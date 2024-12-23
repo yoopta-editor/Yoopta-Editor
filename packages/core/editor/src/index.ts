@@ -7,6 +7,8 @@ export {
   useYooptaReadOnly,
   useYooptaPluginOptions,
 } from './contexts/YooptaContext/YooptaContext';
+import { YooptaEditorProvider } from './YooptaEditorProvider';
+import { Editor } from './components/Editor/Editor';
 import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './YooptaEditor';
 export { deserializeHTML } from './parsers/deserializeHTML';
 export { type EmailTemplateOptions } from './parsers/getEmail';
@@ -74,5 +76,6 @@ export {
 } from './editor/core/applyTransforms';
 
 import './styles.css';
+export { YooptaEditorProvider, Editor };
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };
