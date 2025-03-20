@@ -33,6 +33,7 @@ const FileUploader = ({ accept = '', onClose, blockId, onSetLoading }: Props) =>
         },
       });
     } catch (error) {
+      options?.onError?.(error);
     } finally {
       onSetLoading(false);
     }

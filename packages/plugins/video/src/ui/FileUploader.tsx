@@ -43,6 +43,7 @@ const FileUploader = ({ accept = 'video/*', onClose, blockId, onSetLoading }: Pr
         },
       });
     } catch (error) {
+      options?.onError?.(error);
     } finally {
       onSetLoading(false);
     }
