@@ -11,6 +11,7 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
   const editor = useYooptaEditor();
   const [isToolbarOpen, setIsToolbarOpen] = useState(false);
   const [hold, setHold] = useState(false);
+  const [currDomSelection, setDomSelection] = useState<Selection | null>(null);
 
   const { refs, floatingStyles, context } = useFloating({
     placement: 'top',
@@ -28,6 +29,18 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
     if (hold) return;
 
     const domSelection = window.getSelection();
+
+    // Add check for toolbar click
+    const toolbarElement = refs.floating.current;
+    if (toolbarElement && toolbarElement.contains(document.activeElement)) {
+      return;
+    }
+
+    if (domSelection?.anchorNode === null && currDomSelection?.anchorNode !== null) {
+      return;
+    }
+
+    setDomSelection(domSelection);
 
     if (!domSelection || domSelection?.isCollapsed || domSelection?.anchorOffset === domSelection?.focusOffset) {
       return setIsToolbarOpen(false);
