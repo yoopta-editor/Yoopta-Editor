@@ -164,23 +164,22 @@ export const FloatingBlockActions = memo(({ editor, dragHandleProps }: FloatingB
     if (!block) return;
 
     const slate = findSlateBySelectionPath(editor, { at: block.meta.order });
-    editor.focusBlock(block.id);
-
     if (!slate) return;
 
-    setTimeout(() => {
-      const currentBlock = editor.blocks[block.type];
+    // Set path immediately
+    editor.setPath({ current: block.meta.order, selected: [block.meta.order] });
 
-      if (!currentBlock.hasCustomEditor) {
-        ReactEditor.blur(slate);
-        ReactEditor.deselect(slate);
-        Transforms.deselect(slate);
-      }
+    // Then focus and open options
+    editor.focusBlock(block.id);
 
-      editor.setPath({ current: block.meta.order, selected: [block.meta.order] });
+    const currentBlock = editor.blocks[block.type];
+    if (!currentBlock.hasCustomEditor) {
+      ReactEditor.blur(slate);
+      ReactEditor.deselect(slate);
+      Transforms.deselect(slate);
+    }
 
-      setIsBlockOptionsOpen(true);
-    }, 10);
+    setIsBlockOptionsOpen(true);
   };
 
   const onDragButtonRef = (node: HTMLElement | null) => {

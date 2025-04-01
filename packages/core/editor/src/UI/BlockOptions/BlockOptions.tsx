@@ -69,29 +69,42 @@ const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS,
   const rootElement = getRootBlockElement(editor.blocks[currentBlock?.type || '']?.elements);
   const isVoidElement = rootElement?.props?.nodeType === 'void';
 
-  const onDelete = () => {
-    editor.deleteBlock({ at: editor.path.current });
-    editor.setPath({ current: null });
+  const onDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
+    const currentBlock = findPluginBlockByPath(editor, { at: editor.path.current });
+    if (!currentBlock) {
+      console.warn('Cannot delete block: no current block found');
+      onClose();
+      return;
+    }
+
+    editor.deleteBlock({ at: currentBlock.meta.order });
+    editor.setPath({ current: null });
     onClose();
   };
 
-  const onDuplicate = () => {
+  const onDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     // [TEST]
     if (typeof editor.path.current !== 'number') return;
 
     editor.duplicateBlock({ original: { path: editor.path.current }, focus: true });
-
     onClose();
   };
 
-  const onCopy = () => {
+  const onCopy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const block = findPluginBlockByPath(editor);
     if (block) {
       copy(`${window.location.origin}${window.location.pathname}#${block.id}`);
       editor.emit('block:copy', block);
     }
-
     onClose();
   };
 

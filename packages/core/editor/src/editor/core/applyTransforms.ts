@@ -362,7 +362,6 @@ const MAX_HISTORY_LENGTH = 100;
 export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], options?: ApplyTransformsOptions): void {
   editor.children = createDraft(editor.children);
   editor.path = createDraft(editor.path);
-
   const { validatePaths = true, source } = options || {};
   const operations = [...ops];
 
