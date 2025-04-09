@@ -33,16 +33,17 @@ export const useSlateEditor = (
       const isVoid = nodeType === 'void';
       const isInlineVoid = nodeType === 'inlineVoid';
 
+      const { markableVoid: prevMarkableVoid, isVoid: prevIsVoid, isInline: prevIsInline } = slate;
       if (isInlineVoid) {
-        slate.markableVoid = (element) => element.type === elementType;
+        slate.markableVoid = (element) => prevMarkableVoid(element) || element.type === elementType;
       }
 
       if (isVoid || isInlineVoid) {
-        slate.isVoid = (element) => element.type === elementType;
+        slate.isVoid = (element) => prevIsVoid(element) || element.type === elementType;
       }
 
       if (isInline || isInlineVoid) {
-        slate.isInline = (element) => element.type === elementType;
+        slate.isInline = (element) => prevIsInline(element) || element.type === elementType;
 
         // [TODO] - Move it to Link plugin extension
         slate = withInlines(editor, slate);
