@@ -8,11 +8,10 @@ import { TableCommands } from '@yoopta/table';
 import { AccordionCommands } from '@yoopta/accordion';
 import { TodoListCommands } from '@yoopta/lists';
 import { HeadingOneCommands } from '@yoopta/headings';
-import { Blocks, YooptaPathIndex } from '@yoopta/editor';
-import { I18nYooEditor } from '@yoopta/i18n';
+import { Blocks, YooEditor, YooptaPathIndex } from '@yoopta/editor';
 
 type Props = {
-  editor: I18nYooEditor;
+  editor: YooEditor;
   DEFAULT_DATA: any;
 };
 

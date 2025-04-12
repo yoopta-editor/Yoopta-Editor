@@ -48,7 +48,7 @@ export type Translation<P extends Plugin<{}>[] = Plugin<{}>[]> = {
 
 export type Translations<K extends string> = Record<K, Translation>;
 
-export type I18nYooEditor<Keys extends string = string> = YooEditor & {
+export type I18nYooEditor<Keys extends string = string> = {
   translations: Translations<Keys>;
   language: Keys;
   defaultLanguage: Keys;

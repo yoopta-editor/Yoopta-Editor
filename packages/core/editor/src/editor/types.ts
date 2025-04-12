@@ -180,3 +180,9 @@ export type SlateElement<K extends string = string, T = any> = {
   children: Descendant[];
   props?: PluginElementProps<T>;
 };
+
+export interface CustomTypes {
+  Editor: YooEditor;
+}
+
+export type ExtendedYooEditor = CustomTypes['Editor'];

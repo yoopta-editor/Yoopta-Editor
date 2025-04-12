@@ -4,7 +4,7 @@ import { moveBlock } from './blocks/moveBlock';
 import { focusBlock } from './blocks/focusBlock';
 import { splitBlock } from './blocks/splitBlock';
 import { setPath } from './paths/setPath';
-import { YooEditor, YooptaContentValue } from './types';
+import { ExtendedYooEditor, YooptaContentValue } from './types';
 import { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import { getEditorValue } from './core/getEditorValue';
@@ -37,8 +37,8 @@ const Events = {
   emit: (event, payload) => eventEmitter.emit(event, payload),
 };
 
-export function createYooptaEditor(): YooEditor {
-  const editor: YooEditor = {
+export function createYooptaEditor(): ExtendedYooEditor {
+  const editor: ExtendedYooEditor = {
     id: '',
     children: {},
     blockEditorsMap: {},

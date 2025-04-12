@@ -34,7 +34,7 @@ const TRANSLATION_OPTIONS = {
 };
 
 const BasicExample = () => {
-  const editor: I18nYooEditor<keyof typeof TRANSLATIONS> = useMemo(() => {
+  const editor = useMemo(() => {
     const baseEditor = createYooptaEditor();
     return withTranslations(baseEditor, {
       translations: TRANSLATIONS,
