@@ -34,7 +34,9 @@ const EmbedUploader = ({ blockId, onClose }) => {
     <div className="yoo-video-cursor-pointer yoo-video-user-select-none yoo-video-transition-bg yoo-video-duration-20 yoo-video-ease-in yoo-video-white-space-nowrap yoo-video-w-full">
       <input
         type="text"
-        placeholder="Paste video link"
+        placeholder={
+          editor.getLabelText('plugins.Image.options.placeholder.external.placeholder') || 'Paste video link'
+        }
         value={value}
         className="yoo-video-items-center yoo-video-bg-[hsla(45,13%,94%,.6)] yoo-video-rounded-[4px] yoo-video-shadow-[inset_0_0_0_1px_hsla(0,0%,6%,.1)] yoo-video-cursor-text yoo-video-flex yoo-video-text-[14px] yoo-video-h-[32px] yoo-video-leading-[20px] yoo-video-px-[6px] yoo-video-relative yoo-video-w-full yoo-video-border-none"
         onChange={onChange}
@@ -45,7 +47,7 @@ const EmbedUploader = ({ blockId, onClose }) => {
         disabled={isEmpty}
         onClick={embed}
       >
-        Embed video
+        {editor.getLabelText('plugins.Image.options.placeholder.external.button') || 'Embed video'}
       </button>
     </div>
   );

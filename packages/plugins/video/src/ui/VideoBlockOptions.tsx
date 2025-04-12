@@ -149,7 +149,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
               <button type="button" className="yoopta-block-options-button yoo-video-justify-between" onClick={onFit}>
                 <span className="yoo-video-flex">
                   <RowSpacingIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
-                  Fit
+                  {editor.getLabelText('plugins.Video.options.fit.contain') || 'Fit'}
                 </span>
                 {videoProps?.fit === 'contain' && (
                   <CheckmarkIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4" />
@@ -160,7 +160,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
               <button type="button" className="yoopta-block-options-button yoo-video-justify-between" onClick={onFill}>
                 <span className="yoo-video-flex">
                   <WidthIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
-                  Fill
+                  {editor.getLabelText('plugins.Video.options.fit.fill') || 'Fill'}
                 </span>
                 {videoProps?.fit === 'fill' && (
                   <CheckmarkIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4" />
@@ -171,7 +171,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
               <button type="button" className="yoopta-block-options-button yoo-video-justify-between" onClick={onCover}>
                 <span className="yoo-video-flex">
                   <SizeIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
-                  Cover
+                  {editor.getLabelText('plugins.Video.options.fit.cover') || 'Cover'}
                 </span>
                 {videoProps?.fit === 'cover' && (
                   <CheckmarkIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4" />
@@ -205,7 +205,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
                 ) : (
                   <UpdateIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
                 )}
-                Replace video
+                {editor.getLabelText('plugins.Video.options.replaceImage') || 'Replace video'}
               </label>
             </BlockOptionsMenuItem>
           </BlockOptionsMenuGroup>
@@ -234,7 +234,10 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
               ) : (
                 <ImageIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
               )}
-              {videoProps?.poster ? 'Replace poster' : 'Add poster'}
+              {/* {videoProps?.poster ? 'Replace poster' : 'Add poster'} */}
+              {videoProps?.poster
+                ? editor.getLabelText('plugins.Video.options.replacePosterVideo') || 'Replace poster'
+                : editor.getLabelText('plugins.Video.options.addPosterVideo') || 'Add poster'}
             </label>
           </BlockOptionsMenuItem>
         )}
@@ -245,7 +248,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
             onClick={onToggleAlign}
           >
             <AlignIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
-            Alignment
+            {editor.getLabelText('plugins.Video.options.align') || 'Align'}
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
@@ -257,12 +260,12 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
             {isExternalVideo ? (
               <>
                 <ExternalLinkIcon width={16} height={16} className="yoo-embed-w-4 yoo-embed-h-4 yoo-embed-mr-2" />
-                Open
+                {editor.getLabelText('plugins.Video.options.openVideo') || 'Open'}
               </>
             ) : (
               <>
                 <DownloadIcon width={16} height={16} className="yoo-video-w-4 yoo-video-h-4 yoo-video-mr-2" />
-                Download
+                {editor.getLabelText('plugins.Video.options.downloadVideo') || 'Download'}
               </>
             )}
           </button>

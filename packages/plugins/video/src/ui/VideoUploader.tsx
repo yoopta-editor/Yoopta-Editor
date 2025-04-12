@@ -1,4 +1,4 @@
-import { UI } from '@yoopta/editor';
+import { UI, YooEditor } from '@yoopta/editor';
 import { CSSProperties, useState } from 'react';
 import { EmbedUploader } from './EmbedUploader';
 import { FileUploader } from './FileUploader';
@@ -11,11 +11,12 @@ type Props = {
   blockId: string;
   onClose: () => void;
   onSetLoading: (_s: boolean) => void;
+  editor: YooEditor;
 };
 
 type Tab = 'upload' | 'embed';
 
-const VideoUploader = ({ floatingStyles, refs, onClose, blockId, onSetLoading }: Props) => {
+const VideoUploader = ({ floatingStyles, refs, onClose, blockId, onSetLoading, editor }: Props) => {
   const [activeTab, setActiveTab] = useState<Tab>('upload');
 
   const switchTab = (tab: Tab) => setActiveTab(tab);
@@ -39,7 +40,7 @@ const VideoUploader = ({ floatingStyles, refs, onClose, blockId, onSetLoading }:
                 style={getTabStyles(isUploader)}
                 className={`yoopta-button yoo-video-py-[6px] yoo-video-whitespace-nowrap yoo-video-min-w-0 yoo-video-flex-shrink-0 yoo-video-text-[rgb(55,53,47)] yoo-video-relative yoo-video-cursor-pointer yoo-video-user-select-none yoo-video-bg-inherit yoo-video-transition-[height_20ms_ease-in] yoo-video-inline-flex yoo-video-items-center yoo-video-h-full yoo-video-text-[14px] yoo-video-leading-[1.2] yoo-video-px-[8px]`}
               >
-                Upload
+                {editor.getLabelText('plugins.Image.options.placeholder.upload.label') || 'Upload'}
               </button>
               <button
                 type="button"
@@ -49,7 +50,7 @@ const VideoUploader = ({ floatingStyles, refs, onClose, blockId, onSetLoading }:
                   'yoopta-button yoo-video-py-[6px] yoo-video-whitespace-nowrap yoo-video-min-w-0 yoo-video-flex-shrink-0 yoo-video-text-[rgb(55,53,47)] yoo-video-relative yoo-video-cursor-pointer yoo-video-user-select-none yoo-video-bg-inherit yoo-video-transition-[height_20ms_ease-in] yoo-video-inline-flex yoo-video-items-center yoo-video-h-full yoo-video-text-[14px] yoo-video-leading-[1.2] yoo-video-px-[8px]'
                 }
               >
-                Video link
+                {editor.getLabelText('plugins.Image.options.placeholder.external.label') || 'Video link'}
               </button>
             </div>
             <div className="yoo-video-pt-[6px] yoo-video-pb-[6px] yoo-video-mt-[4px] yoo-video-flex yoo-video-justify-center yoo-video-mr-[12px] yoo-video-ml-[12px]">

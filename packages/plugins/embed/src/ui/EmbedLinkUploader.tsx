@@ -36,7 +36,9 @@ const EmbedLinkUploader = ({ blockId, onClose }) => {
     <div className="yoo-embed-cursor-pointer yoo-embed-user-select-none yoo-embed-transition-bg yoo-embed-duration-20 yoo-embed-ease-in yoo-embed-white-space-nowrap yoo-embed-w-full">
       <input
         type="text"
-        placeholder="Paste embed link"
+        placeholder={
+          editor.getLabelText('plugins.Embed.options.placeholder.external.placeholder') || 'Paste embed link'
+        }
         value={value}
         className="yoo-embed-items-center yoo-embed-bg-[hsla(45,13%,94%,.6)] yoo-embed-rounded-[4px] yoo-embed-shadow-[inset_0_0_0_1px_hsla(0,0%,6%,.1)] yoo-embed-cursor-text yoo-embed-flex yoo-embed-text-[14px] yoo-embed-h-[32px] yoo-embed-leading-[20px] yoo-embed-px-[6px] yoo-embed-relative yoo-embed-w-full yoo-embed-border-none"
         onChange={onChange}
@@ -47,7 +49,7 @@ const EmbedLinkUploader = ({ blockId, onClose }) => {
         disabled={isEmpty}
         onClick={embed}
       >
-        Embed link
+        {editor.getLabelText('plugins.Embed.options.placeholder.external.button') || 'Embed link'}
       </button>
     </div>
   );

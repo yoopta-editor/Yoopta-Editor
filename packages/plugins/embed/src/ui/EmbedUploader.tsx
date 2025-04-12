@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { UI } from '@yoopta/editor';
+import { UI, YooEditor } from '@yoopta/editor';
 import { EmbedLinkUploader } from './EmbedLinkUploader';
 
 type Props = {
@@ -7,11 +7,12 @@ type Props = {
   refs: any;
   blockId: string;
   onClose: () => void;
+  editor: YooEditor;
 };
 
 const { Overlay, Portal } = UI;
 
-const EmbedUploader = ({ floatingStyles, refs, onClose, blockId }: Props) => {
+const EmbedUploader = ({ editor, floatingStyles, refs, onClose, blockId }: Props) => {
   const getTabStyles = () => ({
     borderBottom: '2px solid #2483e2',
   });
@@ -29,7 +30,7 @@ const EmbedUploader = ({ floatingStyles, refs, onClose, blockId }: Props) => {
                   'yoopta-button yoo-embed-py-[6px] yoo-embed-whitespace-nowrap yoo-embed-min-w-0 yoo-embed-flex-shrink-0 yoo-embed-text-[rgb(55,53,47)] yoo-embed-relative yoo-embed-cursor-pointer yoo-embed-user-select-none yoo-embed-bg-inherit yoo-embed-transition-[height_20ms_ease-in] yoo-embed-inline-flex yoo-embed-items-center yoo-embed-h-full yoo-embed-text-[14px] yoo-embed-leading-[1.2] yoo-embed-px-[8px]'
                 }
               >
-                Embed link
+                {editor.getLabelText('plugins.Embed.options.placeholder.external.label') || 'Embed link'}
               </button>
             </div>
             <div className="yoo-embed-pt-[6px] yoo-embed-pb-[6px] yoo-embed-mt-[4px] yoo-embed-flex yoo-embed-justify-center yoo-embed-mr-[12px] yoo-embed-ml-[12px]">

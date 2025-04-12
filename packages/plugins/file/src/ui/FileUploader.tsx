@@ -57,7 +57,7 @@ const FileUploader = ({ accept = '', onClose, blockId, onSetLoading }: Props) =>
           onChange={onChange}
           multiple={false}
         />
-        Upload file
+        {editor.getLabelText('plugins.File.options.placeholder.upload.label') || 'Upload file'}
       </label>
     </div>
   );

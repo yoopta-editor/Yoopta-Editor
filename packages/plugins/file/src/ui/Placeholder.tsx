@@ -1,5 +1,6 @@
 import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
 import { FileIcon } from '@radix-ui/react-icons';
+import { useYooptaEditor } from '@yoopta/editor';
 import { CSSProperties, useState } from 'react';
 import { FilePlaceholderUploader } from './FilePlaceholderUploader';
 import { Loader } from './Loader';
@@ -7,6 +8,7 @@ import { Loader } from './Loader';
 const Placeholder = ({ attributes, children, blockId }) => {
   const [isUploaderOpen, setIsUploaderOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const editor = useYooptaEditor();
 
   const { refs, floatingStyles } = useFloating({
     placement: 'bottom',
@@ -39,7 +41,11 @@ const Placeholder = ({ attributes, children, blockId }) => {
         ) : (
           <FileIcon className="yoo-file-mr-2 yoo-file-user-select-none" width={24} height={24} />
         )}
-        <span className="yoo-file-font-medium">{loading ? 'Loading...' : 'Click to add file'}</span>
+        <span className="yoo-file-font-medium">
+          {loading
+            ? editor.getLabelText('plugins.File.options.placeholder.loading') || 'Loading...'
+            : editor.getLabelText('plugins.File.options.placeholder.title') || 'Click to add file'}
+        </span>
         {loading && (
           <div
             className="yoopta-button yoo-file-absolute yoo-file-top-0 yoo-file-left-0 yoo-file-h-full yoo-file-bg-[rgba(55,53,47,0.16)]"
@@ -54,6 +60,7 @@ const Placeholder = ({ attributes, children, blockId }) => {
           refs={refs}
           onClose={() => setIsUploaderOpen(false)}
           onSetLoading={onSetLoading}
+          editor={editor}
         />
       )}
       {children}

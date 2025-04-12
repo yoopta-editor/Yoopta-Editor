@@ -1,10 +1,12 @@
 import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
 import { CodeIcon } from '@radix-ui/react-icons';
+import { useYooptaEditor } from '@yoopta/editor';
 import { useState } from 'react';
 import { EmbedUploader } from './EmbedUploader';
 
 const Placeholder = ({ attributes, children, blockId }) => {
   const [isUploaderOpen, setIsUploaderOpen] = useState(false);
+  const editor = useYooptaEditor();
 
   const { refs, floatingStyles } = useFloating({
     placement: 'bottom',
@@ -26,7 +28,9 @@ const Placeholder = ({ attributes, children, blockId }) => {
         ref={refs.setReference}
       >
         <CodeIcon className="yoo-embed-mr-2 yoo-embed-user-select-none" width={24} height={24} />
-        <span className="yoo-embed-font-medium">Click to add embed</span>
+        <span className="yoo-embed-font-medium">
+          {editor.getLabelText('plugins.Embed.options.placeholder.title') || 'Click to add embed'}
+        </span>
       </button>
       {isUploaderOpen && (
         <EmbedUploader
@@ -34,6 +38,7 @@ const Placeholder = ({ attributes, children, blockId }) => {
           floatingStyles={floatingStyles}
           refs={refs}
           onClose={() => setIsUploaderOpen(false)}
+          editor={editor}
         />
       )}
       {children}

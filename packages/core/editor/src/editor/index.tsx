@@ -4,7 +4,7 @@ import { moveBlock } from './blocks/moveBlock';
 import { focusBlock } from './blocks/focusBlock';
 import { splitBlock } from './blocks/splitBlock';
 import { setPath } from './paths/setPath';
-import { YooEditor, YooptaContentValue } from './types';
+import { ExtendedYooEditor, YooptaContentValue } from './types';
 import { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import { getEditorValue } from './core/getEditorValue';
@@ -26,6 +26,7 @@ import { mergeBlock } from './blocks/mergeBlock';
 import { UndoRedoOptions, YooptaHistory } from './core/history';
 import EventEmitter from 'eventemitter3';
 import { getEmail, EmailTemplateOptions } from '../parsers/getEmail';
+import { getLabelText } from './i18n/getLabelText';
 
 const eventEmitter = new EventEmitter();
 
@@ -36,8 +37,8 @@ const Events = {
   emit: (event, payload) => eventEmitter.emit(event, payload),
 };
 
-export function createYooptaEditor(): YooEditor {
-  const editor: YooEditor = {
+export function createYooptaEditor(): ExtendedYooEditor {
+  const editor: ExtendedYooEditor = {
     id: '',
     children: {},
     blockEditorsMap: {},
@@ -67,6 +68,8 @@ export function createYooptaEditor(): YooEditor {
 
     applyTransforms: (operations, ...args) => applyTransforms(editor, operations, ...args),
     batchOperations: (callback) => batchOperations(editor, callback),
+
+    getLabelText: (key) => getLabelText(editor, key),
 
     on: (event, callback) => Events.on(event, callback),
     off: (event, callback) => Events.off(event, callback),

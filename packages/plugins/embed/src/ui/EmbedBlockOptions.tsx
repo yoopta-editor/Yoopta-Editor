@@ -39,13 +39,13 @@ const EmbedBlockOptions = ({ editor, block, props: embedProps }: Props) => {
         <BlockOptionsMenuItem>
           <button type="button" className="yoopta-block-options-button" onClick={onToggleAlign}>
             <AlignIcon width={16} height={16} className="yoo-embed-w-4 yoo-embed-h-4 yoo-embed-mr-2" />
-            Alignment
+            {editor.getLabelText('plugins.Embed.options.align') || 'Align'}
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
           <button type="button" className="yoopta-block-options-button" onClick={onOpen}>
             <ExternalLinkIcon width={16} height={16} className="yoo-embed-w-4 yoo-embed-h-4 yoo-embed-mr-2" />
-            Open
+            {editor.getLabelText('plugins.Embed.options.openEmbed') || 'Open'}
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>

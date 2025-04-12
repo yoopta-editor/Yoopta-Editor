@@ -40,13 +40,13 @@ const FileBlockOptions = ({ editor, block, props: fileProps }: Props) => {
         <BlockOptionsMenuItem>
           <button type="button" className="yoopta-block-options-button" onClick={onToggleAlign}>
             <AlignIcon width={16} height={16} className="yoo-file-w-4 yoo-file-h-4 yoo-file-mr-2" />
-            Alignment
+            {editor.getLabelText('plugins.File.options.align') || 'Align'}
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
           <button type="button" className="yoopta-block-options-button" onClick={onOpen}>
             <ExternalLinkIcon width={16} height={16} className="yoo-file-w-4 yoo-file-h-4 yoo-file-mr-2" />
-            Open
+            {editor.getLabelText('plugins.File.options.openFile') || 'Open'}
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
