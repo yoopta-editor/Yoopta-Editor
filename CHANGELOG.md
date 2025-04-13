@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.9.5] - 2025-04-13
+
+### Added
+
+- `Added zoom-in for images`
+
+### Fixed
+
+- `Fix losing focus bug for toolbar in Safari browsers`
+- `Fix bugs when clicking on block actions: delete/duplicate/turnInto`
+- `decrease dealy when selecting highlight color`
+- `added type button to prevent form submit `
+
 ## [4.9.4] - 2025-01-01
 
 ### Added
