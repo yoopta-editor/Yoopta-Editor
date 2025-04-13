@@ -27,6 +27,11 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
   const selectionChange = () => {
     if (hold) return;
 
+    const toolbarEl = refs.floating.current;
+    if (toolbarEl && toolbarEl.contains(document.activeElement)) {
+      return;
+    }
+
     const domSelection = window.getSelection();
 
     if (!domSelection || domSelection?.isCollapsed || domSelection?.anchorOffset === domSelection?.focusOffset) {
