@@ -60,7 +60,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
     }
 
     setLocalColor(null);
-  }, 500);
+  }, 50);
 
   const handleColorChange = (type: 'color' | 'backgroundColor', color: string, shouldDebounce?: boolean) => {
     if (shouldDebounce) {
