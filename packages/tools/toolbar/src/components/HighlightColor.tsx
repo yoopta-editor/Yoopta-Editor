@@ -98,6 +98,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
           {/* Tabs */}
           <div className="yoo-toolbar-flex yoo-toolbar-space-x-2 yoo-toolbar-mb-3">
             <button
+              type="button"
               className={`yoo-toolbar-px-3 yoo-toolbar-py-1 yoo-toolbar-text-sm yoo-toolbar-rounded ${
                 tab === 'text'
                   ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
@@ -108,6 +109,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
               Text
             </button>
             <button
+              type="button"
               className={`yoo-toolbar-px-3 yoo-toolbar-py-1 yoo-toolbar-text-sm yoo-toolbar-rounded ${
                 tab === 'background'
                   ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
@@ -123,9 +125,9 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
           <div className="yoo-toolbar-grid yoo-toolbar-justify-items-center yoo-toolbar-grid-cols-5 yoo-toolbar-gap-1 yoo-toolbar-mb-3">
             {COLOR_PRESETS[tab].map(({ name, value }) => (
               <button
+                type="button"
                 key={name}
                 title={name}
-                type="button"
                 className="yoo-toolbar-w-6 yoo-toolbar-h-6 yoo-toolbar-rounded yoo-toolbar-transition-all hover:yoo-toolbar-scale-110"
                 style={getItemStyles(tab === 'text' ? 'color' : 'backgroundColor', value)}
                 onClick={() => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value)}
@@ -136,6 +138,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
           {/* Custom Color Section */}
           <div className="yoo-toolbar-border-t yoo-toolbar-pt-2">
             <button
+              type="button"
               className="yoo-toolbar-text-sm yoo-toolbar-text-gray-600 hover:yoo-toolbar-text-gray-900 yoo-toolbar-flex yoo-toolbar-items-center"
               onClick={() => setShowColorPicker(!showColorPicker)}
             >
