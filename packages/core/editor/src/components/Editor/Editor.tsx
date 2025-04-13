@@ -109,7 +109,9 @@ const Editor = ({
   };
 
   const onBlur = (event: React.FocusEvent) => {
-    const isInsideEditor = editor.refElement?.contains(event.relatedTarget as Node);
+    const isInsideEditor =
+      editor.refElement?.contains(event.relatedTarget as Node) || editor.refElement?.contains(event.target as Node);
+
     if (isInsideEditor || isReadOnly) return;
 
     resetSelectionState();
