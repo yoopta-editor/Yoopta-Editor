@@ -97,7 +97,7 @@ const ImageComponent = ({
           <UI.Overlay
             onClick={handleImageClick}
             lockScroll
-            className="yoo-image-overlay yoo-image-z-50 yoo-image-w-full yoo-image-h-full yoo-image-bg-[rgba(255,255,255,0.95)]"
+            className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]"
           >
             <Fragment />
           </UI.Overlay>

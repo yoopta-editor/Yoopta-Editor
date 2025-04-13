@@ -28,3 +28,7 @@
 .yoopta-image-alt-text {
   @apply yoo-image-text-[#fff] yoo-image-py-[4px] yoo-image-px-[6px] yoo-image-text-white yoo-image-text-[10px] yoo-image-cursor-pointer yoo-image-font-medium
 }
+
+.yoopta-image-zoom-overlay {
+  @apply yoo-image-z-50 yoo-image-w-full yoo-image-h-full
+}
