@@ -69,7 +69,45 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
   const onSelectionChange = throttle(selectionChange, 200);
 
+  // check if all selected blocks only blocks with root void element
+  const onBlockSelectionChange = () => {
+    if (!Array.isArray(editor.path.selected) || editor.path.selected.length === 0) {
+      return setIsToolbarOpen(false);
+    }
+
+    if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
+      const firstSelectedBlockPath = Math.min(...editor.path.selected);
+      const lastSelectedBlockPath = Math.max(...editor.path.selected);
+
+      let isCloserToLast = true;
+
+      if (typeof editor.path.current === 'number') {
+        isCloserToLast =
+          Math.abs(editor.path.current - lastSelectedBlockPath) <=
+          Math.abs(editor.path.current - firstSelectedBlockPath);
+      }
+
+      const selectedBlock = editor.getBlock({ at: isCloserToLast ? lastSelectedBlockPath : firstSelectedBlockPath });
+      const blockEl = editor.refElement?.querySelector(`[data-yoopta-block-id="${selectedBlock?.id}"]`);
+      if (!blockEl) return;
+
+      refs.setReference({
+        getBoundingClientRect: () => blockEl.getBoundingClientRect(),
+        getClientRects: () => blockEl.getClientRects(),
+      });
+
+      setIsToolbarOpen(true);
+    }
+  };
+
   useEffect(() => {
+    console.log('Toolbar editor.path.selected', editor.path.selected);
+
+    if (Array.isArray(editor.path.selected) && !editor.path.selection) {
+      onBlockSelectionChange();
+      return;
+    }
+
     window.document.addEventListener('selectionchange', onSelectionChange);
     return () => window.document.removeEventListener('selectionchange', onSelectionChange);
   }, [editor.path, hold, editor.children]);

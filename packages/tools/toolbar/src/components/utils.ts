@@ -40,6 +40,21 @@ export function buildActionMenuRenderProps({ editor, view, onClose }: Params) {
     'data-action-menu-item-type': type,
     'aria-selected': false,
     onClick: () => {
+      console.log('__TO__', type);
+      console.log('getItemProps editor.path.selected', editor.path.selected);
+      if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
+        editor.batchOperations(() => {
+          for (const selectedPath of editor.path.selected!) {
+            const block = editor.getBlock({ at: selectedPath });
+            if (block?.type !== type) {
+              editor.toggleBlock(type, { focus: true, at: selectedPath });
+            }
+          }
+        });
+
+        return;
+      }
+
       editor.toggleBlock(type, { focus: true });
       onClose();
     },
