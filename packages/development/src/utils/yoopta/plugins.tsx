@@ -15,8 +15,10 @@ import Divider from '@yoopta/divider';
 
 import { uploadToCloudinary } from '../cloudinary';
 import { Elements } from '@yoopta/editor';
+import { TabsPlugin } from '@/components/plugins/TabsPlugin/TabsPlugin';
 
 export const YOOPTA_PLUGINS = [
+  TabsPlugin,
   Table.extend({
     events: {
       onBeforeCreate: (editor) => {
