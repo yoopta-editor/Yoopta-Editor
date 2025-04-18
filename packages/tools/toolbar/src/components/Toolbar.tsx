@@ -71,7 +71,6 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
   // check if all selected blocks only blocks with root void element
   const onBlockSelectionChange = () => {
-    console.log('onBlockSelectionChange editor.path.source', editor.path.source);
     if (
       !Array.isArray(editor.path.selected) ||
       editor.path.selected.length === 0 ||
@@ -103,8 +102,7 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
   };
 
   useEffect(() => {
-    console.log('Toolbar editor.path', editor.path);
-
+    // we showing toolbar only if editor has native selection or several blocks selected
     if (!Array.isArray(editor.path.selected) && !editor.path.selection) {
       setIsToolbarOpen(false);
       return;

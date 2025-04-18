@@ -1,32 +1,45 @@
 import { Editor, Transforms } from 'slate';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { Blocks } from '../blocks';
-import { YooEditor } from '../types';
+import { SlateEditor, YooEditor } from '../types';
 import { isActive } from './isActive';
+
+type SelectedBlockEntity = {
+  isActiveMark: boolean;
+  slate: SlateEditor;
+};
 
 // [TODO] - check format argument
 export function toggle(editor: YooEditor, type: string) {
   if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
-    for (const path of editor.path.selected) {
+    const selectedBlockEntities: SelectedBlockEntity[] = editor.path.selected.map((path) => {
       const blockSlate = Blocks.getBlockSlate(editor, { at: path });
 
-      if (!blockSlate) continue;
-
+      if (!blockSlate) return { isActiveMark: false, slate: blockSlate };
       const [node] = Editor.node(blockSlate, []);
-      if (!node) continue;
 
+      if (!node) return { isActiveMark: false, slate: blockSlate };
       const end = Editor.end(blockSlate, []);
       const start = Editor.start(blockSlate, []);
-
       Transforms.select(blockSlate, { anchor: start, focus: end });
 
       const marks = Editor.marks(blockSlate);
-      const isActive = !!marks?.[type];
 
-      if (isActive) {
-        Editor.removeMark(blockSlate, type);
+      return {
+        slate: blockSlate,
+        isActiveMark: !!marks?.[type],
+      };
+    });
+
+    const isAllActive = selectedBlockEntities.every((entity) => entity.isActiveMark);
+
+    for (const blockEntity of selectedBlockEntities) {
+      if (blockEntity.isActiveMark) {
+        if (isAllActive) {
+          Editor.removeMark(blockEntity.slate, type);
+        }
       } else {
-        Editor.addMark(blockSlate, type, true);
+        Editor.addMark(blockEntity.slate, type, true);
       }
     }
 
