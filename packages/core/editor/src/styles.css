@@ -32,6 +32,8 @@
   padding-left: 5px;
   font-weight: inherit;
   font-style: inherit;
+  pointer-events: none;
+  cursor: text;
 }
 
 /* common */
