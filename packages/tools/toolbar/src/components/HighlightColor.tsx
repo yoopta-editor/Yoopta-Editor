@@ -149,7 +149,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
             {showColorPicker && (
               <div className="yoo-toolbar-mt-2">
                 <HexColorPicker
-                  color={localColor || highlightColors[tab === 'text' ? 'color' : 'backgroundColor'] || '#000000'}
+                  color={localColor || highlightColors?.[tab === 'text' ? 'color' : 'backgroundColor'] || '#000000'}
                   onChange={(color) => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', color, true)}
                   style={COLOR_PICKER_STYLES}
                 />

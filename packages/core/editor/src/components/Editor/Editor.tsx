@@ -149,7 +149,7 @@ const Editor = ({
       if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
         event.preventDefault();
         const allBlockIndexes = Object.keys(editor.children).map((k, i) => i);
-        editor.setPath({ current: null, selected: allBlockIndexes });
+        editor.setPath({ current: null, selected: allBlockIndexes, source: 'keyboard' });
         return;
       }
     }
@@ -194,7 +194,7 @@ const Editor = ({
             }
           });
 
-          editor.setPath({ current: null, selected: null });
+          editor.setPath({ current: null, selected: null, source: 'copy-paste' });
           resetSelectionState();
         }
         return;

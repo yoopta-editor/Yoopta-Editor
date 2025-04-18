@@ -1,10 +1,16 @@
-import { getRootBlockElement, YooEditor } from '@yoopta/editor';
+import { getRootBlockElement, YooEditor, YooptaBlockData } from '@yoopta/editor';
 
 type Params = {
   editor: YooEditor;
   onClose: () => void;
   empty?: boolean;
   view?: 'small' | 'default';
+};
+
+type BlockToToggle = {
+  id: string;
+  type: string;
+  path: number;
 };
 
 export function buildActionMenuRenderProps({ editor, view, onClose }: Params) {
@@ -34,13 +40,48 @@ export function buildActionMenuRenderProps({ editor, view, onClose }: Params) {
     'data-action-menu-list': true,
   });
 
-  const getItemProps = (type) => ({
+  const getItemProps = (toBlockType: string) => ({
     onMouseEnter: () => undefined,
     'data-action-menu-item': true,
-    'data-action-menu-item-type': type,
+    'data-action-menu-item-type': toBlockType,
     'aria-selected': false,
     onClick: () => {
-      editor.toggleBlock(type, { focus: true });
+      if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
+        const blocksToToggle: BlockToToggle[] = [];
+
+        for (const selectedPath of editor.path.selected!) {
+          const block = editor.getBlock({ at: selectedPath });
+          const blockEntity = editor.blocks[block?.type || ''];
+          const rootElement = getRootBlockElement(blockEntity?.elements);
+          if (
+            block &&
+            rootElement?.props?.nodeType !== 'void' &&
+            rootElement?.props?.nodeType !== 'inline' &&
+            rootElement?.props?.nodeType !== 'inlineVoid'
+          ) {
+            blocksToToggle.push({ id: block.id, type: block.type, path: block.meta.order });
+          }
+        }
+
+        if (blocksToToggle.length > 0) {
+          const isAllBlocksSameType = blocksToToggle.every(({ type }) => type === toBlockType);
+
+          editor.batchOperations(() => {
+            blocksToToggle.forEach(({ path, type }) => {
+              if (isAllBlocksSameType) {
+                editor.toggleBlock('Paragraph', { focus: false, at: path });
+              } else if (type !== toBlockType) {
+                editor.toggleBlock(toBlockType, { focus: false, at: path });
+              }
+            });
+          });
+        }
+
+        onClose();
+        return;
+      }
+
+      editor.toggleBlock(toBlockType, { focus: true });
       onClose();
     },
   });

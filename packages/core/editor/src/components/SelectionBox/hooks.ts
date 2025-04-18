@@ -79,7 +79,7 @@ export const useRectangeSelectionBox = ({ editor, root }: RectangeSelectionProps
       event.pageY - window.pageYOffset,
     ]);
 
-    editor.setPath({ current: null, selected: blocksUnderSelection });
+    editor.setPath({ current: null, selected: blocksUnderSelection, source: 'selection-box' });
   };
 
   const onMouseUp = () => {
