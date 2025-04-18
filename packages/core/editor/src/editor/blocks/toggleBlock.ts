@@ -50,7 +50,10 @@ function findFirstLeaf(node: SlateElement, options: ToggleBlockOptions): SlateEl
 }
 
 export function toggleBlock(editor: YooEditor, toBlockTypeArg: string, options: ToggleBlockOptions = {}) {
-  const fromBlock = findPluginBlockByPath(editor, { at: options.at || editor.path.current });
+  const fromBlock = findPluginBlockByPath(editor, {
+    at: typeof options.at === 'number' ? options.at : editor.path.current,
+  });
+
   if (!fromBlock) throw new Error('Block not found at current selection');
 
   let toBlockType = fromBlock.type === toBlockTypeArg ? DEFAULT_BLOCK_TYPE : toBlockTypeArg;
