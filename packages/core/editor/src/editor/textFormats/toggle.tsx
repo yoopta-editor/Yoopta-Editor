@@ -11,6 +11,7 @@ type SelectedBlockEntity = {
 
 // [TODO] - check format argument
 export function toggle(editor: YooEditor, type: string) {
+  // [TODO] - batch these operations
   if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
     const selectedBlockEntities: SelectedBlockEntity[] = editor.path.selected.map((path) => {
       const blockSlate = Blocks.getBlockSlate(editor, { at: path });
