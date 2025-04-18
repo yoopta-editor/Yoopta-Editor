@@ -26,6 +26,7 @@ export type ImageOptimizationFields = {
 
 export type ImagePluginOptions = {
   onUpload: (file: File) => Promise<ImageUploadResponse>;
+  onError?: (error: any) => void;
   accept?: string;
   optimizations?: ImageOptimizationFields;
   maxSizes?: {

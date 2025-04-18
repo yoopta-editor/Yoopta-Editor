@@ -14,6 +14,7 @@ export type FileUploadResponse = Partial<FileElementProps> & { src: string };
 
 export type FilePluginOptions = {
   onUpload?: (file: File) => Promise<FileUploadResponse>;
+  onError?: (error: any) => void;
   accept?: string;
 };
 
