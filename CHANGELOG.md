@@ -1,5 +1,20 @@
 # Changelog
 
+## [4.9.6] - 2025-04-18
+
+### Added
+
+- `Toolbar opens when several blocks selected`
+- `Added 'toggle_block' operation`
+- `Added 'onError' handler for media plugins`
+
+### Fixed
+
+- `Fixed focus on empty block with placeholder`
+- `Fixed bugs with toggleBlock when block has 0 order`
+- `Fixed toggleBlock when it applies for several blocks`
+- `Fixed bug for inlineVoid plugins(mentions)`
+
 ## [4.9.5] - 2025-04-13
 
 ### Added
