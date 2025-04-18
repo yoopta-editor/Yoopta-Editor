@@ -69,7 +69,6 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
   const onSelectionChange = throttle(selectionChange, 200);
 
-  // check if all selected blocks only blocks with root void element
   const onBlockSelectionChange = () => {
     if (
       !Array.isArray(editor.path.selected) ||
