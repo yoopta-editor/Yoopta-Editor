@@ -182,7 +182,7 @@ export const YooptaHistory = {
       YooptaHistory.withoutSavingHistory(editor, () => {
         // [TODO] - ask Christopher Nolan to help with this
         const inverseOps = batch.operations.flatMap((op) => inverseEditorOperation(editor, op)).reverse();
-        editor.applyTransforms(inverseOps, { source: 'history' });
+        editor.applyTransforms(inverseOps, { source: 'history', validatePaths: true });
         editor.setPath(batch.path);
 
         const { scroll = true } = options || {};

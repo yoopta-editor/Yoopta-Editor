@@ -226,6 +226,16 @@ const DefaultToolbarRender = ({ activeBlock, editor, toggleHoldToolbar }: Toolba
 
     const currentAlign = blockData?.meta?.align || 'left';
     const nextAlign = aligns[(aligns.indexOf(currentAlign) + 1) % aligns.length] as YooptaBlockData['meta']['align'];
+
+    if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
+      for (const path of editor.path.selected) {
+        const block = Blocks.getBlock(editor, { at: path });
+        if (!block) continue;
+        Blocks.updateBlock(editor, block.id, { meta: { ...block.meta, align: nextAlign } });
+      }
+
+      return;
+    }
     Blocks.updateBlock(editor, blockData.id, { meta: { ...blockData.meta, align: nextAlign } });
   };
 

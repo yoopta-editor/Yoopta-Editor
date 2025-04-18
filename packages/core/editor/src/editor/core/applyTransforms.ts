@@ -346,7 +346,6 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
           block.meta.order = index;
         }
       });
-
       break;
     }
   }
@@ -426,7 +425,7 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
 }
 
 function assertValidPaths(editor: YooEditor) {
-  const blocks = Object.values(editor.children);
+  const blocks = [...Object.values(editor.children)];
   blocks.sort((a, b) => a.meta.order - b.meta.order);
   blocks.forEach((block, index) => {
     if (block.meta.order !== index) {
