@@ -73,6 +73,10 @@ type Props = {
   /* Style CSS Object. [Default] - { width: 400, paddingBottom: 100 }
    */
   style?: number | string;
+  /* Change handler  */
+  onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
+  /* Path change handler */
+  onPathChange?: (path: YooptaPath) => void;
 };
 ```
 

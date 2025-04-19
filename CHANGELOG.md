@@ -1,5 +1,47 @@
 # Changelog
 
+## [4.9.6] - 2025-04-18
+
+### Added
+
+- `Toolbar opens when several blocks selected`
+- `Added 'toggle_block' operation`
+- `Added 'onError' handler for media plugins`
+
+### Fixed
+
+- `Fixed focus on empty block with placeholder`
+- `Fixed bugs with toggleBlock when block has 0 order`
+- `Fixed toggleBlock when it applies for several blocks`
+- `Fixed bug for inlineVoid plugins(mentions)`
+
+## [4.9.5] - 2025-04-13
+
+### Added
+
+- `Added zoom-in for images`
+
+### Fixed
+
+- `Fix losing focus bug for toolbar in Safari browsers`
+- `Fix bugs when clicking on block actions: delete/duplicate/turnInto`
+- `decrease dealy when selecting highlight color`
+- `added type button to prevent form submit `
+
+## [4.9.4] - 2025-01-01
+
+### Added
+
+- `Added color picker to highlight color`
+- `Update UI for TodoList`
+- `Added _onPathChange_ prop to <YooptaEditor />`
+
+### Fixed
+
+- `Fixed depth issues for Todo/Bulleted/Numbered lists`
+- `Fixed indent for lists while serializing in markdown string`
+- `Fixed firing _onDestroy_ event after delete block`
+
 ## [4.9.3] - 2024-12-27
 
 ### Added

@@ -20,7 +20,7 @@ import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
 import LinkTool, { DefaultLinkToolRender } from '@yoopta/link-tool';
 
 import { uploadToCloudinary } from '@/utils/cloudinary';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { initValue } from './initValue';
 
 const plugins = [
@@ -35,7 +35,7 @@ const plugins = [
   }),
   Table.extend({
     events: {
-      onBeforeCreate: (editor, blockId) => {
+      onBeforeCreate: (editor) => {
         return TableCommands.buildTableElements(editor, { rows: 4, columns: 5, headerRow: true, headerColumn: true });
       },
     },
@@ -54,6 +54,12 @@ const plugins = [
   Link,
   Embed,
   Image.extend({
+    events: {
+      onDestroy(editor, blockId) {
+        const imageElement = Elements.getElement(editor, blockId, { type: 'image' });
+        console.log('Image destroyed', imageElement);
+      },
+    },
     options: {
       async onUpload(file) {
         const data = await uploadToCloudinary(file, 'image');

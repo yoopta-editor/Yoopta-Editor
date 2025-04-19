@@ -25,13 +25,41 @@
 
 /* Todo list */
 .yoopta-todo-list {
-  @apply yoo-lists-ml-[10px] yoo-lists-items-center yoo-lists-pl-4 yoo-lists-space-x-1 yoo-lists-py-[2px] yoo-lists-text-[16px] yoo-lists-leading-[28px] yoo-lists-relative
+  @apply yoo-lists-relative yoo-lists-flex yoo-lists-items-start yoo-lists-gap-3 yoo-lists-py-1;
 }
 
 .yoopta-todo-list-checkbox {
-  @apply yoo-lists-select-none yoo-lists-cursor-pointer yoo-lists-absolute yoo-lists-left-0 yoo-lists-top-[4px]
+  @apply yoo-lists-relative yoo-lists-mt-1 yoo-lists-flex yoo-lists-h-4 yoo-lists-w-4 yoo-lists-shrink-0 yoo-lists-cursor-pointer yoo-lists-items-center yoo-lists-justify-center yoo-lists-rounded yoo-lists-border yoo-lists-transition-all yoo-lists-duration-200 yoo-lists-ease-in-out focus:yoo-lists-outline-none focus:yoo-lists-ring-2 focus:yoo-lists-ring-blue-500 focus:yoo-lists-ring-offset-2;
+}
+
+.yoopta-todo-list-checkbox--checked {
+  @apply yoo-lists-border-blue-500 yoo-lists-bg-blue-500 hover:yoo-lists-bg-blue-600 hover:yoo-lists-border-blue-600;
+}
+
+.yoopta-todo-list-checkbox--unchecked {
+  @apply yoo-lists-border-gray-300 yoo-lists-bg-transparent hover:yoo-lists-border-blue-500 group-hover:yoo-lists-border-gray-400;
+}
+
+.yoopta-todo-list-checkbox-icon {
+  @apply yoo-lists-h-3 yoo-lists-w-3 yoo-lists-stroke-[3];
+}
+
+.yoopta-todo-list-checkbox-icon--checked {
+  @apply yoo-lists-text-white;
+}
+
+.yoopta-todo-list-checkbox-icon--unchecked {
+  @apply yoo-lists-text-transparent;
 }
 
 .yoopta-todo-list-checkbox-input {
-  @apply yoo-lists-min-w-[10px] yoo-lists-w-auto
+  @apply yoo-lists-sr-only;
+}
+
+.yoopta-todo-list-content {
+  @apply yoo-lists-flex-1 yoo-lists-transition-all yoo-lists-duration-200;
+}
+
+.yoopta-todo-list-content--checked {
+  @apply yoo-lists-text-gray-500;
 }

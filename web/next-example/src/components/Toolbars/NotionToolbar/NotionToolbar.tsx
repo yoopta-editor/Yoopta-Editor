@@ -61,10 +61,7 @@ const NotionToolbar = (props: ToolbarRenderProps) => {
               {blockLabel} <ChevronDownIcon size={12} strokeWidth={2} color="rgba(55, 53, 47, 0.35)" />
             </span>
             {modals.actionMenu && !!ActionMenu && (
-              <FloatingPortal
-                id="yoo-custom-toolbar-action-menu-list-portal"
-                root={document.getElementById('yoopta-editor')}
-              >
+              <FloatingPortal id="yoo-custom-toolbar-action-menu-list-portal" root={editor.refElement}>
                 <div style={actionMenuStyles} ref={actionMenuRefs.setFloating} onClick={(e) => e.stopPropagation()}>
                   <ActionMenu {...actionMenuRenderProps} />
                 </div>

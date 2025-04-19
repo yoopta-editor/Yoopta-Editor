@@ -162,12 +162,17 @@ export const YOOPTA_PLUGINS = [
   }),
   Lists.NumberedList,
   Lists.TodoList.extend({
-    elementProps: {
-      'todo-list': (props: TodoListElement['props']) => ({
-        ...props,
-        checked: true,
-      }),
+    options: {
+      HTMLAttributes: {
+        spellCheck: false,
+      },
     },
+    // elementProps: {
+    //   'todo-list': (props: TodoListElement['props']) => ({
+    //     ...props,
+    //     checked: true,
+    //   }),
+    // },
   }),
   Embed,
   Video.extend({

@@ -134,6 +134,8 @@ type YooptaEditor = {
   value?: YooptaContentValue;
   /* Change handler  */
   onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
+  /* Path change handler */
+  onPathChange?: (path: YooptaPath) => void;
   /* autoFocus. [Default] - true */
   autoFocus?: boolean;
   /* className - class name */

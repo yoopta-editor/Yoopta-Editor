@@ -1,6 +1,4 @@
 import {
-  buildBlockData,
-  deserializeTextNodes,
   generateId,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
@@ -11,6 +9,7 @@ import { BulletedListCommands } from '../commands';
 import { BulletedListRender } from '../elements/BulletedList';
 import { onKeyDown } from '../events/onKeyDown';
 import { ListElementMap } from '../types';
+import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
   type: 'BulletedList',
@@ -36,35 +35,14 @@ const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
         nodeNames: ['UL'],
         parse(el, editor) {
           if (el.nodeName === 'UL') {
-            const listItems = el.querySelectorAll('li');
-
             const align = (el.getAttribute('data-meta-align') || 'left') as YooptaBlockData['meta']['align'];
             const depth = parseInt(el.getAttribute('data-meta-depth') || '0', 10);
 
-            const bulletListBlocks: YooptaBlockData[] = Array.from(listItems)
-              .filter((listItem) => {
-                const textContent = listItem.textContent || '';
-                const isTodoListItem = /\[\s*\S?\s*\]/.test(textContent);
-
-                return !isTodoListItem;
-              })
-              .map((listItem) => {
-                return buildBlockData({
-                  id: generateId(),
-                  type: 'BulletedList',
-                  value: [
-                    {
-                      id: generateId(),
-                      type: 'bulleted-list',
-                      children: deserializeTextNodes(editor, listItem.childNodes),
-                      props: { nodeType: 'block' },
-                    },
-                  ],
-                  meta: { order: 0, depth: depth, align },
-                });
-              });
-
-            if (bulletListBlocks.length > 0) return bulletListBlocks;
+            // [TODO] - Fix losing marks when deserializing
+            const deserializedList = deserializeListNodes(editor, el, { type: 'BulletedList', depth, align });
+            if (deserializedList.length > 0) {
+              return deserializedList;
+            }
           }
         },
       },
@@ -77,8 +55,10 @@ const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `- ${serializeTextNodesIntoMarkdown(element.children)}`;
+      serialize: (element, text, blockMeta) => {
+        const { align = 'left', depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth);
+        return `${indent}- ${serializeTextNodesIntoMarkdown(element.children)}`;
       },
     },
     email: {

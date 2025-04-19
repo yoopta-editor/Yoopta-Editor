@@ -101,6 +101,7 @@ const YooptaEditor = ({
 
   const onEditorPathChange = useCallback((path: YooptaPath) => {
     setStatePath(path);
+    onPathChange?.(path);
   }, []);
 
   const onValueChange = useCallback((value, options: YooptaOnChangeOptions) => {

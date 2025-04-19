@@ -1,49 +1,36 @@
-// import { ChevronUpIcon } from '@radix-ui/react-icons';
-import { CSSProperties, MouseEvent } from 'react';
+import { HexColorPicker } from 'react-colorful';
+import { CSSProperties, MouseEvent, useState } from 'react';
 import { YooEditor, UI } from '@yoopta/editor';
+import { PaletteIcon } from 'lucide-react';
+import { useDebouncedCallback } from 'use-debounce';
+
 const { Portal } = UI;
 
-const colors = [
-  ['Default', 'black'],
-  ['Gray', '#787774'],
-  ['Brown', '#976D57'],
-  ['Orange', '#CC772F'],
-  ['Yellow', '#C29243'],
-  ['Green', '#548064'],
-  ['Blue', '#477DA5'],
-  ['Purple', '#A48BBE'],
-  ['Pink', '#B35588'],
-  ['Red', '#C4554D'],
-];
-
-const backgroundColors = [
-  ['Default', 'unset'],
-  ['Gray', '#F1F1EF'],
-  ['Brown', '#F3EEEE'],
-  ['Orange', '#F8ECDF'],
-  ['Yellow', '#FAF3DD'],
-  ['Green', '#EEF3ED'],
-  ['Blue', '#E9F3F7'],
-  ['Purple', '#F6F3F8'],
-  ['Pink', '#F9F2F5'],
-  ['Red', '#FAECEC'],
-];
-
-// const linearGradients = [
-//   ['Default', 'linear-gradient(90deg, #000000 0%, #000000 100%)'],
-//   ['Gray', 'linear-gradient(90deg, #787774 0%, #787774 100%)'],
-//   ['Brown', 'linear-gradient(90deg, #976D57 0%, #976D57 100%)'],
-//   ['Orange', 'linear-gradient(90deg, #CC772F 0%, #CC772F 100%)'],
-//   ['Yellow', 'linear-gradient(90deg, #C29243 0%, #C29243 100%)'],
-//   ['Green', 'linear-gradient(90deg, #548064 0%, #548064 100%)'],
-//   ['Blue', 'linear-gradient(90deg, #477DA5 0%, #477DA5 100%)'],
-//   ['Purple', 'linear-gradient(90deg, #A48BBE 0%, #A48BBE 100%)'],
-//   ['Pink', 'linear-gradient(90deg, #B35588 0%, #B35588 100%)'],
-//   ['Red', 'linear-gradient(90deg, #C4554D 0%, #C4554D 100%)'],
-// ];
-
-const itemStyles = {
-  border: '1px solid #e3e3e3',
+const COLOR_PRESETS = {
+  text: [
+    { name: 'Default', value: 'black' },
+    { name: 'Gray', value: '#787774' },
+    { name: 'Brown', value: '#976D57' },
+    { name: 'Orange', value: '#CC772F' },
+    { name: 'Yellow', value: '#C29243' },
+    { name: 'Green', value: '#548064' },
+    { name: 'Blue', value: '#477DA5' },
+    { name: 'Purple', value: '#A48BBE' },
+    { name: 'Pink', value: '#B35588' },
+    { name: 'Red', value: '#C4554D' },
+  ],
+  background: [
+    { name: 'Default', value: 'unset' },
+    { name: 'Gray', value: '#F1F1EF' },
+    { name: 'Brown', value: '#F3EEEE' },
+    { name: 'Orange', value: '#F8ECDF' },
+    { name: 'Yellow', value: '#FAF3DD' },
+    { name: 'Green', value: '#EEF3ED' },
+    { name: 'Blue', value: '#E9F3F7' },
+    { name: 'Purple', value: '#F6F3F8' },
+    { name: 'Pink', value: '#F9F2F5' },
+    { name: 'Red', value: '#FAECEC' },
+  ],
 };
 
 type Props = {
@@ -54,61 +41,120 @@ type Props = {
   floatingStyles: React.CSSProperties;
 };
 
-const HighlightColor = ({ editor, highlightColors, onClose, refs, floatingStyles }: Props) => {
-  const getItemStyles = (type, color) => {
-    if (highlightColors?.[type] === color) {
-      return {
-        border: '2px solid #3b82f6',
-        backgroundColor: color,
-      };
-    }
+const COLOR_PICKER_STYLES = {
+  width: '100%',
+  height: 170,
+};
 
-    return { backgroundColor: color, ...itemStyles };
-  };
+const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: Props) => {
+  const [tab, setTab] = useState<'text' | 'background'>('text');
+  const [showColorPicker, setShowColorPicker] = useState(true);
+  const [localColor, setLocalColor] = useState<string | null>(null);
 
-  const updateColor = (type, color) => {
+  const debouncedUpdateColor = useDebouncedCallback((type: 'color' | 'backgroundColor', color: string) => {
     const value = editor.formats.highlight.getValue();
     if (value?.[type] === color) {
       editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
-      return;
+    } else {
+      editor.formats.highlight.update({ ...highlightColors, [type]: color });
     }
 
-    editor.formats.highlight.update({ ...highlightColors, [type]: color });
+    setLocalColor(null);
+  }, 50);
+
+  const handleColorChange = (type: 'color' | 'backgroundColor', color: string, shouldDebounce?: boolean) => {
+    if (shouldDebounce) {
+      setLocalColor(color);
+      debouncedUpdateColor(type, color);
+    } else {
+      const value = editor.formats.highlight.getValue();
+      if (value?.[type] === color) {
+        editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
+      } else {
+        editor.formats.highlight.update({ ...highlightColors, [type]: color });
+      }
+    }
+  };
+
+  const getItemStyles = (type: 'color' | 'backgroundColor', color: string) => {
+    const currentColor = localColor || highlightColors?.[type];
+    const isActive = currentColor === color;
+    return {
+      backgroundColor: color,
+      border: isActive ? '2px solid #3b82f6' : '1px solid #e3e3e3',
+      position: 'relative' as const,
+    };
   };
 
   return (
     <Portal id="yoo-highlight-color-portal">
-      <div style={floatingStyles} ref={refs.setFloating} onClick={(e: MouseEvent) => e.stopPropagation()}>
-        <div className="yoo-toolbar-bg-[#FFFFFF] yoo-toolbar-p-[5px] yoo-toolbar-rounded-md yoo-toolbar-shadow-md yoo-toolbar-border-[1px] yoo-toolbar-border-solid yoo-toolbar-border-[#e5e7eb] yoo-toolbar-shadow-y-[4px]">
-          <div className="yoo-toolbar-flex yoo-toolbar-items-center yoo-toolbar-justify-between">
-            <span className="yoo-toolbar-text-xs">Text color</span>
+      <div
+        style={floatingStyles}
+        ref={refs.setFloating}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
+        className="yoo-toolbar-z-50"
+      >
+        <div className="yoo-toolbar-bg-[#FFFFFF] yoo-toolbar-p-2 yoo-toolbar-rounded-md yoo-toolbar-shadow-md yoo-toolbar-border yoo-toolbar-border-solid yoo-toolbar-border-[#e5e7eb]">
+          {/* Tabs */}
+          <div className="yoo-toolbar-flex yoo-toolbar-space-x-2 yoo-toolbar-mb-3">
+            <button
+              type="button"
+              className={`yoo-toolbar-px-3 yoo-toolbar-py-1 yoo-toolbar-text-sm yoo-toolbar-rounded ${
+                tab === 'text'
+                  ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
+                  : 'yoo-toolbar-text-gray-600 hover:yoo-toolbar-bg-gray-50'
+              }`}
+              onClick={() => setTab('text')}
+            >
+              Text
+            </button>
+            <button
+              type="button"
+              className={`yoo-toolbar-px-3 yoo-toolbar-py-1 yoo-toolbar-text-sm yoo-toolbar-rounded ${
+                tab === 'background'
+                  ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
+                  : 'yoo-toolbar-text-gray-600 hover:yoo-toolbar-bg-gray-50'
+              }`}
+              onClick={() => setTab('background')}
+            >
+              Background
+            </button>
           </div>
-          <div className="yoo-toolbar-flex yoo-toolbar-items-center">
-            {colors.map(([label, color]) => (
+
+          {/* Presets Grid */}
+          <div className="yoo-toolbar-grid yoo-toolbar-justify-items-center yoo-toolbar-grid-cols-5 yoo-toolbar-gap-1 yoo-toolbar-mb-3">
+            {COLOR_PRESETS[tab].map(({ name, value }) => (
               <button
-                key={label}
-                title={label}
                 type="button"
-                className="yoopta-button yoo-toolbar-w-[25px] yoo-toolbar-h-[25px] yoo-toolbar-rounded-md yoo-toolbar-mx-[2px] yoo-toolbar-my-[5px] yoo-toolbar-border yoo-toolbar-border-solid-[#e3e3e3]"
-                style={getItemStyles('color', color)}
-                onClick={() => updateColor('color', color)}
+                key={name}
+                title={name}
+                className="yoo-toolbar-w-6 yoo-toolbar-h-6 yoo-toolbar-rounded yoo-toolbar-transition-all hover:yoo-toolbar-scale-110"
+                style={getItemStyles(tab === 'text' ? 'color' : 'backgroundColor', value)}
+                onClick={() => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value)}
               />
             ))}
           </div>
-          <div className="yoo-toolbar-flex yoo-toolbar-items-center yoo-toolbar-justify-between yoo-toolbar-mt-1">
-            <span className="yoo-toolbar-text-xs">Background color</span>
-          </div>
-          <div className="yoo-toolbar-flex yoo-toolbar-items-center">
-            {backgroundColors.map(([label, backgroundColor]) => (
-              <button
-                key={label}
-                title={label}
-                type="button"
-                className="yoopta-button yoo-toolbar-w-[25px] yoo-toolbar-h-[25px] yoo-toolbar-rounded-md yoo-toolbar-mx-[2px] yoo-toolbar-my-[5px] yoo-toolbar-border yoo-toolbar-border-[#e3e3e3]"
-                style={getItemStyles('backgroundColor', backgroundColor)}
-                onClick={() => updateColor('backgroundColor', backgroundColor)}
-              />
-            ))}
+
+          {/* Custom Color Section */}
+          <div className="yoo-toolbar-border-t yoo-toolbar-pt-2">
+            <button
+              type="button"
+              className="yoo-toolbar-text-sm yoo-toolbar-text-gray-600 hover:yoo-toolbar-text-gray-900 yoo-toolbar-flex yoo-toolbar-items-center"
+              onClick={() => setShowColorPicker(!showColorPicker)}
+            >
+              Color Picker
+              <PaletteIcon className="yoo-toolbar-w-4 yoo-toolbar-h-4 yoo-toolbar-ml-1" />
+            </button>
+
+            {showColorPicker && (
+              <div className="yoo-toolbar-mt-2">
+                <HexColorPicker
+                  color={localColor || highlightColors?.[tab === 'text' ? 'color' : 'backgroundColor'] || '#000000'}
+                  onChange={(color) => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', color, true)}
+                  style={COLOR_PICKER_STYLES}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

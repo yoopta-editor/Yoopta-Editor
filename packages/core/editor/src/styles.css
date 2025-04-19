@@ -32,6 +32,8 @@
   padding-left: 5px;
   font-weight: inherit;
   font-style: inherit;
+  pointer-events: none;
+  cursor: text;
 }
 
 /* common */
@@ -50,7 +52,7 @@
 }
 
 .yoopta-selection-block {
-  @apply before:yoo-editor-pointer-events-none before:yoo-editor-absolute before:yoo-editor-inset-0 before:yoo-editor-z-[1] before:yoo-editor-size-full before:yoo-editor-rounded-[4px] before:yoo-editor-bg-[#2383e224] before:yoo-editor-transition-opacity before:yoo-editor-duration-200 before:yoo-editor-opacity-0
+  @apply before:yoo-editor-pointer-events-none before:yoo-editor-absolute before:yoo-editor-inset-0 before:yoo-editor-z-[0] before:yoo-editor-size-full before:yoo-editor-rounded-[4px] before:yoo-editor-bg-[#2383e224] before:yoo-editor-transition-opacity before:yoo-editor-duration-200 before:yoo-editor-opacity-0
 }
 
 .yoopta-selection-block[data-block-selected="true"]::before {

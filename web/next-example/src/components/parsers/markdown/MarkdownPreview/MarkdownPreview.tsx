@@ -28,7 +28,6 @@ import Table from '@yoopta/table';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
 import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-import jsBeatify from 'js-beautify';
 import { markdown as codemirrorMarkdown } from '@codemirror/lang-markdown';
 
 import { uploadToCloudinary } from '@/utils/cloudinary';
@@ -142,15 +141,10 @@ const ResultMD = ({ editor, value }: ResultHTMLProps) => {
   const [markdown, setMarkdown] = useState<string>('');
 
   useEffect(() => {
-    const htmlString = editor.getMarkdown(debounceValue);
-    const beautifiedMD = jsBeatify.html_beautify(htmlString, {
-      indent_with_tabs: false,
-      indent_size: 2,
-    });
-
-    console.log(beautifiedMD);
-
-    setMarkdown(beautifiedMD);
+    const mdString = editor.getMarkdown(debounceValue);
+    // or
+    // const mdString = parsers.markdown.serialize(editor, debounceValue);
+    setMarkdown(mdString);
   }, [debounceValue]);
 
   const onChange = (value: string) => {
@@ -223,14 +217,10 @@ const MarkdownPreview = () => {
   }, []);
 
   const onCopy = () => {
-    const htmlString = editor.getMarkdown(value);
-    const beautifiedMD = jsBeatify.html_beautify(htmlString, {
-      indent_with_tabs: false,
-      indent_size: 2,
-    });
+    const mdString = editor.getMarkdown(value);
 
-    copy(beautifiedMD);
-    console.log(beautifiedMD);
+    copy(mdString);
+    console.log(mdString);
     window.alert('Markdown content copied to clipboard or logged to console');
   };
 

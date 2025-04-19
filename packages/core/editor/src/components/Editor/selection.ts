@@ -65,7 +65,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       blockOrder > currentSelectionIndex ? currentSelectionIndex + index + 1 : currentSelectionIndex - index - 1,
     );
 
-    editor.setPath({ current: blockOrder, selected: [...indexesBetween, currentSelectionIndex] });
+    editor.setPath({ current: blockOrder, selected: [...indexesBetween, currentSelectionIndex], source: 'keyboard' });
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -127,7 +127,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
           blockOrder === startBlockPathRef.current
         ) {
           currentBlockPathRef.current = blockOrder;
-          editor.setPath({ current: blockOrder, selected: [blockOrder] });
+          editor.setPath({ current: blockOrder, selected: [blockOrder], source: 'mousemove' });
           return;
         }
 
@@ -142,7 +142,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
           blurSlateSelection();
 
           const selectedBlocks = Array.from({ length: end - start + 1 }, (_, i) => start + i);
-          editor.setPath({ current: blockOrder, selected: selectedBlocks });
+          editor.setPath({ current: blockOrder, selected: selectedBlocks, source: 'mousemove' });
         }
       });
     }
@@ -173,7 +173,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       // jump to next index if started selection from this index
       if (currentIndex === selectionState.startedIndexToSelect) {
         const selectedPaths = editor.path.selected ? [...editor.path.selected, nextTopIndex] : [nextTopIndex];
-        editor.setPath({ current: nextTopIndex, selected: selectedPaths });
+        editor.setPath({ current: nextTopIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
         return;
       }
@@ -181,7 +181,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       if (nextTopIndex < selectionState.startedIndexToSelect) {
         const selectedPaths = editor.path.selected ? [...editor.path.selected, nextTopIndex] : [nextTopIndex];
 
-        editor.setPath({ current: nextTopIndex, selected: selectedPaths });
+        editor.setPath({ current: nextTopIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
         return;
       }
@@ -190,7 +190,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
       if (selectedBlocks?.includes(currentIndex) && currentIndex !== selectionState.startedIndexToSelect) {
         const filteredIndexes = selectedBlocks.filter((index) => index !== currentIndex);
-        editor.setPath({ current: nextTopIndex, selected: filteredIndexes });
+        editor.setPath({ current: nextTopIndex, selected: filteredIndexes, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
         return;
       }
@@ -224,7 +224,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
           ? [...editor.path.selected, block?.meta.order, block.meta.order - 1]
           : [block?.meta.order, block.meta.order - 1];
 
-        editor.setPath({ current: null, selected: selectedPaths });
+        editor.setPath({ current: null, selected: selectedPaths, source: 'keyboard' });
 
         selectionState.startedIndexToSelect = block.meta.order;
         selectionState.indexToSelect = block.meta.order - 1;
@@ -247,14 +247,14 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       // jump to next index if started selection from this index
       if (currentIndex === selectionState.startedIndexToSelect) {
         const selectedPaths = editor.path.selected ? [...editor.path.selected, nextIndex] : [nextIndex];
-        editor.setPath({ current: nextIndex, selected: selectedPaths });
+        editor.setPath({ current: nextIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;
         return;
       }
 
       if (nextIndex > selectionState.startedIndexToSelect) {
         const selectedPaths = editor.path.selected ? [...editor.path.selected, nextIndex] : [nextIndex];
-        editor.setPath({ current: nextIndex, selected: selectedPaths });
+        editor.setPath({ current: nextIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;
         return;
       }
@@ -262,7 +262,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       const selectedBlocks = Paths.getSelectedPaths(editor);
       if (selectedBlocks?.includes(currentIndex) && currentIndex !== selectionState.startedIndexToSelect) {
         const filteredIndexes = selectedBlocks.filter((index) => index !== currentIndex);
-        editor.setPath({ current: nextIndex, selected: filteredIndexes });
+        editor.setPath({ current: nextIndex, selected: filteredIndexes, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;
         return;
       }
@@ -293,7 +293,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
           ? [...editor.path.selected, block?.meta.order, block?.meta.order + 1]
           : [block?.meta.order, block.meta.order + 1];
 
-        editor.setPath({ current: null, selected: selectedPaths });
+        editor.setPath({ current: null, selected: selectedPaths, source: 'keyboard' });
 
         selectionState.startedIndexToSelect = block.meta.order;
         selectionState.indexToSelect = block.meta.order + 1;

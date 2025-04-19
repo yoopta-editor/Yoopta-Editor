@@ -56,6 +56,7 @@ export type YooptaPath = {
   current: YooptaPathIndex;
   selected?: number[] | null;
   selection?: Selection | null;
+  source?: null | 'selection-box' | 'native-selection' | 'mousemove' | 'keyboard' | 'copy-paste';
 };
 
 // Marks

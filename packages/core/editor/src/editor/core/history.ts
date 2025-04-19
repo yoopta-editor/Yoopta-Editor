@@ -51,6 +51,17 @@ export function inverseEditorOperation(editor: YooEditor, op: YooptaOperation): 
       ];
     }
 
+    case 'toggle_block': {
+      return {
+        type: 'toggle_block',
+        properties: {
+          toggledBlock: op.prevProperties.sourceBlock,
+          toggledSlateValue: op.prevProperties.sourceSlateValue,
+        },
+        prevProperties: { sourceBlock: op.properties.toggledBlock, sourceSlateValue: op.properties.toggledSlateValue },
+      };
+    }
+
     case 'merge_block': {
       return [
         {

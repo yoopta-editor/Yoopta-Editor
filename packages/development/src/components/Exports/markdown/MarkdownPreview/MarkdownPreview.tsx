@@ -15,7 +15,6 @@ import { MARKDOWN_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
 import { markdown as codemirrorMarkdown } from '@codemirror/lang-markdown';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import jsBeatify from 'js-beautify';
 
 const LANGUAGES_MAP = {
   markdown: {
@@ -41,20 +40,15 @@ type ResultHTMLProps = {
 
 const ResultMD = ({ editor, value }: ResultHTMLProps) => {
   const [debounceValue] = useDebounce(value, 1000);
-  const [markdown, setHTML] = useState<string>('');
+  const [markdown, setMarkdown] = useState<string>('');
 
   useEffect(() => {
-    const htmlString = editor.getMarkdown(debounceValue);
-    const beautifiedMD = jsBeatify.html_beautify(htmlString, {
-      indent_with_tabs: false,
-      indent_size: 2,
-    });
-
-    setHTML(beautifiedMD);
+    const mdString = editor.getMarkdown(debounceValue);
+    setMarkdown(mdString);
   }, [debounceValue]);
 
   const onChange = (value: string) => {
-    setHTML(value);
+    setMarkdown(value);
   };
 
   return (
@@ -116,14 +110,9 @@ const MarkdownPreview = () => {
   };
 
   const onCopy = () => {
-    const htmlString = editor.getMarkdown(value);
-    const beautifiedMD = jsBeatify.html_beautify(htmlString, {
-      indent_with_tabs: false,
-      indent_size: 2,
-    });
-
-    copy(beautifiedMD);
-    console.log(beautifiedMD);
+    const mdString = editor.getMarkdown(value);
+    copy(mdString);
+    console.log(mdString);
     window.alert('Markdown content copied to clipboard or logged to console');
   };
 
@@ -148,7 +137,9 @@ const MarkdownPreview = () => {
                         <Editor editor={editor} value={value} onChange={onChange} />
 
                         <div className="flex items-center space-x-2">
-                          <Button onClick={onCopy}>Get markdown content</Button>
+                          <Button type="button" onClick={onCopy}>
+                            Get markdown content
+                          </Button>
                         </div>
                       </div>
                     </TabsContent>
@@ -161,7 +152,9 @@ const MarkdownPreview = () => {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Button onClick={onCopy}>Get markdown content</Button>
+                          <Button type="button" onClick={onCopy}>
+                            Get markdown content
+                          </Button>
                         </div>
                       </div>
                     </TabsContent>
@@ -177,8 +170,10 @@ const MarkdownPreview = () => {
                           <div className="mt-[21px] min-h-[400px] rounded-md border bg-muted lg:min-h-[700px]" />
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Button onClick={onCopy}>Get markdown</Button>
-                          <Button variant="secondary">
+                          <Button type="button" onClick={onCopy}>
+                            Get markdown
+                          </Button>
+                          <Button type="button" variant="secondary">
                             {/* @ts-ignore */}
                             <CounterClockwiseClockIcon className="h-4 w-4" />
                           </Button>

@@ -40,6 +40,10 @@ export function deleteBlock(editor: YooEditor, options: DeleteBlockOptions) {
   const blockToDelete = editor.children[block.id];
   const operations: YooptaOperation[] = [];
 
+  const plugin = editor.plugins[blockToDelete.type];
+  const { onDestroy } = plugin.events || {};
+  onDestroy?.(editor, blockToDelete.id);
+
   operations.push({
     type: 'delete_block',
     block: blockToDelete,
