@@ -14,8 +14,8 @@ export function decreaseBlockDepth(editor: YooEditor, options: BlockDepthOptions
   const operation: YooptaOperation = {
     type: 'set_block_meta',
     id: block.id,
-    properties: { depth: newDepth },
-    prevProperties: { depth: block.meta.depth },
+    properties: { ...block.meta, depth: newDepth },
+    prevProperties: { ...block.meta, depth: block.meta.depth },
   };
 
   editor.applyTransforms([operation]);

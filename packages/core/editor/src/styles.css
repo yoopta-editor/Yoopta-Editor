@@ -46,6 +46,7 @@
   @apply yoo-editor-relative yoo-editor-py-0 yoo-editor-px-[2px] yoo-editor-mt-[2px] yoo-editor-mb-[1px] yoo-editor-rounded
 }
 
+
 .yoopta-selection-block::before {
   content: "";
 }

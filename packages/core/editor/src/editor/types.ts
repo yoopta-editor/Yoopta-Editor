@@ -22,6 +22,14 @@ import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
 import { getEmail } from '../parsers/getEmail';
 
+// types for slate values
+export type SlateElement<K extends string = string, T = any> = {
+  id: string;
+  type: K;
+  children: Descendant[];
+  props?: PluginElementProps<T>;
+};
+
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
   value: T[];
@@ -124,6 +132,7 @@ export type YooEditor = {
   commands: Record<string, (...args: any[]) => any>;
 
   // core handlers
+  operations: YooptaOperation[];
   applyTransforms: WithoutFirstArg<typeof applyTransforms>;
   batchOperations: (fn: () => void) => void;
 
@@ -167,12 +176,4 @@ export type SlateElementTextNode = {
   code?: boolean;
   strike?: boolean;
   highlight?: any;
-};
-
-// types for slate values
-export type SlateElement<K extends string = string, T = any> = {
-  id: string;
-  type: K;
-  children: Descendant[];
-  props?: PluginElementProps<T>;
 };

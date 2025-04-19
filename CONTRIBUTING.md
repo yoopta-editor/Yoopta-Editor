@@ -48,5 +48,5 @@ packages/
 ├── plugins - editor plugin extensions
 ├── tools - tools packages
 └── development - developer playground
-└── web/next-example - all examples
+web/next-example - all examples
 ```

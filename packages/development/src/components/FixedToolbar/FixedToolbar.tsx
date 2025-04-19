@@ -64,10 +64,10 @@ export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
           type="button"
           onClick={() => {
             editor.batchOperations(() => {
-              const calloutElement = CalloutCommands.buildCalloutElements(editor, {
-                text: 'Heading with text',
-                props: { theme: 'warning' },
-              });
+              // const calloutElement = CalloutCommands.buildCalloutElements(editor, {
+              //   text: 'Heading with text',
+              //   props: { theme: 'warning' },
+              // });
 
               CalloutCommands.insertCallout(editor, {
                 at: 1,
@@ -98,7 +98,8 @@ export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
           type="button"
           onClick={() => {
             const originPath: YooptaPathIndex = editor.path.current || 0;
-            editor.duplicateBlock({ at: 0, original: { path: originPath } });
+            // editor.duplicateBlock({ at: 0, original: { path: originPath } });
+            Blocks.duplicateBlock(editor, { original: { path: originPath } });
           }}
           className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
         >
