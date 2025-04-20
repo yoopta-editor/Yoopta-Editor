@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.9.7] - 2025-04-20
+
+### Fixed
+
+- `Fixed bug with continutation numeric lists`
+- `Fixed critical bug with the entire block text disappearing when switching to another block using the ActionMenu`
+- `Fixed bug with slash commands. Slash symbol "/" is now deleted when selecting block`
+
 ## [4.9.6] - 2025-04-18
 
 ### Added
