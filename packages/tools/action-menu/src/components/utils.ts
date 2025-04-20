@@ -61,7 +61,7 @@ export function buildActionMenuRenderProps({
     'aria-selected': type === selectedAction?.type,
     onClick: () => {
       // [TEST]
-      editor.toggleBlock(type, { deleteText: mode === 'toggle', focus: true });
+      editor.toggleBlock(type, { deleteText: mode === 'create', focus: true });
       onClose();
     },
   });

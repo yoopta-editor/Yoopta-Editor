@@ -1,36 +1,61 @@
 import { PluginElementRenderProps, useBlockData, useYooptaEditor, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { useMemo } from 'react';
 
 function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
-  const sortedKeys = Object.keys(editor.children).sort((a, b) => {
+  const sortedBlockIds = Object.keys(editor.children).sort((a, b) => {
     const blockA = editor.children[a];
     const blockB = editor.children[b];
     return blockA.meta.order - blockB.meta.order;
   });
 
-  let index = 0;
-  let resetIndex = true;
+  const depthCounters: Record<number, number> = {};
+  const lastBlockTypeAtDepth: Record<number, string> = {};
+  const targetDepth = block.meta.depth;
 
-  for (let key of sortedKeys) {
-    const currentBlock = editor.children[key];
-    if (currentBlock.type !== 'NumberedList') {
-      resetIndex = true;
-      continue;
+  for (let blockId of sortedBlockIds) {
+    const currentBlock = editor.children[blockId];
+    const currentDepth = currentBlock.meta.depth;
+    const currentType = currentBlock.type;
+
+    if (blockId === block.id) break;
+
+    if (currentType === 'NumberedList') {
+      if (depthCounters[currentDepth] === undefined) {
+        depthCounters[currentDepth] = 0;
+      }
+
+      const shouldResetCounter = lastBlockTypeAtDepth[currentDepth] !== 'NumberedList';
+
+      if (shouldResetCounter) {
+        depthCounters[currentDepth] = 0;
+      }
+
+      depthCounters[currentDepth]++;
     }
 
-    if (resetIndex) {
-      index = 0;
-      resetIndex = false;
-    }
+    lastBlockTypeAtDepth[currentDepth] = currentType;
 
-    if (currentBlock.meta.depth === block.meta.depth && currentBlock.type === 'NumberedList') {
-      index++;
-      if (key === block.id) break;
+    if (currentDepth < targetDepth) {
+      for (let depth in depthCounters) {
+        if (Number(depth) > currentDepth) {
+          depthCounters[depth] = 0;
+          lastBlockTypeAtDepth[depth] = '';
+        }
+      }
     }
   }
 
-  const count = index;
+  if (depthCounters[targetDepth] === undefined) {
+    depthCounters[targetDepth] = 0;
+  }
 
-  return count;
+  if (lastBlockTypeAtDepth[targetDepth] !== 'NumberedList') {
+    depthCounters[targetDepth] = 0;
+  }
+
+  depthCounters[targetDepth]++;
+
+  return depthCounters[targetDepth];
 }
 
 const NumberedListRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
@@ -39,7 +64,7 @@ const NumberedListRender = ({ extendRender, ...props }: PluginElementRenderProps
   const block = useBlockData(blockId);
   const editor = useYooptaEditor();
 
-  const count = getNumberedListCount(editor, block);
+  const count = useMemo(() => getNumberedListCount(editor, block), [block, editor.children]);
 
   const currentAlign = block?.meta?.align || 'left';
   const alignClass = `yoopta-align-${currentAlign}`;
