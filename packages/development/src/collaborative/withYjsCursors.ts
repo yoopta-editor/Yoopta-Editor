@@ -55,7 +55,6 @@ export function withYjsCursors(
   e.awareness = awareness;
 
   const awarenessChangeHandler = (yEvent: CursorStateChangeEvent) => {
-    console.log('withYjsCursors awarenessChangeHandler', yEvent);
     const listeners = CURSOR_CHANGE_EVENT_LISTENERS.get(e);
 
     if (!listeners) {
@@ -94,7 +93,6 @@ export function withYjsCursors(
       timestamp: Date.now(),
     };
 
-    console.log('e.awareness.setLocalState', cursorState);
     e.awareness.setLocalState(cursorState);
   };
 
@@ -139,13 +137,11 @@ export function withYjsCursors(
 
   e.connect = () => {
     connect?.();
-    e.awareness.on('change', (event) => {
-      console.log('e.connect Raw awareness change event:', event);
-    });
+    // e.awareness.on('change', (event) => {
+    //   console.log('e.connect Raw awareness change event:', event);
+    // });
 
     e.awareness.on('change', awarenessChangeHandler);
-
-    console.log('e.connect Initial awareness call');
 
     awarenessChangeHandler({
       removed: [],

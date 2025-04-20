@@ -255,8 +255,9 @@ const BasicExample = () => {
   }, [provider.document]);
 
   useEffect(() => {
+    // please check fkcing strict mode
     provider.connect();
-    // return () => provider.disconnect();
+    return () => provider.disconnect();
   }, [provider]);
 
   useEffect(() => {

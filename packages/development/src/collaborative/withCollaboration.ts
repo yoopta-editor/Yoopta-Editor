@@ -32,6 +32,7 @@ export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<Edito
     if (editor.isLocalOrigin(transaction.origin)) return;
 
     const state = sharedState.get('state');
+    console.log('handleYEvents state', state);
     if (!state) return;
 
     const remoteOperations = state.operations;

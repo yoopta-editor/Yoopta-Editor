@@ -419,8 +419,6 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
     });
   }
 
-  console.log('applyTransforms operations', operations);
-
   for (const operation of operations) {
     // run `set_slate` operation only if source is history
     if (operation.type === 'set_slate' && source === 'api') {

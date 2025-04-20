@@ -2,7 +2,7 @@ import { applyAwarenessUpdate, Awareness, encodeAwarenessUpdate } from 'y-protoc
 import * as Y from 'yjs';
 
 type WebSocketMessage = {
-  type: 'sync' | 'update' | 'awareness' | 'auth' | 'query-awareness';
+  type: 'initialize' | 'update' | 'awareness' | 'auth' | 'query-awareness';
   documentName: string;
   state?: number[];
   update?: number[];
@@ -59,8 +59,6 @@ export class WebSocketProviderClient {
     const changedClients = [...added, ...updated, ...removed];
     const awarenessUpdate = encodeAwarenessUpdate(this.awarenessInstance, changedClients);
 
-    console.log('WebSocketProviderClient CHANGES FIRED:', { added, updated, removed });
-
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
       console.warn('Attempting to send awareness update while socket is not open');
       return;
@@ -80,7 +78,7 @@ export class WebSocketProviderClient {
       throw new Error('WebSocket permanently closed. Create a new provider instance.');
     }
 
-    this.shouldReconnect = true;
+    this.shouldReconnect = false;
     this.establishConnection();
   }
 
@@ -101,7 +99,7 @@ export class WebSocketProviderClient {
 
         // const initialState = Y.encodeStateAsUpdate(this.ydoc);
         this.sendMessage({
-          type: 'sync',
+          type: 'join-document',
           documentName: this.documentName,
           // state: Array.from(initialState),
         });
@@ -137,29 +135,35 @@ export class WebSocketProviderClient {
     try {
       const data = JSON.parse(event.data) as WebSocketMessage;
 
+      console.log('Client received message:', data.type);
+
       switch (data.type) {
-        case 'sync':
+        case 'initialize': {
+          console.log('Initializing document state', data);
           if (data.state) {
             const stateUpdate = new Uint8Array(data.state);
             Y.applyUpdate(this.ydoc, stateUpdate, 'REMOTE');
           }
           break;
+        }
 
-        case 'update':
+        case 'update': {
+          console.log('Applying update', data);
           if (data.update) {
-            const updateData = new Uint8Array(data.update);
-            Y.applyUpdate(this.ydoc, updateData, 'REMOTE');
+            const update = new Uint8Array(data.update);
+            Y.applyUpdate(this.ydoc, update);
+
+            console.log('Applied update content:', this.ydoc.getMap('content').get('state'));
           }
           break;
+        }
 
-        case 'awareness':
-          if (data.awareness) {
-            console.log('WebSocketProviderClient eceived awareness update:', data.awareness);
-
-            const awarenessUpdate = new Uint8Array(data.awareness);
-            applyAwarenessUpdate(this.awarenessInstance, awarenessUpdate, 'REMOTE');
-          }
-          break;
+        // case 'awareness':
+        //   if (data.awareness) {
+        //     const awarenessUpdate = new Uint8Array(data.awareness);
+        //     applyAwarenessUpdate(this.awarenessInstance, awarenessUpdate, 'REMOTE');
+        //   }
+        //   break;
 
         default:
           console.warn('Unknown message type:', data);
