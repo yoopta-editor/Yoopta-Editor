@@ -1,5 +1,41 @@
 # Changelog
 
+## [4.9.7] - 2025-04-20
+
+### Fixed
+
+- `Fixed bug with continutation numeric lists`
+- `Fixed critical bug with the entire block text disappearing when switching to another block using the ActionMenu`
+- `Fixed bug with slash commands. Slash symbol "/" is now deleted when selecting block`
+
+## [4.9.6] - 2025-04-18
+
+### Added
+
+- `Toolbar opens when several blocks selected`
+- `Added 'toggle_block' operation`
+- `Added 'onError' handler for media plugins`
+
+### Fixed
+
+- `Fixed focus on empty block with placeholder`
+- `Fixed bugs with toggleBlock when block has 0 order`
+- `Fixed toggleBlock when it applies for several blocks`
+- `Fixed bug for inlineVoid plugins(mentions)`
+
+## [4.9.5] - 2025-04-13
+
+### Added
+
+- `Added zoom-in for images`
+
+### Fixed
+
+- `Fix losing focus bug for toolbar in Safari browsers`
+- `Fix bugs when clicking on block actions: delete/duplicate/turnInto`
+- `decrease dealy when selecting highlight color`
+- `added type button to prevent form submit `
+
 ## [4.9.4] - 2025-01-01
 
 ### Added

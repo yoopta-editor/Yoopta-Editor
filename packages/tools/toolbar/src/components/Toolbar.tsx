@@ -27,6 +27,11 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
   const selectionChange = () => {
     if (hold) return;
 
+    const toolbarEl = refs.floating.current;
+    if (toolbarEl && toolbarEl.contains(document.activeElement)) {
+      return;
+    }
+
     const domSelection = window.getSelection();
 
     if (!domSelection || domSelection?.isCollapsed || domSelection?.anchorOffset === domSelection?.focusOffset) {
@@ -64,7 +69,49 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
   const onSelectionChange = throttle(selectionChange, 200);
 
+  const onBlockSelectionChange = () => {
+    if (
+      !Array.isArray(editor.path.selected) ||
+      editor.path.selected.length === 0 ||
+      (editor.path.source !== 'mousemove' && editor.path.source !== 'keyboard')
+    ) {
+      return setIsToolbarOpen(false);
+    }
+
+    const firstSelectedBlockPath = Math.min(...editor.path.selected);
+    const lastSelectedBlockPath = Math.max(...editor.path.selected);
+
+    let isBottomDirection = true;
+
+    if (typeof editor.path.current === 'number') {
+      isBottomDirection =
+        Math.abs(editor.path.current - lastSelectedBlockPath) <= Math.abs(editor.path.current - firstSelectedBlockPath);
+    }
+
+    const selectedBlock = editor.getBlock({ at: isBottomDirection ? lastSelectedBlockPath : firstSelectedBlockPath });
+    const blockEl = editor.refElement?.querySelector(`[data-yoopta-block-id="${selectedBlock?.id}"]`);
+    if (!blockEl) return;
+
+    refs.setReference({
+      getBoundingClientRect: () => blockEl.getBoundingClientRect(),
+      getClientRects: () => blockEl.getClientRects(),
+    });
+
+    setIsToolbarOpen(true);
+  };
+
   useEffect(() => {
+    // we showing toolbar only if editor has native selection or several blocks selected
+    if (!Array.isArray(editor.path.selected) && !editor.path.selection) {
+      setIsToolbarOpen(false);
+      return;
+    }
+
+    if (Array.isArray(editor.path.selected) && !editor.path.selection) {
+      onBlockSelectionChange();
+      return;
+    }
+
     window.document.addEventListener('selectionchange', onSelectionChange);
     return () => window.document.removeEventListener('selectionchange', onSelectionChange);
   }, [editor.path, hold, editor.children]);

@@ -73,8 +73,14 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const onSelectionChange = useCallback(
     (selection: Selection) => {
       if (editor.readOnly) return;
+      if (editor.path.source === 'mousemove' || editor.path.source === 'keyboard') return;
 
-      editor.setPath({ current: editor.path.current, selected: editor.path.selected, selection: selection });
+      editor.setPath({
+        current: editor.path.current,
+        selected: editor.path.selected,
+        selection: selection,
+        source: 'native-selection',
+      });
     },
     [editor.readOnly],
   );
@@ -213,7 +219,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
             });
 
             // [TEST]
-            editor.setPath({ current: null, selected: newPaths });
+            editor.setPath({ current: null, selected: newPaths, source: 'copy-paste' });
           });
 
           return;

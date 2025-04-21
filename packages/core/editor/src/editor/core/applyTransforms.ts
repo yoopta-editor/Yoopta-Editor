@@ -62,6 +62,18 @@ export type SplitBlockOperation = {
   path: YooptaPath;
 };
 
+export type ToogleBlockOperation = {
+  type: 'toggle_block';
+  properties: {
+    toggledBlock: YooptaBlockData;
+    toggledSlateValue: SlateElement[];
+  };
+  prevProperties: {
+    sourceBlock: YooptaBlockData;
+    sourceSlateValue: SlateElement[];
+  };
+};
+
 export type MergeBlockOperation = {
   type: 'merge_block';
   properties: {
@@ -111,6 +123,7 @@ export type YooptaOperation =
   | SetBlockValueOperation
   | SetBlockMetaOperation
   | MergeBlockOperation
+  | ToogleBlockOperation
   | MoveBlockOperation
   | SetSlateOperation
   | SetEditorValueOperation;
@@ -286,6 +299,20 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       break;
     }
 
+    case 'toggle_block': {
+      const { properties, prevProperties } = op;
+      delete editor.blockEditorsMap[prevProperties.sourceBlock.id];
+      delete editor.children[prevProperties.sourceBlock.id];
+
+      const newSlate = buildSlateEditor(editor);
+      newSlate.children = properties.toggledSlateValue;
+
+      editor.children[properties.toggledBlock.id] = properties.toggledBlock;
+      editor.blockEditorsMap[properties.toggledBlock.id] = newSlate;
+
+      break;
+    }
+
     case 'move_block': {
       const { prevProperties, properties } = op;
       const block = editor.children[prevProperties.id];
@@ -346,7 +373,6 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
           block.meta.order = index;
         }
       });
-
       break;
     }
   }
@@ -426,7 +452,7 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
 }
 
 function assertValidPaths(editor: YooEditor) {
-  const blocks = Object.values(editor.children);
+  const blocks = [...Object.values(editor.children)];
   blocks.sort((a, b) => a.meta.order - b.meta.order);
   blocks.forEach((block, index) => {
     if (block.meta.order !== index) {
