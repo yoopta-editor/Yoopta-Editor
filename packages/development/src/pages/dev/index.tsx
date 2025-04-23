@@ -246,11 +246,6 @@ const BasicExample = () => {
           color: rgb(),
         },
       }),
-      {
-        captureTimeout: 500,
-        onStackItemAdded: () => console.log('Added to history'),
-        onStackItemPopped: () => console.log('Restored from history'),
-      },
     );
   }, [provider.document]);
 
@@ -266,20 +261,12 @@ const BasicExample = () => {
   }, [editor]);
 
   const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    console.log('onChange', value, options);
+    console.log('onChange value', value);
+
     setValue(value);
   };
 
   const onPathChange = (path: YooptaPath) => {};
-
-  // useEffect(() => {
-  //   editor.withoutSavingHistory(() => {
-  //     const id = generateId();
-
-  //     editor.setEditorValue(data as YooptaContentValue);
-  //     editor.focusBlock(id);
-  //   });
-  // }, []);
 
   return (
     <>

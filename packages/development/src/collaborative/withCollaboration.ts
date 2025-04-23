@@ -5,8 +5,6 @@ import BlockOrderResolver from './conflict-resolver';
 const LOCAL_ORIGIN = Symbol('yoopta-local-change');
 const CONNECTED: WeakSet<YjsYooEditor> = new WeakSet();
 
-const orderResolver = new BlockOrderResolver();
-
 export type EditorState = {
   operations: YooptaOperation[];
   timestamp: number;
@@ -26,17 +24,17 @@ export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<Edito
 
   editor.sharedState = sharedState;
   editor.localOrigin = LOCAL_ORIGIN;
-  editor.isLocalOrigin = (origin) => origin === editor.localOrigin;
+  editor.isLocalOrigin = (origin: Symbol) => origin === editor.localOrigin;
 
   function handleYEvents(event: Y.YMapEvent<EditorState>, transaction: Y.Transaction) {
     if (editor.isLocalOrigin(transaction.origin)) return;
 
     const state = sharedState.get('state');
-    console.log('handleYEvents state', state);
     if (!state) return;
 
     const remoteOperations = state.operations;
-    const resolvedOperations = orderResolver.resolveConflicts(state, editor.children);
+
+    console.log('FROM_REMOTE_CHANGES remoteOperations', remoteOperations);
 
     if (remoteOperations.length > 0) {
       editor.withoutSavingHistory(() => {
@@ -57,7 +55,7 @@ export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<Edito
     const state = editor.sharedState.get('state');
     if (state && Array.isArray(state.operations)) {
       const ops = state.operations.filter(
-        (op) => !!op?.type && op.type !== 'set_path' && op.type !== 'set_block_value',
+        (op: YooptaOperation) => !!op?.type && op.type !== 'set_path' && op.type !== 'set_block_value',
       );
       if (ops.length > 0) {
         editor.withoutSavingHistory(() => {
@@ -74,6 +72,8 @@ export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<Edito
 
   editor.applyTransforms = (operations: YooptaOperation[], options?: any) => {
     applyTransforms(operations, { ...options, validatePaths: true });
+
+    console.log('FROM_LOCAL_CHANGES operations', operations);
 
     const ops = operations.filter((op) => !!op?.type && op.type !== 'set_path' && op.type !== 'set_block_value');
     if (ops.length > 0) {

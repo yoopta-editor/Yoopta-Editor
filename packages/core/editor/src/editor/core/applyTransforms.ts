@@ -62,7 +62,7 @@ export type SplitBlockOperation = {
   path: YooptaPath;
 };
 
-export type ToogleBlockOperation = {
+export type ToggleBlockOperation = {
   type: 'toggle_block';
   properties: {
     toggledBlock: YooptaBlockData;
@@ -123,7 +123,7 @@ export type YooptaOperation =
   | SetBlockValueOperation
   | SetBlockMetaOperation
   | MergeBlockOperation
-  | ToogleBlockOperation
+  | ToggleBlockOperation
   | MoveBlockOperation
   | SetSlateOperation
   | SetEditorValueOperation;

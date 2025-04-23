@@ -2,6 +2,8 @@ import * as Y from 'yjs';
 import { YjsYooEditor } from './withCollaboration';
 
 export type EditorWithYjsHistory = YjsYooEditor & {
+  undo: () => void;
+  redo: () => void;
   history: {
     clear: () => void;
     canUndo: () => boolean;
@@ -25,36 +27,36 @@ export function withYjsHistory(editor: YjsYooEditor, options: YjsHistoryOptions 
     captureTimeout: options.captureTimeout || 500,
   });
 
-  const handleStackItemAdded = (...params) => {
+  const handleStackItemAdded = () => {
     options.onStackItemAdded?.();
   };
 
-  const handleStackItemPopped = (...params) => {
+  const handleStackItemPopped = (event: any) => {
+    const currentState = e.sharedState.get('state');
+    console.log('handleStackItemPopped currentState', currentState);
+    if (currentState && currentState.operations) {
+      e.withoutSavingHistory(() => {});
+    }
+
     options.onStackItemPopped?.();
   };
 
-  const handleStackItemUpdated = (...params) => {
-    // e.sharedState.set('state', {
-    //   operations: undoManager.toJSON(),
-    //   timestamp: Date.now(),
-    // });
-  };
+  const handleStackItemUpdated = () => {};
 
   e.undo = () => {
-    console.log('undoManager.canUndo()', undoManager.canUndo());
     if (undoManager.canUndo()) {
       undoManager.undo();
     }
   };
 
   e.redo = () => {
-    console.log('undoManager.canRedo()', undoManager.canRedo());
     if (undoManager.canRedo()) {
       undoManager.redo();
     }
   };
 
   e.undoManager = undoManager;
+
   e.history = {
     clear: () => {
       undoManager.clear();
