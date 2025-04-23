@@ -1,67 +1,9 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import { createYooptaEditor } from '../packages/core/editor/src/editor';
-import { YooptaPlugin } from '../packages/core/editor/src/plugins';
 import { YooptaEditor, YooptaEditorProps } from '../packages/core/editor/src/YooptaEditor';
-
-export const InlinePlugin = new YooptaPlugin({
-  type: 'Inline',
-  elements: {
-    inline: {
-      render: (props) => <span {...props.attributes}>{props.children}</span>,
-      props: { nodeType: 'inline' },
-    },
-  },
-});
-
-export const DefaultParagraph = new YooptaPlugin({
-  type: 'Paragraph',
-  elements: {
-    paragraph: {
-      render: (props) => <p {...props.attributes}>{props.children}</p>,
-      props: { nodeType: 'block' },
-    },
-  },
-  options: {
-    shortcuts: ['p', 'text', 'para'],
-    display: {
-      title: 'Paragraph',
-      description: 'Paragraph block',
-    },
-  },
-});
-
-export const BlockPluginWithProps = new YooptaPlugin({
-  type: 'BlockPluginWithProps',
-  elements: {
-    block: {
-      render: (props) => <div {...props.attributes}>{props.children}</div>,
-      props: { nodeType: 'block', checked: false },
-    },
-  },
-});
-
-const PluginWithSeveralElements = new YooptaPlugin({
-  type: 'PluginWithSeveralElements',
-  elements: {
-    'root-element': {
-      render: (props) => <div {...props.attributes}>{props.children}</div>,
-      props: { nodeType: 'inline' },
-      children: ['first-child-element'],
-    },
-    'first-child-element': {
-      render: (props) => <div {...props.attributes}>{props.children}</div>,
-      props: { nodeType: 'block' },
-      children: ['second-child-element'],
-    },
-    'second-child-element': {
-      render: (props) => <div {...props.attributes}>{props.children}</div>,
-      props: { nodeType: 'block' },
-    },
-  },
-});
-
-export const TEST_PLUGIN_LIST = [InlinePlugin, DefaultParagraph, BlockPluginWithProps, PluginWithSeveralElements];
+import { TEST_PLUGIN_LIST } from './test-plugins';
+import { YooptaContentValue } from '../packages/core/editor/src/editor/types';
 
 const DEFAULT_EDITOR_STATE = {
   'aafd7597-1e9a-4c80-ab6c-88786595d72a': {
@@ -130,7 +72,7 @@ const DEFAULT_EDITOR_STATE = {
       order: 1,
     },
   },
-};
+} as YooptaContentValue;
 
 export function renderYooptaEditor(props: Partial<YooptaEditorProps> = {}) {
   const editor = props.editor || createYooptaEditor();
