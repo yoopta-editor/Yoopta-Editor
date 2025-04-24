@@ -166,7 +166,7 @@ export function onKeyDown(editor: YooEditor) {
         Transforms.deselect(slate);
 
         const allBlockPaths = Array.from({ length: Object.keys(editor.children).length }, (_, i) => i);
-        editor.setPath({ current: null, selected: allBlockPaths });
+        editor.setPath({ current: null, selected: allBlockPaths, source: 'keyboard' });
         return;
       }
     }

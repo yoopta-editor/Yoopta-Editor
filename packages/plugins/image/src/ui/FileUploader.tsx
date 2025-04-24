@@ -42,6 +42,7 @@ const FileUploader = ({ accept = 'image/*', onClose, blockId, onSetLoading }: Pr
         },
       });
     } catch (error) {
+      options?.onError?.(error);
     } finally {
       onSetLoading(false);
     }
