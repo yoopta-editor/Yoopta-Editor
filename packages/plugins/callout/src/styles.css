@@ -14,7 +14,11 @@
 }
 
 .yoopta-callout-icon {
-  @apply yoo-callout-mt-1.5 yoo-callout-w-4 yoo-callout-absolute yoo-callout-left-4 yoo-callout-top-2
+  @apply yoo-callout-w-4 yoo-callout-absolute yoo-callout-left-4 yoo-callout-top-1/2
+}
+
+.yoopta-callout-icon>svg {
+  @apply -yoo-callout-translate-y-1/2
 }
 
 .yoopta-callout-theme-default {
