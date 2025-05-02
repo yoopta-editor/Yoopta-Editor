@@ -64,6 +64,11 @@ export type EventHandlers = {
   ) => EditorEventHandlers[key] | void;
 };
 
+export type PluginClipboardPasteOrDropRules = {
+  mimeTypes: string[];
+  handler: (file: File, editor: YooEditor) => Promise<SlateElement>;
+};
+
 export type PluginEventHandlerOptions = {
   hotkeys: HOTKEYS_TYPE;
   defaultBlock: YooptaBlockData;
@@ -89,6 +94,7 @@ export type Plugin<TElementMap extends Record<string, SlateElement>, TPluginOpti
   events?: PluginEvents;
   options?: PluginOptions<TPluginOptions>;
   parsers?: Partial<Record<PluginParserTypes, PluginParsers>>;
+  clipboardPasteOrDropRules?: PluginClipboardPasteOrDropRules;
 };
 
 export type PluginParsers = {

@@ -171,7 +171,6 @@ const Editor = ({
 
         navigator.clipboard.write([clipboardItem]).then(() => {
           const html = new DOMParser().parseFromString(htmlString, 'text/html');
-          console.log('HTML copied\n', html.body);
         });
 
         if (HOTKEYS.isCut(event)) {
@@ -308,6 +307,42 @@ const Editor = ({
     }
   };
 
+  const handleClipboardContent = async (file: File) => {
+    const plugin = Object.keys(editor.plugins).find((plugin) => {
+      const pluginInstance = editor.plugins[plugin];
+      const mimeTypes = pluginInstance.clipboardPasteOrDropRules?.mimeTypes;
+      if (!mimeTypes) return false;
+      return mimeTypes.includes(file.type);
+    });
+
+    if (!plugin) return;
+
+    const pluginInstance = editor.plugins[plugin];
+    const block = await pluginInstance.clipboardPasteOrDropRules?.handler(file, editor);
+    if (!block) return;
+
+    const blockData = Blocks.buildBlockData({ type: pluginInstance.type, value: [block] });
+    Blocks.insertBlock(editor, pluginInstance.type, { focus: true, blockData });
+  };
+
+  const onPaste = (e: ClipboardEvent) => {
+    const items = e.clipboardData.items;
+    for (const item of items) {
+      const file = item.getAsFile();
+      if (!file) continue;
+      handleClipboardContent(file);
+    }
+  };
+
+  const onDrop = (e: DragEvent) => {
+    const items = e.dataTransfer?.files;
+    if (!items) return;
+    for (const file of items) {
+      if (!file) continue;
+      handleClipboardContent(file);
+    }
+  };
+
   const editorStyles: CSSProperties = getEditorStyles({
     ...style,
     userSelect: selectionBox.selection ? 'none' : 'auto',
@@ -325,6 +360,8 @@ const Editor = ({
       onBlur={onBlur}
       onCopy={onCopy}
       onCut={onCopy}
+      onPaste={onPaste}
+      onDrop={onDrop}
     >
       <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
       {selectionBoxRoot !== false && (
