@@ -63,6 +63,8 @@ export const DefaultElementEditorContainerRender = () => {
   const editorEntries = Object.entries(editors) as Array<[ElementPropEditorType, ElementPropEditor]>;
   if (editorEntries.length === 0) return null;
 
+  console.log('editorEntries', editorEntries);
+
   return (
     <Portal id="edit-element">
       <div

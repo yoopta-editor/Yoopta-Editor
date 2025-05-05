@@ -10,7 +10,7 @@ import {
 } from '@yoopta/editor';
 import { useCallback, useReducer, useState } from 'react';
 import { ReactEditor } from 'slate-react';
-import { RangeSizeEditor } from 'src/editors/RangeSizeEditor';
+import { SliderEditor } from 'src/editors/SliderEditor';
 import { ColorEditor } from '../editors/ColorEditor';
 import { SelectEditor } from '../editors/SelectEditor';
 import { SizeEditor } from '../editors/SizeEditor';
@@ -107,14 +107,15 @@ export const RenderElementPropEditor = ({ editor, propEditor, propName, element 
         />
       );
 
-    case 'range-size':
+    case 'range':
       return (
-        <RangeSizeEditor
+        <SliderEditor
+          id={element.id}
+          label={propEditor.label}
+          name={element.id}
           value={value}
           onChange={handleChange}
-          label={propEditor.label}
           description={propEditor.description}
-          options={propEditor.options}
         />
       );
     default:

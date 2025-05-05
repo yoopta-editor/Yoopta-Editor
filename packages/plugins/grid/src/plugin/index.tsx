@@ -129,6 +129,7 @@ const GridCard = new YooptaPlugin<GridElementMap>({
         fit: 'fill',
         nodeType: 'void',
         src: '',
+        sizes: { width: 650, height: 500 },
       },
       editors: {
         fit: {
@@ -143,6 +144,14 @@ const GridCard = new YooptaPlugin<GridElementMap>({
         src: {
           type: 'upload',
           label: 'Image URL',
+        },
+        sizes: {
+          type: 'range',
+          label: 'Size',
+          options: [
+            { label: 'Width', min: 0, max: 1000 },
+            { label: 'Height', min: 0, max: 1000 },
+          ],
         },
       },
     },

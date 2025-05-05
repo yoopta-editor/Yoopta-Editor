@@ -50,7 +50,7 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
           label: 'Background Color',
         },
         sizes: {
-          type: 'range-size',
+          type: 'range',
           label: 'Size',
           options: [
             { label: 'Width', min: 0, max: 1000 },

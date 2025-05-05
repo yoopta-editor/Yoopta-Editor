@@ -51,6 +51,10 @@ export type GridItemMediaElementProps = {
   fit?: GridMediaFit;
   src?: string;
   alt?: string;
+  sizes?: {
+    width: number;
+    height: number;
+  };
 };
 
 export type GridItemContentElementProps = {

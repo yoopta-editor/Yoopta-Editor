@@ -84,7 +84,7 @@ export type {
   TextPropEditor,
   SizePropEditor,
   UploadPropEditor,
-  RangeSizePropEditor,
+  RangePropEditor,
 } from './types/propsEditor';
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };

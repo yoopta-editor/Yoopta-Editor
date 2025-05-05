@@ -1,12 +1,4 @@
-export type ElementPropEditorType =
-  | 'select'
-  | 'color'
-  | 'number'
-  | 'toggle'
-  | 'text'
-  | 'size'
-  | 'upload'
-  | 'range-size';
+export type ElementPropEditorType = 'select' | 'color' | 'number' | 'toggle' | 'text' | 'size' | 'upload' | 'range';
 
 export type BasePropEditor = {
   type: ElementPropEditorType;
@@ -55,8 +47,8 @@ type RangeSizeOption = {
   max: number;
 };
 
-export type RangeSizePropEditor = BasePropEditor & {
-  type: 'range-size';
+export type RangePropEditor = BasePropEditor & {
+  type: 'range';
   options: RangeSizeOption[];
 };
 
@@ -74,4 +66,4 @@ export type ElementPropEditor =
   | TextPropEditor
   | SizePropEditor
   | UploadPropEditor
-  | RangeSizePropEditor;
+  | RangePropEditor;
