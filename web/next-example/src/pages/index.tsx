@@ -40,9 +40,22 @@ export default function Home({ repoData, sponsors, contributors }: Props) {
           <img src="/yoopta/yoopta-logo.png" alt="Yoopta logo" className="w-14 h-14 rounded-full" />
         </a>
         <h1 className="text-center scroll-m-20 text-4xl font-bold tracking-tight">Meet Yoopta-Editor 🚀</h1>
-        <div className="flex items-center mt-4 flex-col md:flex-row">
-          {/* <ProductHuntButton /> */}
+        <div className="flex items-center mt-2 flex-col md:flex-row">
           {repoData && <GithubButton repo={repoData} />}
+          <a
+            href="https://www.buymeacoffee.com/darginec05"
+            target="_blank"
+            className="hover:ring-2 hover:ring-primary hover:ring-offset-2 rounded-md shadow-md transition duration-150 ease-in-out"
+          >
+            <img
+              src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
+              alt="Buy Me A Coffee"
+              style={{
+                height: '36px',
+                width: '174px',
+              }}
+            />
+          </a>
           <GithubSponsorButton />
         </div>
         <p className="font-space-grotesk text-lg leading-snug md:text-xl mt-6 md:w-[680px] text-[#FFFFFFB2] text-center">
