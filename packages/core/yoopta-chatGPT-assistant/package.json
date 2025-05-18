@@ -14,9 +14,9 @@
     "dist/"
   ],
   "peerDependencies": {
+    "@yoopta/editor": ">=4.0.0",
     "react": ">=17.0.2",
-    "react-dom": ">=17.0.2",
-    "@yoopta/editor": ">=4.0.0"
+    "react-dom": ">=17.0.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

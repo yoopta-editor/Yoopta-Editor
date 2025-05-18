@@ -94,7 +94,7 @@ export const YOOPTA_PLUGINS = [
         alt: 'cloudinary',
         sizes: {
           width: 500,
-          height: 500,
+          height: 'auto',
         },
         fit: 'contain',
       }),

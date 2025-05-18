@@ -67,6 +67,7 @@ export {
   SetBlockValueOperation,
   SetBlockMetaOperation,
   MergeBlockOperation,
+  ToggleBlockOperation,
   MoveBlockOperation,
   SetSlateOperation,
   SetEditorValueOperation,

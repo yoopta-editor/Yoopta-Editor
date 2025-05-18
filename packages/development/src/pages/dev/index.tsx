@@ -9,16 +9,28 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { faker } from '@faker-js/faker';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
+import * as Y from 'yjs';
+import { EditorState, withCollaboration, YjsYooEditor } from '@/collaborative/withCollaboration';
+import { withYjsCursors } from '@/collaborative/withYjsCursors';
+import { Awareness } from 'y-protocols/awareness';
+import { RemoteOverlayCursor } from '@/collaborative/RemoteCursorOverlay';
+import { withYjsHistory } from '@/collaborative/withYjsHistory';
+import Head from 'next/head';
+import { WebSocketProviderClient } from '@/collaborative/WebSocketProviderClient';
 
 const EDITOR_STYLE = {
   width: 750,
 };
 
+const {
+  person: { firstName, lastName },
+  color: { rgb },
+} = faker;
 const data = {
   '25b34678-649c-4b6f-87d4-8e595400980f': {
     id: '25b34678-649c-4b6f-87d4-8e595400980f',
@@ -207,36 +219,68 @@ const data = {
 };
 
 const BasicExample = () => {
-  const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
+  const [connected, setConnected] = useState(false);
   const selectionRef = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState<YooptaContentValue>(data);
+  const [value, setValue] = useState<YooptaContentValue>();
+  const [username] = useState(`${firstName()} ${lastName()}`);
+
+  const provider = useMemo(
+    () =>
+      new WebSocketProviderClient({
+        url: 'ws://localhost:1234',
+        documentName: 'yoopta-collab',
+        onConnect: () => setConnected(true),
+        onDisconnect: () => setConnected(false),
+      }),
+    [],
+  );
+
+  const editor = useMemo(() => {
+    const sharedContent = provider.document.getMap('content') as Y.Map<EditorState>;
+    const awareness = provider.awareness;
+
+    return withYjsHistory(
+      withYjsCursors(withCollaboration(createYooptaEditor() as YjsYooEditor, sharedContent), awareness, {
+        data: {
+          name: username,
+          color: rgb(),
+        },
+      }),
+    );
+  }, [provider.document]);
+
+  useEffect(() => {
+    // please check fkcing strict mode
+    provider.connect();
+    return () => provider.disconnect();
+  }, [provider]);
+
+  useEffect(() => {
+    editor.connect();
+    return () => editor.disconnect();
+  }, [editor]);
 
   const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    console.log('onChange', value, options);
+    console.log('onChange value', value);
+
     setValue(value);
   };
 
   const onPathChange = (path: YooptaPath) => {};
 
-  // useEffect(() => {
-  //   editor.withoutSavingHistory(() => {
-  //     const id = generateId();
-
-  //     editor.setEditorValue(data as YooptaContentValue);
-  //     editor.focusBlock(id);
-  //   });
-  // }, []);
-
   return (
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
-        <FixedToolbar editor={editor} DEFAULT_DATA={data} />
+        <Head>
+          <title>Yoopta | {username}</title>
+        </Head>
+        {/* <FixedToolbar editor={editor} DEFAULT_DATA={{}} /> */}
         <YooptaEditor
           editor={editor}
           plugins={YOOPTA_PLUGINS}
           selectionBoxRoot={selectionRef}
           marks={MARKS}
-          autoFocus={true}
+          autoFocus={false}
           readOnly={false}
           placeholder="Type / to open menu"
           tools={TOOLS}
@@ -245,6 +289,7 @@ const BasicExample = () => {
           onChange={onChange}
           onPathChange={onPathChange}
         />
+        {connected && <RemoteOverlayCursor editor={editor} />}
       </div>
     </>
   );

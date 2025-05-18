@@ -62,7 +62,7 @@ export type SplitBlockOperation = {
   path: YooptaPath;
 };
 
-export type ToogleBlockOperation = {
+export type ToggleBlockOperation = {
   type: 'toggle_block';
   properties: {
     toggledBlock: YooptaBlockData;
@@ -96,7 +96,7 @@ export type DeleteBlockOperation = {
 };
 
 export type SetSelectionBlockOperation = {
-  type: 'set_block_path';
+  type: 'set_path';
   path: YooptaPath;
 };
 
@@ -123,7 +123,7 @@ export type YooptaOperation =
   | SetBlockValueOperation
   | SetBlockMetaOperation
   | MergeBlockOperation
-  | ToogleBlockOperation
+  | ToggleBlockOperation
   | MoveBlockOperation
   | SetSlateOperation
   | SetEditorValueOperation;
@@ -338,7 +338,17 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       break;
     }
 
-    case 'set_block_path': {
+    case 'set_path': {
+      // reset anchor selection if several blocks are selected
+      if (Array.isArray(op.path.selected) && op.path.selected.length > 0 && op.path.selection) {
+        op.path.selection = null;
+      }
+
+      // reset anchor selection if we change focused block
+      if (op.path.current !== editor.path.current && op.path.selection) {
+        op.path.selection = null;
+      }
+
       editor.path = op.path;
       break;
     }
@@ -390,7 +400,9 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
   editor.path = createDraft(editor.path);
 
   const { validatePaths = true, source } = options || {};
-  const operations = [...ops];
+  const operations = ops.slice();
+
+  editor.operations = [...editor.operations, ...operations];
 
   if (validatePaths) {
     operations.push({ type: 'validate_block_paths' });
@@ -423,11 +435,18 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
     editor.path = finishDraft(editor.path);
   }
 
+  // console.log(
+  //   'editor.children orders',
+  //   Object.values(editor.children)
+  //     .sort((aKey, bKey) => aKey.meta.order - bKey.meta.order)
+  //     .map((block) => `${block.meta.order}: ${block.id}`),
+  // );
+
   const saveHistory = editor.isSavingHistory() !== false;
   if (saveHistory) {
     const historyBatch = {
       operations: operations.filter(
-        (op) => op.type !== 'set_block_path' && op.type !== 'set_block_value' && op.type !== 'validate_block_paths',
+        (op) => op.type !== 'set_path' && op.type !== 'set_block_value' && op.type !== 'validate_block_paths',
       ),
       path: editor.path,
     };
@@ -445,6 +464,10 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
   const changeOptions = { value: editor.children, operations };
   editor.emit('change', changeOptions);
   editor.emit('path-change', editor.path);
+
+  Promise.resolve().then(() => {
+    editor.operations = [];
+  });
 
   if (process.env.NODE_ENV !== 'production') {
     assertValidPaths(editor);
