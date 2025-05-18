@@ -27,16 +27,16 @@ import { UndoRedoOptions, YooptaHistory } from './core/history';
 import EventEmitter from 'eventemitter3';
 import { getEmail, EmailTemplateOptions } from '../parsers/getEmail';
 
-const eventEmitter = new EventEmitter();
-
-const Events = {
-  on: (event, fn) => eventEmitter.on(event, fn),
-  once: (event, fn) => eventEmitter.once(event, fn),
-  off: (event, fn) => eventEmitter.off(event, fn),
-  emit: (event, payload) => eventEmitter.emit(event, payload),
-};
-
 export function createYooptaEditor(): YooEditor {
+  // Create a unique event emitter for each editor instance
+  const eventEmitter = new EventEmitter();
+  
+  const Events = {
+    on: (event, fn) => eventEmitter.on(event, fn),
+    once: (event, fn) => eventEmitter.once(event, fn),
+    off: (event, fn) => eventEmitter.off(event, fn),
+    emit: (event, payload) => eventEmitter.emit(event, payload),
+  };
   const editor: YooEditor = {
     id: '',
     children: {},
