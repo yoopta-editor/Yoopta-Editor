@@ -1,0 +1,21 @@
+@tailwind utilities;
+
+.yoopta-mention {
+  @apply yoo-mention-underline yoo-mention-cursor-pointer yoo-mention-underline-offset-4 yoo-mention-relative yoo-mention-text-[#007AFF] hover:yoo-mention-text-[#3b82f6]
+}
+
+.yoopta-mention-preview {
+  @apply yoo-mention-bg-[#FFFFFF] yoo-mention-flex yoo-mention-items-center yoo-mention-z-50 yoo-mention-p-[6px] yoo-mention-rounded-md yoo-mention-shadow-md yoo-mention-border-[1px] yoo-mention-border-solid yoo-mention-border-[#e3e3e3]
+}
+
+.yoopta-mention-preview-text {
+  @apply yoo-mention-text-sm yoo-mention-max-w-[200px] yoo-mention-select-none yoo-mention-text-ellipsis yoo-mention-overflow-hidden yoo-mention-whitespace-nowrap
+}
+
+.yoopta-mention-preview-separator {
+  @apply yoo-mention-w-[1px] yoo-mention-h-[20px] yoo-mention-bg-[#e3e3e3] yoo-mention-mx-[5px]
+}
+
+.yoopta-mention-edit-button {
+  @apply yoo-mention-text-sm yoo-mention-cursor-pointer
+}

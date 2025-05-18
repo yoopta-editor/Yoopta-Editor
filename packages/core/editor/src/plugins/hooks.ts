@@ -10,8 +10,7 @@ import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
 import { withInlines } from './extenstions/withInlines';
 import { PluginEventHandlerOptions, PluginEvents } from './types';
-import { SetSlateOperation, YooptaOperation } from '../editor/core/applyTransforms';
-import { YooptaHistory } from '../editor/core/history';
+import { SetSlateOperation } from '../editor/core/applyTransforms';
 
 export const useSlateEditor = (
   id: string,
@@ -35,15 +34,15 @@ export const useSlateEditor = (
 
       const { markableVoid: prevMarkableVoid, isVoid: prevIsVoid, isInline: prevIsInline } = slate;
       if (isInlineVoid) {
-        slate.markableVoid = (element) => prevMarkableVoid(element) || element.type === elementType;
+        slate.markableVoid = (element) => (element.type === elementType ? true : prevMarkableVoid(element));
       }
 
       if (isVoid || isInlineVoid) {
-        slate.isVoid = (element) => prevIsVoid(element) || element.type === elementType;
+        slate.isVoid = (element) => (element.type === elementType ? true : prevIsVoid(element));
       }
 
       if (isInline || isInlineVoid) {
-        slate.isInline = (element) => prevIsInline(element) || element.type === elementType;
+        slate.isInline = (element) => (element.type === elementType ? true : prevIsInline(element));
 
         // [TODO] - Move it to Link plugin extension
         slate = withInlines(editor, slate);
@@ -195,7 +194,6 @@ export const useEventHandlers = (
         }
       };
     });
-
     return eventHandlersMap;
   }, [events, editor, block]);
 };

@@ -12,11 +12,13 @@ import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Code from '@yoopta/code';
 import Table, { TableCommands } from '@yoopta/table';
 import Divider from '@yoopta/divider';
+import Mention from '@yoopta/mention';
 
 import { uploadToCloudinary } from '../cloudinary';
 import { Elements } from '@yoopta/editor';
 
 export const YOOPTA_PLUGINS = [
+  Mention,
   Table.extend({
     events: {
       onBeforeCreate: (editor) => {

@@ -52,7 +52,25 @@ const data = {
         type: 'paragraph',
         children: [
           {
-            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.',
+            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
+          },
+          {
+            type: 'mention',
+            children: [
+              {
+                text: '',
+              },
+            ],
+            props: {
+              user: {
+                id: '613eaca05d44',
+                name: 'akhmed ibragimov',
+              },
+              nodeType: 'inlineVoid',
+            },
+          },
+          {
+            text: '.',
           },
         ],
         props: {
@@ -206,8 +224,17 @@ const data = {
   },
 };
 
+function withMentions(editor: YooEditor) {
+  editor.mentions = {
+    target: null,
+    search: '',
+  };
+
+  return editor;
+}
+
 const BasicExample = () => {
-  const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
+  const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
   const selectionRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<YooptaContentValue>(data);
 
