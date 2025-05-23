@@ -1,42 +1,22 @@
 import { Command, CommandEmpty, CommandGroup, CommandList, CommandItem } from './components/ui/command';
-import { MentionUser } from '../types';
-import { Blocks, UI, useYooptaEditor } from '@yoopta/editor';
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-
-interface MentionDropdownProps {
-  onSelect: (user: MentionUser) => void;
-  onClose: () => void;
-  users: MentionUser[];
-  search: string;
-  target: {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  };
-}
+import { MentionPluginOptions, MentionUser } from '../types';
+import { Blocks, UI, useYooptaEditor, useYooptaPluginOptions, YooEditor } from '@yoopta/editor';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 const { Portal } = UI;
 
-export function MentionDropdown({ users, target, search, onSelect, onClose }: MentionDropdownProps) {
-  const isOpen = !!target;
-  const editor = useYooptaEditor();
+const useArrowNavigation = ({ editor, items, open, onSelect, onClose }) => {
   const listRef = useRef<HTMLDivElement | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const filteredUsers = users.filter((user) => {
-    const userName = user.name.toLowerCase();
-    const searchName = search.toLowerCase().replace('@', '');
-    return searchName.length === 0 || userName.includes(searchName);
-  });
+  useEffect(() => {
+    itemRefs.current = itemRefs.current.slice(0, items.length);
+  }, [items]);
 
   useEffect(() => {
-    itemRefs.current = itemRefs.current.slice(0, filteredUsers.length);
-  }, [filteredUsers]);
-
-  useEffect(() => {
-    if (!isOpen) return;
+    if (!open) return;
 
     const handleClickOutside = (e: MouseEvent) => {
       const el = document.getElementById(`mention-portal-${editor.id}`);
@@ -47,10 +27,10 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [editor.id, isOpen]);
+  }, [editor.id, open]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!open) return;
 
     const block = Blocks.getBlock(editor, { at: editor.path.current });
     if (!block) return;
@@ -61,14 +41,14 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         e.stopPropagation();
-        setSelectedIndex((prev) => (prev + 1) % filteredUsers.length);
+        setSelectedIndex((prev) => (prev + 1) % items.length);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         e.stopPropagation();
-        setSelectedIndex((prev) => (prev - 1 + filteredUsers.length) % filteredUsers.length);
-      } else if (e.key === 'Enter' && filteredUsers[selectedIndex]) {
+        setSelectedIndex((prev) => (prev - 1 + items.length) % items.length);
+      } else if (e.key === 'Enter' && items.length > 0 && items[selectedIndex]) {
         e.preventDefault();
-        onSelect(filteredUsers[selectedIndex]);
+        onSelect(items[selectedIndex]);
         onClose();
       } else if (e.key === 'Escape') {
         e.preventDefault();
@@ -78,7 +58,7 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
 
     blockEl.addEventListener('keydown', handleKeyDown as any);
     return () => blockEl.removeEventListener('keydown', handleKeyDown as any);
-  }, [isOpen, filteredUsers, selectedIndex, editor.path.current]);
+  }, [open, items, selectedIndex, editor.path.current]);
 
   useEffect(() => {
     const selectedItem = itemRefs.current[selectedIndex];
@@ -90,23 +70,87 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
     }
   }, [selectedIndex]);
 
+  return {
+    listRef,
+    selectedIndex,
+    itemRefs,
+  };
+};
+
+const Spinner = () => (
+  <div className="yoo-mention-flex yoo-mention-justify-center yoo-mention-items-center yoo-mention-p-4">
+    <div className="yoo-mention-h-5 yoo-mention-w-5 yoo-mention-border-2 yoo-mention-border-blue-500 yoo-mention-border-t-transparent yoo-mention-rounded-full yoo-mention-animate-spin"></div>
+  </div>
+);
+
+type MentionDropdownProps = {
+  onSelect: (user: MentionUser) => void;
+  onClose: () => void;
+  getItems: (query: string) => Promise<MentionUser[]>;
+  debounceMs?: number;
+  showLoading?: boolean;
+};
+
+export function MentionDropdown({
+  getItems: getMentionItems,
+  onSelect,
+  onClose,
+  debounceMs,
+  showLoading,
+}: MentionDropdownProps) {
+  const editor = useYooptaEditor();
+  const isOpen = !!editor.mentions.target;
+
+  const [results, setResults] = useState<MentionUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [debouncedValue] = useDebounce(editor.mentions.search, typeof debounceMs === 'number' ? debounceMs : 1000);
+
+  const { listRef, itemRefs, selectedIndex } = useArrowNavigation({
+    editor,
+    items: results,
+    open: isOpen,
+    onSelect,
+    onClose,
+  });
+
+  useEffect(() => {
+    const search = debouncedValue.replace(/@/g, '');
+    if (!isOpen) return;
+
+    const getItems = async () => {
+      try {
+        setLoading(true);
+        const res = await getMentionItems(search);
+        setResults(res);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getItems();
+  }, [debouncedValue, isOpen]);
+
   if (!isOpen) return null;
 
-  const { top, left, height } = target;
+  const { top, left, height } = editor.mentions.target;
 
   const onClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
   };
 
+  const onSelectHandler = (userId: string) => {
+    const user = results.find((u) => u.id === userId);
+
+    if (!user) return;
+    onSelect(user);
+    onClose();
+  };
+
   const style = {
     top: top + height + 4,
     left: left,
-  };
-
-  const onSelectHandler = () => {
-    onSelect(filteredUsers[selectedIndex]);
-    onClose();
   };
 
   return (
@@ -118,11 +162,12 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
         className="mention-dropdown yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-white yoo-mention-rounded-lg yoo-mention-border yoo-mention-shadow-md yoo-mention-w-[300px]"
       >
         <Command loop>
-          <CommandEmpty>No users found.</CommandEmpty>
-          {filteredUsers.length > 0 && (
+          {showLoading && loading ? (
+            <Spinner />
+          ) : results.length > 0 ? (
             <CommandGroup>
               <CommandList ref={listRef} style={{ maxHeight: 300, overflow: 'auto' }}>
-                {filteredUsers.map((user, i) => {
+                {results.map((user, i) => {
                   const isSelected = i === selectedIndex;
                   return (
                     <CommandItem
@@ -149,6 +194,8 @@ export function MentionDropdown({ users, target, search, onSelect, onClose }: Me
                 })}
               </CommandList>
             </CommandGroup>
+          ) : (
+            <CommandEmpty>No items found.</CommandEmpty>
           )}
         </Command>
       </div>

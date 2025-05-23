@@ -130,11 +130,11 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
     (event: React.KeyboardEvent) => {
       if (editor.readOnly) return;
 
-      const Mention = editor.plugins.MentionPlugin;
+      const Mention = editor.plugins.Mention;
       const { events: mentionEvents } = Mention;
       const mentionOnKeyDown = mentionEvents?.onKeyDown;
 
-      mentionOnKeyDown?.(editor, slate, {})?.(event);
+      mentionOnKeyDown?.(editor, slate, {} as any)?.(event);
       eventHandlers.onKeyDown?.(event);
       EDITOR_EVENT_HANDLERS.onKeyDown(editor)(event);
     },

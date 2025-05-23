@@ -1,4 +1,4 @@
-import { SlateElement, YooEditor, YooptaBlockData } from '../editor/types';
+import { SlateElement, YooEditor } from '../editor/types';
 import { Plugin, PluginElementsMap } from '../plugins/types';
 import { YooptaMark } from '../marks';
 import { findPluginBlockByPath } from '../utils/findPluginBlockByPath';

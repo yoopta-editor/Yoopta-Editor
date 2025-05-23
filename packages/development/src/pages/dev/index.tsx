@@ -9,6 +9,7 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { MentionCommands, MentionDropdown } from '@yoopta/mention';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -229,9 +230,29 @@ function withMentions(editor: YooEditor) {
     target: null,
     search: '',
   };
+  editor.search = '';
 
   return editor;
 }
+
+const fetchUsers = async (query: string): Promise<any[]> => {
+  try {
+    const url = new URL('http://localhost:3001/users');
+
+    if (query) {
+      url.searchParams.set('q', query);
+    }
+
+    url.searchParams.set('_limit', '10');
+
+    const response = await fetch(url.toString());
+    const users: any[] = await response.json();
+    return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+};
 
 const BasicExample = () => {
   const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
@@ -243,21 +264,13 @@ const BasicExample = () => {
     setValue(value);
   };
 
-  const onPathChange = (path: YooptaPath) => {};
-
-  // useEffect(() => {
-  //   editor.withoutSavingHistory(() => {
-  //     const id = generateId();
-
-  //     editor.setEditorValue(data as YooptaContentValue);
-  //     editor.focusBlock(id);
-  //   });
-  // }, []);
-
   return (
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
+        <button type="button" onClick={() => MentionCommands.closeDropdown(editor)}>
+          Close dropdown
+        </button>
         <YooptaEditor
           editor={editor}
           plugins={YOOPTA_PLUGINS}
@@ -270,8 +283,28 @@ const BasicExample = () => {
           style={EDITOR_STYLE}
           value={value}
           onChange={onChange}
-          onPathChange={onPathChange}
-        />
+        >
+          <MentionDropdown
+            getItems={async (query) => {
+              const users = await fetchUsers(query);
+              return users;
+            }}
+            debounceMs={500}
+            onClose={() => MentionCommands.closeDropdown(editor)}
+            onSelect={(user) => {
+              console.log('onSelect user', user);
+              MentionCommands.insertMention(editor, {
+                props: {
+                  user: {
+                    id: user.id,
+                    name: user.name,
+                    avatar: user.avatar || '',
+                  },
+                },
+              });
+            }}
+          />
+        </YooptaEditor>
       </div>
     </>
   );

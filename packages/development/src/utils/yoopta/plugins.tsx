@@ -18,7 +18,11 @@ import { uploadToCloudinary } from '../cloudinary';
 import { Elements } from '@yoopta/editor';
 
 export const YOOPTA_PLUGINS = [
-  Mention,
+  Mention.extend({
+    options: {
+      char: '@',
+    },
+  }),
   Table.extend({
     events: {
       onBeforeCreate: (editor) => {
@@ -26,9 +30,6 @@ export const YOOPTA_PLUGINS = [
       },
     },
     options: {
-      // HTMLAttributes: {
-      //   className: 'table-element-extended',
-      // },
       display: {
         title: 'Table with Shadcn',
       },

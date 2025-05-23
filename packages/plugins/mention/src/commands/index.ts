@@ -1,6 +1,6 @@
-import { generateId, SlateEditor, YooEditor } from '@yoopta/editor';
-import { Editor, Element, Location, Span, Transforms } from 'slate';
-import { MentionElement, MentionElementProps } from '../types';
+import { Blocks, generateId, SlateEditor, YooEditor } from '@yoopta/editor';
+import { Editor, Element, Location, Node, Span, Text, Transforms } from 'slate';
+import { MentionElement, MentionElementProps, MentionUser } from '../types';
 
 type MentionElementOptions = {
   props: Omit<MentionElementProps, 'nodeType'>;
@@ -8,7 +8,7 @@ type MentionElementOptions = {
 
 type MentionInsertOptions = MentionElementOptions & {
   selection?: Location | undefined;
-  slate: SlateEditor;
+  slate?: SlateEditor;
 };
 
 type DeleteElementOptions = {
@@ -17,6 +17,8 @@ type DeleteElementOptions = {
 
 export type MentionCommands = {
   buildMentionElements: (editor: YooEditor, options: MentionElementOptions) => MentionElement;
+  getSearchQuery: (editor: YooEditor) => string;
+  closeDropdown: (editor: YooEditor) => void;
   insertMention: (editor: YooEditor, options: MentionInsertOptions) => void;
   deleteMention: (editor: YooEditor, options: DeleteElementOptions) => void;
 };
@@ -24,81 +26,59 @@ export type MentionCommands = {
 export const MentionCommands: MentionCommands = {
   buildMentionElements: (editor, options) => {
     const { props } = options || {};
-    const mentionProps: MentionElementProps = { ...props, nodeType: 'inline' };
+    const mentionProps: MentionElementProps = { ...props, nodeType: 'inlineVoid' };
     return {
       id: generateId(),
       type: 'mention',
-      children: [{ text: props?.title || props?.url || '' }],
+      children: [{ text: '' }],
       props: mentionProps,
     } as MentionElement;
   },
+  getSearchQuery: (editor) => {
+    return editor.mentions.search;
+  },
+  closeDropdown: (editor) => {
+    if (editor.mentions) {
+      editor.mentions.target = null;
+      editor.mentions.search = '';
+    }
+  },
   insertMention: (editor, options) => {
-    let { props, slate } = options || {};
+    const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
+    if (!slateEditor || !slateEditor.selection) return;
 
-    if (!slate || !slate.selection) return;
+    const { selection } = slateEditor;
+    const { anchor } = selection;
 
-    const textInSelection = Editor.string(slate, slate.selection);
+    const currentNode = Node.get(slateEditor, anchor.path);
+    if (!Text.isText(currentNode)) return;
 
-    const mentionProps = {
-      ...props,
-      title: props.title || textInSelection || props.url || '',
-      nodeType: 'inline',
-    } as MentionElementProps;
+    const textBefore = currentNode.text.slice(0, anchor.offset);
+    const atIndex = textBefore.lastIndexOf('@');
 
-    const mentionElement = MentionCommands.buildMentionElements(editor, { props });
+    if (atIndex === -1) return;
 
-    const [mentionNodeEntry] = Editor.nodes<MentionElement>(slate, {
-      at: slate.selection,
-      match: (n) => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'mention',
+    Transforms.select(slateEditor, {
+      anchor: { path: anchor.path, offset: atIndex },
+      focus: anchor,
     });
 
-    if (mentionNodeEntry) {
-      const [mention, path] = mentionNodeEntry;
+    Transforms.delete(slateEditor);
 
-      Transforms.setNodes(
-        slate,
-        { props: { ...mention?.props, ...mentionProps, nodeType: 'inline' } },
-        {
-          match: (n) => Element.isElement(n) && n.type === 'mention',
-          at: path,
-        },
-      );
-
-      Editor.insertText(slate, mentionProps.title || mentionProps.url || '', { at: slate.selection });
-      Transforms.collapse(slate, { edge: 'end' });
-      return;
-    }
-
-    Transforms.wrapNodes(slate, mentionElement, { split: true, at: slate.selection });
-    Transforms.setNodes(
-      slate,
-      { text: props?.title || props?.url || '' },
-      {
-        at: slate.selection,
-        mode: 'lowest',
-        match: (n) => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'mention',
+    const mentionNode = {
+      type: 'mention',
+      children: [{ text: '' }],
+      props: {
+        ...options.props,
+        nodeType: 'inlineVoid',
       },
-    );
+    };
 
-    Editor.insertText(slate, props?.title || props?.url || '', { at: slate.selection });
-    Transforms.collapse(slate, { edge: 'end' });
+    Transforms.insertNodes(slateEditor, mentionNode);
+    Transforms.insertText(slateEditor, ' ');
+
+    editor.mentions.target = null;
+    editor.mentions.search = '';
   },
-  deleteMention: (editor, options) => {
-    try {
-      const { slate } = options;
-      if (!slate || !slate.selection) return;
-
-      const [mentionNodeEntry] = Editor.nodes(slate, {
-        at: slate.selection,
-        match: (n) => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'mention',
-      });
-
-      if (mentionNodeEntry) {
-        Transforms.unwrapNodes(slate, {
-          match: (n) => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'mention',
-          at: slate.selection,
-        });
-      }
-    } catch (error) {}
-  },
+  deleteMention: (editor, options) => {},
 };

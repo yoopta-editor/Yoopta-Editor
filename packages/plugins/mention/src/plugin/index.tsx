@@ -1,11 +1,11 @@
-import { Blocks, Elements, YooptaPlugin } from '@yoopta/editor';
-import { Range } from 'slate';
+import { Blocks, Elements, SlateEditor, YooptaPlugin } from '@yoopta/editor';
+import { Node, Range, Text } from 'slate';
 import { MentionCommands } from '../commands';
-import { MentionElementMap } from '../types';
+import { MentionElementMap, MentionPluginOptions, MentionUser } from '../types';
 import { MentionRender } from '../ui/MentionRender';
 
-const Mention = new YooptaPlugin<MentionElementMap>({
-  type: 'MentionPlugin',
+const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
+  type: 'Mention',
   elements: {
     mention: {
       render: MentionRender,
@@ -24,8 +24,9 @@ const Mention = new YooptaPlugin<MentionElementMap>({
       title: 'Mention',
       description: 'Create mention',
     },
+    char: '@',
   },
-  commands: MentionCommands,
+  // commands: MentionCommands,
   extensions: (slate, editor) => {
     const { markableVoid, isInline } = slate;
 
@@ -35,15 +36,33 @@ const Mention = new YooptaPlugin<MentionElementMap>({
     return slate;
   },
   events: {
-    onKeyDown: (editor, slate, options) => (event) => {
+    onKeyDown: (editor, slate) => (event) => {
       const { key } = event;
 
-      if (key === '@') {
+      const pluginOptions = (editor.plugins.Mention.options as MentionPluginOptions) || {};
+      const { char } = pluginOptions;
+
+      if (key === char) {
         if (slate.selection && Range.isCollapsed(slate.selection)) {
           const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
           if (!slateEditor || !slateEditor.selection) return;
+
           const domRange = Elements.getElementRect(editor, slateEditor);
           if (!domRange) return;
+
+          const currentNode = Node.get(slateEditor, slate.selection.anchor.path);
+          if (!Text.isText(currentNode)) return;
+
+          const text = currentNode.text;
+          const offset = slate.selection.anchor.offset;
+
+          const charBefore = text[offset - 1] ?? '';
+          const charAfter = text[offset] ?? '';
+
+          const isLeftClear = charBefore === '' || /\s/.test(charBefore);
+          const isRightClear = charAfter === '' || /\s/.test(charAfter);
+
+          if (!(isLeftClear && isRightClear)) return;
 
           editor.mentions.target = {
             top: domRange.top + window.scrollY,
