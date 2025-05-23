@@ -21,6 +21,7 @@ import { getHTML } from '../parsers/getHTML';
 import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
 import { getEmail } from '../parsers/getEmail';
+import { ExtendedType } from './custom-types';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -90,7 +91,7 @@ export type BaseCommands = Record<string, (...args: any[]) => any>;
 
 // [TODO] - Fix generic and default types
 // [TODO] - change with WithoutFirstArg
-export type YooEditor = {
+export type BaseYooEditor = {
   id: string;
   readOnly: boolean;
   isEmpty: () => boolean;
@@ -176,3 +177,5 @@ export type SlateElement<K extends string = string, T = any> = {
   children: Descendant[];
   props?: PluginElementProps<T>;
 };
+
+export type YooEditor = ExtendedType<'YooEditor', BaseYooEditor>;

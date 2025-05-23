@@ -9,7 +9,7 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { MentionCommands, MentionDropdown } from '@yoopta/mention';
+import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -63,7 +63,7 @@ const data = {
               },
             ],
             props: {
-              user: {
+              mention: {
                 id: '613eaca05d44',
                 name: 'akhmed ibragimov',
               },
@@ -225,16 +225,6 @@ const data = {
   },
 };
 
-function withMentions(editor: YooEditor) {
-  editor.mentions = {
-    target: null,
-    search: '',
-  };
-  editor.search = '';
-
-  return editor;
-}
-
 const fetchUsers = async (query: string): Promise<any[]> => {
   try {
     const url = new URL('http://localhost:3001/users');
@@ -268,9 +258,45 @@ const BasicExample = () => {
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
-        <button type="button" onClick={() => MentionCommands.closeDropdown(editor)}>
-          Close dropdown
-        </button>
+        <div className="flex gap-2 mb-4">
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => MentionCommands.closeDropdown(editor)}
+          >
+            Close dropdown
+          </button>
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => {
+              const mentions = MentionCommands.findMentions(editor);
+              console.log('MentionCommands.findMentions', mentions);
+            }}
+          >
+            Find mentions
+          </button>
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => {
+              const mention = MentionCommands.findMention(editor, { at: 1 });
+              console.log('MentionCommands.findMention', mention);
+            }}
+          >
+            Find mention
+          </button>
+          <button
+            type="button"
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            onClick={() => {
+              const search = MentionCommands.getSearchQuery(editor);
+              console.log('MentionCommands.getSearchQuery', search);
+            }}
+          >
+            Get Search Query
+          </button>
+        </div>
         <YooptaEditor
           editor={editor}
           plugins={YOOPTA_PLUGINS}
@@ -290,15 +316,13 @@ const BasicExample = () => {
               return users;
             }}
             debounceMs={500}
-            onClose={() => MentionCommands.closeDropdown(editor)}
-            onSelect={(user) => {
-              console.log('onSelect user', user);
+            onSelect={(mention) => {
               MentionCommands.insertMention(editor, {
                 props: {
-                  user: {
-                    id: user.id,
-                    name: user.name,
-                    avatar: user.avatar || '',
+                  mention: {
+                    id: mention.id,
+                    name: mention.name,
+                    avatar: mention.avatar || '',
                   },
                 },
               });

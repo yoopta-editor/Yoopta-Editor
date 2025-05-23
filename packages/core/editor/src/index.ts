@@ -30,6 +30,7 @@ export { createYooptaEditor } from './editor';
 export { createYooptaMark, YooptaMarkParams, YooptaMark } from './marks';
 export {
   YooEditor,
+  BaseYooEditor,
   SlateElement,
   YooptaBlockData,
   YooptaBlock,
@@ -74,5 +75,6 @@ export {
 } from './editor/core/applyTransforms';
 
 import './styles.css';
+export type { ExtendYooptaTypes } from './editor/custom-types';
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };

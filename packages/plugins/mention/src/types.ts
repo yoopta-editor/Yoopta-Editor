@@ -1,9 +1,8 @@
-import { YooEditor } from '@yoopta/editor';
 import { SlateElement } from '@yoopta/editor';
 
 export type MentionPluginElementKeys = 'mention';
-export type MentionUser = { id: string; name: string; avatar?: string };
-export type MentionElementProps = { user: MentionUser; nodeType: 'inlineVoid' };
+export type MentionItem = { id: string; name: string; avatar?: string };
+export type MentionElementProps = { mention: MentionItem; nodeType: 'inlineVoid' };
 export type MentionElement = SlateElement<'mention', MentionElementProps>;
 
 export type MentionElementMap = {
@@ -11,9 +10,21 @@ export type MentionElementMap = {
 };
 
 export type MentionPluginOptions = {
-  onSearch: (query: string) => Promise<MentionUser[]>;
-  onSelect?: (user: MentionUser) => void;
-  renderMention?: (user: MentionUser) => React.ReactNode;
-  renderDropdownItem?: (user: MentionUser) => React.ReactNode;
+  onSearch: (query: string) => Promise<MentionItem[]>;
+  onSelect?: (mention: MentionItem) => void;
+  renderMention?: (mention: MentionItem) => React.ReactNode;
+  renderDropdownItem?: (mention: MentionItem) => React.ReactNode;
   char?: string;
 };
+
+export interface MentionEditor {
+  mentions: {
+    target: null | {
+      top: number;
+      left: number;
+      height: number;
+      width: number;
+    };
+    search: string;
+  };
+}

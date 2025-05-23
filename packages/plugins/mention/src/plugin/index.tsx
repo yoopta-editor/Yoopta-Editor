@@ -1,7 +1,7 @@
-import { Blocks, Elements, SlateEditor, YooptaPlugin } from '@yoopta/editor';
+import { Blocks, Elements, SlateEditor, YooEditor, YooptaPlugin } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
-import { MentionCommands } from '../commands';
-import { MentionElementMap, MentionPluginOptions, MentionUser } from '../types';
+import { MentionCommands } from '../commands/MentionCommands';
+import { MentionElementMap, MentionPluginOptions, MentionItem } from '../types';
 import { MentionRender } from '../ui/MentionRender';
 
 const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
@@ -10,7 +10,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     mention: {
       render: MentionRender,
       props: {
-        user: {
+        mention: {
           id: '',
           avatar: '',
           name: '',
@@ -88,4 +88,13 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
   },
 });
 
-export { Mention };
+function withMentions(baseEditor: YooEditor): YooEditor {
+  baseEditor.mentions = {
+    target: null,
+    search: '',
+  };
+
+  return baseEditor;
+}
+
+export { Mention, withMentions };

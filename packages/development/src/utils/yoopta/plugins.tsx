@@ -20,7 +20,7 @@ import { Elements } from '@yoopta/editor';
 export const YOOPTA_PLUGINS = [
   Mention.extend({
     options: {
-      char: '@',
+      char: '#',
     },
   }),
   Table.extend({

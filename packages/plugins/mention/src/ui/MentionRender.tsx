@@ -1,7 +1,5 @@
-import { Blocks, generateId, PluginElementRenderProps, useYooptaEditor, YooEditor } from '@yoopta/editor';
-import { Node, Text, Transforms } from 'slate';
-import { MentionElementProps, MentionUser } from '../types';
-import { MentionDropdown } from './MentionDropdown';
+import { PluginElementRenderProps } from '@yoopta/editor';
+import { MentionElementProps } from '../types';
 
 const style: React.CSSProperties = {
   padding: '.1rem .3rem',
@@ -16,16 +14,13 @@ const style: React.CSSProperties = {
 };
 
 const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
-  const editor = useYooptaEditor();
   const { element, attributes, children } = props;
-  const { className = '' } = props.HTMLAttributes || {};
-
-  const { user } = element.props as MentionElementProps;
+  const { mention } = element.props as MentionElementProps;
 
   return (
     <>
-      <span {...attributes} contentEditable={false} data-user-id={user.id} style={style}>
-        @{user.name}
+      <span {...attributes} contentEditable={false} data-mention-id={mention.id} style={style}>
+        {mention.name}
         {children}
       </span>
     </>
