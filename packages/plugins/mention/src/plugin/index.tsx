@@ -63,10 +63,6 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
           if (!(isLeftClear && isRightClear)) return;
 
           editor.mentions.target = elRect;
-          editor.mentions.range = {
-            anchor: { path: slateEditor.selection.anchor.path, offset: offset },
-            focus: { path: slateEditor.selection.anchor.path, offset: offset },
-          };
           editor.mentions.search = '';
         }
       }

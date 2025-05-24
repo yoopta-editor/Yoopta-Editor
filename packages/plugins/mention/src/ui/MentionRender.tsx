@@ -7,6 +7,10 @@ const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
 
   const { selected, focused } = useElementSelected();
 
+  if (typeof extendRender === 'function') {
+    return extendRender(props);
+  }
+
   return (
     <>
       <span
