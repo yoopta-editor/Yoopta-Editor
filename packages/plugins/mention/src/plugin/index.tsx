@@ -39,6 +39,8 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     onKeyDown: (editor, slate) => (event) => {
       const { key } = event;
 
+      console.log(`Mention onKeyDown: ${key}`);
+
       const pluginOptions = (editor.plugins.Mention.options as MentionPluginOptions) || {};
       const { char } = pluginOptions;
 
@@ -47,8 +49,8 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
           const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
           if (!slateEditor || !slateEditor.selection) return;
 
-          const domRange = Elements.getElementRect(editor, slateEditor);
-          if (!domRange) return;
+          const elRect = Elements.getElementRect(editor, slateEditor);
+          if (!elRect) return;
 
           const currentNode = Node.get(slateEditor, slate.selection.anchor.path);
           if (!Text.isText(currentNode)) return;
@@ -64,12 +66,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
 
           if (!(isLeftClear && isRightClear)) return;
 
-          editor.mentions.target = {
-            top: domRange.top + window.scrollY,
-            left: domRange.left + window.scrollX,
-            width: domRange.width,
-            height: domRange.height,
-          };
+          editor.mentions.target = elRect;
           editor.mentions.search = '';
         }
       }

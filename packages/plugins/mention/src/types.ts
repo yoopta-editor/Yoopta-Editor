@@ -19,12 +19,7 @@ export type MentionPluginOptions = {
 
 export interface MentionEditor {
   mentions: {
-    target: null | {
-      top: number;
-      left: number;
-      height: number;
-      width: number;
-    };
+    target: { domRect: DOMRect; clientRect: DOMRectList } | null;
     search: string;
   };
 }

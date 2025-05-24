@@ -1,10 +1,20 @@
 import { Command, CommandEmpty, CommandGroup, CommandList, CommandItem } from '../components/ui/command';
 import { MentionPluginOptions, MentionItem } from '../types';
 import { UI, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDebounce } from 'use-debounce';
 import { MentionCommands } from '../commands/MentionCommands';
 import { useArrowNavigation } from './hooks';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  inline,
+  autoUpdate,
+  useTransitionStyles,
+  VirtualElement,
+} from '@floating-ui/react';
 
 const { Portal } = UI;
 
@@ -37,10 +47,32 @@ export function MentionDropdown({
   const [loading, setLoading] = useState(false);
   const [debouncedValue] = useDebounce(editor.mentions.search, typeof debounceMs === 'number' ? debounceMs : 1000);
 
+  const { refs, floatingStyles, context } = useFloating({
+    placement: 'bottom-start',
+    open: isOpen,
+    middleware: [inline(), flip(), shift(), offset(4)],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+    duration: 100,
+  });
+
   const closeDropdown = () => {
     MentionCommands.closeDropdown(editor);
     if (onClose) onClose();
   };
+
+  useEffect(() => {
+    if (editor.mentions.target) {
+      const elRect = editor.mentions.target;
+      console.log(elRect);
+      refs.setReference({
+        getBoundingClientRect: () => elRect.domRect,
+        getClientRects: () => elRect.clientRect,
+      });
+    }
+  }, [editor.mentions.target, refs.setReference]);
 
   const { listRef, itemRefs, selectedIndex } = useArrowNavigation({
     editor,
@@ -87,8 +119,8 @@ export function MentionDropdown({
   };
 
   const style = {
-    top: top + height + 4,
-    left: left,
+    ...floatingStyles,
+    ...transitionStyles,
   };
 
   const renderContent = () => {
@@ -133,14 +165,17 @@ export function MentionDropdown({
 
   return (
     <Portal id="mention-portal">
-      <div
-        onClick={onClick}
-        onMouseDown={onClick}
-        style={style}
-        className="mention-dropdown yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-white yoo-mention-rounded-lg yoo-mention-border yoo-mention-shadow-md yoo-mention-w-[300px]"
-      >
-        <Command loop>{renderContent()}</Command>
-      </div>
+      {isMounted && (
+        <div
+          onClick={onClick}
+          onMouseDown={onClick}
+          style={style}
+          ref={refs.setFloating}
+          className="mention-dropdown yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-white yoo-mention-rounded-lg yoo-mention-border yoo-mention-shadow-md yoo-mention-w-[300px]"
+        >
+          <Command loop>{renderContent()}</Command>
+        </div>
+      )}
     </Portal>
   );
 }

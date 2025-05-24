@@ -176,7 +176,7 @@ export const useEventHandlers = (
   slate: SlateEditor,
 ) => {
   return useMemo<EditorEventHandlers>(() => {
-    if (!events || editor.readOnly) return {};
+    if (editor.readOnly) return {};
     const { onBeforeCreate, onDestroy, onCreate, ...eventHandlers } = events || {};
 
     const eventHandlersOptions: PluginEventHandlerOptions = {
@@ -184,16 +184,51 @@ export const useEventHandlers = (
       currentBlock: block,
       defaultBlock: Blocks.buildBlockData({ id: generateId() }),
     };
-    const eventHandlersMap = {};
+    const eventHandlersMap: EditorEventHandlers = {};
 
-    Object.keys(eventHandlers).forEach((eventType) => {
-      eventHandlersMap[eventType] = function handler(event) {
-        if (eventHandlers[eventType]) {
-          const handler = eventHandlers[eventType](editor, slate, eventHandlersOptions);
-          handler(event);
-        }
-      };
+    // Get inline plugin event handlers
+    const inlinePlugins = Object.values(editor.plugins).filter((plugin) => {
+      const rootElement = Object.values(plugin.elements)[0];
+      return rootElement?.props?.nodeType === 'inline' || rootElement?.props?.nodeType === 'inlineVoid';
     });
+
+    // Merge block and inline plugin event handlers
+    const allEventHandlers = { ...eventHandlers };
+    inlinePlugins.forEach((plugin) => {
+      if (plugin.events) {
+        const { onBeforeCreate, onDestroy, onCreate, ...inlineEventHandlers } = plugin.events;
+        Object.keys(inlineEventHandlers).forEach((eventType) => {
+          if (allEventHandlers[eventType]) {
+            // If event handler already exists, wrap it to include inline plugin handler
+            const existingHandler = allEventHandlers[eventType];
+            const inlineHandler = inlineEventHandlers[eventType];
+
+            allEventHandlers[eventType] = (editor, slate, options) => (event) => {
+              // Call the block's event handler
+              const result = existingHandler(editor, slate, options)(event);
+              // Call the inline plugin's handler
+              inlineHandler(editor, slate, options)(event);
+              return result;
+            };
+          } else {
+            // If no block handler exists, just use the inline handler
+            allEventHandlers[eventType] = inlineEventHandlers[eventType];
+          }
+        });
+      }
+    });
+
+    // Transform handlers to match EditorEventHandlers type
+    Object.keys(allEventHandlers).forEach((eventType) => {
+      const handler = allEventHandlers[eventType];
+      if (handler) {
+        eventHandlersMap[eventType] = (event) => {
+          const eventHandler = handler(editor, slate, eventHandlersOptions);
+          eventHandler(event);
+        };
+      }
+    });
+
     return eventHandlersMap;
   }, [events, editor, block]);
 };
