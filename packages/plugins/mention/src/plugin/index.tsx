@@ -1,7 +1,7 @@
-import { Blocks, Elements, SlateEditor, YooEditor, YooptaPlugin } from '@yoopta/editor';
+import { Blocks, Elements, YooEditor, YooptaPlugin } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
 import { MentionCommands } from '../commands/MentionCommands';
-import { MentionElementMap, MentionPluginOptions, MentionItem } from '../types';
+import { MentionElementMap, MentionPluginOptions } from '../types';
 import { MentionRender } from '../ui/MentionRender';
 
 const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
@@ -24,7 +24,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     },
     char: '@',
   },
-  // commands: MentionCommands,
+  commands: MentionCommands,
   extensions: (slate, editor) => {
     const { markableVoid, isInline } = slate;
 

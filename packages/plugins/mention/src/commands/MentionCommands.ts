@@ -1,4 +1,4 @@
-import { Blocks, generateId, SlateEditor, SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
 import { Editor, Element, Location, Node, NodeEntry, Range, Text, Transforms } from 'slate';
 import { MentionElement, MentionElementProps, MentionPluginOptions } from '../types';
 
@@ -14,7 +14,10 @@ type DeleteElementOptions = {
   selection?: Location | undefined;
 };
 
-type FindMentionOptions = { blockId: string } | { at: YooptaPathIndex };
+type FindMentionOptions = {
+  blockId?: string;
+  at?: YooptaPathIndex;
+};
 
 export type MentionCommands = {
   buildMentionElements: (editor: YooEditor, options: MentionElementOptions) => MentionElement;
@@ -93,10 +96,7 @@ export const MentionCommands: MentionCommands = {
   },
   findMentions: (editor: YooEditor, options?: FindMentionOptions): NodeEntry<MentionElement>[] | null => {
     try {
-      let blockToFind = { id: options?.blockId };
-      if (!blockToFind.id) {
-        blockToFind = { at: typeof options?.at === 'number' ? options?.at : editor.path.current };
-      }
+      const blockToFind = options?.blockId ? { id: options.blockId } : { at: options?.at ?? editor.path.current };
 
       const slateEditor = Blocks.getBlockSlate(editor, blockToFind);
       if (!slateEditor) return [];
@@ -116,10 +116,7 @@ export const MentionCommands: MentionCommands = {
   },
   findMention: (editor: YooEditor, options?: FindMentionOptions): NodeEntry<MentionElement> | null => {
     try {
-      let blockToFind = { id: options?.blockId };
-      if (!blockToFind.id) {
-        blockToFind = { at: typeof options?.at === 'number' ? options?.at : editor.path.current };
-      }
+      const blockToFind = options?.blockId ? { id: options.blockId } : { at: options?.at ?? editor.path.current };
 
       const slateEditor = Blocks.getBlockSlate(editor, blockToFind);
       if (!slateEditor) return null;

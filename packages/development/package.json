@@ -42,7 +42,6 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
-    "global": "^4.4.0",
     "js-beautify": "^1.15.1",
     "json-server": "0.17.4",
     "katex": "^0.16.10",
