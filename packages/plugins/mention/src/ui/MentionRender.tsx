@@ -15,7 +15,9 @@ const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
         data-mention-id={id}
         className={`yoopta-mention-tag ${selected && focused ? 'yoopta-mention-tag-selected' : ''}`}
       >
-        {avatar && <img src={avatar} alt={name} className="yoopta-mention-tag-avatar" />}
+        {avatar && (
+          <img src={avatar} alt={name} width={16} height={16} loading="lazy" className="yoopta-mention-tag-avatar" />
+        )}
         {name}
         {children}
       </span>

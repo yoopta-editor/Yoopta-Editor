@@ -37,6 +37,9 @@
 
   /* Transitions */
   --mention-transition-duration: 200ms;
+
+  /* Avatar Sizes */
+  --mention-avatar-size: 0.75em;
 }
 
 .yoopta-mention-tag {
@@ -44,7 +47,7 @@
 }
 
 .yoopta-mention-tag-avatar {
-  @apply yoo-mention-w-[10px] yoo-mention-h-[10px] yoo-mention-rounded-full
+  @apply yoo-mention-w-[var(--mention-avatar-size)] yoo-mention-h-[var(--mention-avatar-size)] yoo-mention-rounded-full
 }
 
 .yoopta-mention-tag:hover {
