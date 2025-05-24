@@ -67,7 +67,7 @@ export function onKeyDown(editor: YooEditor) {
         Transforms.delete(slate, { at: slate.selection });
       }
 
-      // when the cursor is in the middle of the block
+      // when the cursor is between start and end of the block
       if (!isStart && !isEnd) {
         // [TEST]
         editor.splitBlock({ slate, focus: true });

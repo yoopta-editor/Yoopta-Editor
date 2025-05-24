@@ -1,0 +1,113 @@
+@tailwind utilities;
+
+:root {
+  /* Mention Tag Colors */
+  --mention-text-color: #6366f1;
+  --mention-bg-color: rgb(99, 102, 241, 0.08);
+  --mention-bg-selected: rgba(34, 38, 239, 0.15);
+  --mention-hover-bg: rgb(99, 102, 241, 0.12);
+  --mention-hover-text: #4f46e5;
+
+  /* Common Colors */
+  --mention-white: #ffffff;
+  --mention-neutral-50: #fafafa;
+  --mention-neutral-100: #f5f5f5;
+  --mention-neutral-200: #e5e5e5;
+  --mention-neutral-400: #a3a3a3;
+  --mention-neutral-500: #737373;
+  --mention-neutral-800: #262626;
+  --mention-neutral-900: #171717;
+  --mention-blue-500: #3b82f6;
+
+  /* Command Component */
+  --mention-command-radius: 0.375rem;
+  --mention-command-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --mention-command-text-size: 0.875rem;
+  --mention-command-padding: 0.75rem;
+  --mention-command-input-padding: 0.75rem;
+  --mention-command-item-padding: 0.375rem;
+  --mention-command-group-padding: 0.25rem;
+
+  /* Dropdown Component */
+  --mention-dropdown-radius: 0.375rem;
+  --mention-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --mention-dropdown-padding: 0.75rem;
+  --mention-dropdown-item-gap: 0.5rem;
+  --mention-dropdown-avatar-size: 1.5rem;
+
+  /* Transitions */
+  --mention-transition-duration: 200ms;
+
+  /* Avatar Sizes */
+  --mention-avatar-size: 0.75em;
+}
+
+.yoopta-mention-tag {
+  @apply yoo-mention-cursor-pointer yoo-mention-py-[0.1rem] yoo-mention-px-[0.3rem] yoo-mention-mx-[1px] yoo-mention-align-baseline yoo-mention-inline-flex yoo-mention-items-center yoo-mention-gap-[0.3rem] yoo-mention-rounded-[4px] yoo-mention-text-[var(--mention-text-color)] yoo-mention-bg-[var(--mention-bg-color)] yoo-mention-text-[0.8em] yoo-mention-leading-[120%] yoo-mention-transition-colors yoo-mention-duration-[var(--mention-transition-duration)]
+}
+
+.yoopta-mention-tag-avatar {
+  @apply yoo-mention-w-[var(--mention-avatar-size)] yoo-mention-h-[var(--mention-avatar-size)] yoo-mention-rounded-full
+}
+
+.yoopta-mention-tag:hover {
+  @apply yoo-mention-bg-[var(--mention-hover-bg)] yoo-mention-text-[var(--mention-hover-text)]
+}
+
+.yoopta-mention-tag-selected {
+  @apply yoo-mention-bg-[var(--mention-bg-selected)]
+}
+
+/* Mention Command */
+.yoopta-command {
+  @apply yoo-mention-flex yoo-mention-h-full yoo-mention-w-full yoo-mention-flex-col yoo-mention-overflow-hidden yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-bg-[var(--mention-white)] yoo-mention-text-[var(--mention-neutral-900)] yoo-mention-shadow-[var(--mention-command-shadow)] yoo-mention-border yoo-mention-border-[var(--mention-neutral-200)]
+}
+
+.yoopta-command-input-wrapper {
+  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-border-b yoo-mention-px-[var(--mention-command-input-padding)] yoo-mention-bg-[var(--mention-neutral-50)]
+}
+
+.yoopta-command-list {
+  @apply yoo-mention-max-h-[300px] yoo-mention-overflow-y-auto yoo-mention-overflow-x-hidden
+}
+
+.yoopta-command-empty {
+  @apply yoo-mention-py-[var(--mention-command-padding)] yoo-mention-text-center yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-text-[var(--mention-neutral-500)]
+}
+
+.yoopta-command-group {
+  @apply yoo-mention-overflow-hidden yoo-mention-p-[var(--mention-command-group-padding)] yoo-mention-text-[var(--mention-neutral-800)] [&_[cmdk-group-heading]]:yoo-mention-px-[var(--mention-command-padding)] [&_[cmdk-group-heading]]:yoo-mention-py-[var(--mention-command-group-padding)] [&_[cmdk-group-heading]]:yoo-mention-text-[length:var(--mention-command-text-size)] [&_[cmdk-group-heading]]:yoo-mention-font-medium [&_[cmdk-group-heading]]:yoo-mention-text-[var(--mention-neutral-400)]
+}
+
+.yoopta-command-item {
+  @apply yoo-mention-relative yoo-mention-flex yoo-mention-cursor-pointer yoo-mention-select-none yoo-mention-items-center yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-px-[var(--mention-command-item-padding)] yoo-mention-py-[var(--mention-command-item-padding)] yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-outline-none hover:yoo-mention-bg-[var(--mention-neutral-200)] hover:yoo-mention-text-black aria-selected:yoo-mention-bg-[var(--mention-neutral-100)] aria-selected:yoo-mention-text-black data-[disabled="true"]:yoo-mention-pointer-events-none data-[disabled="true"]:yoo-mention-opacity-50
+}
+
+/* Mention Dropdown */
+.yoopta-mention-dropdown {
+  @apply yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-[var(--mention-white)] yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-border yoo-mention-shadow-[var(--mention-dropdown-shadow)] yoo-mention-w-[300px]
+}
+
+.yoopta-mention-dropdown-spinner {
+  @apply yoo-mention-flex yoo-mention-justify-center yoo-mention-items-center yoo-mention-p-[var(--mention-dropdown-padding)]
+}
+
+.yoopta-mention-dropdown-spinner-circle {
+  @apply yoo-mention-h-5 yoo-mention-w-5 yoo-mention-border-2 yoo-mention-border-[var(--mention-blue-500)] yoo-mention-border-t-transparent yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-animate-spin
+}
+
+.yoopta-mention-dropdown-item {
+  @apply yoo-mention-transition-colors yoo-mention-cursor-pointer
+}
+
+.yoopta-mention-dropdown-item-selected {
+  @apply yoo-mention-bg-[var(--mention-neutral-100)]
+}
+
+.yoopta-mention-dropdown-item-content {
+  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-gap-[var(--mention-dropdown-item-gap)]
+}
+
+.yoopta-mention-dropdown-item-avatar {
+  @apply yoo-mention-w-[var(--mention-dropdown-avatar-size)] yoo-mention-h-[var(--mention-dropdown-avatar-size)] yoo-mention-rounded-[var(--mention-dropdown-radius)]
+}
