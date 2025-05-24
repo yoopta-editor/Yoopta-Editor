@@ -40,7 +40,11 @@
 }
 
 .yoopta-mention-tag {
-  @apply yoo-mention-cursor-pointer yoo-mention-py-[0.1rem] yoo-mention-px-[0.3rem] yoo-mention-mx-[1px] yoo-mention-align-baseline yoo-mention-inline-block yoo-mention-rounded-[4px] yoo-mention-text-[var(--mention-text-color)] yoo-mention-bg-[var(--mention-bg-color)] yoo-mention-text-[0.8em] yoo-mention-leading-[120%] yoo-mention-transition-colors yoo-mention-duration-[var(--mention-transition-duration)]
+  @apply yoo-mention-cursor-pointer yoo-mention-py-[0.1rem] yoo-mention-px-[0.3rem] yoo-mention-mx-[1px] yoo-mention-align-baseline yoo-mention-inline-flex yoo-mention-items-center yoo-mention-gap-[0.3rem] yoo-mention-rounded-[4px] yoo-mention-text-[var(--mention-text-color)] yoo-mention-bg-[var(--mention-bg-color)] yoo-mention-text-[0.8em] yoo-mention-leading-[120%] yoo-mention-transition-colors yoo-mention-duration-[var(--mention-transition-duration)]
+}
+
+.yoopta-mention-tag-avatar {
+  @apply yoo-mention-w-[10px] yoo-mention-h-[10px] yoo-mention-rounded-full
 }
 
 .yoopta-mention-tag:hover {
