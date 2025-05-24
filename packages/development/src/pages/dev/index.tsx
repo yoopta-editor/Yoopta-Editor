@@ -10,6 +10,7 @@ import YooptaEditor, {
 } from '@yoopta/editor';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { faker } from '@faker-js/faker';
+import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -64,7 +65,23 @@ const data = {
         type: 'paragraph',
         children: [
           {
-            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.',
+            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
+          },
+          {
+            type: 'mention',
+            children: [
+              {
+                text: '',
+              },
+            ],
+            props: {
+              id: '613eaca05d44',
+              name: 'akhmed ibragimov',
+              nodeType: 'inlineVoid',
+            },
+          },
+          {
+            text: '.',
           },
         ],
         props: {
@@ -218,6 +235,25 @@ const data = {
   },
 };
 
+const fetchUsers = async (query: string): Promise<any[]> => {
+  try {
+    const url = new URL('http://localhost:3001/users');
+
+    if (query) {
+      url.searchParams.set('q', query);
+    }
+
+    url.searchParams.set('_limit', '10');
+
+    const response = await fetch(url.toString());
+    const users: any[] = await response.json();
+    return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+};
+
 const BasicExample = () => {
   const [connected, setConnected] = useState(false);
   const selectionRef = useRef<HTMLDivElement>(null);
@@ -238,9 +274,10 @@ const BasicExample = () => {
   const editor = useMemo(() => {
     const sharedContent = provider.document.getMap('content') as Y.Map<EditorState>;
     const awareness = provider.awareness;
+    const baseEditor = withMentions(createYooptaEditor());
 
     return withYjsHistory(
-      withYjsCursors(withCollaboration(createYooptaEditor() as YjsYooEditor, sharedContent), awareness, {
+      withYjsCursors(withCollaboration(baseEditor, sharedContent), awareness, {
         data: {
           name: username,
           color: rgb(),
@@ -288,8 +325,23 @@ const BasicExample = () => {
           value={value}
           onChange={onChange}
           onPathChange={onPathChange}
-        />
-        {connected && <RemoteOverlayCursor editor={editor} />}
+        >
+          {connected && <RemoteOverlayCursor editor={editor} />}
+          <MentionDropdown
+            getItems={async (query) => {
+              const users = await fetchUsers(query);
+              return users;
+            }}
+            debounceMs={500}
+            onSelect={(mention) => {
+              MentionCommands.insertMention(editor, {
+                id: mention.id,
+                name: mention.name,
+                avatar: mention.avatar || '',
+              });
+            }}
+          />
+        </YooptaEditor>
       </div>
     </>
   );

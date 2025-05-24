@@ -98,6 +98,13 @@ function splitSlate(slateChildren, slateSelection) {
 
   function cleanNode(node) {
     if ('children' in node) {
+      if (node.props?.nodeType === 'inlineVoid' || node.props?.nodeType === 'inline') {
+        if (node.children.length === 0) {
+          node.children = [{ text: '' }];
+        }
+        return node;
+      }
+
       node.children = node.children.filter(
         (child) => (child.text !== '' && child.text !== undefined) || (child.children && child.children.length > 0),
       );

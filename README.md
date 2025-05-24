@@ -1,16 +1,11 @@
-<a href="https://www.producthunt.com/posts/yoopta-editor?embed=true&utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-yoopta&#0045;editor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=453627&theme=light&period=daily" alt="Yoopta&#0045;Editor - Open&#0045;source&#0032;text&#0045;editor | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-
-<!-- [![RepoRater](https://repo-rater.eddiehub.io/api/badge?owner=Darginec05&name=Yoopta-Editor)](https://repo-rater.eddiehub.io/rate?owner=Darginec05&name=Yoopta-Editor) -->
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/darginec05)
 
 ![npm](https://img.shields.io/npm/v/@yoopta/editor)
-![downloads](https://img.shields.io/npm/dm/@yoopta/editor)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Darginec05)
 
 # Welcome to Yoopta-Editor@v4🎉
 
 ![](/docs/public/yoopta_intro.gif)
-
-![Alt](https://repobeats.axiom.co/api/embed/0d5703e649e2ba6be41450de891f466ce6935ff0.svg 'Repobeats analytics image')
 
 ## Introduction
 

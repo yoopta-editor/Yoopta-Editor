@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo, useRef } from 'react';
 import { DefaultElement, Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
 import { useYooptaEditor, useBlockData } from '../contexts/YooptaContext/YooptaContext';
-import { EVENT_HANDLERS } from '../handlers';
+import { EDITOR_EVENT_HANDLERS } from '../handlers';
 import { YooptaMark } from '../marks';
 
 import { ExtendedLeafProps, PluginCustomEditorRenderProps, Plugin, PluginEvents } from './types';
@@ -131,7 +131,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (editor.readOnly) return;
 
       eventHandlers.onKeyDown?.(event);
-      EVENT_HANDLERS.onKeyDown(editor)(event);
+      EDITOR_EVENT_HANDLERS.onKeyDown(editor)(event);
     },
     [eventHandlers.onKeyDown, editor.readOnly, editor.path.current, block.meta.order],
   );

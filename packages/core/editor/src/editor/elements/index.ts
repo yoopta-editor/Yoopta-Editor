@@ -8,6 +8,7 @@ import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
 import { getParentElementPath } from './getParentElementPath';
 import { isElementEmpty } from './isElementEmpty';
+import { getElementRect } from './getElementRect';
 
 export const Elements = {
   createElement,
@@ -20,6 +21,7 @@ export const Elements = {
   isElementEmpty,
   getElementPath,
   getParentElementPath,
+  getElementRect,
 };
 
 export type Elements = typeof Elements;
