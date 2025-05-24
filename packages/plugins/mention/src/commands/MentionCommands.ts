@@ -72,8 +72,21 @@ export const MentionCommands: MentionCommands = {
       },
     };
 
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
+
+    if (block?.id) {
+      editor.focusBlock(block?.id);
+    }
+
     Transforms.insertNodes(slateEditor, mentionNode);
     Transforms.insertText(slateEditor, ' ');
+
+    Transforms.select(slateEditor, {
+      anchor: { path: anchor.path, offset: anchor.offset + 1 },
+      focus: { path: anchor.path, offset: anchor.offset + 1 },
+    });
+
+    Transforms.move(slateEditor, { distance: 1, unit: 'offset' });
   },
   deleteMention: (editor, options) => {
     const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });

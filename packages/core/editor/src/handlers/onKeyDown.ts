@@ -245,7 +245,6 @@ export function onKeyDown(editor: YooEditor) {
 
     // [TODO] - default behavior for complex plugins
     if (HOTKEYS.isArrowDown(event)) {
-      console.log('editor isArrowDown isDefaultPrevented', event.isDefaultPrevented());
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 

@@ -3,7 +3,7 @@ import Paragraph from '@yoopta/paragraph';
 import Headings from '@yoopta/headings';
 import Image, { ImageElementProps } from '@yoopta/image';
 import Callout, { CalloutElement } from '@yoopta/callout';
-import Lists, { TodoListElement } from '@yoopta/lists';
+import Lists from '@yoopta/lists';
 import Link from '@yoopta/link';
 import Video, { VideoElementProps } from '@yoopta/video';
 import File from '@yoopta/file';
@@ -77,13 +77,7 @@ export const YOOPTA_PLUGINS = [
       },
     },
   }),
-  Paragraph.extend({
-    options: {
-      // HTMLAttributes: {
-      //   className: 'paragraph-element-extended',
-      // },
-    },
-  }),
+  Paragraph,
   Image.extend({
     events: {
       onDestroy: (editor, id) => {

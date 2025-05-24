@@ -76,8 +76,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
 
       if (editor.mentions.target) {
         if (key === 'Escape') {
-          editor.mentions.target = null;
-          editor.mentions.search = '';
+          MentionCommands.closeDropdown(editor);
         } else if (key === 'Backspace') {
           editor.mentions.search = editor.mentions.search.slice(0, -1);
         } else if (key.length === 1) {

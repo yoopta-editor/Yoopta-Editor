@@ -1,7 +1,7 @@
-import { PluginElementRenderProps } from '@yoopta/editor';
+import { PluginElementRenderProps, useElementSelected } from '@yoopta/editor';
 import { MentionElementProps } from '../types';
 
-const style: React.CSSProperties = {
+const baseStyle: React.CSSProperties = {
   padding: '.1rem .3rem',
   margin: '0 1px',
   verticalAlign: 'baseline',
@@ -16,6 +16,13 @@ const style: React.CSSProperties = {
 const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, attributes, children } = props;
   const { mention } = element.props as MentionElementProps;
+
+  const { selected, focused } = useElementSelected();
+
+  const style = {
+    ...baseStyle,
+    backgroundColor: selected && focused ? 'rgba(88, 5, 255, .2)' : baseStyle.backgroundColor,
+  };
 
   return (
     <>

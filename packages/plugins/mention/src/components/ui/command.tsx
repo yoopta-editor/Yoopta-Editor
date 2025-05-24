@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '../../../utils';
+import { cn } from '../../utils';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
