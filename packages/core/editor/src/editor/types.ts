@@ -23,6 +23,8 @@ import { getPlainText } from '../parsers/getPlainText';
 import { getEmail } from '../parsers/getEmail';
 import { ExtendedType } from './custom-types';
 
+export type YooptaContentValue = Record<string, YooptaBlockData>;
+
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
   value: T[];
@@ -36,7 +38,13 @@ export type YooptaBlockBaseMeta = {
   align?: 'left' | 'center' | 'right' | undefined;
 };
 
-export type YooptaContentValue = Record<string, YooptaBlockData>;
+// types for slate values
+export type SlateElement<K extends string = string, T = any> = {
+  id: string;
+  type: K;
+  children: Descendant[];
+  props?: PluginElementProps<T>;
+};
 
 export type SlateEditor = ReactEditor;
 
@@ -125,6 +133,7 @@ export type BaseYooEditor = {
   commands: Record<string, (...args: any[]) => any>;
 
   // core handlers
+  operations: YooptaOperation[];
   applyTransforms: WithoutFirstArg<typeof applyTransforms>;
   batchOperations: (fn: () => void) => void;
 
@@ -168,14 +177,6 @@ export type SlateElementTextNode = {
   code?: boolean;
   strike?: boolean;
   highlight?: any;
-};
-
-// types for slate values
-export type SlateElement<K extends string = string, T = any> = {
-  id: string;
-  type: K;
-  children: Descendant[];
-  props?: PluginElementProps<T>;
 };
 
 export type YooEditor = ExtendedType<'YooEditor', BaseYooEditor>;

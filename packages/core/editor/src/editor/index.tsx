@@ -41,7 +41,7 @@ export function createYooptaEditor(): YooEditor {
     id: '',
     children: {},
     blockEditorsMap: {},
-    path: { current: null },
+    path: { current: null, selection: null, selected: null },
     readOnly: false,
     isEmpty: () => isEmpty(editor),
     getEditorValue: () => getEditorValue(editor),
@@ -65,6 +65,7 @@ export function createYooptaEditor(): YooEditor {
     plugins: {},
     commands: {},
 
+    operations: [],
     applyTransforms: (operations, ...args) => applyTransforms(editor, operations, ...args),
     batchOperations: (callback) => batchOperations(editor, callback),
 
