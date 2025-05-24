@@ -9,6 +9,7 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -52,7 +53,23 @@ const data = {
         type: 'paragraph',
         children: [
           {
-            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.',
+            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
+          },
+          {
+            type: 'mention',
+            children: [
+              {
+                text: '',
+              },
+            ],
+            props: {
+              id: '613eaca05d44',
+              name: 'akhmed ibragimov',
+              nodeType: 'inlineVoid',
+            },
+          },
+          {
+            text: '.',
           },
         ],
         props: {
@@ -206,8 +223,27 @@ const data = {
   },
 };
 
+const fetchUsers = async (query: string): Promise<any[]> => {
+  try {
+    const url = new URL('http://localhost:3001/users');
+
+    if (query) {
+      url.searchParams.set('q', query);
+    }
+
+    url.searchParams.set('_limit', '10');
+
+    const response = await fetch(url.toString());
+    const users: any[] = await response.json();
+    return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+};
+
 const BasicExample = () => {
-  const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
+  const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
   const selectionRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<YooptaContentValue>(data);
 
@@ -216,21 +252,49 @@ const BasicExample = () => {
     setValue(value);
   };
 
-  const onPathChange = (path: YooptaPath) => {};
-
-  // useEffect(() => {
-  //   editor.withoutSavingHistory(() => {
-  //     const id = generateId();
-
-  //     editor.setEditorValue(data as YooptaContentValue);
-  //     editor.focusBlock(id);
-  //   });
-  // }, []);
-
   return (
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
+        <div className="flex gap-2 mb-4">
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => MentionCommands.closeDropdown(editor)}
+          >
+            Close dropdown
+          </button>
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => {
+              const mentions = MentionCommands.findMentions(editor);
+              console.log('MentionCommands.findMentions', mentions);
+            }}
+          >
+            Find mentions
+          </button>
+          <button
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            type="button"
+            onClick={() => {
+              const mention = MentionCommands.findMention(editor, { at: 1 });
+              console.log('MentionCommands.findMention', mention);
+            }}
+          >
+            Find mention
+          </button>
+          <button
+            type="button"
+            className="bg-blue-500 text-white px-2 py-1 rounded"
+            onClick={() => {
+              const search = MentionCommands.getSearchQuery(editor);
+              console.log('MentionCommands.getSearchQuery', search);
+            }}
+          >
+            Get Search Query
+          </button>
+        </div>
         <YooptaEditor
           editor={editor}
           plugins={YOOPTA_PLUGINS}
@@ -243,8 +307,22 @@ const BasicExample = () => {
           style={EDITOR_STYLE}
           value={value}
           onChange={onChange}
-          onPathChange={onPathChange}
-        />
+        >
+          <MentionDropdown
+            getItems={async (query) => {
+              const users = await fetchUsers(query);
+              return users;
+            }}
+            debounceMs={500}
+            onSelect={(mention) => {
+              MentionCommands.insertMention(editor, {
+                id: mention.id,
+                name: mention.name,
+                avatar: mention.avatar || '',
+              });
+            }}
+          />
+        </YooptaEditor>
       </div>
     </>
   );
