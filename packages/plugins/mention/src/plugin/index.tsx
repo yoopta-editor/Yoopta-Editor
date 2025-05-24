@@ -10,11 +10,9 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     mention: {
       render: MentionRender,
       props: {
-        mention: {
-          id: '',
-          avatar: '',
-          name: '',
-        },
+        id: '',
+        avatar: '',
+        name: '',
         nodeType: 'inlineVoid',
       },
     },

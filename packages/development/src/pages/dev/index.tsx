@@ -63,10 +63,8 @@ const data = {
               },
             ],
             props: {
-              mention: {
-                id: '613eaca05d44',
-                name: 'akhmed ibragimov',
-              },
+              id: '613eaca05d44',
+              name: 'akhmed ibragimov',
               nodeType: 'inlineVoid',
             },
           },
@@ -318,13 +316,9 @@ const BasicExample = () => {
             debounceMs={500}
             onSelect={(mention) => {
               MentionCommands.insertMention(editor, {
-                props: {
-                  mention: {
-                    id: mention.id,
-                    name: mention.name,
-                    avatar: mention.avatar || '',
-                  },
-                },
+                id: mention.id,
+                name: mention.name,
+                avatar: mention.avatar || '',
               });
             }}
           />

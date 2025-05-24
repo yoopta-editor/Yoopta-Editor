@@ -6,7 +6,7 @@ type MentionElementOptions = {
   props: Omit<MentionElementProps, 'nodeType'>;
 };
 
-type MentionInsertOptions = MentionElementOptions & {
+type MentionInsertOptions = {
   selection?: Location | undefined;
 };
 
@@ -20,7 +20,7 @@ export type MentionCommands = {
   buildMentionElements: (editor: YooEditor, options: MentionElementOptions) => MentionElement;
   getSearchQuery: (editor: YooEditor) => string;
   closeDropdown: (editor: YooEditor) => void;
-  insertMention: (editor: YooEditor, options: MentionInsertOptions) => void;
+  insertMention: (editor: YooEditor, props: MentionElementOptions['props'], options: MentionInsertOptions) => void;
   deleteMention: (editor: YooEditor, options: DeleteElementOptions) => void;
   openDropdown: (editor: YooEditor, target: { domRect: DOMRect; clientRect: DOMRectList }, search: string) => void;
   findMention: (editor: YooEditor, options?: FindMentionOptions) => NodeEntry<MentionElement> | null;
@@ -39,10 +39,10 @@ export const MentionCommands: MentionCommands = {
     } as MentionElement;
   },
 
-  insertMention: (editor, options) => {
+  insertMention: (editor, props, options) => {
     const { char = '@' } = (editor.plugins.Mention.options as MentionPluginOptions) || {};
     const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
-    const range = options.selection || slateEditor?.selection;
+    const range = options?.selection || slateEditor?.selection;
     if (!slateEditor || !Range.isRange(range)) return;
 
     const { anchor } = range;
@@ -67,7 +67,7 @@ export const MentionCommands: MentionCommands = {
       type: 'mention',
       children: [{ text: '' }],
       props: {
-        ...options.props,
+        ...props,
         nodeType: 'inlineVoid',
       },
     };
@@ -79,12 +79,6 @@ export const MentionCommands: MentionCommands = {
     }
 
     Transforms.insertNodes(slateEditor, mentionNode);
-    Transforms.insertText(slateEditor, ' ');
-
-    Transforms.select(slateEditor, {
-      anchor: { path: anchor.path, offset: anchor.offset + 1 },
-      focus: { path: anchor.path, offset: anchor.offset + 1 },
-    });
   },
   deleteMention: (editor, options) => {
     const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });

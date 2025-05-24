@@ -3,7 +3,7 @@ import { MentionElementProps } from '../types';
 
 const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, attributes, children } = props;
-  const { mention } = element.props as MentionElementProps;
+  const { id, name, avatar } = element.props as MentionElementProps;
 
   const { selected, focused } = useElementSelected();
 
@@ -12,10 +12,10 @@ const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
       <span
         {...attributes}
         contentEditable={false}
-        data-mention-id={mention.id}
+        data-mention-id={id}
         className={`yoopta-mention-tag ${selected && focused ? 'yoopta-mention-tag-selected' : ''}`}
       >
-        {mention.name}
+        {name}
         {children}
       </span>
     </>

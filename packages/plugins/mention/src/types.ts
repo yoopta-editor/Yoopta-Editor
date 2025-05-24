@@ -2,7 +2,7 @@ import { SlateElement } from '@yoopta/editor';
 
 export type MentionPluginElementKeys = 'mention';
 export type MentionItem = { id: string; name: string; avatar?: string };
-export type MentionElementProps = { mention: MentionItem; nodeType: 'inlineVoid' };
+export type MentionElementProps = MentionItem & { nodeType: 'inlineVoid' };
 export type MentionElement = SlateElement<'mention', MentionElementProps>;
 
 export type MentionElementMap = {
