@@ -18,11 +18,7 @@ import { uploadToCloudinary } from '../cloudinary';
 import { Elements } from '@yoopta/editor';
 
 export const YOOPTA_PLUGINS = [
-  Mention.extend({
-    options: {
-      char: '#',
-    },
-  }),
+  Mention,
   Table.extend({
     events: {
       onBeforeCreate: (editor) => {

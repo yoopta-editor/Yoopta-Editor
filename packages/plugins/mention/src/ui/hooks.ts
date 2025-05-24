@@ -1,5 +1,6 @@
 import { Blocks } from '@yoopta/editor';
 import { useEffect, useRef, useState } from 'react';
+import { MentionCommands } from '../commands/MentionCommands';
 
 export const useArrowNavigation = ({ editor, items, open, onSelect, onClose }) => {
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -44,6 +45,9 @@ export const useArrowNavigation = ({ editor, items, open, onSelect, onClose }) =
       } else if (e.key === 'Enter' && items.length > 0 && items[selectedIndex]) {
         e.preventDefault();
         onSelect(items[selectedIndex]);
+        onClose();
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
         onClose();
       } else if (e.key === 'Escape') {
         e.preventDefault();

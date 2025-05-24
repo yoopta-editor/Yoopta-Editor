@@ -1,26 +1,17 @@
 import { Command, CommandEmpty, CommandGroup, CommandList, CommandItem } from '../components/ui/command';
 import { MentionPluginOptions, MentionItem } from '../types';
 import { UI, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { MentionCommands } from '../commands/MentionCommands';
 import { useArrowNavigation } from './hooks';
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
-  autoUpdate,
-  useTransitionStyles,
-  VirtualElement,
-} from '@floating-ui/react';
+import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 
 const { Portal } = UI;
 
 const Spinner = () => (
-  <div className="yoo-mention-flex yoo-mention-justify-center yoo-mention-items-center yoo-mention-p-4">
-    <div className="yoo-mention-h-5 yoo-mention-w-5 yoo-mention-border-2 yoo-mention-border-blue-500 yoo-mention-border-t-transparent yoo-mention-rounded-full yoo-mention-animate-spin"></div>
+  <div className="yoopta-mention-dropdown-spinner">
+    <div className="yoopta-mention-dropdown-spinner-circle"></div>
   </div>
 );
 
@@ -66,7 +57,6 @@ export function MentionDropdown({
   useEffect(() => {
     if (editor.mentions.target) {
       const elRect = editor.mentions.target;
-      console.log(elRect);
       refs.setReference({
         getBoundingClientRect: () => elRect.domRect,
         getClientRects: () => elRect.clientRect,
@@ -103,8 +93,6 @@ export function MentionDropdown({
 
   if (!isOpen) return null;
 
-  const { top, left, height } = editor.mentions.target!;
-
   const onClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -130,12 +118,12 @@ export function MentionDropdown({
 
     return (
       <CommandGroup>
-        <CommandList ref={listRef} style={{ maxHeight: 300, overflow: 'auto' }}>
+        <CommandList ref={listRef}>
           {results.map((mention, i) => {
             const isSelected = i === selectedIndex;
-            const className = `${
-              isSelected ? 'yoo-mention-bg-gray-100' : ''
-            } yoo-mention-transition-colors yoo-mention-cursor-pointer`;
+            const className = `yoopta-mention-dropdown-item ${
+              isSelected ? 'yoopta-mention-dropdown-item-selected' : ''
+            }`;
 
             return (
               <CommandItem
@@ -145,13 +133,9 @@ export function MentionDropdown({
                 ref={(el) => (itemRefs.current[i] = el)}
                 className={className}
               >
-                <div className="yoo-mention-flex yoo-mention-items-center yoo-mention-gap-2">
+                <div className="yoopta-mention-dropdown-item-content">
                   {mention.avatar && (
-                    <img
-                      src={mention.avatar}
-                      alt={mention.name}
-                      className="yoo-mention-w-6 yoo-mention-h-6 yoo-mention-rounded-full"
-                    />
+                    <img src={mention.avatar} alt={mention.name} className="yoopta-mention-dropdown-item-avatar" />
                   )}
                   <span>{mention.name}</span>
                 </div>
@@ -171,7 +155,7 @@ export function MentionDropdown({
           onMouseDown={onClick}
           style={style}
           ref={refs.setFloating}
-          className="mention-dropdown yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-white yoo-mention-rounded-lg yoo-mention-border yoo-mention-shadow-md yoo-mention-w-[300px]"
+          className="yoopta-mention-dropdown"
         >
           <Command loop>{renderContent()}</Command>
         </div>

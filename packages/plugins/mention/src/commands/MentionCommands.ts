@@ -1,4 +1,4 @@
-import { Blocks, generateId, SlateEditor, YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, generateId, SlateEditor, SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
 import { Editor, Element, Location, Node, NodeEntry, Range, Text, Transforms } from 'slate';
 import { MentionElement, MentionElementProps, MentionPluginOptions } from '../types';
 
@@ -22,7 +22,7 @@ export type MentionCommands = {
   closeDropdown: (editor: YooEditor) => void;
   insertMention: (editor: YooEditor, options: MentionInsertOptions) => void;
   deleteMention: (editor: YooEditor, options: DeleteElementOptions) => void;
-  openDropdown: (editor: YooEditor, target: DOMRect, search: string) => void;
+  openDropdown: (editor: YooEditor, target: { domRect: DOMRect; clientRect: DOMRectList }, search: string) => void;
   findMention: (editor: YooEditor, options?: FindMentionOptions) => NodeEntry<MentionElement> | null;
   findMentions: (editor: YooEditor, options?: FindMentionOptions) => NodeEntry<MentionElement>[] | null;
 };
@@ -85,8 +85,6 @@ export const MentionCommands: MentionCommands = {
       anchor: { path: anchor.path, offset: anchor.offset + 1 },
       focus: { path: anchor.path, offset: anchor.offset + 1 },
     });
-
-    Transforms.move(slateEditor, { distance: 1, unit: 'offset' });
   },
   deleteMention: (editor, options) => {
     const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
@@ -144,7 +142,7 @@ export const MentionCommands: MentionCommands = {
       return null;
     }
   },
-  openDropdown: (editor, target: DOMRect, search: string) => {
+  openDropdown: (editor, target: { domRect: DOMRect; clientRect: DOMRectList }, search: string) => {
     editor.mentions.target = target;
     editor.mentions.search = search;
   },
