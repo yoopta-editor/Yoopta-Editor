@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import { YjsYooEditor } from './withCollaboration';
 
-export type EditorWithYjsHistory = YjsYooEditor & {
+export interface EditorWithYjsHistory {
   undo: () => void;
   redo: () => void;
   history: {
@@ -10,7 +10,7 @@ export type EditorWithYjsHistory = YjsYooEditor & {
     canRedo: () => boolean;
   };
   undoManager: Y.UndoManager;
-};
+}
 
 export interface YjsHistoryOptions {
   captureTimeout?: number;
@@ -19,8 +19,11 @@ export interface YjsHistoryOptions {
   onStackItemPopped?: () => void;
 }
 
-export function withYjsHistory(editor: YjsYooEditor, options: YjsHistoryOptions = {}): EditorWithYjsHistory {
-  const e = editor as EditorWithYjsHistory;
+export function withYjsHistory<T extends YjsYooEditor>(
+  editor: T,
+  options: YjsHistoryOptions = {},
+): T & EditorWithYjsHistory {
+  const e = editor as T & EditorWithYjsHistory;
 
   const undoManager = new Y.UndoManager(e.sharedState, {
     trackedOrigins: options.trackedOrigins || new Set([e.localOrigin]),

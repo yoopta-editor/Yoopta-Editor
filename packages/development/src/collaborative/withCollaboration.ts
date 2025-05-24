@@ -1,6 +1,6 @@
 import * as Y from 'yjs';
 import { YooEditor, YooptaOperation } from '@yoopta/editor';
-import BlockOrderResolver from './conflict-resolver';
+// import BlockOrderResolver from './conflict-resolver';
 
 const LOCAL_ORIGIN = Symbol('yoopta-local-change');
 const CONNECTED: WeakSet<YjsYooEditor> = new WeakSet();
@@ -10,17 +10,17 @@ export type EditorState = {
   timestamp: number;
 };
 
-export type YjsYooEditor = YooEditor & {
+export interface YjsYooEditor {
   sharedState: Y.Map<EditorState>;
   localOrigin: symbol;
   isLocalOrigin: (origin: symbol) => boolean;
   applyRemoteEvents: (events: any[], origin: symbol) => void;
   connect: () => void;
   disconnect: () => void;
-};
+}
 
-export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<EditorState>) => {
-  const { applyTransforms } = editor;
+export function withCollaboration<T extends YooEditor>(editor: T & YjsYooEditor, sharedState: Y.Map<EditorState>) {
+  const { applyTransforms } = editor as T & YjsYooEditor;
 
   editor.sharedState = sharedState;
   editor.localOrigin = LOCAL_ORIGIN;
@@ -89,4 +89,4 @@ export const withCollaboration = (editor: YjsYooEditor, sharedState: Y.Map<Edito
   };
 
   return editor;
-};
+}

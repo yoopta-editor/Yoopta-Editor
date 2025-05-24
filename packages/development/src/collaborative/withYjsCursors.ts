@@ -31,7 +31,7 @@ export type RemoteCursorChangeEventListener = (event: CursorStateChangeEvent) =>
 
 const CURSOR_CHANGE_EVENT_LISTENERS: WeakMap<EditorWithAwareness, Set<RemoteCursorChangeEventListener>> = new WeakMap();
 
-export type EditorWithAwareness = YjsYooEditor & {
+export interface EditorWithAwareness {
   awareness: Awareness;
   cursor: {
     on: (event: 'change', handler: RemoteCursorChangeEventListener) => void;
@@ -39,18 +39,18 @@ export type EditorWithAwareness = YjsYooEditor & {
     getStates: () => Map<number, CursorState>;
     getLocalState: () => CursorState;
   };
-};
+}
 
 export type WithCursorsOptions = {
   data: CursorUser;
 };
 
-export function withYjsCursors(
-  editor: YjsYooEditor,
+export function withYjsCursors<T extends YjsYooEditor>(
+  editor: T & EditorWithAwareness,
   awareness: Awareness,
   options: WithCursorsOptions,
-): EditorWithAwareness {
-  const e = editor as EditorWithAwareness;
+): T & EditorWithAwareness {
+  const e = editor as T & EditorWithAwareness;
 
   e.awareness = awareness;
 
