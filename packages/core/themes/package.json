@@ -1,11 +1,11 @@
 {
-  "name": "@yoopta/chat-gpt-assistant",
-  "version": "2.0.1",
-  "description": "Chat GPT Assistant tool for Yoopta Editor",
+  "name": "@yoopta/themes",
+  "version": "4.9.7",
+  "description": "Themes and Theme Builder for Yoopta-Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "main": "dist/index.js",
   "type": "module",
   "module": "dist/index.js",
@@ -14,9 +14,9 @@
     "dist/"
   ],
   "peerDependencies": {
+    "@yoopta/editor": ">=4.9.5",
     "react": ">=17.0.2",
-    "react-dom": ">=17.0.2",
-    "@yoopta/editor": ">=4.0.0"
+    "react-dom": ">=17.0.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -26,15 +26,12 @@
     "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
   },
   "scripts": {
-    "test": "node ./__tests__/yoopta-blockquote.test.js"
+    "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
+    "prepublishOnly": "yarn build",
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
   },
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
   },
-  "dependencies": {
-    "ai": "^2.1.3",
-    "autosize": "^6.0.1",
-    "openai-edge": "^1.0.0",
-    "react-syntax-highlighter": "^15.5.0"
-  }
+  "dependencies": {}
 }

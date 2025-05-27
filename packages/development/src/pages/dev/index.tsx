@@ -256,45 +256,6 @@ const BasicExample = () => {
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
-        <div className="flex gap-2 mb-4">
-          <button
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-            type="button"
-            onClick={() => MentionCommands.closeDropdown(editor)}
-          >
-            Close dropdown
-          </button>
-          <button
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-            type="button"
-            onClick={() => {
-              const mentions = MentionCommands.findMentions(editor);
-              console.log('MentionCommands.findMentions', mentions);
-            }}
-          >
-            Find mentions
-          </button>
-          <button
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-            type="button"
-            onClick={() => {
-              const mention = MentionCommands.findMention(editor, { at: 1 });
-              console.log('MentionCommands.findMention', mention);
-            }}
-          >
-            Find mention
-          </button>
-          <button
-            type="button"
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-            onClick={() => {
-              const search = MentionCommands.getSearchQuery(editor);
-              console.log('MentionCommands.getSearchQuery', search);
-            }}
-          >
-            Get Search Query
-          </button>
-        </div>
         <YooptaEditor
           editor={editor}
           plugins={YOOPTA_PLUGINS}

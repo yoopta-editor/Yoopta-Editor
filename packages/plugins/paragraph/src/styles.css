@@ -1,5 +1,0 @@
-@tailwind utilities;
-
-.yoopta-paragraph {
-  @apply yoo-p-leading-7 yoo-p-m-0 yoo-p-mt-2 yoo-p-text-[16px]
-}

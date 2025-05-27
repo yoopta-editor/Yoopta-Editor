@@ -1,6 +1,5 @@
 import { LISTS } from './plugin';
 import { NumberedListElement, BulletedListElement, TodoListElement, TodoListElementProps } from './types';
-import './styles.css';
 
 declare module 'slate' {
   interface CustomTypes {
