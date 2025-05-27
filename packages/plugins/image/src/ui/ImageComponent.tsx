@@ -18,7 +18,7 @@ const ZOOM_STYLES: CSSProperties = {
   transform: 'translate(-50%, -50%)',
   width: '100%',
   height: '100%',
-  zIndex: 99,
+  zIndex: 999,
   maxWidth: '90vw',
   maxHeight: '90vh',
   cursor: 'zoom-out',
@@ -73,7 +73,11 @@ const ImageComponent = ({
   };
 
   return (
-    <div className="yoo-image-w-full yoo-image-relative" data-layout={layout} {...attributes}>
+    <div
+      className={`yoopta-image-inner ${isZoomed ? 'yoopta-image--is-zoomed' : ''}`}
+      data-layout={layout}
+      {...attributes}
+    >
       {src && (
         <img
           src={src}
