@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.9.8] - 2025-05-28
+
+### Added
+
+- `Added classname when state is zoomed `
+
+### Fixed
+
+- `Fixed events for multiple editors by making them not global`
+
 ## [4.9.7] - 2025-04-20
 
 ### Fixed
