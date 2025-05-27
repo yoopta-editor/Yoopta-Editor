@@ -9,6 +9,10 @@
   opacity: 1;
 }
 
+.yoopta-image-inner {
+  @apply yoo-image-w-full yoo-image-relative;
+}
+
 .yoopta-image-input-root {
   @apply yoo-image-min-w-[340px] yoo-image-bg-[#FFFFFF] yoo-image-flex yoo-image-flex-col yoo-image-z-50 yoo-image-p-[10px] yoo-image-rounded-md yoo-image-shadow-md yoo-image-border-solid yoo-image-border-[1px] yoo-image-border-[#e5e7eb]
 }
