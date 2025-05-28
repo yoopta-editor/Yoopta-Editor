@@ -1,5 +1,5 @@
 import { onKeyDown } from './onKeyDown';
 
-export const EVENT_HANDLERS = {
+export const EDITOR_EVENT_HANDLERS = {
   onKeyDown,
 };

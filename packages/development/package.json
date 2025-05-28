@@ -43,6 +43,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "js-beautify": "^1.15.1",
+    "json-server": "0.17.4",
     "katex": "^0.16.10",
     "lucide-react": "^0.453.0",
     "next": "14.1.0",

@@ -3,7 +3,7 @@ import Paragraph from '@yoopta/paragraph';
 import Headings from '@yoopta/headings';
 import Image, { ImageElementProps } from '@yoopta/image';
 import Callout, { CalloutElement } from '@yoopta/callout';
-import Lists, { TodoListElement } from '@yoopta/lists';
+import Lists from '@yoopta/lists';
 import Link from '@yoopta/link';
 import Video, { VideoElementProps } from '@yoopta/video';
 import File from '@yoopta/file';
@@ -12,11 +12,13 @@ import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Code from '@yoopta/code';
 import Table, { TableCommands } from '@yoopta/table';
 import Divider from '@yoopta/divider';
+import Mention from '@yoopta/mention';
 
 import { uploadToCloudinary } from '../cloudinary';
 import { Elements } from '@yoopta/editor';
 
 export const YOOPTA_PLUGINS = [
+  Mention,
   Table.extend({
     events: {
       onBeforeCreate: (editor) => {
@@ -24,9 +26,6 @@ export const YOOPTA_PLUGINS = [
       },
     },
     options: {
-      // HTMLAttributes: {
-      //   className: 'table-element-extended',
-      // },
       display: {
         title: 'Table with Shadcn',
       },
@@ -74,13 +73,7 @@ export const YOOPTA_PLUGINS = [
       },
     },
   }),
-  Paragraph.extend({
-    options: {
-      // HTMLAttributes: {
-      //   className: 'paragraph-element-extended',
-      // },
-    },
-  }),
+  Paragraph,
   Image.extend({
     events: {
       onDestroy: (editor, id) => {
