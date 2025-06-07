@@ -93,11 +93,9 @@ export const FloatingBlockActions = memo(({ editor, dragHandleProps }: FloatingB
 
   const handleMouseMove = (event: MouseEvent) => {
     const isInsideEditor = editor.refElement?.contains(event.target as Node);
-    const isInsideActions = blockActionsRef.current?.contains(event.target as Node);
 
     if (!isInsideEditor) return hideBlockActions();
     if (editor.readOnly) return;
-    if (isInsideActions) return;
 
     const target = event.target as HTMLElement;
     const blockElement = target.closest('[data-yoopta-block]') as HTMLElement;
