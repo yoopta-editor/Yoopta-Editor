@@ -61,6 +61,15 @@ export function deserializeListNodes(
         };
       } else {
         const listType = options.type === 'NumberedList' ? 'numbered-list' : 'bulleted-list';
+
+        // Get all text content from nested elements
+        const children = Array.from(listItem.children).reduce((acc: Descendant[], child) => {
+          if (child.nodeName === 'P') {
+            return [...acc, ...deserializeTextNodes(editor, child.childNodes)];
+          }
+          return [...acc, ...deserializeTextNodes(editor, child.childNodes)];
+        }, []);
+
         blockData = {
           id: generateId(),
           type: options.type,
@@ -68,7 +77,7 @@ export function deserializeListNodes(
             {
               id: generateId(),
               type: listType,
-              children: deserializeTextNodes(editor, listItem.childNodes),
+              children: children.length > 0 ? children : [{ text: '' }],
               props: { nodeType: 'block' },
             },
           ],
