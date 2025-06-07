@@ -56,9 +56,6 @@ const Paragraph = new YooptaPlugin<ParagraphElementMap>({
     },
   },
   commands: ParagraphCommands,
-  extensions(slate, editor, blockId) {
-    return slate;
-  },
 });
 
 export { Paragraph };
