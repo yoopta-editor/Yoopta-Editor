@@ -63,11 +63,24 @@ export function deserializeListNodes(
         const listType = options.type === 'NumberedList' ? 'numbered-list' : 'bulleted-list';
 
         // Get all text content from nested elements
-        const children = Array.from(listItem.children).reduce((acc: Descendant[], child) => {
-          if (child.nodeName === 'P') {
-            return [...acc, ...deserializeTextNodes(editor, child.childNodes)];
+        const children = Array.from(listItem.childNodes).reduce((acc: Descendant[], node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent?.trim();
+            if (text) {
+              return [...acc, { text }];
+            }
+            return acc;
           }
-          return [...acc, ...deserializeTextNodes(editor, child.childNodes)];
+
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as HTMLElement;
+            if (element.nodeName === 'P') {
+              return [...acc, ...deserializeTextNodes(editor, element.childNodes)];
+            }
+            return [...acc, ...deserializeTextNodes(editor, element.childNodes)];
+          }
+
+          return acc;
         }, []);
 
         blockData = {
