@@ -59,13 +59,11 @@ export const useBlockStyles = (
 ) => {
   return useMemo(
     () => ({
-      container: {
-        marginLeft: `${block.meta.depth * 20}px`,
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',
-        transition,
-        opacity: isDragging ? 0.7 : 1,
-      },
-      content: isOver && !isDragging ? { borderBottom: '2px solid #007aff' } : undefined,
+      marginLeft: `${block.meta.depth * 20}px`,
+      transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',
+      transition,
+      opacity: isDragging ? 0.7 : 1,
+      borderBottom: isOver && !isDragging ? '2px solid #007aff' : undefined,
     }),
     [block.meta.depth, transform, transition, isDragging, isOver],
   );
