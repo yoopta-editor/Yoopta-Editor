@@ -1,6 +1,6 @@
 import { ParagraphElement } from './types';
-import { Paragraph } from './plugin';
-export { ParagraphCommands } from './commands';
+import { Paragraph } from './plugin/ParagraphPlugin';
+export { ParagraphCommands } from './commands/ParagraphCommands';
 import './styles.css';
 
 declare module 'slate' {
