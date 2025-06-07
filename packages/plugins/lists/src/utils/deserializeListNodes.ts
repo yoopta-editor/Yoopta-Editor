@@ -61,6 +61,28 @@ export function deserializeListNodes(
         };
       } else {
         const listType = options.type === 'NumberedList' ? 'numbered-list' : 'bulleted-list';
+
+        // Get all text content from nested elements
+        const children = Array.from(listItem.childNodes).reduce((acc: Descendant[], node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent?.trim();
+            if (text) {
+              return [...acc, { text }];
+            }
+            return acc;
+          }
+
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as HTMLElement;
+            if (element.nodeName === 'P') {
+              return [...acc, ...deserializeTextNodes(editor, element.childNodes)];
+            }
+            return [...acc, ...deserializeTextNodes(editor, element.childNodes)];
+          }
+
+          return acc;
+        }, []);
+
         blockData = {
           id: generateId(),
           type: options.type,
@@ -68,7 +90,7 @@ export function deserializeListNodes(
             {
               id: generateId(),
               type: listType,
-              children: deserializeTextNodes(editor, listItem.childNodes),
+              children: children.length > 0 ? children : [{ text: '' }],
               props: { nodeType: 'block' },
             },
           ],

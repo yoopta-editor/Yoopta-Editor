@@ -1,5 +1,4 @@
 import { Element } from 'slate';
-import { buildBlockData } from '../components/Editor/utils';
 import { Blocks } from '../editor/blocks';
 import { SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaBlockData } from '../editor/types';
 import { PluginDeserializeParser } from '../plugins/types';
