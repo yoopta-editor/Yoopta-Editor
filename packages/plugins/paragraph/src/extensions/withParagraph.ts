@@ -1,8 +1,8 @@
 import { SlateEditor, YooEditor } from '@yoopta/editor';
-import { withNormalize } from './withNormalize';
+import { withParagraphNormalize } from './withParagraphNormalize';
 
 export function withParagraph(slate: SlateEditor, editor: YooEditor) {
-  slate = withNormalize(slate, editor);
+  slate = withParagraphNormalize(slate, editor);
 
   return slate;
 }

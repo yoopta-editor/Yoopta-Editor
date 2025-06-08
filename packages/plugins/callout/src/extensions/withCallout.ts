@@ -1,9 +1,9 @@
 import { YooEditor } from '@yoopta/editor';
 import { SlateEditor } from '@yoopta/editor';
-import { withNormalize } from './withNormalize';
+import { withCalloutNormalize } from './withCalloutNormalize';
 
 export function withCallout(slate: SlateEditor, editor: YooEditor) {
-  slate = withNormalize(slate, editor);
+  slate = withCalloutNormalize(slate, editor);
 
   return slate;
 }

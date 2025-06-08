@@ -17,6 +17,11 @@
     "coverage": "vitest run --coverage",
     "test": "vitest",
     "test:ui": "vitest --ui",
+    "test:watch": "vitest watch",
+    "test:run": "vitest run",
+    "test:plugins": "vitest packages/plugins/*/src/**/*.test.ts",
+    "test:core": "vitest packages/core/*/src/**/*.test.ts",
+    "test:marks": "vitest packages/marks/src/**/*.test.ts",
     "test:integration": "playwright test",
     "release": "yarn clean && yarn build && yarn lerna publish --no-private"
   },

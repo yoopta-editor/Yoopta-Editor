@@ -1,7 +1,7 @@
 import { generateId, SlateEditor, YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
-export function withNormalize(slate: SlateEditor, editor: YooEditor) {
+export function withParagraphNormalize(slate: SlateEditor, editor: YooEditor) {
   const { normalizeNode } = slate;
 
   slate.normalizeNode = (entry) => {

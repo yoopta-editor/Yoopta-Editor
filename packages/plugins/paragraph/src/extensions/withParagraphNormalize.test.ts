@@ -1,5 +1,5 @@
 import { Node } from 'slate';
-import { withNormalize } from './withNormalize';
+import { withParagraphNormalize } from './withParagraphNormalize';
 import { generateId } from '@yoopta/editor';
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
@@ -11,7 +11,7 @@ import {
   createTestBlockData,
 } from 'test-utils';
 
-describe('withNormalize', () => {
+describe('withParagraphNormalize', () => {
   let editor: ReturnType<typeof createMockYooEditor>;
   let slate: ReturnType<typeof createMockSlateEditor>;
   let originalNormalizeNode: any;
@@ -21,7 +21,7 @@ describe('withNormalize', () => {
     slate = createMockSlateEditor();
     originalNormalizeNode = slate.normalizeNode;
     setupSlateMocks();
-    withNormalize(slate, editor);
+    withParagraphNormalize(slate, editor);
   });
 
   it('should not normalize if there is no current path', () => {
