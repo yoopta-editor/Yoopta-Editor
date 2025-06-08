@@ -1,6 +1,6 @@
 import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
 import { ParagraphCommands } from '../commands/ParagraphCommands';
-import { withParagraph } from '../extenstions/withParagraph';
+import { withParagraph } from '../extensions/withParagraph';
 import { ParagraphElementMap } from '../types';
 import { ParagraphRender } from '../ui/Paragraph';
 
