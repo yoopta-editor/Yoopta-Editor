@@ -41,19 +41,11 @@ export const YOOPTA_PLUGINS = [
     },
   }),
   Accordion.extend({
-    events: {
-      onBeforeCreate: (editor) => {
-        return AccordionCommands.buildAccordionElements(editor, { items: 2, props: { isExpanded: true } });
-      },
-    },
-    elementProps: {
-      'accordion-list-item': (props) => {
-        return {
-          ...props,
-          isExpanded: true,
-        };
-      },
-    },
+    // events: {
+    //   onBeforeCreate: (editor) => {
+    //     return AccordionCommands.buildAccordionElements(editor, { items: 2, props: { isExpanded: true } });
+    //   },
+    // },
   }),
   File.extend({
     events: {
