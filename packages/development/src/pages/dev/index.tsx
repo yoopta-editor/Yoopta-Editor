@@ -4,15 +4,13 @@ import YooptaEditor, {
   YooEditor,
   YooptaContentValue,
   YooptaPath,
-  Blocks,
 } from '@yoopta/editor';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
 import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
-import { Editor } from 'slate';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -60,7 +58,7 @@ const data = {
             children: [
               {
                 id: 'f8ded2a1-a29d-4296-99a1-d8364d954c4e',
-                type: 'accordion-list-item-heading',
+                type: 'callout',
                 children: [
                   {
                     text: 'heading two',
@@ -145,15 +143,6 @@ const BasicExample = () => {
   //   editor.setEditorValue(data as YooptaContentValue);
   //   editor.focusBlock(id);
   // });
-  // }, []);
-
-  // useEffect(() => {
-  // const blockSlate = Blocks.getBlockSlate(editor, { at: 1 });
-  // if (blockSlate) {
-  //   setTimeout(() => {
-  //     Editor.normalize(blockSlate, { force: true });
-  //   }, 1000);
-  // }
   // }, []);
 
   return (

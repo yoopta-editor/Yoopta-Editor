@@ -23,20 +23,16 @@ describe('withCalloutNormalize', () => {
 
     // Mock Editor.isEditor
     vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
-      console.log('Editor.isEditor called with:', node);
       return node && typeof node === 'object' && 'children' in node;
     });
 
     // Mock Element.isElement
     vi.spyOn(Element, 'isElement').mockImplementation((node) => {
-      console.log('Element.isElement called with:', node);
       return node && typeof node === 'object' && 'type' in node;
     });
 
     // Mock Transforms.removeNodes
-    vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {
-      console.log('Transforms.removeNodes called with:', options);
-    });
+    vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {});
   });
 
   it('should not normalize if there is no current path', () => {
@@ -83,9 +79,6 @@ describe('withCalloutNormalize', () => {
       type: 'editor',
       children: [callout1, callout2, callout3],
     } as unknown as Editor;
-
-    console.log('Test node:', node);
-    console.log('Editor path:', editor.path);
 
     slate.children = createTestNode([callout1, callout2, callout3]);
 

@@ -30,9 +30,7 @@ describe('withAccordionListNormalize', () => {
     });
 
     // Mock Transforms.unwrapNodes
-    vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {
-      console.log('Transforms.unwrapNodes called with:', options);
-    });
+    vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {});
   });
 
   it('should not normalize if node is not an element', () => {
@@ -83,7 +81,6 @@ describe('withAccordionListNormalize', () => {
       children: [accordionList],
     } as unknown as Ancestor;
 
-    // Mock Editor.parent to return the parent node
     vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
       return [parentNode, [0]] as NodeEntry<Ancestor>;
     });

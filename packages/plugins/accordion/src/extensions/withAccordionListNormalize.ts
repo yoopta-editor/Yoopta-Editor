@@ -1,4 +1,4 @@
-import { Editor, Element, Node, Transforms } from 'slate';
+import { Editor, Element, Transforms } from 'slate';
 import { SlateEditor, YooEditor } from '@yoopta/editor';
 import { ACCORDION_ELEMENTS } from '../constants';
 
@@ -19,7 +19,6 @@ export function withAccordionListNormalize(slate: SlateEditor, editor: YooEditor
       const [parentNode] = parentNodeEntry;
 
       if (Element.isElement(parentNode)) {
-        // if (Element.isElement(parentNode) && !Object.values(ACCORDION_ELEMENTS).includes(parentNode.type)) {
         Transforms.unwrapNodes(slate, { at: path });
         return;
       }

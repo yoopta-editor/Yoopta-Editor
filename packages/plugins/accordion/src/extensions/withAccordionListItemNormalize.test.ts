@@ -27,17 +27,11 @@ describe('withAccordionListItemNormalize', () => {
       return node && typeof node === 'object' && 'type' in node;
     });
 
-    vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {
-      console.log('Transforms.unwrapNodes called with:', options);
-    });
+    vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {});
 
-    vi.spyOn(Transforms, 'setNodes').mockImplementation((editor, props, options) => {
-      console.log('Transforms.setNodes called with:', { props, options });
-    });
+    vi.spyOn(Transforms, 'setNodes').mockImplementation((editor, props, options) => {});
 
-    vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {
-      console.log('Transforms.removeNodes called with:', options);
-    });
+    vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {});
 
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       return;

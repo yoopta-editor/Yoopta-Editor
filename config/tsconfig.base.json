@@ -20,10 +20,6 @@
     "preserveSymlinks": false,
     "noEmit": false,
     "declaration": true,
-    "declarationMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "test-utils": ["tests/test-utils.tsx"]
-    }
+    "declarationMap": true
   }
 }

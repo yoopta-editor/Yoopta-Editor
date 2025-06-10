@@ -77,9 +77,6 @@ describe('withBlockquoteNormalize', () => {
       children: [blockquote1, blockquote2, blockquote3],
     } as unknown as Editor;
 
-    console.log('Test node:', node);
-    console.log('Editor path:', editor.path);
-
     slate.children = createTestNode([blockquote1, blockquote2, blockquote3]);
 
     const normalize = withBlockquoteNormalize(slate as SlateEditor, editor as YooEditor);
