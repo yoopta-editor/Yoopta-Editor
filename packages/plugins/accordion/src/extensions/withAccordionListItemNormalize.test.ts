@@ -19,37 +19,30 @@ describe('withAccordionListItemNormalize', () => {
       path: { current: 0 },
     };
 
-    // Mock Editor.isEditor
     vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
       return node && typeof node === 'object' && 'children' in node;
     });
 
-    // Mock Element.isElement
     vi.spyOn(Element, 'isElement').mockImplementation((node) => {
       return node && typeof node === 'object' && 'type' in node;
     });
 
-    // Mock Transforms.unwrapNodes
     vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {
       console.log('Transforms.unwrapNodes called with:', options);
     });
 
-    // Mock Transforms.setNodes
     vi.spyOn(Transforms, 'setNodes').mockImplementation((editor, props, options) => {
       console.log('Transforms.setNodes called with:', { props, options });
     });
 
-    // Mock Transforms.removeNodes
     vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {
       console.log('Transforms.removeNodes called with:', options);
     });
 
-    // Mock Editor.nodes
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       return;
     });
 
-    // Mock Editor.hasPath
     vi.spyOn(Editor, 'hasPath').mockImplementation((editor, path) => {
       return true;
     });
@@ -97,7 +90,6 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    // Mock Editor.parent to return the parent node
     vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
       return [parentNode, [0]] as NodeEntry<Ancestor>;
     });
@@ -169,12 +161,10 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    // Mock Editor.parent to return the parent node
     vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
       return [parentNode, [0]] as NodeEntry<Ancestor>;
     });
 
-    // Mock Editor.nodes to return the children
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];
       yield [accordionListItem.children[1], [0, 1]];
@@ -216,12 +206,10 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    // Mock Editor.parent to return the parent node
     vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
       return [parentNode, [0]] as NodeEntry<Ancestor>;
     });
 
-    // Mock Editor.nodes to return the children
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];
       yield [accordionListItem.children[1], [0, 1]];
@@ -273,12 +261,10 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    // Mock Editor.parent to return the parent node
     vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
       return [parentNode, [0]] as NodeEntry<Ancestor>;
     });
 
-    // Mock Editor.nodes to return the children
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];
       yield [accordionListItem.children[1], [0, 1]];

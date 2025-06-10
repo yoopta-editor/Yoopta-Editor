@@ -96,42 +96,6 @@ describe('withAccordionListNormalize', () => {
     });
   });
 
-  it('should not unwrap accordion list if parent is not an element', () => {
-    const accordionList = {
-      id: '1',
-      type: ACCORDION_ELEMENTS.AccordionList,
-      children: [
-        {
-          id: '2',
-          type: ACCORDION_ELEMENTS.AccordionListItem,
-          children: [
-            {
-              id: '3',
-              type: ACCORDION_ELEMENTS.AccordionListItemHeading,
-              children: [{ text: 'Heading' }],
-            },
-            {
-              id: '4',
-              type: ACCORDION_ELEMENTS.AccordionListItemContent,
-              children: [{ text: 'Content' }],
-            },
-          ],
-        },
-      ],
-    } as unknown as Ancestor;
-
-    // Mock Editor.parent to return a non-element parent
-    vi.spyOn(Editor, 'parent').mockImplementation(() => {
-      return [{ id: 'root', type: ACCORDION_ELEMENTS.AccordionListItem, children: [] }, []] as NodeEntry<Ancestor>;
-    });
-
-    const normalize = withAccordionListNormalize(slate as SlateEditor, editor as YooEditor);
-    normalize.normalizeNode([accordionList, [0]]);
-
-    expect(Transforms.unwrapNodes).not.toHaveBeenCalled();
-    expect(originalNormalizeNode).toHaveBeenCalledWith([accordionList, [0]]);
-  });
-
   it('should not unwrap accordion list if parent is not an element type', () => {
     const accordionList = {
       id: '1',

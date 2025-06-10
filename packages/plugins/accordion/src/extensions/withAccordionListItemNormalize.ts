@@ -32,8 +32,6 @@ export function withAccordionListItemNormalize(slate: SlateEditor, editor: YooEd
 
     const children = Array.from(childrenEntries);
 
-    console.log('children', children);
-
     if (
       children.length > 0 &&
       Element.isElement(children[0][0]) &&
@@ -48,7 +46,7 @@ export function withAccordionListItemNormalize(slate: SlateEditor, editor: YooEd
     }
 
     if (
-      children.length > 0 &&
+      children.length > 1 &&
       Element.isElement(children[1][0]) &&
       children[1][0].type !== ACCORDION_ELEMENTS.AccordionListItemContent
     ) {
