@@ -32,7 +32,13 @@ export function withAccordionListItemNormalize(slate: SlateEditor, editor: YooEd
 
     const children = Array.from(childrenEntries);
 
-    if (Element.isElement(children[0][0]) && children[0][0].type !== ACCORDION_ELEMENTS.AccordionListItemHeading) {
+    console.log('children', children);
+
+    if (
+      children.length > 0 &&
+      Element.isElement(children[0][0]) &&
+      children[0][0].type !== ACCORDION_ELEMENTS.AccordionListItemHeading
+    ) {
       Transforms.setNodes(
         slate,
         { id: generateId(), type: ACCORDION_ELEMENTS.AccordionListItemHeading, props: {} },
@@ -41,7 +47,11 @@ export function withAccordionListItemNormalize(slate: SlateEditor, editor: YooEd
       return;
     }
 
-    if (Element.isElement(children[1][0]) && children[1][0].type !== ACCORDION_ELEMENTS.AccordionListItemContent) {
+    if (
+      children.length > 0 &&
+      Element.isElement(children[1][0]) &&
+      children[1][0].type !== ACCORDION_ELEMENTS.AccordionListItemContent
+    ) {
       Transforms.setNodes(
         slate,
         { id: generateId(), type: ACCORDION_ELEMENTS.AccordionListItemContent, props: {} },

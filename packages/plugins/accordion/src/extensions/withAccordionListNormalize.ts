@@ -18,7 +18,7 @@ export function withAccordionListNormalize(slate: SlateEditor, editor: YooEditor
     if (parentNodeEntry) {
       const [parentNode] = parentNodeEntry;
 
-      if (Element.isElement(parentNode)) {
+      if (Element.isElement(parentNode) && !Object.values(ACCORDION_ELEMENTS).includes(parentNode.type)) {
         Transforms.unwrapNodes(slate, { at: path });
         return;
       }
