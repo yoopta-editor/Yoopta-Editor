@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.9.9] - 2025-06-11
+
+### [Possible] Breaking Changes
+
+- Removed unneccessary div from block render. It can affect on your styles. Recheck please
+
+### Added
+
+- `Added validations for element structures on each plugin level`
+- `Vitest configuration is done`
+- `Added tests for validations`
+
+### Fixed
+
+- `Fix issue where content is lost when pasting HTML containing marks or lists`
+- `Deleted unneccessary div in block render by`
+
 ## [4.9.8] - 2025-05-28
 
 ### Added
