@@ -58,7 +58,7 @@ const data = {
             children: [
               {
                 id: 'f8ded2a1-a29d-4296-99a1-d8364d954c4e',
-                type: 'callout',
+                type: 'accordion-list-item-heading',
                 children: [
                   {
                     text: 'heading two',
