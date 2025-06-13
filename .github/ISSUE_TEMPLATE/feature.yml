@@ -17,24 +17,10 @@ body:
           required: true
   - type: textarea
     attributes:
-      label: Is your feature request related to a problem/unavailable functionality? Please describe.
-      description: A clear and concise description of what the problem is (for example "I'm always frustrated when [...]").
+      label: Description
+      description: A clear and concise description of what the problem is.
     validations:
       required: true
-  - type: textarea
-    id: description
-    attributes:
-      label: Proposed Solution
-      description: A clear description of the enhancement you propose. Please include relevant information and resources (for example another project's implementation of this feature).
-    validations:
-      required: true
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: Please add screenshots of the before and/or after the proposed changes.
-    validations:
-      required: false
   - type: dropdown
     id: assignee
     attributes:
@@ -44,12 +30,5 @@ body:
         - "No"
         - "Yes"
       default: 0
-    validations:
-      required: false
-  - type: textarea
-    id: extrainfo
-    attributes:
-      label: If "yes" to the above, please explain how you would technically implement this (issue will not be assigned if this is skipped)
-      description: For example reference any existing code or library
     validations:
       required: false

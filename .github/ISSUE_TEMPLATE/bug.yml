@@ -22,13 +22,6 @@ body:
       description: A clear description of the bug you have found. Please include relevant information and resources (for example the steps to reproduce the bug)
     validations:
       required: true
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: Please add screenshots if applicable
-    validations:
-      required: false
   - type: dropdown
     id: assignee
     attributes:
