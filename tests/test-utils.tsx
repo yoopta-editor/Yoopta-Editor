@@ -3,6 +3,9 @@ import React from 'react';
 import { createYooptaEditor } from '../packages/core/editor/src/editor';
 import { YooptaPlugin } from '../packages/core/editor/src/plugins';
 import { YooptaEditor, YooptaEditorProps } from '../packages/core/editor/src/YooptaEditor';
+import { Editor, Element, Transforms, Node, Descendant } from 'slate';
+import { YooEditor, SlateEditor, YooptaContentValue, YooptaBlockData, SlateElement } from '@yoopta/editor';
+import { vi } from 'vitest';
 
 export const InlinePlugin = new YooptaPlugin({
   type: 'Inline',
@@ -63,7 +66,7 @@ const PluginWithSeveralElements = new YooptaPlugin({
 
 export const TEST_PLUGIN_LIST = [InlinePlugin, DefaultParagraph, BlockPluginWithProps, PluginWithSeveralElements];
 
-const DEFAULT_EDITOR_STATE = {
+const DEFAULT_EDITOR_STATE: YooptaContentValue = {
   'aafd7597-1e9a-4c80-ab6c-88786595d72a': {
     id: 'aafd7597-1e9a-4c80-ab6c-88786595d72a',
     meta: { depth: 0, order: 0 },
@@ -89,12 +92,12 @@ const DEFAULT_EDITOR_STATE = {
             text: 'Read without limits or ads, fund great writers, and join a community that believes in human storytelling with',
             italic: true,
             bold: true,
-          },
+          } as Descendant,
           {
-            text: ' ',
+            text: ' ',
             italic: true,
             bold: true,
-          },
+          } as Descendant,
           {
             id: '19554e2b-180a-461e-b287-98416f7f30d4',
             type: 'link',
@@ -110,14 +113,14 @@ const DEFAULT_EDITOR_STATE = {
                 bold: true,
                 italic: true,
                 text: 'membership',
-              },
+              } as Descendant,
             ],
           },
           {
             text: '.',
             italic: true,
             bold: true,
-          },
+          } as Descendant,
         ],
         props: {
           nodeType: 'block',
@@ -125,7 +128,7 @@ const DEFAULT_EDITOR_STATE = {
       },
     ],
     meta: {
-      align: 'left',
+      align: 'left' as const,
       depth: 0,
       order: 1,
     },
@@ -144,4 +147,79 @@ export function renderYooptaEditor(props: Partial<YooptaEditorProps> = {}) {
       autoFocus={props.autoFocus || false}
     />,
   );
+}
+
+// Slate test utilities
+export interface MockSlateEditor extends Partial<SlateEditor> {
+  normalizeNode: ReturnType<typeof vi.fn>;
+  removeNodes: ReturnType<typeof vi.fn>;
+  children: any[];
+}
+
+export interface MockYooEditor extends Partial<YooEditor> {
+  path: { current: number | null };
+  batchOperations: (fn: () => void) => void;
+  insertBlock: ReturnType<typeof vi.fn>;
+}
+
+export function createMockSlateEditor(): MockSlateEditor {
+  return {
+    normalizeNode: vi.fn(),
+    removeNodes: vi.fn(),
+    children: [],
+  };
+}
+
+export function createMockYooEditor(): MockYooEditor {
+  return {
+    path: { current: 0 },
+    batchOperations: (fn) => fn(),
+    insertBlock: vi.fn(),
+  };
+}
+
+export function setupSlateMocks() {
+  // Mock Editor.isEditor
+  vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
+    return node && typeof node === 'object' && 'children' in node;
+  });
+
+  // Mock Element.isElement
+  vi.spyOn(Element, 'isElement').mockImplementation((node) => {
+    return node && typeof node === 'object' && 'type' in node;
+  });
+
+  // Mock Transforms.removeNodes
+  vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {
+    if (editor.removeNodes) {
+      editor.removeNodes(options);
+    }
+  });
+}
+
+export function createTestNode(children: any[]): Node {
+  return {
+    children,
+  } as Node;
+}
+
+export function createTestParagraph(text: string) {
+  return {
+    id: expect.any(String),
+    type: 'paragraph',
+    children: [{ text }],
+  };
+}
+
+export function createTestBlockData(value: any[], meta = {}) {
+  return {
+    id: expect.any(String),
+    value,
+    meta: {
+      align: 'left' as const,
+      depth: 0,
+      order: 1,
+      ...meta,
+    },
+  };
 }

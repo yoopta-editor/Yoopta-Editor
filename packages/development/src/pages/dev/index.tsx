@@ -1,15 +1,12 @@
 import YooptaEditor, {
-  Blocks,
   createYooptaEditor,
-  generateId,
   YooptaOnChangeOptions,
   YooEditor,
-  YooptaBlockData,
   YooptaContentValue,
   YooptaPath,
 } from '@yoopta/editor';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
+import { useMemo, useRef, useState } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -21,21 +18,69 @@ const EDITOR_STYLE = {
 };
 
 const data = {
-  '25b34678-649c-4b6f-87d4-8e595400980f': {
-    id: '25b34678-649c-4b6f-87d4-8e595400980f',
-    type: 'HeadingTwo',
+  '5c47e38d-4213-472d-8fda-a182fbecd40c': {
+    id: '5c47e38d-4213-472d-8fda-a182fbecd40c',
+    type: 'Accordion',
     value: [
       {
-        id: '1a7583b7-03c3-47f7-a4b1-f3c3b6e2dd39',
-        type: 'heading-two',
+        id: '23cb2ea7-aeeb-47aa-9d79-3c8a23349b5b',
+        type: 'accordion-list',
         children: [
           {
-            text: 'Introduction',
+            id: '75e787d6-e184-4e2f-8e33-88d2243b3d94',
+            type: 'accordion-list-item',
+            children: [
+              {
+                id: '02b79be6-1b5c-4e69-ab7f-8829fcf83ed6',
+                type: 'accordion-list-item-heading',
+                children: [
+                  {
+                    text: 'heading one',
+                  },
+                ],
+              },
+              {
+                id: '65900302-ddc7-4eef-8399-2cb367b84acf',
+                type: 'accordion-list-item-content',
+                children: [
+                  {
+                    text: 'description one',
+                  },
+                ],
+              },
+            ],
+            props: {
+              isExpanded: true,
+            },
+          },
+          {
+            id: '921c492a-9eca-4c0a-852d-8670f480ea34',
+            type: 'accordion-list-item',
+            children: [
+              {
+                id: 'f8ded2a1-a29d-4296-99a1-d8364d954c4e',
+                type: 'accordion-list-item-heading',
+                children: [
+                  {
+                    text: 'heading two',
+                  },
+                ],
+              },
+              {
+                id: 'f31094a3-4da4-4e50-97b4-67dc28cc40ec',
+                type: 'accordion-list-item-content',
+                children: [
+                  {
+                    text: 'aadescription two',
+                  },
+                ],
+              },
+            ],
+            props: {
+              isExpanded: true,
+            },
           },
         ],
-        props: {
-          nodeType: 'block',
-        },
       },
     ],
     meta: {
@@ -251,6 +296,17 @@ const BasicExample = () => {
     console.log('onChange', value, options);
     setValue(value);
   };
+
+  const onPathChange = (path: YooptaPath) => {};
+
+  // useEffect(() => {
+  // editor.withoutSavingHistory(() => {
+  //   const id = generateId();
+
+  //   editor.setEditorValue(data as YooptaContentValue);
+  //   editor.focusBlock(id);
+  // });
+  // }, []);
 
   return (
     <>

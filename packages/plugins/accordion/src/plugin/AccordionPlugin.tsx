@@ -4,16 +4,11 @@ import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
 import { AccordionItemHeading } from '../renders/AccordionItemHeading';
 import { AccordionItemContent } from '../renders/AccordionItemContent';
-import { Transforms } from 'slate';
+import { Element, Transforms } from 'slate';
 import { ListCollapse } from 'lucide-react';
-import { AccordionCommands } from '../commands';
-
-const ACCORDION_ELEMENTS = {
-  AccordionList: 'accordion-list',
-  AccordionListItem: 'accordion-list-item',
-  AccordionListItemHeading: 'accordion-list-item-heading',
-  AccordionListItemContent: 'accordion-list-item-content',
-};
+import { AccordionCommands } from '../commands/AccordionCommands';
+import { withAccordion } from '../extensions/withAccordion';
+import { ACCORDION_ELEMENTS } from '../constants';
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
@@ -129,6 +124,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
       };
     },
   },
+  extensions: withAccordion,
   options: {
     display: {
       title: 'Accordion',
@@ -158,8 +154,10 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         const { align = 'left', depth = 0 } = blockMeta || {};
 
         return `<div>${element.children
+          .filter(Element.isElement)
           .map((listItem) => {
             return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
+              .filter(Element.isElement)
               .map((item) => {
                 if (item.type === 'accordion-list-item-heading') {
                   return `<summary>${serializeTextNodes(item.children)}</summary>`;
@@ -179,8 +177,10 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           <table data-meta-align="${align}" data-meta-depth="${depth}" style="width: 100%; border-collapse: collapse; margin-left: ${depth}px;">
             <tbody>
               ${element.children
+                .filter(Element.isElement)
                 .map((listItem) =>
                   listItem.children
+                    .filter(Element.isElement)
                     .map((item) => {
                       if (item.type === 'accordion-list-item-heading') {
                         return `

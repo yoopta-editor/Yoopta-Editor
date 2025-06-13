@@ -1,7 +1,7 @@
 import { generateId, SlateEditor, YooEditor } from '@yoopta/editor';
 import { Element, Node, Transforms } from 'slate';
 
-export function withNormalize(slate: SlateEditor, editor: YooEditor): SlateEditor {
+export function withTableNormalize(slate: SlateEditor, editor: YooEditor): SlateEditor {
   const { normalizeNode } = slate;
 
   slate.normalizeNode = (entry, options) => {

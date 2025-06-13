@@ -1,4 +1,4 @@
-import { Accordion } from './plugin';
+import { Accordion } from './plugin/AccordionPlugin';
 import {
   AccordionListElement,
   AccordionItemElement,
@@ -18,7 +18,7 @@ declare module 'slate' {
   }
 }
 
-export { AccordionCommands } from './commands';
+export { AccordionCommands } from './commands/AccordionCommands';
 
 export default Accordion;
 export { AccordionItemElement, AccordionListItemProps };

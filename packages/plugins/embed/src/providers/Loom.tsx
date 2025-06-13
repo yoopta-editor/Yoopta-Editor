@@ -40,10 +40,7 @@ export function Loom({ provider, attributes, children, width, height }: Provider
             src={`https://www.loom.com/embed/${provider.id}?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true`}
             frameBorder="0"
             allowFullScreen
-            onLoad={() => {
-              console.log('Loom iframe loaded');
-              setFrameLoaded(true);
-            }}
+            onLoad={() => setFrameLoaded(true)}
             style={{
               position: 'absolute',
               top: 0,

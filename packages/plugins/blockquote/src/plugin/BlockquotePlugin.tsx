@@ -1,5 +1,6 @@
 import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
-import { BlockquoteCommands } from '../commands';
+import { BlockquoteCommands } from '../commands/BlockquoteCommands';
+import { withBlockquote } from '../extensions/withBlockquote';
 import { BlockquoteElement } from '../types';
 import { BlockquoteRender } from '../ui/Blockquote';
 
@@ -18,6 +19,7 @@ const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
     shortcuts: ['>'],
   },
   commands: BlockquoteCommands,
+  extensions: withBlockquote,
   parsers: {
     html: {
       deserialize: {

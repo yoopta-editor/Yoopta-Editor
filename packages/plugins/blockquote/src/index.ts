@@ -1,4 +1,4 @@
-import { Blockquote } from './plugin';
+import { Blockquote } from './plugin/BlockquotePlugin';
 import { BlockquoteElement } from './types';
 import './styles.css';
 
@@ -8,7 +8,7 @@ declare module 'slate' {
   }
 }
 
-export { BlockquoteCommands } from './commands';
+export { BlockquoteCommands } from './commands/BlockquoteCommands';
 
 export default Blockquote;
 export { BlockquoteElement };

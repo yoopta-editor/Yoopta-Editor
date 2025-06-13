@@ -76,7 +76,11 @@ export const useSlateEditor = (
         const rootElementType = getRootBlockElementType(blockElements);
 
         if (!elementTypes.includes(type)) {
-          Transforms.setNodes(slate, { type: rootElementType, props: { ...node.props } }, { at: path });
+          Transforms.setNodes(
+            slate,
+            { id: generateId(), type: rootElementType, props: { ...node.props } },
+            { at: path },
+          );
           return;
         }
 

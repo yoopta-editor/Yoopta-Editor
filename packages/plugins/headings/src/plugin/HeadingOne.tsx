@@ -38,7 +38,7 @@ const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
       title: 'Heading 1',
       description: 'Big section heading',
     },
-    shortcuts: ['h1', '#', '*'],
+    shortcuts: ['h1', '#'],
   },
   parsers: {
     html: {
