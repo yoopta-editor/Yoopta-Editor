@@ -11,14 +11,14 @@ type InsertVideoOptions = VideoElementOptions & {
 };
 
 export type VideoCommands = {
-  buildVideoElements: (editor: YooEditor, options?: Partial<VideoElementOptions>) => VideoElement;
+  buildVideoElements: (editor?: YooEditor, options?: Partial<VideoElementOptions>) => VideoElement;
   insertVideo: (editor: YooEditor, options?: Partial<InsertVideoOptions>) => void;
   deleteVideo: (editor: YooEditor, blockId: string) => void;
   updateVideo: (editor: YooEditor, blockId: string, props: Partial<VideoElementProps>) => void;
 };
 
 export const VideoCommands: VideoCommands = {
-  buildVideoElements: (editor: YooEditor, options = {}) => {
+  buildVideoElements: (editor?: YooEditor, options = {}) => {
     const videoProps = { ...options.props, nodeType: 'void' };
     return { id: generateId(), type: 'video', children: [{ text: '' }], props: videoProps as VideoElementProps };
   },

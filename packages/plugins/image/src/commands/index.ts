@@ -11,14 +11,14 @@ type InsertImageOptions = ImageElementOptions & {
 };
 
 export type ImageCommands = {
-  buildImageElements: (editor: YooEditor, options?: Partial<ImageElementOptions>) => ImageElement;
+  buildImageElements: (editor?: YooEditor, options?: Partial<ImageElementOptions>) => ImageElement;
   insertImage: (editor: YooEditor, options?: Partial<InsertImageOptions>) => void;
   deleteImage: (editor: YooEditor, blockId: string) => void;
   updateImage: (editor: YooEditor, blockId: string, props: Partial<ImageElementProps>) => void;
 };
 
 export const ImageCommands: ImageCommands = {
-  buildImageElements: (editor: YooEditor, options = {}) => {
+  buildImageElements: (editor?: YooEditor, options = {}) => {
     const imageProps = { ...options.props, nodeType: 'void' };
     return { id: generateId(), type: 'image', children: [{ text: '' }], props: imageProps as ImageElementProps };
   },

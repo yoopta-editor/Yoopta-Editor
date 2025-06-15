@@ -38,6 +38,7 @@ export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOpt
 
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
+    const clipboardPasteOrDropRules = { ...this.plugin.clipboardPasteOrDropRules };
 
     if (renders) {
       Object.keys(renders).forEach((elementType) => {
@@ -84,6 +85,7 @@ export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOpt
       ...this.plugin,
       elements: elements,
       options: extendedOptions as PluginOptions<TOptions>,
+      clipboardPasteOrDropRules: clipboardPasteOrDropRules,
     });
   }
 }
