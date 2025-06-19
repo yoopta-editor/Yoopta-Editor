@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useMemo, useRef } from 'react';
 import { DefaultElement, Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
-import { useYooptaEditor, useBlockData } from '../contexts/YooptaContext/YooptaContext';
+import { useYooptaEditor, useBlockData } from '../contexts/YooptaContext';
 import { EDITOR_EVENT_HANDLERS } from '../handlers';
 import { YooptaMark } from '../marks';
 
@@ -16,10 +16,10 @@ import { SlateElement } from '../editor/types';
 
 type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<TElementMap, TOptions> & {
   id: string;
-  marks?: YooptaMark<any>[];
   options: Plugin<TElementMap, TOptions>['options'];
   placeholder?: string;
   events?: PluginEvents;
+  marks?: YooptaMark<any>[];
 };
 
 const getMappedElements = (elements) => {
@@ -40,9 +40,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   id,
   customEditor,
   elements,
-  marks,
   events,
   options,
+  marks,
   extensions: withExtensions,
   placeholder = `Type '/' for commands`,
 }: Props<TElementMap, TOptions>) => {
@@ -50,6 +50,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const block = useBlockData(id);
   let initialValue = useRef(block.value).current;
   const ELEMENTS_MAP = useMemo(() => getMappedElements(elements), [elements]);
+
   const MARKS_MAP = useMemo(() => getMappedMarks(marks), [marks]);
 
   const slate = useSlateEditor(id, editor, block, elements, withExtensions);

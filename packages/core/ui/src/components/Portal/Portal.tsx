@@ -1,6 +1,6 @@
 import { FloatingPortal } from '@floating-ui/react';
-import { MutableRefObject, ReactNode, useEffect, useRef, useState } from 'react';
-import { useYooptaEditor } from '../../contexts/YooptaContext';
+import { useYooptaEditor } from '@yoopta/editor';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 type Props = {
   children: ReactNode;
@@ -35,7 +35,7 @@ const Portal = (props: Props) => {
   if (!isMounted) return null;
 
   return (
-    <FloatingPortal id={`${props.id}-${editor.id}`} data-yoopta-portal root={rootEl.current || editor.refElement}>
+    <FloatingPortal id={`${props.id}-${editor.id}`} root={rootEl.current || editor.refElement}>
       {props.children}
     </FloatingPortal>
   );

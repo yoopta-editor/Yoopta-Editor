@@ -9,7 +9,7 @@ import { isActive } from '../editor/textFormats/isActive';
 import { toggle } from '../editor/textFormats/toggle';
 import { update } from '../editor/textFormats/update';
 
-export function buildMarks(editor, marks: YooptaMark<any>[]) {
+export function buildMarks(editor: YooEditor, marks: YooptaMark<any>[]) {
   const formats: YooEditor['formats'] = {};
 
   marks.forEach((mark) => {

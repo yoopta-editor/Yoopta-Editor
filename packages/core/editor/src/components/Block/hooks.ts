@@ -1,4 +1,4 @@
-import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import { useYooptaTools } from '../../contexts/ToolsContext';
 import { useFloating, offset, flip, inline, shift, useTransitionStyles, autoUpdate } from '@floating-ui/react';
 import { useMemo, useState } from 'react';
 import { buildActionMenuRenderProps } from '../../UI/BlockOptions/utils';

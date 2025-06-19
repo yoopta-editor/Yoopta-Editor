@@ -14,7 +14,7 @@ import { useActionMenuToolRefs, useBlockOptionsRefs } from './hooks';
 import { Overlay } from '../../UI/Overlay/Overlay';
 import { throttle } from '../../utils/throttle';
 
-type dragHandleProps = {
+type DragHandleProps = {
   attributes: any;
   listeners: any;
   setActivatorNodeRef: any;
@@ -22,7 +22,7 @@ type dragHandleProps = {
 
 type FloatingBlockActionsProps = {
   editor: YooEditor;
-  dragHandleProps: dragHandleProps | null;
+  dragHandleProps: DragHandleProps | null;
 };
 
 type ActionStyles = {

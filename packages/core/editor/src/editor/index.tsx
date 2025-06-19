@@ -30,7 +30,7 @@ import { getEmail, EmailTemplateOptions } from '../parsers/getEmail';
 export function createYooptaEditor(): YooEditor {
   // Create a unique event emitter for each editor instance
   const eventEmitter = new EventEmitter();
-  
+
   const Events = {
     on: (event, fn) => eventEmitter.on(event, fn),
     once: (event, fn) => eventEmitter.once(event, fn),

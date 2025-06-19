@@ -7,7 +7,7 @@ import { YooEditor } from '../../editor/types';
 import { YooptaMark } from '../../marks';
 import { SlateEditorComponent } from '../../plugins/SlateEditorComponent';
 import { useYooptaDragDrop } from './dnd';
-import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import { useYooptaReadOnly } from '../../contexts/YooptaContext';
 import { FloatingBlockActions } from '../Block/FloatingBlockActions';
 
 const DEFAULT_EDITOR_KEYS = [];
@@ -18,7 +18,7 @@ type Props = {
   placeholder?: string;
 };
 
-const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
+const RenderBlocks = ({ editor, placeholder, marks }: Props) => {
   const isReadOnly = useYooptaReadOnly();
   const { sensors, handleDragEnd, handleDragStart } = useYooptaDragDrop({ editor });
   const [dragHandleProps, setActiveDragHandleProps] = useState(null);
@@ -55,13 +55,13 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
           key={blockId}
           type={block.type}
           id={blockId}
-          marks={marks}
           customEditor={plugin.customEditor}
           events={plugin.events}
           elements={plugin.elements}
           options={plugin.options}
           extensions={plugin.extensions}
           placeholder={placeholder}
+          marks={marks}
         />
       </Block>,
     );
@@ -79,7 +79,6 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     >
       <SortableContext disabled={isReadOnly} items={childrenKeys} strategy={verticalListSortingStrategy}>
         {blocks}
-        <FloatingBlockActions editor={editor} dragHandleProps={dragHandleProps} />
       </SortableContext>
     </DndContext>
   );

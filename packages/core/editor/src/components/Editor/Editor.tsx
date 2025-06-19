@@ -1,5 +1,5 @@
 import { ClipboardEvent, CSSProperties, ReactNode, useEffect } from 'react';
-import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext';
 import { RenderBlocks } from './RenderBlocks';
 import { YooptaMark } from '../../marks';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
@@ -14,6 +14,7 @@ import { SelectionBox } from '../SelectionBox/SelectionBox';
 import { Blocks } from '../../editor/blocks';
 import { useMultiSelection } from './selection';
 import { Paths } from '../../editor/paths';
+import { FloatingBlockActions } from '../Block/FloatingBlockActions';
 
 type Props = {
   marks?: YooptaMark<any>[];
@@ -326,7 +327,9 @@ const Editor = ({
       onCopy={onCopy}
       onCut={onCopy}
     >
-      <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
+      <FloatingBlockActions editor={editor} dragHandleProps={null} />
+
+      <RenderBlocks editor={editor} placeholder={placeholder} marks={marks} />
       {selectionBoxRoot !== false && (
         <SelectionBox
           origin={selectionBox.origin}

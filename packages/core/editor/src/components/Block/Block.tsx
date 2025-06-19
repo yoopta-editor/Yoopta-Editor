@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
+import { useYooptaEditor } from '../../contexts/YooptaContext';
 import { useSortable } from '@dnd-kit/sortable';
 import { YooptaBlockData } from '../../editor/types';
 import { useBlockStyles } from './hooks';

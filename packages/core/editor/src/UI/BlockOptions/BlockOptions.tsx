@@ -1,12 +1,12 @@
 import TurnIcon from './icons/turn.svg';
 import { TrashIcon, CopyIcon, Link2Icon } from '@radix-ui/react-icons';
-import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
+import { useYooptaEditor } from '../../contexts/YooptaContext';
 import { CSSProperties, useState } from 'react';
 import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 import copy from 'copy-to-clipboard';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { getRootBlockElement } from '../../utils/blockElements';
-import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import { useYooptaTools } from '../../contexts/ToolsContext';
 import { buildActionMenuRenderProps } from './utils';
 import { Overlay } from '../Overlay/Overlay';
 import { Portal } from '../Portal/Portal';

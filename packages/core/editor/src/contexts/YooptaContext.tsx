@@ -1,8 +1,8 @@
 import { createContext, useContext, useRef } from 'react';
-import { createYooptaEditor } from '../../editor';
-import { YooEditor, YooptaPathIndex } from '../../editor/types';
-import { PluginOptions } from '../../plugins/types';
-import { Blocks } from '../../editor/blocks';
+import { createYooptaEditor } from '../editor';
+import { YooEditor, YooptaPathIndex } from '../editor/types';
+import { PluginOptions } from '../plugins/types';
+import { Blocks } from '../editor/blocks';
 
 export type YooptaEditorContext = {
   editor: YooEditor;

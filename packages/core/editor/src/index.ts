@@ -6,7 +6,7 @@ export {
   useBlockSelected,
   useYooptaReadOnly,
   useYooptaPluginOptions,
-} from './contexts/YooptaContext/YooptaContext';
+} from './contexts/YooptaContext';
 import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './YooptaEditor';
 export { deserializeHTML } from './parsers/deserializeHTML';
 export { type EmailTemplateOptions } from './parsers/getEmail';
@@ -14,7 +14,7 @@ export { type EmailTemplateOptions } from './parsers/getEmail';
 // [TODO] - should be in separated package @yoopta/common/ui or @yoopta/ui
 export { UI } from './UI';
 
-export { useYooptaTools, Tools } from './contexts/YooptaContext/ToolsContext';
+export { useYooptaTools, Tools } from './contexts/ToolsContext';
 
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';

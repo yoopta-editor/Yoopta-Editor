@@ -1,9 +1,9 @@
-import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
+import { YooptaContextProvider } from './contexts/YooptaContext';
 import { Editor } from './components/Editor/Editor';
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 import { SlateElement, YooEditor, YooptaPath, YooptaContentValue } from './editor/types';
 import { Plugin } from './plugins/types';
-import { Tools, ToolsProvider } from './contexts/YooptaContext/ToolsContext';
+import { Tools, ToolsProvider } from './contexts/ToolsContext';
 import {
   buildBlocks,
   buildBlockShortcuts,
@@ -18,6 +18,7 @@ import { FakeSelectionMark } from './marks/FakeSelectionMark';
 import { generateId } from './utils/generateId';
 import { YooptaOperation } from './editor/core/applyTransforms';
 import { validateYooptaValue } from './utils/validateYooptaValue';
+import { UIComponents, UIComponentsProvider, UI_COMPONENTS } from './contexts/UIComponentsContext';
 
 export type YooptaOnChangeOptions = {
   operations: YooptaOperation[];
@@ -136,9 +137,27 @@ const YooptaEditor = ({
     };
   }, [editor, onValueChange]);
 
+  // const uiComponents = useMemo(() => {
+  //   const components: UIComponents = {};
+
+  //   React.Children.forEach(children, (child) => {
+  //     if (React.isValidElement(child)) {
+  //       const type = child.type as any;
+  //       const componentName = type.displayName || type.name;
+
+  //       if (UI_COMPONENTS[componentName]) {
+  //         components[componentName] = child;
+  //       }
+  //     }
+  //   });
+
+  //   return components;
+  // }, [children]);
+
   return (
     <YooptaContextProvider editorState={editorState}>
       <ToolsProvider tools={tools}>
+        {/* <UIComponentsProvider components={uiComponents}> */}
         <Editor
           placeholder={placeholder}
           marks={marks}
@@ -150,6 +169,7 @@ const YooptaEditor = ({
         >
           {children}
         </Editor>
+        {/* </UIComponentsProvider> */}
       </ToolsProvider>
     </YooptaContextProvider>
   );
