@@ -78,6 +78,8 @@ body {
 
     --yoopta-selection-box-bg: rgba(25, 221, 113, 0.141);
     --yoopta-block-selected-bg: rgba(25, 221, 113, 0.141);
+
+    --yoopta-ui-plus-button-color: red !important;
   }
 
   .dark {

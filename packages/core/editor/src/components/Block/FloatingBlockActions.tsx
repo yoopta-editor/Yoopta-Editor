@@ -114,16 +114,16 @@ export const FloatingBlockActions = memo(({ editor, dragHandleProps }: FloatingB
 
   const throttledMouseMove = throttle(handleMouseMove, 100, { leading: true, trailing: true });
 
-  useEffect(() => {
-    document.addEventListener('scroll', hideBlockActions);
-    document.addEventListener('mousemove', throttledMouseMove);
+  // useEffect(() => {
+  //   document.addEventListener('scroll', hideBlockActions);
+  //   document.addEventListener('mousemove', throttledMouseMove);
 
-    return () => {
-      document.removeEventListener('scroll', hideBlockActions);
-      document.removeEventListener('mousemove', throttledMouseMove);
-      throttledMouseMove.cancel();
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener('scroll', hideBlockActions);
+  //     document.removeEventListener('mousemove', throttledMouseMove);
+  //     throttledMouseMove.cancel();
+  //   };
+  // }, []);
 
   const onPlusClick = () => {
     const block = hoveredBlock;

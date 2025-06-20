@@ -1,0 +1,60 @@
+:root {
+  /* Floating block actions */
+  --yoopta-ui-floating-block-actions-gap: 2px;
+
+  /* Plus button */
+  --yoopta-ui-plus-button-hover-bg: #f3f4f6;
+  --yoopta-ui-plus-button-hover-fill: rgba(255, 255, 255, 0.282);
+  --yoopta-ui-plus-button-width: 24px;
+  --yoopta-ui-plus-button-height: 24px;
+  --yoopta-ui-plus-button-border-radius: 4px;
+  --yoopta-ui-plus-button-color: #37352f59;
+
+  /* Drag button */
+  --yoopta-ui-drag-button-hover-bg: #f3f4f6;
+  --yoopta-ui-drag-button-hover-fill: rgba(255, 255, 255, 0.282);
+  --yoopta-ui-drag-button-width: 18px;
+  --yoopta-ui-drag-button-height: 24px;
+  --yoopta-ui-drag-button-border-radius: 4px;
+  --yoopta-ui-drag-button-color: #37352f59;
+}
+
+.yoo-floating-block-actions {
+  gap: var(--yoopta-ui-floating-block-actions-gap);
+  display: flex;
+  align-items: center;
+  border: none;
+  transition: all 200ms ease-in;
+}
+
+.yoo-plus-button-action {
+  transition: background-color 150ms ease-in;
+  fill: var(--yoopta-ui-plus-button-hover-fill);
+  width: var(--yoopta-ui-plus-button-width);
+  height: var(--yoopta-ui-plus-button-height);
+  border-radius: var(--yoopta-ui-plus-button-border-radius);
+
+  & svg {
+    color: var(--yoopta-ui-plus-button-color);
+  }
+
+  &:hover {
+    background-color: var(--yoopta-ui-plus-button-hover-bg);
+  }
+}
+
+.yoo-drag-button-action {
+  transition: background-color 150ms ease-in;
+  fill: var(--yoopta-ui-drag-button-hover-fill);
+  width: var(--yoopta-ui-drag-button-width);
+  height: var(--yoopta-ui-drag-button-height);
+  border-radius: var(--yoopta-ui-drag-button-border-radius);
+
+  & svg {
+    color: var(--yoopta-ui-drag-button-color);
+  }
+
+  &:hover {
+    background-color: var(--yoopta-ui-drag-button-hover-bg);
+  }
+}

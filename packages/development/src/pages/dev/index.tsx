@@ -6,7 +6,7 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
-import { FloatingBlockActions, BlockOptions } from '@yoopta/ui';
+import { FloatingBlockActions } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
@@ -248,6 +248,10 @@ const fetchUsers = async (query: string): Promise<any[]> => {
   }
 };
 
+const CustomBlockAction = (props: any) => {
+  return <div>blockActions</div>;
+};
+
 const BasicExample = () => {
   const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
   const selectionRef = useRef<HTMLDivElement>(null);
@@ -286,7 +290,7 @@ const BasicExample = () => {
           value={value}
           onChange={onChange}
         >
-          {/* <FloatingBlockActions actions={['addBlock', 'openBlockOptions']} /> */}
+          <FloatingBlockActions hideDelay={100} actions={['plus', 'drag']} />
           {/* <BlockOptions /> */}
           {/* <RenderBlocks />
           <BlockActions actions={['delete', (props) => <div>blockActions</div>, 'move']} />

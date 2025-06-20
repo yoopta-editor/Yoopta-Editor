@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-// import { UI } from '@yoopta/editor';
-import { Overlay, Portal } from '@yoopta/ui';
+import { UI } from '@yoopta/editor';
+// import { Overlay, Portal } from '@yoopta/ui';
 import { EmbedLinkUploader } from './EmbedLinkUploader';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-// const { Overlay, Portal } = UI;
+const { Overlay, Portal } = UI;
 
 const EmbedUploader = ({ floatingStyles, refs, onClose, blockId }: Props) => {
   const getTabStyles = () => ({

@@ -1,10 +1,10 @@
 @tailwind utilities;
 
-.yoopta-editor * {
+/* .yoopta-editor * {
   box-sizing: border-box;
   border: 0 solid #e5e7eb;
   scrollbar-color: #D3D1CB rgba(0, 0, 0, 0);
-}
+} */
 
 ::-moz-selection {
   background: #c6ddf8;
