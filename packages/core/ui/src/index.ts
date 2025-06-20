@@ -1,6 +1,7 @@
-export { default as FloatingBlockActions } from './floating-block-actions';
-export { useFloatingBlockActions } from './floating-block-actions';
+export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
+export { useFloatingBlockActions } from './components/FloatingBlockActions/useFloatingBlockActions';
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
+export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
 export { Overlay } from './components/Overlay/Overlay';
 export { Portal } from './components/Portal/Portal';
 

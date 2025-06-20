@@ -6,8 +6,9 @@ import YooptaEditor, {
   YooptaPath,
 } from '@yoopta/editor';
 import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
-import { FloatingBlockActions } from '@yoopta/ui';
+import { FloatingBlockActions, BlockOptions, Portal } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
+import { Trash2Icon, CopyIcon, Link2Icon, RotateCcwIcon } from 'lucide-react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -28,7 +29,7 @@ const data = {
         type: 'paragraph',
         children: [
           {
-            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
+            text: "Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and ",
           },
           {
             type: 'mention',
@@ -248,14 +249,11 @@ const fetchUsers = async (query: string): Promise<any[]> => {
   }
 };
 
-const CustomBlockAction = (props: any) => {
-  return <div>blockActions</div>;
-};
-
 const BasicExample = () => {
   const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
   const selectionRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<YooptaContentValue>(data);
+  const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);
 
   const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
     console.log('onChange', value, options);
@@ -264,14 +262,25 @@ const BasicExample = () => {
 
   const onPathChange = (path: YooptaPath) => {};
 
-  // useEffect(() => {
-  // editor.withoutSavingHistory(() => {
-  //   const id = generateId();
+  const handleDelete = () => {
+    console.log('Delete block');
+    setIsBlockOptionsOpen(false);
+  };
 
-  //   editor.setEditorValue(data as YooptaContentValue);
-  //   editor.focusBlock(id);
-  // });
-  // }, []);
+  const handleDuplicate = () => {
+    console.log('Duplicate block');
+    setIsBlockOptionsOpen(false);
+  };
+
+  const handleCopy = () => {
+    console.log('Copy block link');
+    setIsBlockOptionsOpen(false);
+  };
+
+  const handleTurnInto = () => {
+    console.log('Turn into');
+    setIsBlockOptionsOpen(false);
+  };
 
   return (
     <>
@@ -290,25 +299,45 @@ const BasicExample = () => {
           value={value}
           onChange={onChange}
         >
-          <FloatingBlockActions hideDelay={100} actions={['plus', 'drag']} />
-          {/* <BlockOptions /> */}
-          {/* <RenderBlocks />
-          <BlockActions actions={['delete', (props) => <div>blockActions</div>, 'move']} />
-          <BlockOptions /> */}
-          <MentionDropdown
-            getItems={async (query) => {
-              const users = await fetchUsers(query);
-              return users;
-            }}
-            debounceMs={500}
-            onSelect={(mention) => {
-              MentionCommands.insertMention(editor, {
-                id: mention.id,
-                name: mention.name,
-                avatar: mention.avatar || '',
-              });
-            }}
-          />
+          <FloatingBlockActions.Root hideDelay={100}>
+            <FloatingBlockActions.PlusAction />
+            <FloatingBlockActions.DragAction onClick={() => setIsBlockOptionsOpen(true)}>
+              <BlockOptions.Root
+                isOpen={isBlockOptionsOpen}
+                onClose={() => setIsBlockOptionsOpen(false)}
+                refs={{ setFloating: () => {} }}
+              >
+                <BlockOptions.Content>
+                  <BlockOptions.Group>
+                    <BlockOptions.Item>
+                      <BlockOptions.Button icon={<Trash2Icon size={16} />} onClick={handleDelete}>
+                        Delete
+                      </BlockOptions.Button>
+                    </BlockOptions.Item>
+                    <BlockOptions.Item>
+                      <BlockOptions.Button icon={<CopyIcon size={16} />} onClick={handleDuplicate}>
+                        Duplicate
+                      </BlockOptions.Button>
+                    </BlockOptions.Item>
+                    <BlockOptions.Separator />
+                    <BlockOptions.Item>
+                      <BlockOptions.Button icon={<Link2Icon size={16} />} onClick={handleCopy}>
+                        Copy link to block
+                      </BlockOptions.Button>
+                    </BlockOptions.Item>
+                    <BlockOptions.Item>
+                      <BlockOptions.Button icon={<RotateCcwIcon size={16} />} onClick={handleTurnInto}>
+                        Turn into
+                      </BlockOptions.Button>
+                    </BlockOptions.Item>
+                  </BlockOptions.Group>
+                </BlockOptions.Content>
+              </BlockOptions.Root>
+            </FloatingBlockActions.DragAction>
+            <FloatingBlockActions.Action>
+              <Trash2Icon size={16} />
+            </FloatingBlockActions.Action>
+          </FloatingBlockActions.Root>
         </YooptaEditor>
       </div>
     </>

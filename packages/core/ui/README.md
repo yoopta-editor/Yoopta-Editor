@@ -14,59 +14,67 @@ npm install @yoopta/ui
 
 Компонент для отображения плавающих действий блока (как в Notion).
 
-#### Базовое использование (без hover логики)
+#### Композиционный API (рекомендуется)
 
 ```jsx
-import FloatingBlockActions from '@yoopta/ui/floating-block-actions';
-import { Button } from '@yoopta/ui';
+import { FloatingBlockActions } from '@yoopta/ui';
+import { Trash2Icon, SettingsIcon } from 'lucide-react';
 
 // Базовое использование
-<FloatingBlockActions
-  position={{ top: 100, left: 200 }}
-  visible={true}
-  onPlusClick={() => console.log('Add block')}
-  onDragClick={() => console.log('Drag block')}
-/>
+<FloatingBlockActions.Root hideDelay={100}>
+  <FloatingBlockActions.PlusAction />
+  <FloatingBlockActions.DragAction />
+</FloatingBlockActions.Root>
 
-// С кастомизацией
-<FloatingBlockActions
-  position={{ top: 100, left: 200 }}
-  size="lg"
-  variant="elegant"
-  onPlusClick={handleAddBlock}
-  onDragClick={handleSelectBlock}
-  onDragStart={handleDragStart}
-  className="my-custom-class"
-/>
+// С кастомными действиями
+<FloatingBlockActions.Root
+  hideDelay={100}
+  onPlusClick={(blockId) => console.log('Add block after:', blockId)}
+  onDragClick={(blockId) => console.log('Select block:', blockId)}
+>
+  <FloatingBlockActions.PlusAction />
+  <FloatingBlockActions.DragAction />
+  <FloatingBlockActions.Action>
+    <Trash2Icon size={16} />
+  </FloatingBlockActions.Action>
+  <FloatingBlockActions.Action>
+    <SettingsIcon size={16} />
+  </FloatingBlockActions.Action>
+</FloatingBlockActions.Root>
 
 // С кастомными иконками
-<FloatingBlockActions
-  position={{ top: 100, left: 200 }}
+<FloatingBlockActions.Root
   icons={{
     plus: <CustomPlusIcon />,
     drag: <CustomDragIcon />
   }}
   onPlusClick={handleAddBlock}
   onDragClick={handleSelectBlock}
-/>
+>
+  <FloatingBlockActions.PlusAction />
+  <FloatingBlockActions.DragAction />
+</FloatingBlockActions.Root>
 
-// С кастомными действиями
-<FloatingBlockActions
-  position={{ top: 100, left: 200 }}
-  actions={
-    <>
-      <Button variant="floating" size="floating" onClick={handleAction1}>
-        Action 1
-      </Button>
-      <Button variant="floating" size="floating" onClick={handleAction2}>
-        Action 2
-      </Button>
-    </>
-  }
-/>
+// С кастомизацией стилей
+<FloatingBlockActions.Root className="my-container">
+  <FloatingBlockActions.PlusAction
+    className="my-plus-button"
+    style={{ background: 'blue' }}
+  />
+  <FloatingBlockActions.DragAction
+    className="my-drag-button"
+    style={{ background: 'green' }}
+  />
+  <FloatingBlockActions.Action
+    className="my-custom-action"
+    style={{ background: 'red' }}
+  >
+    <Trash2Icon size={16} />
+  </FloatingBlockActions.Action>
+</FloatingBlockActions.Root>
 ```
 
-#### С автоматическим hover (рекомендуется)
+#### Legacy API (с actions prop)
 
 ```jsx
 import { FloatingBlockActions } from '@yoopta/ui';
@@ -83,7 +91,6 @@ import { FloatingBlockActions } from '@yoopta/ui';
   readOnly={false}
   hideDelay={200}
   throttleDelay={50}
-  size="lg"
   onBlockHover={(blockId) => console.log('Hovered block:', blockId)}
   onPlusClick={handleAddBlock}
   onDragClick={handleSelectBlock}
@@ -150,6 +157,125 @@ function MyComponent() {
 }
 ```
 
+### BlockOptions
+
+Компонент для отображения меню опций блока (как в Notion).
+
+#### Композиционный API
+
+```jsx
+import { BlockOptions } from '@yoopta/ui';
+import { TrashIcon, CopyIcon, Link2Icon, TurnIcon } from 'lucide-react';
+
+// Базовое использование
+<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
+  <BlockOptions.Content>
+    <BlockOptions.Group>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<TrashIcon />} onClick={onDelete}>
+          Delete
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<CopyIcon />} onClick={onDuplicate}>
+          Duplicate
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+      <BlockOptions.Separator />
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<Link2Icon />} onClick={onCopy}>
+          Copy link to block
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+    </BlockOptions.Group>
+  </BlockOptions.Content>
+</BlockOptions.Root>
+
+// С кастомизацией стилей
+<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
+  <BlockOptions.Content className="my-content">
+    <BlockOptions.Group className="my-group">
+      <BlockOptions.Item>
+        <BlockOptions.Button
+          icon={<TrashIcon />}
+          onClick={onDelete}
+          className="my-button"
+          style={{ color: 'red' }}
+        >
+          Delete
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+      <BlockOptions.Separator className="my-separator" />
+      <BlockOptions.Item>
+        <BlockOptions.Button
+          icon={<CopyIcon />}
+          onClick={onDuplicate}
+          className="my-button"
+        >
+          Duplicate
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+    </BlockOptions.Group>
+  </BlockOptions.Content>
+</BlockOptions.Root>
+
+// С кастомными действиями
+<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
+  <BlockOptions.Content>
+    <BlockOptions.Group>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<TrashIcon />} onClick={onDelete}>
+          Delete
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<CopyIcon />} onClick={onDuplicate}>
+          Duplicate
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+    </BlockOptions.Group>
+    <BlockOptions.Separator />
+    <BlockOptions.Group>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<Link2Icon />} onClick={onCopy}>
+          Copy link
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+      <BlockOptions.Item>
+        <BlockOptions.Button icon={<TurnIcon />} onClick={onTurnInto}>
+          Turn into
+        </BlockOptions.Button>
+      </BlockOptions.Item>
+    </BlockOptions.Group>
+  </BlockOptions.Content>
+</BlockOptions.Root>
+```
+
+#### Использование хука напрямую
+
+```jsx
+import { useFloatingBlockActions } from '@yoopta/ui';
+
+function MyComponent() {
+  const { hoveredBlock, position, visible, actionsRef, handlers } = useFloatingBlockActions({
+    editorElement: editorRef.current,
+    onPlusClick: (block) => console.log('Add block:', block.id),
+    onDragClick: (block) => console.log('Drag block:', block.id),
+  });
+
+  return (
+    <div ref={actionsRef} style={{ position: 'fixed', top: position.top, left: position.left }}>
+      {visible && (
+        <>
+          <button onClick={handlers.onPlusClick}>+</button>
+          <button onClick={handlers.onDragClick}>⋮⋮</button>
+        </>
+      )}
+    </div>
+  );
+}
+```
+
 ### Button
 
 Базовый компонент кнопки с вариантами стилей.
@@ -173,14 +299,13 @@ import { Button } from '@yoopta/ui';
 
 ## API
 
-### FloatingBlockActions
+### FloatingBlockActions.Root
 
 | Prop            | Type                                                 | Default                    | Description                              |
 | --------------- | ---------------------------------------------------- | -------------------------- | ---------------------------------------- |
 | `readOnly`      | `boolean`                                            | `false`                    | Флаг только для чтения                   |
 | `hideDelay`     | `number`                                             | `150`                      | Задержка скрытия в мс                    |
 | `throttleDelay` | `number`                                             | `100`                      | Throttle для mousemove в мс              |
-| `size`          | `'sm' \| 'md' \| 'lg'`                               | `'md'`                     | Размер кнопок                            |
 | `className`     | `string`                                             | -                          | Дополнительные CSS классы                |
 | `style`         | `React.CSSProperties`                                | -                          | Инлайн стили                             |
 | `onBlockHover`  | `(blockId: string \| null) => void`                  | -                          | Callback при наведении на блок           |
@@ -188,30 +313,84 @@ import { Button } from '@yoopta/ui';
 | `onDragClick`   | `(blockId: string) => void`                          | -                          | Callback при клике по кнопке Drag        |
 | `onDragStart`   | `(event: React.MouseEvent, blockId: string) => void` | -                          | Callback при начале drag                 |
 | `icons`         | `{ plus?: ReactNode; drag?: ReactNode }`             | -                          | Кастомные иконки                         |
-| `actions`       | `Array<'plus' \| 'drag' \| ReactNode>`               | -                          | Массив действий (встроенные + кастомные) |
+| `actions`       | `Array<'plus' \| 'drag' \| ReactNode>`               | -                          | Массив действий (legacy API)             |
 | `animate`       | `boolean`                                            | `true`                     | Анимация появления                       |
 | `portalId`      | `string`                                             | `'floating-block-actions'` | Портальный ID                            |
+| `children`      | `ReactNode`                                          | -                          | Дочерние компоненты (композиционный API) |
 
-### FloatingBlockActionsWithHover
+### FloatingBlockActions.PlusAction
 
-| Prop            | Type                                                  | Default                    | Description                       |
-| --------------- | ----------------------------------------------------- | -------------------------- | --------------------------------- |
-| `editorElement` | `HTMLElement \| null`                                 | -                          | Элемент редактора                 |
-| `readOnly`      | `boolean`                                             | `false`                    | Флаг только для чтения            |
-| `hideDelay`     | `number`                                              | `150`                      | Задержка скрытия в мс             |
-| `throttleDelay` | `number`                                              | `100`                      | Throttle для mousemove в мс       |
-| `size`          | `'sm' \| 'md' \| 'lg'`                                | `'md'`                     | Размер кнопок                     |
-| `variant`       | `'default' \| 'minimal' \| 'elegant'`                 | `'default'`                | Вариант стиля                     |
-| `className`     | `string`                                              | -                          | Дополнительные CSS классы         |
-| `style`         | `React.CSSProperties`                                 | -                          | Инлайн стили                      |
-| `onBlockHover`  | `(block: BlockData \| null) => void`                  | -                          | Callback при наведении на блок    |
-| `onPlusClick`   | `(block: BlockData) => void`                          | -                          | Callback при клике по кнопке Plus |
-| `onDragClick`   | `(block: BlockData) => void`                          | -                          | Callback при клике по кнопке Drag |
-| `onDragStart`   | `(event: React.MouseEvent, block: BlockData) => void` | -                          | Callback при начале drag          |
-| `icons`         | `{ plus?: ReactNode; drag?: ReactNode }`              | -                          | Кастомные иконки                  |
-| `actions`       | `ReactNode`                                           | -                          | Кастомные действия                |
-| `animate`       | `boolean`                                             | `true`                     | Анимация появления                |
-| `portalId`      | `string`                                              | `'floating-block-actions'` | Портальный ID                     |
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+
+### FloatingBlockActions.DragAction
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+
+### FloatingBlockActions.Action
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `children`  | `ReactNode`           | -       | Содержимое действия       |
+
+### BlockOptions.Root
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `isOpen`    | `boolean`             | -       | Флаг открытия меню        |
+| `onClose`   | `() => void`          | -       | Callback закрытия         |
+| `refs`      | `any`                 | -       | Refs для позиционирования |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `children`  | `ReactNode`           | -       | Дочерние компоненты       |
+
+### BlockOptions.Content
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `children`  | `ReactNode`           | -       | Дочерние компоненты       |
+
+### BlockOptions.Group
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `children`  | `ReactNode`           | -       | Дочерние компоненты       |
+
+### BlockOptions.Item
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `children`  | `ReactNode`           | -       | Дочерние компоненты       |
+
+### BlockOptions.Button
+
+| Prop        | Type                   | Default | Description               |
+| ----------- | ---------------------- | ------- | ------------------------- |
+| `icon`      | `ReactNode`            | -       | Иконка кнопки             |
+| `children`  | `ReactNode`            | -       | Текст кнопки              |
+| `className` | `string`               | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties`  | -       | Инлайн стили              |
+| `...rest`   | `ButtonHTMLAttributes` | -       | Остальные props кнопки    |
+
+### BlockOptions.Separator
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
 
 ### Button
 
@@ -223,7 +402,7 @@ import { Button } from '@yoopta/ui';
 
 ## Требования к DOM
 
-Для работы `FloatingBlockActionsWithHover` блоки должны иметь следующие data-атрибуты:
+Для работы `FloatingBlockActions` блоки должны иметь следующие data-атрибуты:
 
 ```html
 <div data-yoopta-block data-yoopta-block-id="block-1" data-yoopta-block-type="paragraph" data-yoopta-block-order="0">
@@ -233,16 +412,42 @@ import { Button } from '@yoopta/ui';
 
 ## Кастомизация
 
-### Через Tailwind CSS
+### Через CSS классы
 
 ```css
-/* Переопределение стилей */
-.yoopta-floating-actions {
-  @apply bg-blue-500 border-blue-600;
+/* Переопределение стилей BlockOptions */
+.yoo-block-options-content {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
 }
 
-.yoopta-button-floating {
-  @apply bg-white/95 hover:bg-white shadow-xl;
+.yoo-block-options-button {
+  color: #d1d5db !important;
+}
+
+.yoo-block-options-button:hover {
+  background-color: #374151 !important;
+}
+
+.yoo-block-options-separator {
+  background-color: #374151 !important;
+}
+
+/* Переопределение стилей FloatingBlockActions */
+.yoo-floating-block-actions {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.yoo-plus-button-action {
+  background: blue !important;
+}
+
+.yoo-drag-button-action {
+  background: green !important;
+}
+
+.yoo-button-action {
+  background: red !important;
 }
 ```
 
@@ -250,12 +455,22 @@ import { Button } from '@yoopta/ui';
 
 ```css
 :root {
-  --yoo-ui-bg-color: #ffffff;
-  --yoo-ui-border-color: #e5e7eb;
-  --yoo-ui-text-color: #374151;
+  --yoopta-ui-floating-block-actions-gap: 4px;
+  --yoopta-ui-button-hover-bg: #e5e7eb;
+  --yoopta-ui-plus-button-color: #374151;
+  --yoopta-ui-drag-button-color: #374151;
+  --yoopta-ui-button-action-color: #374151;
+
+  /* Block options variables */
+  --yoopta-ui-block-options-bg: #ffffff;
+  --yoopta-ui-block-options-border: #e5e7eb;
+  --yoopta-ui-block-options-text: #374151;
+  --yoopta-ui-block-options-hover-bg: #f3f4f6;
+  --yoopta-ui-block-options-icon: #6b7280;
+  --yoopta-ui-block-options-separator: #e5e7eb;
 }
 ```
 
 ## Поддержка темной темы
 
-Компоненты автоматически адаптируются к темной теме через Tailwind CSS классы.
+Компоненты автоматически адаптируются к темной теме через CSS медиа-запросы.

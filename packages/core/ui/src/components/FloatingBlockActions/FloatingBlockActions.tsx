@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback } from 'react';
+import React, { CSSProperties, useCallback, createContext, useContext } from 'react';
 import { Plus, GripVertical } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useFloatingBlockActions } from './useFloatingBlockActions';
@@ -17,69 +17,42 @@ export interface FloatingBlockActionsProps {
     plus?: React.ReactNode;
     drag?: React.ReactNode;
   };
-  actions?: Array<'plus' | 'drag' | React.ReactNode>;
+  actions?: Array<'plus' | 'drag' | React.ReactNode> | null;
+  animate?: boolean;
+  portalId?: string;
+  children?: React.ReactNode;
+}
+
+interface FloatingBlockActionsContextValue {
+  hoveredBlockId: string | null;
+  position: { top: number; left: number };
+  visible: boolean;
+  actionsRef: React.MutableRefObject<HTMLDivElement | null>;
+  handlers: {
+    onPlusClick: () => void;
+    onDragClick: (event: React.MouseEvent) => void;
+    onDragStart: (event: React.MouseEvent) => void;
+  };
+  icons?: {
+    plus?: React.ReactNode;
+    drag?: React.ReactNode;
+  };
   animate?: boolean;
   portalId?: string;
 }
 
-type PlusButtonProps = {
-  handlers: { onPlusClick: () => void };
-  icon: React.ReactNode;
+const FloatingBlockActionsContext = createContext<FloatingBlockActionsContextValue | null>(null);
+
+const useFloatingBlockActionsContext = () => {
+  const context = useContext(FloatingBlockActionsContext);
+  if (!context) {
+    throw new Error('FloatingBlockActions components must be used within FloatingBlockActions.Root');
+  }
+  return context;
 };
 
-const plusStyle: CSSProperties = {
-  userSelect: 'none',
-  transition: 'background 20ms ease-in',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  pointerEvents: 'auto',
-};
-
-const PlusButton = ({ handlers, icon }: PlusButtonProps) => {
-  return (
-    <button
-      type="button"
-      onClick={handlers.onPlusClick}
-      className="yoo-plus-button-action"
-      title="Add block"
-      style={plusStyle}
-    >
-      {icon || <Plus width={16} height={24} strokeWidth={2} />}
-    </button>
-  );
-};
-
-type DragButtonProps = {
-  handlers: { onDragClick: (event: React.MouseEvent) => void; onDragStart: (event: React.MouseEvent) => void };
-  icon: React.ReactNode;
-};
-
-const dragStyle: CSSProperties = {
-  userSelect: 'none',
-  transition: 'background 20ms ease-in',
-  cursor: 'grab',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-
-const DragButton = ({ handlers, icon }: DragButtonProps) => {
-  return (
-    <button
-      type="button"
-      onClick={handlers.onDragClick}
-      onMouseDown={handlers.onDragStart}
-      style={dragStyle}
-      title="Drag block"
-      className="yoo-drag-button-action"
-    >
-      {icon || <GripVertical size={14} strokeWidth={2} />}
-    </button>
-  );
-};
-
-const FloatingBlockActions = React.forwardRef<HTMLDivElement, FloatingBlockActionsProps>(
+// Root component
+const Root = React.forwardRef<HTMLDivElement, FloatingBlockActionsProps>(
   (
     {
       readOnly = false,
@@ -92,9 +65,9 @@ const FloatingBlockActions = React.forwardRef<HTMLDivElement, FloatingBlockActio
       onDragClick,
       onDragStart,
       icons,
-      actions,
       animate = true,
       portalId = 'floating-block-actions',
+      children,
     },
     ref,
   ) => {
@@ -130,35 +103,162 @@ const FloatingBlockActions = React.forwardRef<HTMLDivElement, FloatingBlockActio
       [ref, actionsRef],
     );
 
+    const contextValue: FloatingBlockActionsContextValue = {
+      hoveredBlockId,
+      position,
+      visible,
+      actionsRef,
+      handlers,
+      icons,
+      animate,
+      portalId,
+    };
+
+    // If children are provided, use compositional API
+    if (children) {
+      if (!visible && !hoveredBlockId) {
+        return null;
+      }
+
+      return (
+        <FloatingBlockActionsContext.Provider value={contextValue}>
+          <div
+            ref={setRefs}
+            className={cn('yoo-floating-block-actions', className)}
+            style={containerStyles}
+            contentEditable={false}
+            data-portal-id={portalId}
+          >
+            {children}
+          </div>
+        </FloatingBlockActionsContext.Provider>
+      );
+    }
+
+    // Legacy API with actions prop
     if (!visible && !hoveredBlockId) {
       return null;
     }
 
-    const renderAction = (action: 'plus' | 'drag' | React.ReactNode, index: number) => {
-      if (action === 'plus') {
-        return <PlusButton key={`plus-${index}`} handlers={handlers} icon={icons?.plus} />;
-      }
-      if (action === 'drag') {
-        return <DragButton key={`drag-${index}`} handlers={handlers} icon={icons?.drag} />;
-      }
-
-      return React.isValidElement(action) ? React.cloneElement(action, { key: `custom-${index}` }) : action;
-    };
-
     return (
-      <div
-        ref={setRefs}
-        className={cn('yoo-floating-block-actions', className)}
-        style={containerStyles}
-        contentEditable={false}
-        data-portal-id={portalId}
-      >
-        {actions?.map((action, index) => renderAction(action, index))}
-      </div>
+      <FloatingBlockActionsContext.Provider value={contextValue}>
+        <div
+          ref={setRefs}
+          className={cn('yoo-floating-block-actions', className)}
+          style={containerStyles}
+          contentEditable={false}
+          data-portal-id={portalId}
+        >
+          {children}
+        </div>
+      </FloatingBlockActionsContext.Provider>
     );
   },
 );
 
-FloatingBlockActions.displayName = 'FloatingBlockActions';
+Root.displayName = 'FloatingBlockActions.Root';
+
+export type PlusActionProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+// PlusAction component
+const PlusAction = React.forwardRef<HTMLButtonElement, PlusActionProps>(({ className, style, ...props }, ref) => {
+  const { handlers, icons } = useFloatingBlockActionsContext();
+
+  const plusStyle: CSSProperties = {
+    userSelect: 'none',
+    transition: 'background 20ms ease-in',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'auto',
+    ...style,
+  };
+
+  const handleClick = (event) => {
+    handlers.onPlusClick();
+    props.onClick?.(event);
+  };
+
+  return (
+    <Action
+      ref={ref}
+      onClick={handleClick}
+      className={cn('yoo-plus-button-action', className)}
+      title="Add block"
+      style={plusStyle}
+    >
+      {icons?.plus || <Plus width={16} height={24} strokeWidth={2} />}
+      {props.children}
+    </Action>
+  );
+});
+
+PlusAction.displayName = 'FloatingBlockActions.PlusAction';
+
+export type DragActionProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+// DragAction component
+const DragAction = React.forwardRef<HTMLButtonElement, DragActionProps>(({ className, style, ...props }, ref) => {
+  const { handlers, icons } = useFloatingBlockActionsContext();
+
+  const dragStyle: CSSProperties = {
+    userSelect: 'none',
+    transition: 'background 20ms ease-in',
+    cursor: 'grab',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...style,
+  };
+
+  const handleClick = (event) => {
+    handlers.onDragClick(event);
+    props.onClick?.(event);
+  };
+
+  const onMouseDown = (event) => {
+    handlers.onDragStart(event);
+    props.onMouseDown?.(event);
+  };
+
+  return (
+    <Action
+      ref={ref}
+      onClick={handleClick}
+      onMouseDown={onMouseDown}
+      style={dragStyle}
+      title="Drag block"
+      className={cn('yoo-drag-button-action', className)}
+    >
+      {icons?.drag || <GripVertical size={14} strokeWidth={2} />}
+      {props.children}
+    </Action>
+  );
+});
+
+DragAction.displayName = 'FloatingBlockActions.DragAction';
+
+export type ActionProps = {
+  children: React.ReactNode;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+// Action component for button actions
+const Action = React.forwardRef<HTMLButtonElement, ActionProps>(({ className, children, ...rest }, ref) => {
+  return (
+    <button ref={ref} type="button" className={cn('yoo-button-action', className)} {...rest}>
+      {children}
+    </button>
+  );
+});
+
+Action.displayName = 'FloatingBlockActions.Action';
+
+// Main component with subcomponents
+const FloatingBlockActions = Object.assign(Root, {
+  Root,
+  PlusAction,
+  DragAction,
+  Action,
+});
 
 export { FloatingBlockActions };
