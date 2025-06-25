@@ -14,7 +14,6 @@ import { SelectionBox } from '../SelectionBox/SelectionBox';
 import { Blocks } from '../../editor/blocks';
 import { useMultiSelection } from './selection';
 import { Paths } from '../../editor/paths';
-import { FloatingBlockActions } from '../Block/FloatingBlockActions';
 
 type Props = {
   marks?: YooptaMark<any>[];
@@ -25,6 +24,8 @@ type Props = {
   width?: number | string;
   children: ReactNode;
   style?: CSSProperties;
+  renderBlocks?: ({ blocks }: { blocks: React.ReactNode }) => React.ReactNode;
+  renderBlock?: ({ blockRender, block }: { blockRender: React.ReactNode; block: any }) => React.ReactNode;
 };
 
 const getEditorStyles = (styles: CSSProperties) => ({
@@ -41,6 +42,8 @@ const Editor = ({
   width,
   style,
   children,
+  renderBlocks,
+  renderBlock,
   autoFocus = true,
 }: Props) => {
   const editor = useYooptaEditor();
@@ -327,9 +330,15 @@ const Editor = ({
       onCopy={onCopy}
       onCut={onCopy}
     >
-      <FloatingBlockActions editor={editor} dragHandleProps={null} />
+      {/* <FloatingBlockActions editor={editor} dragHandleProps={null} /> */}
 
-      <RenderBlocks editor={editor} placeholder={placeholder} marks={marks} />
+      <RenderBlocks
+        editor={editor}
+        placeholder={placeholder}
+        marks={marks}
+        renderBlock={renderBlock}
+        renderBlocks={renderBlocks}
+      />
       {selectionBoxRoot !== false && (
         <SelectionBox
           origin={selectionBox.origin}

@@ -41,6 +41,8 @@ export type YooptaEditorProps = {
   readOnly?: boolean;
   width?: number | string;
   style?: CSSProperties;
+  renderBlocks?: ({ blocks }: { blocks: React.ReactNode }) => React.ReactNode;
+  renderBlock?: ({ blockRender, block }: { blockRender: React.ReactNode; block: any }) => React.ReactNode;
 };
 
 type EditorState = {
@@ -65,6 +67,8 @@ const YooptaEditor = ({
   style,
   onChange,
   onPathChange,
+  renderBlocks,
+  renderBlock,
 }: YooptaEditorProps) => {
   const marks = useMemo(() => {
     if (marksProps) return [FakeSelectionMark, ...marksProps];
@@ -166,6 +170,8 @@ const YooptaEditor = ({
           selectionBoxRoot={selectionBoxRoot}
           width={width}
           style={style}
+          renderBlocks={renderBlocks}
+          renderBlock={renderBlock}
         >
           {children}
         </Editor>

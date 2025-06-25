@@ -10,6 +10,100 @@ npm install @yoopta/ui
 
 ## Использование
 
+### YooptaDndKit
+
+Компоненты для drag and drop функциональности на основе `@dnd-kit`.
+
+#### Базовое использование
+
+```jsx
+import { YooptaDndKit, useYooptaDndKit } from '@yoopta/ui/dnd-kit';
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+
+const MySortableList = () => {
+  const [items, setItems] = useState([
+    { id: '1', content: 'Item 1' },
+    { id: '2', content: 'Item 2' },
+    { id: '3', content: 'Item 3' },
+  ]);
+
+  const { activeId } = useYooptaDndKit();
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setItems((prevItems) => {
+        const oldIndex = prevItems.findIndex((item) => item.id === active.id);
+        const newIndex = prevItems.findIndex((item) => item.id === over.id);
+        return arrayMove(prevItems, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const activeItem = items.find((item) => item.id === activeId);
+
+  return (
+    <YooptaDndKit.Root items={items.map((item) => item.id)} onDragEnd={handleDragEnd}>
+      <div>
+        {items.map((item) => (
+          <YooptaDndKit.Item key={item.id} id={item.id}>
+            <div style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+              <span>{item.content}</span>
+              <div style={{ cursor: 'grab' }}>⋮⋮</div>
+            </div>
+          </YooptaDndKit.Item>
+        ))}
+      </div>
+
+      <YooptaDndKit.Overlay>
+        {activeItem ? <div style={{ padding: '12px', background: '#ffffff' }}>{activeItem.content}</div> : null}
+      </YooptaDndKit.Overlay>
+    </YooptaDndKit.Root>
+  );
+};
+```
+
+#### Subimport использование
+
+```jsx
+import { YooptaDndKit, useYooptaDndKit } from '@yoopta/ui/dnd-kit';
+
+// То же самое использование, но с отдельным импортом
+<YooptaDndKit.Root items={itemIds} onDragEnd={handleDragEnd}>
+  {items.map((item) => (
+    <YooptaDndKit.Item key={item.id} id={item.id}>
+      {item.content}
+    </YooptaDndKit.Item>
+  ))}
+  <YooptaDndKit.Overlay>{activeItem && <div>{activeItem.content}</div>}</YooptaDndKit.Overlay>
+</YooptaDndKit.Root>;
+```
+
+#### Использование хука напрямую
+
+```jsx
+import { useYooptaDndKit } from '@yoopta/ui';
+
+function MyComponent() {
+  const { sensors, activeId, isDragging, dragOverlay, handlers } = useYooptaDndKit({
+    onDragStart: (event) => console.log('Drag started:', event),
+    onDragEnd: (event) => console.log('Drag ended:', event),
+    activationConstraint: { distance: 10 },
+  });
+
+  return (
+    <DndContext sensors={sensors} onDragStart={handlers.handleDragStart} onDragEnd={handlers.handleDragEnd}>
+      {/* Your sortable items */}
+      <dragOverlay.DragOverlayComponent dropAnimation={dragOverlay.dropAnimation}>
+        {/* Drag overlay content */}
+      </dragOverlay.DragOverlayComponent>
+    </DndContext>
+  );
+}
+```
+
 ### FloatingBlockActions
 
 Компонент для отображения плавающих действий блока (как в Notion).
@@ -299,6 +393,46 @@ import { Button } from '@yoopta/ui';
 
 ## API
 
+### YooptaDndKit.Root
+
+| Prop                   | Type                              | Default                       | Description                        |
+| ---------------------- | --------------------------------- | ----------------------------- | ---------------------------------- |
+| `children`             | `ReactNode`                       | -                             | Дочерние компоненты                |
+| `className`            | `string`                          | -                             | Дополнительные CSS классы          |
+| `style`                | `React.CSSProperties`             | -                             | Инлайн стили                       |
+| `onDragStart`          | `(event: DragStartEvent) => void` | -                             | Callback при начале drag           |
+| `onDragEnd`            | `(event: DragEndEvent) => void`   | -                             | Callback при окончании drag        |
+| `onDragOver`           | `(event: DragOverEvent) => void`  | -                             | Callback при перетаскивании        |
+| `activationConstraint` | `PointerActivationConstraint`     | `{ distance: 8 }`             | Ограничения активации              |
+| `collisionDetection`   | `any`                             | `closestCenter`               | Алгоритм определения коллизий      |
+| `measuring`            | `any`                             | -                             | Настройки измерения                |
+| `modifiers`            | `any[]`                           | -                             | Модификаторы                       |
+| `items`                | `string[]`                        | `[]`                          | Массив ID элементов для сортировки |
+| `strategy`             | `any`                             | `verticalListSortingStrategy` | Стратегия сортировки               |
+| `disabled`             | `boolean`                         | `false`                       | Отключение функциональности        |
+
+### YooptaDndKit.Item
+
+| Prop        | Type                  | Default | Description               |
+| ----------- | --------------------- | ------- | ------------------------- |
+| `id`        | `string`              | -       | Уникальный ID элемента    |
+| `disabled`  | `boolean`             | `false` | Отключение элемента       |
+| `children`  | `ReactNode`           | -       | Дочерние компоненты       |
+| `className` | `string`              | -       | Дополнительные CSS классы |
+| `style`     | `React.CSSProperties` | -       | Инлайн стили              |
+| `data`      | `Record<string, any>` | -       | Дополнительные данные     |
+
+### YooptaDndKit.Overlay
+
+| Prop            | Type                  | Default | Description               |
+| --------------- | --------------------- | ------- | ------------------------- |
+| `children`      | `ReactNode`           | -       | Дочерние компоненты       |
+| `className`     | `string`              | -       | Дополнительные CSS классы |
+| `style`         | `React.CSSProperties` | -       | Инлайн стили              |
+| `dropAnimation` | `any`                 | -       | Анимация при сбросе       |
+| `modifiers`     | `any[]`               | -       | Модификаторы              |
+| `zIndex`        | `number`              | `999`   | Z-index                   |
+
 ### FloatingBlockActions.Root
 
 | Prop            | Type                                                 | Default                    | Description                              |
@@ -415,6 +549,25 @@ import { Button } from '@yoopta/ui';
 ### Через CSS классы
 
 ```css
+/* Переопределение стилей YooptaDndKit */
+.yoo-dnd-kit {
+  background: #f8f9fa !important;
+}
+
+.yoo-sortable-item {
+  background: #ffffff !important;
+  border-color: #dee2e6 !important;
+}
+
+.yoo-sortable-item:hover {
+  background: #f8f9fa !important;
+}
+
+.yoo-drag-overlay {
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
 /* Переопределение стилей BlockOptions */
 .yoo-block-options-content {
   background: #1f2937 !important;
@@ -468,6 +621,20 @@ import { Button } from '@yoopta/ui';
   --yoopta-ui-block-options-hover-bg: #f3f4f6;
   --yoopta-ui-block-options-icon: #6b7280;
   --yoopta-ui-block-options-separator: #e5e7eb;
+
+  /* YooptaDndKit variables */
+  --yoopta-ui-dnd-kit-bg: transparent;
+  --yoopta-ui-sortable-item-bg: #ffffff;
+  --yoopta-ui-sortable-item-border: #e5e7eb;
+  --yoopta-ui-sortable-item-hover-bg: #f9fafb;
+  --yoopta-ui-sortable-item-dragging-opacity: 0.5;
+  --yoopta-ui-sortable-item-over-border: 2px solid #007aff;
+
+  /* YooptaDragOverlay variables */
+  --yoopta-ui-drag-overlay-bg: rgba(255, 255, 255, 0.95);
+  --yoopta-ui-drag-overlay-border: #e5e7eb;
+  --yoopta-ui-drag-overlay-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --yoopta-ui-drag-overlay-border-radius: 8px;
 }
 ```
 

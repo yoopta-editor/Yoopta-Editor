@@ -318,21 +318,50 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       const block = editor.children[prevProperties.id];
 
       if (block) {
-        block.meta.order = properties.order;
+        const oldOrder = prevProperties.order;
+        const newOrder = properties.order;
 
-        Object.values(editor.children).forEach((otherBlock) => {
-          if (otherBlock.id !== prevProperties.id) {
-            if (prevProperties.order < properties.order) {
-              if (otherBlock.meta.order > prevProperties.order && otherBlock.meta.order <= properties.order) {
+        // Обновляем порядок перетаскиваемого блока
+        block.meta.order = newOrder;
+
+        // Оптимизированная логика обновления порядков других блоков
+        const blocks = Object.values(editor.children);
+
+        if (oldOrder < newOrder) {
+          // Перемещаем вниз - уменьшаем порядок блоков между старым и новым
+          blocks.forEach((otherBlock) => {
+            if (
+              otherBlock.id !== prevProperties.id &&
+              otherBlock.meta.order > oldOrder &&
+              otherBlock.meta.order <= newOrder
+            ) {
+              if (isDraft(otherBlock)) {
                 otherBlock.meta.order--;
-              }
-            } else {
-              if (otherBlock.meta.order < prevProperties.order && otherBlock.meta.order >= properties.order) {
-                otherBlock.meta.order++;
+              } else {
+                produce(otherBlock, (draft) => {
+                  draft.meta.order--;
+                });
               }
             }
-          }
-        });
+          });
+        } else if (oldOrder > newOrder) {
+          // Перемещаем вверх - увеличиваем порядок блоков между новым и старым
+          blocks.forEach((otherBlock) => {
+            if (
+              otherBlock.id !== prevProperties.id &&
+              otherBlock.meta.order >= newOrder &&
+              otherBlock.meta.order < oldOrder
+            ) {
+              if (isDraft(otherBlock)) {
+                otherBlock.meta.order++;
+              } else {
+                produce(otherBlock, (draft) => {
+                  draft.meta.order++;
+                });
+              }
+            }
+          });
+        }
       }
 
       break;

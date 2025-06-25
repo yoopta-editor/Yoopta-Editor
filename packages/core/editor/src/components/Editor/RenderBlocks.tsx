@@ -1,14 +1,21 @@
-import { useMemo, useState } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  KeyboardSensor,
+  DragStartEvent,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { Block } from '../Block/Block';
-import { YooEditor } from '../../editor/types';
+import { YooEditor, YooptaBlockData } from '../../editor/types';
 import { YooptaMark } from '../../marks';
 import { SlateEditorComponent } from '../../plugins/SlateEditorComponent';
-import { useYooptaDragDrop } from './dnd';
 import { useYooptaReadOnly } from '../../contexts/YooptaContext';
-import { FloatingBlockActions } from '../Block/FloatingBlockActions';
 
 const DEFAULT_EDITOR_KEYS = [];
 
@@ -16,15 +23,31 @@ type Props = {
   editor: YooEditor;
   marks?: YooptaMark<any>[];
   placeholder?: string;
+  renderBlock?: ({ blockRender, block }: { blockRender: React.ReactNode; block: YooptaBlockData }) => React.ReactNode;
+  renderBlocks?: ({ blocks, items }: { blocks: React.ReactNode; items: string[] }) => React.ReactNode;
 };
 
-const RenderBlocks = ({ editor, placeholder, marks }: Props) => {
+const RenderBlocks = ({ editor, placeholder, marks, renderBlocks, renderBlock }: Props) => {
   const isReadOnly = useYooptaReadOnly();
-  const { sensors, handleDragEnd, handleDragStart } = useYooptaDragDrop({ editor });
+
+  // const handleDragEnd = useCallback((event: DragEndEvent) => {
+  //   const { active, over } = event;
+
+  //   if (active && over && active.id !== over.id) {
+  //     const newPluginPosition = editor.children[over.id].meta.order;
+  //     // [TEST]
+  //     editor.moveBlock(active.id as string, newPluginPosition);
+  //   }
+  // }, []);
+
+  // const handleDragStart = useCallback((event: DragStartEvent) => {
+  //   editor.setPath({ current: null });
+  // }, []);
+
   const [dragHandleProps, setActiveDragHandleProps] = useState(null);
 
-  const childrenUnorderedKeys = Object.keys(editor.children);
   const childrenKeys = useMemo(() => {
+    const childrenUnorderedKeys = Object.keys(editor.children);
     if (childrenUnorderedKeys.length === 0) return DEFAULT_EDITOR_KEYS;
 
     return childrenUnorderedKeys.sort((a, b) => {
@@ -33,9 +56,7 @@ const RenderBlocks = ({ editor, placeholder, marks }: Props) => {
 
       return aOrder - bOrder;
     });
-
-    //[TODO] - unnecesary
-  }, [childrenUnorderedKeys]);
+  }, [editor.children]);
 
   const blocks: JSX.Element[] = [];
 
@@ -50,7 +71,7 @@ const RenderBlocks = ({ editor, placeholder, marks }: Props) => {
     }
 
     blocks.push(
-      <Block key={blockId} block={block} blockId={blockId} onActiveDragHandleChange={setActiveDragHandleProps}>
+      <Block key={blockId} renderBlock={renderBlock} block={block} blockId={blockId}>
         <SlateEditorComponent
           key={blockId}
           type={block.type}
@@ -67,21 +88,11 @@ const RenderBlocks = ({ editor, placeholder, marks }: Props) => {
     );
   }
 
-  if (isReadOnly) return <>{blocks}</>;
+  const renderedBlocks = renderBlocks ? renderBlocks({ blocks, items: childrenKeys }) : blocks;
 
-  return (
-    <DndContext
-      id="yoopta-dnd-context"
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext disabled={isReadOnly} items={childrenKeys} strategy={verticalListSortingStrategy}>
-        {blocks}
-      </SortableContext>
-    </DndContext>
-  );
+  if (isReadOnly) return <>{renderedBlocks}</>;
+
+  return renderedBlocks;
 };
 
 export { RenderBlocks };

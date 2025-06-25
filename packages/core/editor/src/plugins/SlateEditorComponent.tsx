@@ -76,12 +76,12 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (editor.readOnly) return;
       if (editor.path.source === 'mousemove' || editor.path.source === 'keyboard') return;
 
-      editor.setPath({
-        current: editor.path.current,
-        selected: editor.path.selected,
-        selection: selection,
-        source: 'native-selection',
-      });
+      // editor.setPath({
+      //   current: editor.path.current,
+      //   selected: editor.path.selected,
+      //   selection: selection,
+      //   source: 'native-selection',
+      // });
     },
     [editor.readOnly],
   );

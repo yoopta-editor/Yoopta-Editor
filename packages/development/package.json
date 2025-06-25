@@ -37,8 +37,8 @@
     "@yoopta/starter-kit": "*",
     "@yoopta/table": "*",
     "@yoopta/toolbar": "*",
-    "@yoopta/video": "*",
     "@yoopta/ui": "*",
+    "@yoopta/video": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
@@ -54,7 +54,9 @@
     "slate-react": "^0.102.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^10.0.4",
+    "@dnd-kit/helpers": "^0.1.19",
+    "@dnd-kit/react": "^0.1.19"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",

@@ -2,6 +2,9 @@ import { YooEditor, YooptaContentValue, deserializeHTML as parseHTML } from '@yo
 
 export function deserializeHTML(editor: YooEditor, htmlString: string): YooptaContentValue {
   const parsedHtml = new DOMParser().parseFromString(htmlString, 'text/html');
+
+  console.log('deserializeHTML htmlString', htmlString);
+  console.log('deserializeHTML parsedHtml', parsedHtml);
   const value: YooptaContentValue = {};
 
   const blocks = parseHTML(editor, parsedHtml.body);

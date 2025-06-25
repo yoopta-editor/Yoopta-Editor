@@ -26,6 +26,7 @@ import { mergeBlock } from './blocks/mergeBlock';
 import { UndoRedoOptions, YooptaHistory } from './core/history';
 import EventEmitter from 'eventemitter3';
 import { getEmail, EmailTemplateOptions } from '../parsers/getEmail';
+import { generateId } from '../utils/generateId';
 
 export function createYooptaEditor(): YooEditor {
   // Create a unique event emitter for each editor instance
@@ -38,7 +39,7 @@ export function createYooptaEditor(): YooEditor {
     emit: (event, payload) => eventEmitter.emit(event, payload),
   };
   const editor: YooEditor = {
-    id: '',
+    id: generateId(),
     children: {},
     blockEditorsMap: {},
     path: { current: null },

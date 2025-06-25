@@ -5,6 +5,16 @@ export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOpt
 export { Overlay } from './components/Overlay/Overlay';
 export { Portal } from './components/Portal/Portal';
 
+// YooptaDndKit Components
+export { useYooptaDndKit, YooptaDndKit, useYooptaDndKitContext } from './components/YooptaDndKit';
+export type {
+  UseYooptaDndKitProps,
+  UseYooptaDndKitReturn,
+  YooptaDndKitRootProps,
+  YooptaDndKitItemProps,
+  YooptaDndKitOverlayProps,
+} from './components/YooptaDndKit';
+
 // UI Components
 export { Button, buttonVariants } from './components/ui/button';
 export type { ButtonProps } from './components/ui/button';

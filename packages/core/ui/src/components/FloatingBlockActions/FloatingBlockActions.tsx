@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, createContext, useContext } from 'react';
+import React, { CSSProperties, useCallback, createContext, useContext, MouseEvent } from 'react';
 import { Plus, GripVertical } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useFloatingBlockActions } from './useFloatingBlockActions';
@@ -12,7 +12,6 @@ export interface FloatingBlockActionsProps {
   onBlockHover?: (blockId: string | null) => void;
   onPlusClick?: (blockId: string) => void;
   onDragClick?: (blockId: string) => void;
-  onDragStart?: (event: React.MouseEvent, blockId: string) => void;
   icons?: {
     plus?: React.ReactNode;
     drag?: React.ReactNode;
@@ -28,11 +27,6 @@ interface FloatingBlockActionsContextValue {
   position: { top: number; left: number };
   visible: boolean;
   actionsRef: React.MutableRefObject<HTMLDivElement | null>;
-  handlers: {
-    onPlusClick: () => void;
-    onDragClick: (event: React.MouseEvent) => void;
-    onDragStart: (event: React.MouseEvent) => void;
-  };
   icons?: {
     plus?: React.ReactNode;
     drag?: React.ReactNode;
@@ -43,7 +37,7 @@ interface FloatingBlockActionsContextValue {
 
 const FloatingBlockActionsContext = createContext<FloatingBlockActionsContextValue | null>(null);
 
-const useFloatingBlockActionsContext = () => {
+export const useFloatingBlockActionsContext = () => {
   const context = useContext(FloatingBlockActionsContext);
   if (!context) {
     throw new Error('FloatingBlockActions components must be used within FloatingBlockActions.Root');
@@ -61,9 +55,6 @@ const Root = React.forwardRef<HTMLDivElement, FloatingBlockActionsProps>(
       className,
       style,
       onBlockHover,
-      onPlusClick,
-      onDragClick,
-      onDragStart,
       icons,
       animate = true,
       portalId = 'floating-block-actions',
@@ -71,14 +62,11 @@ const Root = React.forwardRef<HTMLDivElement, FloatingBlockActionsProps>(
     },
     ref,
   ) => {
-    const { hoveredBlockId, position, visible, actionsRef, handlers } = useFloatingBlockActions({
+    const { hoveredBlockId, position, visible, actionsRef } = useFloatingBlockActions({
       readOnly,
       hideDelay,
       throttleDelay,
       onBlockHover,
-      onPlusClick,
-      onDragClick,
-      onDragStart,
     });
 
     const containerStyles: React.CSSProperties = {
@@ -108,34 +96,12 @@ const Root = React.forwardRef<HTMLDivElement, FloatingBlockActionsProps>(
       position,
       visible,
       actionsRef,
-      handlers,
       icons,
       animate,
       portalId,
     };
 
     // If children are provided, use compositional API
-    if (children) {
-      if (!visible && !hoveredBlockId) {
-        return null;
-      }
-
-      return (
-        <FloatingBlockActionsContext.Provider value={contextValue}>
-          <div
-            ref={setRefs}
-            className={cn('yoo-floating-block-actions', className)}
-            style={containerStyles}
-            contentEditable={false}
-            data-portal-id={portalId}
-          >
-            {children}
-          </div>
-        </FloatingBlockActionsContext.Provider>
-      );
-    }
-
-    // Legacy API with actions prop
     if (!visible && !hoveredBlockId) {
       return null;
     }
@@ -162,7 +128,7 @@ export type PlusActionProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 // PlusAction component
 const PlusAction = React.forwardRef<HTMLButtonElement, PlusActionProps>(({ className, style, ...props }, ref) => {
-  const { handlers, icons } = useFloatingBlockActionsContext();
+  const { icons } = useFloatingBlockActionsContext();
 
   const plusStyle: CSSProperties = {
     userSelect: 'none',
@@ -174,15 +140,10 @@ const PlusAction = React.forwardRef<HTMLButtonElement, PlusActionProps>(({ class
     ...style,
   };
 
-  const handleClick = (event) => {
-    handlers.onPlusClick();
-    props.onClick?.(event);
-  };
-
   return (
     <Action
+      {...props}
       ref={ref}
-      onClick={handleClick}
       className={cn('yoo-plus-button-action', className)}
       title="Add block"
       style={plusStyle}
@@ -199,7 +160,7 @@ export type DragActionProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 // DragAction component
 const DragAction = React.forwardRef<HTMLButtonElement, DragActionProps>(({ className, style, ...props }, ref) => {
-  const { handlers, icons } = useFloatingBlockActionsContext();
+  const { icons } = useFloatingBlockActionsContext();
 
   const dragStyle: CSSProperties = {
     userSelect: 'none',
@@ -211,21 +172,10 @@ const DragAction = React.forwardRef<HTMLButtonElement, DragActionProps>(({ class
     ...style,
   };
 
-  const handleClick = (event) => {
-    handlers.onDragClick(event);
-    props.onClick?.(event);
-  };
-
-  const onMouseDown = (event) => {
-    handlers.onDragStart(event);
-    props.onMouseDown?.(event);
-  };
-
   return (
     <Action
+      {...props}
       ref={ref}
-      onClick={handleClick}
-      onMouseDown={onMouseDown}
       style={dragStyle}
       title="Drag block"
       className={cn('yoo-drag-button-action', className)}
