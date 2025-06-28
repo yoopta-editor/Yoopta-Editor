@@ -44,22 +44,12 @@ const fetchUsers = async (query: string): Promise<any[]> => {
 
 const FloatingBlockActionsExample = () => {
   const { handlers, hoveredBlockId } = useFloatingBlockActions({});
-  const { dragHandlesRef } = useYooptaDndKitContext();
-
-  const dragHandle = useMemo(() => {
-    const handler = dragHandlesRef?.current?.get(hoveredBlockId || '');
-    return handler;
-  }, [dragHandlesRef, hoveredBlockId]);
+  const { getDragHandleProps } = useYooptaDndKitContext();
 
   return (
     <FloatingBlockActions.Root>
       <FloatingBlockActions.PlusAction onClick={handlers.onPlusClick} />
-      <FloatingBlockActions.DragAction
-        onClick={handlers.onDragClick}
-        ref={dragHandle?.setActivatorNodeRef}
-        {...dragHandle?.attributes}
-        {...dragHandle?.listeners}
-      />
+      <FloatingBlockActions.DragAction onClick={handlers.onDragClick} {...getDragHandleProps(hoveredBlockId)} />
     </FloatingBlockActions.Root>
   );
 };
