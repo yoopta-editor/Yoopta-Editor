@@ -42,7 +42,7 @@ const fetchUsers = async (query: string): Promise<any[]> => {
   }
 };
 
-const FloatingBlockActionsExample = ({ dragHandleProps }: { dragHandleProps?: any }) => {
+const FloatingBlockActionsExample = () => {
   const { handlers, hoveredBlockId } = useFloatingBlockActions({});
   const { dragHandlesRef } = useYooptaDndKitContext();
 

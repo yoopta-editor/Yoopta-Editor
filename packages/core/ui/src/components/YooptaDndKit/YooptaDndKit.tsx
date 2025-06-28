@@ -1,4 +1,4 @@
-import React, { createContext, useContext, forwardRef, useState, useCallback, useMemo, useRef } from 'react';
+import React, { createContext, useContext, forwardRef, useCallback, useMemo, useRef } from 'react';
 import {
   DndContext as DndKitContext,
   closestCenter,
@@ -7,7 +7,6 @@ import {
   useSensors,
   PointerSensor,
   KeyboardSensor,
-  DragStartEvent,
   DragEndEvent,
 } from '@dnd-kit/core';
 import {
@@ -24,7 +23,6 @@ export interface YooptaDndKitRootProps {
   id: string;
   readOnly: boolean;
   editor: YooEditor;
-  renderDragOverlay?: (activeId: string) => React.ReactNode;
 }
 
 export interface YooptaDndKitItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -53,7 +51,6 @@ interface DragHandleContext {
 
 interface YooptaDndKitContextValue {
   disabled: boolean;
-  activeDragHandle: DragHandleContext | null;
   registerDragHandle: (blockId: string, dragHandle: DragHandleContext) => void;
   unregisterDragHandle: (blockId: string) => void;
   dragHandlesRef: React.MutableRefObject<Map<string, DragHandleContext>>;
@@ -69,9 +66,7 @@ export const useYooptaDndKitContext = () => {
   return context;
 };
 
-const Root = ({ children, editor, id, readOnly, renderDragOverlay }: YooptaDndKitRootProps) => {
-  const [activeDragHandle, setActiveDragHandle] = useState<DragHandleContext | null>(null);
-  const [activeId, setActiveId] = useState<string | null>(null);
+const Root = ({ children, editor, id, readOnly }: YooptaDndKitRootProps) => {
   const dragHandlesRef = useRef<Map<string, DragHandleContext>>(new Map());
 
   const sensors = useSensors(
@@ -87,19 +82,13 @@ const Root = ({ children, editor, id, readOnly, renderDragOverlay }: YooptaDndKi
 
   const disabled = readOnly;
 
-  const handleDragStart = useCallback(
-    (event: DragStartEvent) => {
-      const { active } = event;
-      setActiveId(active.id as string);
-      editor.setPath({ current: null });
-    },
-    [editor],
-  );
+  const handleDragStart = useCallback(() => {
+    editor.setPath({ current: null });
+  }, [editor]);
 
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      setActiveId(null);
 
       if (active && over && active.id !== over.id) {
         const targetBlock = editor.children[over.id as string];
@@ -123,12 +112,11 @@ const Root = ({ children, editor, id, readOnly, renderDragOverlay }: YooptaDndKi
   const contextValue: YooptaDndKitContextValue = useMemo(
     () => ({
       disabled,
-      activeDragHandle,
       registerDragHandle,
       unregisterDragHandle,
       dragHandlesRef,
     }),
-    [disabled, activeDragHandle, registerDragHandle, unregisterDragHandle, dragHandlesRef],
+    [disabled, registerDragHandle, unregisterDragHandle, dragHandlesRef],
   );
 
   const items = useMemo(() => {
@@ -142,8 +130,6 @@ const Root = ({ children, editor, id, readOnly, renderDragOverlay }: YooptaDndKi
       return aOrder - bOrder;
     });
   }, [editor.children]);
-
-  console.log('CONTEXT_ID', id || `dnd-${editor.id}`);
 
   return (
     <YooptaDndKitContext.Provider value={contextValue}>
@@ -187,8 +173,6 @@ const Item = forwardRef<HTMLDivElement, YooptaDndKitItemProps>(
 
     const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging, isOver } =
       useSortable({ id });
-
-    console.log(`transform: ${id}`, transform);
 
     const blockStyles = useBlockStyles(transform, transition, isDragging, isOver);
 
