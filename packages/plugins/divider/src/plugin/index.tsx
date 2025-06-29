@@ -49,8 +49,10 @@ const Divider = new YooptaPlugin<DividerElementMap>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return '---\n';
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        return `${indent}---\n`;
       },
     },
     email: {

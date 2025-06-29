@@ -25,14 +25,15 @@ const Paragraph = new YooptaPlugin<ParagraphElementMap>({
       },
       serialize: (element, text, blockMeta) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
-        return `<p data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; text-align: ${align}">${serializeTextNodes(element.children)}</p>`;
+        return `<p data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; text-align: ${align}">${serializeTextNodes(element.children)}</p>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `${serializeTextNodesIntoMarkdown(element.children)}\n`;
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        return `${indent}${serializeTextNodesIntoMarkdown(element.children)}\n`;
       },
     },
     email: {

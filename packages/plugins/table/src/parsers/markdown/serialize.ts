@@ -1,6 +1,8 @@
 import { serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
-export function serializeMarkown(element, text) {
+export function serializeMarkown(element, text, blockMeta) {
+  const { depth = 0 } = blockMeta || {};
+  const indent = '  '.repeat(depth); // 2 spaces per depth level
   let markdownTable = '';
 
   element.children.forEach((row, rowIndex) => {
@@ -10,11 +12,11 @@ export function serializeMarkown(element, text) {
       })
       .join('|');
 
-    markdownTable += `|${rowMarkdown}|\n`;
+    markdownTable += `${indent}|${rowMarkdown}|\n`;
 
     if (rowIndex === 0) {
       const separator = row.children.map(() => ' --- ').join('|');
-      markdownTable += `|${separator}|\n`;
+      markdownTable += `${indent}|${separator}|\n`;
     }
   });
 

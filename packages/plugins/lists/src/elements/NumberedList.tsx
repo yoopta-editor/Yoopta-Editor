@@ -1,7 +1,7 @@
 import { PluginElementRenderProps, useBlockData, useYooptaEditor, YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { useMemo } from 'react';
 
-function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
+export function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
   const sortedBlockIds = Object.keys(editor.children).sort((a, b) => {
     const blockA = editor.children[a];
     const blockB = editor.children[b];

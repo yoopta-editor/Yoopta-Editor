@@ -1,6 +1,6 @@
 import { YooptaPlugin, YooptaBlockData, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 import { NumberedListCommands } from '../commands';
-import { NumberedListRender } from '../elements/NumberedList';
+import { NumberedListRender, getNumberedListCount } from '../elements/NumberedList';
 import { onKeyDown } from '../events/onKeyDown';
 import { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
@@ -45,16 +45,19 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
       serialize: (element, text, blockMeta) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
 
-        return `<ol data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; text-align: ${align}"><li>${serializeTextNodes(element.children)}</li></ol>`;
+        return `<ol data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; text-align: ${align}"><li>${serializeTextNodes(element.children)}</li></ol>`;
       },
     },
     markdown: {
-      serialize: (element, text, blockMeta) => {
+      serialize: (element, text, blockMeta, editor, blockData) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
         const indent = '  '.repeat(depth);
-        return `${indent}- ${serializeTextNodesIntoMarkdown(element.children)}`;
+
+        // Use the same counting logic as the renderer if editor and blockData are available
+        const numberedListCount = editor && blockData ? getNumberedListCount(editor, blockData) : 1;
+
+        return `${indent}${numberedListCount}. ${serializeTextNodesIntoMarkdown(element.children)}`;
       },
     },
     email: {

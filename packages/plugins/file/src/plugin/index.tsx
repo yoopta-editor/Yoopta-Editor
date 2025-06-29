@@ -38,15 +38,11 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
         const { align = 'left', depth = 0 } = blockMeta || {};
         const justify = ALIGNS_TO_JUSTIFY[align] || 'left';
 
-        return `<div style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: 100%; justify-content: ${justify}"><a data-meta-align="${align}" data-meta-depth="${depth}" href="${
-          element.props.src
-        }" data-size="${element.props.size}" download="${
-          element.props.name
-        }" target="_blank" rel="noopener noreferrer">${
-          element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
-        }</a></div>`;
+        return `<div style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify}"><a data-meta-align="${align}" data-meta-depth="${depth}" href="${element.props.src
+          }" data-size="${element.props.size}" download="${element.props.name
+          }" target="_blank" rel="noopener noreferrer">${element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
+          }</a></div>`;
       },
       deserialize: {
         nodeNames: ['A'],
@@ -81,8 +77,10 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `[${element.props.name}](${element.props.src})`;
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        return `${indent}[${element.props.name}](${element.props.src})`;
       },
     },
     email: {
@@ -95,15 +93,11 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
             <tbody style="width:100%;">
               <tr>
                 <td>
-                  <div style="margin-left: ${
-                    depth * 20
-                  }px; display: flex; width: 100%; justify-content: ${justify}"><a data-meta-align="${align}" data-meta-depth="${depth}" href="${
-          element.props.src
-        }" data-size="${element.props.size}" download="${
-          element.props.name
-        }" target="_blank" rel="noopener noreferrer">${
-          element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
-        }</a></div>
+                  <div style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify}"><a data-meta-align="${align}" data-meta-depth="${depth}" href="${element.props.src
+          }" data-size="${element.props.size}" download="${element.props.name
+          }" target="_blank" rel="noopener noreferrer">${element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
+          }</a></div>
                 </td>
               </tr>
             </tbody>

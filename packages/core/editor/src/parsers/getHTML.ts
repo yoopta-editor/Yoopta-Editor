@@ -57,7 +57,13 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
 
     if (plugin && plugin.parsers?.html?.serialize) {
       const content = serializeChildren((blockData.value[0] as SlateElement).children, editor.plugins, editor);
-      return plugin.parsers.html.serialize(blockData.value[0] as SlateElement, content, blockData.meta);
+      return plugin.parsers.html.serialize(
+        blockData.value[0] as SlateElement,
+        content,
+        blockData.meta,
+        editor,
+        blockData,
+      );
     }
 
     return '';

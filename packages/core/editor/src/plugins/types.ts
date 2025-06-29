@@ -103,6 +103,8 @@ export type PluginSerializeParser = (
   element: SlateElement,
   content: string,
   blockMetaData?: YooptaBlockBaseMeta,
+  editor?: YooEditor,
+  blockData?: YooptaBlockData,
 ) => string;
 
 export type PluginDeserializeParser = {
