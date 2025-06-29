@@ -86,7 +86,13 @@ export function getEmail(editor: YooEditor, content: YooptaContentValue, opts?: 
     if (plugin && plugin.parsers?.email?.serialize) {
       // @ts-ignore - fixme
       const innerContent = serializeTextNodes(blockData.value[0].children);
-      return plugin.parsers.email.serialize(blockData.value[0] as SlateElement, innerContent, blockData.meta);
+      return plugin.parsers.email.serialize(
+        blockData.value[0] as SlateElement,
+        innerContent,
+        blockData.meta,
+        editor,
+        blockData,
+      );
     }
 
     return '';

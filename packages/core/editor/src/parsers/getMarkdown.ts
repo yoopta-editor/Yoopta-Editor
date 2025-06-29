@@ -15,6 +15,8 @@ export function serialize(editor: YooEditor, blocksData: YooptaBlockData[]) {
           // @ts-ignore - fixme
           element.children.map((child) => child.text).join(''),
           blockData.meta as YooptaBlockBaseMeta,
+          editor,
+          blockData,
         );
         if (serialized) return serialized;
       }
