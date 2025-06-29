@@ -27,16 +27,17 @@ const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
       },
       serialize: (element, text, blockMeta) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
-        return `<blockquote data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; text-align: ${align}; border-left: 3px solid; color: #292929; padding: 2px 14px; margin-top: 8px;">${serializeTextNodes(
-          element.children,
-        )}</blockquote>`;
+        return `<blockquote data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; text-align: ${align}; border-left: 3px solid; color: #292929; padding: 2px 14px; margin-top: 8px;">${serializeTextNodes(
+            element.children,
+          )}</blockquote>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `> ${serializeTextNodesIntoMarkdown(element.children)}`;
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        return `${indent}> ${serializeTextNodesIntoMarkdown(element.children)}`;
       },
     },
     email: {
@@ -49,11 +50,10 @@ const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
               <td>
                 <blockquote data-meta-align="${align}" data-meta-depth="${depth}" style="
     line-height: 1.75rem;
-    margin: 8px 0 0; border-color: #e5e7eb; margin-left: ${
-      depth * 20
-    }px; text-align: ${align}; border-left: 3px solid; color: #292929; padding: 2px 14px; margin-top: 8px;">${serializeTextNodes(
-          element.children,
-        )}</blockquote>
+    margin: 8px 0 0; border-color: #e5e7eb; margin-left: ${depth * 20
+          }px; text-align: ${align}; border-left: 3px solid; color: #292929; padding: 2px 14px; margin-top: 8px;">${serializeTextNodes(
+            element.children,
+          )}</blockquote>
               </td>
             </tr>
           </tbody>

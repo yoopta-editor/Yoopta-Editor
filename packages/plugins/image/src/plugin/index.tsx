@@ -79,17 +79,17 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'center';
 
         return `<div style="margin-left: ${depth * 20}px; display: flex; width: 100%; justify-content: ${justify};">
-        <img data-meta-align="${align}" data-meta-depth="${depth}" src="${element.props.src}" alt="${
-          element.props.alt
-        }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" objectFit="${
-          element.props.fit
-        }"/>
+        <img data-meta-align="${align}" data-meta-depth="${depth}" src="${element.props.src}" alt="${element.props.alt
+          }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" objectFit="${element.props.fit
+          }"/>
         </div>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.alt || element.id}](${element.props.src})\n`;
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        return `${indent}![${element.props.alt || element.id}](${element.props.src})\n`;
       },
     },
     email: {
@@ -101,14 +101,11 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
           <table style="width:100%;">
             <tbody style="width:100%;">
               <tr>
-                <td style="margin-left: ${
-                  depth * 20
-                }px; display: flex; width: 100%; justify-content: ${justify}; margin-top: 1rem;">
-                    <img data-meta-align="${align}" style="margin: 0 auto; object-fit:${
-          element.props.fit || 'contain'
-        };" data-meta-depth="${depth}" src="${element.props.src}" alt="${element.props.alt}" width="${
-          element.props.sizes.width
-        }" height="${element.props.sizes.height}" />
+                <td style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify}; margin-top: 1rem;">
+                    <img data-meta-align="${align}" style="margin: 0 auto; object-fit:${element.props.fit || 'contain'
+          };" data-meta-depth="${depth}" src="${element.props.src}" alt="${element.props.alt}" width="${element.props.sizes.width
+          }" height="${element.props.sizes.height}" />
                 </td>
               </tr>
             </tbody>

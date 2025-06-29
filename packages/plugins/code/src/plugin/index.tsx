@@ -62,16 +62,17 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'left';
         const escapedText = escapeHTML(text);
 
-        return `<pre data-theme="${element.props.theme}" data-language="${
-          element.props.language
-        }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: 100%; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px; white-space: pre-line;"><code>${escapedText}</code></pre>`.toString();
+        return `<pre data-theme="${element.props.theme}" data-language="${element.props.language
+          }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px; white-space: pre-line;"><code>${escapedText}</code></pre>`.toString();
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``;
+      serialize: (element, text, blockMeta) => {
+        const { depth = 0 } = blockMeta || {};
+        const indent = '  '.repeat(depth); // 2 spaces per depth level
+        const lines = `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``.split('\n');
+        return lines.map(line => `${indent}${line}`).join('\n');
       },
     },
     email: {
@@ -87,11 +88,9 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
             <tbody style="width:100%;">
               <tr>
                 <td>
-                  <pre data-theme="${props.theme || 'VSCode'}" data-language="${
-          props.language || 'javascript'
-        }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
+                  <pre data-theme="${props.theme || 'VSCode'}" data-language="${props.language || 'javascript'
+          }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
                 </td>
               </tr>
             </tbody>
