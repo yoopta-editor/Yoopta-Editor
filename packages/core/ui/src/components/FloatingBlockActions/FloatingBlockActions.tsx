@@ -172,10 +172,22 @@ const DragAction = React.forwardRef<HTMLButtonElement, DragActionProps>(({ class
     ...style,
   };
 
+  const setRefs = React.useCallback(
+    (node: HTMLButtonElement | null) => {
+      // Set the ref for the component
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
   return (
     <Action
       {...props}
-      ref={ref}
+      ref={setRefs}
       style={dragStyle}
       title="Drag block"
       className={cn('yoo-drag-button-action', className)}

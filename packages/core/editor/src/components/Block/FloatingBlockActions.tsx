@@ -10,7 +10,7 @@ import { Editor, Transforms } from 'slate';
 import { BlockOptions } from '../../UI/BlockOptions/BlockOptions';
 import { Blocks } from '../../editor/blocks';
 import { Portal } from '../../UI/Portal/Portal';
-import { useActionMenuToolRefs, useBlockOptionsRefs } from './hooks';
+import { useActionMenuToolRefs, useBlockOptions } from './hooks';
 import { Overlay } from '../../UI/Overlay/Overlay';
 import { throttle } from '../../utils/throttle';
 
@@ -51,7 +51,7 @@ export const FloatingBlockActions = memo(({ editor, dragHandleProps }: FloatingB
   const { attributes, listeners, setActivatorNodeRef } = dragHandleProps || {};
 
   const { isBlockOptionsMounted, setIsBlockOptionsOpen, blockOptionsFloatingStyle, blockOptionsRefs } =
-    useBlockOptionsRefs();
+    useBlockOptions();
 
   const {
     isActionMenuOpen,

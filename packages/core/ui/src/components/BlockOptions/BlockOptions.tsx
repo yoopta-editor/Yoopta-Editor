@@ -1,63 +1,38 @@
-import React, { createContext, useContext, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 import { Portal } from '../Portal/Portal';
 import { Overlay } from '../Overlay/Overlay';
+import { useBlockOptionsContext } from './BlockOptionsContext';
 
 export interface BlockOptionsProps {
-  isOpen: boolean;
-  onClose: () => void;
-  refs: any;
-  style?: React.CSSProperties;
   children?: React.ReactNode;
   className?: string;
 }
 
-interface BlockOptionsContextValue {
-  isOpen: boolean;
-  onClose: () => void;
-  refs: any;
-  style?: React.CSSProperties;
-}
-
-const BlockOptionsContext = createContext<BlockOptionsContextValue | null>(null);
-
 // Root component
-const Root = forwardRef<HTMLDivElement, BlockOptionsProps>(
-  ({ isOpen, onClose, refs, style, children, className }, ref) => {
-    if (!isOpen) return null;
+const Root = forwardRef<HTMLDivElement, BlockOptionsProps>(({ children, className }, ref) => {
+  const { isOpen, close, setFloatingRef, style } = useBlockOptionsContext();
 
-    const contextValue: BlockOptionsContextValue = {
-      isOpen,
-      onClose,
-      refs,
-      style,
-    };
+  const onRef = (node: HTMLDivElement | null) => {
+    setFloatingRef(node);
 
-    return (
-      <BlockOptionsContext.Provider value={contextValue}>
-        <Portal id="yoo-block-options-portal">
-          <Overlay>
-            <div
-              ref={(node) => {
-                refs.setFloating(node);
-                if (typeof ref === 'function') {
-                  ref(node);
-                } else if (ref) {
-                  ref.current = node;
-                }
-              }}
-              style={style}
-              className={cn('yoo-block-options-root', className)}
-              contentEditable={false}
-            >
-              {children}
-            </div>
-          </Overlay>
-        </Portal>
-      </BlockOptionsContext.Provider>
-    );
-  },
-);
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
+
+  return isOpen ? (
+    <Portal id="yoo-block-options-portal">
+      <Overlay lockScroll onClick={close}>
+        <div ref={onRef} style={style} className={cn('yoo-block-options-root', className)} contentEditable={false}>
+          {children}
+        </div>
+      </Overlay>
+    </Portal>
+  ) : null;
+});
 
 Root.displayName = 'BlockOptions.Root';
 
@@ -66,17 +41,11 @@ const Content = forwardRef<
   HTMLDivElement,
   {
     className?: string;
-    style?: React.CSSProperties;
     children: React.ReactNode;
   }
->(({ className, style, children }, ref) => {
+>(({ className, children }, ref) => {
   return (
-    <div
-      ref={ref}
-      onClick={(e) => e.stopPropagation()}
-      className={cn('yoo-block-options-content', className)}
-      style={style}
-    >
+    <div ref={ref} onClick={(e) => e.stopPropagation()} className={cn('yoo-block-options-content', className)}>
       {children}
     </div>
   );

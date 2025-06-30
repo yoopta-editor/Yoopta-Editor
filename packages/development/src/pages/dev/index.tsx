@@ -1,14 +1,14 @@
-import YooptaEditor, {
-  createYooptaEditor,
-  YooptaOnChangeOptions,
-  YooEditor,
-  YooptaContentValue,
-  YooptaPath,
-  useYooptaEditor,
-  generateId,
-} from '@yoopta/editor';
-import { MentionCommands, MentionDropdown, withMentions } from '@yoopta/mention';
-import { FloatingBlockActions, YooptaDndKit, useFloatingBlockActions, useYooptaDndKitContext } from '@yoopta/ui';
+import YooptaEditor, { createYooptaEditor, YooptaOnChangeOptions, YooEditor, YooptaContentValue } from '@yoopta/editor';
+import { withMentions } from '@yoopta/mention';
+import {
+  FloatingBlockActions,
+  YooptaDndKit,
+  useFloatingBlockActions,
+  useYooptaDndKitContext,
+  BlockOptionsProvider,
+  useBlockOptionsContext,
+  BlockOptions,
+} from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 import React from 'react';
 
@@ -18,44 +18,54 @@ import { TOOLS } from '../../utils/yoopta/tools';
 import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 import { DEFAULT_VALUE } from '@/utils/yoopta/value';
+import { CopyIcon, Link2Icon, TrashIcon } from 'lucide-react';
 
 const EDITOR_STYLE = {
   width: 750,
 };
 
-const fetchUsers = async (query: string): Promise<any[]> => {
-  try {
-    const url = new URL('http://localhost:3001/users');
-
-    if (query) {
-      url.searchParams.set('q', query);
-    }
-
-    url.searchParams.set('_limit', '10');
-
-    const response = await fetch(url.toString());
-    const users: any[] = await response.json();
-    return users;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    return [];
-  }
-};
-
 const FloatingBlockActionsExample = () => {
   const { handlers, hoveredBlockId } = useFloatingBlockActions({});
   const { getDragHandleProps } = useYooptaDndKitContext();
+  const { open } = useBlockOptionsContext();
+
+  const onDragClick = (event: React.MouseEvent) => {
+    handlers.onDragClick(event);
+    open({ element: event.currentTarget as HTMLElement });
+  };
+
+  const dragProps = getDragHandleProps(hoveredBlockId);
 
   return (
     <FloatingBlockActions.Root>
       <FloatingBlockActions.PlusAction onClick={handlers.onPlusClick} />
-      <FloatingBlockActions.DragAction onClick={handlers.onDragClick} {...getDragHandleProps(hoveredBlockId)} />
+      <FloatingBlockActions.DragAction onClick={onDragClick} {...dragProps} />
     </FloatingBlockActions.Root>
   );
 };
 
-const BlockItem = ({ blockRender, block }: { blockRender: any; block: any }) => {
+type BlockItemProps = {
+  blockRender: any;
+  block: any;
+};
+
+const BlockItem = ({ blockRender, block }: BlockItemProps) => {
   return <YooptaDndKit.Item id={block.id}>{blockRender}</YooptaDndKit.Item>;
+};
+
+const BlockOptionsComponent = () => {
+  return (
+    <BlockOptions.Root>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Button icon={<TrashIcon />}>Delete block</BlockOptions.Button>
+          <BlockOptions.Button icon={<CopyIcon />}>Duplicate block</BlockOptions.Button>
+          <BlockOptions.Separator />
+          <BlockOptions.Button icon={<Link2Icon />}>Copy link to block</BlockOptions.Button>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions.Root>
+  );
 };
 
 const BasicExample = () => {
@@ -64,34 +74,34 @@ const BasicExample = () => {
   const [value, setValue] = useState<YooptaContentValue>(DEFAULT_VALUE as YooptaContentValue);
 
   const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    console.log('onChange', value, options);
     setValue(value);
   };
-
-  const onPathChange = (path: YooptaPath) => {};
 
   return (
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={DEFAULT_VALUE} />
-        <YooptaDndKit.Root editor={editor} readOnly={editor.readOnly} id={`yoopta-dnd-kit-${editor.id}`}>
-          <YooptaEditor
-            editor={editor}
-            plugins={YOOPTA_PLUGINS}
-            selectionBoxRoot={selectionRef}
-            marks={MARKS}
-            autoFocus={true}
-            readOnly={false}
-            placeholder="Type / to open menu"
-            tools={TOOLS}
-            style={EDITOR_STYLE}
-            value={value}
-            onChange={onChange}
-            renderBlock={BlockItem}
-          >
-            <FloatingBlockActionsExample />
-          </YooptaEditor>
-        </YooptaDndKit.Root>
+        <BlockOptionsProvider>
+          <YooptaDndKit.Root editor={editor} readOnly={editor.readOnly} id={`yoopta-dnd-kit-${editor.id}`}>
+            <YooptaEditor
+              editor={editor}
+              plugins={YOOPTA_PLUGINS}
+              selectionBoxRoot={selectionRef}
+              marks={MARKS}
+              autoFocus={true}
+              readOnly={false}
+              placeholder="Type / to open menu"
+              tools={TOOLS}
+              style={EDITOR_STYLE}
+              value={value}
+              onChange={onChange}
+              renderBlock={BlockItem}
+            >
+              <FloatingBlockActionsExample />
+              <BlockOptionsComponent />
+            </YooptaEditor>
+          </YooptaDndKit.Root>
+        </BlockOptionsProvider>
       </div>
     </>
   );

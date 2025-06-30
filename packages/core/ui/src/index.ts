@@ -2,6 +2,8 @@ export { FloatingBlockActions } from './components/FloatingBlockActions/Floating
 export { useFloatingBlockActions } from './components/FloatingBlockActions/useFloatingBlockActions';
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
 export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
+export { useBlockOptions } from './components/BlockOptions/useBlockOptions';
+export { BlockOptionsProvider, useBlockOptionsContext } from './components/BlockOptions/BlockOptionsContext';
 export { Overlay } from './components/Overlay/Overlay';
 export { Portal } from './components/Portal/Portal';
 

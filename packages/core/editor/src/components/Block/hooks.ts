@@ -50,7 +50,7 @@ export const useActionMenuToolRefs = ({ editor }) => {
   };
 };
 
-export const useBlockOptionsRefs = () => {
+export const useBlockOptions = () => {
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);
 
   const {

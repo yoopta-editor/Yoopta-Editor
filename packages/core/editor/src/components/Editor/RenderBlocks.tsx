@@ -30,22 +30,6 @@ type Props = {
 const RenderBlocks = ({ editor, placeholder, marks, renderBlocks, renderBlock }: Props) => {
   const isReadOnly = useYooptaReadOnly();
 
-  // const handleDragEnd = useCallback((event: DragEndEvent) => {
-  //   const { active, over } = event;
-
-  //   if (active && over && active.id !== over.id) {
-  //     const newPluginPosition = editor.children[over.id].meta.order;
-  //     // [TEST]
-  //     editor.moveBlock(active.id as string, newPluginPosition);
-  //   }
-  // }, []);
-
-  // const handleDragStart = useCallback((event: DragStartEvent) => {
-  //   editor.setPath({ current: null });
-  // }, []);
-
-  const [dragHandleProps, setActiveDragHandleProps] = useState(null);
-
   const childrenKeys = useMemo(() => {
     const childrenUnorderedKeys = Object.keys(editor.children);
     if (childrenUnorderedKeys.length === 0) return DEFAULT_EDITOR_KEYS;

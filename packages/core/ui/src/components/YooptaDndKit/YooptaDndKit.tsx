@@ -56,7 +56,7 @@ interface YooptaDndKitContextValue {
   disabled: boolean;
   registerDragHandle: (blockId: string, dragHandle: DragHandleContext) => void;
   unregisterDragHandle: (blockId: string) => void;
-  getDragHandleProps: (id: string | null | undefined) => {
+  getDragHandleProps: (id: string | null | undefined) => Partial<{
     ref: (node: HTMLElement | null) => void;
     role: string;
     tabIndex: number;
@@ -65,7 +65,7 @@ interface YooptaDndKitContextValue {
     'aria-roledescription': string;
     'aria-describedby': string;
     [key: string]: any;
-  } | null;
+  }>;
 }
 
 const YooptaDndKitContext = createContext<YooptaDndKitContextValue | null>(null);
@@ -96,9 +96,9 @@ const Root = ({ children, editor, id, readOnly }: YooptaDndKitRootProps) => {
   const disabled = readOnly;
 
   const getDragHandleProps = useCallback((id: string | null | undefined) => {
-    if (!id) return null;
+    if (!id) return {};
     const dragHandle = dragHandlesRef.current.get(id);
-    if (!dragHandle) return null;
+    if (!dragHandle) return {};
     return {
       ...dragHandle.attributes,
       ...dragHandle.listeners,
