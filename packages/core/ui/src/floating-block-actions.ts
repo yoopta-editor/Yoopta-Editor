@@ -1,3 +1,4 @@
+import './styles/variables.css';
 export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
   useFloatingBlockActions,

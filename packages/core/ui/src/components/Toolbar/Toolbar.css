@@ -1,0 +1,154 @@
+/* Toolbar Styles */
+.yoo-toolbar-root {
+  position: relative;
+  z-index: 1000;
+}
+
+.yoo-toolbar-content {
+  background: var(--yoopta-ui-toolbar-bg);
+  border-radius: 8px;
+  box-shadow: var(--yoopta-ui-toolbar-shadow);
+  border: 1px solid var(--yoopta-ui-toolbar-border);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: toolbarFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+.yoo-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.yoo-toolbar-button,
+.yoo-toolbar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--yoopta-ui-toolbar-text);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  user-select: none;
+}
+
+.yoo-toolbar-button:hover,
+.yoo-toolbar-toggle:hover {
+  background: var(--yoopta-ui-toolbar-hover-bg);
+  color: var(--yoopta-ui-toolbar-text);
+}
+
+.yoo-toolbar-button:active,
+.yoo-toolbar-toggle:active {
+  background: var(--yoopta-ui-toolbar-active-bg);
+  transform: scale(0.95);
+}
+
+.yoo-toolbar-button:focus,
+.yoo-toolbar-toggle:focus {
+  outline: 2px solid var(--yoopta-ui-toolbar-focus-ring);
+  outline-offset: 2px;
+}
+
+.yoo-toolbar-button-active,
+.yoo-toolbar-toggle-active {
+  background: var(--yoopta-ui-toolbar-active-bg);
+  color: var(--yoopta-ui-toolbar-active-text);
+}
+
+.yoo-toolbar-button-disabled,
+.yoo-toolbar-toggle-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.yoo-toolbar-button-ghost {
+  background: transparent;
+}
+
+.yoo-toolbar-button-ghost:hover {
+  background: var(--yoopta-ui-toolbar-hover-bg);
+}
+
+.yoo-toolbar-button-outline {
+  border: 1px solid var(--yoopta-ui-toolbar-border);
+  background: transparent;
+}
+
+.yoo-toolbar-button-outline:hover {
+  background: var(--yoopta-ui-toolbar-hover-bg);
+}
+
+.yoo-toolbar-button-sm,
+.yoo-toolbar-toggle-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+}
+
+.yoo-toolbar-button-md,
+.yoo-toolbar-toggle-md {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.yoo-toolbar-button-lg,
+.yoo-toolbar-toggle-lg {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.yoo-toolbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-toolbar-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-toolbar-text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background: var(--yoopta-ui-toolbar-separator);
+  margin: 0 2px;
+  border-radius: 1px;
+}
+
+@keyframes toolbarFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

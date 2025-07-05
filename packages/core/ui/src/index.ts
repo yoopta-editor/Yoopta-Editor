@@ -1,8 +1,13 @@
+import './styles/variables.css';
+
+// Floating Block Actions Components
 export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
   useFloatingBlockActions,
   useFloatingBlockActionDefaultHandlers,
 } from './components/FloatingBlockActions/useFloatingBlockActions';
+
+// Block Options Components
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
 export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBlockOptions';
 export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
@@ -15,6 +20,7 @@ export { ToolbarProvider, useToolbarContext } from './components/Toolbar/Toolbar
 export { useToolbar, useToolbarActions } from './components/Toolbar/useToolbar';
 export type { ToolbarButtonProps, ToolbarToggleProps } from './components/Toolbar/Toolbar';
 
+// Overlay Components
 export { Overlay } from './components/Overlay/Overlay';
 export { Portal } from './components/Portal/Portal';
 
@@ -27,5 +33,3 @@ export type {
   YooptaDndKitItemProps,
   YooptaDndKitOverlayProps,
 } from './components/YooptaDndKit';
-
-import './styles.css';

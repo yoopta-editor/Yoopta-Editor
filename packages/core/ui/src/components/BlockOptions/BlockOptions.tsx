@@ -3,6 +3,7 @@ import { cn } from '../../lib/utils';
 import { Portal } from '../Portal/Portal';
 import { Overlay } from '../Overlay/Overlay';
 import { useBlockOptionsContext } from './BlockOptionsContext';
+import './BlockOptions.css';
 
 export interface BlockOptionsProps {
   children?: React.ReactNode;

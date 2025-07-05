@@ -1,3 +1,4 @@
+import './styles/variables.css';
 // Toolbar Components
 export { Toolbar } from './components/Toolbar/Toolbar';
 export { ToolbarProvider, useToolbarContext } from './components/Toolbar/ToolbarContext';

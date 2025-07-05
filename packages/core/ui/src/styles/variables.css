@@ -1,0 +1,162 @@
+:root {
+  /* Floating block actions */
+  --yoopta-ui-floating-block-actions-gap: 2px;
+
+  /* Action button */
+  --yoopta-ui-button-hover-bg: #f3f4f6;
+
+  /* Plus button */
+  --yoopta-ui-plus-button-hover-fill: rgba(255, 255, 255, 0.282);
+  --yoopta-ui-plus-button-width: 24px;
+  --yoopta-ui-plus-button-height: 24px;
+  --yoopta-ui-plus-button-border-radius: 4px;
+  --yoopta-ui-plus-button-color: #37352f59;
+
+  /* Drag button */
+  --yoopta-ui-drag-button-hover-fill: rgba(255, 255, 255, 0.282);
+  --yoopta-ui-drag-button-width: 18px;
+  --yoopta-ui-drag-button-height: 24px;
+  --yoopta-ui-drag-button-border-radius: 4px;
+  --yoopta-ui-drag-button-color: #37352f59;
+
+  /* Custom action */
+  --yoopta-ui-button-action-width: 24px;
+  --yoopta-ui-button-action-height: 24px;
+  --yoopta-ui-button-action-border-radius: 4px;
+  --yoopta-ui-button-action-color: #37352f59;
+
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Floating block actions - Dark theme */
+    --yoopta-ui-floating-block-actions-bg: rgba(30, 30, 30, 0.95);
+    --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --yoopta-ui-button-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-plus-button-color: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-drag-button-color: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-button-action-color: hsl(215.4 16.3% 46.9%);
+
+    /* Block options - Dark theme */
+    --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-block-options-text: hsl(210 40% 98%);
+    --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+    /* Toolbar - Dark theme */
+    --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
+  }
+}
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  /* Floating block actions - Dark theme */
+  --yoopta-ui-floating-block-actions-bg: rgba(30, 30, 30, 0.95);
+  --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --yoopta-ui-button-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-plus-button-color: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-drag-button-color: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-button-action-color: hsl(215.4 16.3% 46.9%);
+
+  /* Block options - Dark theme */
+  --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-block-options-text: hsl(210 40% 98%);
+  --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar - Dark theme */
+  --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  /* Floating block actions - Light theme */
+  --yoopta-ui-floating-block-actions-bg: rgba(255, 255, 255, 0.95);
+  --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --yoopta-ui-button-hover-bg: #f3f4f6;
+  --yoopta-ui-plus-button-color: #37352f59;
+  --yoopta-ui-drag-button-color: #37352f59;
+  --yoopta-ui-button-action-color: #37352f59;
+
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar - Light theme */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
+}
