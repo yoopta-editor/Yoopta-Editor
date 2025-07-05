@@ -34,6 +34,10 @@
     "./dnd-kit": {
       "import": "./dist/yoopta-dnd-kit.js",
       "types": "./dist/yoopta-dnd-kit.d.ts"
+    },
+    "./toolbar": {
+      "import": "./dist/toolbar.js",
+      "types": "./dist/toolbar.d.ts"
     }
   },
   "files": [

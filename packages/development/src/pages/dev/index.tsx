@@ -10,6 +10,10 @@ import {
   useBlockOptionsContext,
   BlockOptions,
   useFloatingBlockActionDefaultHandlers,
+  Toolbar,
+  useToolbarActions,
+  ToolbarProvider,
+  useToolbar,
 } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 import React from 'react';
@@ -21,6 +25,16 @@ import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 import { DEFAULT_VALUE } from '@/utils/yoopta/value';
 import { CopyIcon, Link2Icon, TrashIcon, EditIcon, EyeIcon, SettingsIcon, MoveIcon } from 'lucide-react';
+import {
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  StrikethroughIcon,
+  CodeIcon,
+  AlignLeftIcon,
+  AlignCenterIcon,
+  AlignRightIcon,
+} from 'lucide-react';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -103,6 +117,73 @@ const BlockOptionsComponent = () => {
   );
 };
 
+// TODO: Uncomment when Toolbar is ready
+const ToolbarView = () => {
+  const { toggleMark, toggleAlign, isMarkActive, getCurrentAlign } = useToolbarActions();
+  const { isOpen } = useToolbar();
+
+  // console.log('ToolbarView', { isMarkActive: isMarkActive('bold'), isOpen });
+
+  const getAlignIcon = () => {
+    const align = getCurrentAlign();
+    switch (align) {
+      case 'left':
+        return <AlignLeftIcon />;
+      case 'center':
+        return <AlignCenterIcon />;
+      case 'right':
+        return <AlignRightIcon />;
+      default:
+        return <AlignLeftIcon />;
+    }
+  };
+
+  return (
+    <ToolbarProvider>
+      <Toolbar.Root>
+        <Toolbar.Content>
+          <Toolbar.Group>
+            <Toolbar.Toggle
+              icon={<BoldIcon />}
+              active={isMarkActive('bold')}
+              onClick={() => toggleMark('bold')}
+              aria-label="Bold"
+            />
+            <Toolbar.Toggle
+              icon={<ItalicIcon />}
+              active={isMarkActive('italic')}
+              onClick={() => toggleMark('italic')}
+              aria-label="Italic"
+            />
+            <Toolbar.Toggle
+              icon={<UnderlineIcon />}
+              active={isMarkActive('underline')}
+              onClick={() => toggleMark('underline')}
+              aria-label="Underline"
+            />
+            <Toolbar.Toggle
+              icon={<StrikethroughIcon />}
+              active={isMarkActive('strike')}
+              onClick={() => toggleMark('strike')}
+              aria-label="Strikethrough"
+            />
+            <Toolbar.Toggle
+              icon={<CodeIcon />}
+              active={isMarkActive('code')}
+              onClick={() => toggleMark('code')}
+              aria-label="Code"
+            />
+          </Toolbar.Group>
+          <Toolbar.Separator />
+          <Toolbar.Group>
+            <Toolbar.Toggle icon={getAlignIcon()} onClick={toggleAlign} aria-label="Text alignment" />
+          </Toolbar.Group>
+        </Toolbar.Content>
+      </Toolbar.Root>
+    </ToolbarProvider>
+  );
+};
+
 const BasicExample = () => {
   const editor: YooEditor = useMemo(() => withMentions(createYooptaEditor()), []);
   const selectionRef = useRef<HTMLDivElement>(null);
@@ -126,7 +207,7 @@ const BasicExample = () => {
               autoFocus={true}
               readOnly={false}
               placeholder="Type / to open menu"
-              tools={TOOLS}
+              // tools={TOOLS}
               style={EDITOR_STYLE}
               value={value}
               onChange={onChange}
@@ -134,6 +215,7 @@ const BasicExample = () => {
             >
               <FloatingBlockActionsExample />
               <BlockOptionsComponent />
+              <ToolbarView />
             </YooptaEditor>
           </YooptaDndKit.Root>
         </BlockOptionsProvider>

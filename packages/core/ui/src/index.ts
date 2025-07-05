@@ -8,6 +8,13 @@ export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBloc
 export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
 export { useBlockOptions } from './components/BlockOptions/useBlockOptions';
 export { BlockOptionsProvider, useBlockOptionsContext } from './components/BlockOptions/BlockOptionsContext';
+
+// Toolbar Components
+export { Toolbar } from './components/Toolbar/Toolbar';
+export { ToolbarProvider, useToolbarContext } from './components/Toolbar/ToolbarContext';
+export { useToolbar, useToolbarActions } from './components/Toolbar/useToolbar';
+export type { ToolbarButtonProps, ToolbarToggleProps } from './components/Toolbar/Toolbar';
+
 export { Overlay } from './components/Overlay/Overlay';
 export { Portal } from './components/Portal/Portal';
 
@@ -20,12 +27,5 @@ export type {
   YooptaDndKitItemProps,
   YooptaDndKitOverlayProps,
 } from './components/YooptaDndKit';
-
-// UI Components
-export { Button, buttonVariants } from './components/ui/button';
-export type { ButtonProps } from './components/ui/button';
-
-// Utils
-export { cn } from './lib/utils';
 
 import './styles.css';

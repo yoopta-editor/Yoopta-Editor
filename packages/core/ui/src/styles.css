@@ -38,11 +38,30 @@
   --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
   --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
   --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
 }
 
 /* Dark theme support */
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Floating block actions - Dark theme */
+    --yoopta-ui-floating-block-actions-bg: rgba(30, 30, 30, 0.95);
+    --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --yoopta-ui-button-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-plus-button-color: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-drag-button-color: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-button-action-color: hsl(215.4 16.3% 46.9%);
+
     /* Block options - Dark theme */
     --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
     --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
@@ -56,6 +75,17 @@
     --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
     --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
     --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+    /* Toolbar - Dark theme */
+    --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
   }
 }
 
@@ -67,9 +97,9 @@
   transition: all 200ms ease-in;
   padding: 2px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--yoopta-ui-floating-block-actions-bg, rgba(255, 255, 255, 0.95));
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--yoopta-ui-floating-block-actions-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .yoo-plus-button-action {
@@ -83,11 +113,11 @@
   cursor: pointer;
 
   & svg {
-    color: var(--yoopta-ui-plus-button-color);
+    color: var(--yoopta-ui-plus-button-color, #37352f59);
   }
 
   &:hover {
-    background-color: var(--yoopta-ui-button-hover-bg);
+    background-color: var(--yoopta-ui-button-hover-bg, #f3f4f6);
   }
 }
 
@@ -101,11 +131,11 @@
   background: transparent;
 
   & svg {
-    color: var(--yoopta-ui-drag-button-color);
+    color: var(--yoopta-ui-drag-button-color, #37352f59);
   }
 
   &:hover {
-    background-color: var(--yoopta-ui-button-hover-bg);
+    background-color: var(--yoopta-ui-button-hover-bg, #f3f4f6);
   }
 }
 
@@ -120,11 +150,11 @@
   cursor: pointer;
 
   & svg {
-    color: var(--yoopta-ui-button-action-color);
+    color: var(--yoopta-ui-button-action-color, #37352f59);
   }
 
   &:hover {
-    background-color: var(--yoopta-ui-button-hover-bg);
+    background-color: var(--yoopta-ui-button-hover-bg, #f3f4f6);
   }
 }
 
@@ -381,3 +411,236 @@
     --yoopta-ui-block-options-separator: #374151;
   }
 } */
+
+/* Toolbar Styles */
+.yoo-toolbar-root {
+  position: relative;
+  z-index: 1000;
+}
+
+.yoo-toolbar-content {
+  background: var(--yoopta-ui-toolbar-bg);
+  border-radius: 8px;
+  box-shadow: var(--yoopta-ui-toolbar-shadow);
+  border: 1px solid var(--yoopta-ui-toolbar-border);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: toolbarFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+.yoo-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.yoo-toolbar-button,
+.yoo-toolbar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--yoopta-ui-toolbar-text);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  user-select: none;
+  min-width: 32px;
+  height: 32px;
+}
+
+.yoo-toolbar-button:hover,
+.yoo-toolbar-toggle:hover {
+  background-color: var(--yoopta-ui-toolbar-hover-bg);
+  transform: translateY(-1px);
+}
+
+.yoo-toolbar-button:active,
+.yoo-toolbar-toggle:active {
+  background-color: var(--yoopta-ui-toolbar-active-bg);
+  transform: translateY(0);
+}
+
+.yoo-toolbar-button:focus,
+.yoo-toolbar-toggle:focus {
+  outline: none;
+  background-color: var(--yoopta-ui-toolbar-hover-bg);
+  box-shadow: 0 0 0 2px var(--yoopta-ui-toolbar-focus-ring);
+}
+
+.yoo-toolbar-button-active,
+.yoo-toolbar-toggle-active {
+  background-color: var(--yoopta-ui-toolbar-active-bg);
+  color: var(--yoopta-ui-toolbar-active-text);
+}
+
+.yoo-toolbar-button-disabled,
+.yoo-toolbar-toggle-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.yoo-toolbar-button-ghost {
+  background: transparent;
+}
+
+.yoo-toolbar-button-ghost:hover {
+  background-color: var(--yoopta-ui-toolbar-hover-bg);
+}
+
+.yoo-toolbar-button-outline {
+  background: transparent;
+  border: 1px solid var(--yoopta-ui-toolbar-border);
+}
+
+.yoo-toolbar-button-outline:hover {
+  background-color: var(--yoopta-ui-toolbar-hover-bg);
+  border-color: var(--yoopta-ui-toolbar-text);
+}
+
+.yoo-toolbar-button-sm,
+.yoo-toolbar-toggle-sm {
+  padding: 4px 6px;
+  font-size: 12px;
+  min-width: 28px;
+  height: 28px;
+}
+
+.yoo-toolbar-button-md,
+.yoo-toolbar-toggle-md {
+  padding: 6px 8px;
+  font-size: 14px;
+  min-width: 32px;
+  height: 32px;
+}
+
+.yoo-toolbar-button-lg,
+.yoo-toolbar-toggle-lg {
+  padding: 8px 10px;
+  font-size: 16px;
+  min-width: 36px;
+  height: 36px;
+}
+
+.yoo-toolbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-toolbar-icon svg {
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-toolbar-text {
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.yoo-toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--yoopta-ui-toolbar-separator);
+  margin: 0 2px;
+}
+
+@keyframes toolbarFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  /* Floating block actions - Dark theme */
+  --yoopta-ui-floating-block-actions-bg: rgba(30, 30, 30, 0.95);
+  --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --yoopta-ui-button-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-plus-button-color: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-drag-button-color: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-button-action-color: hsl(215.4 16.3% 46.9%);
+
+  /* Block options - Dark theme */
+  --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-block-options-text: hsl(210 40% 98%);
+  --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar - Dark theme */
+  --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  /* Floating block actions - Light theme */
+  --yoopta-ui-floating-block-actions-bg: rgba(255, 255, 255, 0.95);
+  --yoopta-ui-floating-block-actions-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --yoopta-ui-button-hover-bg: #f3f4f6;
+  --yoopta-ui-plus-button-color: #37352f59;
+  --yoopta-ui-drag-button-color: #37352f59;
+  --yoopta-ui-button-action-color: #37352f59;
+
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+
+  /* Toolbar - Light theme */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
+}

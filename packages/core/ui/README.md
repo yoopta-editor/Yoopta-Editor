@@ -2,6 +2,167 @@
 
 UI компоненты для Yoopta Editor, построенные на основе shadcn/ui с возможностью кастомизации.
 
+## Components
+
+### Toolbar
+
+A modern, floating toolbar component for text formatting and block actions, designed in the style of shadcn/ui.
+
+#### Features
+
+- ✨ Floating positioning with smooth animations
+- 🎨 Modern design with hover effects
+- 🔧 Automatic selection detection
+- ♿ Fully accessible with keyboard navigation
+- 📱 Responsive and mobile-friendly
+- 🎯 Precise positioning with floating UI
+
+#### Usage
+
+```tsx
+import { Toolbar, ToolbarProvider, useToolbarActions } from '@yoopta/ui';
+import { BoldIcon, ItalicIcon, AlignLeftIcon } from 'lucide-react';
+
+const MyToolbar = () => {
+  const { toggleMark, isMarkActive } = useToolbarActions();
+
+  return (
+    <ToolbarProvider>
+      <Toolbar.Root>
+        <Toolbar.Content>
+          <Toolbar.Group>
+            <Toolbar.Toggle
+              icon={<BoldIcon />}
+              active={isMarkActive('bold')}
+              onClick={() => toggleMark('bold')}
+              aria-label="Bold"
+            />
+            <Toolbar.Toggle
+              icon={<ItalicIcon />}
+              active={isMarkActive('italic')}
+              onClick={() => toggleMark('italic')}
+              aria-label="Italic"
+            />
+          </Toolbar.Group>
+        </Toolbar.Content>
+      </Toolbar.Root>
+    </ToolbarProvider>
+  );
+};
+```
+
+#### API
+
+##### ToolbarProvider
+
+The provider component that manages toolbar state and positioning.
+
+```tsx
+<ToolbarProvider>{/* Toolbar components */}</ToolbarProvider>
+```
+
+##### Toolbar.Root
+
+The main container component that handles positioning and portal rendering.
+
+```tsx
+<Toolbar.Root className?: string>
+  {/* Toolbar content */}
+</Toolbar.Root>
+```
+
+##### Toolbar.Content
+
+The content wrapper with styling and backdrop blur.
+
+```tsx
+<Toolbar.Content className?: string>
+  {/* Toolbar groups */}
+</Toolbar.Content>
+```
+
+##### Toolbar.Group
+
+Groups related toolbar items together.
+
+```tsx
+<Toolbar.Group className?: string>
+  {/* Toolbar buttons */}
+</Toolbar.Group>
+```
+
+##### Toolbar.Button
+
+A regular button for toolbar actions.
+
+```tsx
+<Toolbar.Button
+  icon?: React.ReactNode
+  variant?: 'default' | 'ghost' | 'outline'
+  size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
+  onClick?: () => void
+>
+  Button text
+</Toolbar.Button>
+```
+
+##### Toolbar.Toggle
+
+A toggle button for formatting actions.
+
+```tsx
+<Toolbar.Toggle
+  icon?: React.ReactNode
+  active?: boolean
+  variant?: 'default' | 'ghost' | 'outline'
+  size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
+  onClick?: () => void
+>
+  Toggle text
+</Toolbar.Toggle>
+```
+
+##### Toolbar.Separator
+
+A visual separator between toolbar groups.
+
+```tsx
+<Toolbar.Separator className?: string />
+```
+
+#### Hooks
+
+##### useToolbarActions
+
+Provides common toolbar actions for text formatting.
+
+```tsx
+const { toggleMark, toggleAlign, isMarkActive, getCurrentAlign } = useToolbarActions();
+
+// Toggle text formatting
+toggleMark('bold');
+toggleMark('italic');
+
+// Toggle text alignment
+toggleAlign();
+
+// Check if mark is active
+const isBold = isMarkActive('bold');
+
+// Get current alignment
+const align = getCurrentAlign(); // 'left' | 'center' | 'right'
+```
+
+#### Design Features
+
+- **Floating Positioning**: Automatically positions above selected text
+- **Smooth Animations**: Elegant fade-in and hover effects
+- **Selection Detection**: Automatically shows/hides based on text selection
+- **Responsive Design**: Adapts to different screen sizes
+- **Accessibility**: Proper ARIA attributes and keyboard navigation
+
 ## Установка
 
 ```bash
