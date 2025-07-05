@@ -1,20 +1,21 @@
 import YooptaEditor, { createYooptaEditor, YooptaOnChangeOptions, YooEditor, YooptaContentValue } from '@yoopta/editor';
 import { withMentions } from '@yoopta/mention';
+import { Toolbar, useToolbarActions, ToolbarProvider, useToolbar } from '@yoopta/ui/toolbar';
+
+import { YooptaDndKit, useYooptaDndKitContext } from '@yoopta/ui/dnd-kit';
+
 import {
-  FloatingBlockActions,
-  YooptaDndKit,
-  useFloatingBlockActions,
-  useBlockOptionDefaultHandlers,
-  useYooptaDndKitContext,
+  BlockOptions,
   BlockOptionsProvider,
   useBlockOptionsContext,
-  BlockOptions,
+  useBlockOptionDefaultHandlers,
+} from '@yoopta/ui/block-options';
+import {
+  FloatingBlockActions,
+  useFloatingBlockActions,
   useFloatingBlockActionDefaultHandlers,
-  Toolbar,
-  useToolbarActions,
-  ToolbarProvider,
-  useToolbar,
-} from '@yoopta/ui';
+} from '@yoopta/ui/floating-block-actions';
+
 import { useMemo, useRef, useState } from 'react';
 import React from 'react';
 

@@ -32,8 +32,8 @@
       "types": "./dist/floating-block-actions.d.ts"
     },
     "./dnd-kit": {
-      "import": "./dist/yoopta-dnd-kit.js",
-      "types": "./dist/yoopta-dnd-kit.d.ts"
+      "import": "./dist/dnd-kit.js",
+      "types": "./dist/dnd-kit.d.ts"
     },
     "./toolbar": {
       "import": "./dist/toolbar.js",

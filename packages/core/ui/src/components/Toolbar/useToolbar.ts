@@ -1,6 +1,6 @@
 import { useFloating, offset, flip, shift, inline, useTransitionStyles, autoUpdate } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import throttle from 'lodash.throttle';
 
 export type ToolbarRefs = {

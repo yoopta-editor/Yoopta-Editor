@@ -1,4 +1,4 @@
-export { FloatingBlockActions as default } from './components/FloatingBlockActions/FloatingBlockActions';
+export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
   useFloatingBlockActions,
   useFloatingBlockActionDefaultHandlers,

@@ -17,7 +17,8 @@ const createMultiEntryConfig = () => {
       overlay: './src/overlay.ts',
       'block-options': './src/block-options.ts',
       'floating-block-actions': './src/floating-block-actions.ts',
-      'dnd-kit': './src/components/YooptaDndKit/index.ts',
+      'dnd-kit': './src/dnd-kit.ts',
+      toolbar: './src/toolbar.ts',
     },
     output: {
       format: 'es',
