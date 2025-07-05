@@ -95,12 +95,25 @@ export interface BlockOptionsButtonProps extends React.ButtonHTMLAttributes<HTML
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  variant?: 'default' | 'destructive';
+  size?: 'sm' | 'md';
 }
 
 const Button = forwardRef<HTMLButtonElement, BlockOptionsButtonProps>(
-  ({ icon, children, className, style, ...rest }, ref) => {
+  ({ icon, children, className, style, variant = 'default', size = 'md', ...rest }, ref) => {
     return (
-      <button ref={ref} type="button" className={cn('yoo-block-options-button', className)} style={style} {...rest}>
+      <button
+        ref={ref}
+        type="button"
+        className={cn(
+          'yoo-block-options-button',
+          `yoo-block-options-button-${variant}`,
+          `yoo-block-options-button-${size}`,
+          className,
+        )}
+        style={style}
+        {...rest}
+      >
         {icon && <span className="yoo-block-options-icon">{icon}</span>}
         <span className="yoo-block-options-text">{children}</span>
       </button>

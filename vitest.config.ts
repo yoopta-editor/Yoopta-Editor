@@ -16,7 +16,7 @@ export default defineConfig({
   test: {
     css: false,
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
     setupFiles: './tests/setup.js',
     include: ['packages/**/*.{test,spec}.{ts,tsx}'],
     exclude: [
@@ -40,10 +40,6 @@ export default defineConfig({
     reporters: ['default', 'verbose'],
     outputFile: {
       verbose: './test-results/verbose.log',
-    },
-    onConsoleLog(log, type) {
-      console.log(`[${type}] ${log}`);
-      return false;
     },
     coverage: {
       provider: 'v8',

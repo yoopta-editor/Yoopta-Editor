@@ -4,10 +4,12 @@ import {
   FloatingBlockActions,
   YooptaDndKit,
   useFloatingBlockActions,
+  useBlockOptionDefaultHandlers,
   useYooptaDndKitContext,
   BlockOptionsProvider,
   useBlockOptionsContext,
   BlockOptions,
+  useFloatingBlockActionDefaultHandlers,
 } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 import React from 'react';
@@ -18,19 +20,31 @@ import { TOOLS } from '../../utils/yoopta/tools';
 import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 import { DEFAULT_VALUE } from '@/utils/yoopta/value';
-import { CopyIcon, Link2Icon, TrashIcon } from 'lucide-react';
+import { CopyIcon, Link2Icon, TrashIcon, EditIcon, EyeIcon, SettingsIcon, MoveIcon } from 'lucide-react';
 
 const EDITOR_STYLE = {
   width: 750,
 };
 
 const FloatingBlockActionsExample = () => {
-  const { handlers, hoveredBlockId } = useFloatingBlockActions({});
-  const { getDragHandleProps } = useYooptaDndKitContext();
-  const { open } = useBlockOptionsContext();
+  const { hoveredBlockId } = useFloatingBlockActions();
+  const { onPlusClick, onDragClick } = useFloatingBlockActionDefaultHandlers();
 
-  const onDragClick = (event: React.MouseEvent) => {
-    handlers.onDragClick(event);
+  const { getDragHandleProps } = useYooptaDndKitContext();
+
+  const { open, close, isOpen } = useBlockOptionsContext();
+
+  const dragActionClick = (event: React.MouseEvent) => {
+    onDragClick(event);
+    if (isOpen) {
+      close();
+    } else {
+      open({ element: event.currentTarget as HTMLElement });
+    }
+  };
+
+  const plusActionClick = (event: React.MouseEvent) => {
+    onPlusClick(event);
     open({ element: event.currentTarget as HTMLElement });
   };
 
@@ -38,8 +52,8 @@ const FloatingBlockActionsExample = () => {
 
   return (
     <FloatingBlockActions.Root>
-      <FloatingBlockActions.PlusAction onClick={handlers.onPlusClick} />
-      <FloatingBlockActions.DragAction onClick={onDragClick} {...dragProps} />
+      <FloatingBlockActions.PlusAction onClick={plusActionClick} />
+      <FloatingBlockActions.DragAction onClick={dragActionClick} {...dragProps} />
     </FloatingBlockActions.Root>
   );
 };
@@ -54,14 +68,35 @@ const BlockItem = ({ blockRender, block }: BlockItemProps) => {
 };
 
 const BlockOptionsComponent = () => {
+  const { duplicateBlock, copyLinkToBlock, deleteBlock } = useBlockOptionDefaultHandlers();
+
   return (
     <BlockOptions.Root>
       <BlockOptions.Content>
         <BlockOptions.Group>
-          <BlockOptions.Button icon={<TrashIcon />}>Delete block</BlockOptions.Button>
-          <BlockOptions.Button icon={<CopyIcon />}>Duplicate block</BlockOptions.Button>
+          <BlockOptions.Button icon={<EditIcon />} size="md">
+            Edit block
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<EyeIcon />} size="md">
+            Preview
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<CopyIcon />} size="md" onClick={duplicateBlock}>
+            Duplicate block
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<MoveIcon />} size="md">
+            Move block
+          </BlockOptions.Button>
           <BlockOptions.Separator />
-          <BlockOptions.Button icon={<Link2Icon />}>Copy link to block</BlockOptions.Button>
+          <BlockOptions.Button icon={<Link2Icon />} size="md" onClick={copyLinkToBlock}>
+            Copy link to block
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<SettingsIcon />} size="md">
+            Block settings
+          </BlockOptions.Button>
+          <BlockOptions.Separator />
+          <BlockOptions.Button icon={<TrashIcon />} variant="destructive" size="md" onClick={deleteBlock}>
+            Delete block
+          </BlockOptions.Button>
         </BlockOptions.Group>
       </BlockOptions.Content>
     </BlockOptions.Root>

@@ -8,15 +8,16 @@ export interface UseFloatingBlockActionsProps {
   onBlockHover?: (blockId: string | null) => void;
 }
 
+export interface UseFloatingBlockActionsDefaultHandlers {
+  onPlusClick: (event: React.MouseEvent) => void;
+  onDragClick: (event: React.MouseEvent) => void;
+}
+
 export interface UseFloatingBlockActionsReturn {
   hoveredBlockId: string | null;
   position: { top: number; left: number };
   visible: boolean;
   actionsRef: React.MutableRefObject<HTMLDivElement | null>;
-  handlers: {
-    onPlusClick: () => void;
-    onDragClick: (event: React.MouseEvent) => void;
-  };
 }
 
 export function useFloatingBlockActions({
@@ -24,7 +25,7 @@ export function useFloatingBlockActions({
   hideDelay = 150,
   throttleDelay = 100,
   onBlockHover,
-}: UseFloatingBlockActionsProps): UseFloatingBlockActionsReturn {
+}: UseFloatingBlockActionsProps = {}): UseFloatingBlockActionsReturn {
   const [hoveredBlockId, setHoveredBlockId] = useState<string | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [visible, setVisible] = useState(false);
@@ -117,6 +118,18 @@ export function useFloatingBlockActions({
     };
   }, [handleMouseMove, hideBlockActions]);
 
+  return {
+    hoveredBlockId,
+    position,
+    visible,
+    actionsRef,
+  };
+}
+
+export function useFloatingBlockActionDefaultHandlers(): UseFloatingBlockActionsDefaultHandlers {
+  const editor = useYooptaEditor();
+  const { hoveredBlockId } = useFloatingBlockActions({});
+
   const onPlusClick = useCallback(() => {
     // TODO: Implement plus click
   }, [hoveredBlockId]);
@@ -135,13 +148,7 @@ export function useFloatingBlockActions({
   );
 
   return {
-    hoveredBlockId,
-    position,
-    visible,
-    actionsRef,
-    handlers: {
-      onPlusClick,
-      onDragClick,
-    },
+    onPlusClick,
+    onDragClick,
   };
 }

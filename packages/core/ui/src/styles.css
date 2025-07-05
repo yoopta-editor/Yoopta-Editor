@@ -25,38 +25,38 @@
   --yoopta-ui-button-action-border-radius: 4px;
   --yoopta-ui-button-action-color: #37352f59;
 
-  /* Block options */
-  --yoopta-ui-block-options-bg: #ffffff;
-  --yoopta-ui-block-options-border: #e5e7eb;
-  --yoopta-ui-block-options-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --yoopta-ui-block-options-text: #374151;
-  --yoopta-ui-block-options-hover-bg: #f3f4f6;
-  --yoopta-ui-block-options-active-bg: #e5e7eb;
-  --yoopta-ui-block-options-focus-ring: rgba(59, 130, 246, 0.5);
-  --yoopta-ui-block-options-icon: #6b7280;
-  --yoopta-ui-block-options-separator: #e5e7eb;
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+}
 
-  /* YooptaDndKit Components */
-  --yoopta-ui-dnd-kit-bg: transparent;
-  --yoopta-ui-sortable-item-bg: #ffffff;
-  --yoopta-ui-sortable-item-border: #e5e7eb;
-  --yoopta-ui-sortable-item-hover-bg: #f9fafb;
-  --yoopta-ui-sortable-item-dragging-opacity: 0.5;
-  --yoopta-ui-sortable-item-over-border: 2px solid #007aff;
-
-  /* YooptaDragHandle */
-  --yoopta-ui-drag-handle-bg: transparent;
-  --yoopta-ui-drag-handle-color: #6b7280;
-  --yoopta-ui-drag-handle-hover-bg: #f3f4f6;
-  --yoopta-ui-drag-handle-hover-color: #374151;
-  --yoopta-ui-drag-handle-border-radius: 4px;
-  --yoopta-ui-drag-handle-transition: background-color 150ms ease-in;
-
-  /* YooptaDragOverlay */
-  --yoopta-ui-drag-overlay-bg: rgba(255, 255, 255, 0.95);
-  --yoopta-ui-drag-overlay-border: #e5e7eb;
-  --yoopta-ui-drag-overlay-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  --yoopta-ui-drag-overlay-border-radius: 8px;
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Block options - Dark theme */
+    --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-block-options-text: hsl(210 40% 98%);
+    --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+  }
 }
 
 .yoo-floating-block-actions {
@@ -136,19 +136,20 @@
 
 .yoo-block-options-content {
   background: var(--yoopta-ui-block-options-bg);
-  border-radius: 4px;
+  border-radius: 8px;
   box-shadow: var(--yoopta-ui-block-options-shadow);
   border: 1px solid var(--yoopta-ui-block-options-border);
-  padding: 6px;
-  min-width: 180px;
-  max-width: 280px;
-  animation: blockOptionsFadeIn 150ms ease-out;
+  padding: 8px;
+  min-width: 200px;
+  max-width: 320px;
+  animation: blockOptionsFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
 }
 
 .yoo-block-options-group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .yoo-block-options-item {
@@ -159,25 +160,29 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: none;
   background: transparent;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--yoopta-ui-block-options-text);
   cursor: pointer;
-  transition: background-color 150ms ease-in;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
   line-height: 1.4;
+  position: relative;
+  user-select: none;
 }
 
 .yoo-block-options-button:hover {
   background-color: var(--yoopta-ui-block-options-hover-bg);
+  transform: translateY(-1px);
 }
 
 .yoo-block-options-button:active {
   background-color: var(--yoopta-ui-block-options-active-bg);
+  transform: translateY(0);
 }
 
 .yoo-block-options-button:focus {
@@ -186,20 +191,53 @@
   box-shadow: 0 0 0 2px var(--yoopta-ui-block-options-focus-ring);
 }
 
+.yoo-block-options-button-destructive {
+  color: var(--yoopta-ui-block-options-destructive-text);
+}
+
+.yoo-block-options-button-destructive:hover {
+  background-color: var(--yoopta-ui-block-options-destructive-hover-bg);
+  color: var(--yoopta-ui-block-options-destructive-hover-text);
+}
+
+.yoo-block-options-button-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.yoo-block-options-button-md {
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
 .yoo-block-options-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
   flex-shrink: 0;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .yoo-block-options-icon svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   color: var(--yoopta-ui-block-options-icon);
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-block-options-button:hover .yoo-block-options-icon svg {
+  color: var(--yoopta-ui-block-options-text);
+}
+
+.yoo-block-options-button-destructive .yoo-block-options-icon svg {
+  color: var(--yoopta-ui-block-options-destructive-text);
+}
+
+.yoo-block-options-button-destructive:hover .yoo-block-options-icon svg {
+  color: var(--yoopta-ui-block-options-destructive-hover-text);
 }
 
 .yoo-block-options-text {
@@ -212,7 +250,8 @@
 .yoo-block-options-separator {
   height: 1px;
   background-color: var(--yoopta-ui-block-options-separator);
-  margin: 4px 0;
+  margin: 6px 0;
+  border-radius: 1px;
 }
 
 /* YooptaDndKit Components Styles */
@@ -320,7 +359,7 @@
 @keyframes blockOptionsFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(-4px);
+    transform: scale(0.95) translateY(-8px);
   }
 
   to {

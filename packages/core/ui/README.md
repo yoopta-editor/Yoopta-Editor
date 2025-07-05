@@ -253,121 +253,193 @@ function MyComponent() {
 
 ### BlockOptions
 
-Компонент для отображения меню опций блока (как в Notion).
+A beautiful, modern dropdown menu component for block actions, designed in the style of shadcn/ui.
 
-#### Композиционный API
+#### Features
 
-```jsx
+- ✨ Modern design with smooth animations
+- 🎨 Support for light and dark themes
+- 🔧 Customizable variants and sizes
+- ♿ Fully accessible with keyboard navigation
+- 📱 Responsive and mobile-friendly
+- 🎯 Precise positioning with floating UI
+
+#### Usage
+
+```tsx
 import { BlockOptions } from '@yoopta/ui';
-import { TrashIcon, CopyIcon, Link2Icon, TurnIcon } from 'lucide-react';
+import { TrashIcon, CopyIcon, Link2Icon } from 'lucide-react';
 
-// Базовое использование
-<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
+const MyBlockOptions = () => {
+  return (
+    <BlockOptions.Root>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Button icon={<CopyIcon />} size="md">
+            Duplicate block
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<Link2Icon />} size="md">
+            Copy link to block
+          </BlockOptions.Button>
+          <BlockOptions.Separator />
+          <BlockOptions.Button icon={<TrashIcon />} variant="destructive" size="md">
+            Delete block
+          </BlockOptions.Button>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions.Root>
+  );
+};
+```
+
+#### API
+
+##### BlockOptions.Root
+
+The main container component that handles positioning and portal rendering.
+
+```tsx
+<BlockOptions.Root className?: string>
+  {/* BlockOptions content */}
+</BlockOptions.Root>
+```
+
+##### BlockOptions.Content
+
+The content wrapper with styling and backdrop blur.
+
+```tsx
+<BlockOptions.Content className?: string>
+  {/* Menu items */}
+</BlockOptions.Content>
+```
+
+##### BlockOptions.Group
+
+Groups related menu items together.
+
+```tsx
+<BlockOptions.Group className?: string>
+  {/* Menu items */}
+</BlockOptions.Group>
+```
+
+##### BlockOptions.Button
+
+A menu item button with icon and text support.
+
+```tsx
+<BlockOptions.Button
+  icon?: React.ReactNode
+  variant?: 'default' | 'destructive'
+  size?: 'sm' | 'md'
+  className?: string
+  onClick?: () => void
+>
+  Button text
+</BlockOptions.Button>
+```
+
+**Props:**
+
+- `icon` - Optional icon element (recommended: Lucide React icons)
+- `variant` - Button style variant (`default` or `destructive`)
+- `size` - Button size (`sm` or `md`)
+- `className` - Additional CSS classes
+- `onClick` - Click handler
+
+##### BlockOptions.Separator
+
+A visual separator between menu groups.
+
+```tsx
+<BlockOptions.Separator className?: string />
+```
+
+#### Design Features
+
+- **Modern Aesthetics**: Clean, minimal design with subtle shadows and rounded corners
+- **Smooth Animations**: Elegant fade-in and hover effects using CSS transitions
+- **Color System**: HSL-based color palette with proper contrast ratios
+- **Dark Mode**: Automatic dark theme support with `prefers-color-scheme`
+- **Accessibility**: Proper focus states, keyboard navigation, and ARIA attributes
+- **Responsive**: Adapts to different screen sizes and content lengths
+
+#### CSS Custom Properties
+
+The component uses CSS custom properties for theming:
+
+```css
+:root {
+  /* Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  /* ... more variables */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme overrides */
+    --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-block-options-text: hsl(210 40% 98%);
+    /* ... more variables */
+  }
+}
+```
+
+#### Examples
+
+**Basic Menu:**
+
+```tsx
+<BlockOptions.Root>
   <BlockOptions.Content>
     <BlockOptions.Group>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<TrashIcon />} onClick={onDelete}>
-          Delete
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<CopyIcon />} onClick={onDuplicate}>
-          Duplicate
-        </BlockOptions.Button>
-      </BlockOptions.Item>
+      <BlockOptions.Button icon={<EditIcon />}>Edit</BlockOptions.Button>
+      <BlockOptions.Button icon={<CopyIcon />}>Copy</BlockOptions.Button>
       <BlockOptions.Separator />
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<Link2Icon />} onClick={onCopy}>
-          Copy link to block
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-    </BlockOptions.Group>
-  </BlockOptions.Content>
-</BlockOptions.Root>
-
-// С кастомизацией стилей
-<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
-  <BlockOptions.Content className="my-content">
-    <BlockOptions.Group className="my-group">
-      <BlockOptions.Item>
-        <BlockOptions.Button
-          icon={<TrashIcon />}
-          onClick={onDelete}
-          className="my-button"
-          style={{ color: 'red' }}
-        >
-          Delete
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-      <BlockOptions.Separator className="my-separator" />
-      <BlockOptions.Item>
-        <BlockOptions.Button
-          icon={<CopyIcon />}
-          onClick={onDuplicate}
-          className="my-button"
-        >
-          Duplicate
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-    </BlockOptions.Group>
-  </BlockOptions.Content>
-</BlockOptions.Root>
-
-// С кастомными действиями
-<BlockOptions.Root isOpen={isOpen} onClose={onClose} refs={refs} style={style}>
-  <BlockOptions.Content>
-    <BlockOptions.Group>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<TrashIcon />} onClick={onDelete}>
-          Delete
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<CopyIcon />} onClick={onDuplicate}>
-          Duplicate
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-    </BlockOptions.Group>
-    <BlockOptions.Separator />
-    <BlockOptions.Group>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<Link2Icon />} onClick={onCopy}>
-          Copy link
-        </BlockOptions.Button>
-      </BlockOptions.Item>
-      <BlockOptions.Item>
-        <BlockOptions.Button icon={<TurnIcon />} onClick={onTurnInto}>
-          Turn into
-        </BlockOptions.Button>
-      </BlockOptions.Item>
+      <BlockOptions.Button icon={<TrashIcon />} variant="destructive">
+        Delete
+      </BlockOptions.Button>
     </BlockOptions.Group>
   </BlockOptions.Content>
 </BlockOptions.Root>
 ```
 
-#### Использование хука напрямую
+**Multiple Groups:**
 
-```jsx
-import { useFloatingBlockActions } from '@yoopta/ui';
+```tsx
+<BlockOptions.Root>
+  <BlockOptions.Content>
+    <BlockOptions.Group>
+      <BlockOptions.Button icon={<EditIcon />}>Edit</BlockOptions.Button>
+      <BlockOptions.Button icon={<EyeIcon />}>Preview</BlockOptions.Button>
+    </BlockOptions.Group>
+    <BlockOptions.Separator />
+    <BlockOptions.Group>
+      <BlockOptions.Button icon={<CopyIcon />}>Duplicate</BlockOptions.Button>
+      <BlockOptions.Button icon={<Link2Icon />}>Share</BlockOptions.Button>
+    </BlockOptions.Group>
+    <BlockOptions.Separator />
+    <BlockOptions.Group>
+      <BlockOptions.Button icon={<TrashIcon />} variant="destructive">
+        Delete
+      </BlockOptions.Button>
+    </BlockOptions.Group>
+  </BlockOptions.Content>
+</BlockOptions.Root>
+```
 
-function MyComponent() {
-  const { hoveredBlock, position, visible, actionsRef, handlers } = useFloatingBlockActions({
-    editorElement: editorRef.current,
-    onPlusClick: (block) => console.log('Add block:', block.id),
-    onDragClick: (block) => console.log('Drag block:', block.id),
-  });
+**Small Size Variant:**
 
-  return (
-    <div ref={actionsRef} style={{ position: 'fixed', top: position.top, left: position.left }}>
-      {visible && (
-        <>
-          <button onClick={handlers.onPlusClick}>+</button>
-          <button onClick={handlers.onDragClick}>⋮⋮</button>
-        </>
-      )}
-    </div>
-  );
-}
+```tsx
+<BlockOptions.Button icon={<EditIcon />} size="sm">
+  Quick Edit
+</BlockOptions.Button>
 ```
 
 ### Button
