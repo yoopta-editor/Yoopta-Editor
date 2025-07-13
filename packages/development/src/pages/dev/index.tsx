@@ -3,6 +3,7 @@ import { withMentions } from '@yoopta/mention';
 import { Toolbar, useToolbarActions, ToolbarProvider, useToolbar } from '@yoopta/ui/toolbar';
 
 import { YooptaDndKit, useYooptaDndKitContext } from '@yoopta/ui/dnd-kit';
+import { HighlightColor, useHighlightColor } from '@yoopta/ui/highlight-color';
 
 import {
   BlockOptions,
@@ -21,11 +22,10 @@ import React from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
-import { TOOLS } from '../../utils/yoopta/tools';
 import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 import { DEFAULT_VALUE } from '@/utils/yoopta/value';
-import { CopyIcon, Link2Icon, TrashIcon, EditIcon, EyeIcon, SettingsIcon, MoveIcon } from 'lucide-react';
+import { CopyIcon, Link2Icon, TrashIcon, EditIcon, EyeIcon, SettingsIcon, MoveIcon, PaletteIcon } from 'lucide-react';
 import {
   BoldIcon,
   ItalicIcon,
@@ -41,12 +41,10 @@ const EDITOR_STYLE = {
   width: 750,
 };
 
-const FloatingBlockActionsExample = () => {
+const FloatingBlockActionsView = () => {
   const { hoveredBlockId } = useFloatingBlockActions();
   const { onPlusClick, onDragClick } = useFloatingBlockActionDefaultHandlers();
-
   const { getDragHandleProps } = useYooptaDndKitContext();
-
   const { open, close, isOpen } = useBlockOptionsContext();
 
   const dragActionClick = (event: React.MouseEvent) => {
@@ -82,7 +80,7 @@ const BlockItem = ({ blockRender, block }: BlockItemProps) => {
   return <YooptaDndKit.Item id={block.id}>{blockRender}</YooptaDndKit.Item>;
 };
 
-const BlockOptionsComponent = () => {
+const BlockOptionsView = () => {
   const { duplicateBlock, copyLinkToBlock, deleteBlock } = useBlockOptionDefaultHandlers();
 
   return (
@@ -90,25 +88,16 @@ const BlockOptionsComponent = () => {
       <BlockOptions.Content>
         <BlockOptions.Group>
           <BlockOptions.Button icon={<EditIcon />} size="md">
-            Edit block
-          </BlockOptions.Button>
-          <BlockOptions.Button icon={<EyeIcon />} size="md">
-            Preview
+            Turn into
           </BlockOptions.Button>
           <BlockOptions.Button icon={<CopyIcon />} size="md" onClick={duplicateBlock}>
             Duplicate block
           </BlockOptions.Button>
-          <BlockOptions.Button icon={<MoveIcon />} size="md">
-            Move block
-          </BlockOptions.Button>
+
           <BlockOptions.Separator />
           <BlockOptions.Button icon={<Link2Icon />} size="md" onClick={copyLinkToBlock}>
             Copy link to block
           </BlockOptions.Button>
-          <BlockOptions.Button icon={<SettingsIcon />} size="md">
-            Block settings
-          </BlockOptions.Button>
-          <BlockOptions.Separator />
           <BlockOptions.Button icon={<TrashIcon />} variant="destructive" size="md" onClick={deleteBlock}>
             Delete block
           </BlockOptions.Button>
@@ -118,12 +107,9 @@ const BlockOptionsComponent = () => {
   );
 };
 
-// TODO: Uncomment when Toolbar is ready
 const ToolbarView = () => {
   const { toggleMark, toggleAlign, isMarkActive, getCurrentAlign } = useToolbarActions();
-  const { isOpen } = useToolbar();
-
-  // console.log('ToolbarView', { isMarkActive: isMarkActive('bold'), isOpen });
+  const { open, close, isOpen, refs, floatingStyles } = useHighlightColor();
 
   const getAlignIcon = () => {
     const align = getCurrentAlign();
@@ -179,6 +165,14 @@ const ToolbarView = () => {
           <Toolbar.Group>
             <Toolbar.Toggle icon={getAlignIcon()} onClick={toggleAlign} aria-label="Text alignment" />
           </Toolbar.Group>
+          <Toolbar.Group>
+            <Toolbar.Toggle
+              icon={<PaletteIcon />}
+              onClick={(event: React.MouseEvent) => open({ element: event.currentTarget as HTMLElement })}
+              aria-label="Highlight color"
+            />
+            <HighlightColor isOpen={isOpen} onClose={close} refs={refs} floatingStyles={floatingStyles} />
+          </Toolbar.Group>
         </Toolbar.Content>
       </Toolbar.Root>
     </ToolbarProvider>
@@ -214,8 +208,8 @@ const BasicExample = () => {
               onChange={onChange}
               renderBlock={BlockItem}
             >
-              <FloatingBlockActionsExample />
-              <BlockOptionsComponent />
+              <FloatingBlockActionsView />
+              <BlockOptionsView />
               <ToolbarView />
             </YooptaEditor>
           </YooptaDndKit.Root>

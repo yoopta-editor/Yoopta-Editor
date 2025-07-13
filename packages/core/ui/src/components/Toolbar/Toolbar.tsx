@@ -2,7 +2,6 @@ import React, { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 import { Portal } from '../Portal/Portal';
 import { useToolbarContext } from './ToolbarContext';
-import './Toolbar.css';
 
 export interface ToolbarProps {
   children?: React.ReactNode;

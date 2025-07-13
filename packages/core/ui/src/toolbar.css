@@ -1,3 +1,61 @@
+/* Toolbar Variables */
+:root {
+  /* Toolbar */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Toolbar - Dark theme */
+    --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
+  }
+}
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  /* Toolbar - Dark theme */
+  --yoopta-ui-toolbar-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-toolbar-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-toolbar-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-toolbar-active-text: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-separator: hsl(217.2 32.6% 17.5%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  /* Toolbar - Light theme */
+  --yoopta-ui-toolbar-bg: hsl(0 0% 100%);
+  --yoopta-ui-toolbar-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-toolbar-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-toolbar-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-toolbar-separator: hsl(214.3 31.8% 91.4%);
+}
+
 /* Toolbar Styles */
 .yoo-toolbar-root {
   position: relative;

@@ -19,6 +19,7 @@ const createMultiEntryConfig = () => {
       'floating-block-actions': './src/floating-block-actions.ts',
       'dnd-kit': './src/dnd-kit.ts',
       toolbar: './src/toolbar.ts',
+      'highlight-color': './src/highlight-color.ts',
     },
     output: {
       format: 'es',

@@ -1,5 +1,3 @@
-import './styles/variables.css';
-
 // Floating Block Actions Components
 export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
@@ -9,7 +7,7 @@ export {
 
 // Block Options Components
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
-export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBlockOptions';
+export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBlockOptionDefaultHandlers';
 export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
 export { useBlockOptions } from './components/BlockOptions/useBlockOptions';
 export { BlockOptionsProvider, useBlockOptionsContext } from './components/BlockOptions/BlockOptionsContext';
@@ -33,3 +31,7 @@ export type {
   YooptaDndKitItemProps,
   YooptaDndKitOverlayProps,
 } from './components/YooptaDndKit';
+
+// Highlight Color Components
+export { HighlightColor, useHighlightColor } from './highlight-color';
+export type { HighlightColorProps, UseHighlightColorOptions, UseHighlightColorReturn } from './highlight-color';

@@ -20,7 +20,6 @@ import {
 import { cn } from '../../lib/utils';
 import { YooEditor } from '@yoopta/editor';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import './YooptaDndKit.css';
 
 export interface YooptaDndKitRootProps {
   children: React.ReactNode;

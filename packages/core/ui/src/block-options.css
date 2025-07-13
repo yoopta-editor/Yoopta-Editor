@@ -1,0 +1,207 @@
+/* Block Options Variables */
+:root {
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-block-options-text: hsl(210 40% 98%);
+    --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+    --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+    --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+  }
+}
+
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  /* Block options - Dark theme */
+  --yoopta-ui-block-options-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-block-options-text: hsl(210 40% 98%);
+  --yoopta-ui-block-options-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-focus-ring: hsl(210 40% 98%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 62.8% 30.6%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  /* Block options - Light theme */
+  --yoopta-ui-block-options-bg: hsl(0 0% 100%);
+  --yoopta-ui-block-options-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-block-options-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-block-options-focus-ring: hsl(222.2 84% 4.9%);
+  --yoopta-ui-block-options-icon: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-block-options-separator: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-block-options-destructive-text: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-bg: hsl(0 84.2% 60.2%);
+  --yoopta-ui-block-options-destructive-hover-text: hsl(0 0% 98%);
+}
+
+/* Block Options Styles */
+.yoo-block-options-root {
+  position: relative;
+  z-index: 1000;
+}
+
+.yoo-block-options-content {
+  background: var(--yoopta-ui-block-options-bg);
+  border-radius: 8px;
+  box-shadow: var(--yoopta-ui-block-options-shadow);
+  border: 1px solid var(--yoopta-ui-block-options-border);
+  padding: 8px;
+  min-width: 200px;
+  max-width: 320px;
+  animation: blockOptionsFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+.yoo-block-options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yoo-block-options-item {
+  position: relative;
+}
+
+.yoo-block-options-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--yoopta-ui-block-options-text);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  line-height: 1.4;
+  position: relative;
+  user-select: none;
+}
+
+.yoo-block-options-button:hover {
+  background: var(--yoopta-ui-block-options-hover-bg);
+  color: var(--yoopta-ui-block-options-text);
+}
+
+.yoo-block-options-button:active {
+  background: var(--yoopta-ui-block-options-active-bg);
+  transform: scale(0.98);
+}
+
+.yoo-block-options-button:focus {
+  outline: 2px solid var(--yoopta-ui-block-options-focus-ring);
+  outline-offset: 2px;
+}
+
+.yoo-block-options-button-destructive {
+  color: var(--yoopta-ui-block-options-destructive-text);
+}
+
+.yoo-block-options-button-destructive:hover {
+  background: var(--yoopta-ui-block-options-destructive-hover-bg);
+  color: var(--yoopta-ui-block-options-destructive-hover-text);
+}
+
+.yoo-block-options-button-sm {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.yoo-block-options-button-md {
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.yoo-block-options-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  color: var(--yoopta-ui-block-options-icon);
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-block-options-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-block-options-button:hover .yoo-block-options-icon svg {
+  transform: scale(1.05);
+}
+
+.yoo-block-options-button-destructive .yoo-block-options-icon svg {
+  color: var(--yoopta-ui-block-options-destructive-text);
+}
+
+.yoo-block-options-button-destructive:hover .yoo-block-options-icon svg {
+  color: var(--yoopta-ui-block-options-destructive-hover-text);
+}
+
+.yoo-block-options-text {
+  flex: 1;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-block-options-separator {
+  height: 1px;
+  background: var(--yoopta-ui-block-options-separator);
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
+@keyframes blockOptionsFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

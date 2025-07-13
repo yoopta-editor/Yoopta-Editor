@@ -1,0 +1,234 @@
+/* Highlight Color Variables */
+:root {
+  /* Highlight Color - Light theme */
+  --yoopta-ui-highlight-bg: hsl(0 0% 100%);
+  --yoopta-ui-highlight-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-highlight-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --yoopta-ui-highlight-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-tab-bg: transparent;
+  --yoopta-ui-highlight-tab-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-tab-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-highlight-tab-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-highlight-tab-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-border-color: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-highlight-active-border: hsl(221.2 83.2% 53.3%);
+  --yoopta-ui-highlight-custom-toggle-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-custom-toggle-hover-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-preset-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --yoopta-ui-highlight-preset-active-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --yoopta-ui-highlight-separator: hsl(214.3 31.8% 91.4%);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Highlight Color - Dark theme */
+    --yoopta-ui-highlight-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-highlight-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-highlight-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+    --yoopta-ui-highlight-text: hsl(210 40% 98%);
+    --yoopta-ui-highlight-tab-bg: transparent;
+    --yoopta-ui-highlight-tab-text: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-highlight-tab-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-highlight-tab-active-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-highlight-tab-active-text: hsl(210 40% 98%);
+    --yoopta-ui-highlight-border-color: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-highlight-active-border: hsl(210 40% 98%);
+    --yoopta-ui-highlight-custom-toggle-text: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-highlight-custom-toggle-hover-text: hsl(210 40% 98%);
+    --yoopta-ui-highlight-preset-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --yoopta-ui-highlight-preset-active-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    --yoopta-ui-highlight-separator: hsl(217.2 32.6% 17.5%);
+  }
+}
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  /* Highlight Color - Dark theme */
+  --yoopta-ui-highlight-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-highlight-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --yoopta-ui-highlight-text: hsl(210 40% 98%);
+  --yoopta-ui-highlight-tab-bg: transparent;
+  --yoopta-ui-highlight-tab-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-tab-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-highlight-tab-active-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-tab-active-text: hsl(210 40% 98%);
+  --yoopta-ui-highlight-border-color: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-highlight-active-border: hsl(210 40% 98%);
+  --yoopta-ui-highlight-custom-toggle-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-custom-toggle-hover-text: hsl(210 40% 98%);
+  --yoopta-ui-highlight-preset-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --yoopta-ui-highlight-preset-active-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --yoopta-ui-highlight-separator: hsl(217.2 32.6% 17.5%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  /* Highlight Color - Light theme */
+  --yoopta-ui-highlight-bg: hsl(0 0% 100%);
+  --yoopta-ui-highlight-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-highlight-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --yoopta-ui-highlight-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-tab-bg: transparent;
+  --yoopta-ui-highlight-tab-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-tab-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-highlight-tab-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-highlight-tab-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-border-color: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-highlight-active-border: hsl(221.2 83.2% 53.3%);
+  --yoopta-ui-highlight-custom-toggle-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-custom-toggle-hover-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-preset-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --yoopta-ui-highlight-preset-active-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --yoopta-ui-highlight-separator: hsl(214.3 31.8% 91.4%);
+}
+
+/* Highlight Color Styles */
+.yoo-highlight-color-root {
+  position: relative;
+  z-index: 1000;
+}
+
+.yoo-highlight-color-content {
+  background: var(--yoopta-ui-highlight-bg);
+  border-radius: 12px;
+  box-shadow: var(--yoopta-ui-highlight-shadow);
+  border: 1px solid var(--yoopta-ui-highlight-border);
+  padding: 16px;
+  min-width: 230px;
+  max-width: 340px;
+  animation: highlightColorFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.yoo-highlight-color-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 16px;
+  background: var(--yoopta-ui-highlight-tab-hover-bg);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.yoo-highlight-color-tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  background: var(--yoopta-ui-highlight-tab-bg);
+  border-radius: 6px;
+  color: var(--yoopta-ui-highlight-tab-text);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  flex: 1;
+  text-align: center;
+}
+
+.yoo-highlight-color-tab:hover {
+  background: var(--yoopta-ui-highlight-tab-hover-bg);
+  color: var(--yoopta-ui-highlight-tab-text);
+}
+
+.yoo-highlight-color-tab-active {
+  background: var(--yoopta-ui-highlight-tab-active-bg);
+  color: var(--yoopta-ui-highlight-tab-active-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.yoo-highlight-color-presets {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  justify-items: center;
+  margin-bottom: 16px;
+}
+
+.yoo-highlight-color-preset {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 2px solid var(--yoopta-ui-highlight-border-color);
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.yoo-highlight-color-preset:hover {
+  transform: scale(1.15);
+  box-shadow: var(--yoopta-ui-highlight-preset-hover-shadow);
+}
+
+.yoo-highlight-color-preset-active {
+  border-color: var(--yoopta-ui-highlight-active-border);
+  box-shadow: var(--yoopta-ui-highlight-preset-active-shadow);
+  transform: scale(1.1);
+}
+
+.yoo-highlight-color-preset-active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.yoo-highlight-color-custom {
+  border-top: 1px solid var(--yoopta-ui-highlight-separator);
+  padding-top: 16px;
+}
+
+.yoo-highlight-color-custom-toggle {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--yoopta-ui-highlight-custom-toggle-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.yoo-highlight-color-custom-toggle:hover {
+  color: var(--yoopta-ui-highlight-custom-toggle-hover-text);
+  background: var(--yoopta-ui-highlight-tab-hover-bg);
+}
+
+.yoo-highlight-color-icon {
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.yoo-highlight-color-picker {
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--yoopta-ui-highlight-border-color);
+}
+
+@keyframes highlightColorFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -1,4 +1,4 @@
-import React, { createContext, CSSProperties, useContext, useState } from 'react';
+import React, { createContext, CSSProperties, useContext } from 'react';
 import { BlockOptionsRefs, useBlockOptions } from './useBlockOptions';
 
 type BlockOptionsOpenProps = {

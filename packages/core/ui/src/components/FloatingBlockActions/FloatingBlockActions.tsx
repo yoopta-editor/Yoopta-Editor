@@ -2,7 +2,6 @@ import React, { CSSProperties, useCallback, createContext, useContext, MouseEven
 import { Plus, GripVertical } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useFloatingBlockActions } from './useFloatingBlockActions';
-import './FloatingBlockActions.css';
 
 export interface FloatingBlockActionsProps {
   readOnly?: boolean;

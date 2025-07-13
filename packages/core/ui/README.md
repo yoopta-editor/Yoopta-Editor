@@ -874,3 +874,93 @@ import { Button } from '@yoopta/ui';
 ## Поддержка темной темы
 
 Компоненты автоматически адаптируются к темной теме через CSS медиа-запросы.
+
+### HighlightColor
+
+Компонент для выбора цвета текста и фона с предустановленными цветами и кастомным пикером.
+
+#### Features
+
+- 🎨 Предустановленные цвета для текста и фона
+- 🎯 Кастомный цветовой пикер
+- 📱 Адаптивный дизайн
+- 🌙 Поддержка темной темы
+- ⚡ Debounced обновления для плавности
+
+#### Usage
+
+```tsx
+import { HighlightColor } from '@yoopta/ui';
+
+const MyComponent = () => {
+  return (
+    <HighlightColor
+      editor={editor}
+      highlightColors={currentColors}
+      refs={floatingRefs}
+      floatingStyles={floatingStyles}
+      onClose={handleClose}
+    />
+  );
+};
+```
+
+#### API
+
+| Prop              | Type              | Default | Description               |
+| ----------------- | ----------------- | ------- | ------------------------- |
+| `editor`          | `YooEditor`       | -       | Экземпляр редактора       |
+| `highlightColors` | `CSSProperties`   | `{}`    | Текущие цвета выделения   |
+| `refs`            | `{ setFloating }` | -       | Refs для позиционирования |
+| `floatingStyles`  | `CSSProperties`   | -       | Стили позиционирования    |
+| `onClose`         | `() => void`      | -       | Callback закрытия         |
+| `className`       | `string`          | -       | Дополнительные CSS классы |
+| `style`           | `CSSProperties`   | -       | Инлайн стили              |
+
+#### Предустановленные цвета
+
+**Цвета текста:**
+
+- Default (black)
+- Gray (#787774)
+- Brown (#976D57)
+- Orange (#CC772F)
+- Yellow (#C29243)
+- Green (#548064)
+- Blue (#477DA5)
+- Purple (#A48BBE)
+- Pink (#B35588)
+- Red (#C4554D)
+
+**Цвета фона:**
+
+- Default (unset)
+- Gray (#F1F1EF)
+- Brown (#F3EEEE)
+- Orange (#F8ECDF)
+- Yellow (#FAF3DD)
+- Green (#EEF3ED)
+- Blue (#E9F3F7)
+- Purple (#F6F3F8)
+- Pink (#F9F2F5)
+- Red (#FAECEC)
+
+#### CSS переменные
+
+```css
+:root {
+  --yoopta-ui-highlight-bg: hsl(0 0% 100%);
+  --yoopta-ui-highlight-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-highlight-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --yoopta-ui-highlight-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-tab-bg: transparent;
+  --yoopta-ui-highlight-tab-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-tab-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-highlight-tab-active-bg: hsl(210 40% 96%);
+  --yoopta-ui-highlight-tab-active-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-highlight-border-color: #e3e3e3;
+  --yoopta-ui-highlight-active-border: #3b82f6;
+  --yoopta-ui-highlight-custom-toggle-text: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-highlight-custom-toggle-hover-text: hsl(222.2 84% 4.9%);
+}
+```
