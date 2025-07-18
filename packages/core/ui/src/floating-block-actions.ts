@@ -2,5 +2,5 @@ import './floating-block-actions.css';
 export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
   useFloatingBlockActions,
-  useFloatingBlockActionDefaultHandlers,
+  useFloatingBlockActionHandlers,
 } from './components/FloatingBlockActions/useFloatingBlockActions';

@@ -75,18 +75,20 @@ const HighlightColor = ({
   }, 50);
 
   const handleColorChange = (type: 'color' | 'backgroundColor', color: string, shouldDebounce?: boolean) => {
+    console.log('shouldDebounce', shouldDebounce);
     if (shouldDebounce) {
       setLocalColor(color);
       debouncedUpdateColor(type, color);
     } else {
-      if (editor?.formats?.highlight) {
-        const value = editor.formats.highlight.getValue();
-        if (value?.[type] === color) {
-          editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
-        } else {
-          editor.formats.highlight.update({ ...highlightColors, [type]: color });
-        }
-      }
+      // console.log('editor?.formats?.highlight', editor?.formats?.highlight);
+      // const value = editor.formats?.highlight?.getValue();
+      // console.log('value', value);
+      // if (value?.[type] === color) {
+      //   editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
+      // } else {
+      // }
+      console.log('editor.formats', editor.formats);
+      editor.formats.highlight.update({ ...highlightColors, [type]: color });
     }
   };
 
@@ -116,7 +118,6 @@ const HighlightColor = ({
         className={cn('yoo-highlight-color-root', className)}
       >
         <div className="yoo-highlight-color-content">
-          {/* Tabs */}
           <div className="yoo-highlight-color-tabs">
             <button
               type="button"
@@ -134,7 +135,6 @@ const HighlightColor = ({
             </button>
           </div>
 
-          {/* Presets Grid */}
           <div className="yoo-highlight-color-presets">
             {COLOR_PRESETS[tab].map(({ name, value }) => (
               <button
@@ -143,7 +143,10 @@ const HighlightColor = ({
                 title={name}
                 className={getPresetClassName(tab === 'text' ? 'color' : 'backgroundColor', value)}
                 style={getItemStyles(tab === 'text' ? 'color' : 'backgroundColor', value)}
-                onClick={() => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value)}
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value);
+                }}
               />
             ))}
           </div>

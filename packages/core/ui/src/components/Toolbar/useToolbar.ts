@@ -134,7 +134,7 @@ export const useToolbar = (): ToolbarReturn => {
     setRef: toolbarRefs.setReference,
     setFloatingRef: toolbarRefs.setFloating,
     style: toolbarFloatingStyle,
-    isOpen: isOpen && isToolbarMounted,
+    isOpen: isToolbarMounted,
     setIsOpen,
   };
 };

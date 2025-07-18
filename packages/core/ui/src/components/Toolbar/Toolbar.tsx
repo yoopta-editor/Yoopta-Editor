@@ -52,7 +52,6 @@ const Content = forwardRef<
 
 Content.displayName = 'Toolbar.Content';
 
-// Group component
 const Group = forwardRef<
   HTMLDivElement,
   {
@@ -69,7 +68,6 @@ const Group = forwardRef<
 
 Group.displayName = 'Toolbar.Group';
 
-// Button component
 export interface ToolbarButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode;
   children?: React.ReactNode;
@@ -106,14 +104,38 @@ const Button = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
 
 Button.displayName = 'Toolbar.Button';
 
-// Toggle component
 export interface ToolbarToggleProps extends ToolbarButtonProps {
   value?: string;
   pressed?: boolean;
 }
 
 const Toggle = forwardRef<HTMLButtonElement, ToolbarToggleProps>(
-  ({ icon, children, className, variant = 'default', size = 'md', active, pressed, disabled, ...rest }, ref) => {
+  (
+    {
+      icon,
+      children,
+      className,
+      variant = 'default',
+      size = 'md',
+      active,
+      pressed,
+      disabled,
+      onClick,
+      onMouseDown,
+      ...rest
+    },
+    ref,
+  ) => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      onClick?.(e);
+    };
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      onMouseDown?.(e);
+    };
+
     return (
       <button
         ref={ref}
@@ -128,6 +150,8 @@ const Toggle = forwardRef<HTMLButtonElement, ToolbarToggleProps>(
           disabled && 'yoo-toolbar-toggle-disabled',
           className,
         )}
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
         {...rest}
       >
         {icon && <span className="yoo-toolbar-icon">{icon}</span>}
@@ -139,7 +163,6 @@ const Toggle = forwardRef<HTMLButtonElement, ToolbarToggleProps>(
 
 Toggle.displayName = 'Toolbar.Toggle';
 
-// Separator component
 const Separator = forwardRef<
   HTMLDivElement,
   {

@@ -1,5 +1,5 @@
 import './block-options.css';
 
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
-export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBlockOptionDefaultHandlers';
+export { useBlockOptionHandlers } from './components/BlockOptions/useBlockOptionHandlers';
 export { BlockOptionsProvider, useBlockOptionsContext } from './components/BlockOptions/BlockOptionsContext';

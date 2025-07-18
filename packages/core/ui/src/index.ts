@@ -2,12 +2,12 @@
 export { FloatingBlockActions } from './components/FloatingBlockActions/FloatingBlockActions';
 export {
   useFloatingBlockActions,
-  useFloatingBlockActionDefaultHandlers,
+  useFloatingBlockActionHandlers,
 } from './components/FloatingBlockActions/useFloatingBlockActions';
 
 // Block Options Components
 export { BlockOptions } from './components/BlockOptions/BlockOptions';
-export { useBlockOptionDefaultHandlers } from './components/BlockOptions/useBlockOptionDefaultHandlers';
+export { useBlockOptionHandlers } from './components/BlockOptions/useBlockOptionHandlers';
 export type { BlockOptionsButtonProps } from './components/BlockOptions/BlockOptions';
 export { useBlockOptions } from './components/BlockOptions/useBlockOptions';
 export { BlockOptionsProvider, useBlockOptionsContext } from './components/BlockOptions/BlockOptionsContext';

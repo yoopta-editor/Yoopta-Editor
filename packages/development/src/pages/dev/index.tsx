@@ -1,4 +1,10 @@
-import YooptaEditor, { createYooptaEditor, YooptaOnChangeOptions, YooEditor, YooptaContentValue } from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor,
+  YooptaOnChangeOptions,
+  YooEditor,
+  YooptaContentValue,
+  useYooptaEditor,
+} from '@yoopta/editor';
 import { withMentions } from '@yoopta/mention';
 import { Toolbar, useToolbarActions, ToolbarProvider, useToolbar } from '@yoopta/ui/toolbar';
 
@@ -9,12 +15,12 @@ import {
   BlockOptions,
   BlockOptionsProvider,
   useBlockOptionsContext,
-  useBlockOptionDefaultHandlers,
+  useBlockOptionHandlers,
 } from '@yoopta/ui/block-options';
 import {
   FloatingBlockActions,
   useFloatingBlockActions,
-  useFloatingBlockActionDefaultHandlers,
+  useFloatingBlockActionHandlers,
 } from '@yoopta/ui/floating-block-actions';
 
 import { useMemo, useRef, useState } from 'react';
@@ -43,7 +49,7 @@ const EDITOR_STYLE = {
 
 const FloatingBlockActionsView = () => {
   const { hoveredBlockId } = useFloatingBlockActions();
-  const { onPlusClick, onDragClick } = useFloatingBlockActionDefaultHandlers();
+  const { onPlusClick, onDragClick } = useFloatingBlockActionHandlers();
   const { getDragHandleProps } = useYooptaDndKitContext();
   const { open, close, isOpen } = useBlockOptionsContext();
 
@@ -81,7 +87,7 @@ const BlockItem = ({ blockRender, block }: BlockItemProps) => {
 };
 
 const BlockOptionsView = () => {
-  const { duplicateBlock, copyLinkToBlock, deleteBlock } = useBlockOptionDefaultHandlers();
+  const { duplicateBlock, copyLinkToBlock, deleteBlock } = useBlockOptionHandlers();
 
   return (
     <BlockOptions.Root>
@@ -110,6 +116,7 @@ const BlockOptionsView = () => {
 const ToolbarView = () => {
   const { toggleMark, toggleAlign, isMarkActive, getCurrentAlign } = useToolbarActions();
   const { open, close, isOpen, refs, floatingStyles } = useHighlightColor();
+  const editor = useYooptaEditor();
 
   const getAlignIcon = () => {
     const align = getCurrentAlign();
@@ -171,7 +178,13 @@ const ToolbarView = () => {
               onClick={(event: React.MouseEvent) => open({ element: event.currentTarget as HTMLElement })}
               aria-label="Highlight color"
             />
-            <HighlightColor isOpen={isOpen} onClose={close} refs={refs} floatingStyles={floatingStyles} />
+            <HighlightColor
+              editor={editor}
+              isOpen={isOpen}
+              onClose={close}
+              refs={refs}
+              floatingStyles={floatingStyles}
+            />
           </Toolbar.Group>
         </Toolbar.Content>
       </Toolbar.Root>

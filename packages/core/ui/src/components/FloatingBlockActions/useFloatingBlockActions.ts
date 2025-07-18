@@ -126,7 +126,7 @@ export function useFloatingBlockActions({
   };
 }
 
-export function useFloatingBlockActionDefaultHandlers(): UseFloatingBlockActionsDefaultHandlers {
+export function useFloatingBlockActionHandlers(): UseFloatingBlockActionsDefaultHandlers {
   const editor = useYooptaEditor();
   const { hoveredBlockId } = useFloatingBlockActions({});
 

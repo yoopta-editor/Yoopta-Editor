@@ -7,11 +7,7 @@ type UseBlockOptionDefaultHandlersProps = {
   onDelete?: () => void;
 };
 
-export function useBlockOptionDefaultHandlers({
-  onCopy,
-  onDuplicate,
-  onDelete,
-}: UseBlockOptionDefaultHandlersProps = {}) {
+export function useBlockOptionHandlers({ onCopy, onDuplicate, onDelete }: UseBlockOptionDefaultHandlersProps = {}) {
   const editor = useYooptaEditor();
   const { close } = useBlockOptionsContext();
 
