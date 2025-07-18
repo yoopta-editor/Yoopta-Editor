@@ -1,3 +1,5 @@
+import './block-options.css';
+
 import React, { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 import { Portal } from '../Portal/Portal';

@@ -42,6 +42,10 @@
     "./highlight-color": {
       "import": "./dist/highlight-color.js",
       "types": "./dist/highlight-color.d.ts"
+    },
+    "./action-menu": {
+      "import": "./dist/action-menu.js",
+      "types": "./dist/action-menu.d.ts"
     }
   },
   "files": [

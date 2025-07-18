@@ -5,6 +5,8 @@ import { cn } from '../../lib/utils';
 import { useDebouncedCallback } from 'use-debounce';
 import { Portal } from '../Portal/Portal';
 
+import './highlight-color.css';
+
 export interface HighlightColorProps {
   className?: string;
   style?: React.CSSProperties;

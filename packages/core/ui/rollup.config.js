@@ -2,7 +2,6 @@ import { createRollupConfig } from '../../../config/rollup';
 
 const pkg = require('./package.json');
 
-// Создаем конфигурацию для множественных входных точек
 const createMultiEntryConfig = () => {
   const baseConfig = createRollupConfig({
     pkg,
@@ -20,6 +19,7 @@ const createMultiEntryConfig = () => {
       'dnd-kit': './src/dnd-kit.ts',
       toolbar: './src/toolbar.ts',
       'highlight-color': './src/highlight-color.ts',
+      'action-menu': './src/action-menu.ts',
     },
     output: {
       format: 'es',

@@ -1,0 +1,197 @@
+/* Action Menu Variables */
+:root {
+  /* Action menu - Light theme */
+  --yoopta-ui-action-menu-bg: hsl(0 0% 100%);
+  --yoopta-ui-action-menu-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-action-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-action-menu-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-action-menu-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-action-menu-selected-bg: hsl(210 40% 96%);
+  --yoopta-ui-action-menu-icon-bg: hsl(0 0% 100%);
+  --yoopta-ui-action-menu-icon-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-action-menu-description: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-action-menu-empty: hsl(215.4 16.3% 46.9%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --yoopta-ui-action-menu-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-action-menu-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-action-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --yoopta-ui-action-menu-text: hsl(210 40% 98%);
+    --yoopta-ui-action-menu-hover-bg: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-action-menu-selected-bg: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-action-menu-icon-bg: hsl(222.2 84% 4.9%);
+    --yoopta-ui-action-menu-icon-border: hsl(217.2 32.6% 17.5%);
+    --yoopta-ui-action-menu-description: hsl(215.4 16.3% 46.9%);
+    --yoopta-ui-action-menu-empty: hsl(215.4 16.3% 46.9%);
+  }
+}
+
+/* Forced dark theme support */
+[data-theme="dark"] {
+  --yoopta-ui-action-menu-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-action-menu-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-action-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --yoopta-ui-action-menu-text: hsl(210 40% 98%);
+  --yoopta-ui-action-menu-hover-bg: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-action-menu-selected-bg: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-action-menu-icon-bg: hsl(222.2 84% 4.9%);
+  --yoopta-ui-action-menu-icon-border: hsl(217.2 32.6% 17.5%);
+  --yoopta-ui-action-menu-description: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-action-menu-empty: hsl(215.4 16.3% 46.9%);
+}
+
+/* Forced light theme support */
+[data-theme="light"] {
+  --yoopta-ui-action-menu-bg: hsl(0 0% 100%);
+  --yoopta-ui-action-menu-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-action-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-action-menu-text: hsl(222.2 84% 4.9%);
+  --yoopta-ui-action-menu-hover-bg: hsl(210 40% 98%);
+  --yoopta-ui-action-menu-selected-bg: hsl(210 40% 96%);
+  --yoopta-ui-action-menu-icon-bg: hsl(0 0% 100%);
+  --yoopta-ui-action-menu-icon-border: hsl(214.3 31.8% 91.4%);
+  --yoopta-ui-action-menu-description: hsl(215.4 16.3% 46.9%);
+  --yoopta-ui-action-menu-empty: hsl(215.4 16.3% 46.9%);
+}
+
+.yoo-action-menu-root {
+  position: fixed;
+  z-index: 1000;
+  background: var(--yoopta-ui-action-menu-bg);
+  border: 1px solid var(--yoopta-ui-action-menu-border);
+  border-radius: 8px;
+  box-shadow: var(--yoopta-ui-action-menu-shadow);
+  max-width: 270px;
+  min-width: 200px;
+  animation: actionMenuFadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+.yoo-action-menu-content {
+  padding: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.yoo-action-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.yoo-action-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  color: var(--yoopta-ui-action-menu-text);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.yoo-action-menu-item:hover {
+  background-color: var(--yoopta-ui-action-menu-hover-bg);
+}
+
+.yoo-action-menu-item-selected,
+.yoo-action-menu-item[aria-selected="true"] {
+  background-color: var(--yoopta-ui-action-menu-selected-bg);
+}
+
+.yoo-action-menu-item:focus {
+  outline: 2px solid var(--yoopta-ui-action-menu-text);
+  outline-offset: 2px;
+}
+
+.yoo-action-menu-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--yoopta-ui-action-menu-icon-border);
+  background-color: var(--yoopta-ui-action-menu-icon-bg);
+  flex-shrink: 0;
+}
+
+.yoo-action-menu-item-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.yoo-action-menu-item-title {
+  font-weight: 500;
+  color: var(--yoopta-ui-action-menu-text);
+  line-height: 1.2;
+}
+
+.yoo-action-menu-item-description {
+  font-size: 12px;
+  color: var(--yoopta-ui-action-menu-description);
+  margin-top: 2px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.yoo-action-menu-empty {
+  text-align: left;
+  color: var(--yoopta-ui-action-menu-empty);
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+/* Small variant */
+.yoo-action-menu-item[data-variant="small"] .yoo-action-menu-icon-wrapper {
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.yoo-action-menu-item[data-variant="small"] .yoo-action-menu-item-description {
+  display: none;
+}
+
+/* Scrollbar styles */
+.yoo-action-menu-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.yoo-action-menu-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yoo-action-menu-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.yoo-action-menu-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@keyframes actionMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

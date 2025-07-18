@@ -35,3 +35,12 @@ export type {
 // Highlight Color Components
 export { HighlightColor, useHighlightColor } from './highlight-color';
 export type { HighlightColorProps, UseHighlightColorOptions, UseHighlightColorReturn } from './highlight-color';
+
+// Action Menu Components
+export { ActionMenu, ActionMenuProvider, useActionMenuContext, useActionMenu } from './components/ActionMenu';
+export type {
+  ActionMenuItemProps,
+  ActionMenuItem,
+  UseActionMenuOptions,
+  UseActionMenuReturn,
+} from './components/ActionMenu';
