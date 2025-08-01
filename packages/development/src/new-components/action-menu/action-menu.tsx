@@ -38,12 +38,11 @@ export const ActionMenu = () => {
                 key={action.type}
                 icon={action.icon}
                 title={action.title}
+                type={action.type}
                 description={action.description}
                 selected={selectedAction?.type === action.type}
                 onClick={() => handleItemClick(action.type)}
                 onMouseEnter={() => handleItemMouseEnter(action.type)}
-                data-action-menu-item
-                data-action-menu-item-type={action.type}
               />
             ))
           )}

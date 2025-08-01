@@ -105,7 +105,7 @@ export const useActionMenu = ({
   trigger = '/',
   mode = 'create',
 }: UseActionMenuOptions): UseActionMenuReturn => {
-  const { open, close } = useActionMenuContext();
+  const { open, close, updatePosition } = useActionMenuContext();
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
   const [actions, setActions] = useState<ActionMenuItem[]>([]);
@@ -227,6 +227,8 @@ export const useActionMenu = ({
   }, [empty, close]);
 
   useEffect(() => {
+    updatePosition();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.isComposing) return;
 
