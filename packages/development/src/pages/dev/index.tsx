@@ -4,7 +4,6 @@ import { YooptaDndKit } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
-import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 import { DEFAULT_VALUE } from '@/utils/yoopta/value';
 
@@ -38,7 +37,6 @@ const BasicExample = () => {
   return (
     <>
       <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
-        <FixedToolbar editor={editor} DEFAULT_DATA={DEFAULT_VALUE} />
         <BlockOptionsProvider>
           <ActionMenuProvider>
             <YooptaDndKit.Root editor={editor} readOnly={editor.readOnly} id={`yoopta-dnd-kit-${editor.id}`}>

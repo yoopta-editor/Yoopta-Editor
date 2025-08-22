@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useCallback, useMemo, useRef, useState } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 
-type ActionMenuOpenReferenceOptions = {
+export type ActionMenuOpenReferenceOptions = {
   getBoundingClientRect: () => DOMRect;
   getClientRects: () => DOMRectList;
 };
@@ -12,6 +12,7 @@ interface ActionMenuContextValue {
   setFloatingRef: (node: HTMLDivElement | null) => void;
   open: (element: HTMLElement | ActionMenuOpenReferenceOptions) => void;
   close: () => void;
+  updatePosition: () => void;
 }
 
 const ActionMenuContext = createContext<ActionMenuContextValue | null>(null);
@@ -37,21 +38,28 @@ export const ActionMenuProvider = ({ children }: ActionMenuProviderProps) => {
     update: updatePosition,
     context,
   } = useFloating({
-    placement: 'bottom-start',
+    placement: 'right',
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [flip(), shift(), offset(10)],
     whileElementsMounted: autoUpdate,
+    strategy: 'fixed',
   });
 
   const { styles: transitionStyles, isMounted } = useTransitionStyles(context, {
-    duration: 100,
+    duration: 150,
   });
 
   const open = useCallback(
     (element: HTMLElement | ActionMenuOpenReferenceOptions) => {
-      console.log('open element:', element);
+      console.log('open element', element);
+      console.log('open element instanceof HTMLElement', element instanceof HTMLElement);
       if (element instanceof HTMLElement) {
+        console.log('refs.setReference', {
+          getBoundingClientRect: element.getBoundingClientRect(),
+          getClientRects: element.getClientRects(),
+        });
+
         refs.setReference({
           getBoundingClientRect: () => element.getBoundingClientRect(),
           getClientRects: () => element.getClientRects(),
@@ -75,7 +83,6 @@ export const ActionMenuProvider = ({ children }: ActionMenuProviderProps) => {
 
   const setFloatingRef = useCallback(
     (node: HTMLDivElement | null) => {
-      console.log('setFloatingRef node:', node);
       refs.setFloating(node);
     },
     [refs],
@@ -96,6 +103,7 @@ export const ActionMenuProvider = ({ children }: ActionMenuProviderProps) => {
       setFloatingRef,
       open,
       close,
+      updatePosition,
     }),
     [isMounted, style, setFloatingRef, open, close],
   );

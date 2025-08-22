@@ -5,26 +5,21 @@ import { useCallback } from 'react';
 export const ActionMenu = () => {
   const editor = useYooptaEditor();
 
-  const { actions, selectedAction, empty, onSelect, onNavigate, onConfirm, onMouseEnter } = useActionMenu({
+  const { actions, selectedAction, empty, isOpen, onSelect, onToggle, onMouseEnter } = useActionMenu({
     editor,
     trigger: '/',
     mode: 'create',
   });
 
-  const handleItemClick = useCallback(
-    (type: string) => {
-      onSelect(type);
-      onConfirm();
-    },
-    [onSelect, onConfirm],
-  );
+  console.log('ActionMenu editor.path.current', editor.path.current);
 
-  const handleItemMouseEnter = useCallback(
-    (type: string) => {
-      onMouseEnter(type);
-    },
-    [onMouseEnter],
-  );
+  const onActionClick = (type: string) => {
+    onSelect(type);
+    console.log('onActionClick', { path: editor.path.current, type });
+    onToggle({ path: editor.path.current });
+  };
+
+  if (!isOpen) return null;
 
   return (
     <ActionMenuUI.Root>
@@ -41,8 +36,8 @@ export const ActionMenu = () => {
                 type={action.type}
                 description={action.description}
                 selected={selectedAction?.type === action.type}
-                onClick={() => handleItemClick(action.type)}
-                onMouseEnter={() => handleItemMouseEnter(action.type)}
+                onClick={() => onActionClick(action.type)}
+                onMouseEnter={() => onMouseEnter(action.type)}
               />
             ))
           )}

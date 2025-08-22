@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Editor, Element, Path, Transforms } from 'slate';
 import { YooEditor, YooptaBlock, Blocks, findPluginBlockByPath, HOTKEYS } from '@yoopta/editor';
-import { useActionMenuContext } from './ActionMenuContext';
+import { ActionMenuOpenReferenceOptions, useActionMenuContext } from './ActionMenuContext';
 
 export interface ActionMenuItem {
   type: string;
@@ -21,11 +21,14 @@ export interface UseActionMenuReturn {
   actions: ActionMenuItem[];
   selectedAction: ActionMenuItem | null;
   empty: boolean;
+  isOpen: boolean;
   onFilter: (text: string) => void;
   onSelect: (type: string) => void;
   onNavigate: (direction: 'up' | 'down') => void;
-  onConfirm: () => void;
+  onToggle: ({ path }: { path: number }) => void;
   onMouseEnter: (type: string) => void;
+  open: (element: HTMLElement | ActionMenuOpenReferenceOptions) => void;
+  close: () => void;
 }
 
 const filterBy = (item: any, text: string, field: string): boolean => {
@@ -105,7 +108,7 @@ export const useActionMenu = ({
   trigger = '/',
   mode = 'create',
 }: UseActionMenuOptions): UseActionMenuReturn => {
-  const { open, close, updatePosition } = useActionMenuContext();
+  const { open, close, updatePosition, isOpen } = useActionMenuContext();
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
   const [actions, setActions] = useState<ActionMenuItem[]>([]);
@@ -173,20 +176,23 @@ export const useActionMenu = ({
     [actions, selectedAction],
   );
 
-  const onConfirm = useCallback(() => {
+  const onToggle = (params: Parameters<UseActionMenuReturn['onToggle']>[0]) => {
     if (!selectedAction) return;
 
-    const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
+    const path = typeof params.path === 'number' ? params.path : editor.path.current;
+
+    console.log('onToggle', { selectedAction, path, 'params.path': params.path });
+    const slate = Blocks.getBlockSlate(editor, { at: path });
     if (!slate || !slate.selection) return;
 
-    const blockEntry: any = Editor.above(slate, {
+    const elementEntry: any = Editor.above(slate, {
       match: (n) => Element.isElement(n) && Editor.isBlock(slate, n),
       mode: 'lowest',
     });
 
-    if (blockEntry) {
-      const [, currentNodePath] = blockEntry;
-      const path = blockEntry ? currentNodePath : [];
+    if (elementEntry) {
+      const [, currentNodePath] = elementEntry;
+      const path = elementEntry ? currentNodePath : [];
 
       const start = Editor.start(slate, path);
       const range = { anchor: slate.selection.anchor, focus: start };
@@ -195,9 +201,9 @@ export const useActionMenu = ({
       Transforms.delete(slate);
     }
 
-    editor.toggleBlock(selectedAction.type, { deleteText: true, focus: true });
+    editor.toggleBlock(selectedAction.type, { deleteText: mode !== 'toggle', focus: true });
     close();
-  }, [selectedAction, editor, close]);
+  };
 
   const onMouseEnter = useCallback(
     (type: string) => {
@@ -305,10 +311,13 @@ export const useActionMenu = ({
     actions,
     selectedAction,
     empty,
+    isOpen,
     onFilter,
     onSelect,
     onNavigate,
-    onConfirm,
+    onToggle,
     onMouseEnter,
+    close,
+    open,
   };
 };

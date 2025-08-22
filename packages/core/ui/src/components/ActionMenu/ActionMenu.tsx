@@ -24,7 +24,12 @@ const Root = forwardRef<HTMLDivElement, ActionMenuProps>(({ children, className 
   return (
     <Portal id="yoo-action-menu-portal">
       {isOpen && (
-        <div ref={onRef} style={style} className={cn('yoo-action-menu-root', className)}>
+        <div
+          ref={onRef}
+          style={style}
+          className={cn('yoo-action-menu-root', className)}
+          data-state={isOpen ? 'open' : 'closed'}
+        >
           {children}
         </div>
       )}
@@ -66,17 +71,18 @@ const List = forwardRef<
 
 List.displayName = 'ActionMenu.List';
 
-export interface ActionMenuItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ActionMenuItemProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   icon?: React.ReactNode;
   title: string;
   description?: string;
   selected?: boolean;
   className?: string;
   variant?: 'default' | 'small';
+  type: string;
 }
 
 const Item = forwardRef<HTMLButtonElement, ActionMenuItemProps>(
-  ({ icon, title, description, selected, className, variant = 'default', ...rest }, ref) => {
+  ({ icon, title, description, selected, className, variant = 'default', type, ...rest }, ref) => {
     const isSmall = variant === 'small';
 
     const iconWrapStyles = {
@@ -84,6 +90,8 @@ const Item = forwardRef<HTMLButtonElement, ActionMenuItemProps>(
       width: isSmall ? '40px' : '40px',
       height: isSmall ? '28px' : '40px',
     };
+
+    // data-action-menu-item
 
     const iconStyles = {
       transform: isSmall ? 'scale(0.75)' : 'scale(1)',
@@ -102,6 +110,8 @@ const Item = forwardRef<HTMLButtonElement, ActionMenuItemProps>(
         type="button"
         aria-selected={selected}
         className={cn('yoo-action-menu-item', selected && 'yoo-action-menu-item-selected', className)}
+        data-action-menu-item
+        data-action-menu-item-type={type}
         {...rest}
       >
         <div style={iconWrapStyles} className="yoo-action-menu-icon-wrapper">
