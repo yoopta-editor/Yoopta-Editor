@@ -8,7 +8,9 @@ export function withCalloutNormalize(slate: SlateEditor, editor: YooEditor) {
     const [node, path] = entry;
 
     if (path.length === 0 && Editor.isEditor(node)) {
-      const calloutElements = node.children.filter((child) => Element.isElement(child) && child.type === 'callout');
+      const calloutElements = node.children.filter(
+        (child) => Element.isElement(child) && child.type === 'callout',
+      );
 
       if (calloutElements.length > 1 && editor.path.current !== null) {
         const currentPath = editor.path.current;

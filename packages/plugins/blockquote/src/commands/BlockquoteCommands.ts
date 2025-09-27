@@ -12,7 +12,10 @@ export type InsertBlockquoteOptions = {
 };
 
 export type BlockquoteCommands = {
-  buildBlockquoteElements: (editor: YooEditor, options?: Partial<BlockquoteElementOptions>) => BlockquoteElement;
+  buildBlockquoteElements: (
+    editor: YooEditor,
+    options?: Partial<BlockquoteElementOptions>,
+  ) => BlockquoteElement;
   insertBlockquote: (editor: YooEditor, options?: Partial<InsertBlockquoteOptions>) => void;
   deleteBlockquote: (editor: YooEditor, blockId: string) => void;
 };

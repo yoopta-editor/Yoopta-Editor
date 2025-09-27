@@ -86,7 +86,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -117,8 +122,7 @@ function WithCommandsAPI() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex flex-col items-center justify-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <FixedToolbar editor={editor} />
       <YooptaEditor
         editor={editor}
@@ -155,18 +159,17 @@ const FixedToolbar = ({ editor }: Props) => {
               },
             });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Image
         </button>
         <button
           type="button"
           onClick={() => {
-            const at: YooptaPathIndex = typeof editor.path.current === 'number' ? editor.path.current : 2;
+            const at: YooptaPathIndex =
+              typeof editor.path.current === 'number' ? editor.path.current : 2;
             editor.toggleBlock('Blockquote', { at: at, focus: true });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Toggle focused block into Blockquote
         </button>
         <button
@@ -174,8 +177,7 @@ const FixedToolbar = ({ editor }: Props) => {
           onClick={() => {
             TableCommands.insertTable(editor, { rows: 3, columns: 3, headerRow: true, at: 1 });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Table 3x3
         </button>
         <button
@@ -183,8 +185,7 @@ const FixedToolbar = ({ editor }: Props) => {
           onClick={() => {
             TableCommands.insertTable(editor, { rows: 6, columns: 4, at: 0 });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Table 6x4
         </button>
         <button
@@ -195,8 +196,7 @@ const FixedToolbar = ({ editor }: Props) => {
               theme: 'gradient',
             });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Update Divider
         </button>
         <button
@@ -211,8 +211,7 @@ const FixedToolbar = ({ editor }: Props) => {
               },
             });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Embed
         </button>
         <button
@@ -232,8 +231,7 @@ const FixedToolbar = ({ editor }: Props) => {
               });
             }, 0);
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Link
         </button>
       </div>
@@ -243,17 +241,19 @@ const FixedToolbar = ({ editor }: Props) => {
           onClick={() => {
             AccordionCommands.insertAccordion(editor, { at: 1, items: 4 });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Accordion with 4 items
         </button>
         <button
           type="button"
           onClick={() => {
-            HeadingOneCommands.insertHeadingOne(editor, { at: 1, text: 'Heading with text', focus: true });
+            HeadingOneCommands.insertHeadingOne(editor, {
+              at: 1,
+              text: 'Heading with text',
+              focus: true,
+            });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Heading 1 with text
         </button>
         <button
@@ -261,17 +261,19 @@ const FixedToolbar = ({ editor }: Props) => {
           onClick={() => {
             editor.commands.insertBlockquote({ at: 1, text: 'Blockquote with text', focus: true });
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Insert Blockquote with text
         </button>
         <button
           type="button"
           onClick={() => {
-            CalloutCommands.updateCalloutTheme(editor, '46f231b7-74c0-4c2d-ba29-2e192e5720a3', 'warning');
+            CalloutCommands.updateCalloutTheme(
+              editor,
+              '46f231b7-74c0-4c2d-ba29-2e192e5720a3',
+              'warning',
+            );
           }}
-          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff]"
-        >
+          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff]">
           Update Callout theme
         </button>
         <button
@@ -280,8 +282,7 @@ const FixedToolbar = ({ editor }: Props) => {
             editor.redo({ scroll: false });
           }}
           className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-          disabled={editor.historyStack.redos.length === 0}
-        >
+          disabled={editor.historyStack.redos.length === 0}>
           Redo
         </button>
         <button
@@ -290,8 +291,7 @@ const FixedToolbar = ({ editor }: Props) => {
             editor.undo({ scroll: false });
           }}
           className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-          disabled={editor.historyStack.undos.length === 0}
-        >
+          disabled={editor.historyStack.undos.length === 0}>
           Undo
         </button>
       </div>

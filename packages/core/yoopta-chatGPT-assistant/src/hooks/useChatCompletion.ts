@@ -1,6 +1,12 @@
 import { generateId } from '@yoopta/editor';
 import { useEffect, useRef, useState } from 'react';
-import { OpenAIChatCompletionChunk, OpenAIChatRole, ChatMessage, OpenAIChatMessage, ChatMessageMap } from '../types';
+import {
+  OpenAIChatCompletionChunk,
+  OpenAIChatRole,
+  ChatMessage,
+  OpenAIChatMessage,
+  ChatMessageMap,
+} from '../types';
 
 const textDecoder = new TextDecoder();
 

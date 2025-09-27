@@ -42,7 +42,10 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
         };
 
         if (th instanceof HTMLElement && th?.hasAttribute('data-width')) {
-          cellElement.props.width = parseInt((th as HTMLElement).getAttribute('data-width') || '200', 10);
+          cellElement.props.width = parseInt(
+            (th as HTMLElement).getAttribute('data-width') || '200',
+            10,
+          );
         }
 
         let textNodes = deserializeTextNodes(editor, th.childNodes);
@@ -56,7 +59,9 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
   }
 
   tbody?.childNodes.forEach((tr) => {
-    const trChildNodes = Array.from(tr.childNodes).filter((node) => node.nodeName === 'TD' || node.nodeName === 'TH');
+    const trChildNodes = Array.from(tr.childNodes).filter(
+      (node) => node.nodeName === 'TD' || node.nodeName === 'TH',
+    );
 
     if (trChildNodes.length > 0) {
       const rowElement: TableRowElement = {
@@ -86,7 +91,10 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
 
         if (td.nodeName === 'TD' || td.nodeName === 'TH') {
           if (td instanceof HTMLElement && td?.hasAttribute('data-width')) {
-            cellElement.props.width = parseInt((td as HTMLElement).getAttribute('data-width') || '200', 10);
+            cellElement.props.width = parseInt(
+              (td as HTMLElement).getAttribute('data-width') || '200',
+              10,
+            );
           }
 
           let textNodes = deserializeTextNodes(editor, td.childNodes);

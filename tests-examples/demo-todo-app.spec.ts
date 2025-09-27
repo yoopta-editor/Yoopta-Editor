@@ -75,7 +75,11 @@ test.describe('Mark all as completed', () => {
     await page.getByLabel('Mark all as complete').check();
 
     // Ensure all todos have 'completed' class.
-    await expect(page.getByTestId('todo-item')).toHaveClass(['completed', 'completed', 'completed']);
+    await expect(page.getByTestId('todo-item')).toHaveClass([
+      'completed',
+      'completed',
+      'completed',
+    ]);
     await checkNumberOfCompletedTodosInLocalStorage(page, 3);
   });
 
@@ -89,7 +93,9 @@ test.describe('Mark all as completed', () => {
     await expect(page.getByTestId('todo-item')).toHaveClass(['', '', '']);
   });
 
-  test('complete all checkbox should update state when items are completed / cleared', async ({ page }) => {
+  test('complete all checkbox should update state when items are completed / cleared', async ({
+    page,
+  }) => {
     const toggleAll = page.getByLabel('Mark all as complete');
     await toggleAll.check();
     await expect(toggleAll).toBeChecked();
@@ -403,7 +409,9 @@ async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
 
 async function checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: number) {
   return await page.waitForFunction((e) => {
-    return JSON.parse(localStorage['react-todos']).filter((todo: any) => todo.completed).length === e;
+    return (
+      JSON.parse(localStorage['react-todos']).filter((todo: any) => todo.completed).length === e
+    );
   }, expected);
 }
 

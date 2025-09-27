@@ -73,7 +73,8 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   if (plugin.parse) {
     nodeElementOrBlocks = plugin.parse(el as HTMLElement, editor);
 
-    const isInline = Element.isElement(nodeElementOrBlocks) && nodeElementOrBlocks.props?.nodeType === 'inline';
+    const isInline =
+      Element.isElement(nodeElementOrBlocks) && nodeElementOrBlocks.props?.nodeType === 'inline';
     if (isInline) return nodeElementOrBlocks;
   }
 
@@ -86,7 +87,8 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   let rootNode: SlateElement<string, any> | YooptaBlockData[] = {
     id: generateId(),
     type: rootElementType,
-    children: isVoid && !block.hasCustomEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
+    children:
+      isVoid && !block.hasCustomEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
     props: { nodeType: 'block', ...rootElement.props },
   };
 
@@ -122,7 +124,11 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   return blockData;
 }
 
-function deserialize(editor: YooEditor, pluginsMap: PluginsMapByNodeNames, el: HTMLElement | ChildNode) {
+function deserialize(
+  editor: YooEditor,
+  pluginsMap: PluginsMapByNodeNames,
+  el: HTMLElement | ChildNode,
+) {
   if (el.nodeType === 3) {
     const text = el.textContent?.replace(/[\t\n\r\f\v]+/g, ' ');
     return { text };

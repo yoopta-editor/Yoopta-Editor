@@ -29,15 +29,13 @@ const InputAltText = ({ floatingStyles, onClose, refs, value, onChange, onSave, 
                 type="button"
                 className="yoopta-button yoo-image-bg-[#1183ff] yoo-image-text-[#fff] yoo-image-text-sm yoo-image-font-medium yoo-image-py-[5px] yoo-image-px-[10px] yoo-image-rounded-md yoo-image-shadow-sm disabled:yoo-image-opacity-50"
                 disabled={!value}
-                onClick={onSave}
-              >
+                onClick={onSave}>
                 Update
               </button>
               <button
                 type="button"
                 className="yoopta-button yoo-image-ml-2 yoo-image-bg-[#f4f4f5] yoo-image-text-[#000] yoo-image-text-sm yoo-image-font-medium yoo-image-py-[5px] yoo-image-px-[10px] yoo-image-rounded-md yoo-image-shadow-sm disabled:yoo-image-opacity-50"
-                onClick={onDelete}
-              >
+                onClick={onDelete}>
                 Delete
               </button>
             </div>

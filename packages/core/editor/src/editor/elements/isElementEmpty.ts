@@ -7,7 +7,11 @@ export type EmptyBlockElement = {
   path: Path;
 };
 
-export function isElementEmpty(editor: YooEditor, blockId: string, element: EmptyBlockElement): boolean | undefined {
+export function isElementEmpty(
+  editor: YooEditor,
+  blockId: string,
+  element: EmptyBlockElement,
+): boolean | undefined {
   const block = editor.children[blockId];
 
   if (!block) {

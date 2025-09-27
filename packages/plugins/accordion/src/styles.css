@@ -1,17 +1,17 @@
 @tailwind utilities;
 
 .yoopta-accordion-list {
-  @apply yoo-accordion-p-0 yoo-accordion-m-0 yoo-accordion-my-2
+  @apply yoo-accordion-p-0 yoo-accordion-m-0 yoo-accordion-my-2;
 }
 
 .yoopta-accordion-list-item {
-  @apply yoo-accordion-border yoo-accordion-border-[#525252] yoo-accordion-bg-[#303030] yoo-accordion-rounded-none yoo-accordion-relative yoo-accordion-w-full
+  @apply yoo-accordion-border yoo-accordion-border-[#525252] yoo-accordion-bg-[#303030] yoo-accordion-rounded-none yoo-accordion-relative yoo-accordion-w-full;
 }
 
 .yoopta-accordion-list-item-heading {
-  @apply yoo-accordion-mb-0 yoo-accordion-relative yoo-accordion-w-full yoo-accordion-items-center yoo-accordion-border-0 yoo-accordion-rounded-none yoo-accordion-py-4 yoo-accordion-pr-8 yoo-accordion-cursor-pointer yoo-accordion-relative yoo-accordion-text-base yoo-accordion-font-medium
+  @apply yoo-accordion-mb-0 yoo-accordion-relative yoo-accordion-w-full yoo-accordion-items-center yoo-accordion-border-0 yoo-accordion-rounded-none yoo-accordion-py-4 yoo-accordion-pr-8 yoo-accordion-cursor-pointer yoo-accordion-relative yoo-accordion-text-base yoo-accordion-font-medium;
 }
 
 .yoopta-accordion-list-item-content {
-  @apply yoo-accordion-overflow-hidden yoo-accordion-text-sm
+  @apply yoo-accordion-overflow-hidden yoo-accordion-text-sm;
 }

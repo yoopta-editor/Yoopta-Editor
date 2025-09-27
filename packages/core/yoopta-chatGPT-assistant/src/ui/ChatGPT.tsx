@@ -61,7 +61,9 @@ const ChatGPTAssistant = ({
   const [inputMessage, setInputMessage] = useState('');
   const selectionRef = useRef<Selection | null>(rest?.selection || null);
 
-  const [menuProps, setMenuProps] = useState<MenuProps>(() => getDefaultMenuPropsState(rest?.style));
+  const [menuProps, setMenuProps] = useState<MenuProps>(() =>
+    getDefaultMenuPropsState(rest?.style),
+  );
   const chatContentRef = useRef<HTMLDivElement>(null);
 
   const lastSelectionRef = fromHook ? { current: rest?.selection } : selectionRef;
@@ -80,7 +82,8 @@ const ChatGPTAssistant = ({
     const selectionRect = getRectByCurrentSelection();
     const actionMenuHeight = chatContentRef.current!.clientHeight;
 
-    const showAtTop = selectionRect.top + selectionRect.height + actionMenuHeight > window.innerHeight;
+    const showAtTop =
+      selectionRect.top + selectionRect.height + actionMenuHeight > window.innerHeight;
 
     const parentPath = Path.parent(editor.selection.anchor.path);
     const [node] = Editor.node(editor, parentPath) || [];
@@ -142,7 +145,10 @@ const ChatGPTAssistant = ({
     const parentPath: Path = Path.parent(editor.selection.anchor.path);
     const selectionPoint: Point = { path: parentPath, offset: editor.selection.anchor.offset };
 
-    if (!Path.equals(selectionPoint.path, menuProps.point.path) || Point.isBefore(selectionPoint, menuProps.point)) {
+    if (
+      !Path.equals(selectionPoint.path, menuProps.point.path) ||
+      Point.isBefore(selectionPoint, menuProps.point)
+    ) {
       hideChatGPT();
     }
   }, [editor.selection, menuProps.point]);
@@ -195,7 +201,8 @@ const ChatGPTAssistant = ({
     const lastSelection = lastSelectionRef.current;
     if (!lastSelection) return null;
 
-    const [node] = Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
+    const [node] =
+      Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
     const { anchor, focus } = lastSelection;
     const string = Editor.string(editor, anchor.path);
 
@@ -225,10 +232,13 @@ const ChatGPTAssistant = ({
     if (!lastSelection) return null;
 
     const { anchor, focus } = lastSelection;
-    const [node] = Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
+    const [node] =
+      Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
 
     Transforms.delete(editor, { at: anchor.path, unit: 'block' });
-    Transforms.insertText(editor, message.content, { at: { path: focus.path, offset: focus.offset } });
+    Transforms.insertText(editor, message.content, {
+      at: { path: focus.path, offset: focus.offset },
+    });
 
     // if (node) {
     //   changeSelectedNodeElement(node as YooptaBaseElement<string>);

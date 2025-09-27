@@ -30,7 +30,10 @@ export function insertElementText<TElementKeys extends string, TElementProps>(
   }
 
   const block = editor.blocks[blockData.type];
-  const latestBlockElementPath = Array.from({ length: Object.keys(block.elements).length }, (_) => 0);
+  const latestBlockElementPath = Array.from(
+    { length: Object.keys(block.elements).length },
+    (_) => 0,
+  );
   let path = slate.selection || latestBlockElementPath;
 
   if (!path) {

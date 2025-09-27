@@ -43,7 +43,9 @@ export function deserializeListNodes(
 
       if (options.type === 'TodoList') {
         // check if the list item has a checkbox input or brackets `[]` in the text content
-        const checkbox = listItem.querySelector('input[type="checkbox"]') as HTMLInputElement | null;
+        const checkbox = listItem.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement | null;
         const checked = checkbox ? checkbox.checked : /\[\s*[xX]\s*\]/.test(textContent);
 
         blockData = {
@@ -114,7 +116,9 @@ export function deserializeListNodes(
         deserializedListBlocks.push(cleanedData);
       }
 
-      const nestedLists = Array.from(listItem.children).filter((el) => el.nodeName === 'UL' || el.nodeName === 'OL');
+      const nestedLists = Array.from(listItem.children).filter(
+        (el) => el.nodeName === 'UL' || el.nodeName === 'OL',
+      );
 
       // if the list item has nested lists, then parse them recursively by increasing the depth
       if (nestedLists.length > 0) {

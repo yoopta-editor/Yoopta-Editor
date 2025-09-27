@@ -66,7 +66,11 @@ const DEFAULT_OPTIONS: EmailTemplateOptions = {
   },
 };
 
-export function getEmail(editor: YooEditor, content: YooptaContentValue, opts?: EmailTemplateOptions): string {
+export function getEmail(
+  editor: YooEditor,
+  content: YooptaContentValue,
+  opts?: EmailTemplateOptions,
+): string {
   const options = deepMerge(DEFAULT_OPTIONS, opts || {});
   const blocks = Object.values(content)
     .filter((item) => {
@@ -86,7 +90,11 @@ export function getEmail(editor: YooEditor, content: YooptaContentValue, opts?: 
     if (plugin && plugin.parsers?.email?.serialize) {
       // @ts-ignore - fixme
       const innerContent = serializeTextNodes(blockData.value[0].children);
-      return plugin.parsers.email.serialize(blockData.value[0] as SlateElement, innerContent, blockData.meta);
+      return plugin.parsers.email.serialize(
+        blockData.value[0] as SlateElement,
+        innerContent,
+        blockData.meta,
+      );
     }
 
     return '';

@@ -10,7 +10,11 @@ export type YooptaMarkParams<TProps> = {
   render: (props: TProps) => JSX.Element;
 };
 
-export function createYooptaMark<TProps>({ type, hotkey, render }: YooptaMarkParams<TProps>): YooptaMark<TProps> {
+export function createYooptaMark<TProps>({
+  type,
+  hotkey,
+  render,
+}: YooptaMarkParams<TProps>): YooptaMark<TProps> {
   return {
     type,
     hotkey,

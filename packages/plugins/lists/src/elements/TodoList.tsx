@@ -19,11 +19,14 @@ const TodoListRender = ({ extendRender, ...props }: PluginElementRenderProps) =>
 
   return (
     <div
-      className={cn('yoopta-todo-list yoo-lists-group', `yoo-lists-text-${currentAlign}`, className)}
+      className={cn(
+        'yoopta-todo-list yoo-lists-group',
+        `yoo-lists-text-${currentAlign}`,
+        className,
+      )}
       data-checked={checked}
       {...htmlAttrs}
-      {...attributes}
-    >
+      {...attributes}>
       <button
         type="button"
         onClick={() =>
@@ -36,12 +39,13 @@ const TodoListRender = ({ extendRender, ...props }: PluginElementRenderProps) =>
           'yoopta-todo-list-checkbox',
           checked ? 'yoopta-todo-list-checkbox--checked' : 'yoopta-todo-list-checkbox--unchecked',
         )}
-        contentEditable={false}
-      >
+        contentEditable={false}>
         <Check
           className={cn(
             'yoopta-todo-list-checkbox-icon',
-            checked ? 'yoopta-todo-list-checkbox-icon--checked' : 'yoopta-todo-list-checkbox-icon--unchecked',
+            checked
+              ? 'yoopta-todo-list-checkbox-icon--checked'
+              : 'yoopta-todo-list-checkbox-icon--unchecked',
           )}
         />
         <input
@@ -57,8 +61,7 @@ const TodoListRender = ({ extendRender, ...props }: PluginElementRenderProps) =>
         className={cn('yoopta-todo-list-content', checked && 'yoopta-todo-list-content--checked')}
         style={{
           textDecoration: checked ? 'line-through' : 'none',
-        }}
-      >
+        }}>
         {children}
       </div>
     </div>

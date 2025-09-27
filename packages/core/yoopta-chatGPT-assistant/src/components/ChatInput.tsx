@@ -79,7 +79,11 @@ const ChatInput = ({
             className={s.textarea}
             rows={1}
           />
-          <button type="button" onClick={loading ? undefined : askChatGPT} disabled={loading} className={s.flight}>
+          <button
+            type="button"
+            onClick={loading ? undefined : askChatGPT}
+            disabled={loading}
+            className={s.flight}>
             {loading ? <Loader /> : <FlighIcon color="#fff" fill="#fff" />}
           </button>
         </div>

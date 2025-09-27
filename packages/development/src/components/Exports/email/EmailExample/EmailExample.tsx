@@ -4,7 +4,13 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import copy from 'copy-to-clipboard';
 import { EMAIL_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
@@ -94,7 +100,10 @@ type EmailFields = {
 };
 
 const EmailExample = () => {
-  const editor: YooptaEmailEditor = useMemo(() => createYooptaEmailEditor({ template: templateEmailOptions }), []);
+  const editor: YooptaEmailEditor = useMemo(
+    () => createYooptaEmailEditor({ template: templateEmailOptions }),
+    [],
+  );
   const [value, setValue] = useState<YooptaContentValue>(EMAIL_EDITOR_DEFAULT_VALUE);
   const [isMailModalOpen, setIsMailModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -172,8 +181,7 @@ const EmailExample = () => {
               href="https://github.com/Darginec05/Yoopta-Editor/tree/master/packages/core/email-builder"
               target="_blank"
               rel="noreferrer"
-              className="underline"
-            >
+              className="underline">
               @yoopta/email-builder
             </a>{' '}
           </code>{' '}
@@ -190,8 +198,7 @@ const EmailExample = () => {
             <a
               href="https://yoodocs.space/yoopta-editor/yoopta/email-builder-_hZvTkSNoI?v=1.0.0&lang=en"
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               Full Docs <ExternalLinkIcon size={16} className="ml-2" />
             </a>
           </Button>
@@ -203,14 +210,13 @@ const EmailExample = () => {
           <DialogHeader>
             <DialogTitle>Please fill in these fields to test</DialogTitle>
             <DialogDescription>
-              We use <b>Resend</b>, so you will need to get the <u>RESEND_API_KEY</u> for the test. You can create token
-              using{' '}
+              We use <b>Resend</b>, so you will need to get the <u>RESEND_API_KEY</u> for the test.
+              You can create token using{' '}
               <a
                 className="text-[#007aff] underline"
                 href="https://resend.com/api-keys"
                 target="_blank"
-                rel="noreferrer"
-              >
+                rel="noreferrer">
                 this link
               </a>
               . Then copy the <u>RESEND_API_KEY</u> and paste it in the field below.

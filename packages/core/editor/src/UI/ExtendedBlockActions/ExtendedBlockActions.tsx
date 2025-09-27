@@ -1,5 +1,13 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  inline,
+  autoUpdate,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import { ReactNode, useState } from 'react';
 import { BlockOptions } from '../BlockOptions/BlockOptions';
 import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
@@ -47,8 +55,7 @@ const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props
           isOpen
           onClose={() => setIsBlockOptionsOpen(false)}
           refs={blockOptionRefs}
-          style={blockOptionsStyle}
-        >
+          style={blockOptionsStyle}>
           {children}
         </BlockOptions>
       )}
@@ -59,8 +66,7 @@ const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props
         id={id}
         className={`yoopta-button yoopta-extended-block-actions ${className || ''}`}
         onClick={onDotsClick}
-        style={isBlockOptionsOpen ? { ...style, opacity: 1 } : style}
-      >
+        style={isBlockOptionsOpen ? { ...style, opacity: 1 } : style}>
         <DotsHorizontalIcon />
       </button>
     </>

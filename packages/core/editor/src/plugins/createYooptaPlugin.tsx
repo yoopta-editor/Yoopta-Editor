@@ -13,12 +13,17 @@ export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOpti
   };
   options?: Partial<PluginOptions<TOptions>>;
   elementProps?: {
-    [K in keyof TElementMap]?: (props: ExtractProps<TElementMap[K]>) => ExtractProps<TElementMap[K]>;
+    [K in keyof TElementMap]?: (
+      props: ExtractProps<TElementMap[K]>,
+    ) => ExtractProps<TElementMap[K]>;
   };
   events?: Partial<PluginEvents>;
 };
 
-export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOptions = Record<string, unknown>> {
+export class YooptaPlugin<
+  TElementMap extends Record<string, SlateElement>,
+  TOptions = Record<string, unknown>,
+> {
   private readonly plugin: Plugin<TElementMap, TOptions>;
   constructor(plugin: Plugin<TElementMap, TOptions>) {
     this.plugin = plugin;

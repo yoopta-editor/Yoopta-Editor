@@ -2,7 +2,13 @@ import { Elements, SlateElement, UI, YooEditor } from '@yoopta/editor';
 
 import { CSSProperties } from 'react';
 import { Editor, Element, Path, Transforms } from 'slate';
-import { TrashIcon, ArrowRightIcon, ArrowLeftIcon, MoveRightIcon, MoveLeftIcon } from 'lucide-react';
+import {
+  TrashIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  MoveRightIcon,
+  MoveLeftIcon,
+} from 'lucide-react';
 import { TableCommands } from '../commands';
 
 const { BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptions, BlockOptionsSeparator } = UI;
@@ -91,7 +97,10 @@ const TableColumnOptions = ({ editor, blockId, element, onClose, ...props }: Pro
     <BlockOptions {...props} onClose={onClose} actions={null}>
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button" onClick={insertColumnBefore}>
+          <button
+            type="button"
+            className="yoopta-block-options-button"
+            onClick={insertColumnBefore}>
             <ArrowLeftIcon className="yoopta-table-icons" />
             Insert left
           </button>

@@ -1,6 +1,15 @@
-import { useState, useLayoutEffect, useEffect, memo, forwardRef, useRef, CSSProperties } from 'react';
+import {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  memo,
+  forwardRef,
+  useRef,
+  CSSProperties,
+} from 'react';
 
-export const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+export const useIsomorphicLayoutEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const SPAN_STYLES: CSSProperties = {
   whiteSpace: 'pre-line',

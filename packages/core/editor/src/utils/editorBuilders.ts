@@ -90,7 +90,9 @@ export function buildBlockShortcuts(editor: YooEditor) {
 
   Object.values(editor.blocks).forEach((block) => {
     const hasShortcuts =
-      block.options && Array.isArray(block.options?.shortcuts) && block.options?.shortcuts.length > 0;
+      block.options &&
+      Array.isArray(block.options?.shortcuts) &&
+      block.options?.shortcuts.length > 0;
 
     if (hasShortcuts) {
       block.options?.shortcuts?.forEach((shortcut) => {

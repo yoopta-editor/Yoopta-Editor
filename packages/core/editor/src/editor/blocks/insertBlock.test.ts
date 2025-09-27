@@ -206,7 +206,12 @@ describe('insertBlock', () => {
   it('should handle editor with no current path', () => {
     editor.path = { current: null };
     editor.children = {
-      'existing-block': { id: 'existing-block', type: 'TestBlock', value: [], meta: { order: 0, depth: 0 } },
+      'existing-block': {
+        id: 'existing-block',
+        type: 'TestBlock',
+        value: [],
+        meta: { order: 0, depth: 0 },
+      },
     };
 
     const blockId = insertBlock(editor as YooEditor, 'TestBlock');

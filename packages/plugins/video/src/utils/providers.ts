@@ -27,7 +27,9 @@ export const getDailymotionId = (url: string) => {
 export const getWistiaId = (url: string) => {
   try {
     // Handle iframe embed URLs
-    const iframeMatch = url.match(/(?:https?:\/\/)?(?:fast\.)?wistia\.(?:com|net)\/embed\/iframe\/([a-zA-Z0-9]+)/);
+    const iframeMatch = url.match(
+      /(?:https?:\/\/)?(?:fast\.)?wistia\.(?:com|net)\/embed\/iframe\/([a-zA-Z0-9]+)/,
+    );
     if (iframeMatch) return iframeMatch[1];
 
     // Handle medias URLs

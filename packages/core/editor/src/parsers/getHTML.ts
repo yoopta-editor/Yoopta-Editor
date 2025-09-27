@@ -30,7 +30,10 @@ function serializeChildren(children, plugins, editor) {
 
         if (childPlugin && childPlugin.parsers?.html?.serialize) {
           // We don't pass block meta data to this because it's inline element inside block
-          innerHtml = childPlugin.parsers.html.serialize(child, serializeChildren(child.children, plugins, editor));
+          innerHtml = childPlugin.parsers.html.serialize(
+            child,
+            serializeChildren(child.children, plugins, editor),
+          );
           return innerHtml;
         }
       }
@@ -56,8 +59,16 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
     const plugin = editor.plugins[blockData.type];
 
     if (plugin && plugin.parsers?.html?.serialize) {
-      const content = serializeChildren((blockData.value[0] as SlateElement).children, editor.plugins, editor);
-      return plugin.parsers.html.serialize(blockData.value[0] as SlateElement, content, blockData.meta);
+      const content = serializeChildren(
+        (blockData.value[0] as SlateElement).children,
+        editor.plugins,
+        editor,
+      );
+      return plugin.parsers.html.serialize(
+        blockData.value[0] as SlateElement,
+        content,
+        blockData.meta,
+      );
     }
 
     return '';

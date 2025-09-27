@@ -3,7 +3,11 @@ import { ReactEditor } from 'slate-react';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { SlateElement, YooEditor } from '../types';
 
-export function getParentElementPath(editor: YooEditor, blockId: string, element: SlateElement): Path | undefined {
+export function getParentElementPath(
+  editor: YooEditor,
+  blockId: string,
+  element: SlateElement,
+): Path | undefined {
   const block = editor.children[blockId];
 
   if (!block) {

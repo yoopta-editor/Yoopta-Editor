@@ -48,8 +48,7 @@ const FileUploader = ({ accept = '', onClose, blockId, onSetLoading }: Props) =>
     <div className="yoo-file-user-select-none yoo-file-transition-bg yoo-file-duration-20 yoo-file-ease-in yoo-file-white-space-nowrap yoo-file-rounded-[4px] yoo-file-h-[32px] yoo-file-px-[12px] yoo-file-border yoo-file-border-solid yoo-file-border-[rgba(55,53,47,0.16)] yoo-file-w-full yoo-file-cursor-pointer">
       <label
         htmlFor="file-uploader"
-        className="yoo-file-text-[14px] yoo-file-leading-[1.2] yoo-file-font-medium yoo-file-cursor-pointer yoo-file-w-full yoo-file-flex yoo-file-items-center yoo-file-justify-center yoo-file-h-full"
-      >
+        className="yoo-file-text-[14px] yoo-file-leading-[1.2] yoo-file-font-medium yoo-file-cursor-pointer yoo-file-w-full yoo-file-flex yoo-file-items-center yoo-file-justify-center yoo-file-h-full">
         <input
           type="file"
           id="file-uploader"

@@ -1,8 +1,18 @@
-import { Elements, PluginElementRenderProps, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
+import {
+  Elements,
+  PluginElementRenderProps,
+  useYooptaEditor,
+  useYooptaReadOnly,
+} from '@yoopta/editor';
 import { ImageIcon, DeleteIcon, Delete, Trash2 } from 'lucide-react';
 import { ChangeEvent, MouseEvent } from 'react';
 
-const CarouselItemImage = ({ element, children, attributes, blockId }: PluginElementRenderProps) => {
+const CarouselItemImage = ({
+  element,
+  children,
+  attributes,
+  blockId,
+}: PluginElementRenderProps) => {
   const editor = useYooptaEditor();
   const readOnly = useYooptaReadOnly();
 
@@ -48,8 +58,7 @@ const CarouselItemImage = ({ element, children, attributes, blockId }: PluginEle
         <label
           htmlFor={`${element.id}-uploader`}
           className="aspect-square w-full rounded-md object-cover cursor-pointer relative"
-          onClick={(e) => e.stopPropagation()}
-        >
+          onClick={(e) => e.stopPropagation()}>
           <input
             id={`${element.id}-uploader`}
             onChange={onUploadFile}
@@ -72,14 +81,20 @@ const CarouselItemImage = ({ element, children, attributes, blockId }: PluginEle
                 src={element.props.src}
               />
               {!readOnly && (
-                <button onClick={onDeleteImage} className="absolute top-1 right-1 z-10" type="button">
+                <button
+                  onClick={onDeleteImage}
+                  className="absolute top-1 right-1 z-10"
+                  type="button">
                   <Trash2 size={20} color="red" />
                 </button>
               )}
             </>
           ) : (
             <div className="aspect-square w-full h-full rounded-md bg-gray-200 relative">
-              <ImageIcon size={30} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              <ImageIcon
+                size={30}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              />
             </div>
           )}
         </label>

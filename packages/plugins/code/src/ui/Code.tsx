@@ -53,7 +53,11 @@ const CodeEditor = ({ blockId }: PluginCustomEditorRenderProps) => {
     if (isShiftEnter) {
       e.preventDefault();
       const defaultBlock = buildBlockData();
-      editor.insertBlock(defaultBlock.type, { at: block.meta.order + 1, focus: true, blockData: defaultBlock });
+      editor.insertBlock(defaultBlock.type, {
+        at: block.meta.order + 1,
+        focus: true,
+        blockData: defaultBlock,
+      });
       return;
     }
   };
@@ -63,8 +67,7 @@ const CodeEditor = ({ blockId }: PluginCustomEditorRenderProps) => {
       data-element-type="code"
       data-custom-editor
       className="yoo-code-rounded-md yoo-code-mt-2 yoo-code-p-0 yoopta-code"
-      onMouseDown={onClick}
-    >
+      onMouseDown={onClick}>
       <div contentEditable={false}>
         <CodeMirror
           value={code}

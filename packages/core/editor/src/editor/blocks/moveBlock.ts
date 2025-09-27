@@ -4,7 +4,9 @@ import { YooEditor, YooptaPathIndex } from '../types';
 export function moveBlock(editor: YooEditor, draggedBlockId: string, newPath: YooptaPathIndex) {
   const updatedPosition = newPath;
   const draggedBlock = editor.children[draggedBlockId];
-  const blockInNewPosition = Object.values(editor.children).find((item) => item.meta.order === updatedPosition);
+  const blockInNewPosition = Object.values(editor.children).find(
+    (item) => item.meta.order === updatedPosition,
+  );
 
   if (!draggedBlock || !blockInNewPosition) {
     console.warn('Invalid block ids for move operation');

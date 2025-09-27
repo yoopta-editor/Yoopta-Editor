@@ -4,7 +4,10 @@ import { generateId } from '../utils/generateId';
 
 // [TODO] - Move to @yoopta/utils or @yoopta/editor/utils
 // helpers for deserializing text nodes when you use custom parsers in your plugins
-export function deserializeTextNodes(editor: YooEditor, nodes: NodeListOf<ChildNode>): Descendant[] {
+export function deserializeTextNodes(
+  editor: YooEditor,
+  nodes: NodeListOf<ChildNode>,
+): Descendant[] {
   const deserializedNodes: Descendant[] = [];
 
   nodes.forEach((node) => {

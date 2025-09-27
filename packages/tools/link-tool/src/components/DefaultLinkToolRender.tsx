@@ -76,10 +76,11 @@ const DefaultLinkToolRender = (props: LinkToolRenderProps) => {
       <button
         type="button"
         className="yoopta-button yoopta-link-tool-label !yoo-link-tool-font-[500] yoo-link-tool-mt-2 !yoo-link-tool-mb-0 !yoo-link-tool-flex yoo-link-tool-justify-between yoo-link-tool-items-center yoo-link-tool-w-full"
-        onClick={() => setAdditionPropsOpen((p) => !p)}
-      >
+        onClick={() => setAdditionPropsOpen((p) => !p)}>
         Additional props
-        <ChevronUp style={{ transform: isAdditionalPropsOpen ? `rotate(180deg)` : `rotate(0deg)` }} />
+        <ChevronUp
+          style={{ transform: isAdditionalPropsOpen ? `rotate(180deg)` : `rotate(0deg)` }}
+        />
       </button>
       {isAdditionalPropsOpen && (
         <>
@@ -120,15 +121,13 @@ const DefaultLinkToolRender = (props: LinkToolRenderProps) => {
           type="button"
           className="yoopta-button yoo-link-tool-bg-[#1183ff] yoo-link-tool-text-[#fff] yoo-link-tool-text-sm yoo-link-tool-font-medium yoo-link-tool-py-[5px] yoo-link-tool-px-[10px] yoo-link-tool-rounded-md yoo-link-tool-shadow-sm disabled:yoo-link-tool-opacity-50"
           disabled={!link.url}
-          onClick={onSave}
-        >
+          onClick={onSave}>
           {props.link.url ? 'Update' : 'Add'}
         </button>
         <button
           type="button"
           className="yoopta-button yoo-link-tool-ml-2 yoo-link-tool-bg-[#f4f4f5] yoo-link-tool-text-[#000] yoo-link-tool-text-sm yoo-link-tool-font-medium yoo-link-tool-py-[5px] yoo-link-tool-px-[10px] yoo-link-tool-rounded-md yoo-link-tool-shadow-sm disabled:yoo-link-tool-opacity-50"
-          onClick={onDelete}
-        >
+          onClick={onDelete}>
           Delete link
         </button>
       </div>

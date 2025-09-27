@@ -41,7 +41,8 @@ const addLink = (editor: YooEditor, slate: SlateEditor, url: string) => {
   const isCollapsed = selection && Range.isCollapsed(selection);
 
   // Should be moved to the Link plugin
-  const defaultLinkProps: Record<string, unknown> | undefined = editor.plugins?.LinkPlugin?.elements?.link?.props;
+  const defaultLinkProps: Record<string, unknown> | undefined =
+    editor.plugins?.LinkPlugin?.elements?.link?.props;
 
   const link = {
     type: 'link',

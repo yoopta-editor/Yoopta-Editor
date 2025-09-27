@@ -94,7 +94,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -118,7 +123,9 @@ const TOOLS = {
 const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 function WithEditorOperations() {
-  const [value, setValue] = useState<YooptaContentValue>(WITH_OPERATIONS_VALUE as YooptaContentValue);
+  const [value, setValue] = useState<YooptaContentValue>(
+    WITH_OPERATIONS_VALUE as YooptaContentValue,
+  );
   const editor = useMemo(() => createYooptaEditor(), []);
   const selectionRef = useRef(null);
 
@@ -137,8 +144,7 @@ function WithEditorOperations() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex flex-col items-center justify-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <FixedToolbar editor={editor} />
       <YooptaEditor
         editor={editor}
@@ -174,20 +180,23 @@ const FixedToolbar = ({ editor }: Props) => {
                 Three headings inserted
                 <code className="my-4">
                   <pre className="bg-[#0d1116] text-[#fff] p-2">
-                    HeadingOneCommands.insertHeadingOne(editor, {'{'} at: 0, text: 'First heading' {'}'});
+                    HeadingOneCommands.insertHeadingOne(editor, {'{'} at: 0, text: 'First heading'{' '}
+                    {'}'});
                     <br />
-                    HeadingTwoCommands.insertHeadingTwo(editor, {'{'} at: 1, text: 'Second heading' {'}'});
+                    HeadingTwoCommands.insertHeadingTwo(editor, {'{'} at: 1, text: 'Second heading'{' '}
+                    {'}'});
                     <br />
-                    HeadingThreeCommands.insertHeadingThree(editor, {'{'} at: 2, text: 'Third heading' {'}'});
+                    HeadingThreeCommands.insertHeadingThree(editor, {'{'} at: 2, text: 'Third
+                    heading' {'}'});
                   </pre>
                 </code>
                 Try to undo (ctrl+z) to see the effect.
               </p>,
             );
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
-          Call three operations without <code>batchOperations</code> and then run <code>undo (ctrl+z)</code>
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
+          Call three operations without <code>batchOperations</code> and then run{' '}
+          <code>undo (ctrl+z)</code>
         </button>
         <button
           type="button"
@@ -205,12 +214,15 @@ const FixedToolbar = ({ editor }: Props) => {
                   <pre className="bg-[#0d1116] text-[#fff] p-2 rounded-[4px]">
                     editor.batchOperations(() ={'>'} {'{'}
                     <br />
-                    &nbsp;&nbsp;HeadingOneCommands.insertHeadingOne(editor, {'{'} at: 0, text: 'First heading' {'}'});
+                    &nbsp;&nbsp;HeadingOneCommands.insertHeadingOne(editor, {'{'} at: 0, text:
+                    'First heading' {'}'});
                     <br />
-                    &nbsp;&nbsp;HeadingTwoCommands.insertHeadingTwo(editor, {'{'} at: 1, text: 'Second heading' {'}'}
+                    &nbsp;&nbsp;HeadingTwoCommands.insertHeadingTwo(editor, {'{'} at: 1, text:
+                    'Second heading' {'}'}
                     );
                     <br />
-                    &nbsp;&nbsp;HeadingThreeCommands.insertHeadingThree(editor, {'{'} at: 2, text: 'Third heading' {'}'}
+                    &nbsp;&nbsp;HeadingThreeCommands.insertHeadingThree(editor, {'{'} at: 2, text:
+                    'Third heading' {'}'}
                     );
                     <br />
                     {'}'});
@@ -220,9 +232,9 @@ const FixedToolbar = ({ editor }: Props) => {
               </p>,
             );
           }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
-          Call three operations inside <code>batchOperations</code> and then run <code>undo (ctrl+z)</code>
+          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
+          Call three operations inside <code>batchOperations</code> and then run{' '}
+          <code>undo (ctrl+z)</code>
         </button>
       </div>
       <div className="flex justify-center">
@@ -230,7 +242,9 @@ const FixedToolbar = ({ editor }: Props) => {
           type="button"
           onClick={() => {
             const ParagraphBlock = Blocks.buildBlockData({
-              value: [ParagraphCommands.buildParagraphElements(editor, { text: 'Inserted paragraph' })],
+              value: [
+                ParagraphCommands.buildParagraphElements(editor, { text: 'Inserted paragraph' }),
+              ],
             });
 
             editor.applyTransforms([
@@ -241,8 +255,7 @@ const FixedToolbar = ({ editor }: Props) => {
               },
             ]);
           }}
-          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
+          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
           applyTransforms with <code>insert_block</code> operation
         </button>
         <button
@@ -259,8 +272,7 @@ const FixedToolbar = ({ editor }: Props) => {
               ]);
             }
           }}
-          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
+          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
           applyTransforms with <code>delete_block</code> operation
         </button>
       </div>

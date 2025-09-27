@@ -1,4 +1,10 @@
-import { PluginElementRenderProps, useYooptaEditor, useYooptaReadOnly, Elements, Blocks } from '@yoopta/editor';
+import {
+  PluginElementRenderProps,
+  useYooptaEditor,
+  useYooptaReadOnly,
+  Elements,
+  Blocks,
+} from '@yoopta/editor';
 import { ChevronUp, Plus, TrashIcon } from 'lucide-react';
 import { Path } from 'slate';
 import { MouseEvent } from 'react';
@@ -65,7 +71,10 @@ export const AccordionItemHeading = ({ extendRender, ...props }: PluginElementRe
   };
 
   const parentPath = Elements.getParentElementPath(editor, blockId, element);
-  const nodeEl = Elements.getElement(editor, blockId, { path: parentPath, type: 'accordion-list-item' });
+  const nodeEl = Elements.getElement(editor, blockId, {
+    path: parentPath,
+    type: 'accordion-list-item',
+  });
   const isExpanded = nodeEl?.props?.isExpanded;
 
   if (extendRender) return extendRender(props);
@@ -74,8 +83,7 @@ export const AccordionItemHeading = ({ extendRender, ...props }: PluginElementRe
     <div
       {...attributes}
       onClick={isReadOnly ? onToggleExpand : undefined}
-      className="yoopta-accordion-list-item-heading yoo-accordion-group"
-    >
+      className="yoopta-accordion-list-item-heading yoo-accordion-group">
       <span className="yoo-accordion-break-words hover:yoo-accordion-underline">{children}</span>
       <div className="yoo-accordion-absolute yoo-accordion-right-[14px] yoo-accordion-z-10 yoo-accordion-top-1/2 -yoo-accordion-translate-y-1/2 yoo-accordion-flex yoo-accordion-gap-1 yoo-accordion-select-none">
         {!isReadOnly && (
@@ -84,21 +92,23 @@ export const AccordionItemHeading = ({ extendRender, ...props }: PluginElementRe
               type="button"
               contentEditable={false}
               onClick={onDeleteAccordionItem}
-              className="yoopta-button yoo-accordion-opacity-0 group-hover:yoo-accordion-opacity-100 yoo-accordion-transition-opacity"
-            >
+              className="yoopta-button yoo-accordion-opacity-0 group-hover:yoo-accordion-opacity-100 yoo-accordion-transition-opacity">
               <TrashIcon strokeWidth={1} size={16} color="#000" />
             </button>
             <button
               type="button"
               contentEditable={false}
               onClick={onAddAccordionItem}
-              className="yoopta-button yoo-accordion-mr-2 yoo-accordion-opacity-0 group-hover:yoo-accordion-opacity-100 yoo-accordion-transition-opacity"
-            >
+              className="yoopta-button yoo-accordion-mr-2 yoo-accordion-opacity-0 group-hover:yoo-accordion-opacity-100 yoo-accordion-transition-opacity">
               <Plus strokeWidth={1} size={20} color="#000" />
             </button>
           </>
         )}
-        <button type="button" contentEditable={false} onClick={onToggleExpand} className="yoopta-button">
+        <button
+          type="button"
+          contentEditable={false}
+          onClick={onToggleExpand}
+          className="yoopta-button">
           <ChevronUp
             strokeWidth={1}
             size={20}

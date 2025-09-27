@@ -31,8 +31,7 @@ export function Loom({ provider, attributes, children, width, height }: Provider
           position: 'relative',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         {isInViewport && (
           <iframe
             key={iframeKey}

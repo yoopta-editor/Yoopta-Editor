@@ -16,12 +16,20 @@ export type CodeCommands = {
   insertCode: (editor: YooEditor, options?: Partial<InsertCodeOptions>) => void;
   deleteCode: (editor: YooEditor, blockId: string) => void;
   updateCodeTheme: (editor: YooEditor, blockId: string, theme: CodeElementProps['theme']) => void;
-  updateCodeLanguage: (editor: YooEditor, blockId: string, language: CodeElementProps['language']) => void;
+  updateCodeLanguage: (
+    editor: YooEditor,
+    blockId: string,
+    language: CodeElementProps['language'],
+  ) => void;
 };
 
 export const CodeCommands: CodeCommands = {
   buildCodeElements: (editor: YooEditor, options = {}) => {
-    return { id: generateId(), type: 'code', children: [{ text: options?.text || '', props: options?.props }] };
+    return {
+      id: generateId(),
+      type: 'code',
+      children: [{ text: options?.text || '', props: options?.props }],
+    };
   },
   insertCode: (editor: YooEditor, options = {}) => {
     const { at, focus, text, props } = options;
@@ -35,11 +43,15 @@ export const CodeCommands: CodeCommands = {
   updateCodeTheme: (editor: YooEditor, blockId, theme) => {
     const block = editor.children[blockId];
     const element = block.value[0] as CodeElement;
-    Blocks.updateBlock(editor, blockId, { value: [{ ...element, props: { ...element.props, theme } }] });
+    Blocks.updateBlock(editor, blockId, {
+      value: [{ ...element, props: { ...element.props, theme } }],
+    });
   },
   updateCodeLanguage: (editor: YooEditor, blockId, language) => {
     const block = editor.children[blockId];
     const element = block.value[0] as CodeElement;
-    Blocks.updateBlock(editor, blockId, { value: [{ ...element, props: { ...element.props, language } }] });
+    Blocks.updateBlock(editor, blockId, {
+      value: [{ ...element, props: { ...element.props, language } }],
+    });
   },
 };

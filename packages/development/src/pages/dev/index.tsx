@@ -147,7 +147,9 @@ const BasicExample = () => {
 
   return (
     <>
-      <div className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center" ref={selectionRef}>
+      <div
+        className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center"
+        ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
         <YooptaEditor
           editor={editor}

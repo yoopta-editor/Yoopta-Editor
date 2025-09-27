@@ -60,9 +60,9 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
           depth * 20
         }px; text-align: ${align}; padding: .5rem .5rem .5rem 1rem; margin-top: .5rem; border-radius: .375rem; color: ${
           theme.color
-        }; border-left: ${theme.borderLeft || 0}; background-color: ${theme.backgroundColor}">${serializeTextNodes(
-          element.children,
-        )}</dl>`;
+        }; border-left: ${theme.borderLeft || 0}; background-color: ${
+          theme.backgroundColor
+        }">${serializeTextNodes(element.children)}</dl>`;
       },
     },
     markdown: {
@@ -88,9 +88,9 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
       depth * 20
     }px; text-align: ${align}; padding: .5rem .5rem .5rem 1rem; margin-top: .5rem; border-radius: .375rem; color: ${
           theme.color
-        }; border-left: ${theme.borderLeft || 0}; background-color: ${theme.backgroundColor};">${serializeTextNodes(
-          element.children,
-        )}
+        }; border-left: ${theme.borderLeft || 0}; background-color: ${
+          theme.backgroundColor
+        };">${serializeTextNodes(element.children)}
               </td>
             </tr>
         </tbody>

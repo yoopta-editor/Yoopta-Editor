@@ -16,7 +16,9 @@ export function mergePlugins(plugins) {
   const items = plugins
     .map((instance) => {
       const { childPlugin, ...componentProps } = instance.getPlugin;
-      return childPlugin ? [componentProps, { ...childPlugin.getPlugin, hasParent: true }] : componentProps;
+      return childPlugin
+        ? [componentProps, { ...childPlugin.getPlugin, hasParent: true }]
+        : componentProps;
     })
     .flat();
 
@@ -64,8 +66,7 @@ const YooptaRenderer = (props: Props) => {
               attributes={props.attributes}
               nodeType={props.element.nodeType}
               render={renderFn}
-              HTMLAttributes={plugin.options?.HTMLAttributes}
-            >
+              HTMLAttributes={plugin.options?.HTMLAttributes}>
               {props.children}
             </ElementWrapper>
           );

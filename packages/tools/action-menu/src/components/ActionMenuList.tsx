@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { DefaultActionMenuRender } from './DefaultActionMenuRender';
-import { useFloating, offset, flip, shift, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  autoUpdate,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import { Editor, Element, NodeEntry, Path, Transforms } from 'slate';
 import {
   YooptaBlockData,
@@ -17,7 +24,11 @@ import { buildActionMenuRenderProps, mapActionMenuItems } from './utils';
 
 const { Portal } = UI;
 
-const filterBy = (item: YooptaBlockData | YooptaBlock['options'], text: string, field: string): boolean => {
+const filterBy = (
+  item: YooptaBlockData | YooptaBlock['options'],
+  text: string,
+  field: string,
+): boolean => {
   if (!item || typeof item[field] === 'undefined') return false;
 
   const value = item[field];
@@ -49,7 +60,8 @@ const filterActionMenuItems = (block: YooptaBlock, searchText: string): boolean 
     const shortcutMatch = block.options && filterBy(block.options, term, 'shortcuts');
     if (shortcutMatch) return true;
 
-    const descriptionMatch = block.options?.display && filterBy(block.options.display, term, 'description');
+    const descriptionMatch =
+      block.options?.display && filterBy(block.options.display, term, 'description');
     if (descriptionMatch) return true;
 
     const aliasMatch = block.options?.aliases && filterBy(block.options, term, 'aliases');
@@ -95,7 +107,10 @@ const ActionMenuList = ({ items, render }: ActionMenuToolProps) => {
     duration: 100,
   });
 
-  const blockTypes: ActionMenuToolItem[] = mapActionMenuItems(editor, items || Object.keys(editor.blocks));
+  const blockTypes: ActionMenuToolItem[] = mapActionMenuItems(
+    editor,
+    items || Object.keys(editor.blocks),
+  );
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuToolItem>(blockTypes[0]);
   const [actions, setActions] = useState<ActionMenuToolItem[]>(blockTypes);
@@ -277,7 +292,9 @@ const ActionMenuList = ({ items, render }: ActionMenuToolProps) => {
       if (HOTKEYS.isEnter(event)) {
         event.preventDefault();
 
-        const selected = document.querySelector('[data-action-menu-item][aria-selected=true]') as HTMLElement;
+        const selected = document.querySelector(
+          '[data-action-menu-item][aria-selected=true]',
+        ) as HTMLElement;
         const type = selected?.dataset.actionMenuItemType;
         if (!type) return;
 

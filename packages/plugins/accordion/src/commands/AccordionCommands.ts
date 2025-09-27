@@ -18,7 +18,10 @@ type InsertAccordionOptions = AccordionElementOptions & {
 };
 
 export type AccordionCommands = {
-  buildAccordionElements: (editor: YooEditor, options?: Partial<AccordionElementOptions>) => AccordionListElement;
+  buildAccordionElements: (
+    editor: YooEditor,
+    options?: Partial<AccordionElementOptions>,
+  ) => AccordionListElement;
   insertAccordion: (editor: YooEditor, options?: Partial<InsertAccordionOptions>) => void;
   deleteAccordion: (editor: YooEditor, blockId: string) => void;
 };
@@ -28,7 +31,11 @@ export const AccordionCommands: AccordionCommands = {
     // take props from block.elements
     const { props = { isExpanded: false }, items = 1 } = options;
 
-    const accordionList: AccordionListElement = { id: generateId(), type: 'accordion-list', children: [] };
+    const accordionList: AccordionListElement = {
+      id: generateId(),
+      type: 'accordion-list',
+      children: [],
+    };
 
     for (let i = 0; i < items; i++) {
       const headingListItem: AccordionListItemHeadingElement = {

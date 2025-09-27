@@ -47,8 +47,12 @@ const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
                   url: url.href,
                 },
                 sizes: {
-                  width: el.getAttribute('width') ? parseInt(el.getAttribute('width') || '650', 10) : 650,
-                  height: el.getAttribute('height') ? parseInt(el.getAttribute('height') || '400', 10) : 400,
+                  width: el.getAttribute('width')
+                    ? parseInt(el.getAttribute('width') || '650', 10)
+                    : 650,
+                  height: el.getAttribute('height')
+                    ? parseInt(el.getAttribute('height') || '400', 10)
+                    : 400,
                 },
               },
             };
@@ -77,7 +81,9 @@ const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
           url = URL_BUILDERS[element.props.provider.type](element.props.provider.id);
         }
 
-        return `<div style="margin-left: ${depth * 20}px; display: flex; width: 100%; justify-content: ${justify}">
+        return `<div style="margin-left: ${
+          depth * 20
+        }px; display: flex; width: 100%; justify-content: ${justify}">
         <iframe data-meta-align="${align}" data-meta-depth="${depth}" src="${url}" width="${
           element.props.sizes.width
         }" height="${element.props.sizes.height}"></iframe> </div>`;

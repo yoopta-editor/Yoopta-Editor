@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { DefaultToolbarRender } from './DefaultToolbarRender';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  inline,
+  autoUpdate,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import throttle from 'lodash.throttle';
 import { useYooptaEditor, UI } from '@yoopta/editor';
 import { ToolbarToolProps } from '../types';
@@ -34,7 +42,11 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
     const domSelection = window.getSelection();
 
-    if (!domSelection || domSelection?.isCollapsed || domSelection?.anchorOffset === domSelection?.focusOffset) {
+    if (
+      !domSelection ||
+      domSelection?.isCollapsed ||
+      domSelection?.anchorOffset === domSelection?.focusOffset
+    ) {
       return setIsToolbarOpen(false);
     }
 
@@ -85,11 +97,16 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
     if (typeof editor.path.current === 'number') {
       isBottomDirection =
-        Math.abs(editor.path.current - lastSelectedBlockPath) <= Math.abs(editor.path.current - firstSelectedBlockPath);
+        Math.abs(editor.path.current - lastSelectedBlockPath) <=
+        Math.abs(editor.path.current - firstSelectedBlockPath);
     }
 
-    const selectedBlock = editor.getBlock({ at: isBottomDirection ? lastSelectedBlockPath : firstSelectedBlockPath });
-    const blockEl = editor.refElement?.querySelector(`[data-yoopta-block-id="${selectedBlock?.id}"]`);
+    const selectedBlock = editor.getBlock({
+      at: isBottomDirection ? lastSelectedBlockPath : firstSelectedBlockPath,
+    });
+    const blockEl = editor.refElement?.querySelector(
+      `[data-yoopta-block-id="${selectedBlock?.id}"]`,
+    );
     if (!blockEl) return;
 
     refs.setReference({
@@ -128,8 +145,16 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
 
     return (
       <Portal id="yoo-toolbar-portal">
-        <div style={style} ref={refs.setFloating} className="yoo-toolbar-z-[99]" onClick={(e) => e.stopPropagation()}>
-          <RenderComponent activeBlock={activeBlock} editor={editor} toggleHoldToolbar={toggleHoldToolbar} />
+        <div
+          style={style}
+          ref={refs.setFloating}
+          className="yoo-toolbar-z-[99]"
+          onClick={(e) => e.stopPropagation()}>
+          <RenderComponent
+            activeBlock={activeBlock}
+            editor={editor}
+            toggleHoldToolbar={toggleHoldToolbar}
+          />
         </div>
       </Portal>
     );
@@ -138,8 +163,16 @@ const Toolbar = ({ render }: ToolbarToolProps) => {
   return (
     // [TODO] - take care about SSR
     <Portal id="yoo-toolbar-portal">
-      <div style={style} ref={refs.setFloating} className="yoo-toolbar-z-[99]" onClick={(e) => e.stopPropagation()}>
-        <DefaultToolbarRender activeBlock={activeBlock} editor={editor} toggleHoldToolbar={toggleHoldToolbar} />
+      <div
+        style={style}
+        ref={refs.setFloating}
+        className="yoo-toolbar-z-[99]"
+        onClick={(e) => e.stopPropagation()}>
+        <DefaultToolbarRender
+          activeBlock={activeBlock}
+          editor={editor}
+          toggleHoldToolbar={toggleHoldToolbar}
+        />
       </div>
     </Portal>
   );

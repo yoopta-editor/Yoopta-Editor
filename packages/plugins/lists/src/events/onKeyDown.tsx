@@ -13,7 +13,11 @@ import { BulletedListElement, NumberedListElement, TodoListElement } from '../ty
 
 type ListNode = NumberedListElement | BulletedListElement | TodoListElement;
 
-export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, defaultBlock }: PluginEventHandlerOptions) {
+export function onKeyDown(
+  editor: YooEditor,
+  slate: SlateEditor,
+  { hotkeys, defaultBlock }: PluginEventHandlerOptions,
+) {
   return (event) => {
     Editor.withoutNormalizing(slate, () => {
       const block = findPluginBlockByPath(editor);
@@ -33,7 +37,10 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, defa
 
         const [todoListNode] = nodeEntry as [TodoListElement, Path];
         const checked = todoListNode.props?.checked || false;
-        Elements.updateElement(editor, block.id, { type: 'todo-list', props: { checked: !checked } });
+        Elements.updateElement(editor, block.id, {
+          type: 'todo-list',
+          props: { checked: !checked },
+        });
         return;
       }
 
@@ -66,7 +73,11 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, defa
 
             editor.batchOperations(() => {
               editor.deleteBlock({ blockId: block.id });
-              editor.insertBlock(defaultBlock.type, { at: currentOrder, focus: true, blockData: defaultBlock });
+              editor.insertBlock(defaultBlock.type, {
+                at: currentOrder,
+                focus: true,
+                blockData: defaultBlock,
+              });
             });
             return;
           }
@@ -87,7 +98,11 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, defa
             ],
           });
 
-          editor.insertBlock(prevListBlock.type, { at: block.meta.order, focus: false, blockData: prevListBlock });
+          editor.insertBlock(prevListBlock.type, {
+            at: block.meta.order,
+            focus: false,
+            blockData: prevListBlock,
+          });
           editor.setPath({ current: prevListBlock.meta.order + 1 });
           return;
         }
@@ -108,7 +123,11 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, defa
           ],
         });
 
-        editor.insertBlock(nextListBlock.type, { at: block.meta.order + 1, focus: true, blockData: nextListBlock });
+        editor.insertBlock(nextListBlock.type, {
+          at: block.meta.order + 1,
+          focus: true,
+          blockData: nextListBlock,
+        });
         return;
       }
     });

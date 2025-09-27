@@ -35,8 +35,7 @@ const EmbedUploader = ({ blockId, onClose }) => {
         type="button"
         className="yoopta-button yoo-image-user-select-none yoo-image-transition-bg yoo-image-duration-20 yoo-image-ease-in yoo-image-cursor-pointer yoo-image-flex yoo-image-items-center yoo-image-justify-center yoo-image-flex-shrink-0 yoo-image-white-space-nowrap yoo-image-h-[28px] yoo-image-rounded-[4px] yoo-image-shadow-[rgba(15,15,15,0.1)_0px_0px_0px_1px_inset,_rgba(15,15,15,0.1)_0px_1px_2px] yoo-image-bg-[rgb(35,131,226)] yoo-image-text-white yoo-image-fill-white yoo-image-leading-[1.2] yoo-image-px-[12px] yoo-image-text-[14px] yoo-image-font-medium yoo-image-w-full yoo-image-max-w-[300px] yoo-image-mx-auto yoo-image-m-[12px_0_6px] disabled:yoo-image-bg-[rgba(35,131,226,0.5)] disabled:yoo-image-cursor-not-allowed"
         disabled={isEmpty}
-        onClick={embed}
-      >
+        onClick={embed}>
         Embed image
       </button>
     </div>

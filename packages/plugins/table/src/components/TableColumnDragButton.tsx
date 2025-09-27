@@ -53,8 +53,7 @@ const TableColumnDragButton = ({ editor, blockId, tdElement }: TableRowProps) =>
         onClick={onClick}
         contentEditable={false}
         style={isTableColumnActionsOpen ? { opacity: 1 } : undefined}
-        className="yoopta-table-column-button"
-      >
+        className="yoopta-table-column-button">
         <DragIcon />
       </button>
     </>

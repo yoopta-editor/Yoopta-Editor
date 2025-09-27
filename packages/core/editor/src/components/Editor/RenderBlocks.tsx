@@ -50,7 +50,11 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     }
 
     blocks.push(
-      <Block key={blockId} block={block} blockId={blockId} onActiveDragHandleChange={setActiveDragHandleProps}>
+      <Block
+        key={blockId}
+        block={block}
+        blockId={blockId}
+        onActiveDragHandleChange={setActiveDragHandleProps}>
         <SlateEditorComponent
           key={blockId}
           type={block.type}
@@ -75,9 +79,11 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext disabled={isReadOnly} items={childrenKeys} strategy={verticalListSortingStrategy}>
+      onDragEnd={handleDragEnd}>
+      <SortableContext
+        disabled={isReadOnly}
+        items={childrenKeys}
+        strategy={verticalListSortingStrategy}>
         {blocks}
         <FloatingBlockActions editor={editor} dragHandleProps={dragHandleProps} />
       </SortableContext>

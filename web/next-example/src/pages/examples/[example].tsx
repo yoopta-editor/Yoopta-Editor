@@ -35,7 +35,9 @@ import { ClientOnly } from '@/components/ClientOnly/ClientOnly';
 import { CheckSourceCode } from '@/components/CheckSourceCode/CheckSourceCode';
 import dynamic from 'next/dynamic';
 
-const Sheet = dynamic(() => import('@/components/ui/sheet').then((mod) => mod.Sheet), { ssr: false });
+const Sheet = dynamic(() => import('@/components/ui/sheet').then((mod) => mod.Sheet), {
+  ssr: false,
+});
 
 export const EXAMPLES: Record<string, () => React.JSX.Element> = {
   withBaseFullSetup,

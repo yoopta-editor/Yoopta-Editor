@@ -20,12 +20,21 @@ export type VideoCommands = {
 export const VideoCommands: VideoCommands = {
   buildVideoElements: (editor: YooEditor, options = {}) => {
     const videoProps = { ...options.props, nodeType: 'void' };
-    return { id: generateId(), type: 'video', children: [{ text: '' }], props: videoProps as VideoElementProps };
+    return {
+      id: generateId(),
+      type: 'video',
+      children: [{ text: '' }],
+      props: videoProps as VideoElementProps,
+    };
   },
   insertVideo: (editor: YooEditor, options = {}) => {
     const { at, focus, props } = options;
     const video = VideoCommands.buildVideoElements(editor, { props });
-    const block = Blocks.buildBlockData({ value: [video], type: 'Video', meta: { align: 'center', depth: 0 } });
+    const block = Blocks.buildBlockData({
+      value: [video],
+      type: 'Video',
+      meta: { align: 'center', depth: 0 },
+    });
     Blocks.insertBlock(editor, block.type, { focus, at, blockData: block });
   },
   deleteVideo: (editor: YooEditor, blockId) => {

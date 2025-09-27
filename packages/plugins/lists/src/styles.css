@@ -2,25 +2,25 @@
 
 /* Numbered list */
 .yoopta-numbered-list {
-  @apply yoo-lists-ml-[10px] yoo-lists-items-center yoo-lists-pl-4 yoo-lists-space-x-1 yoo-lists-py-[2px] yoo-lists-text-[16px] yoo-lists-relative yoo-lists-leading-[28px]
+  @apply yoo-lists-ml-[10px] yoo-lists-items-center yoo-lists-pl-4 yoo-lists-space-x-1 yoo-lists-py-[2px] yoo-lists-text-[16px] yoo-lists-relative yoo-lists-leading-[28px];
 }
 
 .yoopta-numbered-list-count {
-  @apply yoo-lists-min-w-[10px] yoo-lists-w-auto yoo-lists-select-none yoo-lists-absolute yoo-lists-left-0 yoo-lists-top-[2px]
+  @apply yoo-lists-min-w-[10px] yoo-lists-w-auto yoo-lists-select-none yoo-lists-absolute yoo-lists-left-0 yoo-lists-top-[2px];
 }
 
 /* [TD] - take care about bullet and number vertical position */
 /* Bulleted list */
 .yoopta-bulleted-list {
-  @apply yoo-lists-ml-[10px] yoo-lists-items-center yoo-lists-pl-4 yoo-lists-space-x-1 yoo-lists-py-[2px] yoo-lists-text-[16px] yoo-lists-leading-7 yoo-lists-relative
+  @apply yoo-lists-ml-[10px] yoo-lists-items-center yoo-lists-pl-4 yoo-lists-space-x-1 yoo-lists-py-[2px] yoo-lists-text-[16px] yoo-lists-leading-7 yoo-lists-relative;
 }
 
 .yoopta-bulleted-list-bullet {
-  @apply yoo-lists-min-w-[10px] yoo-lists-w-auto yoo-lists-select-none yoo-lists-absolute yoo-lists-left-0 yoo-lists-top-[0px] yoo-lists-font-bold
+  @apply yoo-lists-min-w-[10px] yoo-lists-w-auto yoo-lists-select-none yoo-lists-absolute yoo-lists-left-0 yoo-lists-top-[0px] yoo-lists-font-bold;
 }
 
 .yoopta-bulleted-list-content {
-  @apply yoo-lists-ml-0
+  @apply yoo-lists-ml-0;
 }
 
 /* Todo list */

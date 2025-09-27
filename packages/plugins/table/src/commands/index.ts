@@ -1,4 +1,11 @@
-import { Blocks, Elements, generateId, SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import {
+  Blocks,
+  Elements,
+  generateId,
+  SlateElement,
+  YooEditor,
+  YooptaPathIndex,
+} from '@yoopta/editor';
 import { Editor, Element, Path, Span, Transforms } from 'slate';
 import { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
 
@@ -31,14 +38,25 @@ export type TableCommands = {
   moveTableColumn: (editor: YooEditor, blockId: string, options: MoveTableOptions) => void;
   insertTableColumn: (editor: YooEditor, blockId: string, options?: Options) => void;
   deleteTableColumn: (editor: YooEditor, blockId: string, options?: DeleteOptions) => void;
-  updateColumnWidth: (editor: YooEditor, blockId: string, columnIndex: number, width: number) => void;
+  updateColumnWidth: (
+    editor: YooEditor,
+    blockId: string,
+    columnIndex: number,
+    width: number,
+  ) => void;
   toggleHeaderRow: (editor: YooEditor, blockId: string) => void;
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
 };
 
 export const TableCommands: TableCommands = {
   buildTableElements: (editor: YooEditor, options?: InsertOptions) => {
-    const { rows = 3, columns = 3, columnWidth = 200, headerColumn = false, headerRow = false } = options || {};
+    const {
+      rows = 3,
+      columns = 3,
+      columnWidth = 200,
+      headerColumn = false,
+      headerRow = false,
+    } = options || {};
 
     const table: TableElement = {
       id: generateId(),

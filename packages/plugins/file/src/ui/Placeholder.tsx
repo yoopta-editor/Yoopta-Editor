@@ -26,14 +26,12 @@ const Placeholder = ({ attributes, children, blockId }) => {
     <div
       className="yoo-file-w-full yoo-file-user-select-none yoo-file-m-[20px_0_10px] yoo-file-relative yoo-file-flex"
       {...attributes}
-      contentEditable={false}
-    >
+      contentEditable={false}>
       <button
         type="button"
         className={`yoopta-button yoo-file-p-[12px_36px_12px_12px] yoo-file-flex yoo-file-items-center yoo-file-text-left yoo-file-w-full yoo-file-overflow-hidden yoo-file-rounded-[3px] yoo-file-text-[14px] yoo-file-text-[rgba(55,53,47,0.65)] yoo-file-relative yoo-file-cursor-pointer yoo-file-border-none yoo-file-bg-[#efefef] yoo-file-transition-[background-color_100ms_ease-in] hover:yoo-file-bg-[#e3e3e3]`}
         onClick={() => setIsUploaderOpen(true)}
-        ref={refs.setReference}
-      >
+        ref={refs.setReference}>
         {loading ? (
           <Loader className="yoo-file-mr-2 yoo-file-user-select-none" width={24} height={24} />
         ) : (

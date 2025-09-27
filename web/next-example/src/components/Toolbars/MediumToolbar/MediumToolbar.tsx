@@ -17,12 +17,16 @@ const MediumToolbar = (props: ToolbarRenderProps) => {
     <div>
       <div className={s.root} ref={toolbarRef}>
         <button type="button" className={s.button} onClick={() => editor.formats.bold.toggle()}>
-          <span style={editor.formats.bold.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }} className={s.item}>
+          <span
+            style={editor.formats.bold.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }}
+            className={s.item}>
             <BoldIcon />
           </span>
         </button>
         <button type="button" className={s.button} onClick={() => editor.formats.italic.toggle()}>
-          <span style={editor.formats.italic.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }} className={s.item}>
+          <span
+            style={editor.formats.italic.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }}
+            className={s.item}>
             <ItalicIcon />
           </span>
         </button>
@@ -43,8 +47,7 @@ const MediumToolbar = (props: ToolbarRenderProps) => {
           type="button"
           style={editor.blocks.HeadingOne.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }}
           className={s.button}
-          onClick={() => editor.toggleBlock('HeadingOne')}
-        >
+          onClick={() => editor.toggleBlock('HeadingOne')}>
           <span className={s.item}>
             <TitleIcon />
           </span>
@@ -53,8 +56,7 @@ const MediumToolbar = (props: ToolbarRenderProps) => {
           type="button"
           style={editor.blocks.HeadingTwo.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }}
           className={s.button}
-          onClick={() => editor.toggleBlock('HeadingTwo')}
-        >
+          onClick={() => editor.toggleBlock('HeadingTwo')}>
           <span className={s.item}>
             <SubtitleIcon />
           </span>
@@ -63,8 +65,7 @@ const MediumToolbar = (props: ToolbarRenderProps) => {
           type="button"
           className={s.button}
           style={editor.blocks.Blockquote.isActive() ? { color: '#b5e5a4' } : { color: '#fff' }}
-          onClick={() => editor.toggleBlock('Blockquote')}
-        >
+          onClick={() => editor.toggleBlock('Blockquote')}>
           <span className={s.item}>
             <BlockquoteIcon />
           </span>

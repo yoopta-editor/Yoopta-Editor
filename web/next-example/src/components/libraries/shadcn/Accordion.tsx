@@ -1,4 +1,9 @@
-import { Accordion, AccordionItem, AccordionContent, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionContent,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { AccordionListItemProps } from '@yoopta/accordion';
 import { PluginElementRenderProps } from '@yoopta/editor';
 

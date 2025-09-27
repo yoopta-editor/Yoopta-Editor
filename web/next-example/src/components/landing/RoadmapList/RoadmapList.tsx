@@ -20,8 +20,7 @@ export const RoadmapList = () => {
                 className="text-[#1f6feb] underline"
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://github.com/Darginec05/Yoopta-Editor/discussions/197"
-              >
+                href="https://github.com/Darginec05/Yoopta-Editor/discussions/197">
                 powerful plugins
               </a>
             </>
@@ -38,8 +37,7 @@ export const RoadmapList = () => {
               className="text-[#1f6feb] underline"
               href="https://yoopta.dev/examples/withEmailBuilder/email-builder"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               Open-Source Email Builder
             </a>
           }

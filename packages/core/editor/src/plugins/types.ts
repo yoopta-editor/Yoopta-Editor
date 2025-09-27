@@ -1,6 +1,12 @@
 import { HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { RenderElementProps as RenderSlateElementProps, RenderLeafProps } from 'slate-react';
-import { SlateEditor, SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaBlockData } from '../editor/types';
+import {
+  SlateEditor,
+  SlateElement,
+  YooEditor,
+  YooptaBlockBaseMeta,
+  YooptaBlockData,
+} from '../editor/types';
 import { EditorEventHandlers } from '../types/eventHandlers';
 import { HOTKEYS_TYPE } from '../utils/hotkeys';
 
@@ -78,7 +84,10 @@ export type PluginEvents = {
   onDestroy?: (editor: YooEditor, blockId: string) => void;
 } & EventHandlers;
 
-export type Plugin<TElementMap extends Record<string, SlateElement>, TPluginOptions = Record<string, unknown>> = {
+export type Plugin<
+  TElementMap extends Record<string, SlateElement>,
+  TPluginOptions = Record<string, unknown>,
+> = {
   type: string;
   customEditor?: (props: PluginCustomEditorRenderProps) => JSX.Element;
   extensions?: (slate: SlateEditor, editor: YooEditor, blockId: string) => SlateEditor;
@@ -107,7 +116,10 @@ export type PluginSerializeParser = (
 
 export type PluginDeserializeParser = {
   nodeNames: string[];
-  parse?: (el: HTMLElement, editor: YooEditor) => SlateElement<string, any> | YooptaBlockData[] | void;
+  parse?: (
+    el: HTMLElement,
+    editor: YooEditor,
+  ) => SlateElement<string, any> | YooptaBlockData[] | void;
 };
 
 export type LeafFormats<K extends string, V> = {
@@ -115,7 +127,10 @@ export type LeafFormats<K extends string, V> = {
 };
 
 export type ExtendedLeaf<K extends string, V> = RenderLeafProps['leaf'] & LeafFormats<K, V>;
-export type YooptaMarkProps<K extends string, V> = { children: RenderLeafProps['children']; leaf: ExtendedLeaf<K, V> };
+export type YooptaMarkProps<K extends string, V> = {
+  children: RenderLeafProps['children'];
+  leaf: ExtendedLeaf<K, V>;
+};
 
 export type ExtendedLeafProps<K extends string, V> = RenderLeafProps & {
   leaf: ExtendedLeaf<K, V>;

@@ -110,7 +110,8 @@ const Editor = ({
 
   const onBlur = (event: React.FocusEvent) => {
     const isInsideEditor =
-      editor.refElement?.contains(event.relatedTarget as Node) || editor.refElement?.contains(event.target as Node);
+      editor.refElement?.contains(event.relatedTarget as Node) ||
+      editor.refElement?.contains(event.target as Node);
 
     if (isInsideEditor || isReadOnly) return;
 
@@ -180,7 +181,8 @@ const Editor = ({
             const selectedBlocks = Paths.getSelectedPaths(editor);
 
             if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
-              const isAllBlocksSelected = selectedBlocks.length === Object.keys(editor.children).length;
+              const isAllBlocksSelected =
+                selectedBlocks.length === Object.keys(editor.children).length;
 
               selectedBlocks.forEach((index) => {
                 const blockId = Blocks.getBlock(editor, { at: index })?.id;
@@ -324,8 +326,7 @@ const Editor = ({
       onMouseDown={onMouseDown}
       onBlur={onBlur}
       onCopy={onCopy}
-      onCut={onCopy}
-    >
+      onCut={onCopy}>
       <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
       {selectionBoxRoot !== false && (
         <SelectionBox

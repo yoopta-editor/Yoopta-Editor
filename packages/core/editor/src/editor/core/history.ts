@@ -10,7 +10,10 @@ export type HistoryStack = {
 
 export type HistoryStackName = 'undos' | 'redos';
 
-export function inverseEditorOperation(editor: YooEditor, op: YooptaOperation): YooptaOperation | YooptaOperation[] {
+export function inverseEditorOperation(
+  editor: YooEditor,
+  op: YooptaOperation,
+): YooptaOperation | YooptaOperation[] {
   switch (op.type) {
     case 'insert_block':
       return {
@@ -58,7 +61,10 @@ export function inverseEditorOperation(editor: YooEditor, op: YooptaOperation): 
           toggledBlock: op.prevProperties.sourceBlock,
           toggledSlateValue: op.prevProperties.sourceSlateValue,
         },
-        prevProperties: { sourceBlock: op.properties.toggledBlock, sourceSlateValue: op.properties.toggledSlateValue },
+        prevProperties: {
+          sourceBlock: op.properties.toggledBlock,
+          sourceSlateValue: op.properties.toggledSlateValue,
+        },
       };
     }
 
@@ -192,7 +198,9 @@ export const YooptaHistory = {
 
       YooptaHistory.withoutSavingHistory(editor, () => {
         // [TODO] - ask Christopher Nolan to help with this
-        const inverseOps = batch.operations.flatMap((op) => inverseEditorOperation(editor, op)).reverse();
+        const inverseOps = batch.operations
+          .flatMap((op) => inverseEditorOperation(editor, op))
+          .reverse();
         editor.applyTransforms(inverseOps, { source: 'history' });
         editor.setPath(batch.path);
 

@@ -19,9 +19,12 @@ export const GithubSponsors = ({ sponsors }: Props) => {
               href={`https://github.com/${sponsor.username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-18 h-18 rounded-full shadow-lg m-2"
-            >
-              <img src={sponsor.avatar} alt={`${sponsor.username} avatar`} className="w-14 h-14 rounded-full" />
+              className="flex items-center justify-center w-18 h-18 rounded-full shadow-lg m-2">
+              <img
+                src={sponsor.avatar}
+                alt={`${sponsor.username} avatar`}
+                className="w-14 h-14 rounded-full"
+              />
             </a>
           ))}
         </div>
@@ -34,9 +37,12 @@ export const GithubSponsors = ({ sponsors }: Props) => {
               href={`https://github.com/${sponsor.username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-18 h-18 rounded-full shadow-lg m-2"
-            >
-              <img src={sponsor.avatar} alt={`${sponsor.username} avatar`} className="w-14 h-14 rounded-full" />
+              className="flex items-center justify-center w-18 h-18 rounded-full shadow-lg m-2">
+              <img
+                src={sponsor.avatar}
+                alt={`${sponsor.username} avatar`}
+                className="w-14 h-14 rounded-full"
+              />
             </a>
           ))}
         </div>
@@ -47,8 +53,7 @@ export const GithubSponsors = ({ sponsors }: Props) => {
           target="_blank"
           rel="noopener noreferrer"
           title="Become sponsor"
-          className="flex items-center justify-center w-18 h-18 bg-[#181c21] rounded-full shadow-lg m-2"
-        >
+          className="flex items-center justify-center w-18 h-18 bg-[#181c21] rounded-full shadow-lg m-2">
           <PlusIcon size={30} color="#1f6feb" className="w-14 h-14 rounded-full animate-pulse" />
         </a>
       </div>

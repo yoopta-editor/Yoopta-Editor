@@ -12,7 +12,8 @@ import copy from 'copy-to-clipboard';
 import { getCodeElementText } from '../utils/element';
 import { useState } from 'react';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } = UI_HELPERS;
+const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+  UI_HELPERS;
 
 type Props = {
   editor: YooEditor;
@@ -34,7 +35,9 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
     // We change it directly in the block because this plugin doesn't have Slate instance
     // because it's a plugin with custom editor
 
-    editor.updateBlock(block.id, { value: [{ ...element, props: { ...element.props, language } }] });
+    editor.updateBlock(block.id, {
+      value: [{ ...element, props: { ...element.props, language } }],
+    });
     // editor.applyChanges();
   };
 
@@ -47,7 +50,9 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions onClick={() => editor.setPath({ current: block.meta.order })} className="yoopta-code-options">
+    <ExtendedBlockActions
+      onClick={() => editor.setPath({ current: block.meta.order })}
+      className="yoopta-code-options">
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
@@ -63,8 +68,7 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
               .map((theme) => ({ value: theme, label: theme }))
               .sort((a, b) => a.label.localeCompare(b.label))}
             onChange={onChangeTheme}
-            value={element.props?.theme || 'VSCode'}
-          >
+            value={element.props?.theme || 'VSCode'}>
             <Trigger className="yoopta-block-options-button">
               <ThemeIcon className="yoo-code-w-4 yoo-code-h-4 yoo-code-mr-2" />
               Theme
@@ -81,8 +85,7 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
               }))
               .sort((a, b) => a.label.localeCompare(b.label))}
             onChange={onChangeLanguage}
-            value={element.props?.language || 'JavaScript'}
-          >
+            value={element.props?.language || 'JavaScript'}>
             <Trigger className="yoopta-block-options-button">
               <CodeIcon className="yoo-code-w-4 yoo-code-h-4 yoo-code-mr-2" />
               Language

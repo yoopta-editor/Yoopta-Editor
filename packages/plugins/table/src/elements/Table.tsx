@@ -3,7 +3,14 @@ import { TableBlockOptions } from '../components/TableBlockOptions';
 import { TableElement } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
-const Table = ({ attributes, children, blockId, element, HTMLAttributes, extendRender }: PluginElementRenderProps) => {
+const Table = ({
+  attributes,
+  children,
+  blockId,
+  element,
+  HTMLAttributes,
+  extendRender,
+}: PluginElementRenderProps) => {
   const editor = useYooptaEditor();
   const slate = editor.blockEditorsMap[blockId];
   const blockData = useBlockData(blockId);
@@ -20,10 +27,14 @@ const Table = ({ attributes, children, blockId, element, HTMLAttributes, extendR
 
   return (
     <div className={`yoopta-table-block ${className}`}>
-      <table {...htmlAttrs} className={`yoopta-table ${!!isSelecting ? ' yoopta-table-selecting' : ''}`}>
+      <table
+        {...htmlAttrs}
+        className={`yoopta-table ${!!isSelecting ? ' yoopta-table-selecting' : ''}`}>
         <tbody {...attributes}>{children}</tbody>
       </table>
-      {!isReadOnly && <TableBlockOptions block={blockData} editor={editor} table={element as TableElement} />}
+      {!isReadOnly && (
+        <TableBlockOptions block={blockData} editor={editor} table={element as TableElement} />
+      )}
     </div>
   );
 };

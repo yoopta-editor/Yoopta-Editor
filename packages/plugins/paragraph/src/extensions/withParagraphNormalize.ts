@@ -8,7 +8,9 @@ export function withParagraphNormalize(slate: SlateEditor, editor: YooEditor) {
     const [node, path] = entry;
 
     if (path.length === 0 && Editor.isEditor(node)) {
-      const paragraphElements = node.children.filter((child) => Element.isElement(child) && child.type === 'paragraph');
+      const paragraphElements = node.children.filter(
+        (child) => Element.isElement(child) && child.type === 'paragraph',
+      );
 
       if (paragraphElements.length > 1 && editor.path.current !== null) {
         const currentPath = editor.path.current;
@@ -44,7 +46,11 @@ export function withParagraphNormalize(slate: SlateEditor, editor: YooEditor) {
 
           for (let i = node.children.length - 1; i >= 0; i--) {
             const child = node.children[i];
-            if (Element.isElement(child) && child.type === 'paragraph' && i !== firstParagraphIndex) {
+            if (
+              Element.isElement(child) &&
+              child.type === 'paragraph' &&
+              i !== firstParagraphIndex
+            ) {
               Transforms.removeNodes(slate, { at: [i] });
             }
           }

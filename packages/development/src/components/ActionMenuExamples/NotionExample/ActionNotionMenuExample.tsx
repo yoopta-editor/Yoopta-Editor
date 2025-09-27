@@ -25,7 +25,11 @@ const ActionNotionMenuExample = (props: ActionMenuRenderProps) => {
               const icon = ICONS_SRC[item.type];
 
               return (
-                <button key={item.type} type="button" className={s.item} {...getItemProps(item.type)}>
+                <button
+                  key={item.type}
+                  type="button"
+                  className={s.item}
+                  {...getItemProps(item.type)}>
                   <div className={s.itemLeft}>
                     <img src={icon} className={s.leftImage} />
                   </div>
@@ -46,7 +50,11 @@ const ActionNotionMenuExample = (props: ActionMenuRenderProps) => {
               const icon = ICONS_SRC[item.type];
 
               return (
-                <button key={item.type} type="button" className={s.item} {...getItemProps(item.type)}>
+                <button
+                  key={item.type}
+                  type="button"
+                  className={s.item}
+                  {...getItemProps(item.type)}>
                   <div className={s.itemLeft}>
                     <img src={icon} className={s.leftImage} />
                   </div>

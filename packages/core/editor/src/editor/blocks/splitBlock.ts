@@ -99,7 +99,9 @@ function splitSlate(slateChildren, slateSelection) {
   function cleanNode(node) {
     if ('children' in node) {
       node.children = node.children.filter(
-        (child) => (child.text !== '' && child.text !== undefined) || (child.children && child.children.length > 0),
+        (child) =>
+          (child.text !== '' && child.text !== undefined) ||
+          (child.children && child.children.length > 0),
       );
       node.children.forEach(cleanNode);
     }

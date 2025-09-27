@@ -1,4 +1,11 @@
-import { Blocks, Elements, UI, useYooptaPluginOptions, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import {
+  Blocks,
+  Elements,
+  UI,
+  useYooptaPluginOptions,
+  YooEditor,
+  YooptaBlockData,
+} from '@yoopta/editor';
 import {
   RowSpacingIcon,
   SizeIcon,
@@ -23,7 +30,8 @@ const ALIGN_ICONS = {
   right: TextAlignRightIcon,
 };
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } = UI;
+const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+  UI;
 
 type Props = {
   editor: YooEditor;
@@ -108,7 +116,9 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
     const aligns = ['left', 'center', 'right'];
     if (!block) return;
 
-    const nextAlign = aligns[(aligns.indexOf(currentAlign) + 1) % aligns.length] as YooptaBlockData['meta']['align'];
+    const nextAlign = aligns[
+      (aligns.indexOf(currentAlign) + 1) % aligns.length
+    ] as YooptaBlockData['meta']['align'];
     Blocks.updateBlock(editor, block.id, { meta: { ...block.meta, align: nextAlign } });
   };
 
@@ -145,14 +155,20 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
   return (
     <ExtendedBlockActions
       onClick={() => editor.setPath({ current: block.meta.order })}
-      className="yoopta-image-options"
-    >
+      className="yoopta-image-options">
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button yoo-image-justify-between" onClick={onFit}>
+          <button
+            type="button"
+            className="yoopta-block-options-button yoo-image-justify-between"
+            onClick={onFit}>
             <span className="yoo-image-flex">
-              <RowSpacingIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+              <RowSpacingIcon
+                width={16}
+                height={16}
+                className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+              />
               Fit
             </span>
             {imageProps?.fit === 'contain' && (
@@ -161,9 +177,16 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button yoo-image-justify-between" onClick={onFill}>
+          <button
+            type="button"
+            className="yoopta-block-options-button yoo-image-justify-between"
+            onClick={onFill}>
             <span className="yoo-image-flex">
-              <WidthIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+              <WidthIcon
+                width={16}
+                height={16}
+                className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+              />
               Fill
             </span>
             {imageProps?.fit === 'fill' && (
@@ -172,9 +195,16 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button yoo-image-justify-between" onClick={onCover}>
+          <button
+            type="button"
+            className="yoopta-block-options-button yoo-image-justify-between"
+            onClick={onCover}>
             <span className="yoo-image-flex">
-              <SizeIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+              <SizeIcon
+                width={16}
+                height={16}
+                className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+              />
               Cover
             </span>
             {imageProps?.fit === 'cover' && (
@@ -201,9 +231,12 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
             type="button"
             className="yoopta-block-options-button"
             ref={refs.setReference}
-            onClick={() => setIsAltTextOpen(true)}
-          >
-            <TextIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+            onClick={() => setIsAltTextOpen(true)}>
+            <TextIcon
+              width={16}
+              height={16}
+              className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+            />
             Alt text
           </button>
         </BlockOptionsMenuItem>
@@ -211,8 +244,7 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
           <label
             htmlFor="image-uploader"
             className="yoo-image-rounded-sm yoo-image-relative hover:yoo-image-bg-[#37352f14] yoo-image-leading-[120%] yoo-image-px-2 yoo-image-py-1.5 yoo-image-mx-[4px] yoo-image-cursor-pointer yoo-image-w-full yoo-image-flex yoo-image-justify-start data-[disabled=true]:yoo-image-cursor-not-allowed data-[disabled=true]:yoo-image-pointer-events-none data-[disabled=true]:yoo-image-opacity-50"
-            data-disabled={loading}
-          >
+            data-disabled={loading}>
             <input
               type="file"
               accept={options.accept}
@@ -223,9 +255,17 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
               disabled={loading}
             />
             {loading ? (
-              <Loader className="yoo-image-mr-2 yoo-image-user-select-none" width={24} height={24} />
+              <Loader
+                className="yoo-image-mr-2 yoo-image-user-select-none"
+                width={24}
+                height={24}
+              />
             ) : (
-              <UpdateIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+              <UpdateIcon
+                width={16}
+                height={16}
+                className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+              />
             )}
             Replace image
           </label>
@@ -237,15 +277,22 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
           <button
             type="button"
             className="yoopta-button yoo-image-rounded-sm hover:yoo-image-bg-[#37352f14] yoo-image-leading-[120%] yoo-image-px-2 yoo-image-py-1.5 yoo-image-mx-[4px] yoo-image-cursor-pointer yoo-image-w-full yoo-image-flex yoo-image-justify-start"
-            onClick={onToggleAlign}
-          >
-            <AlignIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+            onClick={onToggleAlign}>
+            <AlignIcon
+              width={16}
+              height={16}
+              className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+            />
             Alignment
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
           <button type="button" className="yoopta-block-options-button" onClick={onDownload}>
-            <DownloadIcon width={16} height={16} className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2" />
+            <DownloadIcon
+              width={16}
+              height={16}
+              className="yoo-image-w-4 yoo-image-h-4 yoo-image-mr-2"
+            />
             Download
           </button>
         </BlockOptionsMenuItem>

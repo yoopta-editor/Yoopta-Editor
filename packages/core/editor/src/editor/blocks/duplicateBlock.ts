@@ -36,7 +36,8 @@ export function duplicateBlock(editor: YooEditor, options: DuplicateBlockOptions
   const duplicatedBlock = deepClone(originalBlock);
   duplicatedBlock.id = generateId();
   // [TEST]
-  duplicatedBlock.meta.order = Array.isArray(at) && typeof at === 'number' ? at : originalBlock.meta.order + 1;
+  duplicatedBlock.meta.order =
+    Array.isArray(at) && typeof at === 'number' ? at : originalBlock.meta.order + 1;
 
   operations.push({
     type: 'insert_block',

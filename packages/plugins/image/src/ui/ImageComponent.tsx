@@ -76,8 +76,7 @@ const ImageComponent = ({
     <div
       className={`yoopta-image-inner ${isZoomed ? 'yoopta-image--is-zoomed' : ''}`}
       data-layout={layout}
-      {...attributes}
-    >
+      {...attributes}>
       {src && (
         <img
           src={src}
@@ -101,8 +100,7 @@ const ImageComponent = ({
           <UI.Overlay
             onClick={handleImageClick}
             lockScroll
-            className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]"
-          >
+            className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]">
             <Fragment />
           </UI.Overlay>
         </UI.Portal>

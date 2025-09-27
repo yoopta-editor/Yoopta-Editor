@@ -28,7 +28,12 @@ function getSelectionPath(slate: SlateEditor, focusAt?: FocusAt): FocusAt {
 
 // [TODO] - update editor.path after focus
 export function focusBlock(editor: YooEditor, blockId: string, options: FocusBlockOptions = {}) {
-  const { focusAt, waitExecution = true, waitExecutionMs = 0, shouldUpdateBlockPath = true } = options;
+  const {
+    focusAt,
+    waitExecution = true,
+    waitExecutionMs = 0,
+    shouldUpdateBlockPath = true,
+  } = options;
 
   const focusBlockEditor = () => {
     const slate = options.slate || editor.blockEditorsMap[blockId];

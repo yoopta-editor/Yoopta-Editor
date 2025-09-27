@@ -21,8 +21,7 @@ const Loader = ({ className, width, height, children }: Props) => {
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="lucide lucide-loader-2 yoo-file-h-4 yoo-file-w-4 yoo-file-animate-spin"
-      >
+        className="lucide lucide-loader-2 yoo-file-h-4 yoo-file-w-4 yoo-file-animate-spin">
         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
       </svg>
     </div>

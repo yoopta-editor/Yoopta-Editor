@@ -1,6 +1,13 @@
 import { createDraft, finishDraft, isDraft, produce } from 'immer';
 import { buildSlateEditor } from '../../utils/buildSlate';
-import { SlateEditor, SlateElement, YooEditor, YooptaBlockData, YooptaContentValue, YooptaPath } from '../types';
+import {
+  SlateEditor,
+  SlateElement,
+  YooEditor,
+  YooptaBlockData,
+  YooptaContentValue,
+  YooptaPath,
+} from '../types';
 import { Editor, Operation, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -255,7 +262,10 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
 
       const nextSlate = buildSlateEditor(editor);
       nextSlate.children = properties.nextSlateValue;
-      editor.children[properties.nextBlock.id] = { ...properties.nextBlock, value: nextSlate.children };
+      editor.children[properties.nextBlock.id] = {
+        ...properties.nextBlock,
+        value: nextSlate.children,
+      };
       editor.blockEditorsMap[properties.nextBlock.id] = nextSlate;
 
       const splitSlate = editor.blockEditorsMap[op.prevProperties.originalBlock.id];
@@ -263,7 +273,10 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       editor.children[op.prevProperties.originalBlock.id].value = splitSlate.children;
 
       Object.values(editor.children).forEach((block) => {
-        if (block.meta.order >= properties.nextBlock.meta.order && block.id !== properties.nextBlock.id) {
+        if (
+          block.meta.order >= properties.nextBlock.meta.order &&
+          block.id !== properties.nextBlock.id
+        ) {
           if (isDraft(block)) {
             block.meta.order++;
           } else {
@@ -323,11 +336,17 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
         Object.values(editor.children).forEach((otherBlock) => {
           if (otherBlock.id !== prevProperties.id) {
             if (prevProperties.order < properties.order) {
-              if (otherBlock.meta.order > prevProperties.order && otherBlock.meta.order <= properties.order) {
+              if (
+                otherBlock.meta.order > prevProperties.order &&
+                otherBlock.meta.order <= properties.order
+              ) {
                 otherBlock.meta.order--;
               }
             } else {
-              if (otherBlock.meta.order < prevProperties.order && otherBlock.meta.order >= properties.order) {
+              if (
+                otherBlock.meta.order < prevProperties.order &&
+                otherBlock.meta.order >= properties.order
+              ) {
                 otherBlock.meta.order++;
               }
             }
@@ -385,7 +404,11 @@ export type ApplyTransformsOptions = {
 
 const MAX_HISTORY_LENGTH = 100;
 
-export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], options?: ApplyTransformsOptions): void {
+export function applyTransforms(
+  editor: YooEditor,
+  ops: YooptaOperation[],
+  options?: ApplyTransformsOptions,
+): void {
   editor.children = createDraft(editor.children);
   editor.path = createDraft(editor.path);
 
@@ -427,7 +450,10 @@ export function applyTransforms(editor: YooEditor, ops: YooptaOperation[], optio
   if (saveHistory) {
     const historyBatch = {
       operations: operations.filter(
-        (op) => op.type !== 'set_block_path' && op.type !== 'set_block_value' && op.type !== 'validate_block_paths',
+        (op) =>
+          op.type !== 'set_block_path' &&
+          op.type !== 'set_block_value' &&
+          op.type !== 'validate_block_paths',
       ),
       path: editor.path,
     };

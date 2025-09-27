@@ -11,7 +11,10 @@ type ParagraphInsertOptions = ParagraphElementOptions & {
 };
 
 export type ParagraphCommands = {
-  buildParagraphElements: (editor: YooEditor, options?: Partial<ParagraphElementOptions>) => ParagraphElement;
+  buildParagraphElements: (
+    editor: YooEditor,
+    options?: Partial<ParagraphElementOptions>,
+  ) => ParagraphElement;
   insertParagraph: (editor: YooEditor, options?: Partial<ParagraphInsertOptions>) => void;
   deleteParagraph: (editor: YooEditor, blockId: string) => void;
 };

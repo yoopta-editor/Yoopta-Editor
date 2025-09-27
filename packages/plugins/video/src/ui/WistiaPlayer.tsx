@@ -22,8 +22,7 @@ function WistiaPlayer({ videoId, children, attributes, width, height, ...other }
           position: 'relative',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         {isInViewport && (
           <iframe
             src={`https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true&videoHeight=${height}&videoWidth=${width}`}

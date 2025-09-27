@@ -1,5 +1,5 @@
 @tailwind utilities;
 
 .yoopta-mark-code {
-  @apply yoo-marks-bg-[#F2F2F2] yoo-marks-py-[3px] yoo-marks-px-[6px] yoo-marks-rounded yoo-marks-text-[75%]
+  @apply yoo-marks-bg-[#F2F2F2] yoo-marks-py-[3px] yoo-marks-px-[6px] yoo-marks-rounded yoo-marks-text-[75%];
 }

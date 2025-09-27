@@ -1,5 +1,17 @@
-import { Blocks, buildBlockData, Elements, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { CalloutElement, CalloutElementProps, CalloutPluginElementKeys, CalloutTheme } from '../types';
+import {
+  Blocks,
+  buildBlockData,
+  Elements,
+  generateId,
+  YooEditor,
+  YooptaPathIndex,
+} from '@yoopta/editor';
+import {
+  CalloutElement,
+  CalloutElementProps,
+  CalloutPluginElementKeys,
+  CalloutTheme,
+} from '../types';
 
 type CalloutElementOptions = {
   text?: string;
@@ -12,7 +24,10 @@ type InsertCalloutOptions = CalloutElementOptions & {
 };
 
 export type CalloutCommands = {
-  buildCalloutElements: (editor: YooEditor, options?: Partial<CalloutElementOptions>) => CalloutElement;
+  buildCalloutElements: (
+    editor: YooEditor,
+    options?: Partial<CalloutElementOptions>,
+  ) => CalloutElement;
   insertCallout: (editor: YooEditor, options?: Partial<InsertCalloutOptions>) => void;
   deleteCallout: (editor: YooEditor, blockId: string) => void;
   updateCalloutTheme: (editor: YooEditor, blockId: string, theme: CalloutTheme) => void;
@@ -20,7 +35,12 @@ export type CalloutCommands = {
 
 export const CalloutCommands: CalloutCommands = {
   buildCalloutElements: (editor, options = {}) => {
-    return { id: generateId(), type: 'callout', children: [{ text: options?.text || '' }], props: options.props };
+    return {
+      id: generateId(),
+      type: 'callout',
+      children: [{ text: options?.text || '' }],
+      props: options.props,
+    };
   },
   insertCallout: (editor, options = {}) => {
     const { at, focus, text, props } = options;

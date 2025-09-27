@@ -1,5 +1,13 @@
 import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
-import { useFloating, offset, flip, inline, shift, useTransitionStyles, autoUpdate } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  inline,
+  shift,
+  useTransitionStyles,
+  autoUpdate,
+} from '@floating-ui/react';
 import { useMemo, useState } from 'react';
 import { buildActionMenuRenderProps } from '../../UI/BlockOptions/utils';
 import { YooptaBlockData } from '../../editor/types';
@@ -22,10 +30,8 @@ export const useActionMenuToolRefs = ({ editor }) => {
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted: isMountedActionMenu, styles: actionMenuTransitionStyles } = useTransitionStyles(
-    actionMenuContext,
-    { duration: 100 },
-  );
+  const { isMounted: isMountedActionMenu, styles: actionMenuTransitionStyles } =
+    useTransitionStyles(actionMenuContext, { duration: 100 });
 
   const actionMenuStyles = { ...actionMenuFloatingStyles, ...actionMenuTransitionStyles };
   const onChangeActionMenuOpen = (state) => setIsActionMenuOpen(state);
@@ -83,12 +89,10 @@ export const useBlockOptionsRefs = () => {
     middleware: [inline(), flip(), shift(), offset()],
   });
 
-  const { isMounted: isBlockOptionsMounted, styles: blockOptionsTransitionStyles } = useTransitionStyles(
-    blockOptionsContext,
-    {
+  const { isMounted: isBlockOptionsMounted, styles: blockOptionsTransitionStyles } =
+    useTransitionStyles(blockOptionsContext, {
       duration: 100,
-    },
-  );
+    });
   const blockOptionsFloatingStyle = { ...blockOptionsStyles, ...blockOptionsTransitionStyles };
 
   return {

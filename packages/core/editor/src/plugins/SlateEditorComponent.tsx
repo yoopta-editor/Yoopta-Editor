@@ -14,7 +14,10 @@ import { deserializeHTML } from '../parsers/deserializeHTML';
 import { useEventHandlers, useSlateEditor } from './hooks';
 import { SlateElement } from '../editor/types';
 
-type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<TElementMap, TOptions> & {
+type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
+  TElementMap,
+  TOptions
+> & {
   id: string;
   marks?: YooptaMark<any>[];
   options: Plugin<TElementMap, TOptions>['options'];
@@ -62,7 +65,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       // @ts-ignore - fixme
       if (window.scheduler) {
         // @ts-ignore - fixme
-        window.scheduler.postTask(() => editor.updateBlock(id, { value }), { priority: 'background' });
+        window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
+          priority: 'background',
+        });
       } else {
         editor.updateBlock(id, { value });
       }
@@ -94,7 +99,12 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (!ElementComponent) return <DefaultElement {...props} attributes={attributes} />;
 
       return (
-        <ElementComponent {...props} attributes={attributes} blockId={id} HTMLAttributes={options?.HTMLAttributes} />
+        <ElementComponent
+          {...props}
+          attributes={attributes}
+          blockId={id}
+          HTMLAttributes={options?.HTMLAttributes}
+        />
       );
     },
     [elements],
@@ -211,7 +221,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
             }
 
             blocks.forEach((block, idx) => {
-              let insertBlockPath = shouldInsertAfterSelection ? insertPathIndex + idx + 1 : insertPathIndex + idx;
+              let insertBlockPath = shouldInsertAfterSelection
+                ? insertPathIndex + idx + 1
+                : insertPathIndex + idx;
               newPaths.push(insertBlockPath);
 
               const { type, ...blockData } = block;
@@ -326,8 +338,7 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
         editor={slate}
         initialValue={initialValue}
         onValueChange={onChange}
-        onSelectionChange={onSelectionChange}
-      >
+        onSelectionChange={onSelectionChange}>
         <Editable
           key={`editable-${id}`}
           renderElement={renderElement}

@@ -1,7 +1,10 @@
 import dynamic from 'next/dynamic';
 
 const EmailBuilderExample = dynamic(
-  () => import('@/components/EmailBuilderExample/EmailBuilderExample').then((mod) => mod.EmailBuilderExample),
+  () =>
+    import('@/components/EmailBuilderExample/EmailBuilderExample').then(
+      (mod) => mod.EmailBuilderExample,
+    ),
   { ssr: false },
 );
 

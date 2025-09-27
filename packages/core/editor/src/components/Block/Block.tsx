@@ -15,8 +15,16 @@ type BlockProps = {
 const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: BlockProps) => {
   const editor = useYooptaEditor();
 
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isOver, isDragging } =
-    useSortable({ id: blockId, disabled: editor.readOnly });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isOver,
+    isDragging,
+  } = useSortable({ id: blockId, disabled: editor.readOnly });
   const blockStyles = useBlockStyles(block, transform, transition, isDragging, isOver);
 
   const align = block.meta.align || 'left';
@@ -41,10 +49,11 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
       style={blockStyles}
       data-yoopta-block
       data-yoopta-block-id={blockId}
-      onMouseEnter={handleMouseEnter}
-    >
+      onMouseEnter={handleMouseEnter}>
       {children}
-      {!editor.readOnly && <div data-block-selected={isSelected} className="yoopta-selection-block" />}
+      {!editor.readOnly && (
+        <div data-block-selected={isSelected} className="yoopta-selection-block" />
+      )}
     </div>
   );
 });

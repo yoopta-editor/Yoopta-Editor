@@ -30,8 +30,7 @@ function LoomPlayer({ videoId, children, attributes, width, height, ...other }) 
           position: 'relative',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         {isInViewport && (
           <iframe
             key={iframeKey}

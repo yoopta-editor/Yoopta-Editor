@@ -14,7 +14,12 @@ const HeadingOneRender = ({ extendRender, ...props }: PluginElementRenderProps) 
   if (extendRender) return extendRender(props);
 
   return (
-    <h1 id={element.id} draggable={false} className={`yoopta-heading-one ${className}`} {...htmlAttrs} {...attributes}>
+    <h1
+      id={element.id}
+      draggable={false}
+      className={`yoopta-heading-one ${className}`}
+      {...htmlAttrs}
+      {...attributes}>
       {children}
     </h1>
   );

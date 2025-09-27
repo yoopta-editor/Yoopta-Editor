@@ -128,9 +128,18 @@ export type YooEditor = {
   batchOperations: (fn: () => void) => void;
 
   // events handlers
-  on: <K extends keyof YooptaEventsMap>(event: K, fn: (payload: YooptaEventsMap[K]) => void) => void;
-  once: <K extends keyof YooptaEventsMap>(event: K, fn: (payload: YooptaEventsMap[K]) => void) => void;
-  off: <K extends keyof YooptaEventsMap>(event: K, fn: (payload: YooptaEventsMap[K]) => void) => void;
+  on: <K extends keyof YooptaEventsMap>(
+    event: K,
+    fn: (payload: YooptaEventsMap[K]) => void,
+  ) => void;
+  once: <K extends keyof YooptaEventsMap>(
+    event: K,
+    fn: (payload: YooptaEventsMap[K]) => void,
+  ) => void;
+  off: <K extends keyof YooptaEventsMap>(
+    event: K,
+    fn: (payload: YooptaEventsMap[K]) => void,
+  ) => void;
   emit: <K extends keyof YooptaEventsMap>(event: K, payload: YooptaEventsMap[K]) => void;
 
   // focus handlers

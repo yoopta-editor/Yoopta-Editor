@@ -45,8 +45,7 @@ const EmbedLinkUploader = ({ blockId, onClose }) => {
         type="button"
         className="yoopta-button yoo-embed-user-select-none yoo-embed-transition-bg yoo-embed-duration-20 yoo-embed-ease-in yoo-embed-cursor-pointer yoo-embed-flex yoo-embed-items-center yoo-embed-justify-center yoo-embed-flex-shrink-0 yoo-embed-white-space-nowrap yoo-embed-h-[28px] yoo-embed-rounded-[4px] yoo-embed-shadow-[rgba(15,15,15,0.1)_0px_0px_0px_1px_inset,_rgba(15,15,15,0.1)_0px_1px_2px] yoo-embed-bg-[rgb(35,131,226)] yoo-embed-text-white yoo-embed-fill-white yoo-embed-leading-[1.2] yoo-embed-px-[12px] yoo-embed-text-[14px] yoo-embed-font-medium yoo-embed-w-full yoo-embed-max-w-[300px] yoo-embed-mx-auto yoo-embed-m-[12px_0_6px] disabled:yoo-embed-bg-[rgba(35,131,226,0.5)] disabled:yoo-embed-cursor-not-allowed"
         disabled={isEmpty}
-        onClick={embed}
-      >
+        onClick={embed}>
         Embed link
       </button>
     </div>

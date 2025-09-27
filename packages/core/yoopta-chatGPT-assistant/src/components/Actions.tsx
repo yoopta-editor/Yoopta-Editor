@@ -13,7 +13,11 @@ const Actions = ({ actions, onAction }: Props) => {
         <div className={s.group}>
           {actions.map((action) => {
             return (
-              <button key={action.name} type="button" className={s.item} onClick={() => onAction(action)}>
+              <button
+                key={action.name}
+                type="button"
+                className={s.item}
+                onClick={() => onAction(action)}>
                 {action.name}
               </button>
             );

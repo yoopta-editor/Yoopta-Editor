@@ -9,7 +9,15 @@ import {
 } from '@yoopta/editor';
 import { Copy, SquareArrowOutUpRight } from 'lucide-react';
 import { useState } from 'react';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  inline,
+  autoUpdate,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import { LinkElementProps } from '../types';
 import { Editor, Element, Transforms } from 'slate';
 
@@ -34,12 +42,15 @@ const LinkHoverPreview = ({ style, setFloating, element, setHoldLinkTool, blockI
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted: isLinkToolMounted, styles: linkToolTransitionStyles } = useTransitionStyles(context, {
-    duration: {
-      open: 100,
-      close: 100,
+  const { isMounted: isLinkToolMounted, styles: linkToolTransitionStyles } = useTransitionStyles(
+    context,
+    {
+      duration: {
+        open: 100,
+        close: 100,
+      },
     },
-  });
+  );
 
   const linkToolEditStyles = { ...linkToolStyles, ...linkToolTransitionStyles, maxWidth: 400 };
 
@@ -65,7 +76,8 @@ const LinkHoverPreview = ({ style, setFloating, element, setHoldLinkTool, blockI
 
     if (linkNodeEntry) {
       Transforms.unwrapNodes(slate, {
-        match: (n) => !Editor.isEditor(n) && Element.isElement(n) && (n as SlateElement).type === element.type,
+        match: (n) =>
+          !Editor.isEditor(n) && Element.isElement(n) && (n as SlateElement).type === element.type,
         at: path || linkNodeEntry?.[1],
       });
     }
@@ -80,8 +92,17 @@ const LinkHoverPreview = ({ style, setFloating, element, setHoldLinkTool, blockI
       {isLinkToolMounted && hasLinkTool && (
         <Portal id="yoopta-link-tool">
           <Overlay lockScroll className="yoo-link-z-[100]" onClick={onClose}>
-            <div ref={linkToolRefs.setFloating} style={linkToolEditStyles} onClick={(e) => e.stopPropagation()}>
-              <LinkTool editor={editor} link={element.props} onSave={onSave} onDelete={onDelete} withTitle={false} />
+            <div
+              ref={linkToolRefs.setFloating}
+              style={linkToolEditStyles}
+              onClick={(e) => e.stopPropagation()}>
+              <LinkTool
+                editor={editor}
+                link={element.props}
+                onSave={onSave}
+                onDelete={onDelete}
+                withTitle={false}
+              />
             </div>
           </Overlay>
         </Portal>
@@ -94,8 +115,7 @@ const LinkHoverPreview = ({ style, setFloating, element, setHoldLinkTool, blockI
           onClick={() => {
             navigator.clipboard.writeText(element.props.url);
           }}
-          className="yoopta-button"
-        >
+          className="yoopta-button">
           <Copy size={14} strokeWidth={1} />
         </button>
         <span className="yoopta-link-preview-separator" />
@@ -113,8 +133,7 @@ const LinkHoverPreview = ({ style, setFloating, element, setHoldLinkTool, blockI
 
             setHoldLinkTool((prev) => !prev);
             setIsEditLinkToolsOpen((prev) => !prev);
-          }}
-        >
+          }}>
           Edit
         </button>
       </div>

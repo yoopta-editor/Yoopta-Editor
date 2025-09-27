@@ -45,7 +45,12 @@ export type TableCommands = {
   moveTableColumn: (editor: YooEditor, blockId: string, options: MoveTableOptions) => void,
   insertTableColumn: (editor: YooEditor, blockId: string, options?: Options) => void,
   deleteTableColumn: (editor: YooEditor, blockId: string, options?: DeleteOptions) => void,
-  updateColumnWidth: (editor: YooEditor, blockId: string, columnIndex: number, width: number) => void,
+  updateColumnWidth: (
+    editor: YooEditor,
+    blockId: string,
+    columnIndex: number,
+    width: number,
+  ) => void,
   toggleHeaderRow: (editor: YooEditor, blockId: string) => void,
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void,
 };

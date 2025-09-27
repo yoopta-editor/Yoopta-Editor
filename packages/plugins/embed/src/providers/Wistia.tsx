@@ -23,8 +23,7 @@ function Wistia({ provider, attributes, children, width, height }: ProviderRende
           position: 'relative',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         {isInViewport && (
           <iframe
             src={`https://fast.wistia.net/embed/iframe/${provider.id}?videoFoam=false`}

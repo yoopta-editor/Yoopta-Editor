@@ -1,7 +1,10 @@
 import dynamic from 'next/dynamic';
 
 const MarkdownPreview = dynamic(
-  () => import('@/components/Exports/markdown/MarkdownPreview/MarkdownPreview').then((mod) => mod.MarkdownPreview),
+  () =>
+    import('@/components/Exports/markdown/MarkdownPreview/MarkdownPreview').then(
+      (mod) => mod.MarkdownPreview,
+    ),
   { ssr: false },
 );
 

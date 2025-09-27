@@ -79,7 +79,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -119,21 +124,18 @@ function WithCustomToolbar() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex justify-center flex-col items-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <div className="flex w-auto mb-4">
         <button
           className="relative mx-2 px-6 py-2 rounded text-white flex items-center"
           style={toolbars.notion ? { backgroundColor: '#007aff' } : { backgroundColor: '#64748b' }}
-          onClick={() => setToolbars({ medium: false, notion: true })}
-        >
+          onClick={() => setToolbars({ medium: false, notion: true })}>
           Switch to Notion toolbar
         </button>
         <button
           className="relative mx-2 px-6 py-2 rounded text-white flex items-center"
           style={toolbars.medium ? { backgroundColor: '#007aff' } : { backgroundColor: '#64748b' }}
-          onClick={() => setToolbars({ medium: true, notion: false })}
-        >
+          onClick={() => setToolbars({ medium: true, notion: false })}>
           Switch to Medium toolbar
           {/* {toolbars.medium && <CheckIcon size={15} className="absolute right-2 top-1/2 -translate-y-1/2" />} */}
         </button>

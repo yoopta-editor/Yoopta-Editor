@@ -1,4 +1,8 @@
-import YooptaEditor, { createYooptaEditor, PluginElementRenderProps, useBlockData } from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor,
+  PluginElementRenderProps,
+  useBlockData,
+} from '@yoopta/editor';
 
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
@@ -59,8 +63,7 @@ const getPlugins = () => [
               className="link-element-extended text-blue-500 hover:underline"
               href={element.props.url}
               target={element.props.target}
-              rel="noreferrer noopener"
-            >
+              rel="noreferrer noopener">
               {children}
             </a>
           );
@@ -72,8 +75,7 @@ const getPlugins = () => [
             className="link-element-extended text-blue-500 hover:underline cursor-pointer"
             href={element.props.url}
             target={element.props.target}
-            rel={element.props.rel}
-          >
+            rel={element.props.rel}>
             {children}
           </NextLink>
         );
@@ -157,7 +159,12 @@ const getPlugins = () => [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -187,8 +194,7 @@ function WithCustomRenders() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex justify-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <YooptaEditor
         editor={editor}
         plugins={getPlugins()}

@@ -59,7 +59,12 @@ export function deserialize(text) {
       }
     } else {
       // Otherwise, add the current line as a paragraph.
-      nodes.push({ id: generateId(), nodeType: 'block', type: 'paragraph', children: [{ text: line }] });
+      nodes.push({
+        id: generateId(),
+        nodeType: 'block',
+        type: 'paragraph',
+        children: [{ text: line }],
+      });
       currentList = null;
     }
   }

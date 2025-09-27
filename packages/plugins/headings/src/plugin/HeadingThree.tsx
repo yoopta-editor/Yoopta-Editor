@@ -19,8 +19,7 @@ const HeadingThreeRender = ({ extendRender, ...props }: PluginElementRenderProps
       draggable={false}
       className={`yoopta-heading-three ${className}`}
       {...htmlAttrs}
-      {...attributes}
-    >
+      {...attributes}>
       {children}
     </h3>
   );

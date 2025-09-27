@@ -99,8 +99,7 @@ const TableDataCell = ({
       colSpan={1}
       rowSpan={1}
       {...htmlAttrs}
-      className={className}
-    >
+      className={className}>
       <div className="yoopta-table-data-cell-content" {...attributes}>
         {children}
       </div>

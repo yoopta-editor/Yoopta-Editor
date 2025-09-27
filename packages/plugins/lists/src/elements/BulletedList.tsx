@@ -9,7 +9,10 @@ const BulletedListRender = ({ extendRender, ...props }: PluginElementRenderProps
   const alignClass = `yoopta-align-${currentAlign}`;
 
   return (
-    <div className={`yoopta-bulleted-list ${alignClass} ${className}`} {...htmlAttrs} {...attributes}>
+    <div
+      className={`yoopta-bulleted-list ${alignClass} ${className}`}
+      {...htmlAttrs}
+      {...attributes}>
       <span className="yoopta-bulleted-list-bullet" contentEditable={false}>
         •
       </span>

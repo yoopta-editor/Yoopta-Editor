@@ -27,8 +27,7 @@ const Overlay = ({ className, children, lockScroll = true, ...props }: Props) =>
       className={className}
       {...props}
       onClick={onClick}
-      onMouseDown={onMouseDown}
-    >
+      onMouseDown={onMouseDown}>
       {children}
     </FloatingOverlay>
   );

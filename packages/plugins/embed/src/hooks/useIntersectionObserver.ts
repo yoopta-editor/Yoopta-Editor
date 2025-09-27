@@ -23,7 +23,10 @@ export function useIntersectionObserver(
     if (hasNotIOSupport || frozen || !node) return;
 
     const observerParams = { threshold, root, rootMargin };
-    const observer = new IntersectionObserver(updateEntry as unknown as IntersectionObserverCallback, observerParams);
+    const observer = new IntersectionObserver(
+      updateEntry as unknown as IntersectionObserverCallback,
+      observerParams,
+    );
 
     observer.observe(node);
 

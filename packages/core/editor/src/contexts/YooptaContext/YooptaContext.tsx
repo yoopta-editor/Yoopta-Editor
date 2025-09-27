@@ -24,7 +24,9 @@ const YooptaContextProvider = ({ children, editorState }) => {
     editor: editorState.editor,
   };
 
-  return <YooptaContext.Provider value={contextValueRef.current}>{children}</YooptaContext.Provider>;
+  return (
+    <YooptaContext.Provider value={contextValueRef.current}>{children}</YooptaContext.Provider>
+  );
 };
 
 const useYooptaEditor = (): YooEditor => {
@@ -43,7 +45,9 @@ const useYooptaReadOnly = () => useYooptaEditor().readOnly;
 const useYooptaPluginOptions = <TOptions,>(pluginType: string): PluginOptions<TOptions> =>
   useYooptaEditor().plugins[pluginType]?.options as PluginOptions<TOptions>;
 
-type UseBlockSelectedProps = { blockId: string; at?: YooptaPathIndex } | { at: YooptaPathIndex; blockId?: string };
+type UseBlockSelectedProps =
+  | { blockId: string; at?: YooptaPathIndex }
+  | { at: YooptaPathIndex; blockId?: string };
 
 const useBlockSelected = ({ blockId, at }: UseBlockSelectedProps) => {
   const editor = useYooptaEditor();

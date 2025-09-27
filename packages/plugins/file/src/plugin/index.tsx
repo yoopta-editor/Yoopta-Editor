@@ -45,7 +45,9 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
         }" data-size="${element.props.size}" download="${
           element.props.name
         }" target="_blank" rel="noopener noreferrer">${
-          element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
+          element.props.format
+            ? `${element.props.name}.${element.props.format}`
+            : `${element.props.name}`
         }</a></div>`;
       },
       deserialize: {
@@ -102,7 +104,9 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
         }" data-size="${element.props.size}" download="${
           element.props.name
         }" target="_blank" rel="noopener noreferrer">${
-          element.props.format ? `${element.props.name}.${element.props.format}` : `${element.props.name}`
+          element.props.format
+            ? `${element.props.name}.${element.props.format}`
+            : `${element.props.name}`
         }</a></div>
                 </td>
               </tr>

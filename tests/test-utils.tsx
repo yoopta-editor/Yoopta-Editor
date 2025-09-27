@@ -4,7 +4,13 @@ import { createYooptaEditor } from '../packages/core/editor/src/editor';
 import { YooptaPlugin } from '../packages/core/editor/src/plugins';
 import { YooptaEditor, YooptaEditorProps } from '../packages/core/editor/src/YooptaEditor';
 import { Editor, Element, Transforms, Node, Descendant } from 'slate';
-import { YooEditor, SlateEditor, YooptaContentValue, YooptaBlockData, SlateElement } from '@yoopta/editor';
+import {
+  YooEditor,
+  SlateEditor,
+  YooptaContentValue,
+  YooptaBlockData,
+  SlateElement,
+} from '@yoopta/editor';
 import { vi } from 'vitest';
 
 export const InlinePlugin = new YooptaPlugin({
@@ -64,7 +70,12 @@ const PluginWithSeveralElements = new YooptaPlugin({
   },
 });
 
-export const TEST_PLUGIN_LIST = [InlinePlugin, DefaultParagraph, BlockPluginWithProps, PluginWithSeveralElements];
+export const TEST_PLUGIN_LIST = [
+  InlinePlugin,
+  DefaultParagraph,
+  BlockPluginWithProps,
+  PluginWithSeveralElements,
+];
 
 const DEFAULT_EDITOR_STATE: YooptaContentValue = {
   'aafd7597-1e9a-4c80-ab6c-88786595d72a': {

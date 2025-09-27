@@ -2,7 +2,15 @@ import TurnIcon from './icons/turn.svg';
 import { TrashIcon, CopyIcon, Link2Icon } from '@radix-ui/react-icons';
 import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
 import { CSSProperties, useState } from 'react';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  inline,
+  autoUpdate,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import copy from 'copy-to-clipboard';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { getRootBlockElement } from '../../utils/blockElements';
@@ -11,18 +19,21 @@ import { buildActionMenuRenderProps } from './utils';
 import { Overlay } from '../Overlay/Overlay';
 import { Portal } from '../Portal/Portal';
 
-const BlockOptionsMenuGroup = ({ children }) => <div className="yoopta-block-options-group">{children}</div>;
+const BlockOptionsMenuGroup = ({ children }) => (
+  <div className="yoopta-block-options-group">{children}</div>
+);
 
 const BlockOptionsMenuContent = ({ children }) => (
   <div
     onClick={(e) => e.stopPropagation()}
-    className="yoopta-block-options-menu-content data-[state=open]:yoo-editor-animate-in data-[state=closed]:yoo-editor-animate-out data-[state=closed]:yoo-editor-fade-out-0 data-[state=open]:yoo-editor-fade-in-0 data-[state=closed]:yoo-editor-zoom-out-95 data-[state=open]:yoo-editor-zoom-in-95 data-[side=bottom]:yoo-editor-slide-in-from-top-2 data-[side=left]:yoo-editor-slide-in-from-right-2 data-[side=right]:yoo-editor-slide-in-from-left-2 data-[side=top]:yoo-editor-slide-in-from-bottom-2"
-  >
+    className="yoopta-block-options-menu-content data-[state=open]:yoo-editor-animate-in data-[state=closed]:yoo-editor-animate-out data-[state=closed]:yoo-editor-fade-out-0 data-[state=open]:yoo-editor-fade-in-0 data-[state=closed]:yoo-editor-zoom-out-95 data-[state=open]:yoo-editor-zoom-in-95 data-[side=bottom]:yoo-editor-slide-in-from-top-2 data-[side=left]:yoo-editor-slide-in-from-right-2 data-[side=right]:yoo-editor-slide-in-from-left-2 data-[side=top]:yoo-editor-slide-in-from-bottom-2">
     {children}
   </div>
 );
 
-const BlockOptionsMenuItem = ({ children }) => <div className="yoopta-block-options-item">{children}</div>;
+const BlockOptionsMenuItem = ({ children }) => (
+  <div className="yoopta-block-options-item">{children}</div>
+);
 
 type BlockOptionsSeparatorProps = {
   className?: string;
@@ -43,7 +54,14 @@ export type BlockOptionsProps = {
 
 const DEFAULT_ACTIONS: BlockOptionsProps['actions'] = ['delete', 'duplicate', 'turnInto', 'copy'];
 
-const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS, children }: BlockOptionsProps) => {
+const BlockOptions = ({
+  isOpen,
+  onClose,
+  refs,
+  style,
+  actions = DEFAULT_ACTIONS,
+  children,
+}: BlockOptionsProps) => {
   const editor = useYooptaEditor();
   const tools = useYooptaTools();
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
@@ -59,9 +77,10 @@ const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS,
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted: isActionMenuMounted, styles: actionMenuTransitionStyles } = useTransitionStyles(context, {
-    duration: 100,
-  });
+  const { isMounted: isActionMenuMounted, styles: actionMenuTransitionStyles } =
+    useTransitionStyles(context, {
+      duration: 100,
+    });
 
   if (!isOpen) return null;
 
@@ -103,7 +122,11 @@ const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS,
     onClose();
   };
 
-  const actionMenuRenderProps = buildActionMenuRenderProps({ editor, view: 'small', onClose: onCloseActionMenu });
+  const actionMenuRenderProps = buildActionMenuRenderProps({
+    editor,
+    view: 'small',
+    onClose: onCloseActionMenu,
+  });
 
   return (
     // [TODO] - take care about SSR
@@ -120,34 +143,41 @@ const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS,
                   </button>
                 </BlockOptionsMenuItem>
                 <BlockOptionsMenuItem>
-                  <button type="button" className="yoopta-block-options-button" onClick={onDuplicate}>
+                  <button
+                    type="button"
+                    className="yoopta-block-options-button"
+                    onClick={onDuplicate}>
                     <CopyIcon className="yoo-editor-w-4 yoo-editor-h-4 yoo-editor-mr-2" />
                     Duplicate
                   </button>
                 </BlockOptionsMenuItem>
-                {!!ActionMenu && !isVoidElement && !editor.blocks[currentBlock?.type || '']?.hasCustomEditor && (
-                  <BlockOptionsMenuItem>
-                    {isActionMenuMounted && (
-                      <Portal id="yoo-block-options-portal">
-                        <Overlay lockScroll className="yoo-editor-z-[100]" onClick={() => setIsActionMenuOpen(false)}>
-                          <div style={actionMenuStyles} ref={actionMenuRefs.setFloating}>
-                            {/* @ts-ignore - fixme */}
-                            <ActionMenu {...actionMenuRenderProps} />
-                          </div>
-                        </Overlay>
-                      </Portal>
-                    )}
-                    <button
-                      type="button"
-                      className="yoopta-block-options-button"
-                      ref={actionMenuRefs.setReference}
-                      onClick={() => setIsActionMenuOpen((open) => !open)}
-                    >
-                      <TurnIcon className="yoo-editor-w-4 yoo-editor-h-4 yoo-editor-mr-2" />
-                      Turn into
-                    </button>
-                  </BlockOptionsMenuItem>
-                )}
+                {!!ActionMenu &&
+                  !isVoidElement &&
+                  !editor.blocks[currentBlock?.type || '']?.hasCustomEditor && (
+                    <BlockOptionsMenuItem>
+                      {isActionMenuMounted && (
+                        <Portal id="yoo-block-options-portal">
+                          <Overlay
+                            lockScroll
+                            className="yoo-editor-z-[100]"
+                            onClick={() => setIsActionMenuOpen(false)}>
+                            <div style={actionMenuStyles} ref={actionMenuRefs.setFloating}>
+                              {/* @ts-ignore - fixme */}
+                              <ActionMenu {...actionMenuRenderProps} />
+                            </div>
+                          </Overlay>
+                        </Portal>
+                      )}
+                      <button
+                        type="button"
+                        className="yoopta-block-options-button"
+                        ref={actionMenuRefs.setReference}
+                        onClick={() => setIsActionMenuOpen((open) => !open)}>
+                        <TurnIcon className="yoo-editor-w-4 yoo-editor-h-4 yoo-editor-mr-2" />
+                        Turn into
+                      </button>
+                    </BlockOptionsMenuItem>
+                  )}
                 <BlockOptionsMenuItem>
                   <button type="button" className="yoopta-block-options-button" onClick={onCopy}>
                     <Link2Icon className="yoo-editor-w-4 yoo-editor-h-4 yoo-editor-mr-2" />
@@ -164,4 +194,10 @@ const BlockOptions = ({ isOpen, onClose, refs, style, actions = DEFAULT_ACTIONS,
   );
 };
 
-export { BlockOptions, BlockOptionsMenuContent, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator };
+export {
+  BlockOptions,
+  BlockOptionsMenuContent,
+  BlockOptionsMenuGroup,
+  BlockOptionsMenuItem,
+  BlockOptionsSeparator,
+};

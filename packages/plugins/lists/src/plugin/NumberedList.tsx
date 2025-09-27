@@ -1,4 +1,9 @@
-import { YooptaPlugin, YooptaBlockData, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+import {
+  YooptaPlugin,
+  YooptaBlockData,
+  serializeTextNodes,
+  serializeTextNodesIntoMarkdown,
+} from '@yoopta/editor';
 import { NumberedListCommands } from '../commands';
 import { NumberedListRender } from '../elements/NumberedList';
 import { onKeyDown } from '../events/onKeyDown';
@@ -32,10 +37,15 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
         nodeNames: ['OL'],
         parse(el, editor) {
           if (el.nodeName === 'OL') {
-            const align = (el.getAttribute('data-meta-align') || 'left') as YooptaBlockData['meta']['align'];
+            const align = (el.getAttribute('data-meta-align') ||
+              'left') as YooptaBlockData['meta']['align'];
             const depth = parseInt(el.getAttribute('data-meta-depth') || '0', 10);
 
-            const deserializedList = deserializeListNodes(editor, el, { type: 'NumberedList', depth, align });
+            const deserializedList = deserializeListNodes(editor, el, {
+              type: 'NumberedList',
+              depth,
+              align,
+            });
             if (deserializedList.length > 0) {
               return deserializedList;
             }

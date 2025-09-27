@@ -35,7 +35,10 @@ export function createElement<TElementKeys extends string, TElementProps>(
   Editor.withoutNormalizing(slate, () => {
     const block = editor.blocks[blockData.type];
     const blockElement = block.elements[element.type];
-    const nodeElement = buildBlockElement({ type: element.type, props: { ...blockElement.props, ...element.props } });
+    const nodeElement = buildBlockElement({
+      type: element.type,
+      props: { ...blockElement.props, ...element.props },
+    });
 
     const elementTypes = Object.keys(block.elements);
 
@@ -48,7 +51,9 @@ export function createElement<TElementKeys extends string, TElementProps>(
         if (Array.isArray(blockElement.children) && blockElement.children.length > 0) {
           blockElement.children.forEach((childElementType) => {
             const childElement = block.elements[childElementType];
-            childrenElements.push(buildBlockElement({ type: childElementType, props: childElement.props }));
+            childrenElements.push(
+              buildBlockElement({ type: childElementType, props: childElement.props }),
+            );
           });
         }
       }

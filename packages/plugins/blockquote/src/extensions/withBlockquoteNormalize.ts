@@ -42,7 +42,11 @@ export function withBlockquoteNormalize(slate: SlateEditor, editor: YooEditor) {
 
         for (let i = node.children.length - 1; i >= 0; i--) {
           const child = node.children[i];
-          if (Element.isElement(child) && child.type === 'blockquote' && i !== firstBlockquoteIndex) {
+          if (
+            Element.isElement(child) &&
+            child.type === 'blockquote' &&
+            i !== firstBlockquoteIndex
+          ) {
             Transforms.removeNodes(slate, { at: [i] });
           }
         }

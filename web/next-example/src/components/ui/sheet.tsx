@@ -54,23 +54,23 @@ interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}
 
-const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Content>, SheetContentProps>(
-  ({ side = 'right', className, children, onOpenChange, ...props }, ref) => (
-    <SheetPortal>
-      {/* <SheetOverlay /> */}
-      <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
-        {children}
-        <SheetPrimitive.Close
-          onClick={onOpenChange}
-          className="opacity-70 absolute right-4 top-4 rounded-sm lg:hidden ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-        >
-          <Cross2Icon className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
-    </SheetPortal>
-  ),
-);
+const SheetContent = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Content>,
+  SheetContentProps
+>(({ side = 'right', className, children, onOpenChange, ...props }, ref) => (
+  <SheetPortal>
+    {/* <SheetOverlay /> */}
+    <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
+      {children}
+      <SheetPrimitive.Close
+        onClick={onOpenChange}
+        className="opacity-70 absolute right-4 top-4 rounded-sm lg:hidden ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        <Cross2Icon className="h-4 w-4" />
+        <span className="sr-only">Close</span>
+      </SheetPrimitive.Close>
+    </SheetPrimitive.Content>
+  </SheetPortal>
+));
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
 const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -79,7 +79,10 @@ const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 SheetHeader.displayName = 'SheetHeader';
 
 const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)} {...props} />
+  <div
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
+    {...props}
+  />
 );
 SheetFooter.displayName = 'SheetFooter';
 
@@ -87,7 +90,11 @@ const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title ref={ref} className={cn('text-lg font-semibold text-foreground', className)} {...props} />
+  <SheetPrimitive.Title
+    ref={ref}
+    className={cn('text-lg font-semibold text-foreground', className)}
+    {...props}
+  />
 ));
 SheetTitle.displayName = SheetPrimitive.Title.displayName;
 
@@ -95,7 +102,11 @@ const SheetDescription = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Description ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+  <SheetPrimitive.Description
+    ref={ref}
+    className={cn('text-sm text-muted-foreground', className)}
+    {...props}
+  />
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
@@ -151,8 +162,7 @@ const Sheet = ({ items, path, title, description }: SheetProps) => {
                   href="https://github.com/Darginec05/Yoopta-Editor/issues/new?assignees=&labels=Example+Request&projects=&template=example_request.yml&title=%5BExample+Request%5D%3A+"
                   target="_blank"
                   rel="noopener"
-                  className="text-sky-500"
-                >
+                  className="text-sky-500">
                   Report it in repo
                 </a>
               </SheetDescription>
@@ -169,8 +179,9 @@ const Sheet = ({ items, path, title, description }: SheetProps) => {
                         href={item.href}
                         className="group flex w-full items-center text-start rounded-md border border-transparent px-2 py-1 hover:underline text-muted-foreground transition-all"
                         onClick={() => setTheme('light')}
-                        style={isCurrent ? { color: '#007aff', textDecoration: 'underline' } : undefined}
-                      >
+                        style={
+                          isCurrent ? { color: '#007aff', textDecoration: 'underline' } : undefined
+                        }>
                         {item.title}
                       </Link>
                     </div>

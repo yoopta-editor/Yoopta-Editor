@@ -1,4 +1,10 @@
-import { Blocks, Elements, YooptaPlugin, buildBlockElementsStructure, serializeTextNodes } from '@yoopta/editor';
+import {
+  Blocks,
+  Elements,
+  YooptaPlugin,
+  buildBlockElementsStructure,
+  serializeTextNodes,
+} from '@yoopta/editor';
 import { AccordionElementMap } from '../types';
 import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
@@ -37,7 +43,9 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         if (hotkeys.isBackspace(event)) {
           if (!slate.selection) return;
 
-          const listItems = Elements.getElementChildren(editor, currentBlock.id, { type: 'accordion-list' });
+          const listItems = Elements.getElementChildren(editor, currentBlock.id, {
+            type: 'accordion-list',
+          });
           const accordionListItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
             path: slate.selection,
             type: 'accordion-list-item',
@@ -56,12 +64,18 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             path: listItemChildPath,
           });
 
-          if (isContentEmpty && currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemContent) {
+          if (
+            isContentEmpty &&
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemContent
+          ) {
             event.preventDefault();
             return;
           }
 
-          if (isHeadingEmpty && currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading) {
+          if (
+            isHeadingEmpty &&
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading
+          ) {
             event.preventDefault();
 
             if (listItems?.length === 1) {
@@ -94,9 +108,14 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           event.preventDefault();
 
           const currentElement = Elements.getElement(editor, currentBlock.id);
-          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, { type: 'accordion-list-item' });
+          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
+            type: 'accordion-list-item',
+          });
 
-          if (currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading && listItemEntry) {
+          if (
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading &&
+            listItemEntry
+          ) {
             const [listItem, listItemPath] = listItemEntry;
 
             Elements.updateElement(

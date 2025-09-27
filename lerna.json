@@ -1,6 +1,12 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "packages": ["packages/plugins/*", "packages/tools/*", "packages/marks", "packages/core/*", "packages/development"],
+  "packages": [
+    "packages/plugins/*",
+    "packages/tools/*",
+    "packages/marks",
+    "packages/core/*",
+    "packages/development"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "4.9.9",

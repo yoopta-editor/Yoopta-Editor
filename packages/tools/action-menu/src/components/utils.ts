@@ -11,7 +11,10 @@ type Params = {
   selectedAction?: ActionMenuToolItem;
 };
 
-export function mapActionMenuItems(editor: YooEditor, items: ActionMenuToolItem[] | string[]): ActionMenuToolItem[] {
+export function mapActionMenuItems(
+  editor: YooEditor,
+  items: ActionMenuToolItem[] | string[],
+): ActionMenuToolItem[] {
   return items.map((item: string | ActionMenuToolItem) => {
     if (typeof item === 'string') {
       const title = editor.blocks[item].options?.display?.title || item;

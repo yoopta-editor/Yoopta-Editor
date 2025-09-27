@@ -1,44 +1,320 @@
 {
+  "extends": [
+    "airbnb",
+    "plugin:import/typescript",
+    "plugin:react-hooks/recommended",
+    "prettier",
+    "plugin:storybook/recommended"
+  ],
   "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true,
-    "vitest": true
+    "mocha": true,
+    "jest": true,
+    "es6": true
   },
-  "ignorePatterns": ["node_modules/*", ".next/*", ".out/*", "!.prettierrc.js"],
-  "extends": ["plugin:react/recommended", "airbnb", "eslint-config-next"],
-  "parser": "@typescript-eslint/parser",
+  "globals": {
+    "window": true,
+    "document": true,
+    "BUILD_INFO": "readonly",
+    "BUILD_CONFIG": "readonly",
+    "BUILD_CONFIG_STRING": "readonly",
+    "IS_REMOTE_DEV": "readonly"
+  },
+  "rules": {},
+  "ignorePatterns": ["**/generated/*"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "<root>/tsconfig.json"
+      }
+    }
+  },
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 2022
   },
-  "plugins": ["react", "@typescript-eslint"],
-  "rules": {
-    "arrow-body-style": 0,
-    "react/self-closing-comp": 0,
-    "react/prop-types": 0,
-    "react/react-in-jsx-scope": 0,
-    "jsx-a11y/anchor-is-valid": 0,
-    "import/prefer-default-export": 0,
-    "import/extensions": 0,
-    "react/jsx-props-no-spreading": 0,
-    "no-underscore-dangle": 0,
-    "react/jsx-filename-extension": 0,
-    "react/function-component-definition": 0,
-    "react-hooks/exhaustive-deps": 0,
-    "react/require-default-props": 0,
-    "max-len": ["error", { "code": 120 }],
-    "object-curly-newline": 0,
-    "consistent-return": 0,
-    "operator-linebreak": 0,
-    "no-return-assign": 0,
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "object-curly-spacing": 0,
-    "implicit-arrow-linebreak": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "import/no-extraneous-dependencies": 0
-  }
+  "plugins": ["mocha", "prettier", "@typescript-eslint", "react-refresh"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/strict",
+        "plugin:@typescript-eslint/stylistic",
+        "prettier"
+      ]
+    },
+    {
+      "files": ["*.cjsx", "*.jsx", "*.tsx"],
+      "extends": ["plugin:react/jsx-runtime"]
+    },
+    {
+      "files": ["*.{cjs,cjsx,js,jsx,ts,tsx}"],
+      "rules": {
+        "no-cond-assign": ["error", "except-parens"],
+        "no-continue": ["off"],
+
+        "no-underscore-dangle": ["off"],
+        "one-var": ["off"],
+        "one-var-declaration-per-line": ["off"],
+        "global-require": ["off"],
+        "max-len": ["off"],
+        "func-names": ["off"],
+        "no-confusing-arrow": ["off"],
+        "no-invalid-this": ["error"],
+        "new-cap": ["error"],
+        "no-restricted-properties": ["off"],
+        "@typescript-eslint/no-unsafe-enum-comparison": ["off"],
+
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "ForInStatement",
+            "message": "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array."
+          },
+          {
+            "selector": "LabeledStatement",
+            "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+          },
+          {
+            "selector": "WithStatement",
+            "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+          }
+        ],
+        "max-classes-per-file": ["off"],
+        "eqeqeq": ["error", "always"],
+        "no-console": ["error"],
+        "no-multi-spaces": [
+          "error",
+          {
+            "ignoreEOLComments": true
+          }
+        ],
+        "lines-between-class-members": [
+          "error",
+          "always",
+          {
+            "exceptAfterSingleLine": true
+          }
+        ],
+        "class-methods-use-this": 0,
+        "prefer-destructuring": ["off"],
+        "no-extra-parens": ["off"],
+        "sort-imports": [
+          "error",
+          {
+            "ignoreCase": false,
+            "ignoreDeclarationSort": true, // don't want to sort import lines, use eslint-plugin-import instead
+            "ignoreMemberSort": false,
+            "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+            "allowSeparatedGroups": true
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "groups": ["builtin", "external", "internal", ["sibling", "parent"], "index"],
+            "newlines-between": "always",
+            "pathGroups": [
+              {
+                "pattern": "react",
+                "group": "external",
+                "position": "before"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "distinctGroup": false
+          }
+        ],
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          {
+            "js": "never",
+            "jsx": "never",
+            "ts": "never",
+            "tsx": "never"
+          }
+        ],
+        "import/no-extraneous-dependencies": ["off"],
+        "react/button-has-type": 0,
+        "react/prop-types": ["off"],
+        "react/destructuring-assignment": ["off"],
+        "react/no-multi-comp": 0,
+        "react/prefer-stateless-function": [
+          "error",
+          {
+            "ignorePureComponents": true
+          }
+        ],
+        "mocha/no-exclusive-tests": ["error"],
+        "react/jsx-filename-extension": [
+          2,
+          {
+            "extensions": [".js", ".cjsx", ".jsx", ".ts", ".tsx"]
+          }
+        ],
+        "react/no-unstable-nested-components": [
+          "error",
+          {
+            "allowAsProps": true
+          }
+        ],
+
+        "react/sort-comp": "off",
+
+        "react/function-component-definition": [
+          "error",
+          {
+            "namedComponents": "arrow-function",
+            "unnamedComponents": "arrow-function"
+          }
+        ],
+
+        "react/jsx-boolean-value": ["error", "never", { "always": ["initialValue"] }],
+
+        "react-hooks/exhaustive-deps": "error",
+
+        "import/prefer-default-export": "off",
+
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+
+        "jsx-a11y/label-has-associated-control": [
+          "error",
+          {
+            "controlComponents": ["Select", "DatePicker"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.{js,cjs}"],
+      "rules": {
+        "no-unused-vars": ["error"],
+
+        "no-param-reassign": "off",
+        "no-warning-comments": [
+          "warn",
+          {
+            "location": "anywhere"
+          }
+        ],
+        "default-param-last": ["warn"],
+        "prefer-object-spread": ["warn"],
+        "prefer-exponentiation-operator": ["warn"],
+        "import/no-useless-path-segments": ["warn"],
+        "react/no-unused-class-component-methods": ["warn"],
+        "no-promise-executor-return": ["warn"],
+        "react/forbid-prop-types": ["warn"]
+      }
+    },
+    {
+      "files": ["*.{ts,tsx}"],
+      "rules": {
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/no-implied-eval": "off",
+        "@typescript-eslint/no-throw-literal": "off",
+        "@typescript-eslint/return-await": "off",
+
+        "react/hook-use-state": "error",
+        "react/jsx-handler-names": "error",
+        "no-nested-ternary": "off",
+
+        "consistent-return": "off",
+
+        "import/no-default-export": "error",
+
+        "react/require-default-props": "off",
+
+        "react/jsx-props-no-spreading": "off",
+
+        "@typescript-eslint/no-empty-function": "off",
+
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_"
+          }
+        ],
+
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+
+        "@typescript-eslint/consistent-type-assertions": "error",
+
+        "@typescript-eslint/no-unnecessary-condition": "off",
+
+        "@typescript-eslint/non-nullable-type-assertion-style": "off",
+
+        "@typescript-eslint/prefer-reduce-type-parameter": "off",
+
+        "@typescript-eslint/unbound-method": "off",
+
+        "@typescript-eslint/no-floating-promises": "off",
+
+        "@typescript-eslint/no-invalid-void-type": "off",
+
+        "@typescript-eslint/lines-between-class-members": "off",
+
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/ban-types": "off",
+
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+
+        "@typescript-eslint/no-dynamic-delete": "off",
+
+        "@typescript-eslint/no-non-null-assertion": "off",
+
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-unused-expressions": [
+          "warn",
+          { "allowTernary": true, "allowShortCircuit": true }
+        ],
+
+        "@typescript-eslint/consistent-type-imports": [
+          "error",
+          {
+            "disallowTypeAnnotations": false
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.{spec,test}.{cjs,js,ts,tsx}"],
+      "rules": {
+        "no-console": "error",
+        "no-new": "off",
+        "no-unused-expressions": "off",
+        "react/jsx-props-no-spreading": "off",
+
+        "@typescript-eslint/no-unused-expressions": "off"
+      }
+    },
+    {
+      "files": ["*.spec.{cjs,js,ts,tsx}"],
+      "rules": {
+        "import/order": "off"
+      }
+    },
+    {
+      "files": ["*.stories.{cjsx,jsx,tsx}"],
+      "rules": {
+        "react/jsx-props-no-spreading": "off",
+        "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["*.{spec,test,stories}.{cjs,cjsx,js,ts,jsx,tsx}"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
 }

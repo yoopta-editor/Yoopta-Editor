@@ -7,7 +7,14 @@ import { PopoverProps } from '@radix-ui/react-popover';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 type ExportType = {
@@ -32,8 +39,7 @@ export function ExportSelector({ presets, ...props }: ExportSelectorProps) {
           role="combobox"
           aria-label="Load a preset..."
           aria-expanded={open}
-          className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
-        >
+          className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]">
           {selectedExport ? selectedExport.name : 'Load a preset...'}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -50,11 +56,13 @@ export function ExportSelector({ presets, ...props }: ExportSelectorProps) {
                   onSelect={() => {
                     setSelectedExport(preset);
                     setOpen(false);
-                  }}
-                >
+                  }}>
                   {preset.name}
                   <CheckIcon
-                    className={cn('ml-auto h-4 w-4', selectedExport?.id === preset.id ? 'opacity-100' : 'opacity-0')}
+                    className={cn(
+                      'ml-auto h-4 w-4',
+                      selectedExport?.id === preset.id ? 'opacity-100' : 'opacity-0',
+                    )}
                   />
                 </CommandItem>
               ))}

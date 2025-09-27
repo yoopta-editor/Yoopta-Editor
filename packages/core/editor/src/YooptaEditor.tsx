@@ -84,7 +84,9 @@ const YooptaEditor = ({
     if (!isValueValid && typeof value !== 'undefined') {
       // [TODO] - add link to documentation
       console.error(
-        `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(value)}`,
+        `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(
+          value,
+        )}`,
       );
     }
 
@@ -146,8 +148,7 @@ const YooptaEditor = ({
           className={className}
           selectionBoxRoot={selectionBoxRoot}
           width={width}
-          style={style}
-        >
+          style={style}>
           {children}
         </Editor>
       </ToolsProvider>

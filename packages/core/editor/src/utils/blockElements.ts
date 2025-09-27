@@ -1,14 +1,23 @@
 import { Editor, Element, NodeEntry, Path } from 'slate';
 import { buildBlockElement } from '../components/Editor/utils';
-import { SlateEditor, SlateElement, YooEditor, YooptaBlock, YooptaBlockData } from '../editor/types';
+import {
+  SlateEditor,
+  SlateElement,
+  YooEditor,
+  YooptaBlock,
+  YooptaBlockData,
+} from '../editor/types';
 import { Plugin, PluginElement, PluginElementProps, PluginElementsMap } from '../plugins/types';
 import { generateId } from './generateId';
 
-export function getRootBlockElementType(elems: PluginElementsMap<string, unknown> | undefined): string | undefined {
+export function getRootBlockElementType(
+  elems: PluginElementsMap<string, unknown> | undefined,
+): string | undefined {
   if (!elems) return;
 
   const elements = Object.keys(elems);
-  const rootElementType = elements.length === 1 ? elements[0] : elements.find((key) => elems[key].asRoot);
+  const rootElementType =
+    elements.length === 1 ? elements[0] : elements.find((key) => elems[key].asRoot);
 
   return rootElementType;
 }
@@ -87,7 +96,11 @@ function recursivelyCollectElementChildren(
         props: childElement.props,
         children:
           childElement.children && childElement.children.length > 0
-            ? recursivelyCollectElementChildren(childElement, blockElements, elementsMapWithTextContent)
+            ? recursivelyCollectElementChildren(
+                childElement,
+                blockElements,
+                elementsMapWithTextContent,
+              )
             : [{ text: elementsMapWithTextContent?.[elementType] || '' }],
       });
 
@@ -120,7 +133,11 @@ export function buildBlockElementsStructure(
     props: rootBlockElement.props,
     children:
       rootBlockElement.children && rootBlockElement.children.length > 0
-        ? recursivelyCollectElementChildren(rootBlockElement, blockElements, elementsMapWithTextContent)
+        ? recursivelyCollectElementChildren(
+            rootBlockElement,
+            blockElements,
+            elementsMapWithTextContent,
+          )
         : [{ text: '' }],
   };
 

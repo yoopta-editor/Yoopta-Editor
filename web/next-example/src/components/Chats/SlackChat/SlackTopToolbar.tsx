@@ -21,22 +21,19 @@ const SlackTopToolbar = () => {
       <button
         className={s.toolbarItem}
         data-state-active={editor.formats.bold?.isActive()}
-        onClick={() => editor.formats.bold.toggle()}
-      >
+        onClick={() => editor.formats.bold.toggle()}>
         <BoldIcon size={15} strokeWidth={1.5} />
       </button>
       <button
         className={s.toolbarItem}
         data-state-active={editor.formats.italic?.isActive()}
-        onClick={() => editor.formats.italic.toggle()}
-      >
+        onClick={() => editor.formats.italic.toggle()}>
         <ItalicIcon size={15} strokeWidth={1.5} />
       </button>
       <button
         className={s.toolbarItem}
         data-state-active={editor.formats.strike?.isActive()}
-        onClick={() => editor.formats.strike.toggle()}
-      >
+        onClick={() => editor.formats.strike.toggle()}>
         <StrikethroughIcon size={15} strokeWidth={1.5} />
       </button>
       <span className={s.separator} />
@@ -47,15 +44,13 @@ const SlackTopToolbar = () => {
       <button
         className={s.toolbarItem}
         data-state-active={editor.blocks.NumberedList?.isActive()}
-        onClick={() => editor.toggleBlock('NumberedList')}
-      >
+        onClick={() => editor.toggleBlock('NumberedList')}>
         <ListOrdered size={15} strokeWidth={1.5} />
       </button>
       <button
         className={s.toolbarItem}
         data-state-active={editor.blocks.BulletedList?.isActive()}
-        onClick={() => editor.toggleBlock('BulletedList')}
-      >
+        onClick={() => editor.toggleBlock('BulletedList')}>
         <List size={15} strokeWidth={1.5} />
       </button>
       <span className={s.separator} />
@@ -64,8 +59,7 @@ const SlackTopToolbar = () => {
         data-state-active={editor.blocks.Blockquote?.isActive()}
         onClick={() => {
           editor.toggleBlock('Blockquote');
-        }}
-      >
+        }}>
         <TextQuoteIcon size={15} strokeWidth={1.5} />
       </button>
       <span className={s.separator} />
@@ -76,8 +70,7 @@ const SlackTopToolbar = () => {
         className={s.toolbarItem}
         onClick={() => {
           editor.toggleBlock('Code');
-        }}
-      >
+        }}>
         <FileCodeIcon size={15} strokeWidth={1.5} />
       </button>
     </div>

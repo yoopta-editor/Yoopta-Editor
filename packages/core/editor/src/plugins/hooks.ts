@@ -131,7 +131,8 @@ export const useSlateEditor = (
           return;
         }
 
-        const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties?.slateOps;
+        const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties
+          ?.slateOps;
         const lastOp = lastSlateOps && lastSlateOps[lastSlateOps.length - 1];
         let merge = shouldMerge(op, lastOp);
 
