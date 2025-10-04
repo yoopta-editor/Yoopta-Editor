@@ -3,9 +3,9 @@ import { EmbedElement, EmbedElementProps } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: EmbedElement;
-  }
+  };
 }
 
 export { EmbedCommands } from './commands';

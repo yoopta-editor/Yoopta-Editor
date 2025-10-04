@@ -10,8 +10,7 @@ const WithStarterKit = () => {
   return (
     <div
       ref={selectionRef}
-      className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex justify-center"
-    >
+      className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex justify-center">
       <YooptaStarterKit
         id="starter-kit"
         value={value}

@@ -1,4 +1,5 @@
-import { Blocks, generateId, YooEditor, YooptaContentValue } from '@yoopta/editor';
+import type { YooEditor, YooptaContentValue } from '@yoopta/editor';
+import { Blocks, generateId } from '@yoopta/editor';
 
 export function deserializeText(editor: YooEditor, text: string): YooptaContentValue {
   const blockId = generateId();

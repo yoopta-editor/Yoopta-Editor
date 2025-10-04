@@ -1,11 +1,14 @@
-import { Elements, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
-import { DividerElementProps, DividerTheme } from '../types';
-import SolidIcon from '../icons/solid.svg';
-import DotsIcon from '../icons/dots.svg';
-import DashedIcon from '../icons/dashed.svg';
-import CheckmarkIcon from '../icons/checkmark.svg';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Elements, UI } from '@yoopta/editor';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } = UI;
+import CheckmarkIcon from '../icons/checkmark.svg';
+import DashedIcon from '../icons/dashed.svg';
+import DotsIcon from '../icons/dots.svg';
+import SolidIcon from '../icons/solid.svg';
+import type { DividerElementProps, DividerTheme } from '../types';
+
+const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+  UI;
 
 type Props = {
   editor: YooEditor;
@@ -28,22 +31,29 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
   return (
     <ExtendedBlockActions
       onClick={() => editor.setPath({ current: block.meta.order })}
-      className="yoopta-divider-options"
-    >
+      className="yoopta-divider-options">
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
           <button
             type="button"
             className="yoopta-block-options-button yoo-divider-justify-between"
-            onClick={() => onChangeTheme('solid')}
-          >
+            onClick={() => onChangeTheme('solid')}>
             <span className="yoo-divider-flex">
-              <SolidIcon width={16} height={16} className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2" />
+              <SolidIcon
+                width={16}
+                height={16}
+                className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2"
+              />
               Line
             </span>
             {isActiveTheme('solid') && (
-              <CheckmarkIcon width={16} height={16} color="#000" className="yoo-divider-w-4 yoo-divider-h-4" />
+              <CheckmarkIcon
+                width={16}
+                height={16}
+                color="#000"
+                className="yoo-divider-w-4 yoo-divider-h-4"
+              />
             )}
           </button>
         </BlockOptionsMenuItem>
@@ -51,19 +61,23 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
           <button
             type="button"
             className="yoopta-block-options-button yoo-divider-justify-between"
-            onClick={() => onChangeTheme('dashed')}
-          >
+            onClick={() => onChangeTheme('dashed')}>
             <span className="yoo-divider-flex">
               <DashedIcon
                 width={16}
                 height={16}
-                color={'tranparent'}
+                color="tranparent"
                 className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2"
               />
               Dashed
             </span>
             {isActiveTheme('dashed') && (
-              <CheckmarkIcon width={16} height={16} color="#000" className="yoo-divider-w-4 yoo-divider-h-4" />
+              <CheckmarkIcon
+                width={16}
+                height={16}
+                color="#000"
+                className="yoo-divider-w-4 yoo-divider-h-4"
+              />
             )}
           </button>
         </BlockOptionsMenuItem>
@@ -71,14 +85,22 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
           <button
             type="button"
             className="yoopta-block-options-button yoo-divider-justify-between"
-            onClick={() => onChangeTheme('dotted')}
-          >
+            onClick={() => onChangeTheme('dotted')}>
             <span className="yoo-divider-flex">
-              <DotsIcon width={16} height={16} className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2" />
+              <DotsIcon
+                width={16}
+                height={16}
+                className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2"
+              />
               Dots
             </span>
             {isActiveTheme('dotted') && (
-              <CheckmarkIcon width={16} height={16} color="#000" className="yoo-divider-w-4 yoo-divider-h-4" />
+              <CheckmarkIcon
+                width={16}
+                height={16}
+                color="#000"
+                className="yoo-divider-w-4 yoo-divider-h-4"
+              />
             )}
           </button>
         </BlockOptionsMenuItem>
@@ -86,8 +108,7 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
           <button
             type="button"
             className="yoopta-block-options-button yoo-divider-justify-between"
-            onClick={() => onChangeTheme('gradient')}
-          >
+            onClick={() => onChangeTheme('gradient')}>
             <span className="yoo-divider-flex">
               <SolidIcon
                 width={14}
@@ -98,7 +119,12 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
               Gradient
             </span>
             {isActiveTheme('gradient') && (
-              <CheckmarkIcon width={16} height={16} color="#000" className="yoo-divider-w-4 yoo-divider-h-4" />
+              <CheckmarkIcon
+                width={16}
+                height={16}
+                color="#000"
+                className="yoo-divider-w-4 yoo-divider-h-4"
+              />
             )}
           </button>
         </BlockOptionsMenuItem>

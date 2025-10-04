@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 import { Editor, Element, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
-import { YooEditor, YooptaPath } from '../../editor/types';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { getPreviousPath } from '../../editor/paths/getPreviousPath';
+import type { YooEditor } from '../../editor/types';
+import { YooptaPath } from '../../editor/types';
+import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 
 type MultiSelectionOptions = {
@@ -30,7 +32,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
   const startBlockPathRef = useRef<number | null>(null);
   const currentBlockPathRef = useRef<number | null>(null);
 
-  let selectionState = useRef<SelectionState>(DEFAULT_SELECTION_STATE).current;
+  const selectionState = useRef<SelectionState>(DEFAULT_SELECTION_STATE).current;
 
   const blurSlateSelection = () => {
     const path = editor.path.current;
@@ -61,11 +63,18 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
     const currentSelectionIndex = Paths.getPath(editor);
     if (typeof currentSelectionIndex !== 'number') return;
 
-    const indexesBetween = Array.from({ length: Math.abs(blockOrder - currentSelectionIndex) }).map((_, index) =>
-      blockOrder > currentSelectionIndex ? currentSelectionIndex + index + 1 : currentSelectionIndex - index - 1,
+    const indexesBetween = Array.from({ length: Math.abs(blockOrder - currentSelectionIndex) }).map(
+      (_, index) =>
+        blockOrder > currentSelectionIndex
+          ? currentSelectionIndex + index + 1
+          : currentSelectionIndex - index - 1,
     );
 
-    editor.setPath({ current: blockOrder, selected: [...indexesBetween, currentSelectionIndex], source: 'keyboard' });
+    editor.setPath({
+      current: blockOrder,
+      selected: [...indexesBetween, currentSelectionIndex],
+      source: 'keyboard',
+    });
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -172,14 +181,18 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       if (currentIndex === 0) return;
       // jump to next index if started selection from this index
       if (currentIndex === selectionState.startedIndexToSelect) {
-        const selectedPaths = editor.path.selected ? [...editor.path.selected, nextTopIndex] : [nextTopIndex];
+        const selectedPaths = editor.path.selected
+          ? [...editor.path.selected, nextTopIndex]
+          : [nextTopIndex];
         editor.setPath({ current: nextTopIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
         return;
       }
 
       if (nextTopIndex < selectionState.startedIndexToSelect) {
-        const selectedPaths = editor.path.selected ? [...editor.path.selected, nextTopIndex] : [nextTopIndex];
+        const selectedPaths = editor.path.selected
+          ? [...editor.path.selected, nextTopIndex]
+          : [nextTopIndex];
 
         editor.setPath({ current: nextTopIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
@@ -188,7 +201,10 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
       const selectedBlocks = Paths.getSelectedPaths(editor);
 
-      if (selectedBlocks?.includes(currentIndex) && currentIndex !== selectionState.startedIndexToSelect) {
+      if (
+        selectedBlocks?.includes(currentIndex) &&
+        currentIndex !== selectionState.startedIndexToSelect
+      ) {
         const filteredIndexes = selectedBlocks.filter((index) => index !== currentIndex);
         editor.setPath({ current: nextTopIndex, selected: filteredIndexes, source: 'keyboard' });
         selectionState.indexToSelect = nextTopIndex;
@@ -246,21 +262,28 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
       // jump to next index if started selection from this index
       if (currentIndex === selectionState.startedIndexToSelect) {
-        const selectedPaths = editor.path.selected ? [...editor.path.selected, nextIndex] : [nextIndex];
+        const selectedPaths = editor.path.selected
+          ? [...editor.path.selected, nextIndex]
+          : [nextIndex];
         editor.setPath({ current: nextIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;
         return;
       }
 
       if (nextIndex > selectionState.startedIndexToSelect) {
-        const selectedPaths = editor.path.selected ? [...editor.path.selected, nextIndex] : [nextIndex];
+        const selectedPaths = editor.path.selected
+          ? [...editor.path.selected, nextIndex]
+          : [nextIndex];
         editor.setPath({ current: nextIndex, selected: selectedPaths, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;
         return;
       }
 
       const selectedBlocks = Paths.getSelectedPaths(editor);
-      if (selectedBlocks?.includes(currentIndex) && currentIndex !== selectionState.startedIndexToSelect) {
+      if (
+        selectedBlocks?.includes(currentIndex) &&
+        currentIndex !== selectionState.startedIndexToSelect
+      ) {
         const filteredIndexes = selectedBlocks.filter((index) => index !== currentIndex);
         editor.setPath({ current: nextIndex, selected: filteredIndexes, source: 'keyboard' });
         selectionState.indexToSelect = nextIndex;

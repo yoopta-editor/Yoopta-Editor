@@ -1,13 +1,14 @@
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
+
 import { DailyMotion } from '../providers/DailyMotion';
 import { Figma } from '../providers/Figma';
 import Instagram from '../providers/Instagram';
+import { Loom } from '../providers/Loom';
 import Twitter from '../providers/Twitter';
 import { Vimeo } from '../providers/Vimeo';
-import { YouTube } from '../providers/Youtube';
-import { Loom } from '../providers/Loom';
 import { Wistia } from '../providers/Wistia';
-import { EmbedElementProps } from '../types';
+import { YouTube } from '../providers/Youtube';
+import type { EmbedElementProps } from '../types';
 
 type EmbedComponentProps = Omit<EmbedElementProps, 'sizes'> & {
   width: number | 'auto';
@@ -26,14 +27,26 @@ const PROVIDERS = {
   wistia: Wistia,
 };
 
-const EmbedComponent = ({ width, height, provider, blockId, attributes, children }: EmbedComponentProps) => {
+const EmbedComponent = ({
+  width,
+  height,
+  provider,
+  blockId,
+  attributes,
+  children,
+}: EmbedComponentProps) => {
   if (!provider) return null;
 
   if (provider && provider.id && provider.type && PROVIDERS[provider.type]) {
     const Provider = PROVIDERS[provider.type];
 
     return (
-      <Provider provider={provider} width={width} height={height} blockId={blockId} attributes={attributes}>
+      <Provider
+        provider={provider}
+        width={width}
+        height={height}
+        blockId={blockId}
+        attributes={attributes}>
         {children}
       </Provider>
     );

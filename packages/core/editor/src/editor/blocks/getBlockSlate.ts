@@ -1,4 +1,4 @@
-import { SlateEditor, YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
+import type { SlateEditor, YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
 
 export type GetBlockSlateOptions = {
   at?: YooptaPathIndex;

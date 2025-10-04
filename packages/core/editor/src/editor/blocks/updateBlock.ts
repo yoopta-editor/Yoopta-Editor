@@ -1,5 +1,5 @@
-import { SlateElement, YooEditor, YooptaBlockData } from '../types';
-import { YooptaOperation } from '../core/applyTransforms';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type { SlateElement, YooEditor, YooptaBlockData } from '../types';
 
 // Maybe add source pararmeter to this function?
 export function updateBlock(

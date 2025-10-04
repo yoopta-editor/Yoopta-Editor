@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
+import type { ProviderRenderProps } from '../types';
 
-const getDayliMotionAPI = (embedId: string) => `https://api.dailymotion.com/embed/${embedId}?fields=thumbnail_url`;
+const getDayliMotionAPI = (embedId: string) =>
+  `https://api.dailymotion.com/embed/${embedId}?fields=thumbnail_url`;
 
-function DailyMotion({ provider, width, height, attributes, children }: ProviderRenderProps) {
+const DailyMotion = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const dailyMotionRootRef = useRef(null);
   const [src, setSrc] = useState(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
@@ -54,6 +56,6 @@ function DailyMotion({ provider, width, height, attributes, children }: Provider
       {children}
     </div>
   );
-}
+};
 
 export { DailyMotion };

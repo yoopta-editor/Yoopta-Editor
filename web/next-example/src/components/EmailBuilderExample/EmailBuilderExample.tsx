@@ -97,7 +97,10 @@ type EmailFields = {
 };
 
 const EmailBuilderExample = () => {
-  const editor: YooptaEmailEditor = useMemo(() => createYooptaEmailEditor({ template: templateOptions }), []);
+  const editor: YooptaEmailEditor = useMemo(
+    () => createYooptaEmailEditor({ template: templateOptions }),
+    [],
+  );
   const [value, setValue] = useState<YooptaContentValue>(initValue);
   const [isMailModalOpen, setIsMailModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -142,8 +145,8 @@ const EmailBuilderExample = () => {
       if (response.ok) {
         toast(
           <p>
-            Email sent successfully! Check your inbox at <b>{emailFields.recipientEmail}</b> for the email you just
-            sent.
+            Email sent successfully! Check your inbox at <b>{emailFields.recipientEmail}</b> for the
+            email you just sent.
           </p>,
         );
       } else {
@@ -203,8 +206,7 @@ const EmailBuilderExample = () => {
               href="https://github.com/Darginec05/Yoopta-Editor/tree/master/packages/core/email-builder"
               target="_blank"
               rel="noreferrer"
-              className="underline"
-            >
+              className="underline">
               @yoopta/email-builder
             </a>{' '}
           </code>{' '}
@@ -221,8 +223,7 @@ const EmailBuilderExample = () => {
             <a
               href="https://yoodocs.space/yoopta-editor/yoopta/email-builder-_hZvTkSNoI?v=1.0.0&lang=en"
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               Full Docs <ExternalLinkIcon size={16} className="ml-2" />
             </a>
           </Button>
@@ -234,14 +235,13 @@ const EmailBuilderExample = () => {
           <DialogHeader>
             <DialogTitle>Please fill in these fields to test</DialogTitle>
             <DialogDescription>
-              We use <b>Resend</b>, so you will need to get the <u>RESEND_API_KEY</u> for the test. You can create token
-              using{' '}
+              We use <b>Resend</b>, so you will need to get the <u>RESEND_API_KEY</u> for the test.
+              You can create token using{' '}
               <a
                 className="text-[#007aff] underline"
                 href="https://resend.com/api-keys"
                 target="_blank"
-                rel="noreferrer"
-              >
+                rel="noreferrer">
                 this link
               </a>
               . Then copy the <u>RESEND_API_KEY</u> and paste it in the field below.

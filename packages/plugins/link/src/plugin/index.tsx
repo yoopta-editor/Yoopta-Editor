@@ -1,6 +1,7 @@
-import { deserializeTextNodes, generateId, serializeTextNodes, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, deserializeTextNodes, generateId, serializeTextNodes } from '@yoopta/editor';
+
 import { LinkCommands } from '../commands';
-import { LinkElementMap, LinkElementProps } from '../types';
+import type { LinkElementMap, LinkElementProps } from '../types';
 import { LinkRender } from '../ui/LinkRender';
 
 const Link = new YooptaPlugin<LinkElementMap>({
@@ -28,7 +29,9 @@ const Link = new YooptaPlugin<LinkElementMap>({
     html: {
       serialize: (element, text) => {
         const { url, target, rel, title } = element.props;
-        return `<a href="${url}" target="${target}" rel="${rel}">${serializeTextNodes(element.children)}</a>`;
+        return `<a href="${url}" target="${target}" rel="${rel}">${serializeTextNodes(
+          element.children,
+        )}</a>`;
       },
       deserialize: {
         nodeNames: ['A'],
@@ -36,7 +39,8 @@ const Link = new YooptaPlugin<LinkElementMap>({
           if (el.nodeName === 'A') {
             const href = el.getAttribute('href') || '';
 
-            const defaultLinkProps = editor.plugins.LinkPlugin.elements.link.props as LinkElementProps;
+            const defaultLinkProps = editor.plugins.LinkPlugin.elements.link
+              .props as LinkElementProps;
 
             // [TODO] Add target
             const target = el.getAttribute('target') || defaultLinkProps.target;
@@ -68,7 +72,9 @@ const Link = new YooptaPlugin<LinkElementMap>({
             <tbody style="width:100%;">
               <tr>
                 <td>
-                  <a href="${url}" target="${target}" rel="${rel}">${serializeTextNodes(element.children)}</a>
+                  <a href="${url}" target="${target}" rel="${rel}">${serializeTextNodes(
+          element.children,
+        )}</a>
                 </td>
               </tr>
             </tbody>

@@ -20,7 +20,10 @@ yarn add @yoopta/divider
 
 ```javascript
 export type DividerCommands = {
-  buildDividerElements: (editor: YooEditor, options?: Partial<DividerElementProps>) => DividerElement,
+  buildDividerElements: (
+    editor: YooEditor,
+    options?: Partial<DividerElementProps>,
+  ) => DividerElement,
   insertDivider: (editor: YooEditor, options?: Partial<DividerInsertOptions>) => void,
   deleteDivider: (editor: YooEditor, blockId: string) => void,
   updateDivider: (editor: YooEditor, blockId: string, props: Partial<DividerElementProps>) => void,

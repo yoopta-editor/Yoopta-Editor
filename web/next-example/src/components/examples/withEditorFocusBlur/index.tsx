@@ -1,4 +1,8 @@
-import YooptaEditor, { createYooptaEditor, useYooptaEditor, useYooptaFocused } from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor,
+  useYooptaEditor,
+  useYooptaFocused,
+} from '@yoopta/editor';
 import { useMemo, useRef } from 'react';
 
 import Paragraph from '@yoopta/paragraph';
@@ -92,7 +96,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -122,16 +131,14 @@ function WithEditorFocusBlur() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex justify-center flex-col items-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <YooptaEditor
         editor={editor}
         plugins={plugins}
         tools={TOOLS}
         marks={MARKS}
         autoFocus={false}
-        selectionBoxRoot={selectionRef}
-      >
+        selectionBoxRoot={selectionRef}>
         <FocusButtons />
         <Placeholder />
       </YooptaEditor>
@@ -147,15 +154,13 @@ const FocusButtons = () => {
       <button
         type="button"
         className="relative mx-2 px-3 py-1 text-[14px] rounded text-white flex items-center bg-[#000]"
-        onClick={() => editor.focus()}
-      >
+        onClick={() => editor.focus()}>
         Focus
       </button>
       <button
         type="button"
         className="relative mx-2 px-3 py-1 text-[14px] rounded text-white flex items-center bg-[#000]"
-        onClick={() => editor.blur()}
-      >
+        onClick={() => editor.blur()}>
         Blur
       </button>
     </div>
@@ -167,7 +172,9 @@ const Placeholder = () => {
 
   if (!isFocused) {
     return (
-      <div className="fixed md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px]">Placeholder</div>
+      <div className="fixed md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px]">
+        Placeholder
+      </div>
     );
   }
 

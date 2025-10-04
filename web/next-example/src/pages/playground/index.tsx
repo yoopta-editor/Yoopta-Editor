@@ -1,4 +1,9 @@
-import YooptaEditor, { createYooptaEditor, Elements, Blocks, useYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor,
+  Elements,
+  Blocks,
+  useYooptaEditor,
+} from '@yoopta/editor';
 
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
@@ -74,7 +79,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -107,8 +117,7 @@ function WithBaseFullSetup() {
       <div
         id="playground"
         className="lg:px-[120px] px-[15px] lg:pt-[80px] pt-[40px] pb-[40px] lg:max-w-[65vw] max-w-none mx-auto flex justify-center"
-        ref={selectionRef}
-      >
+        ref={selectionRef}>
         <YooptaEditor
           editor={editor}
           plugins={plugins}

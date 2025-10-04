@@ -1,13 +1,19 @@
-import { Editor, Element, Path } from 'slate';
+import type { Path } from 'slate';
+import { Editor, Element } from 'slate';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { SlateElement, YooEditor } from '../types';
+import type { SlateElement, YooEditor } from '../types';
 
 export type EmptyBlockElement = {
   type: string;
   path: Path;
 };
 
-export function isElementEmpty(editor: YooEditor, blockId: string, element: EmptyBlockElement): boolean | undefined {
+export function isElementEmpty(
+  editor: YooEditor,
+  blockId: string,
+  element: EmptyBlockElement,
+): boolean | undefined {
   const block = editor.children[blockId];
 
   if (!block) {

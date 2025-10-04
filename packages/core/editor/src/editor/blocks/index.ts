@@ -1,17 +1,17 @@
-import { insertBlock } from './insertBlock';
-import { deleteBlock } from './deleteBlock';
-import { moveBlock } from './moveBlock';
-import { focusBlock } from './focusBlock';
-import { splitBlock } from './splitBlock';
-import { increaseBlockDepth } from './increaseBlockDepth';
+import { buildBlockData } from './buildBlockData';
 import { decreaseBlockDepth } from './decreaseBlockDepth';
+import { deleteBlock } from './deleteBlock';
 import { duplicateBlock } from './duplicateBlock';
-import { updateBlock } from './updateBlock';
-import { toggleBlock } from './toggleBlock';
+import { focusBlock } from './focusBlock';
 import { getBlock } from './getBlock';
 import { getBlockSlate } from './getBlockSlate';
+import { increaseBlockDepth } from './increaseBlockDepth';
+import { insertBlock } from './insertBlock';
 import { mergeBlock } from './mergeBlock';
-import { buildBlockData } from './buildBlockData';
+import { moveBlock } from './moveBlock';
+import { splitBlock } from './splitBlock';
+import { toggleBlock } from './toggleBlock';
+import { updateBlock } from './updateBlock';
 
 export const Blocks = {
   insertBlock,

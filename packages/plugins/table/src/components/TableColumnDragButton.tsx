@@ -1,9 +1,11 @@
-import { Elements, SlateElement, YooEditor } from '@yoopta/editor';
-import { useFloating, inline, flip, shift, offset, autoUpdate } from '@floating-ui/react';
 import { useState } from 'react';
-import DragIcon from '../icons/drag.svg';
-import { TableColumnOptions } from './TableColumnOptions';
+import { autoUpdate, flip, inline, offset, shift, useFloating } from '@floating-ui/react';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
+import { Elements } from '@yoopta/editor';
 import { Transforms } from 'slate';
+
+import { TableColumnOptions } from './TableColumnOptions';
+import DragIcon from '../icons/drag.svg';
 
 type TableRowProps = {
   editor: YooEditor;
@@ -53,8 +55,7 @@ const TableColumnDragButton = ({ editor, blockId, tdElement }: TableRowProps) =>
         onClick={onClick}
         contentEditable={false}
         style={isTableColumnActionsOpen ? { opacity: 1 } : undefined}
-        className="yoopta-table-column-button"
-      >
+        className="yoopta-table-column-button">
         <DragIcon />
       </button>
     </>

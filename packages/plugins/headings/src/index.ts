@@ -1,13 +1,13 @@
-import { HeadingTwo } from './plugin/HeadingTwo';
 import { HeadingOne } from './plugin/HeadingOne';
 import { HeadingThree } from './plugin/HeadingThree';
+import { HeadingTwo } from './plugin/HeadingTwo';
 import { HeadingOneElement, HeadingThreeElement, HeadingTwoElement } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: HeadingOneElement | HeadingTwoElement | HeadingThreeElement;
-  }
+  };
 }
 
 const Headings = {
@@ -19,4 +19,11 @@ const Headings = {
 export { HeadingOneCommands, HeadingTwoCommands, HeadingThreeCommands } from './commands';
 
 export default Headings;
-export { HeadingOne, HeadingTwo, HeadingThree, HeadingOneElement, HeadingTwoElement, HeadingThreeElement };
+export {
+  HeadingOne,
+  HeadingTwo,
+  HeadingThree,
+  HeadingOneElement,
+  HeadingTwoElement,
+  HeadingThreeElement,
+};

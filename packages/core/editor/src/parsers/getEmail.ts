@@ -1,6 +1,6 @@
-import { Paths } from '../editor/paths';
-import { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
 import { serializeTextNodes } from './serializeTextNodes';
+import { Paths } from '../editor/paths';
+import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
 
 type StyleElement = {
   id?: string;
@@ -15,9 +15,7 @@ type MetaElement = {
   charset?: string;
 };
 
-type StyleAttribute = {
-  [key: string]: string | number;
-};
+type StyleAttribute = Record<string, string | number>;
 
 type ElementAttributes = {
   style?: StyleAttribute;
@@ -66,7 +64,11 @@ const DEFAULT_OPTIONS: EmailTemplateOptions = {
   },
 };
 
-export function getEmail(editor: YooEditor, content: YooptaContentValue, opts?: EmailTemplateOptions): string {
+export function getEmail(
+  editor: YooEditor,
+  content: YooptaContentValue,
+  opts?: EmailTemplateOptions,
+): string {
   const options = deepMerge(DEFAULT_OPTIONS, opts || {});
   const blocks = Object.values(content)
     .filter((item) => {
@@ -86,7 +88,11 @@ export function getEmail(editor: YooEditor, content: YooptaContentValue, opts?: 
     if (plugin && plugin.parsers?.email?.serialize) {
       // @ts-ignore - fixme
       const innerContent = serializeTextNodes(blockData.value[0].children);
-      return plugin.parsers.email.serialize(blockData.value[0] as SlateElement, innerContent, blockData.meta);
+      return plugin.parsers.email.serialize(
+        blockData.value[0] as SlateElement,
+        innerContent,
+        blockData.meta,
+      );
     }
 
     return '';

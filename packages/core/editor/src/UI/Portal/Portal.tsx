@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { FloatingPortal } from '@floating-ui/react';
-import { MutableRefObject, ReactNode, useEffect, useRef, useState } from 'react';
+
 import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
 
 type Props = {

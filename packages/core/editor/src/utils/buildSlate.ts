@@ -1,6 +1,7 @@
 import { createEditor } from 'slate';
 import { withReact } from 'slate-react';
-import { SlateEditor, YooEditor } from '../editor/types';
+
+import type { SlateEditor, YooEditor } from '../editor/types';
 import { withShortcuts } from '../extensions/shortcuts';
 
 // [TODO] - add slate structure from block to add elements into slate.children

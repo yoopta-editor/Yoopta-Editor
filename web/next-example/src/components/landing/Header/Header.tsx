@@ -10,8 +10,7 @@ export const Header = () => {
         background: 'radial-gradient(circle at 24.1% 68.8%, #1e232d 0%, #050507 99.4%)',
         animation: ' gradient 15s ease infinite',
         backgroundSize: '400% 400%',
-      }}
-    >
+      }}>
       <div className="container flex h-14 items-center !pl-0">
         <div className="mr-4 hidden md:flex">
           <nav className="flex items-center space-x-6 text-sm font-medium ml-6">
@@ -19,8 +18,7 @@ export const Header = () => {
               href="https://github.com/Darginec05/Yoopta-Editor"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center"
-            >
+              className="flex items-center">
               <div className="rounded-full bg-white relative w-[42px] h-[42px]">
                 <img
                   src="/yoopta/yoopta-logo.png"
@@ -41,8 +39,7 @@ export const Header = () => {
               href="https://yoodocs.space/yoopta-editor/yoopta/introduction-rsK_1fODIL"
               target="_blank"
               rel="noopener noreferrer"
-              className="md:mr-4 mr-1 flex items-center"
-            >
+              className="md:mr-4 mr-1 flex items-center">
               <span className="md:block hidden">Docs</span>
               <FileHeart size={15} className="ml-2" color="#1f6feb" />
             </NextLink>
@@ -54,8 +51,7 @@ export const Header = () => {
               href="https://github.com/sponsors/Darginec05"
               target="_blank"
               rel="noopener noreferrer"
-              className="md:mr-4 mr-1 flex items-center"
-            >
+              className="md:mr-4 mr-1 flex items-center">
               <span className="md:block hidden">Sponsor</span>
               <span className="ml-2">💖</span>
             </NextLink>
@@ -63,8 +59,7 @@ export const Header = () => {
               href="https://github.com/Darginec05/Yoopta-Editor"
               target="_blank"
               rel="noopener noreferrer"
-              className="md:mr-4 mr-1 flex items-center"
-            >
+              className="md:mr-4 mr-1 flex items-center">
               <span className="md:block hidden">Give us star</span>
               <StarIcon size={15} className="ml-2" fill="#faca15" color="#faca15" />
             </NextLink>
@@ -72,8 +67,7 @@ export const Header = () => {
               href="https://discord.com/invite/Dt8rhSTjsn"
               target="_blank"
               rel="noopener noreferrer"
-              className="md:mr-0 mr-0 flex items-center"
-            >
+              className="md:mr-0 mr-0 flex items-center">
               <span className="md:block hidden">Community</span>
               <Send size={15} className="ml-2" color="#2e9fdc" />
             </NextLink>

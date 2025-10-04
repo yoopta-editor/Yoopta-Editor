@@ -11,8 +11,7 @@ export function TypographyLink(props: PluginElementRenderProps) {
       target={target}
       rel={rel}
       className="font-medium text-primary underline underline-offset-4"
-      {...props.attributes}
-    >
+      {...props.attributes}>
       {props.children}
     </a>
   );

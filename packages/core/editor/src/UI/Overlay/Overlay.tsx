@@ -1,5 +1,6 @@
+import type { MouseEvent, ReactNode } from 'react';
+import { forwardRef } from 'react';
 import { FloatingOverlay } from '@floating-ui/react';
-import { MouseEvent, ReactNode, forwardRef } from 'react';
 
 type Props = {
   children: ReactNode;
@@ -27,8 +28,7 @@ const Overlay = ({ className, children, lockScroll = true, ...props }: Props) =>
       className={className}
       {...props}
       onClick={onClick}
-      onMouseDown={onMouseDown}
-    >
+      onMouseDown={onMouseDown}>
       {children}
     </FloatingOverlay>
   );

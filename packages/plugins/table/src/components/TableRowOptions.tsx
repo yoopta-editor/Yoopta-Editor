@@ -1,8 +1,9 @@
-import { Elements, SlateElement, UI, YooEditor } from '@yoopta/editor';
-
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
+import { Elements, UI } from '@yoopta/editor';
+import { CornerDownRight, CornerUpRight, MoveDownIcon, MoveUpIcon, TrashIcon } from 'lucide-react';
 import { Editor, Element, Path } from 'slate';
-import { TrashIcon, MoveDownIcon, MoveUpIcon, CornerUpRight, CornerDownRight } from 'lucide-react';
+
 import { TableCommands } from '../commands';
 
 const { BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptions, BlockOptionsSeparator } = UI;
@@ -36,7 +37,7 @@ const TableRowOptions = ({ editor, blockId, onClose, tdElement, ...props }: Prop
     const trElement = Elements.getElement(editor, blockId, { type: 'table-row', path: tdPath });
     if (!trElement) return;
 
-    let path = Elements.getElementPath(editor, blockId, trElement);
+    const path = Elements.getElementPath(editor, blockId, trElement);
     // @ts-ignore [FIXME] - Fix this
     TableCommands.deleteTableRow(editor, blockId, { path });
     onClose();
@@ -47,7 +48,7 @@ const TableRowOptions = ({ editor, blockId, onClose, tdElement, ...props }: Prop
     const trElement = Elements.getElement(editor, blockId, { type: 'table-row', path: tdPath });
     if (!trElement) return;
 
-    let path = Elements.getElementPath(editor, blockId, trElement);
+    const path = Elements.getElementPath(editor, blockId, trElement);
 
     const slate = editor.blockEditorsMap[blockId];
     const nextElementEntry = Editor.next(slate, {
@@ -64,7 +65,7 @@ const TableRowOptions = ({ editor, blockId, onClose, tdElement, ...props }: Prop
     const trElement = Elements.getElement(editor, blockId, { type: 'table-row', path: tdPath });
     if (!trElement) return;
 
-    let path = Elements.getElementPath(editor, blockId, trElement);
+    const path = Elements.getElementPath(editor, blockId, trElement);
 
     const slate = editor.blockEditorsMap[blockId];
     const prevElementEntry = Editor.previous(slate, {

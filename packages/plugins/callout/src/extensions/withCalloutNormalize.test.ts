@@ -1,8 +1,10 @@
-import { Descendant, Editor, Element, Transforms } from 'slate';
-import { vi } from 'vitest';
-import { withCalloutNormalize } from './withCalloutNormalize';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { Descendant } from 'slate';
+import { Editor, Element, Transforms } from 'slate';
 import { createTestNode } from 'test-utils';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
+import { vi } from 'vitest';
+
+import { withCalloutNormalize } from './withCalloutNormalize';
 
 describe('withCalloutNormalize', () => {
   let editor: Partial<YooEditor>;
@@ -22,14 +24,14 @@ describe('withCalloutNormalize', () => {
     };
 
     // Mock Editor.isEditor
-    vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'children' in node;
-    });
+    vi.spyOn(Editor, 'isEditor').mockImplementation(
+      (node) => node && typeof node === 'object' && 'children' in node,
+    );
 
     // Mock Element.isElement
-    vi.spyOn(Element, 'isElement').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'type' in node;
-    });
+    vi.spyOn(Element, 'isElement').mockImplementation(
+      (node) => node && typeof node === 'object' && 'type' in node,
+    );
 
     // Mock Transforms.removeNodes
     vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {});

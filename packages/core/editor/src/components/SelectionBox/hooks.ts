@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+
+import type { RectangeSelectionProps, RectangeSelectionState } from './SelectionBox';
 import { Paths } from '../../editor/paths';
-import { YooEditor } from '../../editor/types';
-import { RectangeSelectionProps, RectangeSelectionState } from './SelectionBox';
+import type { YooEditor } from '../../editor/types';
 
 const findBlocksUnderSelection = (editor: YooEditor, origin, coords) => {
   const blocksUnderSelection: number[] = [];
@@ -39,7 +40,10 @@ type RectangeSelectionReturn = RectangeSelectionState & {
 
 // [TODO] - Fix selection when multiple editors
 // Maybe move to a separate npm package?
-export const useRectangeSelectionBox = ({ editor, root }: RectangeSelectionProps): RectangeSelectionReturn => {
+export const useRectangeSelectionBox = ({
+  editor,
+  root,
+}: RectangeSelectionProps): RectangeSelectionReturn => {
   const [state, setState] = useState<RectangeSelectionState>({
     origin: [0, 0],
     coords: [0, 0],
@@ -52,7 +56,12 @@ export const useRectangeSelectionBox = ({ editor, root }: RectangeSelectionProps
     const isInsideEditor = editor.refElement?.contains(event.target as Node);
     const selectedBlocks = Paths.getSelectedPaths(editor);
 
-    if (!isInsideEditor && !state.selection && Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
+    if (
+      !isInsideEditor &&
+      !state.selection &&
+      Array.isArray(selectedBlocks) &&
+      selectedBlocks.length > 0
+    ) {
       editor.setPath({ current: null });
       return onClose();
     }
@@ -104,11 +113,15 @@ export const useRectangeSelectionBox = ({ editor, root }: RectangeSelectionProps
     }
 
     if (!('nodeType' in elementMouseEl)) {
-      throw new Error('Root element should be a DOM element or a ref object. Please check the `selectionBoxRoot` prop');
+      throw new Error(
+        'Root element should be a DOM element or a ref object. Please check the `selectionBoxRoot` prop',
+      );
     }
 
     if (editor.refElement?.contains(elementMouseEl)) {
-      throw new Error('Root element should not be a child of the editor. Please check the `selectionBoxRoot` prop');
+      throw new Error(
+        'Root element should not be a child of the editor. Please check the `selectionBoxRoot` prop',
+      );
     }
 
     elementMouseEl.addEventListener('mousedown', onMouseDown);

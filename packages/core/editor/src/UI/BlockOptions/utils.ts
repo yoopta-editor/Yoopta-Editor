@@ -1,4 +1,4 @@
-import { YooEditor } from '../../editor/types';
+import type { YooEditor } from '../../editor/types';
 import { getRootBlockElement } from '../../utils/blockElements';
 
 type Params = {

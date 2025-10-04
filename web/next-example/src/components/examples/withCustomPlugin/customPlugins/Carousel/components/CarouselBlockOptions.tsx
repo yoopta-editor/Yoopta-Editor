@@ -2,7 +2,8 @@ import { Elements, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { Lollipop, FlipVertical, FlipHorizontal } from 'lucide-react';
 import { CarouselElementProps } from '../types';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } = UI;
+const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+  UI;
 
 type Props = {
   editor: YooEditor;
@@ -30,12 +31,14 @@ const CarouselBlockOptions = ({ editor, block, props }: Props) => {
   return (
     <ExtendedBlockActions
       onClick={() => editor.setPath({ current: block.meta.order })}
-      className="yoopta-carousel-options"
-    >
+      className="yoopta-carousel-options">
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button justify-between" onClick={switchLoop}>
+          <button
+            type="button"
+            className="yoopta-block-options-button justify-between"
+            onClick={switchLoop}>
             <span className="flex">
               <Lollipop width={16} height={16} className="w-4 h-4 mr-2" />
               {loop ? 'Disable loop' : 'Make it loop'}
@@ -43,7 +46,10 @@ const CarouselBlockOptions = ({ editor, block, props }: Props) => {
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
-          <button type="button" className="yoopta-block-options-button justify-between" onClick={switchOrientation}>
+          <button
+            type="button"
+            className="yoopta-block-options-button justify-between"
+            onClick={switchOrientation}>
             <span className="flex">
               {isHorizontal ? (
                 <FlipHorizontal width={16} height={16} className="w-4 h-4 mr-2" />

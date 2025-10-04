@@ -123,7 +123,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -226,7 +231,10 @@ const MarkdownPreview = () => {
 
   return (
     <div className="container relative py-8">
-      <Head title="Markdown Playground" description="Deserialize/serialize your content from/to markdown" />
+      <Head
+        title="Markdown Playground"
+        description="Deserialize/serialize your content from/to markdown"
+      />
       <section>
         <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow">
           <div className="hidden h-full flex-col md:flex">

@@ -21,7 +21,8 @@
 .chatContent {
   max-width: 500px;
   min-width: 400px;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 6%, .05), 0 3px 6px hsla(0, 0%, 6%, .1), 0 9px 24px hsla(0, 0%, 6%, .2);
+  box-shadow: 0 0 0 1px hsla(0, 0%, 6%, 0.05), 0 3px 6px hsla(0, 0%, 6%, 0.1),
+    0 9px 24px hsla(0, 0%, 6%, 0.2);
   width: 100%;
   position: relative;
 }

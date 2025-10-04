@@ -1,18 +1,14 @@
-import {
-  useBlockData,
-  useYooptaEditor,
-  PluginCustomEditorRenderProps,
-  useYooptaReadOnly,
-  buildBlockData,
-} from '@yoopta/editor';
-import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-
 import { useRef, useState } from 'react';
-import { THEMES_MAP } from '../utils/themes';
+import type { BasicSetupOptions } from '@uiw/react-codemirror';
+import CodeMirror from '@uiw/react-codemirror';
+import type { PluginCustomEditorRenderProps } from '@yoopta/editor';
+import { buildBlockData, useBlockData, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
+
 import { CodeBlockOptions } from './CodeBlockOptions';
-import { LANGUAGES_MAP } from '../utils/languages';
-import { CodeElement } from '../types';
+import type { CodeElement } from '../types';
 import { getCodeElement, getCodeElementText } from '../utils/element';
+import { LANGUAGES_MAP } from '../utils/languages';
+import { THEMES_MAP } from '../utils/themes';
 
 const codeMirrorSetup: BasicSetupOptions = {
   lineNumbers: false,
@@ -53,8 +49,11 @@ const CodeEditor = ({ blockId }: PluginCustomEditorRenderProps) => {
     if (isShiftEnter) {
       e.preventDefault();
       const defaultBlock = buildBlockData();
-      editor.insertBlock(defaultBlock.type, { at: block.meta.order + 1, focus: true, blockData: defaultBlock });
-      return;
+      editor.insertBlock(defaultBlock.type, {
+        at: block.meta.order + 1,
+        focus: true,
+        blockData: defaultBlock,
+      });
     }
   };
 
@@ -63,8 +62,7 @@ const CodeEditor = ({ blockId }: PluginCustomEditorRenderProps) => {
       data-element-type="code"
       data-custom-editor
       className="yoo-code-rounded-md yoo-code-mt-2 yoo-code-p-0 yoopta-code"
-      onMouseDown={onClick}
-    >
+      onMouseDown={onClick}>
       <div contentEditable={false}>
         <CodeMirror
           value={code}

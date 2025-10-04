@@ -1,23 +1,34 @@
-import { VideoComponent } from './VideoComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { Placeholder } from './Placeholder';
-import { VideoPluginOptions } from '../types';
-import { VideoBlockOptions } from './VideoBlockOptions';
 import { Resizer } from './Resizer';
+import { VideoBlockOptions } from './VideoBlockOptions';
+import { VideoComponent } from './VideoComponent';
+import type { VideoPluginOptions } from '../types';
 
 const VideoRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, blockId, attributes, children } = props;
-  const { src, srcSet, bgColor, settings, sizes: propSizes, poster, provider, fit } = element.props || {};
+  const {
+    src,
+    srcSet,
+    bgColor,
+    settings,
+    sizes: propSizes,
+    poster,
+    provider,
+    fit,
+  } = element.props || {};
   const block = useBlockData(blockId);
   const editor = useYooptaEditor();
   const pluginOptions = useYooptaPluginOptions<VideoPluginOptions>('Video');
@@ -89,8 +100,7 @@ const VideoRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
     <div
       contentEditable={false}
       draggable={false}
-      className={`yoo-video-mt-4 yoo-video-relative yoo-video-flex ${alignClass} yoopta-video`}
-    >
+      className={`yoo-video-mt-4 yoo-video-relative yoo-video-flex ${alignClass} yoopta-video`}>
       <Resizable {...resizeProps} className="yoo-video-my-0 yoo-video-flex">
         {blockSelected && (
           <div className="yoo-video-absolute yoo-video-pointer-events-none yoo-video-inset-0 yoo-video-bg-[rgba(35,131,226,0.14)] yoo-video-z-[81] yoo-video-rounded-[3px] yoo-video-opacity-100 yoo-video-transition-opacity yoo-video-duration-150 yoo-video-ease-in" />
@@ -108,13 +118,19 @@ const VideoRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
             poster={poster}
             provider={provider}
             fit={fit}
-            attributes={attributes}
-          >
+            attributes={attributes}>
             {children}
           </VideoComponent>
         )}
 
-        {!isReadOnly && <VideoBlockOptions block={block} editor={editor} settings={settings} props={element.props} />}
+        {!isReadOnly && (
+          <VideoBlockOptions
+            block={block}
+            editor={editor}
+            settings={settings}
+            props={element.props}
+          />
+        )}
       </Resizable>
     </div>
   );

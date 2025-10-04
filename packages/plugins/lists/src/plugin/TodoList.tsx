@@ -1,8 +1,10 @@
-import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaBlockData, YooptaPlugin } from '@yoopta/editor';
+import type { YooptaBlockData } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+
 import { TodoListCommands } from '../commands';
 import { TodoListRender } from '../elements/TodoList';
 import { onKeyDown } from '../events/onKeyDown';
-import { ListElementMap } from '../types';
+import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const TodoList = new YooptaPlugin<Pick<ListElementMap, 'todo-list'>>({
@@ -32,10 +34,15 @@ const TodoList = new YooptaPlugin<Pick<ListElementMap, 'todo-list'>>({
         nodeNames: ['OL', 'UL'],
         parse(el, editor) {
           if (el.nodeName === 'OL' || el.nodeName === 'UL') {
-            const align = (el.getAttribute('data-meta-align') || 'left') as YooptaBlockData['meta']['align'];
+            const align = (el.getAttribute('data-meta-align') ||
+              'left') as YooptaBlockData['meta']['align'];
             const depth = parseInt(el.getAttribute('data-meta-depth') || '0', 10);
 
-            const deserializedList = deserializeListNodes(editor, el, { type: 'TodoList', depth, align });
+            const deserializedList = deserializeListNodes(editor, el, {
+              type: 'TodoList',
+              depth,
+              align,
+            });
             if (deserializedList.length > 0) {
               return deserializedList;
             }
@@ -56,9 +63,9 @@ const TodoList = new YooptaPlugin<Pick<ListElementMap, 'todo-list'>>({
       serialize: (element, text, blockMeta) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
         const indent = '  '.repeat(depth);
-        return `${indent}- ${element.props.checked ? '[x]' : '[ ]'} ${serializeTextNodesIntoMarkdown(
-          element.children,
-        )}`;
+        return `${indent}- ${
+          element.props.checked ? '[x]' : '[ ]'
+        } ${serializeTextNodesIntoMarkdown(element.children)}`;
       },
     },
     email: {

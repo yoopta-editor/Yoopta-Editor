@@ -1,5 +1,7 @@
-import { getRootBlockElement, YooEditor } from '@yoopta/editor';
-import { ActionMenuRenderProps, ActionMenuToolItem } from '../types';
+import type { YooEditor } from '@yoopta/editor';
+import { getRootBlockElement } from '@yoopta/editor';
+
+import type { ActionMenuRenderProps, ActionMenuToolItem } from '../types';
 
 type Params = {
   editor: YooEditor;
@@ -11,7 +13,10 @@ type Params = {
   selectedAction?: ActionMenuToolItem;
 };
 
-export function mapActionMenuItems(editor: YooEditor, items: ActionMenuToolItem[] | string[]): ActionMenuToolItem[] {
+export function mapActionMenuItems(
+  editor: YooEditor,
+  items: ActionMenuToolItem[] | string[],
+): ActionMenuToolItem[] {
   return items.map((item: string | ActionMenuToolItem) => {
     if (typeof item === 'string') {
       const title = editor.blocks[item].options?.display?.title || item;

@@ -1,7 +1,9 @@
-import { Ancestor, Editor, Element, Node, NodeEntry, Transforms } from 'slate';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { Ancestor, NodeEntry } from 'slate';
+import { Editor, Element, Node, Transforms } from 'slate';
 import { vi } from 'vitest';
+
 import { withAccordionListItemNormalize } from './withAccordionListItemNormalize';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
 import { ACCORDION_ELEMENTS } from '../constants';
 
 describe('withAccordionListItemNormalize', () => {
@@ -19,13 +21,13 @@ describe('withAccordionListItemNormalize', () => {
       path: { current: 0 },
     };
 
-    vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'children' in node;
-    });
+    vi.spyOn(Editor, 'isEditor').mockImplementation(
+      (node) => node && typeof node === 'object' && 'children' in node,
+    );
 
-    vi.spyOn(Element, 'isElement').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'type' in node;
-    });
+    vi.spyOn(Element, 'isElement').mockImplementation(
+      (node) => node && typeof node === 'object' && 'type' in node,
+    );
 
     vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {});
 
@@ -33,13 +35,9 @@ describe('withAccordionListItemNormalize', () => {
 
     vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {});
 
-    vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
-      return;
-    });
+    vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {});
 
-    vi.spyOn(Editor, 'hasPath').mockImplementation((editor, path) => {
-      return true;
-    });
+    vi.spyOn(Editor, 'hasPath').mockImplementation((editor, path) => true);
   });
 
   it('should not normalize if node is not an element', () => {
@@ -84,9 +82,9 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     const normalize = withAccordionListItemNormalize(slate as SlateEditor, editor as YooEditor);
     normalize.normalizeNode([accordionListItem, [0, 0]]);
@@ -121,9 +119,9 @@ describe('withAccordionListItemNormalize', () => {
     } as unknown as Ancestor;
 
     // Mock Editor.parent to return the parent node
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     const normalize = withAccordionListItemNormalize(slate as SlateEditor, editor as YooEditor);
     normalize.normalizeNode([accordionListItem, [0, 0]]);
@@ -155,9 +153,9 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];
@@ -200,9 +198,9 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];
@@ -255,9 +253,9 @@ describe('withAccordionListItemNormalize', () => {
       children: [accordionListItem],
     } as unknown as Ancestor;
 
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     vi.spyOn(Editor, 'nodes').mockImplementation(function* (editor, options) {
       yield [accordionListItem.children[0], [0, 0]];

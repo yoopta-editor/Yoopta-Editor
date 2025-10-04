@@ -5,9 +5,7 @@ export function serializeMarkown(element, text) {
 
   element.children.forEach((row, rowIndex) => {
     const rowMarkdown = row.children
-      .map((cell) => {
-        return ` ${serializeTextNodesIntoMarkdown(cell.children)} `;
-      })
+      .map((cell) => ` ${serializeTextNodesIntoMarkdown(cell.children)} `)
       .join('|');
 
     markdownTable += `|${rowMarkdown}|\n`;

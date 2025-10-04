@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
+
 import { insertBlock } from './insertBlock';
-import { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
+import type { PluginElement } from '../../plugins/types';
 import { buildBlockElementsStructure } from '../../utils/blockElements';
-import { PluginElement } from '../../plugins/types';
+import type { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
 
 vi.mock('../../utils/blockElements', () => ({
   buildBlockElementsStructure: vi.fn(),
@@ -206,7 +207,12 @@ describe('insertBlock', () => {
   it('should handle editor with no current path', () => {
     editor.path = { current: null };
     editor.children = {
-      'existing-block': { id: 'existing-block', type: 'TestBlock', value: [], meta: { order: 0, depth: 0 } },
+      'existing-block': {
+        id: 'existing-block',
+        type: 'TestBlock',
+        value: [],
+        meta: { order: 0, depth: 0 },
+      },
     };
 
     const blockId = insertBlock(editor as YooEditor, 'TestBlock');

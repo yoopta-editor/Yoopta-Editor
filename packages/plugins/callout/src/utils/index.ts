@@ -1,5 +1,6 @@
-import { CSSProperties } from 'react';
-import { CalloutTheme } from '../types';
+import type { CSSProperties } from 'react';
+
+import type { CalloutTheme } from '../types';
 
 export const CALLOUT_THEME_STYLES: Record<CalloutTheme, CSSProperties> = {
   default: {

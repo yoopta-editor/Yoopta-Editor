@@ -1,14 +1,15 @@
+import type { YooptaBlockData } from '@yoopta/editor';
 import {
+  YooptaPlugin,
   generateId,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
-  YooptaBlockData,
-  YooptaPlugin,
 } from '@yoopta/editor';
+
 import { BulletedListCommands } from '../commands';
 import { BulletedListRender } from '../elements/BulletedList';
 import { onKeyDown } from '../events/onKeyDown';
-import { ListElementMap } from '../types';
+import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
@@ -35,11 +36,16 @@ const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
         nodeNames: ['UL'],
         parse(el, editor) {
           if (el.nodeName === 'UL') {
-            const align = (el.getAttribute('data-meta-align') || 'left') as YooptaBlockData['meta']['align'];
+            const align = (el.getAttribute('data-meta-align') ||
+              'left') as YooptaBlockData['meta']['align'];
             const depth = parseInt(el.getAttribute('data-meta-depth') || '0', 10);
 
             // [TODO] - Fix losing marks when deserializing
-            const deserializedList = deserializeListNodes(editor, el, { type: 'BulletedList', depth, align });
+            const deserializedList = deserializeListNodes(editor, el, {
+              type: 'BulletedList',
+              depth,
+              align,
+            });
             if (deserializedList.length > 0) {
               return deserializedList;
             }

@@ -1,19 +1,21 @@
-import { ImageComponent } from './ImageComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
-import { Placeholder } from './Placeholder';
-import { ImagePluginOptions } from '../types';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { ImageBlockOptions } from './ImageBlockOptions';
+import { ImageComponent } from './ImageComponent';
+import { Placeholder } from './Placeholder';
 import { Resizer } from './Resizer';
+import type { ImagePluginOptions } from '../types';
 
 const ImageRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, blockId, children, attributes } = props;
@@ -94,8 +96,7 @@ const ImageRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
     <div
       contentEditable={false}
       draggable={false}
-      className={`yoo-image-mt-4 yoo-image-relative yoo-image-flex ${alignClass} yoopta-image`}
-    >
+      className={`yoo-image-mt-4 yoo-image-relative yoo-image-flex ${alignClass} yoopta-image`}>
       <Resizable {...resizeProps} className="yoo-image-my-0 yoo-image-flex">
         {blockSelected && (
           <div className="yoo-image-absolute yoo-image-pointer-events-none yoo-image-inset-0 yoo-image-bg-[rgba(35,131,226,0.14)] yoo-image-z-[81] yoo-image-rounded-[3px] yoo-image-opacity-100 yoo-image-transition-opacity yoo-image-duration-150 yoo-image-ease-in" />
@@ -111,12 +112,13 @@ const ImageRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
             width={sizes?.width}
             bgColor={bgColor}
             height={sizes?.height}
-            attributes={attributes}
-          >
+            attributes={attributes}>
             {children}
           </ImageComponent>
         )}
-        {!isReadOnly && <ImageBlockOptions block={blockData} editor={editor} props={element.props} />}
+        {!isReadOnly && (
+          <ImageBlockOptions block={blockData} editor={editor} props={element.props} />
+        )}
       </Resizable>
     </div>
   );

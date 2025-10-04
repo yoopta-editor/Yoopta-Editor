@@ -1,4 +1,4 @@
-import { PluginElementRenderProps } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 
 const BlockquoteRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { className = '', ...htmlAttrs } = props.HTMLAttributes || {};

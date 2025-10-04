@@ -1,7 +1,8 @@
-import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+
 import { ParagraphCommands } from '../commands/ParagraphCommands';
 import { withParagraph } from '../extensions/withParagraph';
-import { ParagraphElementMap } from '../types';
+import type { ParagraphElementMap } from '../types';
 import { ParagraphRender } from '../ui/Paragraph';
 
 const Paragraph = new YooptaPlugin<ParagraphElementMap>({
@@ -31,9 +32,7 @@ const Paragraph = new YooptaPlugin<ParagraphElementMap>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `${serializeTextNodesIntoMarkdown(element.children)}\n`;
-      },
+      serialize: (element, text) => `${serializeTextNodesIntoMarkdown(element.children)}\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

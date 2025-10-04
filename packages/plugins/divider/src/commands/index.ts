@@ -1,5 +1,7 @@
-import { Blocks, buildBlockData, Elements, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { DividerElement, DividerElementProps } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
+
+import type { DividerElement, DividerElementProps } from '../types';
 
 type DividerInsertOptions = DividerElementProps & {
   at?: YooptaPathIndex;
@@ -7,21 +9,26 @@ type DividerInsertOptions = DividerElementProps & {
 };
 
 export type DividerCommands = {
-  buildDividerElements: (editor: YooEditor, options?: Partial<DividerElementProps>) => DividerElement;
+  buildDividerElements: (
+    editor: YooEditor,
+    options?: Partial<DividerElementProps>,
+  ) => DividerElement;
   insertDivider: (editor: YooEditor, options?: Partial<DividerInsertOptions>) => void;
   deleteDivider: (editor: YooEditor, blockId: string) => void;
   updateDivider: (editor: YooEditor, blockId: string, props: Partial<DividerElementProps>) => void;
 };
 
 export const DividerCommands: DividerCommands = {
-  buildDividerElements: (editor, options = {}) => {
-    return {
-      id: generateId(),
-      type: 'divider',
-      children: [{ text: '' }],
-      props: { color: options.color || '#EFEFEE', theme: options.theme || 'solid', nodeType: 'void' },
-    };
-  },
+  buildDividerElements: (editor, options = {}) => ({
+    id: generateId(),
+    type: 'divider',
+    children: [{ text: '' }],
+    props: {
+      color: options.color || '#EFEFEE',
+      theme: options.theme || 'solid',
+      nodeType: 'void',
+    },
+  }),
   insertDivider: (editor, options = {}) => {
     const { at, focus } = options;
 

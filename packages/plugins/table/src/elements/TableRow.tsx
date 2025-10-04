@@ -1,4 +1,5 @@
-import { PluginElementRenderProps, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useYooptaEditor } from '@yoopta/editor';
 
 const TableRow = ({
   attributes,
@@ -16,7 +17,11 @@ const TableRow = ({
   const { className = '', ...htmlAttrs } = HTMLAttributes || {};
 
   return (
-    <tr {...htmlAttrs} className={`yoopta-table-row ${className}`} data-element-id={element.id} {...attributes}>
+    <tr
+      {...htmlAttrs}
+      className={`yoopta-table-row ${className}`}
+      data-element-id={element.id}
+      {...attributes}>
       {children}
     </tr>
   );

@@ -6,20 +6,18 @@ export type OpenAIChatRole = 'user' | 'assistant' | 'system' | '';
 
 export type Model = GPT35Model | GPT4Model;
 
-export interface OpenAIChatMessage {
+export type OpenAIChatMessage = {
   content: string;
   role: OpenAIChatRole;
-}
+};
 
 export type ContextChatGPTMessage = OpenAIChatMessage;
 
 export type ChatMessage = OpenAIChatMessage & { id: string; order: number; fromContext?: boolean };
 
-export type ChatMessageMap = {
-  [id: string]: ChatMessage;
-};
+export type ChatMessageMap = Record<string, ChatMessage>;
 
-export interface OpenAIChatCompletionChunk {
+export type OpenAIChatCompletionChunk = {
   id: string;
   object: string;
   created: number;
@@ -29,20 +27,20 @@ export interface OpenAIChatCompletionChunk {
     index: number;
     finish_reason: string | null;
   }[];
-}
+};
 
-export interface ChatCompletionToken extends OpenAIChatMessage {
+export type ChatCompletionToken = {
   timestamp: number;
-}
+} & OpenAIChatMessage;
 
-export interface ChatMessageParams extends OpenAIChatMessage {
+export type ChatMessageParams = {
   timestamp?: number;
   data?: {
     loading?: boolean;
     responseTime?: string;
     chunks?: ChatCompletionToken[];
   };
-}
+} & OpenAIChatMessage;
 
 // For more information on each of these properties:
 // https://platform.openai.com/docs/api-reference/chat

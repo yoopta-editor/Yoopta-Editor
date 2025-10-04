@@ -1,10 +1,14 @@
-import { Descendant } from 'slate';
-import { YooEditor } from '../editor/types';
+import type { Descendant } from 'slate';
+
+import type { YooEditor } from '../editor/types';
 import { generateId } from '../utils/generateId';
 
 // [TODO] - Move to @yoopta/utils or @yoopta/editor/utils
 // helpers for deserializing text nodes when you use custom parsers in your plugins
-export function deserializeTextNodes(editor: YooEditor, nodes: NodeListOf<ChildNode>): Descendant[] {
+export function deserializeTextNodes(
+  editor: YooEditor,
+  nodes: NodeListOf<ChildNode>,
+): Descendant[] {
   const deserializedNodes: Descendant[] = [];
 
   nodes.forEach((node) => {
@@ -70,7 +74,7 @@ export function deserializeTextNodes(editor: YooEditor, nodes: NodeListOf<ChildN
 
         deserializedNodes.push({
           // @ts-ignore [FIXME] - Fix types
-          highlight: { color: color, backgroundColor: backgroundColor },
+          highlight: { color, backgroundColor },
           ...deserializeTextNodes(editor, element.childNodes)[0],
         });
       }

@@ -29,21 +29,18 @@ const MobileNavigation = () => {
       trigger={
         <Button
           variant="ghost"
-          className="mr-2 px-3 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
-        >
+          className="mr-2 px-3 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden">
           <ViewVerticalIcon className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
-      }
-    >
+      }>
       <div className="pb-2 pt-4 border-b text-white">
         <nav className="flex items-center space-x-6 text-sm font-medium ml-0">
           <NextLink
             href="https://github.com/Darginec05/Yoopta-Editor"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center"
-          >
+            className="flex items-center">
             <div className="rounded-full bg-white relative w-[30px] h-[30px]">
               <img
                 src="/yoopta/yoopta-logo.png"
@@ -62,8 +59,7 @@ const MobileNavigation = () => {
           href="https://yoodocs.space/yoopta-editor/yoopta/introduction-rsK_1fODIL"
           target="_blank"
           rel="noopener noreferrer"
-          className="mr-4 flex items-center"
-        >
+          className="mr-4 flex items-center">
           Docs
           <FileHeart size={15} className="ml-2" color="#1f6feb" />
         </NextLink>
@@ -75,16 +71,14 @@ const MobileNavigation = () => {
           href="https://github.com/sponsors/Darginec05"
           target="_blank"
           rel="noopener noreferrer"
-          className="mr-4 flex items-center"
-        >
+          className="mr-4 flex items-center">
           Sponsor <span className="ml-2">💖</span>
         </NextLink>
         <NextLink
           href="https://github.com/Darginec05/Yoopta-Editor"
           target="_blank"
           rel="noopener noreferrer"
-          className="mr-4 flex items-center"
-        >
+          className="mr-4 flex items-center">
           Give us star
           <StarIcon size={15} className="ml-2" fill="#faca15" color="#faca15" />
         </NextLink>
@@ -92,8 +86,7 @@ const MobileNavigation = () => {
           href="https://discord.com/invite/Dt8rhSTjsn"
           target="_blank"
           rel="noopener noreferrer"
-          className="mr-4 flex items-center"
-        >
+          className="mr-4 flex items-center">
           Community
           <Send size={15} className="ml-2" color="#2e9fdc" />
         </NextLink>

@@ -1,9 +1,12 @@
-import { UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
-import { Sheet, TableProperties, CheckIcon } from 'lucide-react';
-import { TableCommands } from '../commands';
-import { TableElement } from '../types';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { UI } from '@yoopta/editor';
+import { CheckIcon, Sheet, TableProperties } from 'lucide-react';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } = UI;
+import { TableCommands } from '../commands';
+import type { TableElement } from '../types';
+
+const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+  UI;
 
 type Props = {
   editor: YooEditor;
@@ -28,29 +31,32 @@ const TableBlockOptions = ({ editor, block, table }: Props) => {
   return (
     <ExtendedBlockActions
       onClick={() => editor.setPath({ current: block.meta.order })}
-      className="yoopta-table-options"
-    >
+      className="yoopta-table-options">
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
           <button
             type="button"
             className="yoopta-block-options-button yoo-table-justify-between"
-            onClick={onSwitchHeaderRow}
-          >
+            onClick={onSwitchHeaderRow}>
             <span className="yoo-table-flex">
-              <Sheet width={16} height={16} className="yoo-table-w-4 yoo-table-h-4 yoo-table-mr-2" />
+              <Sheet
+                width={16}
+                height={16}
+                className="yoo-table-w-4 yoo-table-h-4 yoo-table-mr-2"
+              />
               Header row
             </span>
-            {isHeaderRowEnabled && <CheckIcon width={16} height={16} className="yoo-table-w-4 yoo-table-h-4" />}
+            {isHeaderRowEnabled && (
+              <CheckIcon width={16} height={16} className="yoo-table-w-4 yoo-table-h-4" />
+            )}
           </button>
         </BlockOptionsMenuItem>
         <BlockOptionsMenuItem>
           <button
             type="button"
             className="yoopta-block-options-button yoo-table-justify-between"
-            onClick={onSwitchHeaderColumn}
-          >
+            onClick={onSwitchHeaderColumn}>
             <span className="yoo-table-flex">
               <TableProperties
                 width={16}
@@ -59,7 +65,9 @@ const TableBlockOptions = ({ editor, block, table }: Props) => {
               />
               Header column
             </span>
-            {isHeaderColumnEnabled && <CheckIcon width={16} height={16} className="yoo-table-w-4 yoo-table-h-4" />}
+            {isHeaderColumnEnabled && (
+              <CheckIcon width={16} height={16} className="yoo-table-w-4 yoo-table-h-4" />
+            )}
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>

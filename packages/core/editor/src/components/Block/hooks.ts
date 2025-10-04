@@ -1,9 +1,18 @@
-import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
-import { useFloating, offset, flip, inline, shift, useTransitionStyles, autoUpdate } from '@floating-ui/react';
 import { useMemo, useState } from 'react';
+import type { Transform } from '@dnd-kit/utilities';
+import {
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
+  useTransitionStyles,
+} from '@floating-ui/react';
+
+import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import type { YooptaBlockData } from '../../editor/types';
 import { buildActionMenuRenderProps } from '../../UI/BlockOptions/utils';
-import { YooptaBlockData } from '../../editor/types';
-import { Transform } from '@dnd-kit/utilities';
 
 export const useActionMenuToolRefs = ({ editor }) => {
   const tools = useYooptaTools();
@@ -22,10 +31,8 @@ export const useActionMenuToolRefs = ({ editor }) => {
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted: isMountedActionMenu, styles: actionMenuTransitionStyles } = useTransitionStyles(
-    actionMenuContext,
-    { duration: 100 },
-  );
+  const { isMounted: isMountedActionMenu, styles: actionMenuTransitionStyles } =
+    useTransitionStyles(actionMenuContext, { duration: 100 });
 
   const actionMenuStyles = { ...actionMenuFloatingStyles, ...actionMenuTransitionStyles };
   const onChangeActionMenuOpen = (state) => setIsActionMenuOpen(state);
@@ -56,8 +63,8 @@ export const useBlockStyles = (
   transition: string | undefined,
   isDragging: boolean,
   isOver: boolean,
-) => {
-  return useMemo(
+) =>
+  useMemo(
     () => ({
       marginLeft: `${block.meta.depth * 20}px`,
       transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',
@@ -67,7 +74,6 @@ export const useBlockStyles = (
     }),
     [block.meta.depth, transform, transition, isDragging, isOver],
   );
-};
 
 export const useBlockOptionsRefs = () => {
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);
@@ -83,12 +89,10 @@ export const useBlockOptionsRefs = () => {
     middleware: [inline(), flip(), shift(), offset()],
   });
 
-  const { isMounted: isBlockOptionsMounted, styles: blockOptionsTransitionStyles } = useTransitionStyles(
-    blockOptionsContext,
-    {
+  const { isMounted: isBlockOptionsMounted, styles: blockOptionsTransitionStyles } =
+    useTransitionStyles(blockOptionsContext, {
       duration: 100,
-    },
-  );
+    });
   const blockOptionsFloatingStyle = { ...blockOptionsStyles, ...blockOptionsTransitionStyles };
 
   return {

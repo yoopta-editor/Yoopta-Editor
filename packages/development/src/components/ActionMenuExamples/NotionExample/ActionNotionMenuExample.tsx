@@ -1,7 +1,8 @@
-import { ActionMenuRenderProps } from '@yoopta/action-menu-list';
+import type { ActionMenuRenderProps } from '@yoopta/action-menu-list';
 import cx from 'classnames';
-import { ICONS_SRC } from './utils/iconsMap';
+
 import s from './ActionNotionMenuExample.module.scss';
+import { ICONS_SRC } from './utils/iconsMap';
 
 const VOID_PLUGINS = ['Video', 'Image', 'File', 'Embed'];
 
@@ -25,7 +26,11 @@ const ActionNotionMenuExample = (props: ActionMenuRenderProps) => {
               const icon = ICONS_SRC[item.type];
 
               return (
-                <button key={item.type} type="button" className={s.item} {...getItemProps(item.type)}>
+                <button
+                  key={item.type}
+                  type="button"
+                  className={s.item}
+                  {...getItemProps(item.type)}>
                   <div className={s.itemLeft}>
                     <img src={icon} className={s.leftImage} />
                   </div>
@@ -46,7 +51,11 @@ const ActionNotionMenuExample = (props: ActionMenuRenderProps) => {
               const icon = ICONS_SRC[item.type];
 
               return (
-                <button key={item.type} type="button" className={s.item} {...getItemProps(item.type)}>
+                <button
+                  key={item.type}
+                  type="button"
+                  className={s.item}
+                  {...getItemProps(item.type)}>
                   <div className={s.itemLeft}>
                     <img src={icon} className={s.leftImage} />
                   </div>

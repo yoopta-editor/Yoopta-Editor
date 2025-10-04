@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { HOTKEYS, cx } from '@yoopta/editor';
 import autosize from 'autosize';
-import FlighIcon from '../icons/flight.svg';
-import { Loader } from './Loader';
-import { cx, HOTKEYS } from '@yoopta/editor';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import s from './ChatInput.module.scss';
+import { Loader } from './Loader';
+import FlighIcon from '../icons/flight.svg';
 
 const ChatInput = ({
   value,
@@ -79,7 +80,11 @@ const ChatInput = ({
             className={s.textarea}
             rows={1}
           />
-          <button type="button" onClick={loading ? undefined : askChatGPT} disabled={loading} className={s.flight}>
+          <button
+            type="button"
+            onClick={loading ? undefined : askChatGPT}
+            disabled={loading}
+            className={s.flight}>
             {loading ? <Loader /> : <FlighIcon color="#fff" fill="#fff" />}
           </button>
         </div>

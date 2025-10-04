@@ -11,7 +11,7 @@ type Props = {
 const Leaf = (props: Props) => {
   const { leaf, isLast, text, parent, renderLeaf } = props;
 
-  let children = <StringComponent isLast={isLast} leaf={leaf} parent={parent} text={text} />;
+  const children = <StringComponent isLast={isLast} leaf={leaf} parent={parent} text={text} />;
   const attributes = { 'data-slate-leaf': true };
 
   return renderLeaf({ attributes, children, leaf, text });

@@ -31,8 +31,7 @@ export function TableDataCell(props: PluginElementRenderProps) {
     <Node
       {...props.attributes}
       style={style}
-      className="!border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"
-    >
+      className="!border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
       {props.children}
     </Node>
   );

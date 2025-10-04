@@ -1,6 +1,9 @@
-import { generateId, SlateEditor, YooEditor } from '@yoopta/editor';
-import { Editor, Element, Location, Span, Transforms } from 'slate';
-import { LinkElement, LinkElementProps } from '../types';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import { generateId } from '@yoopta/editor';
+import type { Location } from 'slate';
+import { Editor, Element, Span, Transforms } from 'slate';
+
+import type { LinkElement, LinkElementProps } from '../types';
 
 type LinkElementOptions = {
   props: Omit<LinkElementProps, 'nodeType'>;
@@ -33,7 +36,7 @@ export const LinkCommands: LinkCommands = {
     } as LinkElement;
   },
   insertLink: (editor, options) => {
-    let { props, slate } = options || {};
+    const { props, slate } = options || {};
 
     if (!slate || !slate.selection) return;
 

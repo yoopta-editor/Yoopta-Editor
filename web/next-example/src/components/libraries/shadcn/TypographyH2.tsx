@@ -5,8 +5,7 @@ export function TypographyH2(props: PluginElementRenderProps) {
   return (
     <h2
       className="mt-10 scroll-m-20 !border-b pb-2 text-3xl font-semibold tracking-tight transition-colors"
-      {...props.attributes}
-    >
+      {...props.attributes}>
       {props.children}
     </h2>
   );

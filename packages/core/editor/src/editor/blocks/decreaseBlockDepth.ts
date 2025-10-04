@@ -1,7 +1,7 @@
+import type { BlockDepthOptions } from './increaseBlockDepth';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
-import { YooEditor } from '../types';
-import { YooptaOperation } from '../core/applyTransforms';
-import { BlockDepthOptions } from './increaseBlockDepth';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type { YooEditor } from '../types';
 
 export function decreaseBlockDepth(editor: YooEditor, options: BlockDepthOptions = {}) {
   const { at = editor.path.current, blockId } = options;

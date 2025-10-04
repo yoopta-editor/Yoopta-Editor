@@ -38,13 +38,19 @@ export async function fetchRepoData({ owner, repo }: RepoFetchOptions): Promise<
   return repoData;
 }
 
-export async function fetchRepoContributors({ owner, repo }: RepoFetchOptions): Promise<Contributor[]> {
-  const contributors = await request<Contributor[]>(`https://api.github.com/repos/${owner}/${repo}/contributors`, {
-    headers: {
-      Authorization: `token ${GITHUB_TOKEN}`,
-      Accept: 'application/vnd.github.v3+json',
+export async function fetchRepoContributors({
+  owner,
+  repo,
+}: RepoFetchOptions): Promise<Contributor[]> {
+  const contributors = await request<Contributor[]>(
+    `https://api.github.com/repos/${owner}/${repo}/contributors`,
+    {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
     },
-  });
+  );
 
   return contributors;
 }

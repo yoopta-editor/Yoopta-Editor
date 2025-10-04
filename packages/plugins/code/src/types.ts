@@ -1,6 +1,7 @@
-import { SlateElement } from '@yoopta/editor';
-import { LANGUAGES_MAP } from './utils/languages';
-import { THEMES_MAP } from './utils/themes';
+import type { SlateElement } from '@yoopta/editor';
+
+import type { LANGUAGES_MAP } from './utils/languages';
+import type { THEMES_MAP } from './utils/themes';
 
 export type CodePluginElements = 'code';
 export type CodeElementProps = {

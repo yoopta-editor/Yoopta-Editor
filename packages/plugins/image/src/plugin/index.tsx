@@ -1,6 +1,9 @@
-import { generateId, SlateElement, YooptaPlugin } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { ImageCommands } from '../commands';
-import { ImageElementMap, ImageElementProps, ImagePluginElements, ImagePluginOptions } from '../types';
+import type { ImageElementMap, ImageElementProps, ImagePluginOptions } from '../types';
+import { ImagePluginElements } from '../types';
 import { ImageRender } from '../ui/Image';
 import { limitSizes } from '../utils/limitSizes';
 
@@ -44,8 +47,12 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
         parse: (el, editor) => {
           if (el.nodeName === 'IMG') {
             const sizes = {
-              width: el.getAttribute('width') ? parseInt(el.getAttribute('width') || '650', 10) : 650,
-              height: el.getAttribute('height') ? parseInt(el.getAttribute('height') || '500', 10) : 500,
+              width: el.getAttribute('width')
+                ? parseInt(el.getAttribute('width') || '650', 10)
+                : 650,
+              height: el.getAttribute('height')
+                ? parseInt(el.getAttribute('height') || '500', 10)
+                : 500,
             };
 
             const maxSizes = (editor.plugins.Image.options as ImagePluginOptions)?.maxSizes;
@@ -78,19 +85,19 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
         const { align = 'center', depth = 0 } = blockMeta || {};
         const justify = ALIGNS_TO_JUSTIFY[align] || 'center';
 
-        return `<div style="margin-left: ${depth * 20}px; display: flex; width: 100%; justify-content: ${justify};">
-        <img data-meta-align="${align}" data-meta-depth="${depth}" src="${element.props.src}" alt="${
-          element.props.alt
-        }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" objectFit="${
-          element.props.fit
-        }"/>
+        return `<div style="margin-left: ${
+          depth * 20
+        }px; display: flex; width: 100%; justify-content: ${justify};">
+        <img data-meta-align="${align}" data-meta-depth="${depth}" src="${
+          element.props.src
+        }" alt="${element.props.alt}" width="${element.props.sizes.width}" height="${
+          element.props.sizes.height
+        }" objectFit="${element.props.fit}"/>
         </div>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.alt || element.id}](${element.props.src})\n`;
-      },
+      serialize: (element, text) => `![${element.props.alt || element.id}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {
@@ -106,9 +113,9 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
                 }px; display: flex; width: 100%; justify-content: ${justify}; margin-top: 1rem;">
                     <img data-meta-align="${align}" style="margin: 0 auto; object-fit:${
           element.props.fit || 'contain'
-        };" data-meta-depth="${depth}" src="${element.props.src}" alt="${element.props.alt}" width="${
-          element.props.sizes.width
-        }" height="${element.props.sizes.height}" />
+        };" data-meta-depth="${depth}" src="${element.props.src}" alt="${
+          element.props.alt
+        }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" />
                 </td>
               </tr>
             </tbody>

@@ -3,9 +3,9 @@ import { ImageElement, ImageElementProps, ImageUploadResponse } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: ImageElement;
-  }
+  };
 }
 
 export { ImageCommands } from './commands';

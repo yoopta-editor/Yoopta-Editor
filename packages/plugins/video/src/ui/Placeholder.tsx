@@ -1,8 +1,10 @@
-import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
+import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import { VideoIcon } from '@radix-ui/react-icons';
-import { CSSProperties, useState } from 'react';
-import { VideoUploader } from './VideoUploader';
+
 import { Loader } from './Loader';
+import { VideoUploader } from './VideoUploader';
 
 const loadingStyles: CSSProperties = {
   width: '100%',
@@ -26,21 +28,21 @@ const Placeholder = ({ attributes, children, blockId }) => {
     <div
       className="yoo-video-w-full yoo-video-user-select-none yoo-video-m-[20px_0_10px] yoo-video-relative yoo-video-flex"
       {...attributes}
-      contentEditable={false}
-    >
+      contentEditable={false}>
       <button
         type="button"
-        className={`yoopta-button yoo-video-p-[12px_36px_12px_12px] yoo-video-flex yoo-video-items-center yoo-video-text-left yoo-video-w-full yoo-video-overflow-hidden yoo-video-rounded-[3px] yoo-video-text-[14px] yoo-video-text-[rgba(55,53,47,0.65)] yoo-video-relative yoo-video-cursor-pointer yoo-video-border-none yoo-video-bg-[#efefef] yoo-video-transition-[background-color_100ms_ease-in] hover:yoo-video-bg-[#e3e3e3]`}
+        className="yoopta-button yoo-video-p-[12px_36px_12px_12px] yoo-video-flex yoo-video-items-center yoo-video-text-left yoo-video-w-full yoo-video-overflow-hidden yoo-video-rounded-[3px] yoo-video-text-[14px] yoo-video-text-[rgba(55,53,47,0.65)] yoo-video-relative yoo-video-cursor-pointer yoo-video-border-none yoo-video-bg-[#efefef] yoo-video-transition-[background-color_100ms_ease-in] hover:yoo-video-bg-[#e3e3e3]"
         onClick={() => setIsUploaderOpen(true)}
         disabled={loading}
-        ref={refs.setReference}
-      >
+        ref={refs.setReference}>
         {loading ? (
           <Loader className="yoo-video-mr-2 yoo-video-user-select-none" width={24} height={24} />
         ) : (
           <VideoIcon className="yoo-video-mr-2 yoo-video-user-select-none" width={24} height={24} />
         )}
-        <span className="yoo-video-font-medium">{loading ? 'Loading...' : 'Click to add video'}</span>
+        <span className="yoo-video-font-medium">
+          {loading ? 'Loading...' : 'Click to add video'}
+        </span>
         {loading && (
           <div
             className="yoo-video-absolute yoo-video-top-0 yoo-video-left-0 yoo-video-h-full yoo-video-bg-[rgba(55,53,47,0.16)]"

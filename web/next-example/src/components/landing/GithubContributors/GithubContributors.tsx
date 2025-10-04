@@ -30,8 +30,7 @@ const ContributorItem = ({ contributor }: { contributor: Contributor }) => {
       className="[text-underline-position:from-font]"
       href={contributor.html_url}
       target="_blank"
-      rel="noopener noreferrer"
-    >
+      rel="noopener noreferrer">
       <Image
         src={contributor.avatar_url}
         alt={contributor.login}

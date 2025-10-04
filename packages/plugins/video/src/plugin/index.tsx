@@ -1,6 +1,7 @@
-import { generateId, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { VideoCommands } from '../commands';
-import { VideoElementMap, VideoPluginOptions } from '../types';
+import type { VideoElementMap, VideoPluginOptions } from '../types';
 import { VideoRender } from '../ui/Video';
 import { limitSizes } from '../utils/limitSizes';
 
@@ -57,8 +58,12 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
             const bgColor = el.getAttribute('bgcolor');
 
             const sizes = {
-              width: el.getAttribute('width') ? parseInt(el.getAttribute('width') || '650', 10) : 650,
-              height: el.getAttribute('height') ? parseInt(el.getAttribute('height') || '500', 10) : 500,
+              width: el.getAttribute('width')
+                ? parseInt(el.getAttribute('width') || '650', 10)
+                : 650,
+              height: el.getAttribute('height')
+                ? parseInt(el.getAttribute('height') || '500', 10)
+                : 500,
             };
 
             const maxSizes = (editor.plugins.Image.options as VideoPluginOptions)?.maxSizes;
@@ -124,21 +129,23 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'center';
 
         return `
-        <div style="margin-left: ${depth * 20}px; display: flex; width: 100%; justify-content: ${justify};">
-        <video data-meta-align="${align}" data-meta-depth="${depth}" src="${element.props.src}" width="${
-          element.props.sizes.width
-        }" height="${element.props.sizes.height}" controls="${element.props.settings.controls}" loop="${
-          element.props.settings.loop
-        }" muted="${element.props.settings.muted}" autoplay="${
-          element.props.settings.autoPlay
-        }" style="margin: 0 auto;" objectFit="${element.props.fit}" />
+        <div style="margin-left: ${
+          depth * 20
+        }px; display: flex; width: 100%; justify-content: ${justify};">
+        <video data-meta-align="${align}" data-meta-depth="${depth}" src="${
+          element.props.src
+        }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" controls="${
+          element.props.settings.controls
+        }" loop="${element.props.settings.loop}" muted="${
+          element.props.settings.muted
+        }" autoplay="${element.props.settings.autoPlay}" style="margin: 0 auto;" objectFit="${
+          element.props.fit
+        }" />
         </div>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.src}](${element.props.src})\n`;
-      },
+      serialize: (element, text) => `![${element.props.src}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

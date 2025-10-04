@@ -1,7 +1,9 @@
-import { Ancestor, Editor, Element, Node, NodeEntry, Transforms } from 'slate';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { Ancestor, NodeEntry } from 'slate';
+import { Editor, Element, Node, Transforms } from 'slate';
 import { vi } from 'vitest';
+
 import { withAccordionListNormalize } from './withAccordionListNormalize';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
 import { ACCORDION_ELEMENTS } from '../constants';
 
 describe('withAccordionListNormalize', () => {
@@ -20,14 +22,14 @@ describe('withAccordionListNormalize', () => {
     };
 
     // Mock Editor.isEditor
-    vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'children' in node;
-    });
+    vi.spyOn(Editor, 'isEditor').mockImplementation(
+      (node) => node && typeof node === 'object' && 'children' in node,
+    );
 
     // Mock Element.isElement
-    vi.spyOn(Element, 'isElement').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'type' in node;
-    });
+    vi.spyOn(Element, 'isElement').mockImplementation(
+      (node) => node && typeof node === 'object' && 'type' in node,
+    );
 
     // Mock Transforms.unwrapNodes
     vi.spyOn(Transforms, 'unwrapNodes').mockImplementation((editor, options) => {});
@@ -81,9 +83,9 @@ describe('withAccordionListNormalize', () => {
       children: [accordionList],
     } as unknown as Ancestor;
 
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     const normalize = withAccordionListNormalize(slate as SlateEditor, editor as YooEditor);
     normalize.normalizeNode([accordionList, [0, 0]]);
@@ -123,9 +125,9 @@ describe('withAccordionListNormalize', () => {
     } as unknown as Ancestor;
 
     // Mock Editor.parent to return a non-element parent
-    vi.spyOn(Editor, 'parent').mockImplementation((editor, path) => {
-      return [parentNode, [0]] as NodeEntry<Ancestor>;
-    });
+    vi.spyOn(Editor, 'parent').mockImplementation(
+      (editor, path) => [parentNode, [0]] as NodeEntry<Ancestor>,
+    );
 
     const normalize = withAccordionListNormalize(slate as SlateEditor, editor as YooEditor);
     normalize.normalizeNode([accordionList, [0, 0]]);

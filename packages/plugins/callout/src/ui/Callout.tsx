@@ -1,11 +1,13 @@
-import { PluginElementRenderProps, useBlockData, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useBlockData, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
+
 import { CalloutBlockOptions } from './CalloutBlockOptions';
-import { CalloutTheme } from '../types';
 import DefaultIcon from '../icons/default.svg';
-import SuccessIcon from '../icons/success.svg';
-import WarningIcon from '../icons/warning.svg';
 import ErrorIcon from '../icons/error.svg';
 import InfoIcon from '../icons/info.svg';
+import SuccessIcon from '../icons/success.svg';
+import WarningIcon from '../icons/warning.svg';
+import type { CalloutTheme } from '../types';
 
 const THEME_ICONS: Record<CalloutTheme, any> = {
   default: DefaultIcon,
@@ -31,7 +33,10 @@ const CalloutRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
   const Icon = THEME_ICONS[theme];
 
   return (
-    <div className={`yoopta-callout yoopta-callout-theme-${theme} ${className}`} {...htmlAttrs} {...attributes}>
+    <div
+      className={`yoopta-callout yoopta-callout-theme-${theme} ${className}`}
+      {...htmlAttrs}
+      {...attributes}>
       <div className="yoopta-callout-icon">
         <Icon />
       </div>

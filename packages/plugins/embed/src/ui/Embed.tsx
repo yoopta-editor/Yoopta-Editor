@@ -1,19 +1,21 @@
-import { EmbedComponent } from './EmbedComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
-import { Placeholder } from './Placeholder';
-import { EmbedPluginOptions } from '../types';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { EmbedBlockOptions } from './EmbedBlockOptions';
+import { EmbedComponent } from './EmbedComponent';
+import { Placeholder } from './Placeholder';
 import { Resizer } from './Resizer';
+import type { EmbedPluginOptions } from '../types';
 
 const EmbedRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, children, attributes, blockId } = props;
@@ -89,8 +91,7 @@ const EmbedRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
     <div
       contentEditable={false}
       draggable={false}
-      className={`yoo-embed-mt-4 yoo-embed-relative yoo-embed-flex ${alignClass} yoopta-embed`}
-    >
+      className={`yoo-embed-mt-4 yoo-embed-relative yoo-embed-flex ${alignClass} yoopta-embed`}>
       <Resizable {...resizeProps} className="yoo-embed-my-0 yoo-embed-flex">
         {blockSelected && (
           <div className="yoo-embed-absolute yoo-embed-pointer-events-none yoo-embed-inset-0 yoo-embed-bg-[rgba(35,131,226,0.14)] yoo-embed-z-[81] yoo-embed-rounded-[3px] yoo-embed-opacity-100 yoo-embed-transition-opacity yoo-embed-duration-150 yoo-embed-ease-in" />
@@ -103,8 +104,7 @@ const EmbedRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
             height={sizes?.height || 550}
             provider={provider}
             blockId={blockId}
-            attributes={attributes}
-          >
+            attributes={attributes}>
             {children}
           </EmbedComponent>
         )}

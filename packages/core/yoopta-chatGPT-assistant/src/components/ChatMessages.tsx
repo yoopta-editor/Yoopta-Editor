@@ -1,9 +1,10 @@
-import { cx } from '@yoopta/editor';
 import { useEffect, useRef } from 'react';
+import { cx } from '@yoopta/editor';
+
+import s from './ChatMessages.module.scss';
 import AddIcon from '../icons/add.svg';
 import ReplaceIcon from '../icons/replace.svg';
-import { ChatMessage, ChatMessageMap } from '../types';
-import s from './ChatMessages.module.scss';
+import type { ChatMessage, ChatMessageMap } from '../types';
 
 type Props = {
   messageIds: string[];
@@ -13,7 +14,13 @@ type Props = {
   replaceContent: (message: ChatMessage) => void;
 };
 
-const ChatMessages = ({ messageIds, streamingMessage, messages, pasteContentBelow, replaceContent }: Props) => {
+const ChatMessages = ({
+  messageIds,
+  streamingMessage,
+  messages,
+  pasteContentBelow,
+  replaceContent,
+}: Props) => {
   const streamingMessageRef = useRef<HTMLDivElement>(null);
 
   // useEffect(() => {
@@ -41,8 +48,7 @@ const ChatMessages = ({ messageIds, streamingMessage, messages, pasteContentBelo
               className={cx(s.chatMessage, {
                 [s.chatMessageAssistant]: isAssistantMessage,
                 [s.chatMessageUser]: isUserMessage,
-              })}
-            >
+              })}>
               <div className={s.chatMessageWrap}>
                 <div className={s.chatMessageContent}>{message.content}</div>
               </div>
@@ -52,16 +58,14 @@ const ChatMessages = ({ messageIds, streamingMessage, messages, pasteContentBelo
                     type="button"
                     className={s.buttonIcon}
                     title="Paste content below"
-                    onClick={() => pasteContentBelow(message)}
-                  >
+                    onClick={() => pasteContentBelow(message)}>
                     <AddIcon width={17} height={17} />
                   </button>
                   <button
                     type="button"
                     className={s.buttonIcon}
                     title="Replace content in block"
-                    onClick={() => replaceContent(message)}
-                  >
+                    onClick={() => replaceContent(message)}>
                     <ReplaceIcon width={17} height={17} />
                   </button>
                 </div>
@@ -74,8 +78,7 @@ const ChatMessages = ({ messageIds, streamingMessage, messages, pasteContentBelo
           className={cx(s.chatMessage, {
             [s.chatMessageAssistant]: true,
           })}
-          ref={streamingMessageRef}
-        >
+          ref={streamingMessageRef}>
           <div className={s.chatMessageWrap}>
             <div className={s.chatMessageContent}>{streamingMessage.join('')}</div>
           </div>

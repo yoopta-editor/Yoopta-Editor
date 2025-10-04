@@ -1,4 +1,6 @@
-import { PluginElementRenderProps, useBlockData, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useBlockData, useYooptaEditor } from '@yoopta/editor';
+
 import { DividerBlockOptions } from '../components/DividerBlockOptions';
 
 const DividerRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
@@ -45,9 +47,10 @@ const DividerRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
       {...htmlAttrs}
       className={`${className} yoopta-divider`}
       {...props.attributes}
-      contentEditable={false}
-    >
-      {!editor.readOnly && <DividerBlockOptions block={blockData} editor={editor} props={props.element.props} />}
+      contentEditable={false}>
+      {!editor.readOnly && (
+        <DividerBlockOptions block={blockData} editor={editor} props={props.element.props} />
+      )}
       {getDividerContent()}
       {props.children}
     </div>

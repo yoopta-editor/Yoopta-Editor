@@ -1,5 +1,3 @@
-const LinkTool = () => {
-  return null;
-};
+const LinkTool = () => null;
 
 export { LinkTool };

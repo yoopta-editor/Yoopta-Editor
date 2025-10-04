@@ -1,7 +1,7 @@
 import { buildBlockElementsStructure } from '../../utils/blockElements';
 import { generateId } from '../../utils/generateId';
-import { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
-import { YooptaOperation } from '../core/applyTransforms';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
 
 export type InsertBlockOptions = {
   at?: YooptaPathIndex;
@@ -23,7 +23,7 @@ export function insertBlock(editor: YooEditor, type: string, options: InsertBloc
 
   const newBlock: YooptaBlockData = {
     id: blockData?.id || generateId(),
-    type: type,
+    type,
     value: [slateStructure],
     meta: {
       align: blockData?.meta?.align || 'left',

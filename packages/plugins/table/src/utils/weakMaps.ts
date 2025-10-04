@@ -1,6 +1,9 @@
-import { SlateEditor, SlateElement } from '@yoopta/editor';
-import { NodeEntry } from 'slate';
-import { TableCellElement, TableRowElement } from '../types';
+import type { SlateEditor } from '@yoopta/editor';
+import { SlateElement } from '@yoopta/editor';
+import type { NodeEntry } from 'slate';
+
+import type { TableCellElement } from '../types';
+import { TableRowElement } from '../types';
 
 export type SlateNodeEntry = NodeEntry<TableCellElement>;
 

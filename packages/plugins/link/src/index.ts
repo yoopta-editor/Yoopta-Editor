@@ -3,9 +3,9 @@ import './styles.css';
 import { LinkElement, LinkElementProps } from './types';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: LinkElement;
-  }
+  };
 }
 
 export { LinkCommands } from './commands';

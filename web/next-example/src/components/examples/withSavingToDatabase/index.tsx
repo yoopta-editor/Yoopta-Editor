@@ -1,4 +1,8 @@
-import YooptaEditor, { createYooptaEditor, YooptaContentValue, YooptaEventChangePayload } from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor,
+  YooptaContentValue,
+  YooptaEventChangePayload,
+} from '@yoopta/editor';
 
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
@@ -80,7 +84,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -145,13 +154,11 @@ function WithSavingToDatabase() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex flex-col justify-center items-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <button
         type="button"
         onClick={onSaveToServer}
-        className="bg-[#007aff] text-[14px] text-nowrap my-2 mr-0 md:mr-4 text-[#fff] max-w-[100px] px-4 py-2 rounded-md"
-      >
+        className="bg-[#007aff] text-[14px] text-nowrap my-2 mr-0 md:mr-4 text-[#fff] max-w-[100px] px-4 py-2 rounded-md">
         Save data
       </button>
       <YooptaEditor

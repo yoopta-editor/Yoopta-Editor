@@ -1,17 +1,30 @@
-import { ToolbarRenderProps } from '@yoopta/toolbar';
-import { useYooptaEditor, useYooptaTools } from '@yoopta/editor';
-import cx from 'classnames';
-import { CodeIcon, ChevronDownIcon, RadicalIcon } from 'lucide-react';
 import { useState } from 'react';
-import { useFloating, offset, flip, shift, inline, autoUpdate, FloatingPortal } from '@floating-ui/react';
-import s from './NotionToolbar.module.scss';
+import {
+  FloatingPortal,
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react';
 import { buildActionMenuRenderProps } from '@yoopta/action-menu-list';
+import { useYooptaEditor, useYooptaTools } from '@yoopta/editor';
+import type { ToolbarRenderProps } from '@yoopta/toolbar';
+import cx from 'classnames';
+import { ChevronDownIcon, CodeIcon, RadicalIcon } from 'lucide-react';
+
+import s from './NotionToolbar.module.scss';
 
 const DEFAULT_MODALS = { link: false, highlight: false, actionMenu: false };
 type ModalsState = typeof DEFAULT_MODALS;
 
 const NotionToolbar = (props: ToolbarRenderProps) => {
-  const [modals, setModals] = useState<ModalsState>({ link: false, highlight: false, actionMenu: false });
+  const [modals, setModals] = useState<ModalsState>({
+    link: false,
+    highlight: false,
+    actionMenu: false,
+  });
 
   const { refs: actionMenuRefs, floatingStyles: actionMenuStyles } = useFloating({
     placement: 'bottom-start',
@@ -34,13 +47,20 @@ const NotionToolbar = (props: ToolbarRenderProps) => {
 
   const onCloseActionMenu = () => onChangeModal('actionMenu', false);
 
-  const actionMenuRenderProps = buildActionMenuRenderProps({ editor, onClose: onCloseActionMenu, view: 'small' });
+  const actionMenuRenderProps = buildActionMenuRenderProps({
+    editor,
+    onClose: onCloseActionMenu,
+    view: 'small',
+  });
 
   return (
     <div>
       <div className={s.toolbar}>
         <div className={s.group}>
-          <button type="button" className={s.item} onClick={() => alert('Soon... 😍 \nIn development')}>
+          <button
+            type="button"
+            className={s.item}
+            onClick={() => alert('Soon... 😍 \nIn development')}>
             <span className={s.askGPT}>Ask AI</span>
           </button>
         </div>
@@ -49,17 +69,19 @@ const NotionToolbar = (props: ToolbarRenderProps) => {
             type="button"
             className={s.item}
             ref={actionMenuRefs.setReference}
-            onClick={() => onChangeModal('actionMenu', !modals.actionMenu)}
-          >
+            onClick={() => onChangeModal('actionMenu', !modals.actionMenu)}>
             <span className={s.block}>
-              {blockLabel} <ChevronDownIcon size={12} strokeWidth={2} color="rgba(55, 53, 47, 0.35)" />
+              {blockLabel}{' '}
+              <ChevronDownIcon size={12} strokeWidth={2} color="rgba(55, 53, 47, 0.35)" />
             </span>
             {modals.actionMenu && !!ActionMenu && (
               <FloatingPortal
                 id="yoo-custom-toolbar-action-menu-list-portal"
-                root={document.getElementById('yoopta-editor')}
-              >
-                <div style={actionMenuStyles} ref={actionMenuRefs.setFloating} onClick={(e) => e.stopPropagation()}>
+                root={document.getElementById('yoopta-editor')}>
+                <div
+                  style={actionMenuStyles}
+                  ref={actionMenuRefs.setFloating}
+                  onClick={(e) => e.stopPropagation()}>
                   <ActionMenu {...actionMenuRenderProps} />
                 </div>
               </FloatingPortal>
@@ -70,36 +92,31 @@ const NotionToolbar = (props: ToolbarRenderProps) => {
           <button
             type="button"
             onClick={() => editor.formats.bold.toggle()}
-            className={cx(s.item, { [s.active]: editor.formats.bold.isActive() })}
-          >
+            className={cx(s.item, { [s.active]: editor.formats.bold.isActive() })}>
             <span className={s.bold}>B</span>
           </button>
           <button
             type="button"
             onClick={() => editor.formats.italic.toggle()}
-            className={cx(s.item, { [s.active]: editor.formats.italic.isActive() })}
-          >
+            className={cx(s.item, { [s.active]: editor.formats.italic.isActive() })}>
             <span className={s.italic}>i</span>
           </button>
           <button
             type="button"
             onClick={() => editor.formats.underline.toggle()}
-            className={cx(s.item, { [s.active]: editor.formats.underline.isActive() })}
-          >
+            className={cx(s.item, { [s.active]: editor.formats.underline.isActive() })}>
             <span className={s.underline}>U</span>
           </button>
           <button
             type="button"
             onClick={() => editor.formats.strike.toggle()}
-            className={cx(s.item, { [s.active]: editor.formats.strike.isActive() })}
-          >
+            className={cx(s.item, { [s.active]: editor.formats.strike.isActive() })}>
             <span className={s.strikethrough}>S</span>
           </button>
           <button
             type="button"
             onClick={() => editor.formats.code.toggle()}
-            className={cx(s.item, { [s.active]: editor.formats.code.isActive() })}
-          >
+            className={cx(s.item, { [s.active]: editor.formats.code.isActive() })}>
             <span className={s.code}>
               <CodeIcon size={15} strokeWidth={1.5} />
             </span>

@@ -1,6 +1,8 @@
-import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
+import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import { ImageIcon } from '@radix-ui/react-icons';
-import { CSSProperties, useState } from 'react';
+
 import { ImageUploader } from './ImageUploader';
 import { Loader } from './Loader';
 
@@ -26,21 +28,21 @@ const Placeholder = ({ attributes, children, blockId }) => {
     <div
       className="yoo-image-w-full yoo-image-user-select-none yoo-image-m-[20px_0_10px] yoo-image-relative yoo-image-flex"
       {...attributes}
-      contentEditable={false}
-    >
+      contentEditable={false}>
       <button
-        className={`yoopta-button yoo-image-p-[12px_36px_12px_12px] yoo-image-flex yoo-image-items-center yoo-image-text-left yoo-image-w-full yoo-image-overflow-hidden yoo-image-rounded-[3px] yoo-image-text-[14px] yoo-image-text-[rgba(55,53,47,0.65)] yoo-image-relative yoo-image-cursor-pointer yoo-image-border-none yoo-image-bg-[#efefef] yoo-image-transition-[background-color_100ms_ease-in] hover:yoo-image-bg-[#e3e3e3]`}
+        className="yoopta-button yoo-image-p-[12px_36px_12px_12px] yoo-image-flex yoo-image-items-center yoo-image-text-left yoo-image-w-full yoo-image-overflow-hidden yoo-image-rounded-[3px] yoo-image-text-[14px] yoo-image-text-[rgba(55,53,47,0.65)] yoo-image-relative yoo-image-cursor-pointer yoo-image-border-none yoo-image-bg-[#efefef] yoo-image-transition-[background-color_100ms_ease-in] hover:yoo-image-bg-[#e3e3e3]"
         onClick={() => setIsUploaderOpen(true)}
         disabled={loading}
         type="button"
-        ref={refs.setReference}
-      >
+        ref={refs.setReference}>
         {loading ? (
           <Loader className="yoo-image-mr-2 yoo-image-user-select-none" width={24} height={24} />
         ) : (
           <ImageIcon className="yoo-image-mr-2 yoo-image-user-select-none" width={24} height={24} />
         )}
-        <span className="yoo-image-font-medium">{loading ? 'Loading...' : 'Click to add image'}</span>
+        <span className="yoo-image-font-medium">
+          {loading ? 'Loading...' : 'Click to add image'}
+        </span>
         {loading && (
           <div
             className="yoo-image-absolute yoo-image-top-0 yoo-image-left-0 yoo-image-h-full yoo-image-bg-[rgba(55,53,47,0.16)]"

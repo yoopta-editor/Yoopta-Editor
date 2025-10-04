@@ -3,9 +3,9 @@ import { FileElement, FileElementProps, FileUploadResponse } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: FileElement;
-  }
+  };
 }
 
 export { FileCommands } from './commands';

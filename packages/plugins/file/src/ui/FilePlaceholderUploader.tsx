@@ -1,5 +1,6 @@
+import type { CSSProperties } from 'react';
 import { UI } from '@yoopta/editor';
-import { CSSProperties } from 'react';
+
 import { FileUploader } from './FileUploader';
 
 type Props = {
@@ -12,7 +13,13 @@ type Props = {
 
 const { Overlay, Portal } = UI;
 
-const FilePlaceholderUploader = ({ floatingStyles, refs, onClose, blockId, onSetLoading }: Props) => {
+const FilePlaceholderUploader = ({
+  floatingStyles,
+  refs,
+  onClose,
+  blockId,
+  onSetLoading,
+}: Props) => {
   const getTabStyles = () => ({
     borderBottom: '2px solid #2483e2',
   });
@@ -26,8 +33,7 @@ const FilePlaceholderUploader = ({ floatingStyles, refs, onClose, blockId, onSet
               <button
                 type="button"
                 style={getTabStyles()}
-                className={`yoopta-button yoo-file-py-[6px] yoo-file-whitespace-nowrap yoo-file-min-w-0 yoo-file-flex-shrink-0 yoo-file-text-[rgb(55,53,47)] yoo-file-relative yoo-file-cursor-pointer yoo-file-user-select-none yoo-file-bg-inherit yoo-file-transition-[height_20ms_ease-in] yoo-file-inline-flex yoo-file-items-center yoo-file-h-full yoo-file-text-[14px] yoo-file-leading-[1.2] yoo-file-px-[8px]`}
-              >
+                className="yoopta-button yoo-file-py-[6px] yoo-file-whitespace-nowrap yoo-file-min-w-0 yoo-file-flex-shrink-0 yoo-file-text-[rgb(55,53,47)] yoo-file-relative yoo-file-cursor-pointer yoo-file-user-select-none yoo-file-bg-inherit yoo-file-transition-[height_20ms_ease-in] yoo-file-inline-flex yoo-file-items-center yoo-file-h-full yoo-file-text-[14px] yoo-file-leading-[1.2] yoo-file-px-[8px]">
                 Upload
               </button>
             </div>

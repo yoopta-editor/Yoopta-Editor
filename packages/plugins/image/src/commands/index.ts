@@ -1,5 +1,7 @@
-import { Blocks, buildBlockData, Elements, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { ImageElement, ImageElementProps } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
+
+import type { ImageElement, ImageElementProps } from '../types';
 
 type ImageElementOptions = {
   props?: Omit<ImageElementProps, 'nodeType'>;
@@ -20,12 +22,21 @@ export type ImageCommands = {
 export const ImageCommands: ImageCommands = {
   buildImageElements: (editor: YooEditor, options = {}) => {
     const imageProps = { ...options.props, nodeType: 'void' };
-    return { id: generateId(), type: 'image', children: [{ text: '' }], props: imageProps as ImageElementProps };
+    return {
+      id: generateId(),
+      type: 'image',
+      children: [{ text: '' }],
+      props: imageProps as ImageElementProps,
+    };
   },
   insertImage: (editor: YooEditor, options = {}) => {
     const { at, focus, props } = options;
     const image = ImageCommands.buildImageElements(editor, { props });
-    const block = Blocks.buildBlockData({ value: [image], type: 'Image', meta: { align: 'center', depth: 0 } });
+    const block = Blocks.buildBlockData({
+      value: [image],
+      type: 'Image',
+      meta: { align: 'center', depth: 0 },
+    });
 
     Blocks.insertBlock(editor, block.type, {
       focus,

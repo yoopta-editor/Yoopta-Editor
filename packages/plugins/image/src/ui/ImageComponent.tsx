@@ -1,7 +1,9 @@
-import { CSSProperties, Fragment, useEffect, useState } from 'react';
-import { RenderElementProps } from 'slate-react';
+import type { CSSProperties } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { UI } from '@yoopta/editor';
-import { ImageElementProps } from '../types';
+import type { RenderElementProps } from 'slate-react';
+
+import type { ImageElementProps } from '../types';
 
 type ImageComponentProps = Omit<ImageElementProps, 'sizes'> & {
   width: number | string;
@@ -76,8 +78,7 @@ const ImageComponent = ({
     <div
       className={`yoopta-image-inner ${isZoomed ? 'yoopta-image--is-zoomed' : ''}`}
       data-layout={layout}
-      {...attributes}
-    >
+      {...attributes}>
       {src && (
         <img
           src={src}
@@ -101,9 +102,8 @@ const ImageComponent = ({
           <UI.Overlay
             onClick={handleImageClick}
             lockScroll
-            className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]"
-          >
-            <Fragment />
+            className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]">
+            <></>
           </UI.Overlay>
         </UI.Portal>
       )}

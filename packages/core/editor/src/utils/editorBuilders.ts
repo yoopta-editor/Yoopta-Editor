@@ -1,13 +1,14 @@
-import { SlateElement, YooEditor } from '../editor/types';
-import { Plugin, PluginElementsMap } from '../plugins/types';
-import { YooptaMark } from '../marks';
-import { findPluginBlockByPath } from '../utils/findPluginBlockByPath';
 import { buildBlockElementsStructure, getRootBlockElement } from './blockElements';
 import { buildSlateEditor } from './buildSlate';
+import { findPluginBlockByPath } from './findPluginBlockByPath';
 import { getValue } from '../editor/textFormats/getValue';
 import { isActive } from '../editor/textFormats/isActive';
 import { toggle } from '../editor/textFormats/toggle';
 import { update } from '../editor/textFormats/update';
+import { YooptaBlockData } from '../editor/types';
+import type { SlateElement, YooEditor } from '../editor/types';
+import type { YooptaMark } from '../marks';
+import type { Plugin, PluginElementsMap } from '../plugins/types';
 
 export function buildMarks(editor, marks: YooptaMark<any>[]) {
   const formats: YooEditor['formats'] = {};
@@ -90,7 +91,9 @@ export function buildBlockShortcuts(editor: YooEditor) {
 
   Object.values(editor.blocks).forEach((block) => {
     const hasShortcuts =
-      block.options && Array.isArray(block.options?.shortcuts) && block.options?.shortcuts.length > 0;
+      block.options &&
+      Array.isArray(block.options?.shortcuts) &&
+      block.options?.shortcuts.length > 0;
 
     if (hasShortcuts) {
       block.options?.shortcuts?.forEach((shortcut) => {

@@ -1,9 +1,11 @@
-import { Elements, SlateElement, YooEditor } from '@yoopta/editor';
-import { useFloating, inline, flip, shift, offset, autoUpdate } from '@floating-ui/react';
 import { useState } from 'react';
+import { autoUpdate, flip, inline, offset, shift, useFloating } from '@floating-ui/react';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
+import { Elements } from '@yoopta/editor';
+import { Transforms } from 'slate';
+
 import { TableRowOptions } from './TableRowOptions';
 import DragIcon from '../icons/drag.svg';
-import { Transforms } from 'slate';
 
 type TableRowProps = {
   editor: YooEditor;
@@ -54,8 +56,7 @@ const TableRowDragButton = ({ editor, blockId, tdElement }: TableRowProps) => {
         onClick={onClick}
         contentEditable={false}
         className="yoopta-table-row-button"
-        style={isTableRowActionsOpen ? { opacity: 1 } : undefined}
-      >
+        style={isTableRowActionsOpen ? { opacity: 1 } : undefined}>
         <DragIcon
           className="yoo-table-w-[14px] yoo-table-h-[14px] yoo-table-block yoo-table-flex-shrink-0"
           style={{ transform: 'rotate(0deg)' }}

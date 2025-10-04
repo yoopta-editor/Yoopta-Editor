@@ -1,11 +1,13 @@
-import { Elements, PluginElementRenderProps, useYooptaEditor } from '@yoopta/editor';
 import { useMemo } from 'react';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element } from 'slate';
+
+import { TableCommands } from '../commands';
 import { ResizeHandle } from '../components/ResizeHandle';
 import { TableColumnDragButton } from '../components/TableColumnDragButton';
 import { TableRowDragButton } from '../components/TableRowDragButton';
-import { TableCommands } from '../commands';
-import { TableCellElement, TableElement, TableElementProps } from '../types';
+import type { TableCellElement, TableElement, TableElementProps } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
 const TableDataCell = ({
@@ -99,8 +101,7 @@ const TableDataCell = ({
       colSpan={1}
       rowSpan={1}
       {...htmlAttrs}
-      className={className}
-    >
+      className={className}>
       <div className="yoopta-table-data-cell-content" {...attributes}>
         {children}
       </div>

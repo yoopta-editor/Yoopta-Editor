@@ -14,25 +14,25 @@
 }
 
 .yoopta-image-input-root {
-  @apply yoo-image-min-w-[340px] yoo-image-bg-[#FFFFFF] yoo-image-flex yoo-image-flex-col yoo-image-z-50 yoo-image-p-[10px] yoo-image-rounded-md yoo-image-shadow-md yoo-image-border-solid yoo-image-border-[1px] yoo-image-border-[#e5e7eb]
+  @apply yoo-image-min-w-[340px] yoo-image-bg-[#FFFFFF] yoo-image-flex yoo-image-flex-col yoo-image-z-50 yoo-image-p-[10px] yoo-image-rounded-md yoo-image-shadow-md yoo-image-border-solid yoo-image-border-[1px] yoo-image-border-[#e5e7eb];
 }
 
 .yoopta-image-input-label {
-  @apply yoo-image-text-xs yoo-image-font-medium yoo-image-text-gray-500 yoo-image-block yoo-image-mb-[5px]
+  @apply yoo-image-text-xs yoo-image-font-medium yoo-image-text-gray-500 yoo-image-block yoo-image-mb-[5px];
 }
 
 .yoopta-image-input-ui {
-  @apply yoo-image-text-sm yoo-image-font-medium yoo-image-text-gray-700 yoo-image-border-solid yoo-image-border-[1px] yoo-image-border-[#e5e7eb] yoo-image-rounded-md yoo-image-py-[5px] yoo-image-px-[10px] yoo-image-w-full yoo-image-shadow-sm
+  @apply yoo-image-text-sm yoo-image-font-medium yoo-image-text-gray-700 yoo-image-border-solid yoo-image-border-[1px] yoo-image-border-[#e5e7eb] yoo-image-rounded-md yoo-image-py-[5px] yoo-image-px-[10px] yoo-image-w-full yoo-image-shadow-sm;
 }
 
 .yoopta-image-alt {
-  @apply yoo-image-absolute yoo-image-right-[8px] yoo-image-bottom-[8px] yoo-image-rounded yoo-image-bg-[#00000099]
+  @apply yoo-image-absolute yoo-image-right-[8px] yoo-image-bottom-[8px] yoo-image-rounded yoo-image-bg-[#00000099];
 }
 
 .yoopta-image-alt-text {
-  @apply yoo-image-text-[#fff] yoo-image-py-[4px] yoo-image-px-[6px] yoo-image-text-white yoo-image-text-[10px] yoo-image-cursor-pointer yoo-image-font-medium
+  @apply yoo-image-text-[#fff] yoo-image-py-[4px] yoo-image-px-[6px] yoo-image-text-white yoo-image-text-[10px] yoo-image-cursor-pointer yoo-image-font-medium;
 }
 
 .yoopta-image-zoom-overlay {
-  @apply yoo-image-z-50 yoo-image-w-full yoo-image-h-full
+  @apply yoo-image-z-50 yoo-image-w-full yoo-image-h-full;
 }

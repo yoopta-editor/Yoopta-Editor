@@ -1,19 +1,21 @@
-import { ClipboardEvent, CSSProperties, ReactNode, useEffect } from 'react';
-import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import type { CSSProperties, ClipboardEvent, ReactNode } from 'react';
+import { useEffect } from 'react';
+import { Element, Path, Editor as SlateEditor } from 'slate';
+
 import { RenderBlocks } from './RenderBlocks';
-import { YooptaMark } from '../../marks';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import { useMultiSelection } from './selection';
 import { buildBlockData } from './utils';
+import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import { Blocks } from '../../editor/blocks';
+import { Paths } from '../../editor/paths';
+import type { YooptaContentValue } from '../../editor/types';
+import type { YooptaMark } from '../../marks';
+import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
-import { Editor as SlateEditor, Element, Path } from 'slate';
-import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooptaContentValue } from '../../editor/types';
 import { useRectangeSelectionBox } from '../SelectionBox/hooks';
 import { SelectionBox } from '../SelectionBox/SelectionBox';
-import { Blocks } from '../../editor/blocks';
-import { useMultiSelection } from './selection';
-import { Paths } from '../../editor/paths';
 
 type Props = {
   marks?: YooptaMark<any>[];
@@ -110,7 +112,8 @@ const Editor = ({
 
   const onBlur = (event: React.FocusEvent) => {
     const isInsideEditor =
-      editor.refElement?.contains(event.relatedTarget as Node) || editor.refElement?.contains(event.target as Node);
+      editor.refElement?.contains(event.relatedTarget as Node) ||
+      editor.refElement?.contains(event.target as Node);
 
     if (isInsideEditor || isReadOnly) return;
 
@@ -180,7 +183,8 @@ const Editor = ({
             const selectedBlocks = Paths.getSelectedPaths(editor);
 
             if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
-              const isAllBlocksSelected = selectedBlocks.length === Object.keys(editor.children).length;
+              const isAllBlocksSelected =
+                selectedBlocks.length === Object.keys(editor.children).length;
 
               selectedBlocks.forEach((index) => {
                 const blockId = Blocks.getBlock(editor, { at: index })?.id;
@@ -273,7 +277,6 @@ const Editor = ({
           });
         });
       }
-      return;
     }
   };
 
@@ -304,7 +307,6 @@ const Editor = ({
 
       clipboardData.setData('text/html', htmlString);
       clipboardData.setData('text/plain', textString);
-      return;
     }
   };
 
@@ -324,8 +326,7 @@ const Editor = ({
       onMouseDown={onMouseDown}
       onBlur={onBlur}
       onCopy={onCopy}
-      onCut={onCopy}
-    >
+      onCut={onCopy}>
       <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
       {selectionBoxRoot !== false && (
         <SelectionBox

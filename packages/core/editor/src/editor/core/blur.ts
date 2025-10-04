@@ -1,8 +1,9 @@
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { IS_FOCUSED_EDITOR } from '../../utils/weakMaps';
-import { SlateEditor, YooEditor } from '../types';
+import type { SlateEditor, YooEditor } from '../types';
 
 export type EditorBlurOptions = {
   waitExecution?: boolean;

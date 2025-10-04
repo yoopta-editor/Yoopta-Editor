@@ -1,7 +1,9 @@
-import { HexColorPicker } from 'react-colorful';
-import { CSSProperties, MouseEvent, useState } from 'react';
-import { YooEditor, UI } from '@yoopta/editor';
+import type { CSSProperties, MouseEvent } from 'react';
+import { useState } from 'react';
+import type { YooEditor } from '@yoopta/editor';
+import { UI } from '@yoopta/editor';
 import { PaletteIcon } from 'lucide-react';
+import { HexColorPicker } from 'react-colorful';
 import { useDebouncedCallback } from 'use-debounce';
 
 const { Portal } = UI;
@@ -51,18 +53,25 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
   const [showColorPicker, setShowColorPicker] = useState(true);
   const [localColor, setLocalColor] = useState<string | null>(null);
 
-  const debouncedUpdateColor = useDebouncedCallback((type: 'color' | 'backgroundColor', color: string) => {
-    const value = editor.formats.highlight.getValue();
-    if (value?.[type] === color) {
-      editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
-    } else {
-      editor.formats.highlight.update({ ...highlightColors, [type]: color });
-    }
+  const debouncedUpdateColor = useDebouncedCallback(
+    (type: 'color' | 'backgroundColor', color: string) => {
+      const value = editor.formats.highlight.getValue();
+      if (value?.[type] === color) {
+        editor.formats.highlight.update({ ...highlightColors, [type]: undefined });
+      } else {
+        editor.formats.highlight.update({ ...highlightColors, [type]: color });
+      }
 
-    setLocalColor(null);
-  }, 50);
+      setLocalColor(null);
+    },
+    50,
+  );
 
-  const handleColorChange = (type: 'color' | 'backgroundColor', color: string, shouldDebounce?: boolean) => {
+  const handleColorChange = (
+    type: 'color' | 'backgroundColor',
+    color: string,
+    shouldDebounce?: boolean,
+  ) => {
     if (shouldDebounce) {
       setLocalColor(color);
       debouncedUpdateColor(type, color);
@@ -92,8 +101,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
         style={floatingStyles}
         ref={refs.setFloating}
         onClick={(e: MouseEvent) => e.stopPropagation()}
-        className="yoo-toolbar-z-50"
-      >
+        className="yoo-toolbar-z-50">
         <div className="yoo-toolbar-bg-[#FFFFFF] yoo-toolbar-p-2 yoo-toolbar-rounded-md yoo-toolbar-shadow-md yoo-toolbar-border yoo-toolbar-border-solid yoo-toolbar-border-[#e5e7eb]">
           {/* Tabs */}
           <div className="yoo-toolbar-flex yoo-toolbar-space-x-2 yoo-toolbar-mb-3">
@@ -104,8 +112,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
                   ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
                   : 'yoo-toolbar-text-gray-600 hover:yoo-toolbar-bg-gray-50'
               }`}
-              onClick={() => setTab('text')}
-            >
+              onClick={() => setTab('text')}>
               Text
             </button>
             <button
@@ -115,8 +122,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
                   ? 'yoo-toolbar-bg-blue-50 yoo-toolbar-text-blue-600'
                   : 'yoo-toolbar-text-gray-600 hover:yoo-toolbar-bg-gray-50'
               }`}
-              onClick={() => setTab('background')}
-            >
+              onClick={() => setTab('background')}>
               Background
             </button>
           </div>
@@ -130,7 +136,9 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
                 title={name}
                 className="yoo-toolbar-w-6 yoo-toolbar-h-6 yoo-toolbar-rounded yoo-toolbar-transition-all hover:yoo-toolbar-scale-110"
                 style={getItemStyles(tab === 'text' ? 'color' : 'backgroundColor', value)}
-                onClick={() => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value)}
+                onClick={() =>
+                  handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', value)
+                }
               />
             ))}
           </div>
@@ -140,8 +148,7 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
             <button
               type="button"
               className="yoo-toolbar-text-sm yoo-toolbar-text-gray-600 hover:yoo-toolbar-text-gray-900 yoo-toolbar-flex yoo-toolbar-items-center"
-              onClick={() => setShowColorPicker(!showColorPicker)}
-            >
+              onClick={() => setShowColorPicker(!showColorPicker)}>
               Color Picker
               <PaletteIcon className="yoo-toolbar-w-4 yoo-toolbar-h-4 yoo-toolbar-ml-1" />
             </button>
@@ -149,8 +156,14 @@ const HighlightColor = ({ editor, refs, floatingStyles, highlightColors = {} }: 
             {showColorPicker && (
               <div className="yoo-toolbar-mt-2">
                 <HexColorPicker
-                  color={localColor || highlightColors?.[tab === 'text' ? 'color' : 'backgroundColor'] || '#000000'}
-                  onChange={(color) => handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', color, true)}
+                  color={
+                    localColor ||
+                    highlightColors?.[tab === 'text' ? 'color' : 'backgroundColor'] ||
+                    '#000000'
+                  }
+                  onChange={(color) =>
+                    handleColorChange(tab === 'text' ? 'color' : 'backgroundColor', color, true)
+                  }
                   style={COLOR_PICKER_STYLES}
                 />
               </div>

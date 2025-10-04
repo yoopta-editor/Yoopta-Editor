@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-function YouTubePlayer({ videoId, children, attributes, ...other }) {
+const YouTubePlayer = ({ videoId, children, attributes, ...other }) => {
   const youtubeRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 
@@ -43,6 +44,6 @@ function YouTubePlayer({ videoId, children, attributes, ...other }) {
       {children}
     </div>
   );
-}
+};
 
 export default YouTubePlayer;

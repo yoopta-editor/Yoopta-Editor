@@ -1,4 +1,4 @@
-import { SlateEditor, YooEditor, YooptaPathIndex } from '../editor/types';
+import type { SlateEditor, YooEditor, YooptaPathIndex } from '../editor/types';
 
 export function findSlateBySelectionPath(
   editor: YooEditor,

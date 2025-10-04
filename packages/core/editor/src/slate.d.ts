@@ -1,7 +1,7 @@
-import { SlateEditor, SlateElement, SlateElementTextNode } from './editor/types';
+import type { SlateEditor, SlateElement, SlateElementTextNode } from './editor/types';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Editor: SlateEditor;
     Element: SlateElement;
     Text: SlateElementTextNode;

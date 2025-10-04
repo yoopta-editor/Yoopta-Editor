@@ -1,5 +1,5 @@
 @tailwind utilities;
 
 .yoopta-blockquote {
-  @apply yoo-b-pl-6 yoo-b-leading-7 yoo-b-m-0 yoo-b-mt-[8px] yoo-b-border-l-2 yoo-b-border-l-[#e5e7eb]
+  @apply yoo-b-pl-6 yoo-b-leading-7 yoo-b-m-0 yoo-b-mt-[8px] yoo-b-border-l-2 yoo-b-border-l-[#e5e7eb];
 }

@@ -1,11 +1,12 @@
 import { Editor, Node } from 'slate';
+
+import { buildSlateNodeElement } from '../../utils/blockElements';
+import { deepClone } from '../../utils/deepClone';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
-import { YooptaOperation } from '../core/applyTransforms';
-import { SlateEditor, SlateElement, YooEditor, YooptaBlockData } from '../types';
-import { deepClone } from '../../utils/deepClone';
-import { buildSlateNodeElement } from '../../utils/blockElements';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type { SlateEditor, SlateElement, YooEditor, YooptaBlockData } from '../types';
 
 export type SplitBlockOptions = {
   focus?: boolean;
@@ -44,7 +45,7 @@ export function splitBlock(editor: YooEditor, options: SplitBlockOptions = {}) {
         originalValue: originalSlateChildren as SlateElement[],
       },
       properties: {
-        nextBlock: nextBlock,
+        nextBlock,
         nextSlateValue: !nextSlateValue ? [buildSlateNodeElement('paragraph')] : nextSlateValue,
         splitSlateValue: splitValue,
       },
@@ -75,7 +76,8 @@ function splitSlate(slateChildren, slateSelection) {
           { ...node, text: node.text.slice(0, currentOffset) },
           { ...node, text: node.text.slice(currentOffset) },
         ];
-      } else if (node.type === 'link') {
+      }
+      if (node.type === 'link') {
         const [leftChild, rightChild] = splitNode(node.children[0], [], currentOffset);
         return [
           { ...node, children: [leftChild] },
@@ -106,7 +108,9 @@ function splitSlate(slateChildren, slateSelection) {
       }
 
       node.children = node.children.filter(
-        (child) => (child.text !== '' && child.text !== undefined) || (child.children && child.children.length > 0),
+        (child) =>
+          (child.text !== '' && child.text !== undefined) ||
+          (child.children && child.children.length > 0),
       );
       node.children.forEach(cleanNode);
     }

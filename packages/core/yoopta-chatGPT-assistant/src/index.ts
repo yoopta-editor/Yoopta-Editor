@@ -1,10 +1,11 @@
-import { YooEditor } from '@yoopta/editor';
+import type { YooEditor } from '@yoopta/editor';
+
 import { ChatGPTAssistant } from './ui/ChatGPT';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Editor: YooEditor;
-  }
+  };
 }
 
 export default ChatGPTAssistant;

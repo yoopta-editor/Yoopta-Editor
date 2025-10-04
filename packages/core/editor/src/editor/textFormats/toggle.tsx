@@ -1,8 +1,9 @@
 import { Editor, Transforms } from 'slate';
+
+import { isActive } from './isActive';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { Blocks } from '../blocks';
-import { SlateEditor, YooEditor } from '../types';
-import { isActive } from './isActive';
+import type { SlateEditor, YooEditor } from '../types';
 
 type SelectedBlockEntity = {
   isActiveMark: boolean;

@@ -1,6 +1,9 @@
-import { Blocks, Elements, generateId, SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Editor, Element, Path, Span, Transforms } from 'slate';
-import { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
+import type { SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, generateId } from '@yoopta/editor';
+import type { Span } from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
+
+import type { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
 
 type Options = {
   path?: Location | Span;
@@ -31,22 +34,33 @@ export type TableCommands = {
   moveTableColumn: (editor: YooEditor, blockId: string, options: MoveTableOptions) => void;
   insertTableColumn: (editor: YooEditor, blockId: string, options?: Options) => void;
   deleteTableColumn: (editor: YooEditor, blockId: string, options?: DeleteOptions) => void;
-  updateColumnWidth: (editor: YooEditor, blockId: string, columnIndex: number, width: number) => void;
+  updateColumnWidth: (
+    editor: YooEditor,
+    blockId: string,
+    columnIndex: number,
+    width: number,
+  ) => void;
   toggleHeaderRow: (editor: YooEditor, blockId: string) => void;
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
 };
 
 export const TableCommands: TableCommands = {
   buildTableElements: (editor: YooEditor, options?: InsertOptions) => {
-    const { rows = 3, columns = 3, columnWidth = 200, headerColumn = false, headerRow = false } = options || {};
+    const {
+      rows = 3,
+      columns = 3,
+      columnWidth = 200,
+      headerColumn = false,
+      headerRow = false,
+    } = options || {};
 
     const table: TableElement = {
       id: generateId(),
       type: 'table',
       children: [],
       props: {
-        headerColumn: headerColumn,
-        headerRow: headerRow,
+        headerColumn,
+        headerRow,
       },
     };
 
@@ -105,13 +119,11 @@ export const TableCommands: TableCommands = {
       const newRow: SlateElement = {
         id: generateId(),
         type: 'table-row',
-        children: currentRowElement.children.map((cell) => {
-          return {
-            id: generateId(),
-            type: 'table-data-cell',
-            children: [{ text: '' }],
-          };
-        }),
+        children: currentRowElement.children.map((cell) => ({
+          id: generateId(),
+          type: 'table-data-cell',
+          children: [{ text: '' }],
+        })),
         props: {
           nodeType: 'block',
         },
@@ -162,7 +174,7 @@ export const TableCommands: TableCommands = {
     Editor.withoutNormalizing(slate, () => {
       Transforms.moveNodes(slate, {
         at: from,
-        to: to,
+        to,
         match: (n) => Element.isElement(n) && n.type === 'table-row',
       });
     });
@@ -255,9 +267,9 @@ export const TableCommands: TableCommands = {
       const [_, dataCellPath] = dataCellElementEntryByPath;
       const columnIndex = dataCellPath[dataCellPath.length - 1];
 
-      const dataCellPaths = rows.map(([row, path]) => {
-        return row.children[columnIndex] ? [...path, columnIndex] : null;
-      });
+      const dataCellPaths = rows.map(([row, path]) =>
+        row.children[columnIndex] ? [...path, columnIndex] : null,
+      );
 
       // [TODO] - Check if there are other columns
       dataCellPaths.forEach((path) => {

@@ -1,6 +1,7 @@
 import { useRef } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
+import type { ProviderRenderProps } from '../types';
 
 const Figma = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const figmaRootRef = useRef(null);
@@ -19,7 +20,9 @@ const Figma = ({ provider, width, height, attributes, children }: ProviderRender
     <div className="yoo-embed-relative" {...attributes} ref={onRef}>
       {isInViewport && (
         <iframe
-          src={`https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(provider?.url || '')}`}
+          src={`https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(
+            provider?.url || '',
+          )}`}
           frameBorder={0}
           allowFullScreen
           className="yoo-embed-absolute yoo-embed-top-0 yoo-embed-left-0"

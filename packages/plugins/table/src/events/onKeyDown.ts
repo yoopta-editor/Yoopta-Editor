@@ -1,9 +1,14 @@
-import { SlateEditor, YooEditor, PluginEventHandlerOptions } from '@yoopta/editor';
+import type { PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Node, Path, Range, Text, Transforms } from 'slate';
+
 import { TableCommands } from '../commands';
 import { EDITOR_TO_SELECTION } from '../utils/weakMaps';
 
-export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, currentBlock }: PluginEventHandlerOptions) {
+export function onKeyDown(
+  editor: YooEditor,
+  slate: SlateEditor,
+  { hotkeys, currentBlock }: PluginEventHandlerOptions,
+) {
   return (event) => {
     if (!slate.selection) return;
 
@@ -12,7 +17,7 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, curr
       const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
 
       const elementEntries = EDITOR_TO_SELECTION.get(slate);
-      if (!!elementEntries) {
+      if (elementEntries) {
         event.preventDefault();
 
         Editor.withoutNormalizing(slate, () => {
@@ -60,13 +65,19 @@ export function onKeyDown(editor: YooEditor, slate: SlateEditor, { hotkeys, curr
 
     if (hotkeys.isCmdShiftRight(event)) {
       event.preventDefault();
-      TableCommands.insertTableColumn(editor, currentBlock.id, { select: true, insertMode: 'after' });
+      TableCommands.insertTableColumn(editor, currentBlock.id, {
+        select: true,
+        insertMode: 'after',
+      });
       return;
     }
 
     if (hotkeys.isCmdShiftLeft(event)) {
       event.preventDefault();
-      TableCommands.insertTableColumn(editor, currentBlock.id, { select: true, insertMode: 'before' });
+      TableCommands.insertTableColumn(editor, currentBlock.id, {
+        select: true,
+        insertMode: 'before',
+      });
       return;
     }
 

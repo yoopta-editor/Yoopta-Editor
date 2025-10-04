@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-function WistiaPlayer({ videoId, children, attributes, width, height, ...other }) {
+const WistiaPlayer = ({ videoId, children, attributes, width, height, ...other }) => {
   const wistiaRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 
@@ -22,8 +23,7 @@ function WistiaPlayer({ videoId, children, attributes, width, height, ...other }
           position: 'relative',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         {isInViewport && (
           <iframe
             src={`https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true&videoHeight=${height}&videoWidth=${width}`}
@@ -47,6 +47,6 @@ function WistiaPlayer({ videoId, children, attributes, width, height, ...other }
       {children}
     </div>
   );
-}
+};
 
 export default WistiaPlayer;

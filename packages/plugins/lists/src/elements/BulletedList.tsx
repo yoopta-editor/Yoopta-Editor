@@ -1,4 +1,5 @@
-import { PluginElementRenderProps, useBlockData } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useBlockData } from '@yoopta/editor';
 
 const BulletedListRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { blockId, HTMLAttributes = {}, attributes, children } = props;
@@ -9,7 +10,10 @@ const BulletedListRender = ({ extendRender, ...props }: PluginElementRenderProps
   const alignClass = `yoopta-align-${currentAlign}`;
 
   return (
-    <div className={`yoopta-bulleted-list ${alignClass} ${className}`} {...htmlAttrs} {...attributes}>
+    <div
+      className={`yoopta-bulleted-list ${alignClass} ${className}`}
+      {...htmlAttrs}
+      {...attributes}>
       <span className="yoopta-bulleted-list-bullet" contentEditable={false}>
         •
       </span>

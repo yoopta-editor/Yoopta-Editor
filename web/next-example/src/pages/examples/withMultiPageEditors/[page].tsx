@@ -5,7 +5,9 @@ import PAGES_DATA from '../../../components/examples/withMultiPageEditors/db.jso
 import { EveryPageContent } from '@/components/examples/withMultiPageEditors/EveryPageContent';
 import { CheckSourceCode } from '@/components/CheckSourceCode/CheckSourceCode';
 
-const Sheet = dynamic(() => import('@/components/ui/sheet').then((mod) => mod.Sheet), { ssr: false });
+const Sheet = dynamic(() => import('@/components/ui/sheet').then((mod) => mod.Sheet), {
+  ssr: false,
+});
 
 const DynamicPageComponent = () => {
   const router = useRouter();

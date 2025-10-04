@@ -1,4 +1,5 @@
-import { generateId, SlateEditor, YooEditor } from '@yoopta/editor';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import { generateId } from '@yoopta/editor';
 import { Element, Node, Transforms } from 'slate';
 
 export function withTableNormalize(slate: SlateEditor, editor: YooEditor): SlateEditor {

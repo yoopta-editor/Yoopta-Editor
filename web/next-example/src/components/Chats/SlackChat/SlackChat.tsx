@@ -1,4 +1,9 @@
-import YooptaEditor, { Blocks, createYooptaEditor, generateId, YooptaBlockData } from '@yoopta/editor';
+import YooptaEditor, {
+  Blocks,
+  createYooptaEditor,
+  generateId,
+  YooptaBlockData,
+} from '@yoopta/editor';
 import Blockquote from '@yoopta/blockquote';
 import Paragraph from '@yoopta/paragraph';
 import Image from '@yoopta/image';
@@ -73,8 +78,7 @@ const SlackChat = () => {
             className={s.editor}
             placeholder="Job something done"
             selectionBoxRoot={false}
-            width="100%"
-          >
+            width="100%">
             <SlackTopToolbar />
           </YooptaEditor>
         </div>

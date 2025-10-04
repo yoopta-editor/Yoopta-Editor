@@ -1,9 +1,11 @@
 import { isKeyHotkey } from 'is-hotkey';
-import { Editor, Node, Path, Point, Range, Transforms } from 'slate';
+import type { Point } from 'slate';
+import { Editor, Node, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { Blocks } from '../editor/blocks';
 import { Paths } from '../editor/paths';
-import { SlateEditor, YooEditor } from '../editor/types';
+import type { SlateEditor, YooEditor } from '../editor/types';
 import { findPluginBlockByPath } from '../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
 import { generateId } from '../utils/generateId';
@@ -118,28 +120,27 @@ export function onKeyDown(editor: YooEditor) {
           return;
         }
         // If current block is not empty merge text nodes with previous block
-        else {
-          if (Range.isExpanded(slate.selection)) {
-            return Transforms.delete(slate, { at: slate.selection });
-          }
 
-          const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousPath(editor) });
-          const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
-          if (prevBlock && prevSlate) {
-            const { node: lastSlateNode } = getLastNode(prevSlate);
-            const prevSlateText = Node.string(lastSlateNode);
-
-            if (prevSlateText.trim().length === 0) {
-              // [TEST]
-              editor.deleteBlock({ blockId: prevBlock.id, focus: false });
-              editor.setPath({ current: prevBlock.meta.order });
-              return;
-            }
-          }
-
-          // [TEST]
-          editor.mergeBlock();
+        if (Range.isExpanded(slate.selection)) {
+          return Transforms.delete(slate, { at: slate.selection });
         }
+
+        const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousPath(editor) });
+        const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
+        if (prevBlock && prevSlate) {
+          const { node: lastSlateNode } = getLastNode(prevSlate);
+          const prevSlateText = Node.string(lastSlateNode);
+
+          if (prevSlateText.trim().length === 0) {
+            // [TEST]
+            editor.deleteBlock({ blockId: prevBlock.id, focus: false });
+            editor.setPath({ current: prevBlock.meta.order });
+            return;
+          }
+        }
+
+        // [TEST]
+        editor.mergeBlock();
       }
       return;
     }
@@ -165,7 +166,10 @@ export function onKeyDown(editor: YooEditor) {
         ReactEditor.deselect(slate);
         Transforms.deselect(slate);
 
-        const allBlockPaths = Array.from({ length: Object.keys(editor.children).length }, (_, i) => i);
+        const allBlockPaths = Array.from(
+          { length: Object.keys(editor.children).length },
+          (_, i) => i,
+        );
         editor.setPath({ current: null, selected: allBlockPaths, source: 'keyboard' });
         return;
       }

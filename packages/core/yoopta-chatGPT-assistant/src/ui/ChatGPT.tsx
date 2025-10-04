@@ -1,15 +1,19 @@
-import { cx, useNodeElementSettings, YooptaBaseElement } from '@yoopta/editor';
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
-import { Editor, Element, Path, Point, Selection, Transforms } from 'slate';
+import type { CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { YooptaBaseElement } from '@yoopta/editor';
+import { cx, useNodeElementSettings } from '@yoopta/editor';
+import type { Selection } from 'slate';
+import { Editor, Element, Path, Point, Transforms } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
+
+import s from './ChatGPT.module.scss';
 import { Actions } from '../components/Actions';
 import { ChatInput } from '../components/ChatInput';
 import { ChatMessages } from '../components/ChatMessages';
 import { useChatActions } from '../hooks/useChatActions';
 import { useChatCompletion } from '../hooks/useChatCompletion';
 import { useChatMessages } from '../hooks/useChatMessages';
-import { ChatMessage, OpenAIChatMessage, Action } from '../types';
-import s from './ChatGPT.module.scss';
+import type { Action, ChatMessage, OpenAIChatMessage } from '../types';
 
 type MenuProps = { fixedStyle: CSSProperties; absoluteStyle: CSSProperties; point: Point | null };
 
@@ -61,7 +65,9 @@ const ChatGPTAssistant = ({
   const [inputMessage, setInputMessage] = useState('');
   const selectionRef = useRef<Selection | null>(rest?.selection || null);
 
-  const [menuProps, setMenuProps] = useState<MenuProps>(() => getDefaultMenuPropsState(rest?.style));
+  const [menuProps, setMenuProps] = useState<MenuProps>(() =>
+    getDefaultMenuPropsState(rest?.style),
+  );
   const chatContentRef = useRef<HTMLDivElement>(null);
 
   const lastSelectionRef = fromHook ? { current: rest?.selection } : selectionRef;
@@ -80,7 +86,8 @@ const ChatGPTAssistant = ({
     const selectionRect = getRectByCurrentSelection();
     const actionMenuHeight = chatContentRef.current!.clientHeight;
 
-    const showAtTop = selectionRect.top + selectionRect.height + actionMenuHeight > window.innerHeight;
+    const showAtTop =
+      selectionRect.top + selectionRect.height + actionMenuHeight > window.innerHeight;
 
     const parentPath = Path.parent(editor.selection.anchor.path);
     const [node] = Editor.node(editor, parentPath) || [];
@@ -142,7 +149,10 @@ const ChatGPTAssistant = ({
     const parentPath: Path = Path.parent(editor.selection.anchor.path);
     const selectionPoint: Point = { path: parentPath, offset: editor.selection.anchor.offset };
 
-    if (!Path.equals(selectionPoint.path, menuProps.point.path) || Point.isBefore(selectionPoint, menuProps.point)) {
+    if (
+      !Path.equals(selectionPoint.path, menuProps.point.path) ||
+      Point.isBefore(selectionPoint, menuProps.point)
+    ) {
       hideChatGPT();
     }
   }, [editor.selection, menuProps.point]);
@@ -195,7 +205,8 @@ const ChatGPTAssistant = ({
     const lastSelection = lastSelectionRef.current;
     if (!lastSelection) return null;
 
-    const [node] = Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
+    const [node] =
+      Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
     const { anchor, focus } = lastSelection;
     const string = Editor.string(editor, anchor.path);
 
@@ -225,10 +236,13 @@ const ChatGPTAssistant = ({
     if (!lastSelection) return null;
 
     const { anchor, focus } = lastSelection;
-    const [node] = Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
+    const [node] =
+      Editor.above(editor, { at: lastSelection, match: (n) => Element.isElement(n) }) || [];
 
     Transforms.delete(editor, { at: anchor.path, unit: 'block' });
-    Transforms.insertText(editor, message.content, { at: { path: focus.path, offset: focus.offset } });
+    Transforms.insertText(editor, message.content, {
+      at: { path: focus.path, offset: focus.offset },
+    });
 
     // if (node) {
     //   changeSelectedNodeElement(node as YooptaBaseElement<string>);
@@ -257,7 +271,7 @@ const ChatGPTAssistant = ({
   const isMessageListEmpty = orderedMessagIds.length === 0;
 
   return (
-    <div role={'dialog'} aria-modal className={s.root} style={menuProps.fixedStyle}>
+    <div role="dialog" aria-modal className={s.root} style={menuProps.fixedStyle}>
       <div className={s.relative}>
         <div className={s.absolute} style={menuProps.absoluteStyle}>
           <div ref={chatContentRef} className={cx(s.chatContent, 'yoopta-chatGPT')}>

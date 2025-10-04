@@ -1,4 +1,4 @@
-import { YooEditor, YooptaBlock } from '@yoopta/editor';
+import type { YooEditor, YooptaBlock } from '@yoopta/editor';
 
 export type ToolbarRenderProps = {
   activeBlock?: YooptaBlock;

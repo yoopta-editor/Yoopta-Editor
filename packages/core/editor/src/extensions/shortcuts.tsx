@@ -1,6 +1,7 @@
-import { Element, NodeEntry, Text } from 'slate';
-import { Editor, Range, Transforms } from 'slate';
-import { SlateEditor, SlateElement, YooEditor } from '../editor/types';
+import type { NodeEntry } from 'slate';
+import { Editor, Element, Range, Text, Transforms } from 'slate';
+
+import type { SlateEditor, SlateElement, YooEditor } from '../editor/types';
 
 export const withShortcuts = (editor: YooEditor, slate: SlateEditor) => {
   const { insertText } = slate;

@@ -1,5 +1,6 @@
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
+
 import { ACCORDION_ELEMENTS } from '../constants';
 
 export function withAccordionListNormalize(slate: SlateEditor, editor: YooEditor) {

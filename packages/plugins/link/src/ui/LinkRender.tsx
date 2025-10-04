@@ -1,8 +1,18 @@
-import { PluginElementRenderProps, useYooptaReadOnly } from '@yoopta/editor';
 import { useState } from 'react';
-import { LinkElementProps } from '../types';
+import {
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
+  useTransitionStyles,
+} from '@floating-ui/react';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useYooptaReadOnly } from '@yoopta/editor';
+
 import { LinkHoverPreview } from './LinkHoverPreview';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import type { LinkElementProps } from '../types';
 
 const VALID_TARGET_VALUES = ['_blank', '_self', '_parent', '_top', 'framename'];
 
@@ -23,12 +33,13 @@ const LinkRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted: isActionMenuMounted, styles: linkPreviewTransitionStyles } = useTransitionStyles(context, {
-    duration: {
-      open: 200,
-      close: 100,
-    },
-  });
+  const { isMounted: isActionMenuMounted, styles: linkPreviewTransitionStyles } =
+    useTransitionStyles(context, {
+      duration: {
+        open: 200,
+        close: 100,
+      },
+    });
 
   const linkPreviewStyles = { ...linkPreviewFloatingStyles, ...linkPreviewTransitionStyles };
 
@@ -73,8 +84,7 @@ const LinkRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
           {...props.attributes}
           draggable={false}
           href={url || ''}
-          className={`yoopta-link ${className}`}
-        >
+          className={`yoopta-link ${className}`}>
           {props.children}
         </a>
       )}

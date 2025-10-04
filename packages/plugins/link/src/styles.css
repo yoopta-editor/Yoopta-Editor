@@ -1,21 +1,21 @@
 @tailwind utilities;
 
 .yoopta-link {
-  @apply yoo-link-underline yoo-link-cursor-pointer yoo-link-underline-offset-4 yoo-link-relative yoo-link-text-[#007AFF] hover:yoo-link-text-[#3b82f6]
+  @apply yoo-link-underline yoo-link-cursor-pointer yoo-link-underline-offset-4 yoo-link-relative yoo-link-text-[#007AFF] hover:yoo-link-text-[#3b82f6];
 }
 
 .yoopta-link-preview {
-  @apply yoo-link-bg-[#FFFFFF] yoo-link-flex yoo-link-items-center yoo-link-z-50 yoo-link-p-[6px] yoo-link-rounded-md yoo-link-shadow-md yoo-link-border-[1px] yoo-link-border-solid yoo-link-border-[#e3e3e3]
+  @apply yoo-link-bg-[#FFFFFF] yoo-link-flex yoo-link-items-center yoo-link-z-50 yoo-link-p-[6px] yoo-link-rounded-md yoo-link-shadow-md yoo-link-border-[1px] yoo-link-border-solid yoo-link-border-[#e3e3e3];
 }
 
 .yoopta-link-preview-text {
-  @apply yoo-link-text-sm yoo-link-max-w-[200px] yoo-link-select-none yoo-link-text-ellipsis yoo-link-overflow-hidden yoo-link-whitespace-nowrap
+  @apply yoo-link-text-sm yoo-link-max-w-[200px] yoo-link-select-none yoo-link-text-ellipsis yoo-link-overflow-hidden yoo-link-whitespace-nowrap;
 }
 
 .yoopta-link-preview-separator {
-  @apply yoo-link-w-[1px] yoo-link-h-[20px] yoo-link-bg-[#e3e3e3] yoo-link-mx-[5px]
+  @apply yoo-link-w-[1px] yoo-link-h-[20px] yoo-link-bg-[#e3e3e3] yoo-link-mx-[5px];
 }
 
 .yoopta-link-edit-button {
-  @apply yoo-link-text-sm yoo-link-cursor-pointer
+  @apply yoo-link-text-sm yoo-link-cursor-pointer;
 }

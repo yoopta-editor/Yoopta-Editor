@@ -1,1 +1,16 @@
+# Build outputs
 /dist
+**/dist/
+
+# Web examples (don't lint these)
+/web/
+
+# Other common ignores
+node_modules/
+*.log
+*.lock
+coverage/
+.nyc_output/
+.cache/
+.temp/
+.tmp/

@@ -1,9 +1,14 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { SlateElement, YooEditor } from '../types';
 
-export function getElementPath(editor: YooEditor, blockId: string, element: SlateElement): Path | undefined {
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import type { SlateElement, YooEditor } from '../types';
+
+export function getElementPath(
+  editor: YooEditor,
+  blockId: string,
+  element: SlateElement,
+): Path | undefined {
   const block = editor.children[blockId];
 
   if (!block) {

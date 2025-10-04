@@ -1,5 +1,5 @@
-import { YooEditor, YooptaBlock } from '@yoopta/editor';
-import { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
+import type { YooEditor, YooptaBlock } from '@yoopta/editor';
 
 export type ActionMenuRenderProps = {
   actions: ActionMenuToolItem[];

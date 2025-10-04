@@ -1,6 +1,8 @@
-import { HTMLAttributes } from 'react';
-import { RenderLeafProps, useSelected } from 'slate-react';
-import { ExtendedLeafProps } from '../../plugins/types';
+import type { HTMLAttributes } from 'react';
+import type { RenderLeafProps } from 'slate-react';
+import { useSelected } from 'slate-react';
+
+import type { ExtendedLeafProps } from '../../plugins/types';
 
 type Props = Pick<ExtendedLeafProps<any, any>, 'attributes' | 'children'> & {
   placeholder?: string;

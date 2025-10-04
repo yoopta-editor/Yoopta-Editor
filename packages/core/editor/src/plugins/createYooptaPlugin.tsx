@@ -1,5 +1,5 @@
-import { SlateElement } from '../editor/types';
-import { PluginElementRenderProps, Plugin, PluginOptions, PluginEvents } from './types';
+import type { Plugin, PluginElementRenderProps, PluginEvents, PluginOptions } from './types';
+import type { SlateElement } from '../editor/types';
 
 export type ExtendPluginRender<TKeys extends string> = {
   [x in TKeys]: (props: PluginElementRenderProps) => JSX.Element;
@@ -13,12 +13,17 @@ export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOpti
   };
   options?: Partial<PluginOptions<TOptions>>;
   elementProps?: {
-    [K in keyof TElementMap]?: (props: ExtractProps<TElementMap[K]>) => ExtractProps<TElementMap[K]>;
+    [K in keyof TElementMap]?: (
+      props: ExtractProps<TElementMap[K]>,
+    ) => ExtractProps<TElementMap[K]>;
   };
   events?: Partial<PluginEvents>;
 };
 
-export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOptions = Record<string, unknown>> {
+export class YooptaPlugin<
+  TElementMap extends Record<string, SlateElement>,
+  TOptions = Record<string, unknown>,
+> {
   private readonly plugin: Plugin<TElementMap, TOptions>;
   constructor(plugin: Plugin<TElementMap, TOptions>) {
     this.plugin = plugin;
@@ -46,11 +51,9 @@ export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOpt
         if (element && element.render) {
           const customRenderFn = renders[elementType];
 
-          let elementRender = element.render;
+          const elementRender = element.render;
 
-          element.render = (props) => {
-            return elementRender({ ...props, extendRender: customRenderFn });
-          };
+          element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
         }
       });
     }
@@ -82,7 +85,7 @@ export class YooptaPlugin<TElementMap extends Record<string, SlateElement>, TOpt
 
     return new YooptaPlugin<TElementMap, TOptions>({
       ...this.plugin,
-      elements: elements,
+      elements,
       options: extendedOptions as PluginOptions<TOptions>,
     });
   }

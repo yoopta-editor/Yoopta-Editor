@@ -1,11 +1,19 @@
-import { Descendant, Editor, Element, Text } from 'slate';
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import type { Descendant } from 'slate';
+import { Editor, Element, Text } from 'slate';
 
+import { buildBlockElementsStructure } from '../../utils/blockElements';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
-import { YooptaOperation } from '../core/applyTransforms';
-import { YooEditor, YooptaBlockData, SlateEditor, FocusAt, SlateElement, YooptaPathIndex } from '../types';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type {
+  FocusAt,
+  SlateEditor,
+  SlateElement,
+  YooEditor,
+  YooptaBlockData,
+  YooptaPathIndex,
+} from '../types';
 
 export type ToggleBlockOptions = {
   at?: YooptaPathIndex;
@@ -28,7 +36,8 @@ function extractTextNodes(
     return (blockData.value[0] as SlateElement).children;
   }
 
-  if (Editor.isEditor(node)) return node.children.flatMap((child) => extractTextNodes(slate, child, blockData, editor));
+  if (Editor.isEditor(node))
+    return node.children.flatMap((child) => extractTextNodes(slate, child, blockData, editor));
   if (!Element.isElement(node)) return [node];
   if (Editor.isInline(slate, node)) return [node];
 
@@ -49,21 +58,27 @@ function findFirstLeaf(node: SlateElement, options: ToggleBlockOptions): SlateEl
   return findFirstLeaf(node.children[0] as SlateElement, options);
 }
 
-export function toggleBlock(editor: YooEditor, toBlockTypeArg: string, options: ToggleBlockOptions = {}) {
+export function toggleBlock(
+  editor: YooEditor,
+  toBlockTypeArg: string,
+  options: ToggleBlockOptions = {},
+) {
   const fromBlock = findPluginBlockByPath(editor, {
     at: typeof options.at === 'number' ? options.at : editor.path.current,
   });
 
   if (!fromBlock) throw new Error('Block not found at current selection');
 
-  let toBlockType = fromBlock.type === toBlockTypeArg ? DEFAULT_BLOCK_TYPE : toBlockTypeArg;
+  const toBlockType = fromBlock.type === toBlockTypeArg ? DEFAULT_BLOCK_TYPE : toBlockTypeArg;
   const plugin = editor.plugins[toBlockType];
   const { onBeforeCreate } = plugin.events || {};
 
   const originalSlate = findSlateBySelectionPath(editor, { at: fromBlock.meta.order });
-  if (!originalSlate) throw new Error(`Slate not found for block in position ${fromBlock.meta.order}`);
+  if (!originalSlate)
+    throw new Error(`Slate not found for block in position ${fromBlock.meta.order}`);
 
-  const toBlockSlateChildren = onBeforeCreate?.(editor) || buildBlockElementsStructure(editor, toBlockType);
+  const toBlockSlateChildren =
+    onBeforeCreate?.(editor) || buildBlockElementsStructure(editor, toBlockType);
   const textNodes = extractTextNodes(originalSlate, originalSlate.children[0], fromBlock, editor);
   const firstLeaf = findFirstLeaf(toBlockSlateChildren, options);
 

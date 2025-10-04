@@ -1,7 +1,9 @@
-import { YooEditor } from '../../editor/types';
-import { KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useCallback } from 'react';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import { KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+
+import type { YooEditor } from '../../editor/types';
 
 export const useYooptaDragDrop = ({ editor }: { editor: YooEditor }) => {
   const sensors = useSensors(

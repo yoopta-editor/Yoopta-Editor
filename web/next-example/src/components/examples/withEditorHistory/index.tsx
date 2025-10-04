@@ -86,7 +86,12 @@ const plugins = [
     options: {
       onUpload: async (file) => {
         const response = await uploadToCloudinary(file, 'auto');
-        return { src: response.secure_url, format: response.format, name: response.name, size: response.bytes };
+        return {
+          src: response.secure_url,
+          format: response.format,
+          name: response.name,
+          size: response.bytes,
+        };
       },
     },
   }),
@@ -117,8 +122,7 @@ function WithEditorHistory() {
   return (
     <div
       className="md:py-[100px] md:pl-[200px] md:pr-[80px] px-[20px] pt-[80px] pb-[40px] flex flex-col items-center justify-center"
-      ref={selectionRef}
-    >
+      ref={selectionRef}>
       <FixedToolbar editor={editor} />
       <YooptaEditor
         editor={editor}
@@ -148,8 +152,7 @@ const FixedToolbar = ({ editor }: Props) => {
             editor.redo({ scroll: false });
           }}
           className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-          disabled={editor.historyStack.redos.length === 0}
-        >
+          disabled={editor.historyStack.redos.length === 0}>
           Redo
         </button>
         <button
@@ -158,8 +161,7 @@ const FixedToolbar = ({ editor }: Props) => {
             editor.undo({ scroll: false });
           }}
           className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-          disabled={editor.historyStack.undos.length === 0}
-        >
+          disabled={editor.historyStack.undos.length === 0}>
           Undo
         </button>
       </div>
@@ -169,8 +171,7 @@ const FixedToolbar = ({ editor }: Props) => {
           onClick={() => {
             TableCommands.insertTable(editor, { rows: 3, columns: 3, headerRow: true, at: 0 });
           }}
-          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
+          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
           Insert table with saving in history
         </button>
         <button
@@ -180,8 +181,7 @@ const FixedToolbar = ({ editor }: Props) => {
               TableCommands.insertTable(editor, { rows: 3, columns: 3, headerRow: true, at: 0 });
             });
           }}
-          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50"
-        >
+          className="p-2 text-xs shadow-md hover:bg-[#64748b] hover:text-[#fff] disabled:opacity-50">
           Insert table without saving in history
         </button>
       </div>

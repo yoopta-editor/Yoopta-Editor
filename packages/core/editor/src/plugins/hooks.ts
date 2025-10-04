@@ -1,16 +1,19 @@
 import { useMemo } from 'react';
 import { Editor, Element, Node, Operation, Path, Range, Transforms } from 'slate';
+
+import { withInlines } from './extenstions/withInlines';
+import type { PluginEventHandlerOptions, PluginEvents } from './types';
 import { buildBlockData } from '../components/Editor/utils';
 import { Blocks } from '../editor/blocks';
+import type { SetSlateOperation } from '../editor/core/applyTransforms';
+import { YooptaOperation } from '../editor/core/applyTransforms';
+import { YooptaHistory } from '../editor/core/history';
 import { Paths } from '../editor/paths';
-import { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
-import { EditorEventHandlers } from '../types/eventHandlers';
+import type { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
+import type { EditorEventHandlers } from '../types/eventHandlers';
 import { getRootBlockElementType } from '../utils/blockElements';
 import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
-import { withInlines } from './extenstions/withInlines';
-import { PluginEventHandlerOptions, PluginEvents } from './types';
-import { SetSlateOperation } from '../editor/core/applyTransforms';
 
 export const useSlateEditor = (
   id: string,
@@ -18,8 +21,8 @@ export const useSlateEditor = (
   block: YooptaBlockData,
   elements: any,
   withExtensions: any,
-) => {
-  return useMemo(() => {
+) =>
+  useMemo(() => {
     let slate = editor.blockEditorsMap[id];
 
     const { normalizeNode, insertText, apply } = slate;
@@ -34,7 +37,8 @@ export const useSlateEditor = (
 
       const { markableVoid: prevMarkableVoid, isVoid: prevIsVoid, isInline: prevIsInline } = slate;
       if (isInlineVoid) {
-        slate.markableVoid = (element) => (element.type === elementType ? true : prevMarkableVoid(element));
+        slate.markableVoid = (element) =>
+          element.type === elementType ? true : prevMarkableVoid(element);
       }
 
       if (isVoid || isInlineVoid) {
@@ -122,7 +126,7 @@ export const useSlateEditor = (
               selectionBefore: slate.selection,
             },
             blockId: id,
-            slate: slate,
+            slate,
           };
 
           editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
@@ -130,7 +134,8 @@ export const useSlateEditor = (
           return;
         }
 
-        const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties?.slateOps;
+        const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties
+          ?.slateOps;
         const lastOp = lastSlateOps && lastSlateOps[lastSlateOps.length - 1];
         let merge = shouldMerge(op, lastOp);
 
@@ -155,7 +160,7 @@ export const useSlateEditor = (
               selectionBefore: batch.selectionBefore,
             },
             blockId: id,
-            slate: slate,
+            slate,
           };
 
           editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
@@ -171,16 +176,15 @@ export const useSlateEditor = (
 
     return slate;
   }, []);
-};
 
 export const useEventHandlers = (
   events: PluginEvents | undefined,
   editor: YooEditor,
   block: YooptaBlockData,
   slate: SlateEditor,
-) => {
-  return useMemo<EditorEventHandlers>(() => {
-    if (editor.readOnly) return {};
+) =>
+  useMemo<EditorEventHandlers>(() => {
+    if (!events || editor.readOnly) return {};
     const { onBeforeCreate, onDestroy, onCreate, ...eventHandlers } = events || {};
 
     const eventHandlersOptions: PluginEventHandlerOptions = {
@@ -193,7 +197,9 @@ export const useEventHandlers = (
     // Get inline plugin event handlers
     const inlinePlugins = Object.values(editor.plugins).filter((plugin) => {
       const rootElement = Object.values(plugin.elements)[0];
-      return rootElement?.props?.nodeType === 'inline' || rootElement?.props?.nodeType === 'inlineVoid';
+      return (
+        rootElement?.props?.nodeType === 'inline' || rootElement?.props?.nodeType === 'inlineVoid'
+      );
     });
 
     // Merge block and inline plugin event handlers
@@ -235,7 +241,6 @@ export const useEventHandlers = (
 
     return eventHandlersMap;
   }, [events, editor, block]);
-};
 
 const shouldSave = (op: Operation): boolean => {
   if (op.type === 'set_selection') {

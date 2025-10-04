@@ -1,7 +1,8 @@
 import { Operation } from 'slate';
-import { SlateElement, YooEditor, YooptaPath } from '../types';
-import { YooptaOperation } from './applyTransforms';
+
+import type { YooptaOperation } from './applyTransforms';
 import { Blocks } from '../blocks';
+import type { SlateElement, YooEditor, YooptaPath } from '../types';
 
 export type HistoryStack = {
   operations: YooptaOperation[];
@@ -10,7 +11,10 @@ export type HistoryStack = {
 
 export type HistoryStackName = 'undos' | 'redos';
 
-export function inverseEditorOperation(editor: YooEditor, op: YooptaOperation): YooptaOperation | YooptaOperation[] {
+export function inverseEditorOperation(
+  editor: YooEditor,
+  op: YooptaOperation,
+): YooptaOperation | YooptaOperation[] {
   switch (op.type) {
     case 'insert_block':
       return {
@@ -58,7 +62,10 @@ export function inverseEditorOperation(editor: YooEditor, op: YooptaOperation): 
           toggledBlock: op.prevProperties.sourceBlock,
           toggledSlateValue: op.prevProperties.sourceSlateValue,
         },
-        prevProperties: { sourceBlock: op.properties.toggledBlock, sourceSlateValue: op.properties.toggledSlateValue },
+        prevProperties: {
+          sourceBlock: op.properties.toggledBlock,
+          sourceSlateValue: op.properties.toggledSlateValue,
+        },
       };
     }
 
@@ -192,7 +199,9 @@ export const YooptaHistory = {
 
       YooptaHistory.withoutSavingHistory(editor, () => {
         // [TODO] - ask Christopher Nolan to help with this
-        const inverseOps = batch.operations.flatMap((op) => inverseEditorOperation(editor, op)).reverse();
+        const inverseOps = batch.operations
+          .flatMap((op) => inverseEditorOperation(editor, op))
+          .reverse();
         editor.applyTransforms(inverseOps, { source: 'history' });
         editor.setPath(batch.path);
 
@@ -215,8 +224,8 @@ export const YooptaHistory = {
 };
 
 function isInViewport(element) {
-  var rect = element.getBoundingClientRect();
-  var html = document.documentElement;
+  const rect = element.getBoundingClientRect();
+  const html = document.documentElement;
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&

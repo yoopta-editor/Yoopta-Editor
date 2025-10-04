@@ -1,14 +1,21 @@
-import { Blocks, Elements, YooptaPlugin, buildBlockElementsStructure, serializeTextNodes } from '@yoopta/editor';
-import { AccordionElementMap } from '../types';
+import {
+  Blocks,
+  Elements,
+  YooptaPlugin,
+  buildBlockElementsStructure,
+  serializeTextNodes,
+} from '@yoopta/editor';
+import { ListCollapse } from 'lucide-react';
+import { Element, Transforms } from 'slate';
+
+import { AccordionCommands } from '../commands/AccordionCommands';
+import { ACCORDION_ELEMENTS } from '../constants';
+import { withAccordion } from '../extensions/withAccordion';
+import { AccordionItemContent } from '../renders/AccordionItemContent';
+import { AccordionItemHeading } from '../renders/AccordionItemHeading';
 import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
-import { AccordionItemHeading } from '../renders/AccordionItemHeading';
-import { AccordionItemContent } from '../renders/AccordionItemContent';
-import { Element, Transforms } from 'slate';
-import { ListCollapse } from 'lucide-react';
-import { AccordionCommands } from '../commands/AccordionCommands';
-import { withAccordion } from '../extensions/withAccordion';
-import { ACCORDION_ELEMENTS } from '../constants';
+import type { AccordionElementMap } from '../types';
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
@@ -37,7 +44,9 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         if (hotkeys.isBackspace(event)) {
           if (!slate.selection) return;
 
-          const listItems = Elements.getElementChildren(editor, currentBlock.id, { type: 'accordion-list' });
+          const listItems = Elements.getElementChildren(editor, currentBlock.id, {
+            type: 'accordion-list',
+          });
           const accordionListItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
             path: slate.selection,
             type: 'accordion-list-item',
@@ -56,12 +65,18 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             path: listItemChildPath,
           });
 
-          if (isContentEmpty && currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemContent) {
+          if (
+            isContentEmpty &&
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemContent
+          ) {
             event.preventDefault();
             return;
           }
 
-          if (isHeadingEmpty && currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading) {
+          if (
+            isHeadingEmpty &&
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading
+          ) {
             event.preventDefault();
 
             if (listItems?.length === 1) {
@@ -94,9 +109,14 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           event.preventDefault();
 
           const currentElement = Elements.getElement(editor, currentBlock.id);
-          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, { type: 'accordion-list-item' });
+          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
+            type: 'accordion-list-item',
+          });
 
-          if (currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading && listItemEntry) {
+          if (
+            currentElement?.type === ACCORDION_ELEMENTS.AccordionListItemHeading &&
+            listItemEntry
+          ) {
             const [listItem, listItemPath] = listItemEntry;
 
             Elements.updateElement(
@@ -155,17 +175,18 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
 
         return `<div>${element.children
           .filter(Element.isElement)
-          .map((listItem) => {
-            return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
-              .filter(Element.isElement)
-              .map((item) => {
-                if (item.type === 'accordion-list-item-heading') {
-                  return `<summary>${serializeTextNodes(item.children)}</summary>`;
-                }
-                return `<p>${serializeTextNodes(item.children)}</p>`;
-              })
-              .join('')}</details>`;
-          })
+          .map(
+            (listItem) =>
+              `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
+                .filter(Element.isElement)
+                .map((item) => {
+                  if (item.type === 'accordion-list-item-heading') {
+                    return `<summary>${serializeTextNodes(item.children)}</summary>`;
+                  }
+                  return `<p>${serializeTextNodes(item.children)}</p>`;
+                })
+                .join('')}</details>`,
+          )
           .join('')}</div>`;
       },
     },

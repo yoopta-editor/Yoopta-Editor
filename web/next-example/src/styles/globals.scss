@@ -74,7 +74,7 @@
       color: white;
     }
 
-    & .yoopta-table td[data-cell-selected="true"] {
+    & .yoopta-table td[data-cell-selected='true'] {
       background-color: #1f1f1f;
     }
   }
@@ -146,7 +146,6 @@
   font-family: Monaco, Menlo, Consolas, Courier New, monospace !important;
   border: 1px solid rgba(232, 232, 232, 0.13);
 }
-
 
 #slack .yoopta-editor .yoopta-code .yoopta-code-cm-editor .cm-editor {
   border: 1px solid rgb(53, 55, 59);

@@ -57,7 +57,8 @@ const features: Feature[] = [
   },
   {
     title: 'Powerful plugins',
-    description: 'The editor comes with many built-in plugins to help you create any type of content.',
+    description:
+      'The editor comes with many built-in plugins to help you create any type of content.',
     icon: PlugIcon,
   },
   {
@@ -72,7 +73,8 @@ const features: Feature[] = [
   },
   {
     title: 'Exports/Imports',
-    description: 'Export and import content in various formats such as HTML, Markdown, Text, and others.',
+    description:
+      'Export and import content in various formats such as HTML, Markdown, Text, and others.',
     icon: ImportIcon,
   },
   {
@@ -82,7 +84,8 @@ const features: Feature[] = [
   },
   {
     title: 'Plans',
-    description: 'Yes, our plans for this editor are also a feature. We have ideas to make it exceptional.',
+    description:
+      'Yes, our plans for this editor are also a feature. We have ideas to make it exceptional.',
     icon: LightbulbIcon,
   },
 ];

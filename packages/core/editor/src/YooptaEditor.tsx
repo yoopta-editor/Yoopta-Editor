@@ -1,22 +1,25 @@
-import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
+import type { CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Editor } from './components/Editor/Editor';
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
-import { SlateElement, YooEditor, YooptaPath, YooptaContentValue } from './editor/types';
-import { Plugin } from './plugins/types';
-import { Tools, ToolsProvider } from './contexts/YooptaContext/ToolsContext';
+import type { Tools } from './contexts/YooptaContext/ToolsContext';
+import { ToolsProvider } from './contexts/YooptaContext/ToolsContext';
+import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
+import type { YooptaOperation } from './editor/core/applyTransforms';
+import type { SlateElement, YooEditor, YooptaContentValue, YooptaPath } from './editor/types';
+import type { YooptaMark } from './marks';
+import { FakeSelectionMark } from './marks/FakeSelectionMark';
+import type { YooptaPlugin } from './plugins';
+import type { Plugin } from './plugins/types';
 import {
-  buildBlocks,
   buildBlockShortcuts,
   buildBlockSlateEditors,
+  buildBlocks,
   buildCommands,
   buildMarks,
   buildPlugins,
 } from './utils/editorBuilders';
-import { YooptaPlugin } from './plugins';
-import { YooptaMark } from './marks';
-import { FakeSelectionMark } from './marks/FakeSelectionMark';
 import { generateId } from './utils/generateId';
-import { YooptaOperation } from './editor/core/applyTransforms';
 import { validateYooptaValue } from './utils/validateYooptaValue';
 
 export type YooptaOnChangeOptions = {
@@ -26,7 +29,7 @@ export type YooptaOnChangeOptions = {
 export type YooptaEditorProps = {
   id?: string;
   editor: YooEditor;
-  plugins: Readonly<YooptaPlugin<Record<string, SlateElement>>[]>;
+  plugins: readonly YooptaPlugin<Record<string, SlateElement>>[];
   marks?: YooptaMark<any>[];
   value?: YooptaContentValue;
   onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
@@ -70,9 +73,10 @@ const YooptaEditor = ({
     return [FakeSelectionMark];
   }, [marksProps]);
 
-  const plugins = useMemo(() => {
-    return pluginsProps.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>);
-  }, [pluginsProps]);
+  const plugins = useMemo(
+    () => pluginsProps.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>),
+    [pluginsProps],
+  );
 
   const [editorState, setEditorState] = useState<EditorState>(() => {
     if (!editor.id) editor.id = id || generateId();
@@ -84,7 +88,9 @@ const YooptaEditor = ({
     if (!isValueValid && typeof value !== 'undefined') {
       // [TODO] - add link to documentation
       console.error(
-        `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(value)}`,
+        `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(
+          value,
+        )}`,
       );
     }
 
@@ -146,8 +152,7 @@ const YooptaEditor = ({
           className={className}
           selectionBoxRoot={selectionBoxRoot}
           width={width}
-          style={style}
-        >
+          style={style}>
           {children}
         </Editor>
       </ToolsProvider>

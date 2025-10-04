@@ -1,20 +1,30 @@
-import React, { memo, useCallback, useMemo, useRef } from 'react';
-import { DefaultElement, Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
-import { useYooptaEditor, useBlockData } from '../contexts/YooptaContext/YooptaContext';
-import { EDITOR_EVENT_HANDLERS } from '../handlers';
-import { YooptaMark } from '../marks';
+import type React from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
+import type { NodeEntry, Selection } from 'slate';
+import { Editor, Path, Range } from 'slate';
+import type { RenderElementProps } from 'slate-react';
+import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
-import { ExtendedLeafProps, PluginCustomEditorRenderProps, Plugin, PluginEvents } from './types';
-import { EditorEventHandlers } from '../types/eventHandlers';
-import { Editor, NodeEntry, Path, Range, Selection } from 'slate';
-import { TextLeaf } from '../components/TextLeaf/TextLeaf';
-
-import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
-import { deserializeHTML } from '../parsers/deserializeHTML';
 import { useEventHandlers, useSlateEditor } from './hooks';
-import { SlateElement } from '../editor/types';
+import type {
+  ExtendedLeafProps,
+  Plugin,
+  PluginCustomEditorRenderProps,
+  PluginEvents,
+} from './types';
+import { TextLeaf } from '../components/TextLeaf/TextLeaf';
+import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
+import type { SlateElement } from '../editor/types';
+import type { YooptaMark } from '../marks';
+import { deserializeHTML } from '../parsers/deserializeHTML';
+import type { EditorEventHandlers } from '../types/eventHandlers';
+import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
+import { EDITOR_EVENT_HANDLERS } from '../handlers';
 
-type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<TElementMap, TOptions> & {
+type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
+  TElementMap,
+  TOptions
+> & {
   id: string;
   marks?: YooptaMark<any>[];
   options: Plugin<TElementMap, TOptions>['options'];
@@ -48,7 +58,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 }: Props<TElementMap, TOptions>) => {
   const editor = useYooptaEditor();
   const block = useBlockData(id);
-  let initialValue = useRef(block.value).current;
+  const initialValue = useRef(block.value).current;
   const ELEMENTS_MAP = useMemo(() => getMappedElements(elements), [elements]);
   const MARKS_MAP = useMemo(() => getMappedMarks(marks), [marks]);
 
@@ -62,7 +72,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       // @ts-ignore - fixme
       if (window.scheduler) {
         // @ts-ignore - fixme
-        window.scheduler.postTask(() => editor.updateBlock(id, { value }), { priority: 'background' });
+        window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
+          priority: 'background',
+        });
       } else {
         editor.updateBlock(id, { value });
       }
@@ -78,7 +90,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       editor.setPath({
         current: editor.path.current,
         selected: editor.path.selected,
-        selection: selection,
+        selection,
         source: 'native-selection',
       });
     },
@@ -94,7 +106,12 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (!ElementComponent) return <DefaultElement {...props} attributes={attributes} />;
 
       return (
-        <ElementComponent {...props} attributes={attributes} blockId={id} HTMLAttributes={options?.HTMLAttributes} />
+        <ElementComponent
+          {...props}
+          attributes={attributes}
+          blockId={id}
+          HTMLAttributes={options?.HTMLAttributes}
+        />
       );
     },
     [elements],
@@ -211,7 +228,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
             }
 
             blocks.forEach((block, idx) => {
-              let insertBlockPath = shouldInsertAfterSelection ? insertPathIndex + idx + 1 : insertPathIndex + idx;
+              const insertBlockPath = shouldInsertAfterSelection
+                ? insertPathIndex + idx + 1
+                : insertPathIndex + idx;
               newPaths.push(insertBlockPath);
 
               const { type, ...blockData } = block;
@@ -221,8 +240,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
             // [TEST]
             editor.setPath({ current: null, selected: newPaths, source: 'copy-paste' });
           });
-
-          return;
         }
       }
     },
@@ -326,8 +343,7 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
         editor={slate}
         initialValue={initialValue}
         onValueChange={onChange}
-        onSelectionChange={onSelectionChange}
-      >
+        onSelectionChange={onSelectionChange}>
         <Editable
           key={`editable-${id}`}
           renderElement={renderElement}

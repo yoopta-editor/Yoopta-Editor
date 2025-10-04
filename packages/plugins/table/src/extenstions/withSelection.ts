@@ -1,7 +1,9 @@
-import { SlateEditor, SlateElement } from '@yoopta/editor';
+import type { SlateEditor, SlateElement } from '@yoopta/editor';
 import { Editor, Element, Operation, Path, Range } from 'slate';
-import { TableCellElement } from '../types';
-import { EDITOR_TO_SELECTION, TABLE_SLATE_TO_SELECTION_SET, SlateNodeEntry } from '../utils/weakMaps';
+
+import type { TableCellElement } from '../types';
+import type { SlateNodeEntry } from '../utils/weakMaps';
+import { EDITOR_TO_SELECTION, TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
 export function withSelection(slate: SlateEditor): SlateEditor {
   const { apply } = slate;

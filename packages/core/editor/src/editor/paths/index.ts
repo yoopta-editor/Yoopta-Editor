@@ -1,8 +1,8 @@
-import { getPreviousPath } from './getPreviousPath';
 import { getNextPath } from './getNextPath';
-import { isBlockSelected } from './isBlockSelected';
 import { getPath } from './getPath';
+import { getPreviousPath } from './getPreviousPath';
 import { getSelectedPaths } from './getSelectedPaths';
+import { isBlockSelected } from './isBlockSelected';
 import { isPathEmpty } from './isPathEmpty';
 import { setPath } from './setPath';
 import { getLastNodePoint } from '../../utils/getLastNodePoint';

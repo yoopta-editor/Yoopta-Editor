@@ -1,4 +1,4 @@
-import { ImageSizes } from '../types';
+import type { ImageSizes } from '../types';
 
 /**
  * Converts a size value (number or string) to a number

@@ -1,4 +1,4 @@
-import { EmbedProviderTypes } from '../types';
+import type { EmbedProviderTypes } from '../types';
 
 export const getYoutubeId = (url: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -27,7 +27,9 @@ export const getDailymotionId = (url: string) => {
 export const getWistiaId = (url: string) => {
   try {
     // Handle iframe embed URLs
-    const iframeMatch = url.match(/(?:https?:\/\/)?(?:fast\.)?wistia\.(?:com|net)\/embed\/iframe\/([a-zA-Z0-9]+)/);
+    const iframeMatch = url.match(
+      /(?:https?:\/\/)?(?:fast\.)?wistia\.(?:com|net)\/embed\/iframe\/([a-zA-Z0-9]+)/,
+    );
     if (iframeMatch) return iframeMatch[1];
 
     // Handle medias URLs
@@ -60,23 +62,29 @@ export function getInstagramId(url: string) {
 export function getProvider(url: string): EmbedProviderTypes | null {
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     return 'youtube';
-  } else if (url.includes('vimeo.com')) {
-    return 'vimeo';
-  } else if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
-    return 'dailymotion';
-  } else if (url.includes('loom.com')) {
-    return 'loom';
-  } else if (url.includes('wistia.com') || url.includes('wistia.net')) {
-    return 'wistia';
-  } else if (url.includes('twitter') || url.includes('https://x.com')) {
-    return 'twitter';
-  } else if (url.includes('figma')) {
-    return 'figma';
-  } else if (url.includes('instagram.com')) {
-    return 'instagram';
-  } else {
-    return null;
   }
+  if (url.includes('vimeo.com')) {
+    return 'vimeo';
+  }
+  if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
+    return 'dailymotion';
+  }
+  if (url.includes('loom.com')) {
+    return 'loom';
+  }
+  if (url.includes('wistia.com') || url.includes('wistia.net')) {
+    return 'wistia';
+  }
+  if (url.includes('twitter') || url.includes('https://x.com')) {
+    return 'twitter';
+  }
+  if (url.includes('figma')) {
+    return 'figma';
+  }
+  if (url.includes('instagram.com')) {
+    return 'instagram';
+  }
+  return null;
 }
 
 export function getTwitterEmbedId(url) {

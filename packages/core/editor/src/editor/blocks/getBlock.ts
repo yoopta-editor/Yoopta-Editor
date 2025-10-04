@@ -1,4 +1,4 @@
-import { YooEditor, YooptaPathIndex } from '../types';
+import type { YooEditor, YooptaPathIndex } from '../types';
 
 export type GetBlockOptions = {
   at?: YooptaPathIndex;

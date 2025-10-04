@@ -1,14 +1,15 @@
+import type { CSSProperties } from 'react';
 import {
+  YooptaPlugin,
   deserializeTextNodes,
   generateId,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
-  YooptaPlugin,
 } from '@yoopta/editor';
-import { CSSProperties } from 'react';
+
 import { CalloutCommands } from '../commands/CalloutCommands';
 import { withCallout } from '../extensions/withCallout';
-import { CalloutElementMap, CalloutTheme } from '../types';
+import type { CalloutElementMap, CalloutTheme } from '../types';
 import { CalloutRender } from '../ui/Callout';
 import { CALLOUT_THEME_STYLES } from '../utils';
 
@@ -60,15 +61,13 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
           depth * 20
         }px; text-align: ${align}; padding: .5rem .5rem .5rem 1rem; margin-top: .5rem; border-radius: .375rem; color: ${
           theme.color
-        }; border-left: ${theme.borderLeft || 0}; background-color: ${theme.backgroundColor}">${serializeTextNodes(
-          element.children,
-        )}</dl>`;
+        }; border-left: ${theme.borderLeft || 0}; background-color: ${
+          theme.backgroundColor
+        }">${serializeTextNodes(element.children)}</dl>`;
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `> ${serializeTextNodesIntoMarkdown(element.children)}`;
-      },
+      serialize: (element, text) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
     },
     email: {
       serialize: (element, text, blockMeta) => {
@@ -88,9 +87,9 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
       depth * 20
     }px; text-align: ${align}; padding: .5rem .5rem .5rem 1rem; margin-top: .5rem; border-radius: .375rem; color: ${
           theme.color
-        }; border-left: ${theme.borderLeft || 0}; background-color: ${theme.backgroundColor};">${serializeTextNodes(
-          element.children,
-        )}
+        }; border-left: ${theme.borderLeft || 0}; background-color: ${
+          theme.backgroundColor
+        };">${serializeTextNodes(element.children)}
               </td>
             </tr>
         </tbody>

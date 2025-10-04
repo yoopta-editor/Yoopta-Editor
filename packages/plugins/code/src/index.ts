@@ -3,9 +3,9 @@ import { CodeElement, CodeElementProps } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: CodeElement;
-  }
+  };
 }
 
 export { CodeCommands } from './commands';

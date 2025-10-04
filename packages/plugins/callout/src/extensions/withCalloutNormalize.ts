@@ -1,5 +1,5 @@
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
 
 export function withCalloutNormalize(slate: SlateEditor, editor: YooEditor) {
   const { normalizeNode } = slate;
@@ -8,7 +8,9 @@ export function withCalloutNormalize(slate: SlateEditor, editor: YooEditor) {
     const [node, path] = entry;
 
     if (path.length === 0 && Editor.isEditor(node)) {
-      const calloutElements = node.children.filter((child) => Element.isElement(child) && child.type === 'callout');
+      const calloutElements = node.children.filter(
+        (child) => Element.isElement(child) && child.type === 'callout',
+      );
 
       if (calloutElements.length > 1 && editor.path.current !== null) {
         const currentPath = editor.path.current;
