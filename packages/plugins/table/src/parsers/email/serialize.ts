@@ -1,4 +1,5 @@
-import { SlateElement, YooptaBlockData, serializeTextNodes } from '@yoopta/editor';
+import type { SlateElement, YooptaBlockData} from '@yoopta/editor';
+import { serializeTextNodes } from '@yoopta/editor';
 
 export function serializeTableToEmail(
   element: SlateElement,
@@ -29,15 +30,13 @@ export function serializeTableToEmail(
   }" data-header-column="${element.props?.headerColumn}">
       <colgroup>
       ${columns
-        .map((td) => {
-          return `<col style="width: ${td.props?.width ? `${td.props?.width}px` : 'auto'}" />`;
-        })
+        .map((td) => `<col style="width: ${td.props?.width ? `${td.props?.width}px` : 'auto'}" />`)
         .join('')}
       </colgroup>
       <tbody>${element.children
-        .map((trElement) => {
+        .map((trElement) => 
           // @ts-ignore - fixme
-          return `<tr style="position: relative;">${trElement.children
+           `<tr style="position: relative;">${trElement.children
             .map((td) => {
               const text = serializeTextNodes(td.children);
               if (td.props?.asHeader) {
@@ -74,8 +73,8 @@ export function serializeTableToEmail(
     white-space: pre-wrap;
     width: 100%;" data-width="${td.props?.width || 200}" rowspan="1" colspan="1">${text}</td>`;
             })
-            .join('')}</tr>`;
-        })
+            .join('')}</tr>`
+        )
         .join('')}</tbody></table>`;
 
   return serialized;

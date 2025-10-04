@@ -1,8 +1,9 @@
 import { deepClone } from '../../utils/deepClone';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { generateId } from '../../utils/generateId';
-import { YooptaOperation } from '../core/applyTransforms';
-import { YooEditor, YooptaBlock, YooptaBlockData, YooptaPathIndex } from '../types';
+import type { YooptaOperation } from '../core/applyTransforms';
+import type { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
+import { YooptaBlock } from '../types';
 
 export type DuplicateBlockOptions = {
   original: { blockId?: never; path: YooptaPathIndex } | { blockId: string; path?: never };
@@ -23,7 +24,7 @@ export function duplicateBlock(editor: YooEditor, options: DuplicateBlockOptions
 
   const { blockId, path } = original;
 
-  let originalBlock: YooptaBlockData | null = blockId
+  const originalBlock: YooptaBlockData | null = blockId
     ? editor.children[blockId]
     : findPluginBlockByPath(editor, { at: path! });
 

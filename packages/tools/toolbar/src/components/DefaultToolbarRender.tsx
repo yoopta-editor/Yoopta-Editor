@@ -1,32 +1,36 @@
+import type { CSSProperties, MouseEvent} from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { autoUpdate, flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CodeIcon,
   FontBoldIcon,
   FontItalicIcon,
   StrikethroughIcon,
-  CodeIcon,
-  UnderlineIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  TextAlignRightIcon,
-  TextAlignLeftIcon,
   TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  UnderlineIcon,
 } from '@radix-ui/react-icons';
 import * as Toolbar from '@radix-ui/react-toolbar';
-import { useFloating, offset, flip, shift, inline, autoUpdate } from '@floating-ui/react';
-import { CSSProperties, MouseEvent, useEffect, useRef, useState } from 'react';
-import { HighlightColor } from './HighlightColor';
-import {
-  findSlateBySelectionPath,
-  HOTKEYS,
+import type {
   SlateElement,
-  useYooptaTools,
-  UI,
+  YooptaBlockData} from '@yoopta/editor';
+import {
   Blocks,
+  HOTKEYS,
+  UI,
   findPluginBlockByPath,
-  YooptaBlockData,
+  findSlateBySelectionPath,
+  useYooptaTools
 } from '@yoopta/editor';
-import { Editor, Element, NodeEntry, Range, Transforms } from 'slate';
-import { ToolbarRenderProps } from '../types';
+import type { NodeEntry, Range} from 'slate';
+import { Editor, Element, Transforms } from 'slate';
+
+import { HighlightColor } from './HighlightColor';
 import { buildActionMenuRenderProps } from './utils';
+import type { ToolbarRenderProps } from '../types';
 
 const { Overlay, Portal } = UI;
 
@@ -129,7 +133,7 @@ const DefaultToolbarRender = ({ activeBlock, editor, toggleHoldToolbar }: Toolba
       if (HOTKEYS.isEscape(e)) {
         setModals(DEFAULT_MODALS);
         toggleHoldToolbar?.(false);
-        return;
+        
       }
 
       // [TODO]: Implement this accessibility feature

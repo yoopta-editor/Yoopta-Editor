@@ -1,25 +1,27 @@
+import { useState } from 'react';
+import {
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
+  useTransitionStyles,
+} from '@floating-ui/react';
+import type {
+  SlateElement} from '@yoopta/editor';
 import {
   Blocks,
   Elements,
-  findSlateBySelectionPath,
-  SlateElement,
   UI,
+  findSlateBySelectionPath,
   useYooptaEditor,
   useYooptaTools,
 } from '@yoopta/editor';
 import { Copy, SquareArrowOutUpRight } from 'lucide-react';
-import { useState } from 'react';
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
-  autoUpdate,
-  useTransitionStyles,
-} from '@floating-ui/react';
-import { LinkElementProps } from '../types';
 import { Editor, Element, Transforms } from 'slate';
+
+import type { LinkElementProps } from '../types';
 
 const { Overlay, Portal } = UI;
 

@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-import { Block } from '../Block/Block';
-import { YooEditor } from '../../editor/types';
-import { YooptaMark } from '../../marks';
-import { SlateEditorComponent } from '../../plugins/SlateEditorComponent';
 import { useYooptaDragDrop } from './dnd';
 import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import type { YooEditor } from '../../editor/types';
+import type { YooptaMark } from '../../marks';
+import { SlateEditorComponent } from '../../plugins/SlateEditorComponent';
+import { Block } from '../Block/Block';
 import { FloatingBlockActions } from '../Block/FloatingBlockActions';
 
 const DEFAULT_EDITOR_KEYS = [];
@@ -34,7 +34,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
       return aOrder - bOrder;
     });
 
-    //[TODO] - unnecesary
+    // [TODO] - unnecesary
   }, [childrenUnorderedKeys]);
 
   const blocks: JSX.Element[] = [];

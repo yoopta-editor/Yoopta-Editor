@@ -1,14 +1,16 @@
+import type {
+  YooptaBlockData} from '@yoopta/editor';
 import {
+  YooptaPlugin,
   generateId,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
-  YooptaBlockData,
-  YooptaPlugin,
 } from '@yoopta/editor';
+
 import { BulletedListCommands } from '../commands';
 import { BulletedListRender } from '../elements/BulletedList';
 import { onKeyDown } from '../events/onKeyDown';
-import { ListElementMap } from '../types';
+import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({

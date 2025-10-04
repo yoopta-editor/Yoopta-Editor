@@ -1,6 +1,7 @@
 import { Editor } from 'slate';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export function isEmpty(editor: YooEditor): boolean {
   const content = Object.values(editor.children);

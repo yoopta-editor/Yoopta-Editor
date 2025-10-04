@@ -1,9 +1,8 @@
-import { YooptaBlockData } from '@yoopta/editor';
-import { CodeElement } from '../types';
+import type { YooptaBlockData } from '@yoopta/editor';
 
-export const getCodeElement = (block: YooptaBlockData) => {
-  return block.value[0];
-};
+import type { CodeElement } from '../types';
+
+export const getCodeElement = (block: YooptaBlockData) => block.value[0];
 
 export const getCodeElementText = (block: YooptaBlockData) => {
   const element = getCodeElement(block) as CodeElement;

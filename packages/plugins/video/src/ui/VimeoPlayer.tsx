@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 const VIMEO_API_URI = 'https://vimeo.com/api/v2/video';
 
-function VimeoPlayer({ videoId, children, attributes, ...other }) {
+const VimeoPlayer = ({ videoId, children, attributes, ...other }) => {
   const vimeoRootRef = useRef(null);
   const [src, setSrc] = useState(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);

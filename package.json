@@ -23,16 +23,22 @@
     "test:core": "vitest packages/core/*/src/**/*.test.ts",
     "test:marks": "vitest packages/marks/src/**/*.test.ts",
     "test:integration": "playwright test",
-    "prettier": "prettier --write .",
-    "prettier:check": "prettier --check .",
+    "lint": "eslint packages/ --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint packages/ --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:packages": "yarn lerna run lint --parallel",
+    "prettier": "prettier --write packages/",
+    "prettier:check": "prettier --check packages/",
     "prettier:packages": "yarn lerna run prettier --parallel",
     "format": "yarn prettier && yarn prettier:packages",
     "release": "yarn clean && yarn build && yarn lerna publish --no-private",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
+    ],
+    "packages/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
     ]
   },
   "devDependencies": {
@@ -67,7 +73,9 @@
     "clsx": "^2.1.1",
     "eslint": "^8.7.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-next": "12.0.8",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^5.1.3",

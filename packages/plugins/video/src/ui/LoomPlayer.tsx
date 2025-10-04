@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-function LoomPlayer({ videoId, children, attributes, width, height, ...other }) {
+const LoomPlayer = ({ videoId, children, attributes, width, height, ...other }) => {
   const loomRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
   const [iframeKey, setIframeKey] = useState(0); // Add key to force re-render

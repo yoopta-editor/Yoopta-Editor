@@ -1,11 +1,13 @@
-import { Elements, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Elements, UI } from '@yoopta/editor';
+
+import CheckmarkIcon from '../icons/checkmark.svg';
+import DefaultIcon from '../icons/default.svg';
+import ErrorIcon from '../icons/error.svg';
+import InfoIcon from '../icons/info.svg';
 import SuccessIcon from '../icons/success.svg';
 import WarningIcon from '../icons/warning.svg';
-import ErrorIcon from '../icons/error.svg';
-import DefaultIcon from '../icons/default.svg';
-import InfoIcon from '../icons/info.svg';
-import CheckmarkIcon from '../icons/checkmark.svg';
-import { CalloutElementProps, CalloutPluginElementKeys, CalloutTheme } from '../types';
+import type { CalloutElementProps, CalloutPluginElementKeys, CalloutTheme } from '../types';
 import { CALLOUT_THEME_STYLES } from '../utils';
 
 const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =

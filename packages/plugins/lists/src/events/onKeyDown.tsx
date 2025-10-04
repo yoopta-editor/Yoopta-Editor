@@ -1,15 +1,18 @@
-import {
-  YooEditor,
+import type {
   PluginEventHandlerOptions,
-  findPluginBlockByPath,
-  YooptaBlockData,
+  SlateEditor,
+  YooEditor,
+  YooptaBlockData} from '@yoopta/editor';
+import {
+  Elements,
   buildBlockData,
   buildBlockElement,
-  Elements,
-  SlateEditor,
+  findPluginBlockByPath
 } from '@yoopta/editor';
-import { Editor, Element, Path } from 'slate';
-import { BulletedListElement, NumberedListElement, TodoListElement } from '../types';
+import type { Path } from 'slate';
+import { Editor, Element } from 'slate';
+
+import type { BulletedListElement, NumberedListElement, TodoListElement } from '../types';
 
 type ListNode = NumberedListElement | BulletedListElement | TodoListElement;
 
@@ -128,7 +131,7 @@ export function onKeyDown(
           focus: true,
           blockData: nextListBlock,
         });
-        return;
+        
       }
     });
   };

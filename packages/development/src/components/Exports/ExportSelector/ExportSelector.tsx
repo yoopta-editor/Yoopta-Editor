@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { PopoverProps } from '@radix-ui/react-popover';
+import type { PopoverProps } from '@radix-ui/react-popover';
+import { useRouter } from 'next/navigation';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -16,17 +15,18 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 type ExportType = {
   id: string;
   name: string;
 };
 
-interface ExportSelectorProps extends PopoverProps {
+type ExportSelectorProps = {
   presets: ExportType[];
-}
+} & PopoverProps
 
-export function ExportSelector({ presets, ...props }: ExportSelectorProps) {
+export const ExportSelector = ({ presets, ...props }: ExportSelectorProps) => {
   const [open, setOpen] = React.useState(false);
   const [selectedExport, setSelectedExport] = React.useState<ExportType>();
   const router = useRouter();

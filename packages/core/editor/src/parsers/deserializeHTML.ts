@@ -1,7 +1,8 @@
 import { Element } from 'slate';
+
 import { Blocks } from '../editor/blocks';
-import { SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaBlockData } from '../editor/types';
-import { PluginDeserializeParser } from '../plugins/types';
+import type { SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaBlockData } from '../editor/types';
+import type { PluginDeserializeParser } from '../plugins/types';
 import { getRootBlockElementType } from '../utils/blockElements';
 import { generateId } from '../utils/generateId';
 import { isYooptaBlock } from '../utils/validators';
@@ -116,7 +117,7 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
     value: [rootNode],
     meta: {
       order: 0,
-      depth: depth,
+      depth,
       align: VALID_TEXT_ALIGNS.includes(align) ? align : undefined,
     },
   });
@@ -132,14 +133,14 @@ function deserialize(
   if (el.nodeType === 3) {
     const text = el.textContent?.replace(/[\t\n\r\f\v]+/g, ' ');
     return { text };
-  } else if (el.nodeType !== 1) {
+  } if (el.nodeType !== 1) {
     return null;
-  } else if (el.nodeName === 'BR') {
+  } if (el.nodeName === 'BR') {
     return { text: '\n' };
   }
 
   const parent = el as HTMLElement;
-  let children = Array.from(parent.childNodes)
+  const children = Array.from(parent.childNodes)
     .map((node) => deserialize(editor, pluginsMap, node))
     .flat()
     .filter(Boolean);
@@ -151,7 +152,7 @@ function deserialize(
     return children.map((child) => {
       if (typeof child === 'string') {
         return { [markType]: mark.parse ? mark.parse(parent) : true, text: child };
-      } else if (child.text) {
+      } if (child.text) {
         return { ...child, [markType]: mark.parse ? mark.parse(parent) : true };
       }
       return child;

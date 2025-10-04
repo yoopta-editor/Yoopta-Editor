@@ -1,8 +1,10 @@
-import { Editor, Path, Span, Transforms } from 'slate';
+import type { Span} from 'slate';
+import { Editor, Path, Transforms } from 'slate';
+
+import { getElementEntry } from './getElementEntry';
 import { buildBlockElement } from '../../components/Editor/utils';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { SlateElement, YooEditor } from '../types';
-import { getElementEntry } from './getElementEntry';
+import type { SlateElement, YooEditor } from '../types';
 
 export type CreateBlockElementOptions = {
   path?: 'next' | 'prev' | Path | Span;
@@ -42,7 +44,7 @@ export function createElement<TElementKeys extends string, TElementProps>(
 
     const elementTypes = Object.keys(block.elements);
 
-    let childrenElements: SlateElement[] = [];
+    const childrenElements: SlateElement[] = [];
 
     elementTypes.forEach((blockElementType) => {
       const blockElement = block.elements[blockElementType];

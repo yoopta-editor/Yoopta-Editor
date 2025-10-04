@@ -1,7 +1,8 @@
 import { Editor, Path, Point, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { IS_FOCUSED_EDITOR } from '../../utils/weakMaps';
-import { FocusAt, SlateEditor, YooEditor } from '../types';
+import type { FocusAt, SlateEditor, YooEditor } from '../types';
 
 export type FocusBlockOptions = {
   waitExecution?: boolean;
@@ -21,7 +22,7 @@ function getSelectionPath(slate: SlateEditor, focusAt?: FocusAt): FocusAt {
   }
 
   const [, firstNodePath] = Editor.first(slate, [0]);
-  const firstLeafPath = firstNodePath ? firstNodePath : [0, 0];
+  const firstLeafPath = firstNodePath || [0, 0];
 
   return { path: firstLeafPath, offset: 0 };
 }

@@ -1,4 +1,5 @@
-import { generateId, SlateEditor, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import type { SlateEditor, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { generateId } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
 export function withParagraphNormalize(slate: SlateEditor, editor: YooEditor) {

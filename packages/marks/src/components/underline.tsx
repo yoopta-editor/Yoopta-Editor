@@ -1,4 +1,5 @@
-import { createYooptaMark, YooptaMarkProps } from '@yoopta/editor';
+import type { YooptaMarkProps } from '@yoopta/editor';
+import { createYooptaMark } from '@yoopta/editor';
 
 type UnderlineMarkProps = YooptaMarkProps<'underline', boolean>;
 

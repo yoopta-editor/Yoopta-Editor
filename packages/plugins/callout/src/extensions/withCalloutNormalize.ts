@@ -1,5 +1,5 @@
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
 
 export function withCalloutNormalize(slate: SlateEditor, editor: YooEditor) {
   const { normalizeNode } = slate;

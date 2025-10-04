@@ -1,5 +1,7 @@
-import { Blocks, buildBlockData, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { BlockquoteElement } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+
+import type { BlockquoteElement } from '../types';
 
 type BlockquoteElementOptions = {
   text?: string;
@@ -21,9 +23,7 @@ export type BlockquoteCommands = {
 };
 
 export const BlockquoteCommands: BlockquoteCommands = {
-  buildBlockquoteElements: (editor, options = {}) => {
-    return { id: generateId(), type: 'blockquote', children: [{ text: options?.text || '' }] };
-  },
+  buildBlockquoteElements: (editor, options = {}) => ({ id: generateId(), type: 'blockquote', children: [{ text: options?.text || '' }] }),
   insertBlockquote: (editor, options = {}) => {
     const { at, focus, text } = options;
 

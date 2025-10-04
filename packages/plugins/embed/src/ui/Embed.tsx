@@ -1,19 +1,22 @@
-import { EmbedComponent } from './EmbedComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
-import { Placeholder } from './Placeholder';
-import { EmbedPluginOptions } from '../types';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { EmbedBlockOptions } from './EmbedBlockOptions';
+import { EmbedComponent } from './EmbedComponent';
+import { Placeholder } from './Placeholder';
 import { Resizer } from './Resizer';
+import type { EmbedPluginOptions } from '../types';
 
 const EmbedRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, children, attributes, blockId } = props;

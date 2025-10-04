@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { EmbedElementProps, EmbedPluginElements, ProviderRenderProps } from '../types';
 
-function Twitter({ provider, blockId, attributes, children, height, width }: ProviderRenderProps) {
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import type { EmbedElementProps, EmbedPluginElements, ProviderRenderProps } from '../types';
+
+const Twitter = ({ provider, blockId, attributes, children, height, width }: ProviderRenderProps) => {
   const twitterRootRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 

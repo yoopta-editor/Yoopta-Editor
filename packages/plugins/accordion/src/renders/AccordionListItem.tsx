@@ -1,4 +1,4 @@
-import { PluginElementRenderProps } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 
 export const AccordionListItem = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { attributes, children } = props;

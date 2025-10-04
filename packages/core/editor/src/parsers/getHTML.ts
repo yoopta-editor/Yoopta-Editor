@@ -1,5 +1,6 @@
 import { Paths } from '../editor/paths';
-import { SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaContentValue } from '../editor/types';
+import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
+import { YooptaBlockBaseMeta } from '../editor/types';
 import { getPluginByInlineElement } from '../utils/blockElements';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
@@ -25,7 +26,7 @@ function serializeChildren(children, plugins, editor) {
         }, child.text);
 
         return innerHtml;
-      } else if (child.type) {
+      } if (child.type) {
         const childPlugin = getPluginByInlineElement(plugins, child.type);
 
         if (childPlugin && childPlugin.parsers?.html?.serialize) {

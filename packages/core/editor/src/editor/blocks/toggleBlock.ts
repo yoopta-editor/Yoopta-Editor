@@ -1,16 +1,17 @@
-import { Descendant, Editor, Element, Text } from 'slate';
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import type { Descendant} from 'slate';
+import { Editor, Element, Text } from 'slate';
 
+import { buildBlockElementsStructure } from '../../utils/blockElements';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
-import { YooptaOperation } from '../core/applyTransforms';
-import {
+import type { YooptaOperation } from '../core/applyTransforms';
+import type {
+  FocusAt,
+  SlateEditor,
+  SlateElement,
   YooEditor,
   YooptaBlockData,
-  SlateEditor,
-  FocusAt,
-  SlateElement,
   YooptaPathIndex,
 } from '../types';
 
@@ -68,7 +69,7 @@ export function toggleBlock(
 
   if (!fromBlock) throw new Error('Block not found at current selection');
 
-  let toBlockType = fromBlock.type === toBlockTypeArg ? DEFAULT_BLOCK_TYPE : toBlockTypeArg;
+  const toBlockType = fromBlock.type === toBlockTypeArg ? DEFAULT_BLOCK_TYPE : toBlockTypeArg;
   const plugin = editor.plugins[toBlockType];
   const { onBeforeCreate } = plugin.events || {};
 

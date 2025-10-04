@@ -1,12 +1,14 @@
+import type {
+  YooEditor,
+  YooptaPathIndex} from '@yoopta/editor';
 import {
   Blocks,
-  buildBlockData,
   Elements,
-  generateId,
-  YooEditor,
-  YooptaPathIndex,
+  buildBlockData,
+  generateId
 } from '@yoopta/editor';
-import { FileElement, FileElementProps } from '../types';
+
+import type { FileElement, FileElementProps } from '../types';
 
 type FileElementOptions = {
   props?: Omit<FileElementProps, 'nodeType'>;

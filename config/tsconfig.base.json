@@ -21,5 +21,13 @@
     "noEmit": false,
     "declaration": true,
     "declarationMap": true
-  }
+  },
+  "include": [
+    "packages/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "web"
+  ]
 }

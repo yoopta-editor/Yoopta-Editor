@@ -1,6 +1,7 @@
-import { Editor, Element as SlateElement, Transforms, Range } from 'slate';
-import { SlateEditor, YooEditor } from '../../editor/types';
+import { Editor, Range, Element as SlateElement, Transforms } from 'slate';
 import isURL from 'validator/lib/isURL';
+
+import type { SlateEditor, YooEditor } from '../../editor/types';
 
 function isUrl(string: string): boolean {
   if (!string || string.length > 2048) return false;

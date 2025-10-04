@@ -1,11 +1,12 @@
+import type {
+  CSSProperties} from 'react';
 import {
-  useState,
-  useLayoutEffect,
-  useEffect,
-  memo,
   forwardRef,
+  memo,
+  useEffect,
+  useLayoutEffect,
   useRef,
-  CSSProperties,
+  useState
 } from 'react';
 
 export const useIsomorphicLayoutEffect =

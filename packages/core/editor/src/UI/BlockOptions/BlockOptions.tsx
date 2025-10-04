@@ -1,21 +1,23 @@
-import TurnIcon from './icons/turn.svg';
-import { TrashIcon, CopyIcon, Link2Icon } from '@radix-ui/react-icons';
-import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
-import { CSSProperties, useState } from 'react';
+import type { CSSProperties} from 'react';
+import { useState } from 'react';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
   autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
+import { CopyIcon, Link2Icon, TrashIcon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
-import { getRootBlockElement } from '../../utils/blockElements';
-import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+
+import TurnIcon from './icons/turn.svg';
 import { buildActionMenuRenderProps } from './utils';
+import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
+import { getRootBlockElement } from '../../utils/blockElements';
+import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { Overlay } from '../Overlay/Overlay';
 import { Portal } from '../Portal/Portal';
 

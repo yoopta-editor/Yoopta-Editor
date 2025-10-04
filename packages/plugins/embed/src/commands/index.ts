@@ -1,13 +1,15 @@
+import type {
+  YooEditor,
+  YooptaPathIndex} from '@yoopta/editor';
 import {
   Blocks,
-  buildBlockData,
   Elements,
-  generateId,
-  YooEditor,
-  YooptaPathIndex,
+  buildBlockData,
+  generateId
 } from '@yoopta/editor';
-import { EmbedElement, EmbedElementProps, EmbedProvider, EmbedSizes } from '../types';
-import { getProvider, ProviderGetters } from '../utils/providers';
+
+import type { EmbedElement, EmbedElementProps, EmbedProvider, EmbedSizes } from '../types';
+import { ProviderGetters, getProvider } from '../utils/providers';
 
 type EmbedElementOptions = {
   props?: {

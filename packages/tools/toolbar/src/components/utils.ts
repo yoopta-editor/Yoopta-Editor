@@ -1,4 +1,5 @@
-import { getRootBlockElement, YooEditor, YooptaBlockData } from '@yoopta/editor';
+import type { YooEditor} from '@yoopta/editor';
+import { YooptaBlockData, getRootBlockElement } from '@yoopta/editor';
 
 type Params = {
   editor: YooEditor;

@@ -1,15 +1,16 @@
-import { Node } from 'slate';
-import { withParagraphNormalize } from './withParagraphNormalize';
 import { generateId } from '@yoopta/editor';
-import { describe, it, expect, beforeEach } from 'vitest';
+import type { Node } from 'slate';
 import {
   createMockSlateEditor,
   createMockYooEditor,
-  setupSlateMocks,
+  createTestBlockData,
   createTestNode,
   createTestParagraph,
-  createTestBlockData,
+  setupSlateMocks,
 } from 'test-utils';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { withParagraphNormalize } from './withParagraphNormalize';
 
 describe('withParagraphNormalize', () => {
   let editor: ReturnType<typeof createMockYooEditor>;

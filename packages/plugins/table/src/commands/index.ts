@@ -1,13 +1,16 @@
+import type {
+  SlateElement,
+  YooEditor,
+  YooptaPathIndex} from '@yoopta/editor';
 import {
   Blocks,
   Elements,
-  generateId,
-  SlateElement,
-  YooEditor,
-  YooptaPathIndex,
+  generateId
 } from '@yoopta/editor';
-import { Editor, Element, Path, Span, Transforms } from 'slate';
-import { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
+import type { Span} from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
+
+import type { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
 
 type Options = {
   path?: Location | Span;
@@ -63,8 +66,8 @@ export const TableCommands: TableCommands = {
       type: 'table',
       children: [],
       props: {
-        headerColumn: headerColumn,
-        headerRow: headerRow,
+        headerColumn,
+        headerRow,
       },
     };
 
@@ -123,13 +126,11 @@ export const TableCommands: TableCommands = {
       const newRow: SlateElement = {
         id: generateId(),
         type: 'table-row',
-        children: currentRowElement.children.map((cell) => {
-          return {
+        children: currentRowElement.children.map((cell) => ({
             id: generateId(),
             type: 'table-data-cell',
             children: [{ text: '' }],
-          };
-        }),
+          })),
         props: {
           nodeType: 'block',
         },
@@ -180,7 +181,7 @@ export const TableCommands: TableCommands = {
     Editor.withoutNormalizing(slate, () => {
       Transforms.moveNodes(slate, {
         at: from,
-        to: to,
+        to,
         match: (n) => Element.isElement(n) && n.type === 'table-row',
       });
     });
@@ -273,9 +274,7 @@ export const TableCommands: TableCommands = {
       const [_, dataCellPath] = dataCellElementEntryByPath;
       const columnIndex = dataCellPath[dataCellPath.length - 1];
 
-      const dataCellPaths = rows.map(([row, path]) => {
-        return row.children[columnIndex] ? [...path, columnIndex] : null;
-      });
+      const dataCellPaths = rows.map(([row, path]) => row.children[columnIndex] ? [...path, columnIndex] : null);
 
       // [TODO] - Check if there are other columns
       dataCellPaths.forEach((path) => {

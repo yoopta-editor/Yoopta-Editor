@@ -1,6 +1,7 @@
-import { generateId } from '@yoopta/editor';
 import { useState } from 'react';
-import { ChatMessage, ChatMessageMap, OpenAIChatMessage } from '../types';
+import { generateId } from '@yoopta/editor';
+
+import type { ChatMessage, ChatMessageMap, OpenAIChatMessage } from '../types';
 
 type Props = {
   context?: OpenAIChatMessage[] | null;

@@ -1,5 +1,7 @@
-import { getRootBlockElement, YooEditor } from '@yoopta/editor';
-import { ActionMenuRenderProps, ActionMenuToolItem } from '../types';
+import type { YooEditor } from '@yoopta/editor';
+import { getRootBlockElement } from '@yoopta/editor';
+
+import type { ActionMenuRenderProps, ActionMenuToolItem } from '../types';
 
 type Params = {
   editor: YooEditor;

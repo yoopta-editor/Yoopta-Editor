@@ -1,6 +1,7 @@
-import { FileElementProps } from '../types';
+import type { MouseEvent } from 'react';
 import { FileTextIcon } from '@radix-ui/react-icons';
-import { MouseEvent } from 'react';
+
+import type { FileElementProps } from '../types';
 
 type FileComponentProps = Partial<FileElementProps> & {
   blockId: string;
@@ -12,7 +13,7 @@ function formatBytesToKilobytes(bytes) {
     return null;
   }
   const kilobytes = bytes / 1024;
-  return kilobytes.toFixed(2) + ' KB';
+  return `${kilobytes.toFixed(2) } KB`;
 }
 
 const FileComponent = ({ name, src, size, format, align }: FileComponentProps) => {

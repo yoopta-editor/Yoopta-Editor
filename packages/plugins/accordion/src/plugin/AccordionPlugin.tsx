@@ -5,16 +5,17 @@ import {
   buildBlockElementsStructure,
   serializeTextNodes,
 } from '@yoopta/editor';
-import { AccordionElementMap } from '../types';
+import { ListCollapse } from 'lucide-react';
+import { Element, Transforms } from 'slate';
+
+import { AccordionCommands } from '../commands/AccordionCommands';
+import { ACCORDION_ELEMENTS } from '../constants';
+import { withAccordion } from '../extensions/withAccordion';
+import { AccordionItemContent } from '../renders/AccordionItemContent';
+import { AccordionItemHeading } from '../renders/AccordionItemHeading';
 import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
-import { AccordionItemHeading } from '../renders/AccordionItemHeading';
-import { AccordionItemContent } from '../renders/AccordionItemContent';
-import { Element, Transforms } from 'slate';
-import { ListCollapse } from 'lucide-react';
-import { AccordionCommands } from '../commands/AccordionCommands';
-import { withAccordion } from '../extensions/withAccordion';
-import { ACCORDION_ELEMENTS } from '../constants';
+import type { AccordionElementMap } from '../types';
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
@@ -174,8 +175,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
 
         return `<div>${element.children
           .filter(Element.isElement)
-          .map((listItem) => {
-            return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
+          .map((listItem) => `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
               .filter(Element.isElement)
               .map((item) => {
                 if (item.type === 'accordion-list-item-heading') {
@@ -183,8 +183,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
                 }
                 return `<p>${serializeTextNodes(item.children)}</p>`;
               })
-              .join('')}</details>`;
-          })
+              .join('')}</details>`)
           .join('')}</div>`;
       },
     },

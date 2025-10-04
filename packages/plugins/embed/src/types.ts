@@ -1,5 +1,5 @@
 import { type SlateElement } from '@yoopta/editor';
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 
 export type EmbedSizes = {
   width: number | 'auto';

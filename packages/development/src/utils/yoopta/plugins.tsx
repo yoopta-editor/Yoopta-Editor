@@ -1,27 +1,28 @@
-import Blockquote from '@yoopta/blockquote';
-import Paragraph from '@yoopta/paragraph';
-import Headings from '@yoopta/headings';
-import Image, { ImageElementProps } from '@yoopta/image';
-import Callout, { CalloutElement } from '@yoopta/callout';
-import Lists, { TodoListElement } from '@yoopta/lists';
-import Link from '@yoopta/link';
-import Video, { VideoElementProps } from '@yoopta/video';
-import File from '@yoopta/file';
-import Embed from '@yoopta/embed';
 import Accordion, { AccordionCommands } from '@yoopta/accordion';
+import Blockquote from '@yoopta/blockquote';
+import type { CalloutElement } from '@yoopta/callout';
+import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
-import Table, { TableCommands } from '@yoopta/table';
 import Divider from '@yoopta/divider';
+import { Elements } from '@yoopta/editor';
+import Embed from '@yoopta/embed';
+import File from '@yoopta/file';
+import Headings from '@yoopta/headings';
+import type { ImageElementProps } from '@yoopta/image';
+import Image from '@yoopta/image';
+import Link from '@yoopta/link';
+import Lists, { TodoListElement } from '@yoopta/lists';
+import Table, { TableCommands } from '@yoopta/table';
+import type { VideoElementProps } from '@yoopta/video';
+import Video from '@yoopta/video';
 
 import { uploadToCloudinary } from '../cloudinary';
-import { Elements } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
 
 export const YOOPTA_PLUGINS = [
   Table.extend({
     events: {
-      onBeforeCreate: (editor) => {
-        return TableCommands.buildTableElements(editor, { rows: 3, columns: 3 });
-      },
+      onBeforeCreate: (editor) => TableCommands.buildTableElements(editor, { rows: 3, columns: 3 }),
     },
     options: {
       // HTMLAttributes: {
@@ -49,9 +50,7 @@ export const YOOPTA_PLUGINS = [
   }),
   File.extend({
     events: {
-      onBeforeCreate: (editor) => {
-        return editor.commands.buildFileElements({ text: 'Hello world' });
-      },
+      onBeforeCreate: (editor) => editor.commands.buildFileElements({ text: 'Hello world' }),
     },
     options: {
       onUpload: async (file: File) => {

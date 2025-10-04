@@ -1,7 +1,7 @@
-import { YooEditor, YooptaPathIndex } from '../types';
-import { YooptaOperation } from '../core/applyTransforms';
-import { Paths } from '../paths';
 import { getBlockSlate } from './getBlockSlate';
+import type { YooptaOperation } from '../core/applyTransforms';
+import { Paths } from '../paths';
+import type { YooEditor, YooptaPathIndex } from '../types';
 
 type DeleteBlockByIdOptions = {
   blockId: string;

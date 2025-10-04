@@ -1,9 +1,11 @@
-import { generateId, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { CodeCommands } from '../commands';
-import {
+import type {
   CodeElementMap,
+  CodePluginBlockOptions} from '../types';
+import {
   CodeElementProps,
-  CodePluginBlockOptions,
   CodePluginElements,
 } from '../types';
 import { CodeEditor } from '../ui/Code';
@@ -19,9 +21,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
   customEditor: CodeEditor,
   elements: {
     code: {
-      render: (props) => {
-        return <pre />;
-      },
+      render: (props) => <pre />,
       props: {
         nodeType: 'void',
         language: 'javascript',
@@ -54,8 +54,8 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
               type: 'code',
               id: generateId(),
               props: {
-                language: language,
-                theme: theme,
+                language,
+                theme,
                 nodeType: 'void',
               },
             };
@@ -75,9 +75,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``;
-      },
+      serialize: (element, text) => `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``,
     },
     email: {
       serialize: (element, text, blockMeta) => {
@@ -85,7 +83,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'left';
         const escapedText = escapeHTML(text);
 
-        const props = Object.assign({}, element.props);
+        const props = { ...element.props};
 
         return `
           <table style="width:100%;">

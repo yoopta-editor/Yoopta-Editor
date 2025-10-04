@@ -1,13 +1,14 @@
+import type { MouseEvent } from 'react';
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
-  PluginElementRenderProps,
+  Blocks,
+  Elements,
   useYooptaEditor,
   useYooptaReadOnly,
-  Elements,
-  Blocks,
 } from '@yoopta/editor';
 import { ChevronUp, Plus, TrashIcon } from 'lucide-react';
 import { Path } from 'slate';
-import { MouseEvent } from 'react';
 
 export const AccordionItemHeading = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { attributes, children, blockId, element } = props;

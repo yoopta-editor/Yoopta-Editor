@@ -1,5 +1,6 @@
 import { Elements, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { VideoElementProps, VideoPluginElements, VideoPluginOptions } from '../types';
+
+import type { VideoElementProps, VideoPluginElements, VideoPluginOptions } from '../types';
 import { limitSizes } from '../utils/limitSizes';
 
 type Props = {

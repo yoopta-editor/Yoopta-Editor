@@ -1,13 +1,14 @@
-import { RenderElementProps } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
+
 import { DailyMotion } from '../providers/DailyMotion';
 import { Figma } from '../providers/Figma';
 import Instagram from '../providers/Instagram';
+import { Loom } from '../providers/Loom';
 import Twitter from '../providers/Twitter';
 import { Vimeo } from '../providers/Vimeo';
-import { YouTube } from '../providers/Youtube';
-import { Loom } from '../providers/Loom';
 import { Wistia } from '../providers/Wistia';
-import { EmbedElementProps } from '../types';
+import { YouTube } from '../providers/Youtube';
+import type { EmbedElementProps } from '../types';
 
 type EmbedComponentProps = Omit<EmbedElementProps, 'sizes'> & {
   width: number | 'auto';

@@ -1,6 +1,8 @@
-import { PluginElementRenderProps, useBlockData, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps} from '@yoopta/editor';
+import { useBlockData, useYooptaEditor } from '@yoopta/editor';
+
 import { TableBlockOptions } from '../components/TableBlockOptions';
-import { TableElement } from '../types';
+import type { TableElement } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
 const Table = ({
@@ -29,7 +31,7 @@ const Table = ({
     <div className={`yoopta-table-block ${className}`}>
       <table
         {...htmlAttrs}
-        className={`yoopta-table ${!!isSelecting ? ' yoopta-table-selecting' : ''}`}>
+        className={`yoopta-table ${isSelecting ? ' yoopta-table-selecting' : ''}`}>
         <tbody {...attributes}>{children}</tbody>
       </table>
       {!isReadOnly && (

@@ -1,19 +1,22 @@
-import { VideoComponent } from './VideoComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { Placeholder } from './Placeholder';
-import { VideoPluginOptions } from '../types';
-import { VideoBlockOptions } from './VideoBlockOptions';
 import { Resizer } from './Resizer';
+import { VideoBlockOptions } from './VideoBlockOptions';
+import { VideoComponent } from './VideoComponent';
+import type { VideoPluginOptions } from '../types';
 
 const VideoRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, blockId, attributes, children } = props;

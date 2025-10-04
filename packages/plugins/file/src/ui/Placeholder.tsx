@@ -1,6 +1,8 @@
-import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
+import type { CSSProperties} from 'react';
+import { useState } from 'react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import { FileIcon } from '@radix-ui/react-icons';
-import { CSSProperties, useState } from 'react';
+
 import { FilePlaceholderUploader } from './FilePlaceholderUploader';
 import { Loader } from './Loader';
 
@@ -29,7 +31,7 @@ const Placeholder = ({ attributes, children, blockId }) => {
       contentEditable={false}>
       <button
         type="button"
-        className={`yoopta-button yoo-file-p-[12px_36px_12px_12px] yoo-file-flex yoo-file-items-center yoo-file-text-left yoo-file-w-full yoo-file-overflow-hidden yoo-file-rounded-[3px] yoo-file-text-[14px] yoo-file-text-[rgba(55,53,47,0.65)] yoo-file-relative yoo-file-cursor-pointer yoo-file-border-none yoo-file-bg-[#efefef] yoo-file-transition-[background-color_100ms_ease-in] hover:yoo-file-bg-[#e3e3e3]`}
+        className="yoopta-button yoo-file-p-[12px_36px_12px_12px] yoo-file-flex yoo-file-items-center yoo-file-text-left yoo-file-w-full yoo-file-overflow-hidden yoo-file-rounded-[3px] yoo-file-text-[14px] yoo-file-text-[rgba(55,53,47,0.65)] yoo-file-relative yoo-file-cursor-pointer yoo-file-border-none yoo-file-bg-[#efefef] yoo-file-transition-[background-color_100ms_ease-in] hover:yoo-file-bg-[#e3e3e3]"
         onClick={() => setIsUploaderOpen(true)}
         ref={refs.setReference}>
         {loading ? (

@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo } from 'react';
+
 import { useYooptaReadOnly } from './YooptaContext';
 
 export type ToolProps<RenderProps = any, ToolProps = any> = {
@@ -14,9 +15,7 @@ export type Tools = {
   [key: string]: ToolProps;
 };
 
-export type ToolsContextType = {
-  [key: string]: ToolProps['render'];
-};
+export type ToolsContextType = Record<string, ToolProps['render']>;
 
 const ToolsContext = createContext<ToolsContextType | undefined>(undefined);
 
@@ -31,12 +30,10 @@ export const ToolsProvider = ({ children, tools }: Props) => {
   const contextValue = useMemo(() => {
     if (!tools) return {};
 
-    return Object.keys(tools).reduce((acc, toolname) => {
-      return {
+    return Object.keys(tools).reduce((acc, toolname) => ({
         ...acc,
         [toolname]: tools[toolname]?.render,
-      };
-    }, {});
+      }), {});
   }, [tools]);
 
   const toolsRender = useMemo(() => {

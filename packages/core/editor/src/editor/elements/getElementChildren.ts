@@ -1,6 +1,6 @@
-import { SlateElement, YooEditor } from '../types';
 import { getElement } from './getElement';
-import { GetBlockElementEntryOptions } from './getElementEntry';
+import type { GetBlockElementEntryOptions } from './getElementEntry';
+import type { SlateElement, YooEditor } from '../types';
 
 export type GetElementChildrenOptions = GetBlockElementEntryOptions;
 

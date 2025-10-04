@@ -1,6 +1,7 @@
 import { Editor } from 'slate';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export function isActive(editor: YooEditor, type: string) {
   const slate = findSlateBySelectionPath(editor);

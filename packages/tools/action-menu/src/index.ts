@@ -1,13 +1,15 @@
-import { SlateElement } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
+
 import { ActionMenuList } from './components/ActionMenuList';
+
+import './styles.css';
+
 export { DefaultActionMenuRender } from './components/DefaultActionMenuRender';
 export { ActionMenuRenderProps, ActionMenuToolProps } from './types';
 export { buildActionMenuRenderProps } from './components/utils';
 
-import './styles.css';
-
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: SlateElement<string>;
   }
 }

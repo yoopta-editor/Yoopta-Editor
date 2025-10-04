@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
 
-function YouTube({ provider, width, height, attributes, children }: ProviderRenderProps) {
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import type { ProviderRenderProps } from '../types';
+
+const YouTube = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const youtubeRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 

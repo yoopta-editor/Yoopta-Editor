@@ -1,6 +1,7 @@
-import { generateId, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { VideoCommands } from '../commands';
-import { VideoElementMap, VideoPluginOptions } from '../types';
+import type { VideoElementMap, VideoPluginOptions } from '../types';
 import { VideoRender } from '../ui/Video';
 import { limitSizes } from '../utils/limitSizes';
 
@@ -144,9 +145,7 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.src}](${element.props.src})\n`;
-      },
+      serialize: (element, text) => `![${element.props.src}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

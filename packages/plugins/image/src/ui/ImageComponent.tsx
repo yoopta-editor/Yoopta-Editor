@@ -1,7 +1,9 @@
-import { CSSProperties, Fragment, useEffect, useState } from 'react';
-import { RenderElementProps } from 'slate-react';
+import type { CSSProperties} from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { UI } from '@yoopta/editor';
-import { ImageElementProps } from '../types';
+import type { RenderElementProps } from 'slate-react';
+
+import type { ImageElementProps } from '../types';
 
 type ImageComponentProps = Omit<ImageElementProps, 'sizes'> & {
   width: number | string;
@@ -101,7 +103,7 @@ const ImageComponent = ({
             onClick={handleImageClick}
             lockScroll
             className="yoopta-image-zoom-overlay yoo-image-bg-[rgba(255,255,255,0.95)]">
-            <Fragment />
+            <></>
           </UI.Overlay>
         </UI.Portal>
       )}

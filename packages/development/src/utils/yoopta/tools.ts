@@ -1,5 +1,5 @@
 import ActionMenuList, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
-import { Tools } from '@yoopta/editor';
+import type { Tools } from '@yoopta/editor';
 import LinkTool, { DefaultLinkToolRender } from '@yoopta/link-tool';
 import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
 

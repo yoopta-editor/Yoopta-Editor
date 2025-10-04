@@ -1,6 +1,8 @@
-import { Editor, Element, Path, Transforms } from 'slate';
+import type { Path} from 'slate';
+import { Editor, Element, Transforms } from 'slate';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export type DeleteBlockElement = {
   type: string;

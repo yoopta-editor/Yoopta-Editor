@@ -1,5 +1,6 @@
-import { Descendant } from 'slate';
-import { YooEditor } from '../editor/types';
+import type { Descendant } from 'slate';
+
+import type { YooEditor } from '../editor/types';
 import { generateId } from '../utils/generateId';
 
 // [TODO] - Move to @yoopta/utils or @yoopta/editor/utils
@@ -73,7 +74,7 @@ export function deserializeTextNodes(
 
         deserializedNodes.push({
           // @ts-ignore [FIXME] - Fix types
-          highlight: { color: color, backgroundColor: backgroundColor },
+          highlight: { color, backgroundColor },
           ...deserializeTextNodes(editor, element.childNodes)[0],
         });
       }

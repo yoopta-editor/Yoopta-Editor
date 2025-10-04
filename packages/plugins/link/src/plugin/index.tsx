@@ -1,6 +1,7 @@
-import { deserializeTextNodes, generateId, serializeTextNodes, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, deserializeTextNodes, generateId, serializeTextNodes } from '@yoopta/editor';
+
 import { LinkCommands } from '../commands';
-import { LinkElementMap, LinkElementProps } from '../types';
+import type { LinkElementMap, LinkElementProps } from '../types';
 import { LinkRender } from '../ui/LinkRender';
 
 const Link = new YooptaPlugin<LinkElementMap>({

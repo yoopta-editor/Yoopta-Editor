@@ -1,7 +1,8 @@
-import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+
 import { BlockquoteCommands } from '../commands/BlockquoteCommands';
 import { withBlockquote } from '../extensions/withBlockquote';
-import { BlockquoteElement } from '../types';
+import type { BlockquoteElement } from '../types';
 import { BlockquoteRender } from '../ui/Blockquote';
 
 const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
@@ -35,9 +36,7 @@ const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `> ${serializeTextNodesIntoMarkdown(element.children)}`;
-      },
+      serialize: (element, text) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

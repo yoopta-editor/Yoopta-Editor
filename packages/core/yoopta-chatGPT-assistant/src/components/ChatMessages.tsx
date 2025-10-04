@@ -1,9 +1,10 @@
-import { cx } from '@yoopta/editor';
 import { useEffect, useRef } from 'react';
+import { cx } from '@yoopta/editor';
+
+import s from './ChatMessages.module.scss';
 import AddIcon from '../icons/add.svg';
 import ReplaceIcon from '../icons/replace.svg';
-import { ChatMessage, ChatMessageMap } from '../types';
-import s from './ChatMessages.module.scss';
+import type { ChatMessage, ChatMessageMap } from '../types';
 
 type Props = {
   messageIds: string[];

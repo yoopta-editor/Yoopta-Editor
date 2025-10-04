@@ -1,5 +1,6 @@
+import type { ChangeEvent} from 'react';
+import { useState } from 'react';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
-import { ChangeEvent, useState } from 'react';
 
 const EmbedUploader = ({ blockId, onClose }) => {
   const editor = useYooptaEditor();

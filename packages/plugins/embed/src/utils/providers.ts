@@ -1,4 +1,4 @@
-import { EmbedProviderTypes } from '../types';
+import type { EmbedProviderTypes } from '../types';
 
 export const getYoutubeId = (url: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -62,23 +62,23 @@ export function getInstagramId(url: string) {
 export function getProvider(url: string): EmbedProviderTypes | null {
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     return 'youtube';
-  } else if (url.includes('vimeo.com')) {
+  } if (url.includes('vimeo.com')) {
     return 'vimeo';
-  } else if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
+  } if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
     return 'dailymotion';
-  } else if (url.includes('loom.com')) {
+  } if (url.includes('loom.com')) {
     return 'loom';
-  } else if (url.includes('wistia.com') || url.includes('wistia.net')) {
+  } if (url.includes('wistia.com') || url.includes('wistia.net')) {
     return 'wistia';
-  } else if (url.includes('twitter') || url.includes('https://x.com')) {
+  } if (url.includes('twitter') || url.includes('https://x.com')) {
     return 'twitter';
-  } else if (url.includes('figma')) {
+  } if (url.includes('figma')) {
     return 'figma';
-  } else if (url.includes('instagram.com')) {
+  } if (url.includes('instagram.com')) {
     return 'instagram';
-  } else {
+  } 
     return null;
-  }
+  
 }
 
 export function getTwitterEmbedId(url) {

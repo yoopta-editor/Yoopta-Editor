@@ -1,4 +1,5 @@
-import { generateId, YooptaBaseElement } from '@yoopta/editor';
+import type { YooptaBaseElement } from '@yoopta/editor';
+import { generateId } from '@yoopta/editor';
 
 export function deserialize(text) {
   const lines = text.trim().split('\n');

@@ -1,17 +1,18 @@
-import { useState, useRef, useEffect, memo } from 'react';
-import { YooEditor, YooptaBlockData } from '../../editor/types';
+import { memo, useEffect, useRef, useState } from 'react';
+import { Editor, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
+
+import { useActionMenuToolRefs, useBlockOptionsRefs } from './hooks';
 import DragIcon from './icons/drag.svg';
 import PlusIcon from './icons/plus.svg';
-import { generateId } from '../../utils/generateId';
-import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { getRootBlockElement } from '../../utils/blockElements';
-import { ReactEditor } from 'slate-react';
-import { Editor, Transforms } from 'slate';
-import { BlockOptions } from '../../UI/BlockOptions/BlockOptions';
 import { Blocks } from '../../editor/blocks';
-import { Portal } from '../../UI/Portal/Portal';
-import { useActionMenuToolRefs, useBlockOptionsRefs } from './hooks';
+import type { YooEditor, YooptaBlockData } from '../../editor/types';
+import { BlockOptions } from '../../UI/BlockOptions/BlockOptions';
 import { Overlay } from '../../UI/Overlay/Overlay';
+import { Portal } from '../../UI/Portal/Portal';
+import { getRootBlockElement } from '../../utils/blockElements';
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import { generateId } from '../../utils/generateId';
 import { throttle } from '../../utils/throttle';
 
 type dragHandleProps = {

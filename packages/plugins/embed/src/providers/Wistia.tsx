@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
 
-function Wistia({ provider, attributes, children, width, height }: ProviderRenderProps) {
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import type { ProviderRenderProps } from '../types';
+
+const Wistia = ({ provider, attributes, children, width, height }: ProviderRenderProps) => {
   const wistiaRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 

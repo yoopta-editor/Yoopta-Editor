@@ -1,11 +1,13 @@
-import { Blocks, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
 import {
   ExternalLinkIcon,
   TextAlignCenterIcon,
   TextAlignLeftIcon,
   TextAlignRightIcon,
 } from '@radix-ui/react-icons';
-import { FileElementProps } from '../types';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Blocks, UI } from '@yoopta/editor';
+
+import type { FileElementProps } from '../types';
 
 const ALIGN_ICONS = {
   left: TextAlignLeftIcon,

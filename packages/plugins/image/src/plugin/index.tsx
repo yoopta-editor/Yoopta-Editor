@@ -1,10 +1,13 @@
-import { generateId, SlateElement, YooptaPlugin } from '@yoopta/editor';
+import type { SlateElement} from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { ImageCommands } from '../commands';
-import {
+import type {
   ImageElementMap,
   ImageElementProps,
-  ImagePluginElements,
-  ImagePluginOptions,
+  ImagePluginOptions} from '../types';
+import {
+  ImagePluginElements
 } from '../types';
 import { ImageRender } from '../ui/Image';
 import { limitSizes } from '../utils/limitSizes';
@@ -99,9 +102,7 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.alt || element.id}](${element.props.src})\n`;
-      },
+      serialize: (element, text) => `![${element.props.alt || element.id}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

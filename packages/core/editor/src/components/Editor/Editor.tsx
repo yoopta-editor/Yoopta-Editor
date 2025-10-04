@@ -1,19 +1,21 @@
-import { ClipboardEvent, CSSProperties, ReactNode, useEffect } from 'react';
-import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import type { CSSProperties, ClipboardEvent, ReactNode} from 'react';
+import { useEffect } from 'react';
+import { Element, Path, Editor as SlateEditor } from 'slate';
+
 import { RenderBlocks } from './RenderBlocks';
-import { YooptaMark } from '../../marks';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import { useMultiSelection } from './selection';
 import { buildBlockData } from './utils';
+import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import { Blocks } from '../../editor/blocks';
+import { Paths } from '../../editor/paths';
+import type { YooptaContentValue } from '../../editor/types';
+import type { YooptaMark } from '../../marks';
+import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
-import { Editor as SlateEditor, Element, Path } from 'slate';
-import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooptaContentValue } from '../../editor/types';
 import { useRectangeSelectionBox } from '../SelectionBox/hooks';
 import { SelectionBox } from '../SelectionBox/SelectionBox';
-import { Blocks } from '../../editor/blocks';
-import { useMultiSelection } from './selection';
-import { Paths } from '../../editor/paths';
 
 type Props = {
   marks?: YooptaMark<any>[];
@@ -275,7 +277,7 @@ const Editor = ({
           });
         });
       }
-      return;
+      
     }
   };
 
@@ -306,7 +308,7 @@ const Editor = ({
 
       clipboardData.setData('text/html', htmlString);
       clipboardData.setData('text/plain', textString);
-      return;
+      
     }
   };
 

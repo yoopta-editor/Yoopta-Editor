@@ -1,16 +1,18 @@
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
-  PluginElementRenderProps,
   useBlockData,
   useYooptaEditor,
   useYooptaReadOnly,
 } from '@yoopta/editor';
+
 import { CalloutBlockOptions } from './CalloutBlockOptions';
-import { CalloutTheme } from '../types';
 import DefaultIcon from '../icons/default.svg';
-import SuccessIcon from '../icons/success.svg';
-import WarningIcon from '../icons/warning.svg';
 import ErrorIcon from '../icons/error.svg';
 import InfoIcon from '../icons/info.svg';
+import SuccessIcon from '../icons/success.svg';
+import WarningIcon from '../icons/warning.svg';
+import type { CalloutTheme } from '../types';
 
 const THEME_ICONS: Record<CalloutTheme, any> = {
   default: DefaultIcon,

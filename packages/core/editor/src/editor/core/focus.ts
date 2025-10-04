@@ -1,6 +1,6 @@
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { IS_FOCUSED_EDITOR } from '../../utils/weakMaps';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export function focus(editor: YooEditor) {
   if (editor.readOnly) return;

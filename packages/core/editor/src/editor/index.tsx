@@ -1,31 +1,34 @@
-import { insertBlock } from './blocks/insertBlock';
+import EventEmitter from 'eventemitter3';
+
+import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import { deleteBlock } from './blocks/deleteBlock';
-import { moveBlock } from './blocks/moveBlock';
+import { duplicateBlock } from './blocks/duplicateBlock';
 import { focusBlock } from './blocks/focusBlock';
+import { getBlock } from './blocks/getBlock';
+import { increaseBlockDepth } from './blocks/increaseBlockDepth';
+import { insertBlock } from './blocks/insertBlock';
+import { mergeBlock } from './blocks/mergeBlock';
+import { moveBlock } from './blocks/moveBlock';
 import { splitBlock } from './blocks/splitBlock';
+import { toggleBlock } from './blocks/toggleBlock';
+import { updateBlock } from './blocks/updateBlock';
+import { blur } from './core/blur';
+import { getEditorValue } from './core/getEditorValue';
 import { setPath } from './paths/setPath';
 import { YooEditor, YooptaContentValue } from './types';
-import { increaseBlockDepth } from './blocks/increaseBlockDepth';
-import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
-import { getEditorValue } from './core/getEditorValue';
 import { setEditorValue } from './core/setEditorValue';
-import { duplicateBlock } from './blocks/duplicateBlock';
-import { updateBlock } from './blocks/updateBlock';
-import { toggleBlock } from './blocks/toggleBlock';
-import { blur } from './core/blur';
 import { focus } from './core/focus';
 import { isFocused } from './core/isFocused';
-import { getBlock } from './blocks/getBlock';
+import type { EmailTemplateOptions } from '../parsers/getEmail';
+import { getEmail } from '../parsers/getEmail';
 import { getHTML } from '../parsers/getHTML';
 import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
 import { isEmpty } from './core/isEmpty';
 import { applyTransforms } from './core/applyTransforms';
 import { batchOperations } from './core/batchOperations';
-import { mergeBlock } from './blocks/mergeBlock';
-import { UndoRedoOptions, YooptaHistory } from './core/history';
-import EventEmitter from 'eventemitter3';
-import { getEmail, EmailTemplateOptions } from '../parsers/getEmail';
+import type { UndoRedoOptions} from './core/history';
+import { YooptaHistory } from './core/history';
 
 export function createYooptaEditor(): YooEditor {
   // Create a unique event emitter for each editor instance

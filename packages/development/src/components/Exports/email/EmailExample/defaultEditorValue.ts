@@ -1,4 +1,4 @@
-import { YooptaContentValue } from '@yoopta/editor';
+import type { YooptaContentValue } from '@yoopta/editor';
 
 export const EMAIL_EDITOR_DEFAULT_VALUE = {
   'e583241f-54e8-46ab-84b9-576ec9d198d8': {

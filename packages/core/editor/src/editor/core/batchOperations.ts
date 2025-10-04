@@ -1,5 +1,5 @@
-import { YooptaOperation } from './applyTransforms';
-import { YooEditor } from '../types';
+import type { YooptaOperation } from './applyTransforms';
+import type { YooEditor } from '../types';
 
 export function batchOperations(editor: YooEditor, callback: () => void) {
   const operations: YooptaOperation[] = [];

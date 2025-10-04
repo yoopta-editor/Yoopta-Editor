@@ -1,20 +1,25 @@
-import YooptaEditor, { createYooptaEditor, YooEditor, YooptaContentValue } from '@yoopta/editor';
 import { useEffect, useMemo, useState } from 'react';
-import { YOOPTA_PLUGINS } from '../../../../utils/yoopta/plugins';
+import { markdown as codemirrorMarkdown } from '@codemirror/lang-markdown';
+import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import type { BasicSetupOptions } from '@uiw/react-codemirror';
+import CodeMirror from '@uiw/react-codemirror';
+import type { YooEditor, YooptaContentValue } from '@yoopta/editor';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import copy from 'copy-to-clipboard';
+import { useDebounce } from 'use-debounce';
+
+import { MARKDOWN_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 import { MARKS } from '../../../../utils/yoopta/marks';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { YOOPTA_PLUGINS } from '../../../../utils/yoopta/plugins';
+
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
-import { Separator } from '@/components/ui/separator';
-import { TOOLS } from '@/utils/yoopta/tools';
-import { useDebounce } from 'use-debounce';
-import copy from 'copy-to-clipboard';
-import { MARKDOWN_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 
-import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-import { markdown as codemirrorMarkdown } from '@codemirror/lang-markdown';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { TOOLS } from '@/utils/yoopta/tools';
+
 
 const LANGUAGES_MAP = {
   markdown: {
@@ -123,14 +128,14 @@ const MarkdownPreview = () => {
           <div className="hidden h-full flex-col md:flex">
             <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
               <h2 className="text-lg font-semibold text-nowrap">Markdown playground</h2>
-              <div className="ml-auto flex w-full space-x-2 sm:justify-end"></div>
+              <div className="ml-auto flex w-full space-x-2 sm:justify-end" />
             </div>
             <Separator />
             <Tabs defaultValue="editor/deserialized" className="flex-1">
               <div className="container h-full py-6">
                 {/* <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_200px]"> */}
                 <div className="grid h-full items-stretch gap-6">
-                  <div className="hidden flex-col space-y-4 sm:flex md:order-2"></div>
+                  <div className="hidden flex-col space-y-4 sm:flex md:order-2" />
                   <div className="md:order-1">
                     <TabsContent value="editor" className="mt-0 border-0 p-0">
                       <div className="flex h-full flex-col space-y-4">

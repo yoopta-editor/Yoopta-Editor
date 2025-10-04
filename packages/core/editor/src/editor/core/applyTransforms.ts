@@ -1,6 +1,10 @@
 import { createDraft, finishDraft, isDraft, produce } from 'immer';
+import type { Operation, Range} from 'slate';
+import { Editor, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
+
 import { buildSlateEditor } from '../../utils/buildSlate';
-import {
+import type {
   SlateEditor,
   SlateElement,
   YooEditor,
@@ -8,8 +12,6 @@ import {
   YooptaContentValue,
   YooptaPath,
 } from '../types';
-import { Editor, Operation, Range, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 export type ChangeSource = 'api' | 'user' | 'history';
 
@@ -342,14 +344,12 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
               ) {
                 otherBlock.meta.order--;
               }
-            } else {
-              if (
+            } else if (
                 otherBlock.meta.order < prevProperties.order &&
                 otherBlock.meta.order >= properties.order
               ) {
                 otherBlock.meta.order++;
               }
-            }
           }
         });
       }

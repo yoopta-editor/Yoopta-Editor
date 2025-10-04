@@ -1,9 +1,11 @@
-import { Elements, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
-import { DividerElementProps, DividerTheme } from '../types';
-import SolidIcon from '../icons/solid.svg';
-import DotsIcon from '../icons/dots.svg';
-import DashedIcon from '../icons/dashed.svg';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Elements, UI } from '@yoopta/editor';
+
 import CheckmarkIcon from '../icons/checkmark.svg';
+import DashedIcon from '../icons/dashed.svg';
+import DotsIcon from '../icons/dots.svg';
+import SolidIcon from '../icons/solid.svg';
+import type { DividerElementProps, DividerTheme } from '../types';
 
 const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
@@ -64,7 +66,7 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
               <DashedIcon
                 width={16}
                 height={16}
-                color={'tranparent'}
+                color="tranparent"
                 className="yoo-divider-w-4 yoo-divider-h-4 yoo-divider-mr-2"
               />
               Dashed

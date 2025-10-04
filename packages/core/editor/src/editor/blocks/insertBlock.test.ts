@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
+
 import { insertBlock } from './insertBlock';
-import { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
+import type { PluginElement } from '../../plugins/types';
 import { buildBlockElementsStructure } from '../../utils/blockElements';
-import { PluginElement } from '../../plugins/types';
+import type { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
 
 vi.mock('../../utils/blockElements', () => ({
   buildBlockElementsStructure: vi.fn(),

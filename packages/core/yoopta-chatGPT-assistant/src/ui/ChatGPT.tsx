@@ -1,15 +1,19 @@
-import { cx, useNodeElementSettings, YooptaBaseElement } from '@yoopta/editor';
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
-import { Editor, Element, Path, Point, Selection, Transforms } from 'slate';
+import type { CSSProperties} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { YooptaBaseElement } from '@yoopta/editor';
+import { cx, useNodeElementSettings } from '@yoopta/editor';
+import type { Selection} from 'slate';
+import { Editor, Element, Path, Point, Transforms } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
+
+import s from './ChatGPT.module.scss';
 import { Actions } from '../components/Actions';
 import { ChatInput } from '../components/ChatInput';
 import { ChatMessages } from '../components/ChatMessages';
 import { useChatActions } from '../hooks/useChatActions';
 import { useChatCompletion } from '../hooks/useChatCompletion';
 import { useChatMessages } from '../hooks/useChatMessages';
-import { ChatMessage, OpenAIChatMessage, Action } from '../types';
-import s from './ChatGPT.module.scss';
+import type { Action, ChatMessage, OpenAIChatMessage } from '../types';
 
 type MenuProps = { fixedStyle: CSSProperties; absoluteStyle: CSSProperties; point: Point | null };
 
@@ -267,7 +271,7 @@ const ChatGPTAssistant = ({
   const isMessageListEmpty = orderedMessagIds.length === 0;
 
   return (
-    <div role={'dialog'} aria-modal className={s.root} style={menuProps.fixedStyle}>
+    <div role="dialog" aria-modal className={s.root} style={menuProps.fixedStyle}>
       <div className={s.relative}>
         <div className={s.absolute} style={menuProps.absoluteStyle}>
           <div ref={chatContentRef} className={cx(s.chatContent, 'yoopta-chatGPT')}>

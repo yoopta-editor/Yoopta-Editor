@@ -1,7 +1,9 @@
-import { HexColorPicker } from 'react-colorful';
-import { CSSProperties, MouseEvent, useState } from 'react';
-import { YooEditor, UI } from '@yoopta/editor';
+import type { CSSProperties, MouseEvent} from 'react';
+import { useState } from 'react';
+import type { YooEditor} from '@yoopta/editor';
+import { UI } from '@yoopta/editor';
 import { PaletteIcon } from 'lucide-react';
+import { HexColorPicker } from 'react-colorful';
 import { useDebouncedCallback } from 'use-debounce';
 
 const { Portal } = UI;

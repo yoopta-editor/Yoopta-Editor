@@ -1,16 +1,18 @@
-import { PluginElementRenderProps, useYooptaReadOnly } from '@yoopta/editor';
 import { useState } from 'react';
-import { LinkElementProps } from '../types';
-import { LinkHoverPreview } from './LinkHoverPreview';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
   autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
+import type { PluginElementRenderProps} from '@yoopta/editor';
+import { useYooptaReadOnly } from '@yoopta/editor';
+
+import { LinkHoverPreview } from './LinkHoverPreview';
+import type { LinkElementProps } from '../types';
 
 const VALID_TARGET_VALUES = ['_blank', '_self', '_parent', '_top', 'framename'];
 

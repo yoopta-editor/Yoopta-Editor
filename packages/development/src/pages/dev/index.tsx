@@ -1,16 +1,17 @@
-import YooptaEditor, {
-  createYooptaEditor,
-  YooptaOnChangeOptions,
+import { useMemo, useRef, useState } from 'react';
+import type {
   YooEditor,
   YooptaContentValue,
-  YooptaPath,
+  YooptaOnChangeOptions,
+  YooptaPath} from '@yoopta/editor';
+import YooptaEditor, {
+  createYooptaEditor
 } from '@yoopta/editor';
-import { useMemo, useRef, useState } from 'react';
 
+import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -146,8 +147,7 @@ const BasicExample = () => {
   // }, []);
 
   return (
-    <>
-      <div
+    <div
         className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center"
         ref={selectionRef}>
         <FixedToolbar editor={editor} DEFAULT_DATA={data} />
@@ -156,7 +156,7 @@ const BasicExample = () => {
           plugins={YOOPTA_PLUGINS}
           selectionBoxRoot={selectionRef}
           marks={MARKS}
-          autoFocus={true}
+          autoFocus
           readOnly={false}
           placeholder="Type / to open menu"
           tools={TOOLS}
@@ -166,7 +166,6 @@ const BasicExample = () => {
           onPathChange={onPathChange}
         />
       </div>
-    </>
   );
 };
 

@@ -1,22 +1,21 @@
-import Paragraph, { ParagraphCommands } from '@yoopta/paragraph';
+import { AccordionCommands } from '@yoopta/accordion';
+import Callout, { CalloutCommands } from '@yoopta/callout';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, Paths } from '@yoopta/editor';
 import Embed, { EmbedCommands } from '@yoopta/embed';
+import { HeadingOne, HeadingOneCommands, HeadingThree, HeadingTwo } from '@yoopta/headings';
 import Image, { ImageCommands } from '@yoopta/image';
 import Link, { LinkCommands } from '@yoopta/link';
-import Callout, { CalloutCommands } from '@yoopta/callout';
-
-import { AccordionCommands } from '@yoopta/accordion';
 import { TodoListCommands } from '@yoopta/lists';
-import { HeadingOne, HeadingOneCommands, HeadingThree, HeadingTwo } from '@yoopta/headings';
+import Paragraph, { ParagraphCommands } from '@yoopta/paragraph';
 import Table, { TableCommands } from '@yoopta/table';
-import { Blocks, Elements, YooEditor, Paths, YooptaPathIndex } from '@yoopta/editor';
 
 type Props = {
   editor: YooEditor;
   DEFAULT_DATA: any;
 };
 
-export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
-  return (
+export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => (
     <div className="bg-white z-50">
       <div className="flex justify-center mb-2">
         {DEFAULT_DATA && (
@@ -52,7 +51,7 @@ export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
           onClick={() => {
             const at: YooptaPathIndex = typeof editor.path.current ? editor.path.current : 2;
             console.log('toggleBlock at', at);
-            editor.toggleBlock('Blockquote', { at: at, focus: true });
+            editor.toggleBlock('Blockquote', { at, focus: true });
           }}
           className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
           Toggle into Blockquote
@@ -205,4 +204,3 @@ export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
       </div>
     </div>
   );
-};

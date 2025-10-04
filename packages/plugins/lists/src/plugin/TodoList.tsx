@@ -1,13 +1,15 @@
+import type {
+  YooptaBlockData} from '@yoopta/editor';
 import {
+  YooptaPlugin,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
-  YooptaBlockData,
-  YooptaPlugin,
 } from '@yoopta/editor';
+
 import { TodoListCommands } from '../commands';
 import { TodoListRender } from '../elements/TodoList';
 import { onKeyDown } from '../events/onKeyDown';
-import { ListElementMap } from '../types';
+import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const TodoList = new YooptaPlugin<Pick<ListElementMap, 'todo-list'>>({

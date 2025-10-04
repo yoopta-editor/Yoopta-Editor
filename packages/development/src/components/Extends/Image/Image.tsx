@@ -1,5 +1,7 @@
-import { PluginElementRenderProps, useBlockData } from '@yoopta/editor';
-import NextImage, { ImageProps } from 'next/image';
+import type { PluginElementRenderProps} from '@yoopta/editor';
+import { useBlockData } from '@yoopta/editor';
+import type { ImageProps } from 'next/image';
+import NextImage from 'next/image';
 
 export const YooptaWithNextImage = (props: PluginElementRenderProps) => {
   const { children, element, blockId, attributes } = props;

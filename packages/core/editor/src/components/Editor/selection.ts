@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 import { Editor, Element, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
-import { YooEditor, YooptaPath } from '../../editor/types';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { getPreviousPath } from '../../editor/paths/getPreviousPath';
+import type { YooEditor} from '../../editor/types';
+import { YooptaPath } from '../../editor/types';
+import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 
 type MultiSelectionOptions = {
@@ -30,7 +32,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
   const startBlockPathRef = useRef<number | null>(null);
   const currentBlockPathRef = useRef<number | null>(null);
 
-  let selectionState = useRef<SelectionState>(DEFAULT_SELECTION_STATE).current;
+  const selectionState = useRef<SelectionState>(DEFAULT_SELECTION_STATE).current;
 
   const blurSlateSelection = () => {
     const path = editor.path.current;

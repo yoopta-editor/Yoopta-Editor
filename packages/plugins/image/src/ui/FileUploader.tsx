@@ -1,5 +1,6 @@
 import { Elements, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { ImageElementProps, ImagePluginElements, ImagePluginOptions } from '../types';
+
+import type { ImageElementProps, ImagePluginElements, ImagePluginOptions } from '../types';
 import { limitSizes } from '../utils/limitSizes';
 
 type Props = {

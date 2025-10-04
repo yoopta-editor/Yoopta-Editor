@@ -1,7 +1,7 @@
+import type { SetEditorValueOperation } from './applyTransforms';
 import { validateYooptaValue } from '../../utils/validateYooptaValue';
 import { Blocks } from '../blocks';
-import { YooEditor, YooptaContentValue } from '../types';
-import { SetEditorValueOperation } from './applyTransforms';
+import type { YooEditor, YooptaContentValue } from '../types';
 
 export function setEditorValue(editor: YooEditor, value: YooptaContentValue | null) {
   let editorValue: YooptaContentValue;

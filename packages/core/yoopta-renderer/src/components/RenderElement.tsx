@@ -1,5 +1,5 @@
-import { isElement } from '../utils';
 import { TextComponent } from './TextComponent';
+import { isElement } from '../utils';
 
 export const getChildren = (props) => {
   const { node, renderElement, plugins, renderLeaf } = props;
@@ -47,7 +47,7 @@ const RenderElement = (props) => {
     attributes['data-slate-inline'] = true;
   }
 
-  let children: React.ReactNode = getChildren({
+  const children: React.ReactNode = getChildren({
     node: element,
     renderElement,
     renderLeaf,

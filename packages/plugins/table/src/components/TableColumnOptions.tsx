@@ -1,14 +1,15 @@
-import { Elements, SlateElement, UI, YooEditor } from '@yoopta/editor';
-
-import { CSSProperties } from 'react';
-import { Editor, Element, Path, Transforms } from 'slate';
+import type { CSSProperties } from 'react';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
+import { Elements, UI } from '@yoopta/editor';
 import {
-  TrashIcon,
-  ArrowRightIcon,
   ArrowLeftIcon,
-  MoveRightIcon,
+  ArrowRightIcon,
   MoveLeftIcon,
+  MoveRightIcon,
+  TrashIcon,
 } from 'lucide-react';
+import { Editor, Element, Path, Transforms } from 'slate';
+
 import { TableCommands } from '../commands';
 
 const { BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptions, BlockOptionsSeparator } = UI;
@@ -38,7 +39,7 @@ const TableColumnOptions = ({ editor, blockId, element, onClose, ...props }: Pro
   };
 
   const deleteTableColumn = () => {
-    let path = Elements.getElementPath(editor, blockId, element);
+    const path = Elements.getElementPath(editor, blockId, element);
     if (!path) return;
 
     // @ts-ignore [FIXME] - fix types

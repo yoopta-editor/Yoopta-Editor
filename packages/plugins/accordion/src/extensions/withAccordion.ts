@@ -1,4 +1,5 @@
-import { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+
 import { withAccordionListItemNormalize } from './withAccordionListItemNormalize';
 import { withAccordionListNormalize } from './withAccordionListNormalize';
 

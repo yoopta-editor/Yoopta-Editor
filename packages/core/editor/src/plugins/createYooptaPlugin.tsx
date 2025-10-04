@@ -1,5 +1,5 @@
-import { SlateElement } from '../editor/types';
-import { PluginElementRenderProps, Plugin, PluginOptions, PluginEvents } from './types';
+import type { Plugin, PluginElementRenderProps, PluginEvents, PluginOptions } from './types';
+import type { SlateElement } from '../editor/types';
 
 export type ExtendPluginRender<TKeys extends string> = {
   [x in TKeys]: (props: PluginElementRenderProps) => JSX.Element;
@@ -51,11 +51,9 @@ export class YooptaPlugin<
         if (element && element.render) {
           const customRenderFn = renders[elementType];
 
-          let elementRender = element.render;
+          const elementRender = element.render;
 
-          element.render = (props) => {
-            return elementRender({ ...props, extendRender: customRenderFn });
-          };
+          element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
         }
       });
     }
@@ -87,7 +85,7 @@ export class YooptaPlugin<
 
     return new YooptaPlugin<TElementMap, TOptions>({
       ...this.plugin,
-      elements: elements,
+      elements,
       options: extendedOptions as PluginOptions<TOptions>,
     });
   }

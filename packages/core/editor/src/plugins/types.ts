@@ -1,14 +1,15 @@
-import { HTMLAttributes, ReactElement, ReactNode } from 'react';
-import { RenderElementProps as RenderSlateElementProps, RenderLeafProps } from 'slate-react';
-import {
+import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { RenderLeafProps, RenderElementProps as RenderSlateElementProps } from 'slate-react';
+
+import type {
   SlateEditor,
   SlateElement,
   YooEditor,
   YooptaBlockBaseMeta,
   YooptaBlockData,
 } from '../editor/types';
-import { EditorEventHandlers } from '../types/eventHandlers';
-import { HOTKEYS_TYPE } from '../utils/hotkeys';
+import type { EditorEventHandlers } from '../types/eventHandlers';
+import type { HOTKEYS_TYPE } from '../utils/hotkeys';
 
 export enum NodeType {
   Block = 'block',

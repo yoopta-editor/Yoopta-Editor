@@ -1,11 +1,13 @@
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
   YooptaPlugin,
-  PluginElementRenderProps,
-  serializeTextNodesIntoMarkdown,
   serializeTextNodes,
+  serializeTextNodesIntoMarkdown,
 } from '@yoopta/editor';
+
 import { HeadingOneCommands } from '../commands';
-import { HeadingOneElement } from '../types';
+import type { HeadingOneElement } from '../types';
 
 const HeadingOneRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, HTMLAttributes = {}, attributes, children } = props;
@@ -59,15 +61,13 @@ const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `# ${serializeTextNodesIntoMarkdown(element.children)}\n`;
-      },
+      serialize: (element, text) => `# ${serializeTextNodesIntoMarkdown(element.children)}\n`,
     },
     email: {
       serialize: (element, content, blockMeta) => {
         const { depth = 0, align = 'left' } = blockMeta || {};
 
-        let headingOneHTML = `<h1 data-meta-align="${align}" data-meta-depth="${depth}" style="
+        const headingOneHTML = `<h1 data-meta-align="${align}" data-meta-depth="${depth}" style="
                 margin-bottom: .5rem;
                 scroll-margin: 5rem; font-size: 2.25rem;
                 font-weight: 700;

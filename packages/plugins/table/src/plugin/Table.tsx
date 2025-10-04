@@ -1,17 +1,17 @@
 import { YooptaPlugin } from '@yoopta/editor';
+
+import { TableCommands } from '../commands';
 import { Table as TableRender } from '../elements/Table';
 import { TableDataCell } from '../elements/TableDataCell';
 import { TableRow } from '../elements/TableRow';
-import { TableElementMap } from '../types';
-import { TableCommands } from '../commands';
-
-import { withTable } from '../extenstions/withTable';
 import { onKeyDown } from '../events/onKeyDown';
-import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
+import { withTable } from '../extenstions/withTable';
+import { serializeTableToEmail } from '../parsers/email/serialize';
 import { deserializeTable } from '../parsers/html/deserialize';
 import { serializeTable } from '../parsers/html/serialize';
 import { serializeMarkown } from '../parsers/markdown/serialize';
-import { serializeTableToEmail } from '../parsers/email/serialize';
+import type { TableElementMap } from '../types';
+import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
 const Table = new YooptaPlugin<TableElementMap>({
   type: 'Table',

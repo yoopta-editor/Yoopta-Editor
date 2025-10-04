@@ -1,13 +1,15 @@
-import { FileComponent } from './FileComponent';
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
   useBlockData,
-  PluginElementRenderProps,
-  useYooptaEditor,
   useBlockSelected,
+  useYooptaEditor,
   useYooptaReadOnly,
 } from '@yoopta/editor';
-import { Placeholder } from './Placeholder';
+
 import { FileBlockOptions } from './FileBlockOptions';
+import { FileComponent } from './FileComponent';
+import { Placeholder } from './Placeholder';
 
 const FileRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, attributes, children, blockId } = props;
@@ -32,7 +34,7 @@ const FileRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
     <div
       contentEditable={false}
       draggable={false}
-      className={`yoo-file-mt-4 yoo-file-relative yoo-file-flex yoopta-file`}
+      className="yoo-file-mt-4 yoo-file-relative yoo-file-flex yoopta-file"
       {...attributes}>
       {blockSelected && (
         <div className="yoo-file-absolute yoo-file-pointer-events-none yoo-file-inset-0 yoo-file-bg-[rgba(35,131,226,0.14)] yoo-file-z-[81] yoo-file-rounded-[3px] yoo-file-opacity-100 yoo-file-transition-opacity yoo-file-duration-150 yoo-file-ease-in" />

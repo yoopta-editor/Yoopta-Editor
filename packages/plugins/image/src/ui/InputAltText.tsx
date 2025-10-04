@@ -2,8 +2,7 @@ import { UI } from '@yoopta/editor';
 
 const { Overlay, Portal } = UI;
 
-const InputAltText = ({ floatingStyles, onClose, refs, value, onChange, onSave, onDelete }) => {
-  return (
+const InputAltText = ({ floatingStyles, onClose, refs, value, onChange, onSave, onDelete }) => (
     <Portal id="yoo-image-uploader-portal">
       <Overlay lockScroll className="yoo-image-z-[100]" onClick={onClose}>
         <div ref={refs.setFloating} style={floatingStyles} onClick={(e) => e.stopPropagation()}>
@@ -44,6 +43,5 @@ const InputAltText = ({ floatingStyles, onClose, refs, value, onChange, onSave, 
       </Overlay>
     </Portal>
   );
-};
 
 export { InputAltText };

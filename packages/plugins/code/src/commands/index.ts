@@ -1,5 +1,7 @@
-import { Blocks, buildBlockData, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { CodeElement, CodeElementProps } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+
+import type { CodeElement, CodeElementProps } from '../types';
 
 type CodeElementOptions = {
   text?: string;
@@ -24,13 +26,11 @@ export type CodeCommands = {
 };
 
 export const CodeCommands: CodeCommands = {
-  buildCodeElements: (editor: YooEditor, options = {}) => {
-    return {
+  buildCodeElements: (editor: YooEditor, options = {}) => ({
       id: generateId(),
       type: 'code',
       children: [{ text: options?.text || '', props: options?.props }],
-    };
-  },
+    }),
   insertCode: (editor: YooEditor, options = {}) => {
     const { at, focus, text, props } = options;
     const code = CodeCommands.buildCodeElements(editor, { text, props });

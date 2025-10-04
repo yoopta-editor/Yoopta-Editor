@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { Descendant } from 'slate';
 import type { YooptaMark } from '@yoopta/editor';
-import { getChildren } from './components/RenderElement';
 import uniqWith from 'lodash.uniqwith';
+import type { Descendant } from 'slate';
+
+import { getChildren } from './components/RenderElement';
 import { useScrollToElement } from './utils';
 
 type Props = {
@@ -38,13 +39,11 @@ const ElementWrapper = ({ children, element, attributes, nodeType, render, HTMLA
   );
 };
 
-const TextLeaf = ({ attributes, children, placeholder, leaf }) => {
-  return (
+const TextLeaf = ({ attributes, children, placeholder, leaf }) => (
     <span {...attributes} data-placeholder={placeholder}>
       {children}
     </span>
   );
-};
 
 const YooptaRenderer = (props: Props) => {
   useScrollToElement();
@@ -52,8 +51,7 @@ const YooptaRenderer = (props: Props) => {
   const { className, data, plugins, marks } = props;
   const yooptaPlugins: any[] = useMemo(() => mergePlugins(plugins), [plugins]);
 
-  const renderElement = useMemo(() => {
-    return (props) => {
+  const renderElement = useMemo(() => (props) => {
       for (let i = 0; i < yooptaPlugins.length; i++) {
         const plugin = yooptaPlugins[i];
         const renderFn = plugin.renderer.render ? plugin.renderer.render : plugin.renderer(null);
@@ -74,11 +72,9 @@ const YooptaRenderer = (props: Props) => {
       }
 
       return null;
-    };
-  }, [yooptaPlugins]);
+    }, [yooptaPlugins]);
 
-  const renderLeaf = useMemo(() => {
-    return (leafProps) => {
+  const renderLeaf = useMemo(() => (leafProps) => {
       const props = { ...leafProps };
 
       yooptaPlugins.forEach((plugin) => {
@@ -95,13 +91,12 @@ const YooptaRenderer = (props: Props) => {
       });
 
       return <TextLeaf {...props} />;
-    };
-  }, [yooptaPlugins]);
+    }, [yooptaPlugins]);
 
   const renderProps = {
     node: { children: data },
-    renderElement: renderElement,
-    renderLeaf: renderLeaf,
+    renderElement,
+    renderLeaf,
   };
 
   return (

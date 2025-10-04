@@ -1,11 +1,13 @@
-import { SlateElement } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
+
 import { LinkTool } from './components/LinkTool';
-export { DefaultLinkToolRender } from './components/DefaultLinkToolRender';
 
 import './styles.css';
 
+export { DefaultLinkToolRender } from './components/DefaultLinkToolRender';
+
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: SlateElement<string>;
   }
 }

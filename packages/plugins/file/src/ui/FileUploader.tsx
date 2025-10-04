@@ -1,5 +1,6 @@
 import { Elements, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { FileElementProps, FilePluginElements, FilePluginOptions } from '../types';
+
+import type { FileElementProps, FilePluginElements, FilePluginOptions } from '../types';
 
 type Props = {
   onClose: () => void;

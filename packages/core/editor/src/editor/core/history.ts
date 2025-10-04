@@ -1,7 +1,8 @@
 import { Operation } from 'slate';
-import { SlateElement, YooEditor, YooptaPath } from '../types';
-import { YooptaOperation } from './applyTransforms';
+
+import type { YooptaOperation } from './applyTransforms';
 import { Blocks } from '../blocks';
+import type { SlateElement, YooEditor, YooptaPath } from '../types';
 
 export type HistoryStack = {
   operations: YooptaOperation[];
@@ -223,8 +224,8 @@ export const YooptaHistory = {
 };
 
 function isInViewport(element) {
-  var rect = element.getBoundingClientRect();
-  var html = document.documentElement;
+  const rect = element.getBoundingClientRect();
+  const html = document.documentElement;
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 type Props = {
   className?: string;
@@ -7,8 +7,7 @@ type Props = {
   height?: number;
 };
 
-const Loader = ({ className, width, height, children }: Props) => {
-  return (
+const Loader = ({ className, width, height, children }: Props) => (
     <div className={className}>
       {children}
       <svg
@@ -26,6 +25,5 @@ const Loader = ({ className, width, height, children }: Props) => {
       </svg>
     </div>
   );
-};
 
 export { Loader };

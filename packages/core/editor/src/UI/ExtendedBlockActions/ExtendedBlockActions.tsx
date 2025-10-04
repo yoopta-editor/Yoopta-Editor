@@ -1,16 +1,18 @@
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import type { ReactNode} from 'react';
+import { useState } from 'react';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
   autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
-import { ReactNode, useState } from 'react';
-import { BlockOptions } from '../BlockOptions/BlockOptions';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+
 import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
+import { BlockOptions } from '../BlockOptions/BlockOptions';
 
 type Props = {
   id?: string;

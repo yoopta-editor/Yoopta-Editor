@@ -1,13 +1,15 @@
+import type {
+  YooptaBlockData} from '@yoopta/editor';
 import {
   YooptaPlugin,
-  YooptaBlockData,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
 } from '@yoopta/editor';
+
 import { NumberedListCommands } from '../commands';
 import { NumberedListRender } from '../elements/NumberedList';
 import { onKeyDown } from '../events/onKeyDown';
-import { ListElementMap } from '../types';
+import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({

@@ -1,21 +1,26 @@
-import { EmailTemplateOptions, YooEditor, YooptaContentValue } from '@yoopta/editor';
-import EmailBuilder, { createYooptaEmailEditor, YooptaEmailEditor } from '@yoopta/email-builder';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import type { ChangeEvent} from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import type { EmailTemplateOptions, YooptaContentValue } from '@yoopta/editor';
+import { YooEditor } from '@yoopta/editor';
+import type { YooptaEmailEditor } from '@yoopta/email-builder';
+import EmailBuilder, { createYooptaEmailEditor } from '@yoopta/email-builder';
+import copy from 'copy-to-clipboard';
+import { CopyIcon, ExternalLinkIcon, MailWarningIcon } from 'lucide-react';
+
+import { EMAIL_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
+
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import copy from 'copy-to-clipboard';
-import { EMAIL_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 import { uploadToCloudinary } from '@/utils/cloudinary';
-import { CopyIcon, ExternalLinkIcon, MailWarningIcon } from 'lucide-react';
 
 const templateEmailOptions: EmailTemplateOptions = {
   head: {

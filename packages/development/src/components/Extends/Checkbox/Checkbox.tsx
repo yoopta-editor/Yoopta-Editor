@@ -1,7 +1,7 @@
-import * as React from 'react';
-import cn from 'classnames';
+import type * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
+import cn from 'classnames';
 
 type CheckboxPrimitiveProps = React.ComponentProps<typeof CheckboxPrimitive.Root>;
 
@@ -23,7 +23,7 @@ CheckboxShadcn.displayName = CheckboxPrimitive.Root.displayName;
 
 type Props = React.ComponentProps<typeof CheckboxShadcn>;
 
-export function Checkbox({
+export const Checkbox = ({
   name,
   checked,
   onCheckedChange: onChange,
@@ -31,8 +31,7 @@ export function Checkbox({
   children,
   attributes,
   ...props
-}: Props) {
-  return (
+}: Props) => (
     <div className="flex flex-row items-start space-x-3 mt-4" {...attributes}>
       <CheckboxShadcn
         id={name}
@@ -49,5 +48,4 @@ export function Checkbox({
         </span>
       </div>
     </div>
-  );
-}
+  )

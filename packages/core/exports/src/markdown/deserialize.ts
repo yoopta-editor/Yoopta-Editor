@@ -1,5 +1,6 @@
-import { YooEditor, YooptaContentValue } from '@yoopta/editor';
+import type { YooEditor, YooptaContentValue } from '@yoopta/editor';
 import { marked } from 'marked';
+
 import { deserializeHTML } from '../html/deserialize';
 
 export function deserializeMarkdown(editor: YooEditor, markdown: string): YooptaContentValue {
@@ -20,7 +21,7 @@ export function deserializeMarkdown(editor: YooEditor, markdown: string): Yoopta
           href: match[2],
         };
       }
-      return;
+      
     },
     renderer(token: any) {
       return `<img alt="${token.alt}" src="${token.href}">`;

@@ -1,7 +1,8 @@
-import { Editor, Transforms, Range } from 'slate';
+import { Editor, Range, Transforms } from 'slate';
+
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export type UpdateElementTextOptions = {
   focus?: boolean;
@@ -34,7 +35,7 @@ export function insertElementText<TElementKeys extends string, TElementProps>(
     { length: Object.keys(block.elements).length },
     (_) => 0,
   );
-  let path = slate.selection || latestBlockElementPath;
+  const path = slate.selection || latestBlockElementPath;
 
   if (!path) {
     console.warn('No valid path or selection found for text insertion');

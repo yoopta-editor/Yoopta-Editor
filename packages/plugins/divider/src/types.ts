@@ -1,4 +1,4 @@
-import { SlateElement } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
 
 export type DividerTheme = 'solid' | 'dashed' | 'dotted' | 'gradient';
 

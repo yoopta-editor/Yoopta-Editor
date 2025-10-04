@@ -1,6 +1,7 @@
-import { generateId, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { FileCommands } from '../commands';
-import { FileElementMap, FilePluginOptions } from '../types';
+import type { FileElementMap, FilePluginOptions } from '../types';
 import { FileRender } from '../ui/File';
 
 const ALIGNS_TO_JUSTIFY = {
@@ -83,9 +84,7 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `[${element.props.name}](${element.props.src})`;
-      },
+      serialize: (element, text) => `[${element.props.name}](${element.props.src})`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

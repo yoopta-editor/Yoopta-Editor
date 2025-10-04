@@ -1,13 +1,13 @@
 import * as SelectPrimitive from '@radix-ui/react-select';
-import DownIcon from '../icons/down.svg';
-import CheckmarkIcon from '../icons/checkmark.svg';
 import { useYooptaEditor } from '@yoopta/editor';
+
+import CheckmarkIcon from '../icons/checkmark.svg';
+import DownIcon from '../icons/down.svg';
 
 const SelectRoot: typeof SelectPrimitive.Root = SelectPrimitive.Root;
 const SelectValue: typeof SelectPrimitive.Value = SelectPrimitive.Value;
 
-const SelectTrigger = ({ children, className }) => {
-  return (
+const SelectTrigger = ({ children, className }) => (
     <SelectPrimitive.Trigger
       className={`yoopta-code-select yoo-code-bg-[#fff] yoo-code-h-[20px] yoo-code-absolute yoo-code-top-[8px] yoo-code-left-[8px] yoo-code-z-20 yoo-code-min-w-[80px] yoo-code-max-w-[250px] yoo-code-w-auto yoo-code-flex yoo-code-h-9 yoo-code-items-center yoo-code-justify-between yoo-code-whitespace-nowrap yoo-code-rounded-sm yoo-code-border-solid yoo-code-border-[#e5e7eb] yoo-code-px-[5px] yoo-code-py-0 yoo-code-text-sm yoo-code-shadow-sm yoo-code-ring-offset-background focus:yoo-code-outline-none focus:yoo-code-ring-1 focus:yoo-code-ring-ring disabled:yoo-code-cursor-not-allowed disabled:yoo-code-opacity-50 [&>span]:yoo-code-line-clamp-1 ${className}`}>
       {children}
@@ -16,7 +16,6 @@ const SelectTrigger = ({ children, className }) => {
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
-};
 
 const SelectContent = ({ children }) => {
   const editor = useYooptaEditor();
@@ -39,8 +38,7 @@ const SelectContent = ({ children }) => {
   );
 };
 
-const SelectItem = ({ value, children, onChange }) => {
-  return (
+const SelectItem = ({ value, children, onChange }) => (
     <button
       type="button"
       className="yoopta-button yoo-code-relative yoo-code-flex yoo-code-w-full yoo-code-cursor-pointer yoo-code-select-none yoo-code-items-center yoo-code-rounded-sm yoo-code-py-1.5 yoo-code-pl-2 yoo-code-pr-2 yoo-code-text-sm yoo-code-outline-none focus:yoo-code-bg-[#eeeeee] focus:yoo-code-text-accent-foreground data-[disabled]:yoo-code-pointer-events-none data-[disabled]:yoo-code-opacity-50"
@@ -50,7 +48,6 @@ const SelectItem = ({ value, children, onChange }) => {
       </span>
     </button>
   );
-};
 
 type SelectProps = {
   options: { label: string; value: string }[];
@@ -60,8 +57,7 @@ type SelectProps = {
   children?: React.ReactNode;
 };
 
-const Select = ({ options, onChange, value, children, className }: SelectProps) => {
-  return (
+const Select = ({ options, onChange, value, children, className }: SelectProps) => (
     <SelectRoot value={value}>
       {children}
       <SelectContent>
@@ -78,6 +74,5 @@ const Select = ({ options, onChange, value, children, className }: SelectProps) 
       </SelectContent>
     </SelectRoot>
   );
-};
 
 export { Select, SelectTrigger, SelectRoot, SelectValue, SelectContent, SelectItem };

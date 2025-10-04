@@ -1,4 +1,5 @@
-import { PluginElementRenderProps, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps} from '@yoopta/editor';
+import { useYooptaEditor } from '@yoopta/editor';
 
 const TableRow = ({
   attributes,

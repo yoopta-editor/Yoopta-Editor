@@ -1,16 +1,17 @@
-import { Elements, UI as UI_HELPERS, YooEditor, YooptaBlockData } from '@yoopta/editor';
-import { Select } from './Select';
-import { THEMES_MAP } from '../utils/themes';
-
-import { Trigger } from '@radix-ui/react-select';
-import { LANGUAGES_MAP } from '../utils/languages';
-import CopyIcon from '../icons/copy.svg';
-import CodeIcon from '../icons/code.svg';
-import ThemeIcon from '../icons/theme.svg';
-import { CodeElement } from '../types';
-import copy from 'copy-to-clipboard';
-import { getCodeElementText } from '../utils/element';
 import { useState } from 'react';
+import { Trigger } from '@radix-ui/react-select';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Elements, UI as UI_HELPERS } from '@yoopta/editor';
+import copy from 'copy-to-clipboard';
+
+import { Select } from './Select';
+import CodeIcon from '../icons/code.svg';
+import CopyIcon from '../icons/copy.svg';
+import ThemeIcon from '../icons/theme.svg';
+import type { CodeElement } from '../types';
+import { getCodeElementText } from '../utils/element';
+import { LANGUAGES_MAP } from '../utils/languages';
+import { THEMES_MAP } from '../utils/themes';
 
 const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI_HELPERS;

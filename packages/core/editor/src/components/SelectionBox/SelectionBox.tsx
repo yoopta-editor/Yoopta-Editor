@@ -1,5 +1,6 @@
-import { CSSProperties } from 'react';
-import { YooEditor } from '../../editor/types';
+import type { CSSProperties } from 'react';
+
+import type { YooEditor } from '../../editor/types';
 
 export type RectangeSelectionProps = {
   editor: YooEditor;

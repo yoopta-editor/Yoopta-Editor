@@ -1,19 +1,22 @@
-import { ImageComponent } from './ImageComponent';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  PluginElementRenderProps} from '@yoopta/editor';
 import {
+  Elements,
   useBlockData,
-  PluginElementRenderProps,
+  useBlockSelected,
   useYooptaEditor,
   useYooptaPluginOptions,
-  useBlockSelected,
   useYooptaReadOnly,
-  Elements,
 } from '@yoopta/editor';
-import { Resizable, ResizableProps } from 're-resizable';
-import { useEffect, useMemo, useState } from 'react';
-import { Placeholder } from './Placeholder';
-import { ImagePluginOptions } from '../types';
+import type { ResizableProps } from 're-resizable';
+import { Resizable } from 're-resizable';
+
 import { ImageBlockOptions } from './ImageBlockOptions';
+import { ImageComponent } from './ImageComponent';
+import { Placeholder } from './Placeholder';
 import { Resizer } from './Resizer';
+import type { ImagePluginOptions } from '../types';
 
 const ImageRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
   const { element, blockId, children, attributes } = props;

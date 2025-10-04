@@ -1,4 +1,4 @@
-import { SlateEditor } from '@yoopta/editor';
+import type { SlateEditor } from '@yoopta/editor';
 import { Editor, Element, Point, Range, Transforms } from 'slate';
 
 export function withDelete(slate: SlateEditor): SlateEditor {

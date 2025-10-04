@@ -1,10 +1,12 @@
-import { Blocks, buildBlockData, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import {
-  AccordionListElement,
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+
+import type {
   AccordionItemElement,
-  AccordionListItemProps,
-  AccordionListItemHeadingElement,
+  AccordionListElement,
   AccordionListItemContentElement,
+  AccordionListItemHeadingElement,
+  AccordionListItemProps,
 } from '../types';
 
 type AccordionElementOptions = {

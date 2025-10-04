@@ -1,14 +1,15 @@
+import type { CSSProperties } from 'react';
 import {
+  YooptaPlugin,
   deserializeTextNodes,
   generateId,
   serializeTextNodes,
   serializeTextNodesIntoMarkdown,
-  YooptaPlugin,
 } from '@yoopta/editor';
-import { CSSProperties } from 'react';
+
 import { CalloutCommands } from '../commands/CalloutCommands';
 import { withCallout } from '../extensions/withCallout';
-import { CalloutElementMap, CalloutTheme } from '../types';
+import type { CalloutElementMap, CalloutTheme } from '../types';
 import { CalloutRender } from '../ui/Callout';
 import { CALLOUT_THEME_STYLES } from '../utils';
 
@@ -66,9 +67,7 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `> ${serializeTextNodesIntoMarkdown(element.children)}`;
-      },
+      serialize: (element, text) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

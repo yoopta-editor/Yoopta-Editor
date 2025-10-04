@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { Action } from '../types';
+
+import type { Action } from '../types';
 
 type Props = {
   actions: Action[] | null;
 };
 
-const filterBy = (item, text: string) => {
-  return item.name.toLowerCase().indexOf(text) > -1;
-};
+const filterBy = (item, text: string) => item.name.toLowerCase().indexOf(text) > -1;
 
 export const useChatActions = ({ actions: baseActions }: Props) => {
   const [actions, setActions] = useState<Action[] | null>(baseActions);

@@ -1,4 +1,5 @@
-import { YooptaMarkProps, createYooptaMark } from '@yoopta/editor';
+import type { YooptaMarkProps} from '@yoopta/editor';
+import { createYooptaMark } from '@yoopta/editor';
 
 export type LeafColorProps = {
   color: string;

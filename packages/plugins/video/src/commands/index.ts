@@ -1,5 +1,7 @@
-import { Blocks, Elements, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { VideoElement, VideoElementProps } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, generateId } from '@yoopta/editor';
+
+import type { VideoElement, VideoElementProps } from '../types';
 
 type VideoElementOptions = {
   props?: Omit<VideoElementProps, 'nodeType'>;

@@ -1,7 +1,8 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { SlateElement, YooEditor } from '../types';
+import type { SlateElement, YooEditor } from '../types';
 
 export function getElementPath(
   editor: YooEditor,

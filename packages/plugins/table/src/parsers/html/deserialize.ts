@@ -1,5 +1,7 @@
-import { deserializeTextNodes, generateId, YooEditor } from '@yoopta/editor';
-import { TableElement, TableRowElement } from '../../types';
+import type { YooEditor } from '@yoopta/editor';
+import { deserializeTextNodes, generateId } from '@yoopta/editor';
+
+import type { TableElement, TableRowElement } from '../../types';
 
 export function deserializeTable(el: HTMLElement, editor: YooEditor) {
   const tbody = el.querySelector('tbody');
@@ -48,7 +50,7 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
           );
         }
 
-        let textNodes = deserializeTextNodes(editor, th.childNodes);
+        const textNodes = deserializeTextNodes(editor, th.childNodes);
         // @ts-ignore [FIXME] - Fix this
         cellElement.children = textNodes;
         rowElement.children.push(cellElement);
@@ -97,7 +99,7 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
             );
           }
 
-          let textNodes = deserializeTextNodes(editor, td.childNodes);
+          const textNodes = deserializeTextNodes(editor, td.childNodes);
           // @ts-ignore [FIXME] - Fix this
           cellElement.children = textNodes;
           rowElement.children.push(cellElement);

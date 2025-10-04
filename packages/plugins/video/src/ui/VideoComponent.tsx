@@ -1,11 +1,12 @@
-import { CSSProperties } from 'react';
-import { RenderElementProps } from 'slate-react';
-import { VideoElementProps } from '../types';
+import type { CSSProperties } from 'react';
+import type { RenderElementProps } from 'slate-react';
+
 import DailyMotion from './DailyMotionPlayer';
-import VimeoPlayer from './VimeoPlayer';
-import YouTubePlayer from './YoutubePlayer';
 import LoomPlayer from './LoomPlayer';
+import VimeoPlayer from './VimeoPlayer';
 import WistiaPlayer from './WistiaPlayer';
+import YouTubePlayer from './YoutubePlayer';
+import type { VideoElementProps } from '../types';
 
 type VideoComponentProps = Omit<VideoElementProps, 'sizes'> & {
   width: number | string;

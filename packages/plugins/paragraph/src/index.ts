@@ -1,10 +1,11 @@
-import { ParagraphElement } from './types';
 import { Paragraph } from './plugin/ParagraphPlugin';
-export { ParagraphCommands } from './commands/ParagraphCommands';
+import { ParagraphElement } from './types';
 import './styles.css';
 
+export { ParagraphCommands } from './commands/ParagraphCommands';
+
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: ParagraphElement;
   }
 }

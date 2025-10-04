@@ -1,27 +1,30 @@
+import { useState } from 'react';
+import {
+  ExternalLinkIcon,
+  ImageIcon,
+  RowSpacingIcon,
+  SizeIcon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  UpdateIcon,
+  WidthIcon,
+} from '@radix-ui/react-icons';
+import type {
+  YooEditor,
+  YooptaBlockData} from '@yoopta/editor';
 import {
   Blocks,
   Elements,
   UI,
-  useYooptaPluginOptions,
-  YooEditor,
-  YooptaBlockData,
+  useYooptaPluginOptions
 } from '@yoopta/editor';
-import {
-  RowSpacingIcon,
-  SizeIcon,
-  WidthIcon,
-  ExternalLinkIcon,
-  TextAlignCenterIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
-  ImageIcon,
-  UpdateIcon,
-} from '@radix-ui/react-icons';
-import { VideoElementProps, VideoPluginElements, VideoPluginOptions } from '../types';
+
+import { Loader } from './Loader';
 import CheckmarkIcon from '../icons/checkmark.svg';
 import DownloadIcon from '../icons/download.svg';
-import { useState } from 'react';
-import { Loader } from './Loader';
+import type { VideoElementProps, VideoPluginElements, VideoPluginOptions } from '../types';
+
 
 const ALIGN_ICONS = {
   left: TextAlignLeftIcon,

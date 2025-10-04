@@ -1,17 +1,18 @@
-import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import { useMemo, useState } from 'react';
+import type { Transform } from '@dnd-kit/utilities';
 import {
-  useFloating,
-  offset,
+  autoUpdate,
   flip,
   inline,
+  offset,
   shift,
+  useFloating,
   useTransitionStyles,
-  autoUpdate,
 } from '@floating-ui/react';
-import { useMemo, useState } from 'react';
+
+import { useYooptaTools } from '../../contexts/YooptaContext/ToolsContext';
+import type { YooptaBlockData } from '../../editor/types';
 import { buildActionMenuRenderProps } from '../../UI/BlockOptions/utils';
-import { YooptaBlockData } from '../../editor/types';
-import { Transform } from '@dnd-kit/utilities';
 
 export const useActionMenuToolRefs = ({ editor }) => {
   const tools = useYooptaTools();
@@ -62,8 +63,7 @@ export const useBlockStyles = (
   transition: string | undefined,
   isDragging: boolean,
   isOver: boolean,
-) => {
-  return useMemo(
+) => useMemo(
     () => ({
       marginLeft: `${block.meta.depth * 20}px`,
       transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',
@@ -73,7 +73,6 @@ export const useBlockStyles = (
     }),
     [block.meta.depth, transform, transition, isDragging, isOver],
   );
-};
 
 export const useBlockOptionsRefs = () => {
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);

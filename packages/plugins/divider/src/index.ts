@@ -1,10 +1,11 @@
-import { DividerElement, DividerElementProps, DividerTheme } from './types';
 import { Divider } from './plugin';
-export { DividerCommands } from './commands';
+import { DividerElement, DividerElementProps, DividerTheme } from './types';
 import './styles.css';
 
+export { DividerCommands } from './commands';
+
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: DividerElement;
   }
 }

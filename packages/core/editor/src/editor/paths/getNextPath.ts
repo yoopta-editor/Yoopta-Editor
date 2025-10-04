@@ -1,4 +1,4 @@
-import { YooEditor, YooptaPath } from '../types';
+import type { YooEditor, YooptaPath } from '../types';
 
 export function getNextPath(editor: YooEditor): YooptaPath['current'] {
   const path = editor.path.current;

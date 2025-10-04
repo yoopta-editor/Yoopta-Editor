@@ -1,26 +1,29 @@
 import { useEffect, useState } from 'react';
-import { DefaultActionMenuRender } from './DefaultActionMenuRender';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
   autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
-import { Editor, Element, NodeEntry, Path, Transforms } from 'slate';
-import {
-  YooptaBlockData,
-  YooptaBlock,
-  useYooptaEditor,
-  HOTKEYS,
-  findPluginBlockByPath,
-  UI,
+import type {
   SlateElement,
+  YooptaBlock,
+  YooptaBlockData} from '@yoopta/editor';
+import {
   Blocks,
+  HOTKEYS,
+  UI,
+  findPluginBlockByPath,
+  useYooptaEditor,
 } from '@yoopta/editor';
-import { ActionMenuRenderProps, ActionMenuToolItem, ActionMenuToolProps } from '../types';
+import type { NodeEntry} from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
+
+import { DefaultActionMenuRender } from './DefaultActionMenuRender';
 import { buildActionMenuRenderProps, mapActionMenuItems } from './utils';
+import type { ActionMenuRenderProps, ActionMenuToolItem, ActionMenuToolProps } from '../types';
 
 const { Portal } = UI;
 
@@ -362,7 +365,7 @@ const ActionMenuList = ({ items, render }: ActionMenuToolProps) => {
   });
 
   useEffect(() => {
-    let timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (empty) onClose();
     }, 3000);
 

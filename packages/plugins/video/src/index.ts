@@ -3,7 +3,7 @@ import { VideoElement, VideoElementProps, VideoUploadResponse } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: VideoElement;
   }
 }

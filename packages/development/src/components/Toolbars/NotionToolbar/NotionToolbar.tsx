@@ -1,19 +1,20 @@
-import { ToolbarRenderProps } from '@yoopta/toolbar';
-import { useYooptaEditor, useYooptaTools } from '@yoopta/editor';
-import cx from 'classnames';
-import { CodeIcon, ChevronDownIcon, RadicalIcon } from 'lucide-react';
 import { useState } from 'react';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  inline,
-  autoUpdate,
   FloatingPortal,
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
 } from '@floating-ui/react';
-import s from './NotionToolbar.module.scss';
 import { buildActionMenuRenderProps } from '@yoopta/action-menu-list';
+import { useYooptaEditor, useYooptaTools } from '@yoopta/editor';
+import type { ToolbarRenderProps } from '@yoopta/toolbar';
+import cx from 'classnames';
+import { ChevronDownIcon, CodeIcon, RadicalIcon } from 'lucide-react';
+
+import s from './NotionToolbar.module.scss';
 
 const DEFAULT_MODALS = { link: false, highlight: false, actionMenu: false };
 type ModalsState = typeof DEFAULT_MODALS;

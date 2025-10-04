@@ -1,12 +1,13 @@
 import { Editor, Text, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
+
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { getLastNodePoint } from '../../utils/getLastNodePoint';
-import { YooptaOperation } from '../core/applyTransforms';
+import type { YooptaOperation } from '../core/applyTransforms';
 import { Elements } from '../elements';
 import { Paths } from '../paths';
-import { SlateElement, YooEditor } from '../types';
-import { ReactEditor } from 'slate-react';
+import type { SlateElement, YooEditor } from '../types';
 
 export function mergeBlock(editor: YooEditor) {
   const sourceBlock = findPluginBlockByPath(editor);
@@ -50,7 +51,7 @@ export function mergeBlock(editor: YooEditor) {
     operations.push({
       type: 'merge_block',
       prevProperties: {
-        sourceBlock: sourceBlock,
+        sourceBlock,
         sourceSlateValue: sourceSlate.children as SlateElement[],
         targetBlock,
         targetSlateValue: targetSlate.children as SlateElement[],
@@ -85,7 +86,7 @@ function mergeSlateChildren(target, source) {
   if (Text.isText(lastTargetChild) && Text.isText(firstSourceChild)) {
     lastTargetChild.text += firstSourceChild.text;
     return [...targetChildren.slice(0, -1), lastTargetChild, ...sourceChildren.slice(1)];
-  } else {
+  } 
     return [...targetChildren, ...sourceChildren];
-  }
+  
 }

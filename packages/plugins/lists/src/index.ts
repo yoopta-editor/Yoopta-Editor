@@ -1,14 +1,14 @@
 import { LISTS } from './plugin';
 import {
-  NumberedListElement,
   BulletedListElement,
+  NumberedListElement,
   TodoListElement,
   TodoListElementProps,
 } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: NumberedListElement | BulletedListElement | TodoListElement;
   }
 }

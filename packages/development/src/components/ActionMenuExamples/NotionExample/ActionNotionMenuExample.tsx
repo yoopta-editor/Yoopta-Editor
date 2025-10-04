@@ -1,7 +1,8 @@
-import { ActionMenuRenderProps } from '@yoopta/action-menu-list';
+import type { ActionMenuRenderProps } from '@yoopta/action-menu-list';
 import cx from 'classnames';
-import { ICONS_SRC } from './utils/iconsMap';
+
 import s from './ActionNotionMenuExample.module.scss';
+import { ICONS_SRC } from './utils/iconsMap';
 
 const VOID_PLUGINS = ['Video', 'Image', 'File', 'Embed'];
 

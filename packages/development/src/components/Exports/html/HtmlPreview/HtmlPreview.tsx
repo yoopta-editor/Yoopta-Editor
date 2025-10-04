@@ -1,22 +1,27 @@
-import YooptaEditor, { createYooptaEditor, YooEditor, YooptaContentValue } from '@yoopta/editor';
-import parsers from '@yoopta/exports';
 import { useEffect, useMemo, useState } from 'react';
-import { YOOPTA_PLUGINS } from '../../../../utils/yoopta/plugins';
+import { html as codemirrorHTML } from '@codemirror/lang-html';
+import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import type { BasicSetupOptions } from '@uiw/react-codemirror';
+import CodeMirror from '@uiw/react-codemirror';
+import type { YooEditor, YooptaContentValue } from '@yoopta/editor';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import parsers from '@yoopta/exports';
+import copy from 'copy-to-clipboard';
+import jsBeatify from 'js-beautify';
+import { useDebounce } from 'use-debounce';
+
+import { HTML_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 import { MARKS } from '../../../../utils/yoopta/marks';
+import { YOOPTA_PLUGINS } from '../../../../utils/yoopta/plugins';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
+
 import { Separator } from '@/components/ui/separator';
 import { TOOLS } from '@/utils/yoopta/tools';
-import { useDebounce } from 'use-debounce';
-import copy from 'copy-to-clipboard';
-import { HTML_EDITOR_DEFAULT_VALUE } from './defaultEditorValue';
 
-import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-import { html as codemirrorHTML } from '@codemirror/lang-html';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import jsBeatify from 'js-beautify';
+
 import { ExportSelector } from '../../ExportSelector/ExportSelector';
 
 const LANGUAGES_MAP = {
@@ -145,7 +150,7 @@ const HtmlPreview = () => {
               <div className="container h-full py-6">
                 {/* <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_200px]"> */}
                 <div className="grid h-full items-stretch gap-6">
-                  <div className="hidden flex-col space-y-4 sm:flex md:order-2"></div>
+                  <div className="hidden flex-col space-y-4 sm:flex md:order-2" />
                   <div className="md:order-1">
                     <TabsContent value="editor" className="mt-0 border-0 p-0">
                       <div className="flex h-full flex-col space-y-4">

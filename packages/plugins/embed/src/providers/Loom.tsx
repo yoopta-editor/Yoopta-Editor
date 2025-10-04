@@ -1,8 +1,9 @@
-import { useRef, useState, useEffect } from 'react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
+import { useEffect, useRef, useState } from 'react';
 
-export function Loom({ provider, attributes, children, width, height }: ProviderRenderProps) {
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import type { ProviderRenderProps } from '../types';
+
+export const Loom = ({ provider, attributes, children, width, height }: ProviderRenderProps) => {
   const loomRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
   const [iframeKey, setIframeKey] = useState(0); // Add key to force re-render

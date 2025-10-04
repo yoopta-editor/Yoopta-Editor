@@ -3,7 +3,7 @@ import { CalloutElement, CalloutElementProps } from './types';
 import './styles.css';
 
 declare module 'slate' {
-  interface CustomTypes {
+  type CustomTypes = {
     Element: CalloutElement;
   }
 }

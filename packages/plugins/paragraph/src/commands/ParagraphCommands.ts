@@ -1,5 +1,7 @@
-import { Blocks, buildBlockData, generateId, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { ParagraphElement } from '../types';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+
+import type { ParagraphElement } from '../types';
 
 type ParagraphElementOptions = {
   text?: string;
@@ -20,9 +22,7 @@ export type ParagraphCommands = {
 };
 
 export const ParagraphCommands: ParagraphCommands = {
-  buildParagraphElements: (editor, options = {}) => {
-    return { id: generateId(), type: 'paragraph', children: [{ text: options?.text || '' }] };
-  },
+  buildParagraphElements: (editor, options = {}) => ({ id: generateId(), type: 'paragraph', children: [{ text: options?.text || '' }] }),
   insertParagraph: (editor, options = {}) => {
     const { at, focus, text } = options;
 

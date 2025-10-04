@@ -1,5 +1,5 @@
-import { MoveBlockOperation, YooptaOperation } from '../core/applyTransforms';
-import { YooEditor, YooptaPathIndex } from '../types';
+import type { MoveBlockOperation, YooptaOperation } from '../core/applyTransforms';
+import type { YooEditor, YooptaPathIndex } from '../types';
 
 export function moveBlock(editor: YooEditor, draggedBlockId: string, newPath: YooptaPathIndex) {
   const updatedPosition = newPath;

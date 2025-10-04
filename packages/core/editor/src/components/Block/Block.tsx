@@ -1,9 +1,11 @@
-import React, { memo } from 'react';
-import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
+import type React from 'react';
+import { memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
-import { YooptaBlockData } from '../../editor/types';
+
 import { useBlockStyles } from './hooks';
+import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
 import { Paths } from '../../editor/paths';
+import type { YooptaBlockData } from '../../editor/types';
 
 type BlockProps = {
   children: React.ReactNode;

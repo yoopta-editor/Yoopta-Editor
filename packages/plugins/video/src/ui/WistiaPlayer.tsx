@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-function WistiaPlayer({ videoId, children, attributes, width, height, ...other }) {
+const WistiaPlayer = ({ videoId, children, attributes, width, height, ...other }) => {
   const wistiaRootRef = useRef(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 

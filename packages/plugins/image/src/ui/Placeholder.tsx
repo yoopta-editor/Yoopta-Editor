@@ -1,6 +1,8 @@
-import { useFloating, inline, flip, shift, offset } from '@floating-ui/react';
+import type { CSSProperties} from 'react';
+import { useState } from 'react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import { ImageIcon } from '@radix-ui/react-icons';
-import { CSSProperties, useState } from 'react';
+
 import { ImageUploader } from './ImageUploader';
 import { Loader } from './Loader';
 
@@ -28,7 +30,7 @@ const Placeholder = ({ attributes, children, blockId }) => {
       {...attributes}
       contentEditable={false}>
       <button
-        className={`yoopta-button yoo-image-p-[12px_36px_12px_12px] yoo-image-flex yoo-image-items-center yoo-image-text-left yoo-image-w-full yoo-image-overflow-hidden yoo-image-rounded-[3px] yoo-image-text-[14px] yoo-image-text-[rgba(55,53,47,0.65)] yoo-image-relative yoo-image-cursor-pointer yoo-image-border-none yoo-image-bg-[#efefef] yoo-image-transition-[background-color_100ms_ease-in] hover:yoo-image-bg-[#e3e3e3]`}
+        className="yoopta-button yoo-image-p-[12px_36px_12px_12px] yoo-image-flex yoo-image-items-center yoo-image-text-left yoo-image-w-full yoo-image-overflow-hidden yoo-image-rounded-[3px] yoo-image-text-[14px] yoo-image-text-[rgba(55,53,47,0.65)] yoo-image-relative yoo-image-cursor-pointer yoo-image-border-none yoo-image-bg-[#efefef] yoo-image-transition-[background-color_100ms_ease-in] hover:yoo-image-bg-[#e3e3e3]"
         onClick={() => setIsUploaderOpen(true)}
         disabled={loading}
         type="button"

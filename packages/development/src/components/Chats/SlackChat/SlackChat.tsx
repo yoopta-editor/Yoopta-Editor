@@ -1,25 +1,26 @@
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import Blockquote from '@yoopta/blockquote';
-import Paragraph from '@yoopta/paragraph';
-import Image from '@yoopta/image';
-import { Bold, Italic, CodeMark, Strike, Underline } from '@yoopta/marks';
-import Lists from '@yoopta/lists';
-import Link from '@yoopta/link';
-import Video from '@yoopta/video';
-import File from '@yoopta/file';
-import Code from '@yoopta/code';
 import { useMemo } from 'react';
+import Blockquote from '@yoopta/blockquote';
+import Code from '@yoopta/code';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import File from '@yoopta/file';
+import Image from '@yoopta/image';
+import Link from '@yoopta/link';
+import Lists from '@yoopta/lists';
+import { Bold, CodeMark, Italic, Strike, Underline } from '@yoopta/marks';
+import Paragraph from '@yoopta/paragraph';
+import Video from '@yoopta/video';
 import {
-  List,
-  ListOrdered,
   BoldIcon,
-  ItalicIcon,
-  StrikethroughIcon,
-  LinkIcon,
-  TextQuoteIcon,
   CodeIcon,
   FileCodeIcon,
+  ItalicIcon,
+  LinkIcon,
+  List,
+  ListOrdered,
+  StrikethroughIcon,
+  TextQuoteIcon,
 } from 'lucide-react';
+
 import s from './SlackChat.module.scss';
 
 const plugins = [

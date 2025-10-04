@@ -1,5 +1,7 @@
-import { Elements, PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
-import { DividerElement, DividerTheme } from '../types';
+import type { PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
+import { Elements } from '@yoopta/editor';
+
+import type { DividerElement, DividerTheme } from '../types';
 
 const dividerTypes: DividerTheme[] = ['solid', 'dashed', 'dotted', 'gradient'];
 

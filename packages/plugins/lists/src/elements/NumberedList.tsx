@@ -1,11 +1,12 @@
-import {
-  PluginElementRenderProps,
-  useBlockData,
-  useYooptaEditor,
-  YooEditor,
-  YooptaBlockData,
-} from '@yoopta/editor';
 import { useMemo } from 'react';
+import type {
+  PluginElementRenderProps,
+  YooEditor,
+  YooptaBlockData} from '@yoopta/editor';
+import {
+  useBlockData,
+  useYooptaEditor
+} from '@yoopta/editor';
 
 function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
   const sortedBlockIds = Object.keys(editor.children).sort((a, b) => {
@@ -18,7 +19,7 @@ function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
   const lastBlockTypeAtDepth: Record<number, string> = {};
   const targetDepth = block.meta.depth;
 
-  for (let blockId of sortedBlockIds) {
+  for (const blockId of sortedBlockIds) {
     const currentBlock = editor.children[blockId];
     const currentDepth = currentBlock.meta.depth;
     const currentType = currentBlock.type;
@@ -42,7 +43,7 @@ function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
     lastBlockTypeAtDepth[currentDepth] = currentType;
 
     if (currentDepth < targetDepth) {
-      for (let depth in depthCounters) {
+      for (const depth in depthCounters) {
         if (Number(depth) > currentDepth) {
           depthCounters[depth] = 0;
           lastBlockTypeAtDepth[depth] = '';

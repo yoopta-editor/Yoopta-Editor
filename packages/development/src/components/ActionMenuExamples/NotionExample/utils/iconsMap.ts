@@ -1,15 +1,15 @@
-import text from '../icons/text.png';
 import blockquote from '../icons/blockquote.png';
-import callout from '../icons/callout.png';
-import image from '../icons/image.png';
-import video from '../icons/video.png';
-import file from '../icons/file.png';
-import code from '../icons/code.png';
-import headingOne from '../icons/headerOne.png';
 import bulletedList from '../icons/bulletedList.png';
-import numberedList from '../icons/numberedList.png';
-import todoList from '../icons/todoList.png';
+import callout from '../icons/callout.png';
+import code from '../icons/code.png';
 import embed from '../icons/embed.png';
+import file from '../icons/file.png';
+import headingOne from '../icons/headerOne.png';
+import image from '../icons/image.png';
+import numberedList from '../icons/numberedList.png';
+import text from '../icons/text.png';
+import todoList from '../icons/todoList.png';
+import video from '../icons/video.png';
 
 export const ICONS_SRC = {
   Paragraph: text.src,

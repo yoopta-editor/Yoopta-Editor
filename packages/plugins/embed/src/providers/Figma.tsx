@@ -1,6 +1,7 @@
 import { useRef } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
+import type { ProviderRenderProps } from '../types';
 
 const Figma = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const figmaRootRef = useRef(null);

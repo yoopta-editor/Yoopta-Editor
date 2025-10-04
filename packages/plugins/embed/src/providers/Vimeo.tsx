@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { ProviderRenderProps } from '../types';
+import type { ProviderRenderProps } from '../types';
 
 const VIMEO_API_URI = 'https://vimeo.com/api/v2/embed';
 
-function Vimeo({ provider, width, height, attributes, children }: ProviderRenderProps) {
+const Vimeo = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const vimeoRootRef = useRef(null);
   const [src, setSrc] = useState(null);
   const [isFrameLoaded, setFrameLoaded] = useState(false);

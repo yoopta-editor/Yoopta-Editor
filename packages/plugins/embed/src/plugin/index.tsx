@@ -1,6 +1,7 @@
-import { generateId, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+
 import { EmbedCommands } from '../commands';
-import { EmbedElementMap, EmbedPluginOptions } from '../types';
+import type { EmbedElementMap, EmbedPluginOptions } from '../types';
 import { EmbedRender } from '../ui/Embed';
 
 const ALIGNS_TO_JUSTIFY = {
@@ -90,9 +91,7 @@ const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => {
-        return `![${element.props.provider.type}](${element.props.provider.url})\n`;
-      },
+      serialize: (element, text) => `![${element.props.provider.type}](${element.props.provider.url})\n`,
     },
   },
 });

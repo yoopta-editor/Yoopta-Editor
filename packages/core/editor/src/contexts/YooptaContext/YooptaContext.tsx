@@ -1,8 +1,9 @@
 import { createContext, useContext, useRef } from 'react';
+
 import { createYooptaEditor } from '../../editor';
-import { YooEditor, YooptaPathIndex } from '../../editor/types';
-import { PluginOptions } from '../../plugins/types';
 import { Blocks } from '../../editor/blocks';
+import type { YooEditor, YooptaPathIndex } from '../../editor/types';
+import type { PluginOptions } from '../../plugins/types';
 
 export type YooptaEditorContext = {
   editor: YooEditor;
@@ -63,7 +64,7 @@ const useBlockSelected = ({ blockId, at }: UseBlockSelectedProps) => {
   }
 
   if (at) {
-    block = Blocks.getBlock(editor, { at: at });
+    block = Blocks.getBlock(editor, { at });
   }
 
   return editor.path.current === block?.meta.order;

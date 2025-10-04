@@ -1,6 +1,7 @@
 import { cloneElement, isValidElement } from 'react';
-import { ActionMenuRenderProps } from '../types';
+
 import { DEFAULT_ICONS_MAP } from './icons';
+import type { ActionMenuRenderProps } from '../types';
 
 const DefaultActionMenuRender = ({
   actions,

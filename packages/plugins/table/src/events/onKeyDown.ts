@@ -1,5 +1,6 @@
-import { SlateEditor, YooEditor, PluginEventHandlerOptions } from '@yoopta/editor';
+import type { PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Node, Path, Range, Text, Transforms } from 'slate';
+
 import { TableCommands } from '../commands';
 import { EDITOR_TO_SELECTION } from '../utils/weakMaps';
 
@@ -16,7 +17,7 @@ export function onKeyDown(
       const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
 
       const elementEntries = EDITOR_TO_SELECTION.get(slate);
-      if (!!elementEntries) {
+      if (elementEntries) {
         event.preventDefault();
 
         Editor.withoutNormalizing(slate, () => {

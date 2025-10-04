@@ -1,4 +1,4 @@
-import { VideoSizes } from '../types';
+import type { VideoSizes } from '../types';
 
 /**
  * Converts a size value (number or string) to a number

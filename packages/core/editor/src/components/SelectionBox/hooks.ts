@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+
+import type { RectangeSelectionProps, RectangeSelectionState } from './SelectionBox';
 import { Paths } from '../../editor/paths';
-import { YooEditor } from '../../editor/types';
-import { RectangeSelectionProps, RectangeSelectionState } from './SelectionBox';
+import type { YooEditor } from '../../editor/types';
 
 const findBlocksUnderSelection = (editor: YooEditor, origin, coords) => {
   const blocksUnderSelection: number[] = [];

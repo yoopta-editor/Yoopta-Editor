@@ -1,4 +1,6 @@
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
+
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 type InstagramProps = {

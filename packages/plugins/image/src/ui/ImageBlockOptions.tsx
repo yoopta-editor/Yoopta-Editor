@@ -1,28 +1,30 @@
+import { useState } from 'react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
+import {
+  RowSpacingIcon,
+  SizeIcon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  TextIcon,
+  UpdateIcon,
+  WidthIcon,
+} from '@radix-ui/react-icons';
 import {
   Blocks,
   Elements,
   UI,
-  useYooptaPluginOptions,
-  YooEditor,
-  YooptaBlockData,
+  useYooptaPluginOptions
 } from '@yoopta/editor';
-import {
-  RowSpacingIcon,
-  SizeIcon,
-  WidthIcon,
-  TextAlignCenterIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
-  UpdateIcon,
-  TextIcon,
-} from '@radix-ui/react-icons';
-import { ImageElementProps, ImagePluginElements, ImagePluginOptions } from '../types';
+import type {
+  YooEditor,
+  YooptaBlockData} from '@yoopta/editor';
+
+import { InputAltText } from './InputAltText';
+import { Loader } from './Loader';
 import CheckmarkIcon from '../icons/checkmark.svg';
 import DownloadIcon from '../icons/download.svg';
-import { useState } from 'react';
-import { Loader } from './Loader';
-import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
-import { InputAltText } from './InputAltText';
+import type { ImageElementProps, ImagePluginElements, ImagePluginOptions } from '../types';
 
 const ALIGN_ICONS = {
   left: TextAlignLeftIcon,

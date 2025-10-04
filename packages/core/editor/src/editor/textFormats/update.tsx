@@ -1,7 +1,8 @@
 import { Editor, Range, Transforms } from 'slate';
+
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { Blocks } from '../blocks';
-import { YooEditor } from '../types';
+import type { YooEditor } from '../types';
 
 export function update(editor: YooEditor, type: any, value: any) {
   if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {

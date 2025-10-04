@@ -3,8 +3,7 @@
     "airbnb",
     "plugin:import/typescript",
     "plugin:react-hooks/recommended",
-    "prettier",
-    "plugin:storybook/recommended"
+    "prettier"
   ],
   "env": {
     "mocha": true,
@@ -24,15 +23,16 @@
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": "<root>/tsconfig.json"
+        "project": "./config/tsconfig.base.json"
       }
     }
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 2022
+    "ecmaVersion": 2022,
+    "project": "./config/tsconfig.base.json"
   },
-  "plugins": ["mocha", "prettier", "@typescript-eslint", "react-refresh"],
+  "plugins": ["prettier", "@typescript-eslint"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx"],
@@ -42,7 +42,6 @@
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
         "plugin:@typescript-eslint/strict",
-        "plugin:@typescript-eslint/stylistic",
         "prettier"
       ]
     },
@@ -153,7 +152,7 @@
             "ignorePureComponents": true
           }
         ],
-        "mocha/no-exclusive-tests": ["error"],
+        "mocha/no-exclusive-tests": "off",
         "react/jsx-filename-extension": [
           2,
           {
@@ -192,7 +191,8 @@
           {
             "controlComponents": ["Select", "DatePicker"]
           }
-        ]
+        ],
+        "jsx-a11y/anchor-is-valid": "off"
       }
     },
     {

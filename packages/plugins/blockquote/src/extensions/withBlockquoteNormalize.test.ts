@@ -1,8 +1,10 @@
-import { Descendant, Editor, Element, Transforms } from 'slate';
-import { vi } from 'vitest';
-import { withBlockquoteNormalize } from './withBlockquoteNormalize';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { Descendant} from 'slate';
+import { Editor, Element, Transforms } from 'slate';
 import { createTestNode } from 'test-utils';
-import { SlateEditor, YooEditor } from '@yoopta/editor';
+import { vi } from 'vitest';
+
+import { withBlockquoteNormalize } from './withBlockquoteNormalize';
 
 describe('withBlockquoteNormalize', () => {
   let editor: Partial<YooEditor>;
@@ -21,13 +23,9 @@ describe('withBlockquoteNormalize', () => {
       insertBlock: vi.fn(),
     };
 
-    vi.spyOn(Editor, 'isEditor').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'children' in node;
-    });
+    vi.spyOn(Editor, 'isEditor').mockImplementation((node) => node && typeof node === 'object' && 'children' in node);
 
-    vi.spyOn(Element, 'isElement').mockImplementation((node) => {
-      return node && typeof node === 'object' && 'type' in node;
-    });
+    vi.spyOn(Element, 'isElement').mockImplementation((node) => node && typeof node === 'object' && 'type' in node);
 
     vi.spyOn(Transforms, 'removeNodes').mockImplementation((editor, options) => {});
   });

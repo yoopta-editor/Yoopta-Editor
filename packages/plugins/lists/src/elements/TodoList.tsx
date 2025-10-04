@@ -1,6 +1,8 @@
-import { Elements, PluginElementRenderProps, useBlockData, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps} from '@yoopta/editor';
+import { Elements, useBlockData, useYooptaEditor } from '@yoopta/editor';
 import { Check } from 'lucide-react';
-import { TodoListElementProps } from '../types';
+
+import type { TodoListElementProps } from '../types';
 import { cn } from '../utils/cn';
 
 const TodoListRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
