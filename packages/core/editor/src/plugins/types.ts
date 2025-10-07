@@ -34,9 +34,10 @@ export type PluginElementOptions = {
   draggable?: boolean;
 };
 
-export type PluginElementExtendRenderProps = RenderSlateElementProps & {
+export type PluginElementExtendRenderProps = Omit<RenderSlateElementProps, 'element'> & {
   blockId: string;
   HTMLAttributes?: HTMLAttributes<HTMLElement>;
+  element: SlateElement;
 };
 
 export type PluginElementRenderProps = PluginElementExtendRenderProps & {

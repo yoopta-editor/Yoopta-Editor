@@ -5,7 +5,7 @@ import './styles.css';
 declare module 'slate' {
   type CustomTypes = {
     Element: FileElement;
-  }
+  };
 }
 
 export { FileCommands } from './commands';

@@ -1,9 +1,9 @@
-import type { ChangeEvent} from 'react';
+import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 
 import ChevronUp from '../icons/chevronup.svg';
-import type { LinkToolRenderProps} from '../types';
+import type { LinkToolRenderProps } from '../types';
 import { Link } from '../types';
 
 const DefaultLinkToolRender = (props: LinkToolRenderProps) => {

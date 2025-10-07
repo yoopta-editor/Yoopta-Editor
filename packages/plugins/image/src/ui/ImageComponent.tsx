@@ -1,4 +1,4 @@
-import type { CSSProperties} from 'react';
+import type { CSSProperties } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 import { UI } from '@yoopta/editor';
 import type { RenderElementProps } from 'slate-react';

@@ -56,6 +56,6 @@ const LoomPlayer = ({ videoId, children, attributes, width, height, ...other }) 
       {children}
     </div>
   );
-}
+};
 
 export default LoomPlayer;

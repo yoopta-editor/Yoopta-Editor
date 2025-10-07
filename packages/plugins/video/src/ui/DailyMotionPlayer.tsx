@@ -54,6 +54,6 @@ const DailyMotion = ({ videoId, attributes, children, ...other }) => {
       {children}
     </div>
   );
-}
+};
 
 export default DailyMotion;

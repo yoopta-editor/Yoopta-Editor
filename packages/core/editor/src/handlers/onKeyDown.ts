@@ -1,5 +1,5 @@
 import { isKeyHotkey } from 'is-hotkey';
-import type { Point} from 'slate';
+import type { Point } from 'slate';
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -69,7 +69,7 @@ export function onKeyDown(editor: YooEditor) {
         Transforms.delete(slate, { at: slate.selection });
       }
 
-      // when the cursor is in the middle of the block
+      // when the cursor is between start and end of the block
       if (!isStart && !isEnd) {
         // [TEST]
         editor.splitBlock({ slate, focus: true });
@@ -120,28 +120,27 @@ export function onKeyDown(editor: YooEditor) {
           return;
         }
         // If current block is not empty merge text nodes with previous block
-        
-          if (Range.isExpanded(slate.selection)) {
-            return Transforms.delete(slate, { at: slate.selection });
+
+        if (Range.isExpanded(slate.selection)) {
+          return Transforms.delete(slate, { at: slate.selection });
+        }
+
+        const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousPath(editor) });
+        const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
+        if (prevBlock && prevSlate) {
+          const { node: lastSlateNode } = getLastNode(prevSlate);
+          const prevSlateText = Node.string(lastSlateNode);
+
+          if (prevSlateText.trim().length === 0) {
+            // [TEST]
+            editor.deleteBlock({ blockId: prevBlock.id, focus: false });
+            editor.setPath({ current: prevBlock.meta.order });
+            return;
           }
+        }
 
-          const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousPath(editor) });
-          const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
-          if (prevBlock && prevSlate) {
-            const { node: lastSlateNode } = getLastNode(prevSlate);
-            const prevSlateText = Node.string(lastSlateNode);
-
-            if (prevSlateText.trim().length === 0) {
-              // [TEST]
-              editor.deleteBlock({ blockId: prevBlock.id, focus: false });
-              editor.setPath({ current: prevBlock.meta.order });
-              return;
-            }
-          }
-
-          // [TEST]
-          editor.mergeBlock();
-        
+        // [TEST]
+        editor.mergeBlock();
       }
       return;
     }

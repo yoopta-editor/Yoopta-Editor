@@ -1,22 +1,19 @@
 import type { Descendant, Path, Point, Selection } from 'slate';
 
 import { ReactEditor } from 'slate-react';
-import { applyTransforms, ApplyTransformsOptions, YooptaOperation } from './core/applyTransforms';
-import { insertBlock, InsertBlockOptions } from './blocks/insertBlock';
+import { applyTransforms, YooptaOperation } from './core/applyTransforms';
+import { insertBlock } from './blocks/insertBlock';
 import { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import { SplitBlockOptions } from './blocks/splitBlock';
 import { HistoryStack, HistoryStackName, YooptaHistory } from './core/history';
 import { WithoutFirstArg } from '../utils/types';
 import { moveBlock } from './blocks/moveBlock';
 import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
-import { DeleteBlockOptions } from './blocks/deleteBlock';
-import type { deleteBlock} from './blocks/deleteBlock';
-import { DuplicateBlockOptions } from './blocks/duplicateBlock';
-import type { duplicateBlock} from './blocks/duplicateBlock';
+import type { deleteBlock } from './blocks/deleteBlock';
+import type { duplicateBlock } from './blocks/duplicateBlock';
 import type { focusBlock } from './blocks/focusBlock';
 import { GetBlockOptions } from './blocks/getBlock';
-import { ToggleBlockOptions } from './blocks/toggleBlock';
-import type { toggleBlock} from './blocks/toggleBlock';
+import type { toggleBlock } from './blocks/toggleBlock';
 import type { updateBlock } from './blocks/updateBlock';
 import type { EditorBlurOptions } from './core/blur';
 import type { setEditorValue } from './core/setEditorValue';
@@ -24,7 +21,13 @@ import type { getEmail } from '../parsers/getEmail';
 import type { getHTML } from '../parsers/getHTML';
 import type { getMarkdown } from '../parsers/getMarkdown';
 import type { getPlainText } from '../parsers/getPlainText';
-import type { Plugin, PluginElementProps, PluginElementsMap, PluginOptions } from '../plugins/types';
+import type {
+  Plugin,
+  PluginElementProps,
+  PluginElementsMap,
+  PluginOptions,
+} from '../plugins/types';
+import { ExtendedType } from './custom-types';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -94,7 +97,7 @@ export type BaseCommands = Record<string, (...args: any[]) => any>;
 
 // [TODO] - Fix generic and default types
 // [TODO] - change with WithoutFirstArg
-export type YooEditor = {
+export type BaseYooEditor = {
   id: string;
   readOnly: boolean;
   isEmpty: () => boolean;
@@ -189,3 +192,5 @@ export type SlateElement<K extends string = string, T = any> = {
   children: Descendant[];
   props?: PluginElementProps<T>;
 };
+
+export type YooEditor = ExtendedType<'YooEditor', BaseYooEditor>;

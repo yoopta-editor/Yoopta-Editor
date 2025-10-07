@@ -175,15 +175,18 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
 
         return `<div>${element.children
           .filter(Element.isElement)
-          .map((listItem) => `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
-              .filter(Element.isElement)
-              .map((item) => {
-                if (item.type === 'accordion-list-item-heading') {
-                  return `<summary>${serializeTextNodes(item.children)}</summary>`;
-                }
-                return `<p>${serializeTextNodes(item.children)}</p>`;
-              })
-              .join('')}</details>`)
+          .map(
+            (listItem) =>
+              `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
+                .filter(Element.isElement)
+                .map((item) => {
+                  if (item.type === 'accordion-list-item-heading') {
+                    return `<summary>${serializeTextNodes(item.children)}</summary>`;
+                  }
+                  return `<p>${serializeTextNodes(item.children)}</p>`;
+                })
+                .join('')}</details>`,
+          )
           .join('')}</div>`;
       },
     },

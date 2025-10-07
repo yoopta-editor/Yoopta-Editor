@@ -1,4 +1,4 @@
-import { createRollupConfig } from "../../config/rollup";
+import { createRollupConfig } from '../../config/rollup';
 
 const pkg = require('./package.json');
 

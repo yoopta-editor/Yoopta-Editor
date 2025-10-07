@@ -1,4 +1,4 @@
-import type { YooEditor, YooptaContentValue} from '@yoopta/editor';
+import type { YooEditor, YooptaContentValue } from '@yoopta/editor';
 import { deserializeHTML as parseHTML } from '@yoopta/editor';
 
 export function deserializeHTML(editor: YooEditor, htmlString: string): YooptaContentValue {

@@ -1,11 +1,5 @@
-import type {
-  PluginElementRenderProps} from '@yoopta/editor';
-import {
-  useBlockData,
-  useBlockSelected,
-  useYooptaEditor,
-  useYooptaReadOnly,
-} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useBlockData, useBlockSelected, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
 
 import { FileBlockOptions } from './FileBlockOptions';
 import { FileComponent } from './FileComponent';

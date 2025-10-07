@@ -1,7 +1,12 @@
 import { Element } from 'slate';
 
 import { Blocks } from '../editor/blocks';
-import type { SlateElement, YooEditor, YooptaBlockBaseMeta, YooptaBlockData } from '../editor/types';
+import type {
+  SlateElement,
+  YooEditor,
+  YooptaBlockBaseMeta,
+  YooptaBlockData,
+} from '../editor/types';
 import type { PluginDeserializeParser } from '../plugins/types';
 import { getRootBlockElementType } from '../utils/blockElements';
 import { generateId } from '../utils/generateId';
@@ -133,9 +138,11 @@ function deserialize(
   if (el.nodeType === 3) {
     const text = el.textContent?.replace(/[\t\n\r\f\v]+/g, ' ');
     return { text };
-  } if (el.nodeType !== 1) {
+  }
+  if (el.nodeType !== 1) {
     return null;
-  } if (el.nodeName === 'BR') {
+  }
+  if (el.nodeName === 'BR') {
     return { text: '\n' };
   }
 
@@ -152,7 +159,8 @@ function deserialize(
     return children.map((child) => {
       if (typeof child === 'string') {
         return { [markType]: mark.parse ? mark.parse(parent) : true, text: child };
-      } if (child.text) {
+      }
+      if (child.text) {
         return { ...child, [markType]: mark.parse ? mark.parse(parent) : true };
       }
       return child;

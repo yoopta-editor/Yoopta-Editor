@@ -56,21 +56,24 @@ export const getLoomId = (url: string) => {
 export function getProvider(url: string): VideoProviderTypes | null {
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     return 'youtube';
-  } if (url.includes('vimeo.com')) {
+  }
+  if (url.includes('vimeo.com')) {
     return 'vimeo';
-  } if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
+  }
+  if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
     return 'dailymotion';
-  } if (url.includes('loom.com')) {
+  }
+  if (url.includes('loom.com')) {
     return 'loom';
-  } if (url.includes('wistia.com') || url.includes('wistia.net')) {
+  }
+  if (url.includes('wistia.com') || url.includes('wistia.net')) {
     return 'wistia';
   }
   // } else if (url.includes('twitch.tv')) {
   //   return 'Twitch';
   // }
-  
-    return null;
-  
+
+  return null;
 }
 
 export const ProviderGetters = {

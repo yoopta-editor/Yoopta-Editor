@@ -1,5 +1,5 @@
-import type { NodeEntry} from 'slate';
-import { Editor, Element , Range, Text, Transforms } from 'slate';
+import type { NodeEntry } from 'slate';
+import { Editor, Element, Range, Text, Transforms } from 'slate';
 
 import type { SlateEditor, SlateElement, YooEditor } from '../editor/types';
 

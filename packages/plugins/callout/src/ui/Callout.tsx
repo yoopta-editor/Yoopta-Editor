@@ -1,10 +1,5 @@
-import type {
-  PluginElementRenderProps} from '@yoopta/editor';
-import {
-  useBlockData,
-  useYooptaEditor,
-  useYooptaReadOnly,
-} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useBlockData, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
 
 import { CalloutBlockOptions } from './CalloutBlockOptions';
 import DefaultIcon from '../icons/default.svg';

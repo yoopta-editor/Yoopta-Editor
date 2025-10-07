@@ -1,8 +1,8 @@
-import type { CSSProperties} from 'react';
+import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { YooptaBaseElement } from '@yoopta/editor';
 import { cx, useNodeElementSettings } from '@yoopta/editor';
-import type { Selection} from 'slate';
+import type { Selection } from 'slate';
 import { Editor, Element, Path, Point, Transforms } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 

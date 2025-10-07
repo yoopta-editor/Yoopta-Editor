@@ -62,23 +62,29 @@ export function getInstagramId(url: string) {
 export function getProvider(url: string): EmbedProviderTypes | null {
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     return 'youtube';
-  } if (url.includes('vimeo.com')) {
+  }
+  if (url.includes('vimeo.com')) {
     return 'vimeo';
-  } if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
+  }
+  if (url.includes('dailymotion.com') || url.includes('dai.ly')) {
     return 'dailymotion';
-  } if (url.includes('loom.com')) {
+  }
+  if (url.includes('loom.com')) {
     return 'loom';
-  } if (url.includes('wistia.com') || url.includes('wistia.net')) {
+  }
+  if (url.includes('wistia.com') || url.includes('wistia.net')) {
     return 'wistia';
-  } if (url.includes('twitter') || url.includes('https://x.com')) {
+  }
+  if (url.includes('twitter') || url.includes('https://x.com')) {
     return 'twitter';
-  } if (url.includes('figma')) {
+  }
+  if (url.includes('figma')) {
     return 'figma';
-  } if (url.includes('instagram.com')) {
+  }
+  if (url.includes('instagram.com')) {
     return 'instagram';
-  } 
-    return null;
-  
+  }
+  return null;
 }
 
 export function getTwitterEmbedId(url) {

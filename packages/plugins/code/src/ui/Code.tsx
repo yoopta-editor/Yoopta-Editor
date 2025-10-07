@@ -1,14 +1,8 @@
 import { useRef, useState } from 'react';
 import type { BasicSetupOptions } from '@uiw/react-codemirror';
 import CodeMirror from '@uiw/react-codemirror';
-import type {
-  PluginCustomEditorRenderProps} from '@yoopta/editor';
-import {
-  buildBlockData,
-  useBlockData,
-  useYooptaEditor,
-  useYooptaReadOnly,
-} from '@yoopta/editor';
+import type { PluginCustomEditorRenderProps } from '@yoopta/editor';
+import { buildBlockData, useBlockData, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
 
 import { CodeBlockOptions } from './CodeBlockOptions';
 import type { CodeElement } from '../types';
@@ -60,7 +54,6 @@ const CodeEditor = ({ blockId }: PluginCustomEditorRenderProps) => {
         focus: true,
         blockData: defaultBlock,
       });
-      
     }
   };
 

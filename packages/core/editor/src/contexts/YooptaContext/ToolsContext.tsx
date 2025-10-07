@@ -30,10 +30,13 @@ export const ToolsProvider = ({ children, tools }: Props) => {
   const contextValue = useMemo(() => {
     if (!tools) return {};
 
-    return Object.keys(tools).reduce((acc, toolname) => ({
+    return Object.keys(tools).reduce(
+      (acc, toolname) => ({
         ...acc,
         [toolname]: tools[toolname]?.render,
-      }), {});
+      }),
+      {},
+    );
   }, [tools]);
 
   const toolsRender = useMemo(() => {

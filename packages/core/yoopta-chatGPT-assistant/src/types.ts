@@ -9,7 +9,7 @@ export type Model = GPT35Model | GPT4Model;
 export type OpenAIChatMessage = {
   content: string;
   role: OpenAIChatRole;
-}
+};
 
 export type ContextChatGPTMessage = OpenAIChatMessage;
 
@@ -27,11 +27,11 @@ export type OpenAIChatCompletionChunk = {
     index: number;
     finish_reason: string | null;
   }[];
-}
+};
 
 export type ChatCompletionToken = {
   timestamp: number;
-} & OpenAIChatMessage
+} & OpenAIChatMessage;
 
 export type ChatMessageParams = {
   timestamp?: number;
@@ -40,7 +40,7 @@ export type ChatMessageParams = {
     responseTime?: string;
     chunks?: ChatCompletionToken[];
   };
-} & OpenAIChatMessage
+} & OpenAIChatMessage;
 
 // For more information on each of these properties:
 // https://platform.openai.com/docs/api-reference/chat

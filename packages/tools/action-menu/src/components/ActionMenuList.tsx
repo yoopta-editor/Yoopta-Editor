@@ -7,18 +7,9 @@ import {
   useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
-import type {
-  SlateElement,
-  YooptaBlock,
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  Blocks,
-  HOTKEYS,
-  UI,
-  findPluginBlockByPath,
-  useYooptaEditor,
-} from '@yoopta/editor';
-import type { NodeEntry} from 'slate';
+import type { SlateElement, YooptaBlock, YooptaBlockData } from '@yoopta/editor';
+import { Blocks, HOTKEYS, UI, findPluginBlockByPath, useYooptaEditor } from '@yoopta/editor';
+import type { NodeEntry } from 'slate';
 import { Editor, Element, Path, Transforms } from 'slate';
 
 import { DefaultActionMenuRender } from './DefaultActionMenuRender';

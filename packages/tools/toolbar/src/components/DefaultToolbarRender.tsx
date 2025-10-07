@@ -1,4 +1,4 @@
-import type { CSSProperties, MouseEvent} from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { autoUpdate, flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import {
@@ -14,18 +14,16 @@ import {
   UnderlineIcon,
 } from '@radix-ui/react-icons';
 import * as Toolbar from '@radix-ui/react-toolbar';
-import type {
-  SlateElement,
-  YooptaBlockData} from '@yoopta/editor';
+import type { SlateElement, YooptaBlockData } from '@yoopta/editor';
 import {
   Blocks,
   HOTKEYS,
   UI,
   findPluginBlockByPath,
   findSlateBySelectionPath,
-  useYooptaTools
+  useYooptaTools,
 } from '@yoopta/editor';
-import type { NodeEntry, Range} from 'slate';
+import type { NodeEntry, Range } from 'slate';
 import { Editor, Element, Transforms } from 'slate';
 
 import { HighlightColor } from './HighlightColor';
@@ -133,7 +131,6 @@ const DefaultToolbarRender = ({ activeBlock, editor, toggleHoldToolbar }: Toolba
       if (HOTKEYS.isEscape(e)) {
         setModals(DEFAULT_MODALS);
         toggleHoldToolbar?.(false);
-        
       }
 
       // [TODO]: Implement this accessibility feature

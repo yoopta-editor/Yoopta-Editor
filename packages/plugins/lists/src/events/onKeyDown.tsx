@@ -2,13 +2,9 @@ import type {
   PluginEventHandlerOptions,
   SlateEditor,
   YooEditor,
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  Elements,
-  buildBlockData,
-  buildBlockElement,
-  findPluginBlockByPath
+  YooptaBlockData,
 } from '@yoopta/editor';
+import { Elements, buildBlockData, buildBlockElement, findPluginBlockByPath } from '@yoopta/editor';
 import type { Path } from 'slate';
 import { Editor, Element } from 'slate';
 
@@ -131,7 +127,6 @@ export function onKeyDown(
           focus: true,
           blockData: nextListBlock,
         });
-        
       }
     });
   };

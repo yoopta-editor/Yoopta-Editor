@@ -5,7 +5,7 @@ import { LinkElement, LinkElementProps } from './types';
 declare module 'slate' {
   type CustomTypes = {
     Element: LinkElement;
-  }
+  };
 }
 
 export { LinkCommands } from './commands';

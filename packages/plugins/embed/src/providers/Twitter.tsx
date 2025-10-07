@@ -4,7 +4,14 @@ import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import type { EmbedElementProps, EmbedPluginElements, ProviderRenderProps } from '../types';
 
-const Twitter = ({ provider, blockId, attributes, children, height, width }: ProviderRenderProps) => {
+const Twitter = ({
+  provider,
+  blockId,
+  attributes,
+  children,
+  height,
+  width,
+}: ProviderRenderProps) => {
   const twitterRootRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 
@@ -65,6 +72,6 @@ const Twitter = ({ provider, blockId, attributes, children, height, width }: Pro
       {children}
     </div>
   );
-}
+};
 
 export default Twitter;

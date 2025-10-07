@@ -1,8 +1,8 @@
-import type { CSSProperties} from 'react';
+import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Editor } from './components/Editor/Editor';
-import type { Tools} from './contexts/YooptaContext/ToolsContext';
+import type { Tools } from './contexts/YooptaContext/ToolsContext';
 import { ToolsProvider } from './contexts/YooptaContext/ToolsContext';
 import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
 import type { YooptaOperation } from './editor/core/applyTransforms';
@@ -73,7 +73,10 @@ const YooptaEditor = ({
     return [FakeSelectionMark];
   }, [marksProps]);
 
-  const plugins = useMemo(() => pluginsProps.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>), [pluginsProps]);
+  const plugins = useMemo(
+    () => pluginsProps.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>),
+    [pluginsProps],
+  );
 
   const [editorState, setEditorState] = useState<EditorState>(() => {
     if (!editor.id) editor.id = id || generateId();

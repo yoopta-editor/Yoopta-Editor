@@ -2,6 +2,7 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import { resolve } from 'path';
+import type { UserConfig as VitestConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [
@@ -66,4 +67,4 @@ export default defineConfig({
       'test-utils': resolve(__dirname, 'tests/test-utils.tsx'),
     },
   },
-});
+} as VitestConfig);

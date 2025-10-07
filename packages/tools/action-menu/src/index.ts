@@ -11,7 +11,7 @@ export { buildActionMenuRenderProps } from './components/utils';
 declare module 'slate' {
   type CustomTypes = {
     Element: SlateElement<string>;
-  }
+  };
 }
 
 export default ActionMenuList;

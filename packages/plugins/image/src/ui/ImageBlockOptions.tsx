@@ -10,15 +10,8 @@ import {
   UpdateIcon,
   WidthIcon,
 } from '@radix-ui/react-icons';
-import {
-  Blocks,
-  Elements,
-  UI,
-  useYooptaPluginOptions
-} from '@yoopta/editor';
-import type {
-  YooEditor,
-  YooptaBlockData} from '@yoopta/editor';
+import { Blocks, Elements, UI, useYooptaPluginOptions } from '@yoopta/editor';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
 
 import { InputAltText } from './InputAltText';
 import { Loader } from './Loader';

@@ -27,7 +27,7 @@ import { getPlainText } from '../parsers/getPlainText';
 import { isEmpty } from './core/isEmpty';
 import { applyTransforms } from './core/applyTransforms';
 import { batchOperations } from './core/batchOperations';
-import type { UndoRedoOptions} from './core/history';
+import type { UndoRedoOptions } from './core/history';
 import { YooptaHistory } from './core/history';
 
 export function createYooptaEditor(): YooEditor {

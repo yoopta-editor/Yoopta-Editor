@@ -8,8 +8,7 @@ import {
   useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
-import type {
-  SlateElement} from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
 import {
   Blocks,
   Elements,

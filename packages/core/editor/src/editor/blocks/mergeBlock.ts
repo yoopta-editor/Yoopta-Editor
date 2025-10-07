@@ -86,7 +86,6 @@ function mergeSlateChildren(target, source) {
   if (Text.isText(lastTargetChild) && Text.isText(firstSourceChild)) {
     lastTargetChild.text += firstSourceChild.text;
     return [...targetChildren.slice(0, -1), lastTargetChild, ...sourceChildren.slice(1)];
-  } 
-    return [...targetChildren, ...sourceChildren];
-  
+  }
+  return [...targetChildren, ...sourceChildren];
 }

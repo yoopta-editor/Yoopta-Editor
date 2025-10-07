@@ -1,14 +1,9 @@
-import type { SlateElement} from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { ImageCommands } from '../commands';
-import type {
-  ImageElementMap,
-  ImageElementProps,
-  ImagePluginOptions} from '../types';
-import {
-  ImagePluginElements
-} from '../types';
+import type { ImageElementMap, ImageElementProps, ImagePluginOptions } from '../types';
+import { ImagePluginElements } from '../types';
 import { ImageRender } from '../ui/Image';
 import { limitSizes } from '../utils/limitSizes';
 

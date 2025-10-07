@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react';
-import type { RenderLeafProps} from 'slate-react';
+import type { RenderLeafProps } from 'slate-react';
 import { useSelected } from 'slate-react';
 
 import type { ExtendedLeafProps } from '../../plugins/types';

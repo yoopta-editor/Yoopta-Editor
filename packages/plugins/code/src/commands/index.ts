@@ -27,10 +27,10 @@ export type CodeCommands = {
 
 export const CodeCommands: CodeCommands = {
   buildCodeElements: (editor: YooEditor, options = {}) => ({
-      id: generateId(),
-      type: 'code',
-      children: [{ text: options?.text || '', props: options?.props }],
-    }),
+    id: generateId(),
+    type: 'code',
+    children: [{ text: options?.text || '', props: options?.props }],
+  }),
   insertCode: (editor: YooEditor, options = {}) => {
     const { at, focus, text, props } = options;
     const code = CodeCommands.buildCodeElements(editor, { text, props });

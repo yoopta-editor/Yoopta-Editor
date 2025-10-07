@@ -13,7 +13,7 @@ function formatBytesToKilobytes(bytes) {
     return null;
   }
   const kilobytes = bytes / 1024;
-  return `${kilobytes.toFixed(2) } KB`;
+  return `${kilobytes.toFixed(2)} KB`;
 }
 
 const FileComponent = ({ name, src, size, format, align }: FileComponentProps) => {

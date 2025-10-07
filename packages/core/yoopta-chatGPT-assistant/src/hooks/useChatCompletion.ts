@@ -5,10 +5,9 @@ import type {
   ChatMessage,
   ChatMessageMap,
   OpenAIChatCompletionChunk,
-  OpenAIChatMessage} from '../types';
-import {
-  OpenAIChatRole,
+  OpenAIChatMessage,
 } from '../types';
+import { OpenAIChatRole } from '../types';
 
 const textDecoder = new TextDecoder();
 

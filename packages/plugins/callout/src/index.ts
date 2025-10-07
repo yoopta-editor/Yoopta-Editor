@@ -5,7 +5,7 @@ import './styles.css';
 declare module 'slate' {
   type CustomTypes = {
     Element: CalloutElement;
-  }
+  };
 }
 
 export { CalloutCommands } from './commands/CalloutCommands';

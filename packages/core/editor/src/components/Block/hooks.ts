@@ -63,7 +63,8 @@ export const useBlockStyles = (
   transition: string | undefined,
   isDragging: boolean,
   isOver: boolean,
-) => useMemo(
+) =>
+  useMemo(
     () => ({
       marginLeft: `${block.meta.depth * 20}px`,
       transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',

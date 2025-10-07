@@ -1,4 +1,4 @@
-import type { SlateEditor , YooEditor } from '@yoopta/editor';
+import type { SlateEditor, YooEditor } from '@yoopta/editor';
 
 import { withCalloutNormalize } from './withCalloutNormalize';
 

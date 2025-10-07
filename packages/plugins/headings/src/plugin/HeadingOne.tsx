@@ -1,10 +1,5 @@
-import type {
-  PluginElementRenderProps} from '@yoopta/editor';
-import {
-  YooptaPlugin,
-  serializeTextNodes,
-  serializeTextNodesIntoMarkdown,
-} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { HeadingOneCommands } from '../commands';
 import type { HeadingOneElement } from '../types';

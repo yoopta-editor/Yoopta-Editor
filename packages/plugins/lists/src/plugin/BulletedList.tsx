@@ -1,5 +1,4 @@
-import type {
-  YooptaBlockData} from '@yoopta/editor';
+import type { YooptaBlockData } from '@yoopta/editor';
 import {
   YooptaPlugin,
   generateId,

@@ -1,10 +1,5 @@
-import type {
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  YooptaPlugin,
-  serializeTextNodes,
-  serializeTextNodesIntoMarkdown,
-} from '@yoopta/editor';
+import type { YooptaBlockData } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { TodoListCommands } from '../commands';
 import { TodoListRender } from '../elements/TodoList';

@@ -76,7 +76,8 @@ function splitSlate(slateChildren, slateSelection) {
           { ...node, text: node.text.slice(0, currentOffset) },
           { ...node, text: node.text.slice(currentOffset) },
         ];
-      } if (node.type === 'link') {
+      }
+      if (node.type === 'link') {
         const [leftChild, rightChild] = splitNode(node.children[0], [], currentOffset);
         return [
           { ...node, children: [leftChild] },
@@ -99,6 +100,13 @@ function splitSlate(slateChildren, slateSelection) {
 
   function cleanNode(node) {
     if ('children' in node) {
+      if (node.props?.nodeType === 'inlineVoid' || node.props?.nodeType === 'inline') {
+        if (node.children.length === 0) {
+          node.children = [{ text: '' }];
+        }
+        return node;
+      }
+
       node.children = node.children.filter(
         (child) =>
           (child.text !== '' && child.text !== undefined) ||

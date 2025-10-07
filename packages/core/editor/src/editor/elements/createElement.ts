@@ -1,4 +1,4 @@
-import type { Span} from 'slate';
+import type { Span } from 'slate';
 import { Editor, Path, Transforms } from 'slate';
 
 import { getElementEntry } from './getElementEntry';

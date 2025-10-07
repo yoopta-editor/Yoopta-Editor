@@ -5,7 +5,7 @@ import { ReactEditor } from 'slate-react';
 import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
 import { getPreviousPath } from '../../editor/paths/getPreviousPath';
-import type { YooEditor} from '../../editor/types';
+import type { YooEditor } from '../../editor/types';
 import { YooptaPath } from '../../editor/types';
 import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';

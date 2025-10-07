@@ -1,4 +1,4 @@
-import type { CSSProperties} from 'react';
+import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 import { ImageIcon } from '@radix-ui/react-icons';

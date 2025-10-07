@@ -91,7 +91,8 @@ const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => `![${element.props.provider.type}](${element.props.provider.url})\n`,
+      serialize: (element, text) =>
+        `![${element.props.provider.type}](${element.props.provider.url})\n`,
     },
   },
 });

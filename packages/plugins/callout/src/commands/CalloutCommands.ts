@@ -1,12 +1,5 @@
-import type {
-  YooEditor,
-  YooptaPathIndex} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  buildBlockData,
-  generateId
-} from '@yoopta/editor';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
 
 import type {
   CalloutElement,
@@ -37,11 +30,11 @@ export type CalloutCommands = {
 
 export const CalloutCommands: CalloutCommands = {
   buildCalloutElements: (editor, options = {}) => ({
-      id: generateId(),
-      type: 'callout',
-      children: [{ text: options?.text || '' }],
-      props: options.props,
-    }),
+    id: generateId(),
+    type: 'callout',
+    children: [{ text: options?.text || '' }],
+    props: options.props,
+  }),
   insertCallout: (editor, options = {}) => {
     const { at, focus, text, props } = options;
 

@@ -2,11 +2,9 @@ import { Accordion } from './plugin/AccordionPlugin';
 import type {
   AccordionListElement,
   AccordionListItemContentElement,
-  AccordionListItemHeadingElement} from './types';
-import {
-  AccordionItemElement,
-  AccordionListItemProps,
+  AccordionListItemHeadingElement,
 } from './types';
+import { AccordionItemElement, AccordionListItemProps } from './types';
 import './styles.css';
 
 declare module 'slate' {
@@ -16,7 +14,7 @@ declare module 'slate' {
       | AccordionItemElement
       | AccordionListItemHeadingElement
       | AccordionListItemContentElement;
-  }
+  };
 }
 
 export { AccordionCommands } from './commands/AccordionCommands';

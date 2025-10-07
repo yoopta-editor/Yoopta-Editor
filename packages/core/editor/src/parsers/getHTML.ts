@@ -26,7 +26,8 @@ function serializeChildren(children, plugins, editor) {
         }, child.text);
 
         return innerHtml;
-      } if (child.type) {
+      }
+      if (child.type) {
         const childPlugin = getPluginByInlineElement(plugins, child.type);
 
         if (childPlugin && childPlugin.parsers?.html?.serialize) {

@@ -1,5 +1,5 @@
 import { createDraft, finishDraft, isDraft, produce } from 'immer';
-import type { Operation, Range} from 'slate';
+import type { Operation, Range } from 'slate';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -345,11 +345,11 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
                 otherBlock.meta.order--;
               }
             } else if (
-                otherBlock.meta.order < prevProperties.order &&
-                otherBlock.meta.order >= properties.order
-              ) {
-                otherBlock.meta.order++;
-              }
+              otherBlock.meta.order < prevProperties.order &&
+              otherBlock.meta.order >= properties.order
+            ) {
+              otherBlock.meta.order++;
+            }
           }
         });
       }

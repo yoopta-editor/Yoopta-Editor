@@ -33,6 +33,7 @@ export { createYooptaEditor } from './editor';
 export { createYooptaMark, YooptaMarkParams, YooptaMark } from './marks';
 export {
   YooEditor,
+  BaseYooEditor,
   SlateElement,
   YooptaBlockData,
   YooptaBlock,
@@ -75,5 +76,20 @@ export {
   SetEditorValueOperation,
   YooptaOperation,
 } from './editor/core/applyTransforms';
+
+export type { ExtendYooptaTypes } from './editor/custom-types';
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };
+
+import { useFocused, useSelected } from 'slate-react';
+
+// [TODO] - move to hooks
+export function useElementSelected() {
+  const selected = useSelected();
+  const focused = useFocused();
+
+  return {
+    selected,
+    focused,
+  };
+}

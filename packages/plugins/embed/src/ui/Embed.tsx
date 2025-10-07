@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type {
-  PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import {
   Elements,
   useBlockData,

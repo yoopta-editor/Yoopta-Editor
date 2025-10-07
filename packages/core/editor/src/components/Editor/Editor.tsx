@@ -1,4 +1,4 @@
-import type { CSSProperties, ClipboardEvent, ReactNode} from 'react';
+import type { CSSProperties, ClipboardEvent, ReactNode } from 'react';
 import { useEffect } from 'react';
 import { Element, Path, Editor as SlateEditor } from 'slate';
 
@@ -277,7 +277,6 @@ const Editor = ({
           });
         });
       }
-      
     }
   };
 
@@ -308,7 +307,6 @@ const Editor = ({
 
       clipboardData.setData('text/html', htmlString);
       clipboardData.setData('text/plain', textString);
-      
     }
   };
 

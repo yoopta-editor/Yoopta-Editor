@@ -54,6 +54,6 @@ const VimeoPlayer = ({ videoId, children, attributes, ...other }) => {
       {children}
     </div>
   );
-}
+};
 
 export default VimeoPlayer;

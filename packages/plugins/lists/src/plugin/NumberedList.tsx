@@ -1,10 +1,5 @@
-import type {
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  YooptaPlugin,
-  serializeTextNodes,
-  serializeTextNodesIntoMarkdown,
-} from '@yoopta/editor';
+import type { YooptaBlockData } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { NumberedListCommands } from '../commands';
 import { NumberedListRender } from '../elements/NumberedList';

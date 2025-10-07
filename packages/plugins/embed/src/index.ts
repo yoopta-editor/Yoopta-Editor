@@ -5,7 +5,7 @@ import './styles.css';
 declare module 'slate' {
   type CustomTypes = {
     Element: EmbedElement;
-  }
+  };
 }
 
 export { EmbedCommands } from './commands';

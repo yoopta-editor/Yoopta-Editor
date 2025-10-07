@@ -56,4 +56,4 @@ export const Loom = ({ provider, attributes, children, width, height }: Provider
       {children}
     </div>
   );
-}
+};

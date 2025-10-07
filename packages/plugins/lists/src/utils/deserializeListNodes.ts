@@ -1,6 +1,6 @@
 import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { deserializeTextNodes, generateId } from '@yoopta/editor';
-import type { Descendant} from 'slate';
+import type { Descendant } from 'slate';
 import { Element } from 'slate';
 
 type ListHTMLElement = HTMLUListElement | HTMLOListElement | HTMLElement;

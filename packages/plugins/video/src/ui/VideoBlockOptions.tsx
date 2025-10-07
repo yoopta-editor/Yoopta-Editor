@@ -10,21 +10,13 @@ import {
   UpdateIcon,
   WidthIcon,
 } from '@radix-ui/react-icons';
-import type {
-  YooEditor,
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  UI,
-  useYooptaPluginOptions
-} from '@yoopta/editor';
+import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
+import { Blocks, Elements, UI, useYooptaPluginOptions } from '@yoopta/editor';
 
 import { Loader } from './Loader';
 import CheckmarkIcon from '../icons/checkmark.svg';
 import DownloadIcon from '../icons/download.svg';
 import type { VideoElementProps, VideoPluginElements, VideoPluginOptions } from '../types';
-
 
 const ALIGN_ICONS = {
   left: TextAlignLeftIcon,

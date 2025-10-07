@@ -1,12 +1,12 @@
 import { buildBlockElementsStructure, getRootBlockElement } from './blockElements';
 import { buildSlateEditor } from './buildSlate';
-import { findPluginBlockByPath } from "./findPluginBlockByPath";
+import { findPluginBlockByPath } from './findPluginBlockByPath';
 import { getValue } from '../editor/textFormats/getValue';
 import { isActive } from '../editor/textFormats/isActive';
 import { toggle } from '../editor/textFormats/toggle';
 import { update } from '../editor/textFormats/update';
 import { YooptaBlockData } from '../editor/types';
-import type { SlateElement, YooEditor} from '../editor/types';
+import type { SlateElement, YooEditor } from '../editor/types';
 import type { YooptaMark } from '../marks';
 import type { Plugin, PluginElementsMap } from '../plugins/types';
 

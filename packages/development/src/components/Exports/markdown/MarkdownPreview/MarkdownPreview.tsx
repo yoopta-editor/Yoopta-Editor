@@ -20,7 +20,6 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { TOOLS } from '@/utils/yoopta/tools';
 
-
 const LANGUAGES_MAP = {
   markdown: {
     type: 'markdown',

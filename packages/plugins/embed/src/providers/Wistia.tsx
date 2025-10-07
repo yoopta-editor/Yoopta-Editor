@@ -47,6 +47,6 @@ const Wistia = ({ provider, attributes, children, width, height }: ProviderRende
       {children}
     </div>
   );
-}
+};
 
 export { Wistia };

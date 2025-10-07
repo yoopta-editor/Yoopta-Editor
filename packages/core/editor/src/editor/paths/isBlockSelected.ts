@@ -1,4 +1,4 @@
-import type { YooEditor, YooptaBlockData} from '../types';
+import type { YooEditor, YooptaBlockData } from '../types';
 import { YooptaPath } from '../types';
 
 export function isBlockSelected(editor: YooEditor, block: YooptaBlockData): boolean {

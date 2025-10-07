@@ -9,7 +9,7 @@ export { DefaultLinkToolRender } from './components/DefaultLinkToolRender';
 declare module 'slate' {
   type CustomTypes = {
     Element: SlateElement<string>;
-  }
+  };
 }
 
 export default LinkTool;

@@ -5,7 +5,7 @@ import { withInlines } from './extenstions/withInlines';
 import type { PluginEventHandlerOptions, PluginEvents } from './types';
 import { buildBlockData } from '../components/Editor/utils';
 import { Blocks } from '../editor/blocks';
-import type { SetSlateOperation} from '../editor/core/applyTransforms';
+import type { SetSlateOperation } from '../editor/core/applyTransforms';
 import { YooptaOperation } from '../editor/core/applyTransforms';
 import { YooptaHistory } from '../editor/core/history';
 import { Paths } from '../editor/paths';
@@ -21,7 +21,8 @@ export const useSlateEditor = (
   block: YooptaBlockData,
   elements: any,
   withExtensions: any,
-) => useMemo(() => {
+) =>
+  useMemo(() => {
     let slate = editor.blockEditorsMap[id];
 
     const { normalizeNode, insertText, apply } = slate;
@@ -36,15 +37,16 @@ export const useSlateEditor = (
 
       const { markableVoid: prevMarkableVoid, isVoid: prevIsVoid, isInline: prevIsInline } = slate;
       if (isInlineVoid) {
-        slate.markableVoid = (element) => prevMarkableVoid(element) || element.type === elementType;
+        slate.markableVoid = (element) =>
+          element.type === elementType ? true : prevMarkableVoid(element);
       }
 
       if (isVoid || isInlineVoid) {
-        slate.isVoid = (element) => prevIsVoid(element) || element.type === elementType;
+        slate.isVoid = (element) => (element.type === elementType ? true : prevIsVoid(element));
       }
 
       if (isInline || isInlineVoid) {
-        slate.isInline = (element) => prevIsInline(element) || element.type === elementType;
+        slate.isInline = (element) => (element.type === elementType ? true : prevIsInline(element));
 
         // [TODO] - Move it to Link plugin extension
         slate = withInlines(editor, slate);
@@ -180,7 +182,8 @@ export const useEventHandlers = (
   editor: YooEditor,
   block: YooptaBlockData,
   slate: SlateEditor,
-) => useMemo<EditorEventHandlers>(() => {
+) =>
+  useMemo<EditorEventHandlers>(() => {
     if (!events || editor.readOnly) return {};
     const { onBeforeCreate, onDestroy, onCreate, ...eventHandlers } = events || {};
 
@@ -189,15 +192,51 @@ export const useEventHandlers = (
       currentBlock: block,
       defaultBlock: Blocks.buildBlockData({ id: generateId() }),
     };
-    const eventHandlersMap = {};
+    const eventHandlersMap: EditorEventHandlers = {};
 
-    Object.keys(eventHandlers).forEach((eventType) => {
-      eventHandlersMap[eventType] = function handler(event) {
-        if (eventHandlers[eventType]) {
-          const handler = eventHandlers[eventType](editor, slate, eventHandlersOptions);
-          handler(event);
-        }
-      };
+    // Get inline plugin event handlers
+    const inlinePlugins = Object.values(editor.plugins).filter((plugin) => {
+      const rootElement = Object.values(plugin.elements)[0];
+      return (
+        rootElement?.props?.nodeType === 'inline' || rootElement?.props?.nodeType === 'inlineVoid'
+      );
+    });
+
+    // Merge block and inline plugin event handlers
+    const allEventHandlers = { ...eventHandlers };
+    inlinePlugins.forEach((plugin) => {
+      if (plugin.events) {
+        const { onBeforeCreate, onDestroy, onCreate, ...inlineEventHandlers } = plugin.events;
+        Object.keys(inlineEventHandlers).forEach((eventType) => {
+          if (allEventHandlers[eventType]) {
+            // If event handler already exists, wrap it to include inline plugin handler
+            const existingHandler = allEventHandlers[eventType];
+            const inlineHandler = inlineEventHandlers[eventType];
+
+            allEventHandlers[eventType] = (editor, slate, options) => (event) => {
+              // Call the block's event handler
+              const result = existingHandler(editor, slate, options)(event);
+              // Call the inline plugin's handler
+              inlineHandler(editor, slate, options)(event);
+              return result;
+            };
+          } else {
+            // If no block handler exists, just use the inline handler
+            allEventHandlers[eventType] = inlineEventHandlers[eventType];
+          }
+        });
+      }
+    });
+
+    // Transform handlers to match EditorEventHandlers type
+    Object.keys(allEventHandlers).forEach((eventType) => {
+      const handler = allEventHandlers[eventType];
+      if (handler) {
+        eventHandlersMap[eventType] = (event) => {
+          const eventHandler = handler(editor, slate, eventHandlersOptions);
+          eventHandler(event);
+        };
+      }
     });
 
     return eventHandlersMap;

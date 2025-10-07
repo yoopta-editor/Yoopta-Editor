@@ -32,20 +32,20 @@ export const Checkbox = ({
   attributes,
   ...props
 }: Props) => (
-    <div className="flex flex-row items-start space-x-3 mt-4" {...attributes}>
-      <CheckboxShadcn
-        id={name}
-        checked={checked}
-        value={value}
-        onCheckedChange={onChange}
-        {...props}
-      />
-      <div className="grid gap-1.5 leading-none">
-        <span
-          // htmlFor={name}
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-          {children}
-        </span>
-      </div>
+  <div className="flex flex-row items-start space-x-3 mt-4" {...attributes}>
+    <CheckboxShadcn
+      id={name}
+      checked={checked}
+      value={value}
+      onCheckedChange={onChange}
+      {...props}
+    />
+    <div className="grid gap-1.5 leading-none">
+      <span
+        // htmlFor={name}
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        {children}
+      </span>
     </div>
-  )
+  </div>
+);

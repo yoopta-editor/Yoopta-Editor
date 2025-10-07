@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode} from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import { FloatingOverlay } from '@floating-ui/react';
 

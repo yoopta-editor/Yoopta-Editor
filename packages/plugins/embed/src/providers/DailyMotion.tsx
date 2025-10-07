@@ -56,6 +56,6 @@ const DailyMotion = ({ provider, width, height, attributes, children }: Provider
       {children}
     </div>
   );
-}
+};
 
 export { DailyMotion };

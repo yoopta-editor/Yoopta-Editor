@@ -44,6 +44,6 @@ const YouTubePlayer = ({ videoId, children, attributes, ...other }) => {
       {children}
     </div>
   );
-}
+};
 
 export default YouTubePlayer;

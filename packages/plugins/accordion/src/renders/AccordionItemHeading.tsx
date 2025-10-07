@@ -1,12 +1,6 @@
 import type { MouseEvent } from 'react';
-import type {
-  PluginElementRenderProps} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  useYooptaEditor,
-  useYooptaReadOnly,
-} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { Blocks, Elements, useYooptaEditor, useYooptaReadOnly } from '@yoopta/editor';
 import { ChevronUp, Plus, TrashIcon } from 'lucide-react';
 import { Path } from 'slate';
 

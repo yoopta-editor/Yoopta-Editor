@@ -47,6 +47,6 @@ const WistiaPlayer = ({ videoId, children, attributes, width, height, ...other }
       {children}
     </div>
   );
-}
+};
 
 export default WistiaPlayer;

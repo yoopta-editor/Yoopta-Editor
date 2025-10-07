@@ -56,6 +56,6 @@ const Vimeo = ({ provider, width, height, attributes, children }: ProviderRender
       {children}
     </div>
   );
-}
+};
 
 export { Vimeo };

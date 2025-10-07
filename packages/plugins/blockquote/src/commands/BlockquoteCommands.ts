@@ -23,7 +23,11 @@ export type BlockquoteCommands = {
 };
 
 export const BlockquoteCommands: BlockquoteCommands = {
-  buildBlockquoteElements: (editor, options = {}) => ({ id: generateId(), type: 'blockquote', children: [{ text: options?.text || '' }] }),
+  buildBlockquoteElements: (editor, options = {}) => ({
+    id: generateId(),
+    type: 'blockquote',
+    children: [{ text: options?.text || '' }],
+  }),
   insertBlockquote: (editor, options = {}) => {
     const { at, focus, text } = options;
 

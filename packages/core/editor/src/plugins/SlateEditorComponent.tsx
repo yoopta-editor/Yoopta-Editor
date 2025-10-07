@@ -2,19 +2,24 @@ import type React from 'react';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import type { NodeEntry, Selection } from 'slate';
 import { Editor, Path, Range } from 'slate';
-import type { RenderElementProps} from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
 import { useEventHandlers, useSlateEditor } from './hooks';
-import type { ExtendedLeafProps, Plugin, PluginCustomEditorRenderProps, PluginEvents } from './types';
+import type {
+  ExtendedLeafProps,
+  Plugin,
+  PluginCustomEditorRenderProps,
+  PluginEvents,
+} from './types';
 import { TextLeaf } from '../components/TextLeaf/TextLeaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
-import { EVENT_HANDLERS } from '../handlers';
 import type { YooptaMark } from '../marks';
 import { deserializeHTML } from '../parsers/deserializeHTML';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
+import { EDITOR_EVENT_HANDLERS } from '../handlers';
 
 type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   TElementMap,
@@ -143,7 +148,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (editor.readOnly) return;
 
       eventHandlers.onKeyDown?.(event);
-      EVENT_HANDLERS.onKeyDown(editor)(event);
+      EDITOR_EVENT_HANDLERS.onKeyDown(editor)(event);
     },
     [eventHandlers.onKeyDown, editor.readOnly, editor.path.current, block.meta.order],
   );
@@ -235,8 +240,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
             // [TEST]
             editor.setPath({ current: null, selected: newPaths, source: 'copy-paste' });
           });
-
-          
         }
       }
     },

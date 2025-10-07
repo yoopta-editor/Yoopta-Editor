@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element } from 'slate';
 

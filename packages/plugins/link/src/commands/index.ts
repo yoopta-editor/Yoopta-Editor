@@ -1,6 +1,6 @@
 import type { SlateEditor, YooEditor } from '@yoopta/editor';
 import { generateId } from '@yoopta/editor';
-import type { Location} from 'slate';
+import type { Location } from 'slate';
 import { Editor, Element, Span, Transforms } from 'slate';
 
 import type { LinkElement, LinkElementProps } from '../types';

@@ -1,6 +1,6 @@
-import type { CSSProperties, MouseEvent} from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 import { useState } from 'react';
-import type { YooEditor} from '@yoopta/editor';
+import type { YooEditor } from '@yoopta/editor';
 import { UI } from '@yoopta/editor';
 import { PaletteIcon } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';

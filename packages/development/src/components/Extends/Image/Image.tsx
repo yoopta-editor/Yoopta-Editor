@@ -1,4 +1,4 @@
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useBlockData } from '@yoopta/editor';
 import type { ImageProps } from 'next/image';
 import NextImage from 'next/image';

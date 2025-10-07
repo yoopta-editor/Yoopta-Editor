@@ -46,6 +46,6 @@ const YouTube = ({ provider, width, height, attributes, children }: ProviderRend
       {children}
     </div>
   );
-}
+};
 
 export { YouTube };

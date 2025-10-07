@@ -1,4 +1,4 @@
-import type { Descendant} from 'slate';
+import type { Descendant } from 'slate';
 import { Editor, Element, Text } from 'slate';
 
 import { buildBlockElementsStructure } from '../../utils/blockElements';

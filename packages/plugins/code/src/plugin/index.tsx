@@ -1,13 +1,8 @@
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { CodeCommands } from '../commands';
-import type {
-  CodeElementMap,
-  CodePluginBlockOptions} from '../types';
-import {
-  CodeElementProps,
-  CodePluginElements,
-} from '../types';
+import type { CodeElementMap, CodePluginBlockOptions } from '../types';
+import { CodeElementProps, CodePluginElements } from '../types';
 import { CodeEditor } from '../ui/Code';
 
 const ALIGNS_TO_JUSTIFY = {
@@ -75,7 +70,8 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``,
+      serialize: (element, text) =>
+        `\`\`\`${element.props.language || 'javascript'}\n${text}\n\`\`\``,
     },
     email: {
       serialize: (element, text, blockMeta) => {
@@ -83,7 +79,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'left';
         const escapedText = escapeHTML(text);
 
-        const props = { ...element.props};
+        const props = { ...element.props };
 
         return `
           <table style="width:100%;">

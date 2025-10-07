@@ -8,7 +8,7 @@ import {
   useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useYooptaReadOnly } from '@yoopta/editor';
 
 import { LinkHoverPreview } from './LinkHoverPreview';

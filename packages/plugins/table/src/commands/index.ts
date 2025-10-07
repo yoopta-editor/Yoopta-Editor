@@ -1,13 +1,6 @@
-import type {
-  SlateElement,
-  YooEditor,
-  YooptaPathIndex} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  generateId
-} from '@yoopta/editor';
-import type { Span} from 'slate';
+import type { SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, generateId } from '@yoopta/editor';
+import type { Span } from 'slate';
 import { Editor, Element, Path, Transforms } from 'slate';
 
 import type { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
@@ -127,10 +120,10 @@ export const TableCommands: TableCommands = {
         id: generateId(),
         type: 'table-row',
         children: currentRowElement.children.map((cell) => ({
-            id: generateId(),
-            type: 'table-data-cell',
-            children: [{ text: '' }],
-          })),
+          id: generateId(),
+          type: 'table-data-cell',
+          children: [{ text: '' }],
+        })),
         props: {
           nodeType: 'block',
         },
@@ -274,7 +267,9 @@ export const TableCommands: TableCommands = {
       const [_, dataCellPath] = dataCellElementEntryByPath;
       const columnIndex = dataCellPath[dataCellPath.length - 1];
 
-      const dataCellPaths = rows.map(([row, path]) => row.children[columnIndex] ? [...path, columnIndex] : null);
+      const dataCellPaths = rows.map(([row, path]) =>
+        row.children[columnIndex] ? [...path, columnIndex] : null,
+      );
 
       // [TODO] - Check if there are other columns
       dataCellPaths.forEach((path) => {

@@ -1,4 +1,4 @@
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Elements, useBlockData, useYooptaEditor } from '@yoopta/editor';
 import { Check } from 'lucide-react';
 

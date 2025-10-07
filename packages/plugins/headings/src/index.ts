@@ -7,7 +7,7 @@ import './styles.css';
 declare module 'slate' {
   type CustomTypes = {
     Element: HeadingOneElement | HeadingTwoElement | HeadingThreeElement;
-  }
+  };
 }
 
 const Headings = {

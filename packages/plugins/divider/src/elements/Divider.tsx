@@ -1,4 +1,4 @@
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useBlockData, useYooptaEditor } from '@yoopta/editor';
 
 import { DividerBlockOptions } from '../components/DividerBlockOptions';

@@ -1,4 +1,4 @@
-import type { PluginElementRenderProps} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useBlockData } from '@yoopta/editor';
 
 const BulletedListRender = ({ extendRender, ...props }: PluginElementRenderProps) => {

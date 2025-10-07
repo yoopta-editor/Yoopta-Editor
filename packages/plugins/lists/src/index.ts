@@ -10,7 +10,7 @@ import './styles.css';
 declare module 'slate' {
   type CustomTypes = {
     Element: NumberedListElement | BulletedListElement | TodoListElement;
-  }
+  };
 }
 
 export default LISTS;

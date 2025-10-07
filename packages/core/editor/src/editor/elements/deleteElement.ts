@@ -1,4 +1,4 @@
-import type { Path} from 'slate';
+import type { Path } from 'slate';
 import { Editor, Element, Transforms } from 'slate';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';

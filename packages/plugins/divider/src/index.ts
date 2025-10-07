@@ -7,7 +7,7 @@ export { DividerCommands } from './commands';
 declare module 'slate' {
   type CustomTypes = {
     Element: DividerElement;
-  }
+  };
 }
 
 export default Divider;
