@@ -1,4 +1,3 @@
-import { useMemo, useRef, useState } from 'react';
 import type {
   YooEditor,
   YooptaContentValue,
