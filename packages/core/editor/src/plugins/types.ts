@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
-import type { RenderLeafProps, RenderElementProps as RenderSlateElementProps } from 'slate-react';
+import type { RenderLeafProps, RenderElementProps } from 'slate-react';
 
 import type {
   SlateEditor,
@@ -34,10 +34,13 @@ export type PluginElementOptions = {
   draggable?: boolean;
 };
 
-export type PluginElementExtendRenderProps = Omit<RenderSlateElementProps, 'element'> & {
+export type RenderSlateElementProps = Omit<RenderElementProps, 'element'> & {
+  element: SlateElement;
+};
+
+export type PluginElementExtendRenderProps = RenderSlateElementProps & {
   blockId: string;
   HTMLAttributes?: HTMLAttributes<HTMLElement>;
-  element: SlateElement;
 };
 
 export type PluginElementRenderProps = PluginElementExtendRenderProps & {

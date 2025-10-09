@@ -11,6 +11,7 @@ import type {
   Plugin,
   PluginCustomEditorRenderProps,
   PluginEvents,
+  RenderSlateElementProps,
 } from './types';
 import { TextLeaf } from '../components/TextLeaf/TextLeaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
@@ -98,7 +99,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   );
 
   const renderElement = useCallback(
-    (elementProps: RenderElementProps) => {
+    (elementProps: RenderSlateElementProps) => {
       const ElementComponent = ELEMENTS_MAP[elementProps.element.type];
       const { attributes, ...props } = elementProps;
       attributes['data-element-type'] = props.element.type;
@@ -303,7 +304,7 @@ type SlateEditorInstanceProps = {
   onChange: (value: any) => void;
   onSelectionChange: (selection: Selection) => void;
   renderLeaf: (props: ExtendedLeafProps<any, any>) => JSX.Element;
-  renderElement: (props: RenderElementProps) => JSX.Element;
+  renderElement: (props: RenderSlateElementProps) => JSX.Element;
   eventHandlers: EditorEventHandlers;
   onKeyDown: (event: React.KeyboardEvent) => void;
   onKeyUp: (event: React.KeyboardEvent) => void;
@@ -346,7 +347,7 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
         onSelectionChange={onSelectionChange}>
         <Editable
           key={`editable-${id}`}
-          renderElement={renderElement}
+          renderElement={renderElement as any}
           renderLeaf={renderLeaf}
           className="yoopta-slate"
           spellCheck
