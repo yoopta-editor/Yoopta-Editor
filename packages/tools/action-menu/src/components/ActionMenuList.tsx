@@ -79,6 +79,7 @@ function isSlashPressed(event: KeyboardEvent): boolean {
     event.key === '/' ||
     event.keyCode === 191 ||
     event.which === 191 ||
+    event.keyCode === 229 ||
     // [TODO] - event.code Slash works for both '/' and '?' keys
     event.code === 'Slash' ||
     event.key === '/' ||
