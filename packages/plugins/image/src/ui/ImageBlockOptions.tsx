@@ -25,7 +25,7 @@ const ALIGN_ICONS = {
   right: TextAlignRightIcon,
 };
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -148,7 +148,7 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-image-options">
       <BlockOptionsSeparator />
@@ -292,7 +292,7 @@ const ImageBlockOptions = ({ editor, block, props: imageProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

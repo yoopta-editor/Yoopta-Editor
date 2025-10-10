@@ -15,7 +15,7 @@ const ALIGN_ICONS = {
   right: TextAlignRightIcon,
 };
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -44,7 +44,7 @@ const FileBlockOptions = ({ editor, block, props: fileProps }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions onClick={() => editor.setPath({ current: block.meta.order })}>
+    <ExtendedBlockOptions onClick={() => editor.setPath({ current: block.meta.order })}>
       <BlockOptionsSeparator />
       <BlockOptionsMenuGroup>
         <BlockOptionsMenuItem>
@@ -64,7 +64,7 @@ const FileBlockOptions = ({ editor, block, props: fileProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

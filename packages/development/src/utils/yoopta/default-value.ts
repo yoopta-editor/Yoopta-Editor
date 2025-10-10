@@ -83,22 +83,6 @@ export const DEFAULT_VALUE = {
           {
             text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
           },
-          {
-            type: 'mention',
-            children: [
-              {
-                text: '',
-              },
-            ],
-            props: {
-              id: '613eaca05d44',
-              name: 'akhmed ibragimov',
-              nodeType: 'inlineVoid',
-            },
-          },
-          {
-            text: '.',
-          },
         ],
         props: {
           nodeType: 'block',

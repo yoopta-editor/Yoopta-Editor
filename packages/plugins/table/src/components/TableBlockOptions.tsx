@@ -5,7 +5,7 @@ import { CheckIcon, Sheet, TableProperties } from 'lucide-react';
 import { TableCommands } from '../commands';
 import type { TableElement } from '../types';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -29,7 +29,7 @@ const TableBlockOptions = ({ editor, block, table }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-table-options">
       <BlockOptionsSeparator />
@@ -71,7 +71,7 @@ const TableBlockOptions = ({ editor, block, table }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

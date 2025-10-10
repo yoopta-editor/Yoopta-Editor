@@ -85,7 +85,6 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
         items={childrenKeys}
         strategy={verticalListSortingStrategy}>
         {blocks}
-        <FloatingBlockActions editor={editor} dragHandleProps={dragHandleProps} />
       </SortableContext>
     </DndContext>
   );

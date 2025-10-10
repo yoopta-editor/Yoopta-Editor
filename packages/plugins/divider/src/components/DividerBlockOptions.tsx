@@ -7,7 +7,7 @@ import DotsIcon from '../icons/dots.svg';
 import SolidIcon from '../icons/solid.svg';
 import type { DividerElementProps, DividerTheme } from '../types';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -29,7 +29,7 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
   const isActiveTheme = (theme: DividerTheme) => dividerProps?.theme === theme;
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-divider-options">
       <BlockOptionsSeparator />
@@ -129,7 +129,7 @@ const DividerBlockOptions = ({ editor, block, props: dividerProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

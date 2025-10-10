@@ -38,6 +38,8 @@
     "@yoopta/table": "*",
     "@yoopta/toolbar": "*",
     "@yoopta/video": "*",
+    "@yoopta/mention": "*",
+    "@yoopta/ui": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",

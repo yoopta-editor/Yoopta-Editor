@@ -4,7 +4,7 @@ import type { CalloutElement } from '@yoopta/callout';
 import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
-import Mention from '@yoopta/mention';
+// import Mention from '@yoopta/mention';
 import { Elements } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
@@ -21,7 +21,7 @@ import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
 
 export const YOOPTA_PLUGINS = [
-  Mention,
+  // Mention,
   Table.extend({
     events: {
       onBeforeCreate: (editor) => TableCommands.buildTableElements(editor, { rows: 3, columns: 3 }),

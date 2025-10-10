@@ -10,7 +10,7 @@ import WarningIcon from '../icons/warning.svg';
 import type { CalloutElementProps, CalloutPluginElementKeys, CalloutTheme } from '../types';
 import { CALLOUT_THEME_STYLES } from '../utils';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -32,7 +32,7 @@ const CalloutBlockOptions = ({ editor, block, props: calloutProps }: Props) => {
   const isActiveTheme = (theme: CalloutTheme) => calloutProps?.theme === theme;
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-callout-options">
       <BlockOptionsSeparator />
@@ -183,7 +183,7 @@ const CalloutBlockOptions = ({ editor, block, props: calloutProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

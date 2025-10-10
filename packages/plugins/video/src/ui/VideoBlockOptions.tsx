@@ -24,7 +24,7 @@ const ALIGN_ICONS = {
   right: TextAlignRightIcon,
 };
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -148,7 +148,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       id="yoopta-video-options">
       <BlockOptionsSeparator />
@@ -323,7 +323,7 @@ const VideoBlockOptions = ({ editor, block, props: videoProps }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

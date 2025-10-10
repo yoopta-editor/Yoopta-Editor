@@ -22,7 +22,7 @@ type Props = {
   children: ReactNode;
 };
 
-const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props) => {
+const ExtendedBlockOptions = ({ id, className, style, onClick, children }: Props) => {
   const isReadOnly = useYooptaReadOnly();
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);
   const {
@@ -75,4 +75,4 @@ const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props
   );
 };
 
-export { ExtendedBlockActions };
+export { ExtendedBlockOptions };

@@ -1,0 +1,58 @@
+{
+  "name": "@yoopta/ui",
+  "version": "4.9.9",
+  "description": "UI components for Yoopta Editor",
+  "author": "Darginec05 <devopsbanda@gmail.com>",
+  "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./floating-block-actions": {
+      "import": "./dist/floating-block-actions.js",
+      "types": "./dist/floating-block-actions.d.ts"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "peerDependencies": {
+    "@yoopta/editor": ">=4.9.9",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.26.9",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "lucide-react": "^0.294.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "react-colorful": "^5.6.1",
+    "use-debounce": "^10.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/yoopta-ui.test.js",
+    "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
+    "prepublishOnly": "yarn build",
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
+  },
+  "bugs": {
+    "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
+  }
+}

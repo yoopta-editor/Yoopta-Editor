@@ -316,6 +316,8 @@ const Editor = ({
     pointerEvents: selectionBox.selection ? 'none' : 'auto',
     width: width || style?.width,
     paddingBottom: style?.paddingBottom,
+    paddingLeft: '2.5rem',
+    paddingRight: '2.5rem',
   });
 
   return (

@@ -44,6 +44,7 @@ const INITIAL_STYLES: ActionStyles = {
   transition: 'opacity 150ms ease-out',
 };
 
+// [TODO] - remove
 export const FloatingBlockActions = memo(
   ({ editor, dragHandleProps }: FloatingBlockActionsProps) => {
     const [hoveredBlock, setHoveredBlock] = useState<YooptaBlockData | null>(null);
