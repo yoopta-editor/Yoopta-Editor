@@ -132,8 +132,8 @@ Hook for working with FloatingBlockActions.
 
 Components use CSS classes:
 
-- `.yoopta-floating-block-actions` - container
-- `.yoopta-floating-action-button` - button
+- `.yoopta-ui-floating-block-actions` - container
+- `.yoopta-ui-floating-action-button` - button
 
 ### CSS Variables (shadcn style)
 
@@ -144,21 +144,21 @@ You can customize the appearance using CSS variables. The design system uses HSL
 ```css
 :root {
   /* Base colors (HSL format without hsl()) */
-  --yoopta-background: 0 0% 100%;
-  --yoopta-foreground: 222.2 84% 4.9%;
-  --yoopta-muted: 210 40% 96.1%;
-  --yoopta-border: 214.3 31.8% 91.4%;
-  --yoopta-accent: 210 40% 96.1%;
-  --yoopta-ring: 222.2 84% 4.9%;
+  --yoopta-ui-background: 0 0% 100%;
+  --yoopta-ui-foreground: 222.2 84% 4.9%;
+  --yoopta-ui-muted: 210 40% 96.1%;
+  --yoopta-ui-border: 214.3 31.8% 91.4%;
+  --yoopta-ui-accent: 210 40% 96.1%;
+  --yoopta-ui-ring: 222.2 84% 4.9%;
 }
 
 .dark {
-  --yoopta-background: 222.2 84% 4.9%;
-  --yoopta-foreground: 210 40% 98%;
-  --yoopta-muted: 217.2 32.6% 17.5%;
-  --yoopta-border: 217.2 32.6% 17.5%;
-  --yoopta-accent: 217.2 32.6% 17.5%;
-  --yoopta-ring: 212.7 26.8% 83.9%;
+  --yoopta-ui-background: 222.2 84% 4.9%;
+  --yoopta-ui-foreground: 210 40% 98%;
+  --yoopta-ui-muted: 217.2 32.6% 17.5%;
+  --yoopta-ui-border: 217.2 32.6% 17.5%;
+  --yoopta-ui-accent: 217.2 32.6% 17.5%;
+  --yoopta-ui-ring: 212.7 26.8% 83.9%;
 }
 ```
 
@@ -167,25 +167,28 @@ You can customize the appearance using CSS variables. The design system uses HSL
 ```css
 :root {
   /* Container */
-  --yoopta-floating-bg: var(--yoopta-background);
-  --yoopta-floating-border: var(--yoopta-border);
-  --yoopta-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --yoopta-floating-z-index: 100;
-  --yoopta-floating-gap: 1px;
-  --yoopta-floating-padding: 4px;
-  --yoopta-floating-radius: 0.5rem;
+  --yoopta-ui-floating-bg: var(--yoopta-ui-background);
+  --yoopta-ui-floating-border: var(--yoopta-ui-border);
+  --yoopta-ui-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --yoopta-ui-floating-z-index: 100;
+  --yoopta-ui-floating-gap: 1px;
+  --yoopta-ui-floating-padding: 4px;
+  --yoopta-ui-floating-radius: 0.5rem;
 
   /* Button */
-  --yoopta-floating-button-size: 28px;
-  --yoopta-floating-button-color: var(--yoopta-foreground);
-  --yoopta-floating-button-hover: var(--yoopta-accent);
-  --yoopta-floating-button-radius: 0.375rem;
+  --yoopta-ui-floating-button-min-width: 28px;
+  --yoopta-ui-floating-button-min-height: 28px;
+  --yoopta-ui-floating-button-padding-y: 6px;
+  --yoopta-ui-floating-button-padding-x: 8px;
+  --yoopta-ui-floating-button-color: var(--yoopta-ui-foreground);
+  --yoopta-ui-floating-button-hover: var(--yoopta-ui-accent);
+  --yoopta-ui-floating-button-radius: 0.375rem;
 
   /* Icon */
-  --yoopta-floating-icon-size: 1rem;
+  --yoopta-ui-floating-icon-size: 1rem;
 
   /* Focus ring */
-  --yoopta-floating-ring-offset: 2px;
+  --yoopta-ui-floating-ring-offset: 2px;
 }
 ```
 
@@ -196,8 +199,8 @@ You can customize the appearance using CSS variables. The design system uses HSL
 ```css
 :root {
   /* Custom blue accent */
-  --yoopta-accent: 221.2 83.2% 53.3%;
-  --yoopta-ring: 221.2 83.2% 53.3%;
+  --yoopta-ui-accent: 221.2 83.2% 53.3%;
+  --yoopta-ui-ring: 221.2 83.2% 53.3%;
 }
 ```
 
@@ -205,10 +208,13 @@ You can customize the appearance using CSS variables. The design system uses HSL
 
 ```css
 :root {
-  --yoopta-floating-button-size: 32px;
-  --yoopta-floating-padding: 6px;
-  --yoopta-floating-gap: 2px;
-  --yoopta-floating-radius: 0.75rem;
+  --yoopta-ui-floating-button-min-width: 32px;
+  --yoopta-ui-floating-button-min-height: 32px;
+  --yoopta-ui-floating-button-padding-y: 8px;
+  --yoopta-ui-floating-button-padding-x: 12px;
+  --yoopta-ui-floating-padding: 6px;
+  --yoopta-ui-floating-gap: 2px;
+  --yoopta-ui-floating-radius: 0.75rem;
 }
 ```
 
@@ -217,10 +223,10 @@ You can customize the appearance using CSS variables. The design system uses HSL
 ```css
 .dark,
 [data-theme='dark'] {
-  --yoopta-background: 240 10% 3.9%;
-  --yoopta-foreground: 0 0% 98%;
-  --yoopta-accent: 240 4.8% 95.9%;
-  --yoopta-border: 240 3.7% 15.9%;
+  --yoopta-ui-background: 240 10% 3.9%;
+  --yoopta-ui-foreground: 0 0% 98%;
+  --yoopta-ui-accent: 240 4.8% 95.9%;
+  --yoopta-ui-border: 240 3.7% 15.9%;
 }
 ```
 

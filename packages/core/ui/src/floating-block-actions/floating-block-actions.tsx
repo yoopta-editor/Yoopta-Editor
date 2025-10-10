@@ -21,8 +21,8 @@ type FloatingBlockActionsButtonProps = {
 // ============ Root Component ============
 
 const FloatingBlockActionsRoot = forwardRef<HTMLDivElement, FloatingBlockActionsRootProps>(
-  ({ children, className = '' }, ref) => {
-    const { isVisible, style, blockActionsRef } = useFloatingBlockActions();
+  ({ children, className = '', style: customStyle }, ref) => {
+    const { style, blockActionsRef } = useFloatingBlockActions();
 
     return (
       <div
@@ -36,10 +36,10 @@ const FloatingBlockActionsRoot = forwardRef<HTMLDivElement, FloatingBlockActions
             ref.current = node;
           }
         }}
-        className={`yoopta-floating-block-actions ${className}`}
+        className={`yoopta-ui-floating-block-actions ${className}`}
         style={{
-          pointerEvents: isVisible ? 'auto' : 'none',
           ...style,
+          ...customStyle,
         }}
         contentEditable={false}>
         {children}
@@ -58,7 +58,7 @@ const FloatingBlockActionsButton = forwardRef<HTMLButtonElement, FloatingBlockAc
       <button
         ref={ref}
         type="button"
-        className={`yoopta-floating-action-button ${className}`}
+        className={`yoopta-ui-floating-action-button ${className}`}
         onClick={onClick}
         disabled={disabled}
         title={title}

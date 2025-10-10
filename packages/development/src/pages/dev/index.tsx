@@ -22,8 +22,8 @@ import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { CopyIcon, EditIcon, Link2Icon, PlusIcon, TrashIcon } from 'lucide-react';
-import { DragHandleDots1Icon } from '@radix-ui/react-icons';
+import { PlusIcon } from 'lucide-react';
+import { DragHandleVerticalIcon } from '@radix-ui/react-icons';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -60,9 +60,12 @@ const FloatingBlockActionsComponent = () => {
         <PlusIcon />
       </FloatingBlockActions.Button>
       <FloatingBlockActions.Button onClick={onDragClick} {...dragHandleProps}>
-        <DragHandleDots1Icon />
+        <DragHandleVerticalIcon />
       </FloatingBlockActions.Button>
-      {/* <FloatingBlockActions.Button onClick={() => {}}>Insert Block</FloatingBlockActions.Button> */}
+      <FloatingBlockActions.Button
+        onClick={() => editor.insertBlock('Paragraph', { at: editor.path.current, focus: true })}>
+        Insert Block
+      </FloatingBlockActions.Button>
     </FloatingBlockActions.Root>
   );
 };

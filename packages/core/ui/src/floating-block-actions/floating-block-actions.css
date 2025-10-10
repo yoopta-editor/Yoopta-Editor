@@ -1,79 +1,81 @@
 /* CSS Variables for theming - shadcn style */
 :root {
   /* Base colors using HSL */
-  --yoopta-background: 0 0% 100%;
-  --yoopta-foreground: 222.2 84% 4.9%;
-  --yoopta-muted: 210 40% 96.1%;
-  --yoopta-muted-foreground: 215.4 16.3% 46.9%;
-  --yoopta-border: 214.3 31.8% 91.4%;
-  --yoopta-ring: 222.2 84% 4.9%;
-  --yoopta-accent: 210 40% 96.1%;
-  --yoopta-accent-foreground: 222.2 47.4% 11.2%;
+  --yoopta-ui-background: 0 0% 100%;
+  --yoopta-ui-foreground: 222.2 84% 4.9%;
+  --yoopta-ui-muted: 210 40% 96.1%;
+  --yoopta-ui-muted-foreground: 215.4 16.3% 46.9%;
+  --yoopta-ui-border: 214.3 31.8% 91.4%;
+  --yoopta-ui-ring: 222.2 84% 4.9%;
+  --yoopta-ui-accent: 210 40% 96.1%;
+  --yoopta-ui-accent-foreground: 222.2 47.4% 11.2%;
 
   /* FloatingBlockActions - Container */
-  --yoopta-floating-bg: var(--yoopta-background);
-  --yoopta-floating-border: var(--yoopta-border);
-  --yoopta-floating-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --yoopta-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --yoopta-floating-z-index: 100;
-  --yoopta-floating-gap: 1px;
-  --yoopta-floating-padding: 4px;
-  --yoopta-floating-radius: 0.5rem;
-  --yoopta-floating-offset: 46px;
+  --yoopta-ui-floating-bg: var(--yoopta-ui-background);
+  --yoopta-ui-floating-border: var(--yoopta-ui-border);
+  --yoopta-ui-floating-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --yoopta-ui-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --yoopta-ui-floating-z-index: 100;
+  --yoopta-ui-floating-gap: 1px;
+  --yoopta-ui-floating-padding: 3px;
+  --yoopta-ui-floating-radius: 0.5rem;
+  --yoopta-ui-floating-offset: 46px;
 
   /* FloatingBlockActions - Button */
-  --yoopta-floating-button-size: 28px;
-  --yoopta-floating-button-padding: 0;
-  --yoopta-floating-button-color: var(--yoopta-foreground);
-  --yoopta-floating-button-bg: transparent;
-  --yoopta-floating-button-hover: var(--yoopta-accent);
-  --yoopta-floating-button-active: var(--yoopta-accent);
-  --yoopta-floating-button-radius: 0.375rem;
+  --yoopta-ui-floating-button-min-width: 24px;
+  --yoopta-ui-floating-button-min-height: 24px;
+  --yoopta-ui-floating-button-padding-y: 4px;
+  --yoopta-ui-floating-button-padding-x: 6px;
+  --yoopta-ui-floating-button-color: var(--yoopta-ui-foreground);
+  --yoopta-ui-floating-button-bg: transparent;
+  --yoopta-ui-floating-button-hover: var(--yoopta-ui-accent);
+  --yoopta-ui-floating-button-active: var(--yoopta-ui-accent);
+  --yoopta-ui-floating-button-radius: 0.375rem;
 
   /* Transitions */
-  --yoopta-floating-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  --yoopta-ui-floating-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   /* Focus ring */
-  --yoopta-floating-ring-offset: 2px;
-  --yoopta-floating-ring: var(--yoopta-ring);
+  --yoopta-ui-floating-ring-offset: 2px;
+  --yoopta-ui-floating-ring: var(--yoopta-ui-ring);
 
   /* Icon */
-  --yoopta-floating-icon-size: 1rem;
+  --yoopta-ui-floating-icon-size: 1rem;
 }
 
 /* Dark theme - shadcn style */
 .dark,
 [data-theme='dark'],
 [data-yoopta-theme='dark'] {
-  --yoopta-background: 222.2 84% 4.9%;
-  --yoopta-foreground: 210 40% 98%;
-  --yoopta-muted: 217.2 32.6% 17.5%;
-  --yoopta-muted-foreground: 215 20.2% 65.1%;
-  --yoopta-border: 217.2 32.6% 17.5%;
-  --yoopta-ring: 212.7 26.8% 83.9%;
-  --yoopta-accent: 217.2 32.6% 17.5%;
-  --yoopta-accent-foreground: 210 40% 98%;
+  --yoopta-ui-background: 222.2 84% 4.9%;
+  --yoopta-ui-foreground: 210 40% 98%;
+  --yoopta-ui-muted: 217.2 32.6% 17.5%;
+  --yoopta-ui-muted-foreground: 215 20.2% 65.1%;
+  --yoopta-ui-border: 217.2 32.6% 17.5%;
+  --yoopta-ui-ring: 212.7 26.8% 83.9%;
+  --yoopta-ui-accent: 217.2 32.6% 17.5%;
+  --yoopta-ui-accent-foreground: 210 40% 98%;
 
-  --yoopta-floating-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --yoopta-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --yoopta-ui-floating-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --yoopta-ui-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.3);
 }
 
 /* FloatingBlockActions Container */
-.yoopta-floating-block-actions {
+.yoopta-ui-floating-block-actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--yoopta-floating-gap);
-  padding: var(--yoopta-floating-padding);
-  background-color: hsl(var(--yoopta-floating-bg));
-  border: 1px solid hsl(var(--yoopta-floating-border));
-  border-radius: var(--yoopta-floating-radius);
-  box-shadow: var(--yoopta-floating-shadow-md);
-  z-index: var(--yoopta-floating-z-index);
+  gap: var(--yoopta-ui-floating-gap);
+  padding: var(--yoopta-ui-floating-padding);
+  background-color: hsl(var(--yoopta-ui-floating-bg));
+  border: 1px solid hsl(var(--yoopta-ui-floating-border));
+  border-radius: var(--yoopta-ui-floating-radius);
+  box-shadow: var(--yoopta-ui-floating-shadow-md);
+  z-index: var(--yoopta-ui-floating-z-index);
 }
 
 /* FloatingBlockActions Button */
-.yoopta-floating-action-button {
+.yoopta-ui-floating-action-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -81,59 +83,59 @@
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1;
-  width: var(--yoopta-floating-button-size);
-  height: var(--yoopta-floating-button-size);
-  padding: var(--yoopta-floating-button-padding);
-  background-color: var(--yoopta-floating-button-bg);
-  color: hsl(var(--yoopta-floating-button-color));
+  min-width: var(--yoopta-ui-floating-button-min-width);
+  min-height: var(--yoopta-ui-floating-button-min-height);
+  padding: var(--yoopta-ui-floating-button-padding-y) var(--yoopta-ui-floating-button-padding-x);
+  background-color: var(--yoopta-ui-floating-button-bg);
+  color: hsl(var(--yoopta-ui-floating-button-color));
   border: none;
-  border-radius: var(--yoopta-floating-button-radius);
+  border-radius: var(--yoopta-ui-floating-button-radius);
   cursor: pointer;
-  transition: var(--yoopta-floating-transition);
+  transition: var(--yoopta-ui-floating-transition);
   outline: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
 
-.yoopta-floating-action-button:hover {
-  background-color: hsl(var(--yoopta-floating-button-hover));
-  color: hsl(var(--yoopta-accent-foreground));
+.yoopta-ui-floating-action-button:hover {
+  background-color: hsl(var(--yoopta-ui-floating-button-hover));
+  color: hsl(var(--yoopta-ui-accent-foreground));
 }
 
-.yoopta-floating-action-button:active {
-  background-color: hsl(var(--yoopta-floating-button-active));
+.yoopta-ui-floating-action-button:active {
+  background-color: hsl(var(--yoopta-ui-floating-button-active));
   transform: scale(0.98);
 }
 
-.yoopta-floating-action-button:focus-visible {
+.yoopta-ui-floating-action-button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--yoopta-floating-ring-offset) hsl(var(--yoopta-background)),
-    0 0 0 calc(var(--yoopta-floating-ring-offset) + 2px) hsl(var(--yoopta-floating-ring));
+  box-shadow: 0 0 0 var(--yoopta-ui-floating-ring-offset) hsl(var(--yoopta-ui-background)),
+    0 0 0 calc(var(--yoopta-ui-floating-ring-offset) + 2px) hsl(var(--yoopta-ui-floating-ring));
 }
 
-.yoopta-floating-action-button:disabled {
+.yoopta-ui-floating-action-button:disabled {
   pointer-events: none;
   opacity: 0.5;
 }
 
 /* Icon sizing */
-.yoopta-floating-action-button svg {
-  width: var(--yoopta-floating-icon-size);
-  height: var(--yoopta-floating-icon-size);
+.yoopta-ui-floating-action-button svg {
+  width: var(--yoopta-ui-floating-icon-size);
+  height: var(--yoopta-ui-floating-icon-size);
   flex-shrink: 0;
 }
 
 /* Dark theme support with prefers-color-scheme */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --yoopta-background: 222.2 84% 4.9%;
-    --yoopta-foreground: 210 40% 98%;
-    --yoopta-muted: 217.2 32.6% 17.5%;
-    --yoopta-muted-foreground: 215 20.2% 65.1%;
-    --yoopta-border: 217.2 32.6% 17.5%;
-    --yoopta-ring: 212.7 26.8% 83.9%;
-    --yoopta-accent: 217.2 32.6% 17.5%;
-    --yoopta-accent-foreground: 210 40% 98%;
+    --yoopta-ui-background: 222.2 84% 4.9%;
+    --yoopta-ui-foreground: 210 40% 98%;
+    --yoopta-ui-muted: 217.2 32.6% 17.5%;
+    --yoopta-ui-muted-foreground: 215 20.2% 65.1%;
+    --yoopta-ui-border: 217.2 32.6% 17.5%;
+    --yoopta-ui-ring: 212.7 26.8% 83.9%;
+    --yoopta-ui-accent: 217.2 32.6% 17.5%;
+    --yoopta-ui-accent-foreground: 210 40% 98%;
   }
 }
