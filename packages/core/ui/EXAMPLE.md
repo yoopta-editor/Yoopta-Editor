@@ -1,49 +1,67 @@
-# FloatingBlockActions Integration Example
+# @yoopta/ui Integration Examples
 
-## In development/src/pages/dev/index.tsx
+## Complete Example with FloatingBlockActions + BlockOptions
 
 ```tsx
-import { YooptaUI, FloatingBlockActions, useFloatingBlockActions } from '@yoopta/ui';
+import { YooptaUI, FloatingBlockActions, BlockOptions, useBlockOptions } from '@yoopta/ui';
 import { useYooptaEditor } from '@yoopta/editor';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import { PlusIcon } from 'lucide-react';
-import { DragHandleDots1Icon } from '@radix-ui/react-icons';
+import { PlusIcon, TrashIcon, CopyIcon, Link2Icon } from 'lucide-react';
+import { DragHandleDots2Icon } from '@radix-ui/react-icons';
 
+// FloatingBlockActions Component
 const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
+  const { open } = useBlockOptions();
 
-  const { hoveredBlockId, onPlusClick, onDragClick } = useFloatingBlockActions({
-    onPlusClick: (blockId, event) => {
-      console.log('Plus clicked for block:', blockId);
-      // Add new block or open ActionMenu
-      editor.insertBlock('paragraph', {
-        at: editor.children[blockId].meta.order + 1,
-        focus: true,
-      });
-    },
-    onDragClick: (blockId, event) => {
-      console.log('Drag clicked for block:', blockId);
-      // Open BlockOptions menu
-      // openBlockOptions({ blockId, ref: event.currentTarget });
-    },
-  });
+  const onPlusClick = (e: React.MouseEvent) => {
+    editor.insertBlock('text', { at: editor.path.current, focus: true });
+  };
+
+  const onDragClick = (e: React.MouseEvent) => {
+    // Open BlockOptions - this will freeze FloatingBlockActions
+    open({
+      ref: e.currentTarget as HTMLElement,
+    });
+  };
 
   return (
     <FloatingBlockActions>
       <FloatingBlockActions.Button onClick={onPlusClick} title="Add block">
         <PlusIcon size={16} />
       </FloatingBlockActions.Button>
-      <FloatingBlockActions.Button onClick={onDragClick} title="Drag to move">
-        <DragHandleDots1Icon />
+      <FloatingBlockActions.Button onClick={onDragClick} title="Open menu">
+        <DragHandleDots2Icon />
       </FloatingBlockActions.Button>
-      {hoveredBlockId && (
-        <FloatingBlockActions.Button
-          onClick={() => console.log('Custom action')}
-          title="Custom action">
-          ✨
-        </FloatingBlockActions.Button>
-      )}
     </FloatingBlockActions>
+  );
+};
+
+// BlockOptions Component
+const BlockOptionsComponent = () => {
+  const { isOpen, duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
+
+  if (!isOpen) return null;
+
+  return (
+    <BlockOptions>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Button icon={<CopyIcon />} onClick={duplicateBlock}>
+            Duplicate
+          </BlockOptions.Button>
+          <BlockOptions.Button icon={<Link2Icon />} onClick={copyBlockLink}>
+            Copy link to block
+          </BlockOptions.Button>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Button icon={<TrashIcon />} onClick={deleteBlock} variant="destructive">
+            Delete
+          </BlockOptions.Button>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions>
   );
 };
 
@@ -61,6 +79,7 @@ const BasicExample = () => {
           value={value}
           onChange={setValue}>
           <FloatingBlockActionsComponent />
+          <BlockOptionsComponent />
         </YooptaEditor>
       </YooptaUI>
     </div>
@@ -69,6 +88,19 @@ const BasicExample = () => {
 
 export default BasicExample;
 ```
+
+## How Freeze Works
+
+When you click the drag button in FloatingBlockActions:
+
+1. ✅ **BlockOptions opens** → positioned relative to the button
+2. ✅ **FloatingBlockActions freezes** → stays on the current block
+3. ✅ **Move mouse to BlockOptions** → FloatingBlockActions doesn't move!
+4. ✅ **Click an option or Escape** → BlockOptions closes
+5. ✅ **FloatingBlockActions unfreezes** → resumes normal hover tracking
+
+**Why is this important?**
+Without freeze, when you move your mouse from FloatingBlockActions to BlockOptions menu, the FloatingBlockActions would disappear or move to a different block, making the UX confusing.
 
 ## Minimal Example
 

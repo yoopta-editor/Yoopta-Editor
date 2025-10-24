@@ -21,11 +21,14 @@ const INITIAL_STYLES: ActionStyles = {
 };
 
 export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions) => {
-  const { hoveredBlockId, onSetHoveredBlockId } = useContext(YooptaUIContext);
+  const { hoveredBlockId, onSetHoveredBlockId, frozenBlockId } = useContext(YooptaUIContext);
   const editor = useYooptaEditor();
 
   const [actionStyles, setActionStyles] = useState<ActionStyles>(INITIAL_STYLES);
   const blockActionsRef = useRef<HTMLDivElement>(null);
+
+  // Use frozenBlockId if set, otherwise use hoveredBlockId
+  const activeBlockId = frozenBlockId || hoveredBlockId;
 
   const updateBlockPosition = useCallback(
     (blockElement: HTMLElement, blockData: YooptaBlockData) => {
@@ -112,6 +115,9 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
+      // If frozen, ignore mousemove
+      if (frozenBlockId) return;
+
       const target = event.target as HTMLElement;
       const isInsideEditor = editor.refElement?.contains(event.target as Node);
       const isInsideActions = blockActionsRef.current?.contains(target);
@@ -134,6 +140,7 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
       }
     },
     [
+      frozenBlockId,
       editor.refElement,
       editor.readOnly,
       hoveredBlockId,
@@ -150,6 +157,7 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
 
   useEffect(() => {
     const handleScroll = () => {
+      if (frozenBlockId) return;
       hideBlockActions();
     };
 
@@ -167,26 +175,27 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
   const handlePlusClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      if (hoveredBlockId && options?.onPlusClick) {
-        options.onPlusClick(hoveredBlockId, event);
+      if (activeBlockId && options?.onPlusClick) {
+        options.onPlusClick(activeBlockId, event);
       }
     },
-    [hoveredBlockId, options],
+    [activeBlockId, options],
   );
 
   const handleDragClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      if (hoveredBlockId && options?.onDragClick) {
-        options.onDragClick(hoveredBlockId, event);
+      if (activeBlockId && options?.onDragClick) {
+        options.onDragClick(activeBlockId, event);
       }
     },
-    [hoveredBlockId, options],
+    [activeBlockId, options],
   );
 
   return {
-    hoveredBlockId,
-    isVisible: hoveredBlockId !== null,
+    hoveredBlockId: activeBlockId,
+    isVisible: activeBlockId !== null,
+    isFrozen: frozenBlockId !== null,
     style: actionStyles,
     blockActionsRef,
     onPlusClick: handlePlusClick,

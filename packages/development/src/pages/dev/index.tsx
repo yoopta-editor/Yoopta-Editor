@@ -10,7 +10,8 @@ import {
   YooptaUI,
   FloatingBlockActions,
   useFloatingBlockActions,
-  // BlockOptions,
+  useBlockOptions,
+  BlockOptions,
   // ActionMenu,
   // useActionsMenu,
   // useBlockOptions,
@@ -23,7 +24,7 @@ import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
 import { PlusIcon } from 'lucide-react';
-import { DragHandleVerticalIcon } from '@radix-ui/react-icons';
+import { DragHandleDots2Icon } from '@radix-ui/react-icons';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -33,7 +34,7 @@ const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
 
   const { hoveredBlockId } = useFloatingBlockActions();
-  // const { open: openBlockOptions } = useBlockOptions();
+  const { open } = useBlockOptions();
   // const { open: openActionMenu } = useActionsMenu();
   // const { getDragHandleProps } = useDndKit();
 
@@ -45,10 +46,9 @@ const FloatingBlockActionsComponent = () => {
   };
 
   const onDragClick = (e: React.MouseEvent) => {
-    // openBlockOptions({
-    //   ref: e.currentTarget as HTMLElement,
-    //   blockId: editor.path.current,
-    // });
+    open({
+      ref: e.currentTarget as HTMLElement,
+    });
   };
 
   // const dragHandleProps = getDragHandleProps(hoveredBlockId);
@@ -60,53 +60,35 @@ const FloatingBlockActionsComponent = () => {
         <PlusIcon />
       </FloatingBlockActions.Button>
       <FloatingBlockActions.Button onClick={onDragClick} {...dragHandleProps}>
-        <DragHandleVerticalIcon />
+        <DragHandleDots2Icon />
       </FloatingBlockActions.Button>
       <FloatingBlockActions.Button
         onClick={() => editor.insertBlock('Paragraph', { at: editor.path.current, focus: true })}>
-        Insert Block
+        Insert
       </FloatingBlockActions.Button>
     </FloatingBlockActions.Root>
   );
 };
 
-// const BlockOptionsComponent = () => {
-//   const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
-//   const { open: openActionMenu } = useActionsMenu();
+const BlockOptionsComponent = () => {
+  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
 
-//   const onTurnInto = (e: React.MouseEvent) => {
-//     openActionMenu({
-//       ref: e.currentTarget as HTMLElement,
-//     });
-//   };
-
-//   return (
-//     <BlockOptions.Root>
-//       <BlockOptions.Content>
-//         <BlockOptions.Group>
-//           <BlockOptions.Button icon={<EditIcon />} size="md" onClick={onTurnInto}>
-//             Turn into
-//           </BlockOptions.Button>
-//           <BlockOptions.Button icon={<CopyIcon />} size="md" onClick={duplicateBlock}>
-//             Duplicate block
-//           </BlockOptions.Button>
-
-//           <BlockOptions.Separator />
-//           <BlockOptions.Button icon={<Link2Icon />} size="md" onClick={copyBlockLink}>
-//             Copy link to block
-//           </BlockOptions.Button>
-//           <BlockOptions.Button
-//             icon={<TrashIcon />}
-//             variant="destructive"
-//             size="md"
-//             onClick={deleteBlock}>
-//             Delete block
-//           </BlockOptions.Button>
-//         </BlockOptions.Group>
-//       </BlockOptions.Content>
-//     </BlockOptions.Root>
-//   );
-// };
+  return (
+    <BlockOptions.Root>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Button onClick={duplicateBlock}>Turn into</BlockOptions.Button>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Button onClick={duplicateBlock}>Duplicate</BlockOptions.Button>
+          <BlockOptions.Button onClick={copyBlockLink}>Copy link to block</BlockOptions.Button>
+          <BlockOptions.Button onClick={deleteBlock}>Delete</BlockOptions.Button>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions.Root>
+  );
+};
 
 // const ActionsMenuComponent = () => {
 //   const { actions, selectedAction, empty, onMouseEnter } = useActionsMenu({
@@ -174,6 +156,7 @@ const BasicExample = () => {
           value={value}
           onChange={onChange}>
           <FloatingBlockActionsComponent />
+          <BlockOptionsComponent />
           {/* <ActionsMenuComponent />
           <BlockOptionsComponent /> */}
         </YooptaEditor>

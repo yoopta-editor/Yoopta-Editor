@@ -1,0 +1,166 @@
+/* CSS Variables for BlockOptions - shadcn style */
+:root {
+  /* BlockOptions - Container */
+  --yoopta-ui-block-options-bg: var(--yoopta-ui-background);
+  --yoopta-ui-block-options-border: var(--yoopta-ui-border);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-radius: 0.5rem;
+  --yoopta-ui-block-options-padding: 4px;
+  --yoopta-ui-block-options-min-width: 220px;
+  --yoopta-ui-block-options-z-index: 200;
+
+  /* BlockOptions - Group */
+  --yoopta-ui-block-options-group-gap: 1px;
+
+  /* BlockOptions - Button */
+  --yoopta-ui-block-options-button-padding-y: 8px;
+  --yoopta-ui-block-options-button-padding-x: 12px;
+  --yoopta-ui-block-options-button-font-size: 0.875rem;
+  --yoopta-ui-block-options-button-line-height: 1.25rem;
+  --yoopta-ui-block-options-button-color: var(--yoopta-ui-foreground);
+  --yoopta-ui-block-options-button-bg: transparent;
+  --yoopta-ui-block-options-button-hover: var(--yoopta-ui-accent);
+  --yoopta-ui-block-options-button-active: var(--yoopta-ui-accent);
+  --yoopta-ui-block-options-button-radius: 0.375rem;
+
+  /* BlockOptions - Button Destructive */
+  --yoopta-ui-destructive: 0 84.2% 60.2%;
+  --yoopta-ui-destructive-foreground: 210 40% 98%;
+  --yoopta-ui-block-options-button-destructive-color: hsl(var(--yoopta-ui-destructive));
+  --yoopta-ui-block-options-button-destructive-hover: hsl(var(--yoopta-ui-destructive) / 0.1);
+
+  /* BlockOptions - Icon */
+  --yoopta-ui-block-options-icon-size: 1rem;
+  --yoopta-ui-block-options-icon-gap: 8px;
+
+  /* BlockOptions - Separator */
+  --yoopta-ui-block-options-separator-color: var(--yoopta-ui-border);
+  --yoopta-ui-block-options-separator-height: 1px;
+  --yoopta-ui-block-options-separator-margin: 4px 0;
+
+  /* Transitions */
+  --yoopta-ui-block-options-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Dark theme */
+.dark,
+[data-theme='dark'],
+[data-yoopta-theme='dark'] {
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5),
+    0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* BlockOptions Container */
+.yoopta-ui-block-options {
+  position: fixed;
+  min-width: var(--yoopta-ui-block-options-min-width);
+  padding: var(--yoopta-ui-block-options-padding);
+  background-color: hsl(var(--yoopta-ui-block-options-bg));
+  border: 1px solid hsl(var(--yoopta-ui-block-options-border));
+  border-radius: var(--yoopta-ui-block-options-radius);
+  box-shadow: var(--yoopta-ui-block-options-shadow);
+  z-index: var(--yoopta-ui-block-options-z-index);
+}
+
+/* BlockOptions Content */
+.yoopta-ui-block-options-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yoopta-ui-block-options-group-gap);
+}
+
+/* BlockOptions Group */
+.yoopta-ui-block-options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* BlockOptions Button */
+.yoopta-ui-block-options-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--yoopta-ui-block-options-button-padding-y)
+    var(--yoopta-ui-block-options-button-padding-x);
+  font-size: var(--yoopta-ui-block-options-button-font-size);
+  line-height: var(--yoopta-ui-block-options-button-line-height);
+  font-weight: 400;
+  text-align: left;
+  color: hsl(var(--yoopta-ui-block-options-button-color));
+  background-color: var(--yoopta-ui-block-options-button-bg);
+  border: none;
+  border-radius: var(--yoopta-ui-block-options-button-radius);
+  cursor: pointer;
+  transition: var(--yoopta-ui-block-options-transition);
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.yoopta-ui-block-options-button:hover {
+  background-color: hsl(var(--yoopta-ui-block-options-button-hover));
+  color: hsl(var(--yoopta-ui-accent-foreground));
+}
+
+.yoopta-ui-block-options-button:active {
+  background-color: hsl(var(--yoopta-ui-block-options-button-active));
+}
+
+.yoopta-ui-block-options-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-background)), 0 0 0 4px hsl(var(--yoopta-ui-ring));
+}
+
+.yoopta-ui-block-options-button:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* BlockOptions Button - Destructive variant */
+.yoopta-ui-block-options-button-destructive {
+  color: var(--yoopta-ui-block-options-button-destructive-color);
+}
+
+.yoopta-ui-block-options-button-destructive:hover {
+  background-color: var(--yoopta-ui-block-options-button-destructive-hover);
+  color: hsl(var(--yoopta-ui-destructive));
+}
+
+/* BlockOptions Button Icon */
+.yoopta-ui-block-options-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--yoopta-ui-block-options-icon-gap);
+  flex-shrink: 0;
+}
+
+.yoopta-ui-block-options-button-icon svg {
+  width: var(--yoopta-ui-block-options-icon-size);
+  height: var(--yoopta-ui-block-options-icon-size);
+}
+
+/* BlockOptions Button Text */
+.yoopta-ui-block-options-button-text {
+  flex: 1;
+}
+
+/* BlockOptions Separator */
+.yoopta-ui-block-options-separator {
+  height: var(--yoopta-ui-block-options-separator-height);
+  margin: var(--yoopta-ui-block-options-separator-margin);
+  background-color: hsl(var(--yoopta-ui-block-options-separator-color));
+}
+
+/* Animations handled by Floating UI useTransitionStyles */
+
+/* Dark theme support with prefers-color-scheme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5),
+      0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+}

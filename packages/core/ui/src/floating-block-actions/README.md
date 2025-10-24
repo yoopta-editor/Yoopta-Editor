@@ -110,9 +110,10 @@ Hook for working with FloatingBlockActions.
 
 ```tsx
 {
-  hoveredBlockId: string | null;  // ID of currently hovered block
+  hoveredBlockId: string | null;  // ID of currently active block (hovered or frozen)
   isVisible: boolean;              // Panel visibility
-  position: { top: number; left: number };  // Panel position
+  isFrozen: boolean;               // Whether panel is frozen (ignores mousemove)
+  style: CSSProperties;            // Positioning styles
   blockActionsRef: React.RefObject;         // Ref for container
   onPlusClick: (event: React.MouseEvent) => void;
   onDragClick: (event: React.MouseEvent) => void;
@@ -259,3 +260,19 @@ The hook automatically tracks:
 - Click outside panel
 
 Position is automatically calculated based on block position.
+
+## Freeze Behavior
+
+FloatingBlockActions can be "frozen" to prevent it from moving when other UI components are open:
+
+- When `BlockOptions` opens, FloatingBlockActions **freezes** on the current block
+- While frozen, mousemove events are **ignored**
+- When BlockOptions closes, FloatingBlockActions **unfreezes** and resumes normal tracking
+
+This ensures a smooth UX when interacting with menus - the action buttons stay visible and accessible.
+
+```tsx
+const { isFrozen } = useFloatingBlockActions();
+
+// isFrozen === true when BlockOptions (or other menus) are open
+```
