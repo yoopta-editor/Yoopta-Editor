@@ -1,5 +1,6 @@
-import { forwardRef, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, type ReactNode, type CSSProperties, memo } from 'react';
 import './floating-block-actions.css';
+import { useFloatingBlockActionsStore } from './store';
 
 type FloatingBlockActionsRootProps = {
   children: ReactNode;
@@ -15,19 +16,19 @@ type FloatingBlockActionsButtonProps = {
   title?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const FloatingBlockActionsRoot = forwardRef<HTMLDivElement, FloatingBlockActionsRootProps>(
-  ({ children, className = '', style: styleProp }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`yoopta-ui-floating-block-actions ${className}`}
-        style={styleProp}
-        contentEditable={false}>
-        {children}
-      </div>
-    );
-  },
-);
+const FloatingBlockActionsRoot = memo(({ children, className }: FloatingBlockActionsRootProps) => {
+  const { setReference, styles } = useFloatingBlockActionsStore();
+
+  return (
+    <div
+      ref={setReference}
+      className={`yoopta-ui-floating-block-actions ${className}`}
+      style={styles}
+      contentEditable={false}>
+      {children}
+    </div>
+  );
+});
 FloatingBlockActionsRoot.displayName = 'FloatingBlockActions.Root';
 
 const FloatingBlockActionsButton = forwardRef<HTMLButtonElement, FloatingBlockActionsButtonProps>(

@@ -28,25 +28,21 @@ const EDITOR_STYLE = {
 const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
   const { open: openBlockOptions } = useBlockOptions();
-  const {
-    toggle: toggleFloatingBlockActions,
-    floatingBlockActionRef,
-    style: floatingBlockActionsStyle,
-  } = useFloatingBlockActions();
+  const { toggle, reference } = useFloatingBlockActions();
 
   const onPlusClick = (e: React.MouseEvent) => {
     editor.insertBlock('Paragraph', { at: editor.path.current, focus: true });
   };
 
   const onDragClick = (e: React.MouseEvent) => {
-    openBlockOptions({ reference: floatingBlockActionRef.current as HTMLElement });
-    toggleFloatingBlockActions('frozen');
+    openBlockOptions({ reference: reference as HTMLElement });
+    toggle('frozen');
   };
 
   const dragHandleProps = {};
 
   return (
-    <FloatingBlockActions.Root ref={floatingBlockActionRef} style={floatingBlockActionsStyle}>
+    <FloatingBlockActions.Root>
       <FloatingBlockActions.Button onClick={onPlusClick}>
         <PlusIcon />
       </FloatingBlockActions.Button>

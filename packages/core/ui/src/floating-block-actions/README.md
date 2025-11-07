@@ -1,65 +1,47 @@
 # FloatingBlockActions
 
-Floating action panel that appears when hovering over blocks.
+Floating action panel that appears when hovering over blocks. Uses Zustand for state management.
+
+## Architecture
+
+**State Management**: All state (visibility, position, styles) is stored in Zustand store (`useFloatingBlockActionsStore`).
+
+**Hook**: `useFloatingBlockActions()` initializes mouse tracking logic and provides access to store data.
+
+**Key Features**:
+
+- ✅ Single hook for both logic and state access
+- ✅ State stored in Zustand (no duplication when called multiple times)
+- ✅ Automatic mouse tracking and positioning
+- ✅ Freeze mode to prevent movement when menus are open
+- ✅ Optimized performance with throttling
 
 ## Usage
 
 ### Basic Example
 
 ```tsx
-import { YooptaUI, FloatingBlockActions } from '@yoopta/ui';
-import { useYooptaEditor } from '@yoopta/editor';
-
-function Editor() {
-  const editor = useYooptaEditor();
-
-  return (
-    <YooptaUI>
-      <YooptaEditor editor={editor} plugins={plugins}>
-        <FloatingBlockActions>
-          <FloatingBlockActions.Button onClick={() => console.log('Plus')}>
-            +
-          </FloatingBlockActions.Button>
-          <FloatingBlockActions.Button onClick={() => console.log('Drag')}>
-            ⋮⋮
-          </FloatingBlockActions.Button>
-        </FloatingBlockActions>
-      </YooptaEditor>
-    </YooptaUI>
-  );
-}
-```
-
-### With Hook for Handlers
-
-```tsx
 import { FloatingBlockActions, useFloatingBlockActions } from '@yoopta/ui';
 import { useYooptaEditor } from '@yoopta/editor';
 
-function CustomFloatingActions() {
+function FloatingBlockActionsComponent() {
   const editor = useYooptaEditor();
+  const { floatingBlockActionRef, toggle, styles } = useFloatingBlockActions();
 
-  const { hoveredBlockId, onPlusClick, onDragClick } = useFloatingBlockActions({
-    onPlusClick: (blockId, event) => {
-      console.log('Plus clicked for block:', blockId);
-      // Your logic here
-    },
-    onDragClick: (blockId, event) => {
-      console.log('Drag clicked for block:', blockId);
-      // Open BlockOptions or other actions
-    },
-  });
+  const onPlusClick = () => {
+    editor.insertBlock('Paragraph', { focus: true });
+  };
+
+  const onDragClick = () => {
+    // Open BlockOptions or other actions
+    toggle('frozen'); // Freeze to prevent movement
+  };
 
   return (
-    <FloatingBlockActions>
+    <FloatingBlockActions.Root ref={floatingBlockActionRef} style={styles}>
       <FloatingBlockActions.Button onClick={onPlusClick}>+</FloatingBlockActions.Button>
       <FloatingBlockActions.Button onClick={onDragClick}>⋮⋮</FloatingBlockActions.Button>
-      {hoveredBlockId && (
-        <FloatingBlockActions.Button onClick={() => console.log('Custom')}>
-          Custom
-        </FloatingBlockActions.Button>
-      )}
-    </FloatingBlockActions>
+    </FloatingBlockActions.Root>
   );
 }
 ```
@@ -68,27 +50,44 @@ function CustomFloatingActions() {
 
 ```tsx
 import { PlusIcon } from 'lucide-react';
-import { DragHandleDots1Icon } from '@radix-ui/react-icons';
+import { DragHandleDots2Icon } from '@radix-ui/react-icons';
 
 function FloatingActionsWithIcons() {
-  const { onPlusClick, onDragClick } = useFloatingBlockActions({
-    onPlusClick: (blockId) => {
-      // Logic for adding block
-    },
-    onDragClick: (blockId) => {
-      // Logic for drag & drop or opening menu
-    },
-  });
+  const editor = useYooptaEditor();
+  const { floatingBlockActionRef, styles } = useFloatingBlockActions();
 
   return (
-    <FloatingBlockActions>
-      <FloatingBlockActions.Button onClick={onPlusClick} title="Add block">
+    <FloatingBlockActions.Root ref={floatingBlockActionRef} style={styles}>
+      <FloatingBlockActions.Button
+        onClick={() => editor.insertBlock('Paragraph')}
+        title="Add block">
         <PlusIcon />
       </FloatingBlockActions.Button>
-      <FloatingBlockActions.Button onClick={onDragClick} title="Drag to move">
-        <DragHandleDots1Icon />
+      <FloatingBlockActions.Button title="Drag to move">
+        <DragHandleDots2Icon />
       </FloatingBlockActions.Button>
-    </FloatingBlockActions>
+    </FloatingBlockActions.Root>
+  );
+}
+```
+
+### Accessing State in Other Components
+
+```tsx
+function BlockOptionsComponent() {
+  const { duplicateBlock } = useBlockOptions();
+  // Access store actions without re-initializing logic
+  const { toggle } = useFloatingBlockActions();
+
+  const onDuplicate = () => {
+    duplicateBlock();
+    toggle('hovering'); // Resume normal tracking
+  };
+
+  return (
+    <BlockOptions.Root onClose={() => toggle('closed')}>
+      <BlockOptions.Button onClick={onDuplicate}>Duplicate</BlockOptions.Button>
+    </BlockOptions.Root>
   );
 }
 ```
@@ -102,30 +101,26 @@ Compound component with subcomponents:
 - `FloatingBlockActions.Root` - container (can use `FloatingBlockActions` directly)
 - `FloatingBlockActions.Button` - action button
 
-### useFloatingBlockActions(options?)
+### useFloatingBlockActions()
 
-Hook for working with FloatingBlockActions.
+Hook that initializes tracking logic and provides access to store.
 
 **Returns:**
 
 ```tsx
 {
-  hoveredBlockId: string | null;  // ID of currently active block (hovered or frozen)
-  isVisible: boolean;              // Panel visibility
-  isFrozen: boolean;               // Whether panel is frozen (ignores mousemove)
-  style: CSSProperties;            // Positioning styles
-  blockActionsRef: React.RefObject;         // Ref for container
-  onPlusClick: (event: React.MouseEvent) => void;
-  onDragClick: (event: React.MouseEvent) => void;
-}
-```
+  // Ref for FloatingBlockActions root element
+  floatingBlockActionRef: React.RefObject<HTMLDivElement>;
 
-**Options:**
+  // State from store
+  floatingBlockId: string | null;  // ID of currently hovered/frozen block
+  state: 'hovering' | 'frozen' | 'closed';
+  styles: CSSProperties;           // Calculated positioning styles
 
-```tsx
-{
-  onPlusClick?: (blockId: string, event: React.MouseEvent) => void;
-  onDragClick?: (blockId: string, event: React.MouseEvent) => void;
+  // Actions
+  toggle: (state: 'hovering' | 'frozen' | 'closed', id?: string) => void;
+  hide: () => void;
+  reset: () => void;
 }
 ```
 
