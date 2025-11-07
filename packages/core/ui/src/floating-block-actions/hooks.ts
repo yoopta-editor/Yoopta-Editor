@@ -94,11 +94,11 @@ export const useFloatingBlockActions = () => {
 
       if (closestBlock) {
         const { element, data } = closestBlock;
-        if (data.id !== store.id) {
+        if (data.id !== store.blockId) {
           store.toggle('hovering', data.id);
           updateBlockPosition(element, data);
         }
-      } else if (store.id !== null) {
+      } else if (store.blockId !== null) {
         hideBlockActions();
       }
     },
@@ -125,11 +125,10 @@ export const useFloatingBlockActions = () => {
   return {
     reference: store.reference,
 
-    floatingBlockId: store.id,
+    floatingBlockId: store.blockId,
     state: store.state,
     styles: store.styles,
 
-    // Actions
     toggle: store.toggle,
     hide: store.hide,
     reset: store.reset,

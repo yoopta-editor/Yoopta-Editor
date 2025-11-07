@@ -14,24 +14,21 @@ const INITIAL_STYLES: CSSProperties = {
 export type FloatingBlockActionsState = 'hovering' | 'frozen' | 'closed';
 
 export type FloatingBlockActionsStore = {
-  // State
-  id: string | null;
+  blockId: string | null;
   state: FloatingBlockActionsState;
   position: { top: number; left: number };
   styles: CSSProperties;
   reference: HTMLElement | null;
 
-  // Actions
   setReference: (reference: HTMLElement | null) => void;
-  toggle: (actionState: FloatingBlockActionsState, id?: string | null) => void;
+  toggle: (actionState: FloatingBlockActionsState, blockId?: string | null) => void;
   updatePosition: (top: number, left: number, blockActionsWidth?: number) => void;
   hide: () => void;
   reset: () => void;
 };
 
 export const useFloatingBlockActionsStore = create<FloatingBlockActionsStore>()((set, get) => ({
-  // Initial state
-  id: null,
+  blockId: null,
   state: 'closed',
   position: { top: 0, left: 0 },
   styles: INITIAL_STYLES,
@@ -40,12 +37,10 @@ export const useFloatingBlockActionsStore = create<FloatingBlockActionsStore>()(
   setReference(reference) {
     set({ reference });
   },
-  // Toggle state
-  toggle(actionState, id) {
-    set({ state: actionState, id: id || null });
+  toggle(actionState, blockId) {
+    set({ state: actionState, blockId: blockId || null });
   },
 
-  // Update position and styles
   updatePosition(top, left, blockActionsWidth = 46) {
     set({
       position: { top, left },
@@ -60,11 +55,10 @@ export const useFloatingBlockActionsStore = create<FloatingBlockActionsStore>()(
     });
   },
 
-  // Hide actions
   hide() {
     set({
       state: 'closed',
-      id: null,
+      blockId: null,
       styles: {
         ...get().styles,
         opacity: 0,
@@ -74,10 +68,9 @@ export const useFloatingBlockActionsStore = create<FloatingBlockActionsStore>()(
     });
   },
 
-  // Reset to initial state
   reset() {
     set({
-      id: null,
+      blockId: null,
       state: 'closed',
       position: { top: 0, left: 0 },
       styles: INITIAL_STYLES,

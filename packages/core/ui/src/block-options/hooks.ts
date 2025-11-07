@@ -30,7 +30,7 @@ export const useBlockOptions = () => {
 
   const open = useCallback(
     ({ reference, blockId }: UseBlockOptionsOpenOptions) => {
-      blockOptionStore.toggle('open', reference);
+      blockOptionStore.toggle('open', reference, blockId);
     },
     [blockOptionStore],
   );
@@ -39,56 +39,64 @@ export const useBlockOptions = () => {
     blockOptionStore.toggle('closed', null);
   }, [blockOptionStore]);
 
-  const duplicateBlock = useCallback(() => {
-    if (typeof editor.path.current !== 'number') {
-      close();
-      return;
-    }
-
-    editor.duplicateBlock({ original: { path: editor.path.current }, focus: true });
-    close();
-  }, [editor, close]);
-
-  const copyBlockLink = useCallback(() => {
-    const blockId = null;
-    if (!blockId) {
-      close();
-      return;
-    }
-
-    const block = editor.children[blockId];
-    if (block) {
-      const url = `${window.location.origin}${window.location.pathname}#${block.id}`;
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => {
-          console.log('Block link copied to clipboard');
-        });
-      } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+  const duplicateBlock = useCallback(
+    (blockId: string) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to duplicate block');
       }
 
-      editor.emit?.('block:copy', block);
-    }
+      editor.duplicateBlock({ original: { blockId }, focus: true });
+      close();
+    },
+    [editor, close],
+  );
 
-    close();
-  }, [blockOptionStore, editor, close]);
+  const copyBlockLink = useCallback(
+    (blockId) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to duplicate block');
+      }
 
-  const deleteBlock = useCallback(() => {
-    if (editor.path.current !== null) {
-      editor.deleteBlock({ at: editor.path.current });
+      const block = editor.children[blockId];
+      if (block) {
+        const url = `${window.location.origin}${window.location.pathname}#${block.id}`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(() => {
+            console.log('Block link copied to clipboard');
+          });
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = url;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+        }
+
+        editor.emit?.('block:copy', block);
+      }
+
+      close();
+    },
+    [blockOptionStore, editor, close],
+  );
+
+  const deleteBlock = useCallback(
+    (blockId: string | null) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to delete block');
+      }
+
+      editor.deleteBlock({ blockId });
       editor.setPath({ current: null });
-    }
 
-    close();
-  }, [editor, close]);
+      close();
+    },
+    [editor, close],
+  );
 
   const setFloatingRef = useCallback(
     (node: HTMLElement | null) => {
@@ -99,6 +107,7 @@ export const useBlockOptions = () => {
 
   return {
     isOpen,
+    blockId: blockOptionStore.blockId,
     style: floatingStyles,
     setFloatingRef,
     open,

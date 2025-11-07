@@ -30,7 +30,7 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
   const blockStyles = useBlockStyles(block, transform, transition, isDragging, isOver);
 
   const align = block.meta.align || 'left';
-  const className = `yoopta-block yoopta-align-${align}`;
+  const className = `yoopta-block ${align === 'left' ? '' : `yoopta-align-${align}`}`;
 
   const isSelected = Paths.isBlockSelected(editor, block);
 

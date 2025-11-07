@@ -64,16 +64,17 @@ export const useBlockStyles = (
   isDragging: boolean,
   isOver: boolean,
 ) =>
-  useMemo(
-    () => ({
+  useMemo(() => {
+    if (block.meta.depth === 0 && !isDragging && !transform) return undefined;
+
+    return {
       marginLeft: `${block.meta.depth * 20}px`,
       transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'none',
       transition,
       opacity: isDragging ? 0.7 : 1,
       borderBottom: isOver && !isDragging ? '2px solid #007aff' : undefined,
-    }),
-    [block.meta.depth, transform, transition, isDragging, isOver],
-  );
+    };
+  }, [block.meta.depth, transform, transition, isDragging, isOver]);
 
 export const useBlockOptionsRefs = () => {
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);

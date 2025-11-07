@@ -28,15 +28,17 @@ const EDITOR_STYLE = {
 const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
   const { open: openBlockOptions } = useBlockOptions();
-  const { toggle, reference } = useFloatingBlockActions();
+  const { toggle, reference, floatingBlockId } = useFloatingBlockActions();
 
   const onPlusClick = (e: React.MouseEvent) => {
     editor.insertBlock('Paragraph', { at: editor.path.current, focus: true });
   };
 
   const onDragClick = (e: React.MouseEvent) => {
-    openBlockOptions({ reference: reference as HTMLElement });
-    toggle('frozen');
+    if (!floatingBlockId) return;
+    console.log('onDragClick floatingBlockId', floatingBlockId);
+    openBlockOptions({ reference: reference as HTMLElement, blockId: floatingBlockId });
+    toggle('frozen', floatingBlockId);
   };
 
   const dragHandleProps = {};
@@ -49,30 +51,29 @@ const FloatingBlockActionsComponent = () => {
       <FloatingBlockActions.Button onClick={onDragClick} {...dragHandleProps}>
         <DragHandleDots2Icon />
       </FloatingBlockActions.Button>
-      <FloatingBlockActions.Button
-        onClick={() => editor.insertBlock('Paragraph', { at: editor.path.current, focus: true })}>
-        Insert
-      </FloatingBlockActions.Button>
     </FloatingBlockActions.Root>
   );
 };
 
 const BlockOptionsComponent = () => {
   const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
-  const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
+  const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
 
   const onDuplicateBlock = () => {
-    duplicateBlock();
+    if (!floatingBlockId) return;
+    duplicateBlock(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };
 
   const onCopyBlockLink = () => {
-    copyBlockLink();
+    if (!floatingBlockId) return;
+    copyBlockLink(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };
 
   const onDeleteBlock = () => {
-    deleteBlock();
+    if (!floatingBlockId) return;
+    deleteBlock(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };
 
@@ -84,7 +85,7 @@ const BlockOptionsComponent = () => {
     <BlockOptions.Root onClose={onClose}>
       <BlockOptions.Content>
         <BlockOptions.Group>
-          <BlockOptions.Button onClick={duplicateBlock}>Turn into</BlockOptions.Button>
+          <BlockOptions.Button onClick={onDuplicateBlock}>Turn into</BlockOptions.Button>
         </BlockOptions.Group>
         <BlockOptions.Separator />
         <BlockOptions.Group>
