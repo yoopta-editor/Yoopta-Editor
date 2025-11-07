@@ -18,8 +18,7 @@ import { useToolbarStore } from './store';
  */
 export const useToolbar = () => {
   const editor = useYooptaEditor();
-  const { state, frozen, reference, open, close, updateStyles, setFrozen, toggle, reset } =
-    useToolbarStore();
+  const { state, frozen, open, close, updateStyles, setFrozen, toggle, reset } = useToolbarStore();
 
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'top',

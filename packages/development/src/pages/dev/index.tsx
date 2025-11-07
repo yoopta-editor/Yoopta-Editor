@@ -5,6 +5,7 @@ import YooptaEditor, {
   YooptaContentValue,
   YooptaOnChangeOptions,
   createYooptaEditor,
+  Blocks,
 } from '@yoopta/editor';
 import {
   FloatingBlockActions,
@@ -12,7 +13,6 @@ import {
   BlockOptions,
   useFloatingBlockActions,
   Toolbar,
-  useToolbar,
 } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 
@@ -20,7 +20,7 @@ import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, PlusIcon } from 'lucide-react';
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, MagnetIcon, PlusIcon } from 'lucide-react';
 import {
   DragHandleDots2Icon,
   FontBoldIcon,
@@ -45,7 +45,6 @@ const FloatingBlockActionsComponent = () => {
 
   const onDragClick = (e: React.MouseEvent) => {
     if (!floatingBlockId) return;
-    console.log('onDragClick floatingBlockId', floatingBlockId);
     openBlockOptions({ reference: reference as HTMLElement, blockId: floatingBlockId });
     toggle('frozen', floatingBlockId);
   };
@@ -103,41 +102,13 @@ const BlockOptionsComponent = () => {
           <BlockOptions.Button onClick={onDeleteBlock}>Delete</BlockOptions.Button>
         </BlockOptions.Group>
       </BlockOptions.Content>
+      <BlockOptions.Separator />
+      <BlockOptions.Group>
+        <BlockOptions.Button onClick={onDuplicateBlock}>Generate AI</BlockOptions.Button>
+      </BlockOptions.Group>
     </BlockOptions.Root>
   );
 };
-
-// const ActionsMenuComponent = () => {
-//   const { actions, selectedAction, empty, onMouseEnter } = useActionsMenu({
-//     trigger: '/',
-//     mode: 'create',
-//   });
-
-//   return (
-//     <ActionMenu.Root>
-//       <ActionMenu.Content>
-//         <ActionMenu.List>
-//           {empty ? (
-//             <ActionMenu.Empty />
-//           ) : (
-//             actions.map((action) => (
-//               <ActionMenu.Item
-//                 key={action.type}
-//                 icon={action.icon}
-//                 title={action.title}
-//                 type={action.type}
-//                 description={action.description}
-//                 selected={selectedAction?.type === action.type}
-//                 // onClick={() => onActionClick(action.type)}
-//                 onMouseEnter={() => onMouseEnter(action.type)}
-//               />
-//             ))
-//           )}
-//         </ActionMenu.List>
-//       </ActionMenu.Content>
-//     </ActionMenu.Root>
-//   );
-// };
 
 const ToolbarComponent = () => {
   const editor = useYooptaEditor();
@@ -203,6 +174,7 @@ const ToolbarComponent = () => {
 };
 
 const BasicExample = () => {
+  // move plugins, marks and other things to this object setup
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
   const selectionRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<YooptaContentValue>(DEFAULT_VALUE);

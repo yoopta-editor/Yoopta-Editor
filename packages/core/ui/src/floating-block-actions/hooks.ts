@@ -64,7 +64,7 @@ export const useFloatingBlockActions = () => {
 
       // Only show actions if cursor is close enough
       if (closestBlock && minDistance <= MAX_DISTANCE) {
-        const blockId = closestBlock.getAttribute('data-yoopta-block-id');
+        const blockId = (closestBlock as HTMLElement).getAttribute('data-yoopta-block-id');
         const blockData = blockId ? editor.children[blockId] : null;
 
         if (blockId && blockData) {
