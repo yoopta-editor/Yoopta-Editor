@@ -8,10 +8,10 @@ export const TOOLS: Tools = {
     render: DefaultActionMenuRender,
     tool: ActionMenuList,
   },
-  Toolbar: {
-    render: DefaultToolbarRender,
-    tool: Toolbar,
-  },
+  // Toolbar: {
+  //   render: DefaultToolbarRender,
+  //   tool: Toolbar,
+  // },
   LinkTool: {
     render: DefaultLinkToolRender,
     tool: LinkTool,

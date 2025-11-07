@@ -11,6 +11,8 @@ import {
   useBlockOptions,
   BlockOptions,
   useFloatingBlockActions,
+  Toolbar,
+  useToolbar,
 } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 
@@ -18,8 +20,15 @@ import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { PlusIcon } from 'lucide-react';
-import { DragHandleDots2Icon } from '@radix-ui/react-icons';
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, PlusIcon } from 'lucide-react';
+import {
+  DragHandleDots2Icon,
+  FontBoldIcon,
+  FontItalicIcon,
+  UnderlineIcon,
+  StrikethroughIcon,
+  CodeIcon,
+} from '@radix-ui/react-icons';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -130,6 +139,69 @@ const BlockOptionsComponent = () => {
 //   );
 // };
 
+const ToolbarComponent = () => {
+  const editor = useYooptaEditor();
+
+  const isBoldActive = editor.formats.bold?.isActive();
+  const isItalicActive = editor.formats.italic?.isActive();
+  const isUnderlineActive = editor.formats.underline?.isActive();
+  const isStrikeActive = editor.formats.strike?.isActive();
+  const isCodeActive = editor.formats.code?.isActive();
+
+  return (
+    <Toolbar.Root>
+      <Toolbar.Group>
+        {editor.formats.bold && (
+          <Toolbar.Button onClick={editor.formats.bold?.toggle} active={isBoldActive} title="Bold">
+            <FontBoldIcon />
+          </Toolbar.Button>
+        )}
+        {editor.formats.italic && (
+          <Toolbar.Button
+            onClick={editor.formats.italic?.toggle}
+            active={isItalicActive}
+            title="Italic">
+            <FontItalicIcon />
+          </Toolbar.Button>
+        )}
+        {editor.formats.underline && (
+          <Toolbar.Button
+            onClick={editor.formats.underline?.toggle}
+            active={isUnderlineActive}
+            title="Underline">
+            <UnderlineIcon />
+          </Toolbar.Button>
+        )}
+        {editor.formats.strike && (
+          <Toolbar.Button
+            onClick={editor.formats.strike?.toggle}
+            active={isStrikeActive}
+            title="Strikethrough">
+            <StrikethroughIcon />
+          </Toolbar.Button>
+        )}
+        {editor.formats.code && (
+          <Toolbar.Button onClick={editor.formats.code?.toggle} active={isCodeActive} title="Code">
+            <CodeIcon />
+          </Toolbar.Button>
+        )}
+      </Toolbar.Group>
+      <Toolbar.Separator />
+      <Toolbar.Group>
+        <Toolbar.Button onClick={() => console.log('Align left')}>
+          <AlignLeftIcon />
+        </Toolbar.Button>
+        <Toolbar.Button onClick={() => console.log('Align center')}>
+          <AlignCenterIcon />
+        </Toolbar.Button>
+        <Toolbar.Button onClick={() => console.log('Align right')}>
+          <AlignRightIcon />
+        </Toolbar.Button>
+      </Toolbar.Group>
+    </Toolbar.Root>
+  );
+};
+
 const BasicExample = () => {
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
   const selectionRef = useRef<HTMLDivElement>(null);
@@ -159,6 +231,7 @@ const BasicExample = () => {
         onChange={onChange}>
         <FloatingBlockActionsComponent />
         <BlockOptionsComponent />
+        <ToolbarComponent />
       </YooptaEditor>
     </div>
   );

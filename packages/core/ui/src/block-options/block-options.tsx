@@ -38,14 +38,14 @@ type BlockOptionsSeparatorProps = {
 
 const BlockOptionsRoot = memo(
   ({ children, style: styleProp, onClose: onCloseProp, className = '' }: BlockOptionsRootProps) => {
-    const { close, style: floatingStyle, isOpen, setFloatingRef } = useBlockOptions();
+    const { close, style: floatingStyle, isMounted, setFloatingRef } = useBlockOptions();
 
     const style = {
       ...floatingStyle,
       ...styleProp,
     };
 
-    if (!isOpen) return null;
+    if (!isMounted) return null;
 
     const onClose = () => {
       close();

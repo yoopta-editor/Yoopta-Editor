@@ -1,5 +1,13 @@
 import { useCallback, useEffect } from 'react';
-import { useFloating, offset, flip, shift, autoUpdate, inline } from '@floating-ui/react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  autoUpdate,
+  inline,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { useBlockOptionsStore } from './store';
 
@@ -14,12 +22,16 @@ export const useBlockOptions = () => {
 
   const isOpen = blockOptionStore.state === 'open';
 
-  const { refs, floatingStyles, update } = useFloating({
+  const { refs, floatingStyles, context, update } = useFloating({
     placement: 'right-start',
     open: isOpen,
     middleware: [inline(), flip(), shift(), offset({ mainAxis: 5 })],
     whileElementsMounted: autoUpdate,
     strategy: 'fixed',
+  });
+
+  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+    duration: 150,
   });
 
   useEffect(() => {
@@ -107,8 +119,9 @@ export const useBlockOptions = () => {
 
   return {
     isOpen,
+    isMounted,
     blockId: blockOptionStore.blockId,
-    style: floatingStyles,
+    style: { ...floatingStyles, ...transitionStyles },
     setFloatingRef,
     open,
     close,
