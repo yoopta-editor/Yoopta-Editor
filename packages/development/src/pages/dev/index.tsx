@@ -7,15 +7,10 @@ import YooptaEditor, {
   createYooptaEditor,
 } from '@yoopta/editor';
 import {
-  YooptaUI,
   FloatingBlockActions,
-  useFloatingBlockActions,
   useBlockOptions,
   BlockOptions,
-  // ActionMenu,
-  // useActionsMenu,
-  // useBlockOptions,
-  // useDndKit,
+  useFloatingBlockActions,
 } from '@yoopta/ui';
 import { useMemo, useRef, useState } from 'react';
 
@@ -32,30 +27,26 @@ const EDITOR_STYLE = {
 
 const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
-
-  const { hoveredBlockId } = useFloatingBlockActions();
-  const { open } = useBlockOptions();
-  // const { open: openActionMenu } = useActionsMenu();
-  // const { getDragHandleProps } = useDndKit();
+  const { open: openBlockOptions } = useBlockOptions();
+  const {
+    toggle: toggleFloatingBlockActions,
+    floatingBlockActionRef,
+    style: floatingBlockActionsStyle,
+  } = useFloatingBlockActions();
 
   const onPlusClick = (e: React.MouseEvent) => {
-    editor.insertBlock('text', { at: editor.path.current, focus: true });
-    // openActionMenu({
-    //   ref: e.currentTarget as HTMLElement,
-    // });
+    editor.insertBlock('Paragraph', { at: editor.path.current, focus: true });
   };
 
   const onDragClick = (e: React.MouseEvent) => {
-    open({
-      ref: e.currentTarget as HTMLElement,
-    });
+    openBlockOptions({ reference: floatingBlockActionRef.current as HTMLElement });
+    toggleFloatingBlockActions('frozen');
   };
 
-  // const dragHandleProps = getDragHandleProps(hoveredBlockId);
   const dragHandleProps = {};
 
   return (
-    <FloatingBlockActions.Root>
+    <FloatingBlockActions.Root ref={floatingBlockActionRef} style={floatingBlockActionsStyle}>
       <FloatingBlockActions.Button onClick={onPlusClick}>
         <PlusIcon />
       </FloatingBlockActions.Button>
@@ -72,18 +63,38 @@ const FloatingBlockActionsComponent = () => {
 
 const BlockOptionsComponent = () => {
   const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
+  const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
+
+  const onDuplicateBlock = () => {
+    duplicateBlock();
+    toggleFloatingBlockActions('hovering');
+  };
+
+  const onCopyBlockLink = () => {
+    copyBlockLink();
+    toggleFloatingBlockActions('hovering');
+  };
+
+  const onDeleteBlock = () => {
+    deleteBlock();
+    toggleFloatingBlockActions('hovering');
+  };
+
+  const onClose = () => {
+    toggleFloatingBlockActions('closed');
+  };
 
   return (
-    <BlockOptions.Root>
+    <BlockOptions.Root onClose={onClose}>
       <BlockOptions.Content>
         <BlockOptions.Group>
           <BlockOptions.Button onClick={duplicateBlock}>Turn into</BlockOptions.Button>
         </BlockOptions.Group>
         <BlockOptions.Separator />
         <BlockOptions.Group>
-          <BlockOptions.Button onClick={duplicateBlock}>Duplicate</BlockOptions.Button>
-          <BlockOptions.Button onClick={copyBlockLink}>Copy link to block</BlockOptions.Button>
-          <BlockOptions.Button onClick={deleteBlock}>Delete</BlockOptions.Button>
+          <BlockOptions.Button onClick={onDuplicateBlock}>Duplicate</BlockOptions.Button>
+          <BlockOptions.Button onClick={onCopyBlockLink}>Copy link to block</BlockOptions.Button>
+          <BlockOptions.Button onClick={onDeleteBlock}>Delete</BlockOptions.Button>
         </BlockOptions.Group>
       </BlockOptions.Content>
     </BlockOptions.Root>
@@ -137,30 +148,21 @@ const BasicExample = () => {
       className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col items-center"
       ref={selectionRef}>
       <FixedToolbar editor={editor} DEFAULT_DATA={DEFAULT_VALUE} />
-      <YooptaUI
-        theme={{
-          floatingActions: {
-            zIndex: 100,
-          },
-        }}>
-        <YooptaEditor
-          editor={editor}
-          plugins={YOOPTA_PLUGINS}
-          selectionBoxRoot={selectionRef}
-          marks={MARKS}
-          autoFocus
-          readOnly={false}
-          placeholder="Type / to open menu"
-          tools={TOOLS}
-          style={EDITOR_STYLE}
-          value={value}
-          onChange={onChange}>
-          <FloatingBlockActionsComponent />
-          <BlockOptionsComponent />
-          {/* <ActionsMenuComponent />
-          <BlockOptionsComponent /> */}
-        </YooptaEditor>
-      </YooptaUI>
+      <YooptaEditor
+        editor={editor}
+        plugins={YOOPTA_PLUGINS}
+        selectionBoxRoot={selectionRef}
+        marks={MARKS}
+        autoFocus
+        readOnly={false}
+        placeholder="Type / to open menu"
+        tools={TOOLS}
+        style={EDITOR_STYLE}
+        value={value}
+        onChange={onChange}>
+        <FloatingBlockActionsComponent />
+        <BlockOptionsComponent />
+      </YooptaEditor>
     </div>
   );
 };

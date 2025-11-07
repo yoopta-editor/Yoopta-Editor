@@ -1,84 +1,43 @@
-import { useContext, useCallback, useEffect, CSSProperties } from 'react';
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  autoUpdate,
-  inline,
-  useTransitionStyles,
-} from '@floating-ui/react';
+import { useCallback, useEffect } from 'react';
+import { useFloating, offset, flip, shift, autoUpdate, inline } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
-import { YooptaUIContext } from '../ui-context/yoopta-ui-context';
+import { useBlockOptionsStore } from './store';
 
 type UseBlockOptionsOpenOptions = {
-  ref: HTMLElement;
+  reference: HTMLElement;
   blockId?: string;
 };
 
 export const useBlockOptions = () => {
-  const { uiRefs, uiState, setUIState, hoveredBlockId, onSetFrozenBlockId } =
-    useContext(YooptaUIContext);
   const editor = useYooptaEditor();
+  const blockOptionStore = useBlockOptionsStore();
 
-  const { refs, floatingStyles, context, update } = useFloating({
+  const isOpen = blockOptionStore.state === 'open';
+
+  const { refs, floatingStyles, update } = useFloating({
     placement: 'right-start',
-    open: uiState.blockOptions.isOpen,
-    middleware: [inline(), offset(10), flip(), shift({ padding: 8 })],
+    open: isOpen,
+    middleware: [inline(), flip(), shift(), offset({ mainAxis: 5 })],
     whileElementsMounted: autoUpdate,
     strategy: 'fixed',
   });
 
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: {
-      open: 150,
-      close: 100,
-    },
-    initial: {
-      opacity: 0,
-      transform: 'scale(0.95)',
-    },
-  });
-
   useEffect(() => {
-    if (uiState.blockOptions.isOpen && uiRefs.current.blockOptions.anchor) {
-      refs.setReference(uiRefs.current.blockOptions.anchor);
-    }
-  }, [uiState.blockOptions.isOpen, uiRefs, refs]);
+    refs.setReference(blockOptionStore.refs.reference);
+
+    if (isOpen) update();
+  }, [refs, blockOptionStore.refs.reference, isOpen]);
 
   const open = useCallback(
-    ({ ref, blockId }: UseBlockOptionsOpenOptions) => {
-      const targetBlockId = blockId || hoveredBlockId || editor.path.current?.toString() || null;
-      uiRefs.current.blockOptions.anchor = ref;
-      refs.setReference(ref);
-
-      setUIState({
-        blockOptions: {
-          isOpen: true,
-          blockId: targetBlockId,
-        },
-      });
-
-      if (targetBlockId) {
-        onSetFrozenBlockId(targetBlockId);
-      }
+    ({ reference, blockId }: UseBlockOptionsOpenOptions) => {
+      blockOptionStore.toggle('open', reference);
     },
-    [uiRefs, refs, setUIState, hoveredBlockId, editor.path.current, onSetFrozenBlockId],
+    [blockOptionStore],
   );
 
   const close = useCallback(() => {
-    uiRefs.current.blockOptions.anchor = null;
-    uiRefs.current.blockOptions.floating = null;
-
-    setUIState({
-      blockOptions: {
-        isOpen: false,
-        blockId: null,
-      },
-    });
-
-    onSetFrozenBlockId(null);
-  }, [uiRefs, setUIState, onSetFrozenBlockId]);
+    blockOptionStore.toggle('closed', null);
+  }, [blockOptionStore]);
 
   const duplicateBlock = useCallback(() => {
     if (typeof editor.path.current !== 'number') {
@@ -91,7 +50,7 @@ export const useBlockOptions = () => {
   }, [editor, close]);
 
   const copyBlockLink = useCallback(() => {
-    const blockId = uiState.blockOptions.blockId || editor.path.current?.toString();
+    const blockId = null;
     if (!blockId) {
       close();
       return;
@@ -120,7 +79,7 @@ export const useBlockOptions = () => {
     }
 
     close();
-  }, [uiState.blockOptions.blockId, editor, close]);
+  }, [blockOptionStore, editor, close]);
 
   const deleteBlock = useCallback(() => {
     if (editor.path.current !== null) {
@@ -131,26 +90,16 @@ export const useBlockOptions = () => {
     close();
   }, [editor, close]);
 
-  const style: CSSProperties = {
-    ...floatingStyles,
-    ...transitionStyles,
-  };
-
   const setFloatingRef = useCallback(
     (node: HTMLElement | null) => {
-      uiRefs.current.blockOptions.floating = node;
-
-      if (node) {
-        refs.setFloating(node);
-      }
+      refs.setFloating(node);
     },
-    [uiRefs, refs],
+    [blockOptionStore, refs],
   );
 
   return {
-    isOpen: uiState.blockOptions.isOpen,
-    isMounted,
-    style,
+    isOpen,
+    style: floatingStyles,
     setFloatingRef,
     open,
     close,

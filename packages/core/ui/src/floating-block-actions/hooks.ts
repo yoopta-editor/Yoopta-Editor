@@ -1,11 +1,15 @@
-import { useContext, useEffect, useRef, useCallback, useState, CSSProperties } from 'react';
+import { useEffect, useRef, useCallback, useState, CSSProperties } from 'react';
 import { useYooptaEditor, YooptaBlockData } from '@yoopta/editor';
-import { YooptaUIContext } from '../ui-context/yoopta-ui-context';
 import { throttle } from '../utils/throttle';
+import { useFloatingBlockActionsStore } from './store';
 
 type UseFloatingBlockActionsOptions = {
   onPlusClick?: (blockId: string, event: React.MouseEvent) => void;
   onDragClick?: (blockId: string, event: React.MouseEvent) => void;
+  toggle?: (state: 'hovering' | 'frozen' | 'closed') => void;
+  blockId?: string;
+  state?: 'hovering' | 'frozen' | 'closed';
+  floatingBlockActionRef?: React.RefObject<HTMLDivElement>;
 };
 
 type ActionStyles = CSSProperties;
@@ -21,21 +25,17 @@ const INITIAL_STYLES: ActionStyles = {
 };
 
 export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions) => {
-  const { hoveredBlockId, onSetHoveredBlockId, frozenBlockId } = useContext(YooptaUIContext);
   const editor = useYooptaEditor();
+  const floatingActionsStore = useFloatingBlockActionsStore();
 
   const [actionStyles, setActionStyles] = useState<ActionStyles>(INITIAL_STYLES);
-  const blockActionsRef = useRef<HTMLDivElement>(null);
-
-  // Use frozenBlockId if set, otherwise use hoveredBlockId
-  const activeBlockId = frozenBlockId || hoveredBlockId;
+  const floatingBlockActionRef = useRef<HTMLDivElement>(null);
+  const floatingBlockId = floatingActionsStore.id;
 
   const updateBlockPosition = useCallback(
     (blockElement: HTMLElement, blockData: YooptaBlockData) => {
-      onSetHoveredBlockId(blockData.id);
-
       const blockElementRect = blockElement.getBoundingClientRect();
-      const blockActionsWidth = blockActionsRef.current?.offsetWidth || 46;
+      const blockActionsWidth = floatingBlockActionRef.current?.offsetWidth || 46;
 
       setActionStyles((prev) => ({
         ...prev,
@@ -46,7 +46,7 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
         pointerEvents: 'auto',
       }));
     },
-    [onSetHoveredBlockId],
+    [floatingActionsStore],
   );
 
   const hideBlockActions = useCallback(() => {
@@ -57,107 +57,91 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
       pointerEvents: 'none',
     }));
 
-    onSetHoveredBlockId(null);
-  }, [onSetHoveredBlockId]);
+    floatingActionsStore.toggle('closed', null);
+  }, [floatingActionsStore]);
 
   // Find the closest block to cursor position (optimized for viewport only)
-  const findClosestBlock = useCallback(
-    (mouseY: number): { element: HTMLElement; data: YooptaBlockData } | null => {
-      if (!editor.refElement) return null;
+  const findClosestBlock = (
+    mouseY: number,
+  ): { element: HTMLElement; data: YooptaBlockData } | null => {
+    if (!editor.refElement) return null;
 
-      const blocks = editor.refElement.querySelectorAll('[data-yoopta-block]');
-      const viewportHeight = window.innerHeight;
-      const VIEWPORT_MARGIN = 200; // Extra margin for smooth experience
-      const MAX_DISTANCE = 100; // Maximum distance to show actions
+    const blocks = editor.refElement.querySelectorAll('[data-yoopta-block]');
+    const viewportHeight = window.innerHeight;
+    const VIEWPORT_MARGIN = 200; // Extra margin for smooth experience
+    const MAX_DISTANCE = 100; // Maximum distance to show actions
 
-      let closestBlock: HTMLElement | null = null;
-      let minDistance = Infinity;
+    let closestBlock: HTMLElement | null = null;
+    let minDistance = Infinity;
 
-      blocks.forEach((block) => {
-        const blockElement = block as HTMLElement;
-        const rect = blockElement.getBoundingClientRect();
+    blocks.forEach((block) => {
+      const blockElement = block as HTMLElement;
+      const rect = blockElement.getBoundingClientRect();
 
-        // Skip blocks outside viewport (with margin)
-        if (rect.bottom < -VIEWPORT_MARGIN || rect.top > viewportHeight + VIEWPORT_MARGIN) {
-          return;
-        }
-
-        // Check if cursor is within the block's vertical bounds
-        if (mouseY >= rect.top && mouseY <= rect.bottom) {
-          closestBlock = blockElement;
-          minDistance = 0;
-          return;
-        }
-
-        // Calculate distance to block
-        const distance = mouseY < rect.top ? rect.top - mouseY : mouseY - rect.bottom;
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestBlock = blockElement;
-        }
-      });
-
-      // Only show actions if cursor is close enough
-      if (closestBlock && minDistance <= MAX_DISTANCE) {
-        const blockId = closestBlock.getAttribute('data-yoopta-block-id');
-        const blockData = blockId ? editor.children[blockId] : null;
-
-        if (blockId && blockData) {
-          return { element: closestBlock, data: blockData };
-        }
+      // Skip blocks outside viewport (with margin)
+      if (rect.bottom < -VIEWPORT_MARGIN || rect.top > viewportHeight + VIEWPORT_MARGIN) {
+        return;
       }
 
-      return null;
-    },
-    [editor.refElement, editor.children],
-  );
-
-  const handleMouseMove = useCallback(
-    (event: MouseEvent) => {
-      // If frozen, ignore mousemove
-      if (frozenBlockId) return;
-
-      const target = event.target as HTMLElement;
-      const isInsideEditor = editor.refElement?.contains(event.target as Node);
-      const isInsideActions = blockActionsRef.current?.contains(target);
-
-      // Hide if outside editor or in read-only mode
-      if (!isInsideEditor) return hideBlockActions();
-      if (editor.readOnly) return;
-      if (isInsideActions) return;
-
-      // Find closest block to cursor position
-      const closestBlock = findClosestBlock(event.clientY);
-
-      if (closestBlock) {
-        const { element, data } = closestBlock;
-        if (data.id !== hoveredBlockId) {
-          updateBlockPosition(element, data);
-        }
-      } else if (hoveredBlockId !== null) {
-        hideBlockActions();
+      // Check if cursor is within the block's vertical bounds
+      if (mouseY >= rect.top && mouseY <= rect.bottom) {
+        closestBlock = blockElement;
+        minDistance = 0;
+        return;
       }
-    },
-    [
-      frozenBlockId,
-      editor.refElement,
-      editor.readOnly,
-      hoveredBlockId,
-      hideBlockActions,
-      updateBlockPosition,
-      findClosestBlock,
-    ],
-  );
 
-  const throttledMouseMove = useCallback(
-    throttle(handleMouseMove, 100, { leading: true, trailing: true }),
-    [handleMouseMove],
-  );
+      // Calculate distance to block
+      const distance = mouseY < rect.top ? rect.top - mouseY : mouseY - rect.bottom;
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestBlock = blockElement;
+      }
+    });
+
+    // Only show actions if cursor is close enough
+    if (closestBlock && minDistance <= MAX_DISTANCE) {
+      const blockId = closestBlock.getAttribute('data-yoopta-block-id');
+      const blockData = blockId ? editor.children[blockId] : null;
+
+      if (blockId && blockData) {
+        return { element: closestBlock, data: blockData };
+      }
+    }
+
+    return null;
+  };
+
+  const handleMouseMove = (event: MouseEvent) => {
+    // If frozen, ignore mousemove
+    if (floatingActionsStore.state === 'frozen') return;
+
+    const target = event.target as HTMLElement;
+    const isInsideEditor = editor.refElement?.contains(event.target as Node);
+    const isInsideActions = floatingBlockActionRef.current?.contains(target);
+
+    if (!isInsideEditor) return hideBlockActions();
+    if (editor.readOnly) return;
+    if (isInsideActions) return;
+
+    const closestBlock = findClosestBlock(event.clientY);
+
+    if (closestBlock) {
+      const { element, data } = closestBlock;
+      if (data.id !== floatingBlockId) {
+        floatingActionsStore.toggle('hovering', data.id);
+        updateBlockPosition(element, data);
+      }
+    } else if (floatingBlockId !== null) {
+      hideBlockActions();
+    }
+  };
+
+  const throttledMouseMove = throttle(handleMouseMove, 100, { leading: true, trailing: true });
 
   useEffect(() => {
     const handleScroll = () => {
-      if (frozenBlockId) return;
+      if (floatingActionsStore.state === 'frozen') return;
       hideBlockActions();
     };
 
@@ -168,36 +152,27 @@ export const useFloatingBlockActions = (options?: UseFloatingBlockActionsOptions
       document.removeEventListener('mousemove', throttledMouseMove);
       document.removeEventListener('scroll', handleScroll, true);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hideBlockActions]);
+  }, [hideBlockActions, floatingActionsStore.id, floatingActionsStore.state]);
 
-  // Handlers
-  const handlePlusClick = useCallback(
-    (event: React.MouseEvent) => {
-      event.stopPropagation();
-      if (activeBlockId && options?.onPlusClick) {
-        options.onPlusClick(activeBlockId, event);
-      }
-    },
-    [activeBlockId, options],
-  );
+  const handlePlusClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (floatingBlockId && options?.onPlusClick) {
+      options.onPlusClick(floatingBlockId, event);
+    }
+  };
 
-  const handleDragClick = useCallback(
-    (event: React.MouseEvent) => {
-      event.stopPropagation();
-      if (activeBlockId && options?.onDragClick) {
-        options.onDragClick(activeBlockId, event);
-      }
-    },
-    [activeBlockId, options],
-  );
+  const handleDragClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (floatingBlockId && options?.onDragClick) {
+      options.onDragClick(floatingBlockId, event);
+    }
+  };
 
   return {
-    hoveredBlockId: activeBlockId,
-    isVisible: activeBlockId !== null,
-    isFrozen: frozenBlockId !== null,
     style: actionStyles,
-    blockActionsRef,
+    floatingBlockActionRef,
+    floatingBlockId: floatingActionsStore.id,
+    toggle: floatingActionsStore.toggle,
     onPlusClick: handlePlusClick,
     onDragClick: handleDragClick,
   };

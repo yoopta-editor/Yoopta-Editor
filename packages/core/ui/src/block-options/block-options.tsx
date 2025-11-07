@@ -1,16 +1,16 @@
-import { forwardRef, type ReactNode, useEffect, useCallback } from 'react';
+import { forwardRef, type ReactNode, memo, CSSProperties } from 'react';
 import { UI } from '@yoopta/editor';
-import { useBlockOptions } from './hooks';
 import './block-options.css';
+import { useBlockOptions } from './hooks';
 
 const Portal = UI.Portal;
 const Overlay = UI.Overlay;
 
-// ============ Types ============
-
 type BlockOptionsRootProps = {
   children: ReactNode;
+  style?: CSSProperties;
   className?: string;
+  onClose?: () => void;
 };
 
 type BlockOptionsContentProps = {
@@ -36,54 +36,27 @@ type BlockOptionsSeparatorProps = {
   className?: string;
 };
 
-// ============ Root Component ============
+const BlockOptionsRoot = memo(
+  ({ children, style: styleProp, onClose: onCloseProp, className = '' }: BlockOptionsRootProps) => {
+    const { close, style: floatingStyle, isOpen, setFloatingRef } = useBlockOptions();
 
-const BlockOptionsRoot = forwardRef<HTMLDivElement, BlockOptionsRootProps>(
-  ({ children, className = '' }, ref) => {
-    const { isOpen, isMounted, style, setFloatingRef, close } = useBlockOptions();
+    const style = {
+      ...floatingStyle,
+      ...styleProp,
+    };
 
-    // Close on Escape key
-    useEffect(() => {
-      if (!isOpen) return;
+    if (!isOpen) return null;
 
-      const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          close();
-        }
-      };
-
-      document.addEventListener('keydown', handleEscape);
-
-      return () => {
-        document.removeEventListener('keydown', handleEscape);
-      };
-    }, [isOpen, close]);
-
-    // Combine forwarded ref with setFloatingRef
-    const combinedRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        // Call setFloatingRef (for Floating UI)
-        setFloatingRef(node);
-
-        // Call forwarded ref (if provided)
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [setFloatingRef, ref],
-    );
-
-    // Use isMounted instead of isOpen for rendering
-    // This allows transition animation to complete
-    if (!isMounted) return null;
+    const onClose = () => {
+      close();
+      onCloseProp?.();
+    };
 
     return (
       <Portal id="yoo-block-options-portal">
-        <Overlay lockScroll className="yoo-editor-z-[100]" onClick={close}>
+        <Overlay lockScroll className="yoo-editor-z-[100]" onClick={onClose}>
           <div
-            ref={combinedRef}
+            ref={setFloatingRef}
             className={`yoopta-ui-block-options ${className}`}
             style={style}
             contentEditable={false}>
@@ -94,24 +67,12 @@ const BlockOptionsRoot = forwardRef<HTMLDivElement, BlockOptionsRootProps>(
     );
   },
 );
-
 BlockOptionsRoot.displayName = 'BlockOptions.Root';
 
-// ============ Content Component ============
-
-const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>(
-  ({ children, className = '' }, ref) => {
-    return (
-      <div ref={ref} className={`yoopta-ui-block-options-content ${className}`}>
-        {children}
-      </div>
-    );
-  },
-);
-
+const BlockOptionsContent = memo(({ children, className = '' }: BlockOptionsContentProps) => {
+  return <div className={`yoopta-ui-block-options-content ${className}`}>{children}</div>;
+});
 BlockOptionsContent.displayName = 'BlockOptions.Content';
-
-// ============ Group Component ============
 
 const BlockOptionsGroup = forwardRef<HTMLDivElement, BlockOptionsGroupProps>(
   ({ children, className = '' }, ref) => {
@@ -122,10 +83,7 @@ const BlockOptionsGroup = forwardRef<HTMLDivElement, BlockOptionsGroupProps>(
     );
   },
 );
-
 BlockOptionsGroup.displayName = 'BlockOptions.Group';
-
-// ============ Button Component ============
 
 const BlockOptionsButton = forwardRef<HTMLButtonElement, BlockOptionsButtonProps>(
   ({ children, onClick, className = '', disabled, icon, variant = 'default', ...props }, ref) => {
@@ -143,20 +101,14 @@ const BlockOptionsButton = forwardRef<HTMLButtonElement, BlockOptionsButtonProps
     );
   },
 );
-
 BlockOptionsButton.displayName = 'BlockOptions.Button';
-
-// ============ Separator Component ============
 
 const BlockOptionsSeparator = forwardRef<HTMLDivElement, BlockOptionsSeparatorProps>(
   ({ className = '' }, ref) => {
     return <div ref={ref} className={`yoopta-ui-block-options-separator ${className}`} />;
   },
 );
-
 BlockOptionsSeparator.displayName = 'BlockOptions.Separator';
-
-// ============ Compound Component ============
 
 export const BlockOptions = Object.assign(BlockOptionsRoot, {
   Root: BlockOptionsRoot,
