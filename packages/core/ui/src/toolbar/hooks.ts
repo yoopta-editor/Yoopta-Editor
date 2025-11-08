@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -18,7 +18,7 @@ import { useToolbarStore } from './store';
  */
 export const useToolbar = () => {
   const editor = useYooptaEditor();
-  const { state, frozen, open, close, updateStyles, setFrozen, toggle, reset } = useToolbarStore();
+  const { state, frozen, open, close, setFrozen, toggle, reset } = useToolbarStore();
 
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'top',
@@ -47,43 +47,41 @@ export const useToolbar = () => {
       domSelection?.isCollapsed ||
       domSelection?.anchorOffset === domSelection?.focusOffset
     ) {
-      return close();
+      if (state === 'open') {
+        close();
+      }
+      return;
     }
 
     const domRange = domSelection.getRangeAt(0);
     const selectionRect = domRange.getBoundingClientRect();
     const text = domRange.toString().trim();
 
-    const pluginWithCustomEditor = document.querySelectorAll('[data-custom-editor]');
     const ancestor = domRange?.commonAncestorContainer;
 
-    let isInsideCustomEditor = false;
-    for (let i = 0; i < pluginWithCustomEditor.length; i++) {
-      if (pluginWithCustomEditor[i].contains(ancestor)) {
-        isInsideCustomEditor = true;
-        break;
-      }
-    }
+    // Check if inside custom editor (optimized - check closest instead of querySelectorAll)
+    const isInsideCustomEditor = !!(ancestor as Element)?.closest?.('[data-custom-editor]');
 
     if (!editor.refElement?.contains(ancestor) || isInsideCustomEditor) {
-      return close();
+      if (state === 'open') {
+        close();
+      }
+      return;
     }
 
     if (domRange && text.length > 0) {
-      // refs.setReference({
-      //   getBoundingClientRect: () => selectionRect,
-      //   getClientRects: () => domRange.getClientRects(),
-      // });
-
       const reference = {
         getBoundingClientRect: () => selectionRect,
         getClientRects: () => domRange.getClientRects(),
       };
 
       refs.setReference(reference);
-      open(reference as HTMLElement);
+
+      if (state !== 'open') {
+        open();
+      }
     }
-  }, [frozen, refs, editor.refElement, close, open]);
+  }, [frozen, refs, editor.refElement, close, open, state]);
 
   // Block selection change handler
   const onBlockSelectionChange = useCallback(() => {
@@ -92,7 +90,10 @@ export const useToolbar = () => {
       editor.path.selected.length === 0 ||
       (editor.path.source !== 'mousemove' && editor.path.source !== 'keyboard')
     ) {
-      return close();
+      if (state === 'open') {
+        close();
+      }
+      return;
     }
 
     const firstSelectedBlockPath = Math.min(...editor.path.selected);
@@ -109,34 +110,31 @@ export const useToolbar = () => {
     const selectedBlock = editor.getBlock({
       at: isBottomDirection ? lastSelectedBlockPath : firstSelectedBlockPath,
     });
+
+    if (!selectedBlock) return;
+
     const blockEl = editor.refElement?.querySelector<HTMLElement>(
-      `[data-yoopta-block-id="${selectedBlock?.id}"]`,
+      `[data-yoopta-block-id="${selectedBlock.id}"]`,
     );
+
     if (!blockEl) return;
 
-    // refs.setReference({
-    //   getBoundingClientRect: () => blockEl.getBoundingClientRect(),
-    //   getClientRects: () => blockEl.getClientRects(),
-    // });
+    refs.setReference(blockEl);
 
-    const reference = {
-      getBoundingClientRect: () => blockEl.getBoundingClientRect(),
-      getClientRects: () => blockEl.getClientRects(),
-    };
+    if (state !== 'open') {
+      open();
+    }
+  }, [editor, refs, close, open, state]);
 
-    refs.setReference(reference);
-    open(reference as HTMLElement);
-  }, [close, refs, editor, open]);
-
-  // useEffect(() => {
-  //   refs.setReference(reference);
-  //   if (state === 'open') update();
-  // }, [refs, reference, state]);
-
-  const throttledSelectionChange = throttle(selectionChange, 200, {
-    leading: true,
-    trailing: true,
-  });
+  // Memoize throttled function to avoid recreation
+  const throttledSelectionChange = useMemo(
+    () =>
+      throttle(selectionChange, 200, {
+        leading: true,
+        trailing: true,
+      }),
+    [selectionChange],
+  );
 
   useEffect(() => {
     if (!Array.isArray(editor.path.selected) && !editor.path.selection) {
@@ -154,28 +152,26 @@ export const useToolbar = () => {
     window.document.addEventListener('selectionchange', throttledSelectionChange);
     return () => window.document.removeEventListener('selectionchange', throttledSelectionChange);
   }, [
-    editor.path,
-    editor.children,
+    editor.path.selected,
+    editor.path.selection,
     state,
     throttledSelectionChange,
     close,
     onBlockSelectionChange,
   ]);
 
-  useEffect(() => {
-    if (isMounted && state === 'open') {
-      updateStyles({ ...floatingStyles, ...transitionStyles });
-    }
-  }, [floatingStyles, transitionStyles, isMounted, state, updateStyles]);
+  // Combine styles once
+  const combinedStyles = useMemo(
+    () => ({ ...floatingStyles, ...transitionStyles }),
+    [floatingStyles, transitionStyles],
+  );
 
   return {
-    setFloating: refs.setFloating,
+    setFloatingRef: refs.setFloating,
     isMounted,
-
     state,
     frozen,
-    styles: { ...floatingStyles, ...transitionStyles },
-
+    styles: combinedStyles,
     open,
     close,
     toggle,

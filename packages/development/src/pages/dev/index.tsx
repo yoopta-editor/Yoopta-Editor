@@ -13,8 +13,10 @@ import {
   BlockOptions,
   useFloatingBlockActions,
   Toolbar,
+  ActionMenuList,
+  useActionMenuList,
 } from '@yoopta/ui';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
@@ -64,8 +66,14 @@ const FloatingBlockActionsComponent = () => {
 };
 
 const BlockOptionsComponent = () => {
-  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptions();
+  const { duplicateBlock, copyBlockLink, deleteBlock, reference } = useBlockOptions();
   const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
+  const { open: openActionMenuList } = useActionMenuList();
+
+  const onTurnInto = (e: React.MouseEvent) => {
+    openActionMenuList({ reference: e.currentTarget as HTMLElement, view: 'small' });
+    toggleFloatingBlockActions('frozen');
+  };
 
   const onDuplicateBlock = () => {
     if (!floatingBlockId) return;
@@ -93,7 +101,7 @@ const BlockOptionsComponent = () => {
     <BlockOptions.Root onClose={onClose}>
       <BlockOptions.Content>
         <BlockOptions.Group>
-          <BlockOptions.Button onClick={onDuplicateBlock}>Turn into</BlockOptions.Button>
+          <BlockOptions.Button onClick={onTurnInto}>Turn into</BlockOptions.Button>
         </BlockOptions.Group>
         <BlockOptions.Separator />
         <BlockOptions.Group>
@@ -173,6 +181,33 @@ const ToolbarComponent = () => {
   );
 };
 
+const ActionMenuListComponent = () => {
+  const { actions, selectedAction, empty, getItemProps, getRootProps, view, isMounted } =
+    useActionMenuList();
+
+  return (
+    <ActionMenuList.Root>
+      <ActionMenuList.Content view={view}>
+        <ActionMenuList.Group {...getRootProps()}>
+          {empty ? (
+            <ActionMenuList.Empty />
+          ) : (
+            actions.map((action) => (
+              <ActionMenuList.Item
+                key={action.type}
+                action={action}
+                view={view}
+                selected={action.type === selectedAction?.type}
+                {...getItemProps(action.type)}
+              />
+            ))
+          )}
+        </ActionMenuList.Group>
+      </ActionMenuList.Content>
+    </ActionMenuList.Root>
+  );
+};
+
 const BasicExample = () => {
   // move plugins, marks and other things to this object setup
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
@@ -204,6 +239,7 @@ const BasicExample = () => {
         <FloatingBlockActionsComponent />
         <BlockOptionsComponent />
         <ToolbarComponent />
+        <ActionMenuListComponent />
       </YooptaEditor>
     </div>
   );

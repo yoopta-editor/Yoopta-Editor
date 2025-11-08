@@ -77,7 +77,7 @@ function FloatingActions() {
 
   const onDragClick = (e: React.MouseEvent) => {
     open({
-      ref: e.currentTarget as HTMLElement,
+      reference: e.currentTarget as HTMLElement,
     });
   };
 
@@ -85,6 +85,43 @@ function FloatingActions() {
     <FloatingBlockActions>
       <FloatingBlockActions.Button onClick={onDragClick}>⋮⋮</FloatingBlockActions.Button>
     </FloatingBlockActions>
+  );
+}
+```
+
+### Integration with ActionMenuList (Turn Into)
+
+```tsx
+import { BlockOptions, useBlockOptions, useActionMenuList } from '@yoopta/ui';
+
+function BlockOptionsComponent() {
+  const { reference, close, duplicateBlock, deleteBlock } = useBlockOptions();
+  const { open: openActionMenuList } = useActionMenuList();
+
+  const onTurnInto = () => {
+    if (!reference) return;
+    // Open ActionMenuList with small view at BlockOptions position
+    openActionMenuList({ reference, view: 'small' });
+    close();
+  };
+
+  return (
+    <BlockOptions.Root>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Button onClick={onTurnInto}>Turn into</BlockOptions.Button>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Button onClick={() => duplicateBlock(blockId)}>
+            Duplicate
+          </BlockOptions.Button>
+          <BlockOptions.Button onClick={() => deleteBlock(blockId)} variant="destructive">
+            Delete
+          </BlockOptions.Button>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions.Root>
   );
 }
 ```
@@ -110,16 +147,18 @@ Hook for managing BlockOptions state and actions.
 ```tsx
 {
   isOpen: boolean;                      // Menu visibility
+  isMounted: boolean;                   // Transition state
   blockId: string | null;               // Current block ID
+  reference: HTMLElement | null;        // Reference element for positioning
   style: CSSProperties;                 // Positioning styles
-  blockOptionsRef: React.RefObject;     // Container ref
+  setFloatingRef: (node: HTMLElement | null) => void; // Set floating element ref
 
   // Actions
-  open: (options: { ref: HTMLElement; blockId?: string }) => void;
+  open: (options: { reference: HTMLElement; blockId?: string }) => void;
   close: () => void;
-  duplicateBlock: () => void;
-  copyBlockLink: () => void;
-  deleteBlock: () => void;
+  duplicateBlock: (blockId: string) => void;
+  copyBlockLink: (blockId: string) => void;
+  deleteBlock: (blockId: string) => void;
 }
 ```
 

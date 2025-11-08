@@ -7,14 +7,14 @@ const { Portal } = UI;
 export type ToolbarRootProps = Partial<HTMLAttributes<HTMLDivElement>>;
 
 const ToolbarRoot = ({ className, children, ...props }: ToolbarRootProps) => {
-  const { setFloating, isMounted, styles } = useToolbar();
+  const { setFloatingRef, isMounted, styles } = useToolbar();
 
   if (!isMounted) return null;
 
   return (
     <Portal id="yoo-toolbar-portal">
       <div
-        ref={setFloating}
+        ref={setFloatingRef}
         style={styles}
         className={`yoopta-ui-toolbar ${className || ''}`}
         onClick={(e) => e.stopPropagation()}

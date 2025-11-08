@@ -17,13 +17,6 @@ describe('ToolbarStore', () => {
       expect(result.current.state).toBe('closed');
       expect(result.current.frozen).toBe(false);
     });
-
-    it('should have initial styles', () => {
-      const { result } = renderHook(() => useToolbarStore());
-
-      expect(result.current.styles).toBeDefined();
-      expect(result.current.styles.position).toBe('absolute');
-    });
   });
 
   describe('Open/Close', () => {
@@ -108,23 +101,6 @@ describe('ToolbarStore', () => {
     });
   });
 
-  describe('Styles', () => {
-    it('should update styles', () => {
-      const { result } = renderHook(() => useToolbarStore());
-      const newStyles = {
-        opacity: 1,
-        top: 100,
-        left: 200,
-      };
-
-      act(() => {
-        result.current.updateStyles(newStyles);
-      });
-
-      expect(result.current.styles).toEqual(newStyles);
-    });
-  });
-
   describe('Reset', () => {
     it('should reset to initial state', () => {
       const { result } = renderHook(() => useToolbarStore());
@@ -132,13 +108,11 @@ describe('ToolbarStore', () => {
       act(() => {
         result.current.open();
         result.current.setFrozen(true);
-        result.current.updateStyles({ opacity: 1 });
         result.current.reset();
       });
 
       expect(result.current.state).toBe('closed');
       expect(result.current.frozen).toBe(false);
-      expect(result.current.styles.position).toBe('absolute');
     });
   });
 });

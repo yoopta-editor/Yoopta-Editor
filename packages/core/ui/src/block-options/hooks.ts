@@ -121,6 +121,7 @@ export const useBlockOptions = () => {
     isOpen,
     isMounted,
     blockId: blockOptionStore.blockId,
+    reference: blockOptionStore.refs.reference,
     style: { ...floatingStyles, ...transitionStyles },
     setFloatingRef,
     open,
