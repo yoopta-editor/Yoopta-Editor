@@ -15,7 +15,6 @@ export type ToolbarStore = {
 };
 
 export const useToolbarStore = create<ToolbarStore>()((set) => ({
-  // Initial state
   state: 'closed',
   frozen: false,
 

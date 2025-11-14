@@ -48,7 +48,7 @@ const BlockOptionsRoot = memo(
     if (!isMounted) return null;
 
     const onClose = () => {
-      close();
+      // close();
       onCloseProp?.();
     };
 

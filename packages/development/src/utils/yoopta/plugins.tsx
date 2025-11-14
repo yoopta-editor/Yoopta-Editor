@@ -26,11 +26,6 @@ export const YOOPTA_PLUGINS = [
     events: {
       onBeforeCreate: (editor) => TableCommands.buildTableElements(editor, { rows: 3, columns: 3 }),
     },
-    options: {
-      display: {
-        title: 'Table with Shadcn',
-      },
-    },
   }),
   Divider.extend({
     elementProps: {
@@ -41,11 +36,14 @@ export const YOOPTA_PLUGINS = [
     },
   }),
   Accordion.extend({
-    // events: {
-    //   onBeforeCreate: (editor) => {
-    //     return AccordionCommands.buildAccordionElements(editor, { items: 2, props: { isExpanded: true } });
-    //   },
-    // },
+    events: {
+      onBeforeCreate: (editor) => {
+        return AccordionCommands.buildAccordionElements(editor, {
+          items: 2,
+          props: { isExpanded: true },
+        });
+      },
+    },
   }),
   File.extend({
     events: {

@@ -13,7 +13,6 @@ export type ActionMenuListProps = {
   trigger?: string;
   view?: 'small' | 'default';
   mode?: 'create' | 'toggle';
-  render?: (props: ActionMenuRenderProps) => JSX.Element;
 };
 
 export type ActionMenuRenderProps = {

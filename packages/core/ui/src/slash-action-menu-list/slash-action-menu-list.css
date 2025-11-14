@@ -1,0 +1,138 @@
+/* SlashActionMenuList Content (with floating positioning and visual styles) */
+.yoopta-ui-slash-action-menu-list-content {
+  position: absolute;
+  z-index: var(--yoopta-ui-action-menu-z-index, 9999);
+  margin: 0;
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  background: hsl(var(--yoopta-ui-background));
+  border: 1px solid hsl(var(--yoopta-ui-border));
+  border-radius: var(--yoopta-ui-action-menu-radius, 0.5rem);
+  box-shadow: var(
+    --yoopta-ui-action-menu-shadow,
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1)
+  );
+  padding: var(--yoopta-ui-action-menu-padding, 0.5rem);
+  max-height: var(--yoopta-ui-action-menu-max-height, 330px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* SlashActionMenuList Group */
+.yoopta-ui-slash-action-menu-list-group {
+  overflow: hidden;
+  padding: 0;
+  color: hsl(var(--yoopta-ui-foreground));
+}
+
+/* SlashActionMenuList Item */
+.yoopta-ui-slash-action-menu-list-item {
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  gap: var(--yoopta-ui-action-menu-item-gap, 0.5rem);
+  border-radius: var(--yoopta-ui-action-menu-item-radius, 0.375rem);
+  padding: var(--yoopta-ui-action-menu-item-padding, 0.5rem);
+  margin-bottom: 0.125rem;
+  text-align: left;
+  font-size: var(--yoopta-ui-action-menu-item-font-size, 0.875rem);
+  background: transparent;
+  border: none;
+  color: hsl(var(--yoopta-ui-foreground));
+  transition: background-color 150ms ease-out;
+  outline: none;
+}
+
+.yoopta-ui-slash-action-menu-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.yoopta-ui-slash-action-menu-list-item:hover {
+  background: hsl(var(--yoopta-ui-accent));
+}
+
+.yoopta-ui-slash-action-menu-list-item[aria-selected='true'] {
+  background: hsl(var(--yoopta-ui-accent));
+}
+
+.yoopta-ui-slash-action-menu-list-item.selected {
+  background: hsl(var(--yoopta-ui-accent));
+}
+
+.yoopta-ui-slash-action-menu-list-item:focus-visible {
+  outline: 2px solid hsl(var(--yoopta-ui-ring));
+  outline-offset: 2px;
+}
+
+/* SlashActionMenuList Item Icon */
+.yoopta-ui-slash-action-menu-list-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--yoopta-ui-action-menu-icon-radius, 0.375rem);
+  border: 1px solid hsl(var(--yoopta-ui-border));
+  background: hsl(var(--yoopta-ui-background));
+  flex-shrink: 0;
+}
+
+.yoopta-ui-slash-action-menu-list-item-icon img,
+.yoopta-ui-slash-action-menu-list-item-icon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* SlashActionMenuList Item Content */
+.yoopta-ui-slash-action-menu-list-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* SlashActionMenuList Item Title */
+.yoopta-ui-slash-action-menu-list-item-title {
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* SlashActionMenuList Item Description */
+.yoopta-ui-slash-action-menu-list-item-description {
+  font-size: var(--yoopta-ui-action-menu-item-description-font-size, 0.75rem);
+  color: hsl(var(--yoopta-ui-muted-foreground));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+  line-height: 1.25;
+  margin-top: 0.125rem;
+}
+
+/* SlashActionMenuList Empty */
+.yoopta-ui-slash-action-menu-list-empty {
+  text-align: left;
+  color: hsl(var(--yoopta-ui-muted-foreground));
+  font-size: var(--yoopta-ui-action-menu-empty-font-size, 0.75rem);
+  padding: var(--yoopta-ui-action-menu-empty-padding, 0.5rem);
+}
+
+/* Scrollbar styles */
+.yoopta-ui-slash-action-menu-list-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.yoopta-ui-slash-action-menu-list-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yoopta-ui-slash-action-menu-list-content::-webkit-scrollbar-thumb {
+  background: hsl(var(--yoopta-ui-border));
+  border-radius: 4px;
+}
+
+.yoopta-ui-slash-action-menu-list-content::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--yoopta-ui-muted-foreground));
+}

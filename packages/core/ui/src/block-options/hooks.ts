@@ -16,11 +16,102 @@ type UseBlockOptionsOpenOptions = {
   blockId?: string;
 };
 
+/**
+ * Lightweight hook for accessing only store actions
+ * Use this when you only need to open/close the menu programmatically
+ * without rendering the menu itself
+ */
+export const useBlockOptionsActions = () => {
+  const editor = useYooptaEditor();
+  const store = useBlockOptionsStore();
+
+  const duplicateBlock = useCallback(
+    (blockId: string) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to duplicate block');
+      }
+
+      editor.duplicateBlock({ original: { blockId }, focus: true });
+      store.close();
+    },
+    [editor, store],
+  );
+
+  const copyBlockLink = useCallback(
+    (blockId: string) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to copy block link');
+      }
+
+      const block = editor.children[blockId];
+      if (block) {
+        const url = `${window.location.origin}${window.location.pathname}#${block.id}`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(() => {
+            console.log('Block link copied to clipboard');
+          });
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = url;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+        }
+
+        editor.emit?.('block:copy', block);
+      }
+
+      store.close();
+    },
+    [editor, store],
+  );
+
+  const deleteBlock = useCallback(
+    (blockId: string | null) => {
+      if (!blockId) {
+        throw new Error('Block ID is required to delete block');
+      }
+
+      editor.deleteBlock({ blockId });
+      editor.setPath({ current: null });
+
+      store.close();
+    },
+    [editor, store],
+  );
+
+  return {
+    open: store.open,
+    close: store.close,
+    state: store.state,
+    blockId: store.blockId,
+    reference: store.reference,
+    duplicateBlock,
+    copyBlockLink,
+    deleteBlock,
+  };
+};
+
+/**
+ * Full hook with Floating UI, event listeners, and all logic
+ * Use this only in the component that renders the BlockOptions
+ */
 export const useBlockOptions = () => {
   const editor = useYooptaEditor();
-  const blockOptionStore = useBlockOptionsStore();
+  const {
+    state,
+    blockId,
+    reference: storeReference,
+    open: storeOpen,
+    close: storeClose,
+    setReference,
+  } = useBlockOptionsStore();
 
-  const isOpen = blockOptionStore.state === 'open';
+  const isOpen = state === 'open';
 
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'right-start',
@@ -34,22 +125,24 @@ export const useBlockOptions = () => {
     duration: 150,
   });
 
+  // Sync store reference with Floating UI
   useEffect(() => {
-    refs.setReference(blockOptionStore.refs.reference);
-
+    if (storeReference) {
+      refs.setReference(storeReference);
+    }
     if (isOpen) update();
-  }, [refs, blockOptionStore.refs.reference, isOpen]);
+  }, [refs, storeReference, isOpen, update]);
 
   const open = useCallback(
     ({ reference, blockId }: UseBlockOptionsOpenOptions) => {
-      blockOptionStore.toggle('open', reference, blockId);
+      storeOpen({ reference, blockId });
     },
-    [blockOptionStore],
+    [storeOpen],
   );
 
   const close = useCallback(() => {
-    blockOptionStore.toggle('closed', null);
-  }, [blockOptionStore]);
+    storeClose();
+  }, [storeClose]);
 
   const duplicateBlock = useCallback(
     (blockId: string) => {
@@ -64,9 +157,9 @@ export const useBlockOptions = () => {
   );
 
   const copyBlockLink = useCallback(
-    (blockId) => {
+    (blockId: string) => {
       if (!blockId) {
-        throw new Error('Block ID is required to duplicate block');
+        throw new Error('Block ID is required to copy block link');
       }
 
       const block = editor.children[blockId];
@@ -93,7 +186,7 @@ export const useBlockOptions = () => {
 
       close();
     },
-    [blockOptionStore, editor, close],
+    [editor, close],
   );
 
   const deleteBlock = useCallback(
@@ -114,14 +207,14 @@ export const useBlockOptions = () => {
     (node: HTMLElement | null) => {
       refs.setFloating(node);
     },
-    [blockOptionStore, refs],
+    [refs],
   );
 
   return {
     isOpen,
     isMounted,
-    blockId: blockOptionStore.blockId,
-    reference: blockOptionStore.refs.reference,
+    blockId,
+    reference: storeReference,
     style: { ...floatingStyles, ...transitionStyles },
     setFloatingRef,
     open,

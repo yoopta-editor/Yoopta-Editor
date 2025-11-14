@@ -13,7 +13,6 @@ const ActionMenuListRoot = ({
   trigger,
   view,
   mode,
-  render,
   className,
   ...props
 }: ActionMenuListRootProps) => {

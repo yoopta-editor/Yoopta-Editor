@@ -10,11 +10,16 @@ import YooptaEditor, {
 import {
   FloatingBlockActions,
   useBlockOptions,
+  useBlockOptionsActions,
   BlockOptions,
   useFloatingBlockActions,
+  useFloatingBlockActionsActions,
   Toolbar,
   ActionMenuList,
   useActionMenuList,
+  useActionMenuListActions,
+  SlashActionMenuList,
+  useSlashActionMenu,
 } from '@yoopta/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -22,7 +27,14 @@ import { FixedToolbar } from '../../components/FixedToolbar/FixedToolbar';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { TOOLS } from '../../utils/yoopta/tools';
-import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, MagnetIcon, PlusIcon } from 'lucide-react';
+import {
+  AlignCenterIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  ChevronDownIcon,
+  MagnetIcon,
+  PlusIcon,
+} from 'lucide-react';
 import {
   DragHandleDots2Icon,
   FontBoldIcon,
@@ -30,7 +42,9 @@ import {
   UnderlineIcon,
   StrikethroughIcon,
   CodeIcon,
+  MagicWandIcon,
 } from '@radix-ui/react-icons';
+import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons/icons';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -38,7 +52,7 @@ const EDITOR_STYLE = {
 
 const FloatingBlockActionsComponent = () => {
   const editor = useYooptaEditor();
-  const { open: openBlockOptions } = useBlockOptions();
+  const { open: openBlockOptions } = useBlockOptionsActions();
   const { toggle, reference, floatingBlockId } = useFloatingBlockActions();
 
   const onPlusClick = (e: React.MouseEvent) => {
@@ -66,13 +80,18 @@ const FloatingBlockActionsComponent = () => {
 };
 
 const BlockOptionsComponent = () => {
-  const { duplicateBlock, copyBlockLink, deleteBlock, reference } = useBlockOptions();
-  const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
-  const { open: openActionMenuList } = useActionMenuList();
+  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptionsActions();
+  const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActionsActions();
+  const { open: openActionMenuList } = useActionMenuListActions();
 
-  const onTurnInto = (e: React.MouseEvent) => {
-    openActionMenuList({ reference: e.currentTarget as HTMLElement, view: 'small' });
+  const onTurnInto = () => {
     toggleFloatingBlockActions('frozen');
+    openActionMenuList({
+      reference: document.querySelector('.yoopta-ui-block-options') as HTMLElement,
+      view: 'small',
+      mode: 'button',
+      placement: 'right',
+    });
   };
 
   const onDuplicateBlock = () => {
@@ -94,7 +113,7 @@ const BlockOptionsComponent = () => {
   };
 
   const onClose = () => {
-    toggleFloatingBlockActions('closed');
+    // toggleFloatingBlockActions('closed');
   };
 
   return (
@@ -112,7 +131,9 @@ const BlockOptionsComponent = () => {
       </BlockOptions.Content>
       <BlockOptions.Separator />
       <BlockOptions.Group>
-        <BlockOptions.Button onClick={onDuplicateBlock}>Generate AI</BlockOptions.Button>
+        <BlockOptions.Button onClick={onDuplicateBlock} icon={<MagicWandIcon />}>
+          Generate AI
+        </BlockOptions.Button>
       </BlockOptions.Group>
     </BlockOptions.Root>
   );
@@ -120,6 +141,7 @@ const BlockOptionsComponent = () => {
 
 const ToolbarComponent = () => {
   const editor = useYooptaEditor();
+  const { open: openActionMenuList } = useActionMenuListActions();
 
   const isBoldActive = editor.formats.bold?.isActive();
   const isItalicActive = editor.formats.italic?.isActive();
@@ -127,8 +149,24 @@ const ToolbarComponent = () => {
   const isStrikeActive = editor.formats.strike?.isActive();
   const isCodeActive = editor.formats.code?.isActive();
 
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenuList({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      mode: 'button',
+      placement: 'bottom-start',
+    });
+  };
+
   return (
     <Toolbar.Root>
+      <Toolbar.Group>
+        <Toolbar.Button onClick={onTurnIntoClick}>
+          Turn into
+          <ChevronDownIcon />
+        </Toolbar.Button>
+      </Toolbar.Group>
+      <Toolbar.Separator />
       <Toolbar.Group>
         {editor.formats.bold && (
           <Toolbar.Button onClick={editor.formats.bold?.toggle} active={isBoldActive} title="Bold">
@@ -181,30 +219,35 @@ const ToolbarComponent = () => {
   );
 };
 
-const ActionMenuListComponent = () => {
-  const { actions, selectedAction, empty, getItemProps, getRootProps, view, isMounted } =
-    useActionMenuList();
+const SlashActionMenuListComponent = () => {
+  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } = useSlashActionMenu(
+    { trigger: '/' },
+  );
+
+  if (!isOpen) return null;
 
   return (
-    <ActionMenuList.Root>
-      <ActionMenuList.Content view={view}>
-        <ActionMenuList.Group {...getRootProps()}>
-          {empty ? (
-            <ActionMenuList.Empty />
-          ) : (
-            actions.map((action) => (
-              <ActionMenuList.Item
+    <SlashActionMenuList.Root {...getRootProps()}>
+      <SlashActionMenuList.Group>
+        {empty ? (
+          <SlashActionMenuList.Empty />
+        ) : (
+          actions.map((action) => {
+            const Icon = ACTION_MENU_LIST_DEFAULT_ICONS_MAP[action.type];
+
+            return (
+              <SlashActionMenuList.Item
                 key={action.type}
                 action={action}
-                view={view}
                 selected={action.type === selectedAction?.type}
+                icon={Icon ? <Icon width={20} height={20} /> : null}
                 {...getItemProps(action.type)}
               />
-            ))
-          )}
-        </ActionMenuList.Group>
-      </ActionMenuList.Content>
-    </ActionMenuList.Root>
+            );
+          })
+        )}
+      </SlashActionMenuList.Group>
+    </SlashActionMenuList.Root>
   );
 };
 
@@ -239,7 +282,7 @@ const BasicExample = () => {
         <FloatingBlockActionsComponent />
         <BlockOptionsComponent />
         <ToolbarComponent />
-        <ActionMenuListComponent />
+        <SlashActionMenuListComponent />
       </YooptaEditor>
     </div>
   );

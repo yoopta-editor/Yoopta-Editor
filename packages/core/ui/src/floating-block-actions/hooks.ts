@@ -1,11 +1,31 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useYooptaEditor, YooptaBlockData } from '@yoopta/editor';
 import { throttle } from '../utils/throttle';
 import { useFloatingBlockActionsStore } from './store';
 
 /**
- * Hook for FloatingBlockActions
+ * Lightweight hook for accessing only store actions
+ * Use this when you only need to control the state programmatically
+ * without needing the mouse tracking logic
+ */
+export const useFloatingBlockActionsActions = () => {
+  const store = useFloatingBlockActionsStore();
+
+  return {
+    reference: store.reference,
+    floatingBlockId: store.blockId,
+    state: store.state,
+    styles: store.styles,
+    toggle: store.toggle,
+    hide: store.hide,
+    reset: store.reset,
+  };
+};
+
+/**
+ * Full hook for FloatingBlockActions
  * Handles mouse tracking, positioning, and provides access to store
+ * Use this only in the component that renders the FloatingBlockActions
  */
 export const useFloatingBlockActions = () => {
   const editor = useYooptaEditor();
@@ -124,7 +144,6 @@ export const useFloatingBlockActions = () => {
 
   return {
     reference: store.reference,
-
     floatingBlockId: store.blockId,
     state: store.state,
     styles: store.styles,
