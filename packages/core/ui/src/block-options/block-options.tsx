@@ -1,7 +1,6 @@
-import { forwardRef, type ReactNode, memo, CSSProperties } from 'react';
+import { forwardRef, type ReactNode, CSSProperties } from 'react';
 import { UI } from '@yoopta/editor';
 import './block-options.css';
-import { useBlockOptions } from './hooks';
 
 const Portal = UI.Portal;
 const Overlay = UI.Overlay;
@@ -11,11 +10,6 @@ type BlockOptionsRootProps = {
   style?: CSSProperties;
   className?: string;
   onClose?: () => void;
-};
-
-type BlockOptionsContentProps = {
-  children: ReactNode;
-  className?: string;
 };
 
 type BlockOptionsGroupProps = {

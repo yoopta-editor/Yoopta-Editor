@@ -64,7 +64,7 @@ export function mapActionMenuItems(
   });
 }
 
-function filterToggleActions(editor: YooEditor, type: string) {
+export function filterToggleActions(editor: YooEditor, type: string) {
   const block = editor.blocks[type];
   if (!block) return false;
 

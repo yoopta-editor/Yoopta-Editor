@@ -13,7 +13,7 @@ import { useTheme } from '@yoopta/ui';
 
 type Props = {
   editor: YooEditor;
-  DEFAULT_DATA: any;
+  DEFAULT_DATA?: any;
 };
 
 export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {

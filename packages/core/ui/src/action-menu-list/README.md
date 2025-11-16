@@ -1,391 +1,469 @@
 # ActionMenuList
 
-A flexible and customizable action menu list component for Yoopta Editor, built with Zustand for state management and styled with shadcn/ui principles.
+A controlled menu component for displaying and selecting block types. Perfect for "Turn into" buttons in toolbars and block options.
 
 ## Features
 
-- 🎯 **Keyboard Navigation** - Full keyboard support (Arrow keys, Enter, Escape, Tab)
-- 🔍 **Search & Filter** - Real-time filtering with support for aliases and shortcuts
-- 🎨 **Customizable** - Compound component pattern with full styling control
-- ⚡ **Performance** - Optimized with Zustand for state management
-- 🎭 **Smooth Animations** - Built-in transitions using Floating UI
-- 📱 **Responsive** - Adapts to different view modes (default/small)
+- 🎮 **Controlled** - Full control over open/close state
+- 🎯 **Programmatic API** - Open from anywhere with `open()` function
+- 🎨 **Flexible positioning** - Customizable placement via Floating UI
+- 📦 **Compound Components** - Composable UI structure
+- ⌨️ **Keyboard Navigation** - Built-in arrow key and hover support
+- 🎭 **Two Views** - `small` and `default` sizes
 
-## Architecture
+## Installation
 
-### Store (`store.ts`)
+```bash
+yarn add @yoopta/ui
+```
 
-Manages the action menu state using Zustand:
+## Basic Usage
 
-- `state`: 'open' | 'closed'
-- `searchText`: Current search query
-- `selectedIndex`: Currently selected item index
-- `styles`: Floating UI styles
-
-### Hook (`hooks.ts`)
-
-`useActionMenuList` - Main hook that:
-
-- Handles keyboard navigation
-- Manages filtering and search
-- Integrates with Floating UI for positioning
-- Provides smooth transitions
-
-### Component (`action-menu-list.tsx`)
-
-Compound component with subcomponents:
-
-- `ActionMenuList.Root` - Container with portal
-- `ActionMenuList.Content` - Scrollable content wrapper
-- `ActionMenuList.Group` - Group items together
-- `ActionMenuList.Item` - Individual action item
-- `ActionMenuList.Empty` - Empty state message
-
-## Usage
-
-### Basic Example
+### Simple Example
 
 ```tsx
-import { ActionMenuList, useActionMenuList } from '@yoopta/ui';
-import { useYooptaEditor } from '@yoopta/editor';
+import { ActionMenuList, useActionMenuList, useActionMenuListActions } from '@yoopta/ui';
 
-const ActionMenuComponent = () => {
-  const editor = useYooptaEditor();
-  const { actions, selectedAction, empty, getItemProps, getRootProps } = useActionMenuList();
+// Component that renders the menu
+const MyActionMenuList = () => {
+  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
+    useActionMenuList();
+
+  if (!isOpen) return null;
 
   return (
-    <ActionMenuList.Root>
-      <ActionMenuList.Content>
-        <ActionMenuList.Group {...getRootProps()}>
-          {empty ? (
-            <ActionMenuList.Empty />
-          ) : (
-            actions.map((action) => (
-              <ActionMenuList.Item
-                key={action.type}
-                action={action}
-                selected={action.type === selectedAction?.type}
-                {...getItemProps(action.type)}
-              />
-            ))
-          )}
-        </ActionMenuList.Group>
-      </ActionMenuList.Content>
+    <ActionMenuList.Root {...getRootProps()}>
+      <ActionMenuList.Group>
+        {empty ? (
+          <ActionMenuList.Empty />
+        ) : (
+          actions.map((action) => (
+            <ActionMenuList.Item
+              key={action.type}
+              action={action}
+              selected={action.type === selectedAction?.type}
+              icon={<MyIcon />}
+              {...getItemProps(action.type)}
+            />
+          ))
+        )}
+      </ActionMenuList.Group>
+    </ActionMenuList.Root>
+  );
+};
+
+// Component that opens the menu
+const MyToolbar = () => {
+  const { open } = useActionMenuListActions();
+
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    open({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
+
+  return <button onClick={onTurnIntoClick}>Turn into</button>;
+};
+
+// Usage
+<YooptaEditor>
+  <MyToolbar />
+  <MyActionMenuList />
+</YooptaEditor>;
+```
+
+## API Reference
+
+### Hooks
+
+#### `useActionMenuList(options?)`
+
+Full hook with Floating UI and all logic. Use this only in the component that renders the menu.
+
+**Options:**
+
+```typescript
+{
+  items?: string[];  // Array of block type names. Defaults to all editor blocks
+  view?: 'small' | 'default';  // Default: 'default'
+}
+```
+
+**Returns:**
+
+```typescript
+{
+  isOpen: boolean;                    // Whether menu is mounted and visible
+  state: 'open' | 'closed';          // Current state
+  actions: ActionMenuItem[];          // Filtered block types
+  selectedAction: ActionMenuItem | null;  // Currently selected item
+  empty: boolean;                     // Whether actions array is empty
+  view: 'small' | 'default';         // Current view mode
+  open: (options: OpenOptions) => void;  // Open menu programmatically
+  close: () => void;                  // Close menu
+  getItemProps: (type: string) => ItemProps;  // Props for menu items
+  getRootProps: () => RootProps;      // Props for root container
+}
+```
+
+**OpenOptions:**
+
+```typescript
+{
+  reference: HTMLElement | null;     // Required: Element to position relative to
+  view?: 'small' | 'default';        // Optional: Override view mode
+  placement?: Placement;              // Optional: Floating UI placement
+}
+```
+
+#### `useActionMenuListActions()`
+
+Lightweight hook for accessing only store actions. Use this when you only need to open/close the menu programmatically without rendering it.
+
+**Returns:**
+
+```typescript
+{
+  open: (options: OpenOptions) => void;
+  close: () => void;
+  toggle: (state: 'open' | 'closed') => void;
+  isOpen: boolean;
+}
+```
+
+### Components
+
+#### `ActionMenuList.Root`
+
+Root container for the menu. Handles positioning and visibility.
+
+**Props:**
+
+```typescript
+{
+  children: ReactNode;
+  style?: CSSProperties;
+  className?: string;
+  ...HTMLAttributes<HTMLDivElement>
+}
+```
+
+**Usage:**
+
+```tsx
+<ActionMenuList.Root {...getRootProps()}>{children}</ActionMenuList.Root>
+```
+
+#### `ActionMenuList.Group`
+
+Groups menu items together.
+
+**Props:**
+
+```typescript
+{
+  children: ReactNode;
+  className?: string;
+  ...HTMLAttributes<HTMLDivElement>
+}
+```
+
+**Usage:**
+
+```tsx
+<ActionMenuList.Group>
+  <ActionMenuList.Item ... />
+  <ActionMenuList.Item ... />
+</ActionMenuList.Group>
+```
+
+#### `ActionMenuList.Item`
+
+Individual menu item representing a block type.
+
+**Props:**
+
+```typescript
+{
+  action: ActionMenuItem;     // Required: Block type info
+  selected?: boolean;         // Whether item is selected
+  icon?: string | ReactNode;  // Optional: Icon to display
+  className?: string;
+  ...HTMLAttributes<HTMLButtonElement>
+}
+```
+
+**ActionMenuItem:**
+
+```typescript
+{
+  type: string;           // Block type name
+  title: string;          // Display title
+  description?: string;   // Optional description
+  icon?: ReactNode;       // Optional icon
+}
+```
+
+**Usage:**
+
+```tsx
+<ActionMenuList.Item
+  action={action}
+  selected={action.type === selectedAction?.type}
+  icon={<MyIcon />}
+  {...getItemProps(action.type)}
+/>
+```
+
+#### `ActionMenuList.Empty`
+
+Displays when no items are available.
+
+**Props:**
+
+```typescript
+{
+  children?: ReactNode;  // Custom empty message
+  className?: string;
+  ...HTMLAttributes<HTMLDivElement>
+}
+```
+
+**Usage:**
+
+```tsx
+<ActionMenuList.Empty>No blocks available</ActionMenuList.Empty>
+```
+
+## Examples
+
+### From Toolbar
+
+```tsx
+import {
+  Toolbar,
+  useToolbar,
+  ActionMenuList,
+  useActionMenuList,
+  useActionMenuListActions,
+} from '@yoopta/ui';
+
+const MyToolbar = () => {
+  const { isOpen, getRootProps } = useToolbar();
+  const { open: openActionMenu } = useActionMenuListActions();
+
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenu({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <Toolbar.Root {...getRootProps()}>
+      <Toolbar.Button onClick={onTurnIntoClick}>Turn into</Toolbar.Button>
+    </Toolbar.Root>
+  );
+};
+
+const MyActionMenuList = () => {
+  const { actions, selectedAction, isOpen, getItemProps, getRootProps } = useActionMenuList();
+
+  if (!isOpen) return null;
+
+  return (
+    <ActionMenuList.Root {...getRootProps()}>
+      <ActionMenuList.Group>
+        {actions.map((action) => (
+          <ActionMenuList.Item
+            key={action.type}
+            action={action}
+            selected={action.type === selectedAction?.type}
+            {...getItemProps(action.type)}
+          />
+        ))}
+      </ActionMenuList.Group>
+    </ActionMenuList.Root>
+  );
+};
+
+// Usage
+<YooptaEditor>
+  <MyToolbar />
+  <MyActionMenuList />
+</YooptaEditor>;
+```
+
+### From BlockOptions
+
+```tsx
+import {
+  BlockOptions,
+  useBlockOptions,
+  ActionMenuList,
+  useActionMenuListActions,
+} from '@yoopta/ui';
+
+const MyBlockOptions = () => {
+  const { isOpen, getRootProps } = useBlockOptions();
+  const { open: openActionMenu } = useActionMenuListActions();
+
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenu({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'right', // Open to the right of BlockOptions
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <BlockOptions.Root {...getRootProps()}>
+      <BlockOptions.Group>
+        <BlockOptions.Button onClick={onTurnIntoClick}>Turn into</BlockOptions.Button>
+      </BlockOptions.Group>
+    </BlockOptions.Root>
+  );
+};
+
+// MyActionMenuList component same as above
+
+// Usage
+<YooptaEditor>
+  <MyBlockOptions />
+  <MyActionMenuList />
+</YooptaEditor>;
+```
+
+### Custom Items
+
+```tsx
+const MyActionMenuList = () => {
+  const { actions, selectedAction, isOpen, getItemProps, getRootProps } = useActionMenuList({
+    items: ['Paragraph', 'HeadingOne', 'HeadingTwo'], // Only these types
+  });
+
+  if (!isOpen) return null;
+
+  return (
+    <ActionMenuList.Root {...getRootProps()}>
+      <ActionMenuList.Group>
+        {actions.map((action) => (
+          <ActionMenuList.Item
+            key={action.type}
+            action={action}
+            selected={action.type === selectedAction?.type}
+            icon={<CustomIcon type={action.type} />}
+            {...getItemProps(action.type)}
+          />
+        ))}
+      </ActionMenuList.Group>
     </ActionMenuList.Root>
   );
 };
 ```
 
-### Programmatic Opening
-
-You can programmatically open the menu with custom reference and view:
-
-```tsx
-const { open, close } = useActionMenuList();
-
-// Open with custom reference and small view
-const handleTurnInto = () => {
-  const buttonElement = document.querySelector('.my-button');
-  open({ reference: buttonElement as HTMLElement, view: 'small' });
-};
-
-// Open with default view
-const handleOpenMenu = () => {
-  open();
-};
-
-// Close menu
-const handleClose = () => {
-  close();
-};
-```
-
-### With Custom Items
-
-```tsx
-const customItems = [
-  {
-    type: 'Paragraph',
-    title: 'Text',
-    description: 'Just start writing with plain text',
-    icon: <TextIcon />,
-  },
-  {
-    type: 'HeadingOne',
-    title: 'Heading 1',
-    description: 'Big section heading',
-    icon: <H1Icon />,
-  },
-];
-
-<ActionMenuList.Root items={customItems}>{/* ... */}</ActionMenuList.Root>;
-```
-
-### Custom Render Function
-
-```tsx
-<ActionMenuList.Root
-  render={({ actions, selectedAction, getItemProps, getRootProps, empty }) => (
-    <div className="custom-menu">
-      <div {...getRootProps()}>
-        {empty ? (
-          <div>No results found</div>
-        ) : (
-          actions.map((action) => (
-            <button
-              key={action.type}
-              {...getItemProps(action.type)}
-              className={action.type === selectedAction?.type ? 'active' : ''}>
-              {action.title}
-            </button>
-          ))
-        )}
-      </div>
-    </div>
-  )}
-/>
-```
-
-### Different View Modes
+### Different Views
 
 ```tsx
 // Small view (compact)
-<ActionMenuList.Root view="small">
-  <ActionMenuList.Content view="small">
-    {/* Items will be rendered in compact mode */}
-  </ActionMenuList.Content>
-</ActionMenuList.Root>
+const onTurnIntoClick = (e: React.MouseEvent) => {
+  open({
+    reference: e.currentTarget as HTMLElement,
+    view: 'small', // Compact view without descriptions
+  });
+};
 
 // Default view (full)
-<ActionMenuList.Root view="default">
-  <ActionMenuList.Content view="default">
-    {/* Items with descriptions */}
-  </ActionMenuList.Content>
-</ActionMenuList.Root>
+const onTurnIntoClick = (e: React.MouseEvent) => {
+  open({
+    reference: e.currentTarget as HTMLElement,
+    view: 'default', // Full view with descriptions
+  });
+};
 ```
 
-### Mode: Create vs Toggle
+### Custom Placement
 
 ```tsx
-// Create mode - deletes trigger text and inserts new block
-<ActionMenuList.Root mode="create" />
-
-// Toggle mode - converts current block to selected type
-<ActionMenuList.Root mode="toggle" />
+const onTurnIntoClick = (e: React.MouseEvent) => {
+  open({
+    reference: e.currentTarget as HTMLElement,
+    placement: 'right', // or 'left', 'top', 'bottom', etc.
+  });
+};
 ```
-
-## Props
-
-### ActionMenuList.Root
-
-| Prop      | Type                           | Default           | Description             |
-| --------- | ------------------------------ | ----------------- | ----------------------- |
-| `items`   | `ActionMenuItem[] \| string[]` | All editor blocks | Custom items to display |
-| `trigger` | `string`                       | `'/'`             | Trigger character       |
-| `view`    | `'small' \| 'default'`         | `'default'`       | Display mode            |
-| `mode`    | `'create' \| 'toggle'`         | `'create'`        | Behavior mode           |
-| `render`  | `(props) => JSX.Element`       | -                 | Custom render function  |
-
-### ActionMenuList.Content
-
-| Prop   | Type                   | Default     | Description  |
-| ------ | ---------------------- | ----------- | ------------ |
-| `view` | `'small' \| 'default'` | `'default'` | Display mode |
-
-### ActionMenuList.Item
-
-| Prop       | Type                   | Default     | Description              |
-| ---------- | ---------------------- | ----------- | ------------------------ |
-| `action`   | `ActionMenuItem`       | -           | Action item data         |
-| `view`     | `'small' \| 'default'` | `'default'` | Display mode             |
-| `selected` | `boolean`              | `false`     | Whether item is selected |
-
-## Keyboard Shortcuts
-
-- `/` - Open action menu
-- `↑` / `↓` - Navigate items
-- `Enter` - Select item
-- `Escape` - Close menu
-- `Backspace` - Close if at start
-- `Tab` - Prevent default (reserved)
 
 ## Styling
 
-### CSS Variables
+The component uses CSS variables for theming. See the main UI package documentation for available variables.
 
-```css
-:root {
-  /* Z-index */
-  --yoopta-ui-action-menu-z-index: 9999;
+### CSS Classes
 
-  /* Border radius */
-  --yoopta-ui-action-menu-radius: 0.5rem;
-  --yoopta-ui-action-menu-item-radius: 0.375rem;
-  --yoopta-ui-action-menu-icon-radius: 0.375rem;
+- `.yoopta-ui-action-menu-list-content` - Root container
+- `.yoopta-ui-action-menu-list-group` - Group container
+- `.yoopta-ui-action-menu-list-item` - Menu item button
+- `.yoopta-ui-action-menu-list-item.selected` - Selected item
+- `.yoopta-ui-action-menu-list-item-icon` - Icon container
+- `.yoopta-ui-action-menu-list-item-content` - Text content container
+- `.yoopta-ui-action-menu-list-item-title` - Item title
+- `.yoopta-ui-action-menu-list-item-description` - Item description
+- `.yoopta-ui-action-menu-list-empty` - Empty state
 
-  /* Spacing */
-  --yoopta-ui-action-menu-padding: 0.5rem;
-  --yoopta-ui-action-menu-item-padding: 0.5rem;
-  --yoopta-ui-action-menu-item-gap: 0.5rem;
-  --yoopta-ui-action-menu-empty-padding: 0.5rem;
+## Architecture
 
-  /* Sizes */
-  --yoopta-ui-action-menu-max-height: 330px;
+### Store-Based Coordination
 
-  /* Typography */
-  --yoopta-ui-action-menu-item-font-size: 0.875rem;
-  --yoopta-ui-action-menu-item-description-font-size: 0.75rem;
-  --yoopta-ui-action-menu-empty-font-size: 0.75rem;
+`ActionMenuList` uses Zustand for state management, allowing different components to coordinate:
 
-  /* Shadow */
-  --yoopta-ui-action-menu-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-```
+1. **Toolbar** calls `open()` → Store updates
+2. **ActionMenuList** reads from store → Renders menu
+3. User selects item → Menu calls `close()` → Store updates
+4. **ActionMenuList** reads from store → Unmounts
 
-### Custom Classes
+This allows clean separation between components that trigger the menu and the menu itself.
 
-```tsx
-<ActionMenuList.Root className="my-custom-menu">
-  <ActionMenuList.Content className="my-custom-content">
-    <ActionMenuList.Item action={action} className="my-custom-item" />
-  </ActionMenuList.Content>
-</ActionMenuList.Root>
-```
+### Two-Hook Pattern
 
-## Hook API
+- **`useActionMenuList()`**: Full hook with Floating UI, event listeners, and rendering logic. Use in the component that renders the menu.
+- **`useActionMenuListActions()`**: Lightweight hook with only actions. Use in components that need to open/close the menu.
 
-The `useActionMenuList` hook returns the following:
+This pattern prevents unnecessary re-renders and keeps the API clean.
 
-```typescript
-{
-  // State
-  state: 'open' | 'closed';
-  isMounted: boolean;
-  empty: boolean;
+## Differences from SlashActionMenuList
 
-  // Data
-  actions: ActionMenuItem[];
-  selectedAction?: ActionMenuItem;
-  view: 'small' | 'default';
-  mode: 'create' | 'toggle';
+| Feature         | ActionMenuList              | SlashActionMenuList       |
+| --------------- | --------------------------- | ------------------------- |
+| **Trigger**     | Programmatic (button click) | Automatic (slash command) |
+| **Control**     | Controlled via `open()`     | Self-managed              |
+| **Positioning** | Relative to button          | Relative to text cursor   |
+| **Use Case**    | Toolbars, menus             | Slash commands            |
+| **Filtering**   | No search                   | Search by text            |
 
-  // Methods
-  open: (options?: { reference?: HTMLElement | null; view?: 'small' | 'default' }) => void;
-  onClose: () => void;
-  onMouseEnter: (e: React.MouseEvent) => void;
+## TypeScript
 
-  // Props builders
-  getItemProps: (type: string) => any;
-  getRootProps: () => any;
-
-  // Floating UI
-  setFloating: (node: HTMLElement | null) => void;
-  styles: CSSProperties;
-}
-```
-
-### `open(options?)`
-
-Programmatically open the menu with optional configuration:
-
-- `reference?: HTMLElement | null` - Custom reference element for positioning
-- `view?: 'small' | 'default'` - Display mode
-
-**Example**:
-
-```tsx
-const { open } = useActionMenuList();
-
-// Open with custom reference and small view
-open({ reference: buttonElement, view: 'small' });
-
-// Open with default settings
-open();
-```
-
-## Store API
-
-Access the store directly for advanced use cases:
-
-```tsx
-import { useActionMenuListStore } from '@yoopta/ui';
-
-const store = useActionMenuListStore();
-
-// Open/close
-store.open();
-store.close();
-
-// Search
-store.setSearchText('heading');
-
-// Selection
-store.setSelectedIndex(2);
-
-// Reset
-store.reset();
-```
-
-## Types
+Full TypeScript support with exported types:
 
 ```typescript
-type ActionMenuItem = {
-  type: string;
-  title: string;
-  description?: string;
-  icon?: string | ReactNode | ReactElement;
-};
-
-type ActionMenuListState = 'open' | 'closed';
-
-type ActionMenuRenderProps = {
-  actions: ActionMenuItem[];
-  editor: YooEditor;
-  selectedAction?: ActionMenuItem;
-  onClose: () => void;
-  getItemProps: (type: string) => any;
-  getRootProps: () => any;
-  empty: boolean;
-  view?: 'small' | 'default';
-  mode?: 'create' | 'toggle';
-};
+import type {
+  ActionMenuItem,
+  ActionMenuListProps,
+  ActionMenuListRootProps,
+  ActionMenuListGroupProps,
+  ActionMenuListItemProps,
+  ActionMenuListEmptyProps,
+} from '@yoopta/ui';
 ```
 
-## Integration with YooptaEditor
+## Related Components
 
-```tsx
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import { ActionMenuList } from '@yoopta/ui';
-
-const Editor = () => {
-  const editor = useMemo(() => createYooptaEditor(), []);
-
-  return (
-    <YooptaEditor editor={editor} plugins={plugins}>
-      <ActionMenuComponent />
-    </YooptaEditor>
-  );
-};
-```
-
-## Best Practices
-
-1. **Use compound components** for maximum flexibility
-2. **Leverage CSS variables** for consistent theming
-3. **Keep custom items minimal** for better performance
-4. **Use view modes** appropriately (small for toolbars, default for main menu)
-5. **Test keyboard navigation** thoroughly
-
-## Performance Tips
-
-- The component uses Zustand for efficient state management
-- Filtering is optimized with memoization
-- Floating UI handles positioning efficiently
-- Transitions are GPU-accelerated
-
-## Accessibility
-
-- Full keyboard navigation support
-- ARIA attributes for screen readers
-- Focus management
-- Semantic HTML structure
+- **SlashActionMenuList** - For slash command menus
+- **Toolbar** - Text formatting toolbar
+- **BlockOptions** - Block action menu
+- **FloatingBlockActions** - Floating block controls

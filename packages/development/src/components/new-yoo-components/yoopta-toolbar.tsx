@@ -10,11 +10,12 @@ import {
   UnderlineIcon,
 } from '@radix-ui/react-icons';
 import { useYooptaEditor } from '@yoopta/editor';
-import { Toolbar, useToolbar } from '@yoopta/ui';
+import { Toolbar, useToolbar, useActionMenuListActions } from '@yoopta/ui';
 
 export const YooptaToolbar = () => {
   const editor = useYooptaEditor();
   const { isOpen, getRootProps } = useToolbar();
+  const { open: openActionMenuList } = useActionMenuListActions();
 
   const isBoldActive = editor.formats.bold?.isActive();
   const isItalicActive = editor.formats.italic?.isActive();
@@ -22,7 +23,13 @@ export const YooptaToolbar = () => {
   const isStrikeActive = editor.formats.strike?.isActive();
   const isCodeActive = editor.formats.code?.isActive();
 
-  const onTurnIntoClick = (e: React.MouseEvent) => {};
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenuList({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
 
   if (!isOpen) return null;
 

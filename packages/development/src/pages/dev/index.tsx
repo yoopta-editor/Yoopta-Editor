@@ -1,6 +1,6 @@
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 import YooptaEditor, { YooEditor, createYooptaEditor, Blocks } from '@yoopta/editor';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -14,9 +14,15 @@ import { YooptaToolbar } from '@/components/new-yoo-components/yoopta-toolbar';
 import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoopta-floating-block-actions';
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
+import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
+import { FixedToolbar } from '@/components/FixedToolbar/FixedToolbar';
 
 const YooptaUIPackageExample = () => {
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
+
+  useEffect(() => {
+    editor.applyTransforms([{ type: 'validate_block_paths' }]);
+  }, []);
 
   return (
     <YooptaEditor
@@ -30,10 +36,12 @@ const YooptaUIPackageExample = () => {
       style={EDITOR_STYLE}
       value={DEFAULT_VALUE}
       className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
+      <FixedToolbar editor={editor} />
       <YooptaToolbar />
       <YooptaFloatingBlockActions />
       <YooptaBlockOptions />
       <YooptaSlashCommandMenu />
+      <YooptaActionMenuList />
     </YooptaEditor>
   );
 };

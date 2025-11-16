@@ -6,7 +6,11 @@ import { useBlockOptionsActions, useFloatingBlockActions } from '@yoopta/ui';
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
   const { open: openBlockOptions } = useBlockOptionsActions();
-  const { toggle, reference, floatingBlockId } = useFloatingBlockActions();
+  const {
+    toggle: toggleFloatingBlockActions,
+    reference,
+    floatingBlockId,
+  } = useFloatingBlockActions();
 
   const onPlusClick = (e: React.MouseEvent) => {
     editor.insertBlock('Paragraph', { at: editor.path.current, focus: true });
@@ -15,7 +19,7 @@ export const YooptaFloatingBlockActions = () => {
   const onDragClick = (e: React.MouseEvent) => {
     if (!floatingBlockId) return;
     openBlockOptions({ reference: reference as HTMLElement, blockId: floatingBlockId });
-    toggle('frozen', floatingBlockId);
+    toggleFloatingBlockActions('frozen', floatingBlockId);
   };
 
   return (

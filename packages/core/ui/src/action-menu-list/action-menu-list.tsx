@@ -1,61 +1,42 @@
-import { forwardRef, HTMLAttributes, cloneElement, isValidElement } from 'react';
-import { UI } from '@yoopta/editor';
-import { useActionMenuList } from './hooks';
-import type { ActionMenuListProps, ActionMenuItem } from './types';
+import {
+  forwardRef,
+  HTMLAttributes,
+  cloneElement,
+  isValidElement,
+  CSSProperties,
+  ReactNode,
+} from 'react';
+import type { ActionMenuItem } from './types';
 
-const { Portal } = UI;
-
-export type ActionMenuListRootProps = ActionMenuListProps & HTMLAttributes<HTMLDivElement>;
-
-const ActionMenuListRoot = ({
-  children,
-  items,
-  trigger,
-  view,
-  mode,
-  className,
-  ...props
-}: ActionMenuListRootProps) => {
-  const { setFloatingRef, isMounted, styles } = useActionMenuList({ items, trigger, view, mode });
-
-  if (!isMounted) return null;
-
-  return (
-    <Portal id="yoo-action-menu-list-portal">
-      <div
-        ref={setFloatingRef}
-        style={styles}
-        className={`yoopta-ui-action-menu-list ${className || ''}`}
-        {...props}>
-        {children}
-      </div>
-    </Portal>
-  );
-};
-ActionMenuListRoot.displayName = 'ActionMenuList.Root';
-
-export type ActionMenuListContentProps = HTMLAttributes<HTMLDivElement> & {
-  view?: 'small' | 'default';
+// ====================================
+// Root Component
+// ====================================
+export type ActionMenuListRootProps = HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode;
+  style?: CSSProperties;
 };
 
-const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentProps>(
-  ({ children, view = 'default', className, style, ...props }, ref) => {
-    const maxWidth = view === 'small' ? '200px' : '270px';
-
+const ActionMenuListRoot = forwardRef<HTMLDivElement, ActionMenuListRootProps>(
+  ({ children, style, className, ...props }, ref) => {
     return (
       <div
         ref={ref}
         role="listbox"
-        style={{ maxWidth, ...style }}
+        style={style}
         className={`yoopta-ui-action-menu-list-content ${className || ''}`}
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         {...props}>
         {children}
       </div>
     );
   },
 );
-ActionMenuListContent.displayName = 'ActionMenuList.Content';
+ActionMenuListRoot.displayName = 'ActionMenuList.Root';
 
+// ====================================
+// Group Component
+// ====================================
 export type ActionMenuListGroupProps = HTMLAttributes<HTMLDivElement>;
 
 const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>(
@@ -69,46 +50,46 @@ const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>
 );
 ActionMenuListGroup.displayName = 'ActionMenuList.Group';
 
+// ====================================
+// Item Component
+// ====================================
 export type ActionMenuListItemProps = HTMLAttributes<HTMLButtonElement> & {
   action: ActionMenuItem;
-  view?: 'small' | 'default';
   selected?: boolean;
+  icon?: string | ReactNode;
 };
 
 const ActionMenuListItem = forwardRef<HTMLButtonElement, ActionMenuListItemProps>(
-  ({ action, view = 'default', selected, className, children, ...props }, ref) => {
-    const isViewSmall = view === 'small';
+  ({ action, selected, icon: iconProp, className, ...props }, ref) => {
+    const renderIcon = (icon: any) => {
+      if (!icon) return null;
 
-    const iconWrapStyles = {
-      minWidth: isViewSmall ? '28px' : '40px',
-      width: isViewSmall ? '28px' : '40px',
-      height: isViewSmall ? '28px' : '40px',
-    };
+      if (typeof icon === 'string') {
+        return <img src={icon} alt="icon" />;
+      }
 
-    const iconStyles = {
-      transform: isViewSmall ? 'scale(0.75)' : 'scale(1)',
-    };
+      if (isValidElement(icon)) {
+        return cloneElement<any>(icon);
+      }
 
-    const renderIcon = (Icon: any) => {
-      if (!Icon) return null;
-      if (typeof Icon === 'string') return <img src={Icon} alt="icon" style={iconStyles} />;
-      if (isValidElement(Icon)) return cloneElement<any>(Icon, { style: iconStyles });
-      return <Icon style={iconStyles} />;
+      const IconComponent = icon as any;
+      return <IconComponent />;
     };
 
     return (
       <button
         ref={ref}
         type="button"
-        aria-selected={selected}
-        className={`yoopta-ui-action-menu-list-item ${className || ''}`}
+        className={`yoopta-ui-action-menu-list-item ${selected ? 'selected' : ''} ${
+          className || ''
+        }`}
         {...props}>
-        <div style={iconWrapStyles} className="yoopta-ui-action-menu-list-item-icon">
-          {renderIcon(action.icon)}
-        </div>
+        {iconProp && (
+          <div className="yoopta-ui-action-menu-list-item-icon">{renderIcon(iconProp)}</div>
+        )}
         <div className="yoopta-ui-action-menu-list-item-content">
           <div className="yoopta-ui-action-menu-list-item-title">{action.title}</div>
-          {!isViewSmall && action.description && (
+          {action.description && (
             <div className="yoopta-ui-action-menu-list-item-description">{action.description}</div>
           )}
         </div>
@@ -133,7 +114,6 @@ ActionMenuListEmpty.displayName = 'ActionMenuList.Empty';
 
 export const ActionMenuList = {
   Root: ActionMenuListRoot,
-  Content: ActionMenuListContent,
   Group: ActionMenuListGroup,
   Item: ActionMenuListItem,
   Empty: ActionMenuListEmpty,
