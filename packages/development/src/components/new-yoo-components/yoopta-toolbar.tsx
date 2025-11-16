@@ -9,7 +9,7 @@ import {
   TextAlignRightIcon,
   UnderlineIcon,
 } from '@radix-ui/react-icons';
-import { useYooptaEditor } from '@yoopta/editor';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Toolbar, useToolbar, useActionMenuListActions } from '@yoopta/ui';
 
 export const YooptaToolbar = () => {
@@ -24,10 +24,14 @@ export const YooptaToolbar = () => {
   const isCodeActive = editor.formats.code?.isActive();
 
   const onTurnIntoClick = (e: React.MouseEvent) => {
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
+    if (!block) return;
+
     openActionMenuList({
       reference: e.currentTarget as HTMLElement,
       view: 'small',
       placement: 'bottom-start',
+      blockId: block.id,
     });
   };
 

@@ -15,7 +15,6 @@ import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoop
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
-import { FixedToolbar } from '@/components/FixedToolbar/FixedToolbar';
 
 const YooptaUIPackageExample = () => {
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
@@ -36,7 +35,6 @@ const YooptaUIPackageExample = () => {
       style={EDITOR_STYLE}
       value={DEFAULT_VALUE}
       className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
-      <FixedToolbar editor={editor} />
       <YooptaToolbar />
       <YooptaFloatingBlockActions />
       <YooptaBlockOptions />

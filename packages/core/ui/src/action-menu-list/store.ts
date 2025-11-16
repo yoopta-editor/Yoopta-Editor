@@ -8,11 +8,13 @@ export type ActionMenuListStore = {
   view: 'small' | 'default';
   reference: HTMLElement | null;
   placement: Placement;
+  blockId: string | null;
 
   open: (options?: {
     reference?: HTMLElement | null;
-    view?: 'small' | 'default';
     placement?: Placement;
+    blockId?: string;
+    view?: 'small' | 'default';
   }) => void;
   close: () => void;
   toggle: (state: ActionMenuListState) => void;
@@ -26,14 +28,16 @@ export const useActionMenuListStore = create<ActionMenuListStore>()((set) => ({
   view: 'default',
   reference: null,
   placement: 'bottom-start',
+  blockId: null,
 
   open(options = {}) {
-    const { reference, view, placement } = options;
+    const { reference, view, placement, blockId } = options;
     set((state) => ({
       state: 'open',
       reference: reference !== undefined ? reference : state.reference,
       view: view !== undefined ? view : state.view,
       placement: placement !== undefined ? placement : state.placement,
+      blockId: typeof blockId !== 'undefined' ? blockId : state.blockId,
     }));
   },
 
@@ -42,6 +46,7 @@ export const useActionMenuListStore = create<ActionMenuListStore>()((set) => ({
       state: 'closed',
       view: 'default',
       placement: 'bottom-start',
+      blockId: null,
     });
   },
 
@@ -63,6 +68,7 @@ export const useActionMenuListStore = create<ActionMenuListStore>()((set) => ({
       view: 'default',
       reference: null,
       placement: 'bottom-start',
+      blockId: null,
     });
   },
 }));

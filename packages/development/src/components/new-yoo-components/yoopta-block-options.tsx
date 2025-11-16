@@ -8,27 +8,33 @@ export const YooptaBlockOptions = () => {
   const { open: openActionMenuList } = useActionMenuListActions();
 
   const onTurnInto = (e: React.MouseEvent) => {
+    if (!floatingBlockId) return;
+
     openActionMenuList({
       reference: e.currentTarget as HTMLElement,
       view: 'small',
       placement: 'right',
+      blockId: floatingBlockId,
     });
   };
 
   const onDuplicateBlock = () => {
     if (!floatingBlockId) return;
+
     duplicateBlock(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };
 
   const onCopyBlockLink = () => {
     if (!floatingBlockId) return;
+
     copyBlockLink(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };
 
   const onDeleteBlock = () => {
     if (!floatingBlockId) return;
+
     deleteBlock(floatingBlockId);
     toggleFloatingBlockActions('hovering');
   };

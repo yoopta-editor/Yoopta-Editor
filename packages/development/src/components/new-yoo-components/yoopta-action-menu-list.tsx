@@ -1,5 +1,4 @@
 import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons/icons';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import {
   ActionMenuList,
   useActionMenuList,
@@ -8,10 +7,8 @@ import {
 } from '@yoopta/ui';
 
 export const YooptaActionMenuList = () => {
-  const editor = useYooptaEditor();
-
   const { close: closeBlockOptions } = useBlockOptionsActions();
-  const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
+  const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
   const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
     useActionMenuList();
 
@@ -27,12 +24,7 @@ export const YooptaActionMenuList = () => {
             const Icon = ACTION_MENU_LIST_DEFAULT_ICONS_MAP[action.type];
             const itemProps = getItemProps(action.type);
             const onClick = (e: React.MouseEvent) => {
-              if (!floatingBlockId) return;
-
-              const block = Blocks.getBlock(editor, { id: floatingBlockId });
-              if (!block) return;
-
-              itemProps.onClick(e, block.meta.order);
+              itemProps.onClick(e);
               closeBlockOptions();
               toggleFloatingBlockActions('hovering');
             };

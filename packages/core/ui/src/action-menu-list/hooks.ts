@@ -8,7 +8,7 @@ import {
   useTransitionStyles,
   Placement,
 } from '@floating-ui/react';
-import { useYooptaEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 import { useActionMenuListStore } from './store';
 import { filterToggleActions, mapActionMenuItems } from './utils';
@@ -44,6 +44,7 @@ export const useActionMenuList = ({
     state,
     view,
     reference: storeReference,
+    blockId: storeBlockId,
     open: storeOpen,
     close: storeClose,
     setView,
@@ -92,14 +93,14 @@ export const useActionMenuList = ({
   const open = useCallback(
     (options: {
       reference: HTMLElement | null;
-      view?: 'small' | 'default';
+      blockId?: string;
       placement?: Placement;
+      view?: 'small' | 'default';
     }) => {
-      const { reference, view: viewMode, placement } = options;
-
+      const { reference, view: viewMode, placement, blockId } = options;
       if (viewMode) setView(viewMode);
 
-      storeOpen({ reference, view: viewMode, placement });
+      storeOpen({ reference, view: viewMode, placement, blockId });
     },
     [storeOpen, setView],
   );
@@ -117,9 +118,13 @@ export const useActionMenuList = ({
     (type: string) => ({
       onMouseEnter,
       onMouseDown: (e: MouseEvent) => e.stopPropagation(),
-      onClick: (e: MouseEvent, path: YooptaPathIndex) => {
+      onClick: (e: MouseEvent) => {
+        if (!storeBlockId) return;
+        const block = Blocks.getBlock(editor, { id: storeBlockId });
+        if (!block) return;
+
         e.stopPropagation();
-        editor.toggleBlock(type, { deleteText: false, focus: true, at: path });
+        editor.toggleBlock(type, { deleteText: false, focus: true, at: block.meta.order });
         close();
       },
       'data-action-menu-item': true,
