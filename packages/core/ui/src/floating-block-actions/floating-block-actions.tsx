@@ -24,7 +24,9 @@ const FloatingBlockActionsRoot = memo(({ children, className }: FloatingBlockAct
       ref={setReference}
       className={`yoopta-ui-floating-block-actions ${className}`}
       style={styles}
-      contentEditable={false}>
+      contentEditable={false}
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}>
       {children}
     </div>
   );

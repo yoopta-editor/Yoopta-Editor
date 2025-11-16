@@ -203,20 +203,18 @@ export const useBlockOptions = () => {
     [editor, close],
   );
 
-  const setFloatingRef = useCallback(
-    (node: HTMLElement | null) => {
-      refs.setFloating(node);
-    },
-    [refs],
-  );
+  const getRootProps = () => {
+    return {
+      ref: refs.setFloating,
+      style: { ...floatingStyles, ...transitionStyles },
+      onClick: (e: React.MouseEvent) => e.stopPropagation(),
+      onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
+    };
+  };
 
   return {
-    isOpen,
-    isMounted,
-    blockId,
-    reference: storeReference,
-    style: { ...floatingStyles, ...transitionStyles },
-    setFloatingRef,
+    isOpen: isMounted,
+    getRootProps,
     open,
     close,
     duplicateBlock,

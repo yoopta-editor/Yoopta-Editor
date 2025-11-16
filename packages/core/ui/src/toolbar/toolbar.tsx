@@ -1,29 +1,26 @@
 import { forwardRef, HTMLAttributes } from 'react';
-import { useToolbar } from './hooks';
 import { UI } from '@yoopta/editor';
 
 const { Portal } = UI;
 
 export type ToolbarRootProps = Partial<HTMLAttributes<HTMLDivElement>>;
 
-const ToolbarRoot = ({ className, children, ...props }: ToolbarRootProps) => {
-  const { setFloatingRef, isMounted, styles } = useToolbar();
-
-  if (!isMounted) return null;
-
-  return (
-    <Portal id="yoo-toolbar-portal">
-      <div
-        ref={setFloatingRef}
-        style={styles}
-        className={`yoopta-ui-toolbar ${className || ''}`}
-        onClick={(e) => e.stopPropagation()}
-        {...props}>
-        {children}
-      </div>
-    </Portal>
-  );
-};
+const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <Portal id="yoopta-ui-toolbar-portal">
+        <div
+          ref={ref}
+          className={`yoopta-ui-toolbar ${className || ''}`}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          {...props}>
+          {children}
+        </div>
+      </Portal>
+    );
+  },
+);
 ToolbarRoot.displayName = 'Toolbar.Root';
 
 export interface ToolbarGroupProps extends HTMLAttributes<HTMLDivElement> {}

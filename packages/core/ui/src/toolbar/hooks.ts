@@ -166,16 +166,22 @@ export const useToolbar = () => {
     [floatingStyles, transitionStyles],
   );
 
+  const getRootProps = () => ({
+    ref: refs.setFloating,
+    style: combinedStyles,
+    onClick: (e: React.MouseEvent) => e.stopPropagation(),
+    onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
+  });
+
   return {
-    setFloatingRef: refs.setFloating,
-    isMounted,
+    isOpen: isMounted,
     state,
     frozen,
-    styles: combinedStyles,
     open,
     close,
     toggle,
     setFrozen,
     reset,
+    getRootProps,
   };
 };

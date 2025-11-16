@@ -36,30 +36,16 @@ type BlockOptionsSeparatorProps = {
   className?: string;
 };
 
-const BlockOptionsRoot = memo(
-  ({ children, style: styleProp, onClose: onCloseProp, className = '' }: BlockOptionsRootProps) => {
-    const { close, style: floatingStyle, isMounted, setFloatingRef } = useBlockOptions();
-
-    const style = {
-      ...floatingStyle,
-      ...styleProp,
-    };
-
-    if (!isMounted) return null;
-
-    const onClose = () => {
-      // close();
-      onCloseProp?.();
-    };
-
+const BlockOptionsRoot = forwardRef<HTMLDivElement, BlockOptionsRootProps>(
+  ({ children, className = '', onClose, ...props }, ref) => {
     return (
-      <Portal id="yoo-block-options-portal">
-        <Overlay lockScroll className="yoo-editor-z-[100]" onClick={onClose}>
+      <Portal id="yoopta-ui-block-options-portal">
+        <Overlay lockScroll onMouseDown={(e) => e.stopPropagation()} onClick={onClose}>
           <div
-            ref={setFloatingRef}
+            ref={ref}
             className={`yoopta-ui-block-options ${className}`}
-            style={style}
-            contentEditable={false}>
+            contentEditable={false}
+            {...props}>
             {children}
           </div>
         </Overlay>
@@ -67,12 +53,8 @@ const BlockOptionsRoot = memo(
     );
   },
 );
-BlockOptionsRoot.displayName = 'BlockOptions.Root';
 
-const BlockOptionsContent = memo(({ children, className = '' }: BlockOptionsContentProps) => {
-  return <div className={`yoopta-ui-block-options-content ${className}`}>{children}</div>;
-});
-BlockOptionsContent.displayName = 'BlockOptions.Content';
+BlockOptionsRoot.displayName = 'BlockOptions.Root';
 
 const BlockOptionsGroup = forwardRef<HTMLDivElement, BlockOptionsGroupProps>(
   ({ children, className = '' }, ref) => {
@@ -112,7 +94,6 @@ BlockOptionsSeparator.displayName = 'BlockOptions.Separator';
 
 export const BlockOptions = Object.assign(BlockOptionsRoot, {
   Root: BlockOptionsRoot,
-  Content: BlockOptionsContent,
   Group: BlockOptionsGroup,
   Button: BlockOptionsButton,
   Separator: BlockOptionsSeparator,
