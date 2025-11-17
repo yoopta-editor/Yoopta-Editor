@@ -1,5 +1,5 @@
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
-import YooptaEditor, { YooEditor, createYooptaEditor, Blocks } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';

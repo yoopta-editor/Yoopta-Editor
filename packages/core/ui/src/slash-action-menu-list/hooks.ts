@@ -31,6 +31,21 @@ type SlashActionMenuProps = {
 const TRIGGER = '/';
 
 /**
+ * Lightweight hook for accessing only store actions
+ * Use this when you only need to open/close the menu programmatically
+ * without rendering the menu itself
+ */
+export const useSlashActionMenuActions = () => {
+  const store = useSlashActionMenuStore();
+
+  return {
+    open: store.open,
+    close: store.close,
+    isOpen: store.state === 'open',
+  };
+};
+
+/**
  * Full hook with Floating UI, event listeners, and all logic
  * Use this only in the component that renders the SlashActionMenu
  */
@@ -51,6 +66,8 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
   const [actions, setActions] = useState<ActionMenuItem[]>([]);
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
 
+  console.log('actions', actions);
+
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'bottom-start',
     open: state === 'open',
@@ -67,20 +84,39 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     [editor],
   );
 
+  // Update reference when it changes
   useEffect(() => {
-    if (state === 'open') update();
-  }, [state, refs, update]);
+    if (storeReference) {
+      refs.setReference(storeReference);
+    }
+  }, [storeReference, refs]);
 
-  const open = useCallback(
-    (reference?: HTMLElement | null) => {
-      storeOpen(reference);
-    },
-    [storeOpen],
-  );
+  // Update position when menu opens
+  useEffect(() => {
+    if (state === 'open') {
+      update();
+    }
+  }, [state, update]);
+
+  const open = (reference?: HTMLElement | null) => {
+    console.log('blockTypes', blockTypes);
+    console.log('editor.blocks', editor.blocks);
+
+    // Initialize with all block types (no filter)
+    setActions(blockTypes);
+    setSelectedAction(blockTypes[0]);
+    setSearchText('');
+
+    // Open the menu
+    storeOpen(reference);
+  };
 
   const onClose = useCallback(() => {
+    setActions(blockTypes);
+    setSelectedAction(blockTypes[0]);
+    setSearchText('');
     storeClose();
-  }, [storeClose]);
+  }, [storeClose, blockTypes, setSearchText]);
 
   const onFilter = useCallback(
     ({ text }: { text: string }) => {
@@ -112,7 +148,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
   );
 
   useEffect(() => {
-    update();
+    // update();
 
     const handleActionMenuKeyUp = (event: KeyboardEvent) => {
       const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
@@ -163,7 +199,6 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
             getClientRects: () => domRange.getClientRects(),
           };
 
-          refs.setReference(reference);
           open(reference as HTMLElement);
         }
       }
@@ -367,8 +402,9 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     selectedAction,
     empty: actions.length === 0,
     searchText: storeSearchText,
+    open,
+    close: storeClose,
     getItemProps,
     getRootProps,
-    onClose,
   };
 };

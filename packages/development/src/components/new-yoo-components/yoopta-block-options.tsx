@@ -5,7 +5,7 @@ export const YooptaBlockOptions = () => {
   const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
   const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptionsActions();
   const { isOpen, getRootProps, close } = useBlockOptions();
-  const { open: openActionMenuList } = useActionMenuListActions();
+  const { open: openActionMenuList, close: closeActionMenuList } = useActionMenuListActions();
 
   const onTurnInto = (e: React.MouseEvent) => {
     if (!floatingBlockId) return;
@@ -40,8 +40,9 @@ export const YooptaBlockOptions = () => {
   };
 
   const onClose = () => {
-    close();
+    closeActionMenuList();
     toggleFloatingBlockActions('hovering');
+    close();
   };
 
   if (!isOpen) return null;

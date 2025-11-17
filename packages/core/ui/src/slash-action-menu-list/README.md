@@ -5,6 +5,7 @@
 ## 🎯 Особенности
 
 - ✅ **Автоматический триггер** - открывается при нажатии `/` в начале блока
+- ✅ **Программное открытие** - можно открыть из другого компонента через `useSlashActionMenuActions`
 - ✅ **Поиск** - фильтрация блоков по введенному тексту
 - ✅ **Keyboard navigation** - навигация стрелками, выбор Enter, закрытие Escape
 - ✅ **Inline positioning** - позиционируется относительно текстового курсора
@@ -16,7 +17,7 @@
 ```
 slash-action-menu-list/
 ├── store.ts                        # Zustand store
-├── hooks.ts                        # useSlashActionMenu hook
+├── hooks.ts                        # useSlashActionMenu + useSlashActionMenuActions
 ├── slash-action-menu-list.tsx      # UI компоненты
 ├── slash-action-menu-list.css      # Стили
 └── index.ts                        # Экспорты
@@ -24,7 +25,7 @@ slash-action-menu-list/
 
 ## 🚀 Использование
 
-### Базовый пример
+### Базовый пример (автоматический триггер)
 
 ```tsx
 import { SlashActionMenuList, useSlashActionMenu } from '@yoopta/ui';
@@ -65,6 +66,62 @@ const SlashCommandComponent = () => {
 <YooptaEditor editor={editor} plugins={plugins}>
   <SlashCommandComponent />
 </YooptaEditor>
+```
+
+### Программное открытие
+
+Вы можете программно открыть меню из другого компонента, используя `useSlashActionMenuActions`:
+
+```tsx
+import {
+  useSlashActionMenuActions,
+  FloatingBlockActions,
+  useFloatingBlockActions,
+} from '@yoopta/ui';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+
+const MyFloatingBlockActions = () => {
+  const editor = useYooptaEditor();
+  const { floatingBlockId } = useFloatingBlockActions();
+  const { open: openSlashMenu } = useSlashActionMenuActions();
+
+  const onPlusClick = () => {
+    if (!floatingBlockId) return;
+
+    const block = Blocks.getBlock(editor, { id: floatingBlockId });
+    if (!block) return;
+
+    // Insert new paragraph after current block
+    const nextOrder = block.meta.order + 1;
+    const nextBlockId = editor.insertBlock('Paragraph', { at: nextOrder, focus: true });
+
+    // Wait for block to render and get cursor position
+    setTimeout(() => {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+
+      const range = selection.getRangeAt(0);
+      if (!range) return;
+
+      // Create virtual reference from current cursor position
+      const reference = {
+        getBoundingClientRect: () => range.getBoundingClientRect(),
+        getClientRects: () => range.getClientRects(),
+      };
+
+      // Open slash menu - all logic (filter, keyboard nav) will work automatically
+      openSlashMenu(reference as any);
+    }, 0);
+  };
+
+  return (
+    <FloatingBlockActions.Root>
+      <FloatingBlockActions.Button onClick={onPlusClick}>
+        <PlusIcon />
+      </FloatingBlockActions.Button>
+    </FloatingBlockActions.Root>
+  );
+};
 ```
 
 ## 🎨 Компоненты
@@ -127,9 +184,13 @@ const SlashCommandComponent = () => {
 {empty ? <SlashActionMenuList.Empty /> : /* items */}
 ```
 
-## 🎣 Hook: `useSlashActionMenu`
+## 🎣 Hooks
 
-### Параметры
+### `useSlashActionMenu`
+
+**Full hook** с Floating UI, event listeners и всей логикой. Используйте только в компоненте, который рендерит меню.
+
+#### Параметры
 
 ```typescript
 type SlashActionMenuProps = {
@@ -137,7 +198,7 @@ type SlashActionMenuProps = {
 };
 ```
 
-### Возвращаемые значения
+#### Возвращаемые значения
 
 ```typescript
 {
@@ -151,6 +212,53 @@ type SlashActionMenuProps = {
   getRootProps: () => ContentProps; // Props для Content (с ref и style)
   onClose: () => void;             // Закрыть меню
 }
+```
+
+### `useSlashActionMenuActions`
+
+**Lightweight hook** только с actions из store. Используйте когда нужно только программно открыть/закрыть меню без его рендера.
+
+#### Параметры
+
+Нет параметров.
+
+#### Возвращаемые значения
+
+```typescript
+{
+  open: (reference?: HTMLElement | null) => void;  // Открыть меню
+  close: () => void;                               // Закрыть меню
+  isOpen: boolean;                                 // Открыто ли меню
+}
+```
+
+#### Пример использования
+
+```tsx
+import { useSlashActionMenuActions } from '@yoopta/ui';
+
+const MyComponent = () => {
+  const { open: openSlashMenu } = useSlashActionMenuActions();
+
+  const handleClick = () => {
+    // Get current cursor/selection position
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+
+    // Create virtual reference for positioning
+    const reference = {
+      getBoundingClientRect: () => range.getBoundingClientRect(),
+      getClientRects: () => range.getClientRects(),
+    };
+
+    // Open menu - all slash logic (filtering, keyboard nav) works automatically
+    openSlashMenu(reference as any);
+  };
+
+  return <button onClick={handleClick}>Open Slash Menu</button>;
+};
 ```
 
 ## 🎨 Стилизация
