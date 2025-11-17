@@ -1,0 +1,214 @@
+---
+title: 'Theme & Appearance'
+description: 'Light/dark mode, theme provider, and styling guidelines for @yoopta/ui'
+icon: 'moon'
+---
+
+## Overview
+
+Yoopta UI ships with a lightweight theme system based on CSS variables (shadcn/ui style). You get:
+
+- `ThemeProvider` – manages resolved theme (`light`, `dark`, `system`)
+- `useTheme()` – hook for reading/setting theme
+- `ThemeToggle` – ready-to-use button for switching themes
+
+All UI components consume shared CSS variables, so changing theme affects every component uniformly.
+
+<Frame>
+  <img src="/images/theme-toggle.png" alt="Theme toggle example" />
+</Frame>
+
+## Quick Start
+
+```tsx
+import { ThemeProvider, ThemeToggle } from '@yoopta/ui';
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="yoopta-ui-theme">
+      <div className="app">
+        <ThemeToggle />
+        <YooptaEditor />
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+## Components & Hooks
+
+### `ThemeProvider`
+
+Wrap your app (or editor) with this provider to sync theme state.
+
+Props:
+
+- `defaultTheme?: 'light' | 'dark' | 'system'` (default `system`)
+- `storageKey?: string` (default `'yoopta-ui-theme'`)
+
+```tsx
+<ThemeProvider defaultTheme="system" storageKey="yoopta-theme">
+  <YourApp />
+</ThemeProvider>
+```
+
+### `useTheme()`
+
+Access theme state and helpers.
+
+```tsx
+const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
+
+return (
+  <button onClick={toggleTheme}>
+    Switch to {resolvedTheme === 'light' ? 'dark' : 'light'} mode
+  </button>
+);
+```
+
+| Property          | Description                                           |
+| ----------------- | ----------------------------------------------------- | ------ | ---------- |
+| `theme`           | Current stored preference (`'light'                   | 'dark' | 'system'`) |
+| `resolvedTheme`   | Actual applied mode after resolving system preference |
+| `setTheme(theme)` | Set explicit theme                                    |
+| `toggleTheme()`   | Switch between light/dark                             |
+
+### `ThemeToggle`
+
+Ready-made toggle button using `useTheme()` internally.
+
+```tsx
+<ThemeToggle className="px-3 py-2 rounded-md bg-slate-100 dark:bg-slate-800" />
+```
+
+## CSS Variables
+
+All UI components use shared variables defined on `:root`. You can override them globally, per theme, or per component.
+
+### Base variables
+
+```css
+:root {
+  --yoopta-ui-background: 0 0% 100%;
+  --yoopta-ui-foreground: 222.2 84% 4.9%;
+  --yoopta-ui-muted: 210 40% 96.1%;
+  --yoopta-ui-muted-foreground: 215.4 16.3% 46.9%;
+  --yoopta-ui-border: 214.3 31.8% 91.4%;
+  --yoopta-ui-ring: 222.2 84% 4.9%;
+  --yoopta-ui-accent: 210 40% 96.1%;
+  --yoopta-ui-accent-foreground: 222.2 47.4% 11.2%;
+}
+```
+
+### Dark mode
+
+```css
+.dark,
+[data-theme='dark'],
+[data-yoopta-theme='dark'] {
+  --yoopta-ui-background: 222.2 84% 4.9%;
+  --yoopta-ui-foreground: 210 40% 98%;
+  --yoopta-ui-muted: 217.2 32.6% 17.5%;
+  --yoopta-ui-muted-foreground: 215 20.2% 65.1%;
+  --yoopta-ui-border: 217.2 32.6% 17.5%;
+  --yoopta-ui-ring: 212.7 26.8% 83.9%;
+  --yoopta-ui-accent: 217.2 32.6% 17.5%;
+  --yoopta-ui-accent-foreground: 210 40% 98%;
+}
+```
+
+### Component-specific variables
+
+Each component exposes its own CSS vars (see respective docs). Example for `FloatingBlockActions`:
+
+```css
+:root {
+  --yoopta-ui-floating-bg: hsl(var(--yoopta-ui-background));
+  --yoopta-ui-floating-border: hsl(var(--yoopta-ui-border));
+  --yoopta-ui-floating-shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+```
+
+Override per component:
+
+```css
+.my-floating-actions {
+  --yoopta-ui-floating-bg: 222 47% 11%;
+  --yoopta-ui-floating-border: 222 47% 25%;
+}
+```
+
+## Using Tailwind
+
+If you use Tailwind, you can target the generated classes directly:
+
+```tsx
+<Toolbar.Root className="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-lg" />
+```
+
+### Example theme config
+
+```tsx
+const themeStyles = {
+  light: {
+    '--yoopta-ui-background': '0 0% 100%',
+    '--yoopta-ui-foreground': '240 10% 3.9%',
+  },
+  dark: {
+    '--yoopta-ui-background': '240 10% 3.9%',
+    '--yoopta-ui-foreground': '0 0% 100%',
+  },
+};
+
+const ThemeWrapper = ({ children }) => {
+  const { resolvedTheme } = useTheme();
+  const styles = resolvedTheme === 'dark' ? themeStyles.dark : themeStyles.light;
+
+  return <div style={styles}>{children}</div>;
+};
+```
+
+## Persisting Theme
+
+`ThemeProvider` stores the chosen theme in `localStorage` (configurable via `storageKey`). On first render, it reads system preference via `window.matchMedia('(prefers-color-scheme: dark)')`.
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Wrap editor with ThemeProvider">
+    ```tsx
+    <ThemeProvider>
+      <YooptaEditor>
+        {/* UI components */}
+      </YooptaEditor>
+    </ThemeProvider>
+    ```
+  </Accordion>
+
+  <Accordion title="Keep theme in sync with app shell">
+    ```tsx
+    useEffect(() => {
+      document.documentElement.setAttribute('data-theme', resolvedTheme);
+    }, [resolvedTheme]);
+    ```
+  </Accordion>
+
+  <Accordion title="Support system preference by default">
+    ```tsx
+    <ThemeProvider defaultTheme="system">
+      …
+    </ThemeProvider>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Customize floating action buttons with theme variables
+  </Card>
+  <Card title="Toolbar" icon="toolbox" href="/ui/toolbar">
+    Style toolbar with light/dark themes
+  </Card>
+</CardGroup>

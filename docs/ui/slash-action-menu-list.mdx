@@ -1,0 +1,286 @@
+---
+title: 'SlashActionMenuList'
+description: 'Inline slash command menu triggered by typing /'
+icon: 'slash'
+---
+
+## Overview
+
+`SlashActionMenuList` provides the `/` command experience you see in modern editors: when a user types `/` at the start of a line, a menu appears near the caret with available block types. Unlike `ActionMenuList`, this component is **self-managed** – it handles keyboard listeners, filtering, floating positioning, etc.
+
+<Frame>
+  <img src="/images/slash-action-menu-list.gif" alt="Slash command menu demo" />
+</Frame>
+
+## Features
+
+- ✅ Automatic trigger when typing `/`
+- ✅ Filters block types as user types (`/hea…`)
+- ✅ Keyboard navigation (↑ ↓ Enter Esc)
+- ✅ Inline positioning via Floating UI `inline()` middleware
+- ✅ Compound components (`Root`, `Group`, `Item`, `Empty`)
+- ✅ Programmatic API to open from code (e.g., from FloatingBlockActions)
+
+## Basic Usage
+
+```tsx
+import { SlashActionMenuList, useSlashActionMenu } from '@yoopta/ui';
+import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons';
+
+const SlashActionMenuListComponent = () => {
+  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } = useSlashActionMenu(
+    {
+      trigger: '/',
+    },
+  );
+
+  if (!isOpen) return null;
+
+  return (
+    <SlashActionMenuList.Root {...getRootProps()}>
+      <SlashActionMenuList.Group>
+        {empty ? (
+          <SlashActionMenuList.Empty />
+        ) : (
+          actions.map((action) => {
+            const Icon = ACTION_MENU_LIST_DEFAULT_ICONS_MAP[action.type];
+
+            return (
+              <SlashActionMenuList.Item
+                key={action.type}
+                action={action}
+                selected={action.type === selectedAction?.type}
+                icon={Icon ? <Icon width={20} height={20} /> : null}
+                {...getItemProps(action.type)}
+              />
+            );
+          })
+        )}
+      </SlashActionMenuList.Group>
+    </SlashActionMenuList.Root>
+  );
+};
+
+<YooptaEditor editor={editor}>
+  <SlashActionMenuListComponent />
+</YooptaEditor>;
+```
+
+## Programmatic Opening
+
+Need to open the slash menu from code (e.g., when clicking the "+" button in `FloatingBlockActions`)? Use the lightweight hook:
+
+```tsx
+const { open: openSlashMenu } = useSlashActionMenuActions();
+
+// Example: open menu after inserting a new empty block
+const onPlusClick = () => {
+  const nextBlockId = editor.insertBlock('Paragraph', { at: editor.path.current + 1, focus: true });
+
+  setTimeout(() => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    openSlashMenu({
+      getBoundingClientRect: () => range.getBoundingClientRect(),
+      getClientRects: () => range.getClientRects(),
+    });
+  }, 0);
+};
+```
+
+## API Reference
+
+### Components
+
+#### `SlashActionMenuList.Root`
+
+Portal/overlay container. Use `getRootProps()` for positioning.
+
+```tsx
+<SlashActionMenuList.Root {...getRootProps()}>
+  <SlashActionMenuList.Group>{/* items */}</SlashActionMenuList.Group>
+</SlashActionMenuList.Root>
+```
+
+Props: `children`, `className?`, `style?`
+
+#### `SlashActionMenuList.Group`
+
+Wraps the list of items.
+
+#### `SlashActionMenuList.Item`
+
+Menu item with title + optional description.
+
+```tsx
+<SlashActionMenuList.Item
+  action={{ type: 'HeadingOne', title: 'Heading 1', description: 'Big section heading' }}
+  selected={true}
+  icon={<HeadingIcon />}
+  {...getItemProps('HeadingOne')}
+/>
+```
+
+Props: `action`, `selected?`, `icon?`, spreads button props (`type="button"`).
+
+#### `SlashActionMenuList.Empty`
+
+Empty state message (default “No results”).
+
+### Hooks
+
+#### `useSlashActionMenu({ trigger = '/' })`
+
+Full hook with all logic (keyboard listeners, filtering, Floating UI).
+
+```tsx
+const {
+  isOpen,
+  actions,
+  selectedAction,
+  empty,
+  searchText,
+  getItemProps,
+  getRootProps,
+  open,
+  close,
+} = useSlashActionMenu({ trigger: '/' });
+```
+
+| Property           | Description                                                              |
+| ------------------ | ------------------------------------------------------------------------ |
+| `isOpen`           | Whether the menu is mounted                                              |
+| `actions`          | Filtered list of block actions                                           |
+| `selectedAction`   | Currently highlighted action                                             |
+| `empty`            | True when `actions.length === 0`                                         |
+| `searchText`       | Current filter text (without trigger)                                    |
+| `getItemProps`     | Returns props for `<SlashActionMenuList.Item>` (keyboard/mouse handlers) |
+| `getRootProps`     | Returns props for `<SlashActionMenuList.Root>` (floating ref, styles)    |
+| `open(reference?)` | Open programmatically with optional reference                            |
+| `close()`          | Close menu                                                               |
+
+#### `useSlashActionMenuActions()`
+
+Lightweight hook with `open`/`close`/`isOpen` for programmatic control.
+
+```tsx
+const { open, close, isOpen } = useSlashActionMenuActions();
+```
+
+`open(reference)` expects a virtual element (`HTMLElement` or { getBoundingClientRect }) – typically derived from the current selection range.
+
+## Behavior
+
+- Typing `/` at the start of a block opens the menu
+- Typing `/hea` filters actions
+- `Arrow Up/Down` navigate items
+- `Enter` confirms selection (replaces current block)
+- `Escape` closes the menu
+- If no results for 3 seconds, menu auto-closes
+
+## Examples
+
+### Custom Action Set
+
+```tsx
+const customItems = [
+  { type: 'Paragraph', title: 'Paragraph', description: 'Plain text' },
+  { type: 'HeadingOne', title: 'Heading 1', description: 'Big heading' },
+  { type: 'HeadingTwo', title: 'Heading 2', description: 'Medium heading' },
+  { type: 'Quote', title: 'Quote', description: 'Block quote' },
+];
+
+const { actions } = useSlashActionMenu({ items: customItems });
+```
+
+### Custom Trigger
+
+```tsx
+const { actions } = useSlashActionMenu({ trigger: '!' }); // “!” instead of “/”
+```
+
+### Empty State Customization
+
+```tsx
+{empty ? (
+  <SlashActionMenuList.Empty>
+    No blocks match "{searchText}"
+  </SlashActionMenuList.Empty>
+) : (
+  // actions…
+)}
+```
+
+## Styling
+
+### CSS Variables
+
+Uses the same base variables as `ActionMenuList`, but namespaced with `yoopta-ui-slash-action-menu`.
+
+```css
+:root {
+  --yoopta-ui-slash-action-menu-bg: hsl(var(--yoopta-ui-background));
+  --yoopta-ui-slash-action-menu-border: hsl(var(--yoopta-ui-border));
+  --yoopta-ui-slash-action-menu-radius: 0.5rem;
+  --yoopta-ui-slash-action-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+```
+
+### Tailwind Example
+
+```tsx
+<SlashActionMenuList.Root className="bg-slate-900/95 border border-white/10 shadow-2xl">
+  <SlashActionMenuList.Item className="text-white hover:bg-white/10" />
+</SlashActionMenuList.Root>
+```
+
+## Accessibility
+
+- Uses `listbox` semantics
+- Items respond to keyboard focus
+- Provide descriptive titles/descriptions for clarity
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Insert default block before opening programmatically">
+    ```tsx
+    const onPlusClick = () => {
+      const nextBlockId = editor.insertBlock('Paragraph', { focus: true });
+      openSlashMenuAtCursor();
+    };
+    ```
+  </Accordion>
+
+{' '}
+<Accordion title="Freeze FloatingBlockActions while menu open">
+  ```tsx toggleFloating('frozen'); openSlashMenu(reference); ```
+</Accordion>
+
+  <Accordion title="Provide helpful descriptions">
+    ```tsx
+    {actions.map((action) => (
+      <SlashActionMenuList.Item
+        key={action.type}
+        action={{
+          ...action,
+          description: action.description || `Insert a ${action.title.toLowerCase()}`,
+        }}
+      />
+    ))}
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Open slash menu programmatically from the + button
+  </Card>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Use for toolbar/block options menus
+  </Card>
+</CardGroup>

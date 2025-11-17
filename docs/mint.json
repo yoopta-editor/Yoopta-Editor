@@ -79,6 +79,18 @@
       "pages": ["marks/overview", "marks/built-in", "marks/custom-marks"]
     },
     {
+      "group": "UI Components",
+      "pages": [
+        "ui/overview",
+        "ui/floating-block-actions",
+        "ui/block-options",
+        "ui/toolbar",
+        "ui/action-menu-list",
+        "ui/slash-action-menu-list",
+        "ui/theme"
+      ]
+    },
+    {
       "group": "Advanced",
       "pages": [
         "advanced/editor-instance",

@@ -1,0 +1,338 @@
+---
+title: 'ActionMenuList'
+description: 'Controlled dropdown menu for choosing block types (toolbar, block options, etc.)'
+icon: 'list'
+---
+
+## Overview
+
+`ActionMenuList` is a **controlled** dropdown menu for selecting block types or contextual actions. It uses Floating UI for positioning and a portal so it can render anywhere in the DOM. Unlike `SlashActionMenuList`, this component is designed for button-triggered menus (toolbar, block options, etc.).
+
+<Frame>
+  <img src="/images/action-menu-list.png" alt="Action menu list screenshot" />
+</Frame>
+
+## Features
+
+- ✅ Controlled API (`open`, `close`, `getRootProps`)
+- ✅ Floating positioning with placement/middleware options
+- ✅ Compound components (`Root`, `Group`, `Item`, `Empty`)
+- ✅ Type-ahead filtering (optional)
+- ✅ Supports icons, descriptions, small/large views
+- ✅ Keyboard + mouse friendly
+
+## When to Use
+
+| Component             | Use Case                                                               |
+| --------------------- | ---------------------------------------------------------------------- |
+| `ActionMenuList`      | Button-triggered menus (Toolbar "Turn into", BlockOptions "Turn into") |
+| `SlashActionMenuList` | Slash command (inline) menu                                            |
+
+## Basic Usage
+
+```tsx
+import { ActionMenuList, useActionMenuList, useActionMenuListActions } from '@yoopta/ui';
+import { useYooptaEditor } from '@yoopta/editor';
+
+const MyActionMenuList = () => {
+  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
+    useActionMenuList();
+
+  if (!isOpen) return null;
+
+  return (
+    <ActionMenuList.Root {...getRootProps()}>
+      <ActionMenuList.Group>
+        {empty ? (
+          <ActionMenuList.Empty>No results</ActionMenuList.Empty>
+        ) : (
+          actions.map((action) => (
+            <ActionMenuList.Item
+              key={action.type}
+              action={action}
+              selected={action.type === selectedAction?.type}
+              {...getItemProps(action.type)}
+            />
+          ))
+        )}
+      </ActionMenuList.Group>
+    </ActionMenuList.Root>
+  );
+};
+
+const ToolbarTurnIntoButton = () => {
+  const { open } = useActionMenuListActions();
+
+  const onClick = (e: React.MouseEvent) => {
+    open({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
+
+  return <button onClick={onClick}>Turn into</button>;
+};
+
+<YooptaEditor editor={editor}>
+  <ToolbarTurnIntoButton />
+  <MyActionMenuList />
+</YooptaEditor>;
+```
+
+## API Reference
+
+### Components
+
+#### `ActionMenuList.Root`
+
+Floating container. Receives props from `getRootProps()`.
+
+```tsx
+<ActionMenuList.Root {...getRootProps()}>{/* groups/items */}</ActionMenuList.Root>
+```
+
+Props: `children`, `className?`, `style?`
+
+#### `ActionMenuList.Group`
+
+Wraps items (vertical stack).
+
+```tsx
+<ActionMenuList.Group>
+  <ActionMenuList.Item action={action} />
+</ActionMenuList.Group>
+```
+
+Props: `children`, `className?`
+
+#### `ActionMenuList.Item`
+
+Selectable option.
+
+```tsx
+<ActionMenuList.Item
+  action={{
+    type: 'HeadingOne',
+    title: 'Heading 1',
+    description: 'Large section heading',
+    icon: <HeadingIcon />,
+  }}
+  selected={true}
+  view="default"
+  {...getItemProps('HeadingOne')}
+/>
+```
+
+Props:
+
+- `action: ActionMenuItem` (type/title/description/icon)
+- `selected?: boolean`
+- `view?: 'small' | 'default'`
+- `icon?: ReactNode`
+- `className?`
+- spreads button props (`type="button"`)
+
+#### `ActionMenuList.Empty`
+
+Empty state fallback.
+
+```tsx
+<ActionMenuList.Empty>No blocks found</ActionMenuList.Empty>
+```
+
+### Hooks
+
+#### `useActionMenuList()`
+
+Full hook with Floating UI and selection logic. Use in the component that renders `ActionMenuList`.
+
+```tsx
+const { isOpen, actions, selectedAction, empty, view, open, close, getItemProps, getRootProps } =
+  useActionMenuList({
+    items: ['Paragraph', 'HeadingOne'], // optional
+    view: 'default', // optional
+  });
+```
+
+| Property         | Type                     | Description                                    |
+| ---------------- | ------------------------ | ---------------------------------------------- |
+| `isOpen`         | `boolean`                | Whether the menu is mounted (with transitions) |
+| `actions`        | `ActionMenuItem[]`       | Processed block types                          |
+| `selectedAction` | `ActionMenuItem \| null` | Currently highlighted action                   |
+| `empty`          | `boolean`                | Whether there are zero actions                 |
+| `view`           | `'small' \| 'default'`   | Current view mode                              |
+| `open`           | `(options) => void`      | Open menu with options                         |
+| `close`          | `() => void`             | Close menu                                     |
+| `getItemProps`   | `(type) => ItemProps`    | Props for each `ActionMenuList.Item`           |
+| `getRootProps`   | `() => RootProps`        | Props for `ActionMenuList.Root`                |
+
+`options` for `open`:
+
+```ts
+open({
+  reference: HTMLElement;      // required
+  view?: 'small' | 'default';  // override view
+  placement?: Placement;       // Floating UI placement
+  blockId?: string;            // optional block context
+});
+```
+
+#### `useActionMenuListActions()`
+
+Lightweight hook to open/close programmatically.
+
+```tsx
+const { open, close, isOpen } = useActionMenuListActions();
+```
+
+## Examples
+
+### Toolbar "Turn into"
+
+```tsx
+const ToolbarTurnIntoButton = () => {
+  const { open } = useActionMenuListActions();
+
+  const onClick = (e: React.MouseEvent) => {
+    open({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
+
+  return (
+    <Toolbar.Button onClick={onClick}>
+      Turn into
+      <ChevronDownIcon size={14} />
+    </Toolbar.Button>
+  );
+};
+```
+
+### BlockOptions integration
+
+```tsx
+const BlockOptions = () => {
+  const { open: openActionMenu } = useActionMenuListActions();
+
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenu({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'right',
+    });
+  };
+
+  return (
+    <BlockOptions.Root {...getRootProps()}>
+      <BlockOptions.Button onClick={onTurnIntoClick}>Turn into</BlockOptions.Button>
+    </BlockOptions.Root>
+  );
+};
+```
+
+### Custom actions + icons
+
+```tsx
+const customActions = [
+  { type: 'Paragraph', title: 'Paragraph', description: 'Plain text', icon: <ParagraphIcon /> },
+  { type: 'HeadingOne', title: 'Heading 1', description: 'Large heading', icon: <Heading1Icon /> },
+  { type: 'Quote', title: 'Quote', description: 'Block quote', icon: <QuoteIcon /> },
+];
+
+const { actions, getItemProps } = useActionMenuList({ items: customActions });
+
+<ActionMenuList.Group>
+  {actions.map((action) => (
+    <ActionMenuList.Item
+      key={action.type}
+      action={action}
+      icon={action.icon}
+      {...getItemProps(action.type)}
+    />
+  ))}
+</ActionMenuList.Group>;
+```
+
+## Styling
+
+### CSS variables
+
+```css
+:root {
+  --yoopta-ui-action-menu-bg: hsl(var(--yoopta-ui-background));
+  --yoopta-ui-action-menu-border: hsl(var(--yoopta-ui-border));
+  --yoopta-ui-action-menu-radius: 0.5rem;
+  --yoopta-ui-action-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --yoopta-ui-action-menu-item-hover: hsl(var(--yoopta-ui-accent));
+}
+```
+
+### Custom classes
+
+```tsx
+<ActionMenuList.Root className="bg-slate-900/95 border border-white/10 shadow-2xl">
+  <ActionMenuList.Item className="text-white hover:bg-white/10" />
+</ActionMenuList.Root>
+```
+
+## Accessibility
+
+- Uses `role="listbox"` and `role="option"` semantics
+- Keyboard navigation handled by `getItemProps` (Arrow Up/Down, Enter)
+- Provide descriptive titles/descriptions for screen readers
+
+```tsx
+<ActionMenuList.Item
+  action={{
+    type: 'HeadingOne',
+    title: 'Heading 1',
+    description: 'Large section heading',
+  }}
+  {...getItemProps('HeadingOne')}
+/>
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep view consistent with context">
+    ```tsx
+    open({ view: 'small' }); // compact for toolbar
+    open({ view: 'default' }); // full info for modals / large menus
+    ```
+  </Accordion>
+
+  <Accordion title="Always pass reference element">
+    ```tsx
+    open({
+      reference: e.currentTarget as HTMLElement,
+    });
+    ```
+  </Accordion>
+
+  <Accordion title="Close menu when action completes">
+    ```tsx
+    const { close } = useActionMenuListActions();
+
+    const handleSelect = (type: string) => {
+      editor.toggleBlock(type);
+      close();
+    };
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="Toolbar" icon="toolbox" href="/ui/toolbar">
+    Trigger ActionMenuList from selection toolbar
+  </Card>
+  <Card title="SlashActionMenuList" icon="slash" href="/ui/slash-action-menu-list">
+    Use for slash command menus
+  </Card>
+</CardGroup>
