@@ -12,7 +12,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 
 import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
-import { BlockOptions } from '../BlockOptions/BlockOptions';
 
 type Props = {
   id?: string;
@@ -22,9 +21,12 @@ type Props = {
   children: ReactNode;
 };
 
-const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props) => {
+// move to @yoopta/ui packages in next PR
+const ExtendedBlockOptions = ({ id, className, style, onClick, children }: Props) => {
   const isReadOnly = useYooptaReadOnly();
   const [isBlockOptionsOpen, setIsBlockOptionsOpen] = useState(false);
+
+  // remove after move to @yoopta/ui packages
   const {
     refs: blockOptionRefs,
     floatingStyles: blockOptionFloatingStyles,
@@ -52,15 +54,6 @@ const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props
 
   return (
     <>
-      {isMounted && (
-        <BlockOptions
-          isOpen
-          onClose={() => setIsBlockOptionsOpen(false)}
-          refs={blockOptionRefs}
-          style={blockOptionsStyle}>
-          {children}
-        </BlockOptions>
-      )}
       <button
         type="button"
         contentEditable={false}
@@ -75,4 +68,4 @@ const ExtendedBlockActions = ({ id, className, style, onClick, children }: Props
   );
 };
 
-export { ExtendedBlockActions };
+export { ExtendedBlockOptions };

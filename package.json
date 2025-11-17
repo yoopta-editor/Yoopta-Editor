@@ -36,9 +36,6 @@
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
-    ],
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
     ]
   },
   "devDependencies": {

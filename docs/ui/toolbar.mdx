@@ -1,0 +1,308 @@
+---
+title: 'Toolbar'
+description: 'Floating formatting toolbar that appears on text selection'
+icon: 'toolbox'
+---
+
+## Overview
+
+The `Toolbar` component provides a floating formatting toolbar that appears whenever the user selects text. It is **self-managed** – once rendered inside `YooptaEditor`, it automatically listens to selection events, positions itself near the selection, and hides when no text is selected.
+
+<Frame>
+  <img src="/images/toolbar.png" alt="Yoopta toolbar screenshot" />
+</Frame>
+
+## Features
+
+- ✅ Automatic display on selection events
+- ✅ Floating UI positioning (follows selection)
+- ✅ Compound components (`Root`, `Group`, `Button`, `Separator`)
+- ✅ Works with any formatting actions or custom buttons
+- ✅ Lightweight hook for open/close control
+- ✅ Full keyboard and accessibility support
+
+## Basic Usage
+
+```tsx
+import { Toolbar, useToolbar } from '@yoopta/ui';
+import { useYooptaEditor } from '@yoopta/editor';
+import { BoldIcon, ItalicIcon, CodeIcon } from 'lucide-react';
+
+function MyToolbar() {
+  const editor = useYooptaEditor();
+  const { isOpen, getRootProps } = useToolbar();
+
+  if (!isOpen) return null;
+
+  return (
+    <Toolbar.Root {...getRootProps()}>
+      <Toolbar.Group>
+        {editor.formats.bold && (
+          <Toolbar.Button
+            onClick={editor.formats.bold.toggle}
+            active={editor.formats.bold.isActive()}>
+            <BoldIcon size={14} />
+          </Toolbar.Button>
+        )}
+        {editor.formats.italic && (
+          <Toolbar.Button
+            onClick={editor.formats.italic.toggle}
+            active={editor.formats.italic.isActive()}>
+            <ItalicIcon size={14} />
+          </Toolbar.Button>
+        )}
+        {editor.formats.code && (
+          <Toolbar.Button
+            onClick={editor.formats.code.toggle}
+            active={editor.formats.code.isActive()}>
+            <CodeIcon size={14} />
+          </Toolbar.Button>
+        )}
+      </Toolbar.Group>
+    </Toolbar.Root>
+  );
+}
+
+<YooptaEditor editor={editor} plugins={plugins} marks={marks}>
+  <MyToolbar />
+</YooptaEditor>;
+```
+
+## API Reference
+
+### Components
+
+#### `Toolbar.Root`
+
+Root floating container. Should receive `getRootProps()` from `useToolbar()`.
+
+```tsx
+<Toolbar.Root {...getRootProps()}>{/* Toolbar.Group */}</Toolbar.Root>
+```
+
+Props:
+
+- `children: ReactNode`
+- `className?: string`
+- `style?: CSSProperties`
+
+#### `Toolbar.Group`
+
+Wraps related buttons together.
+
+```tsx
+<Toolbar.Group>
+  <Toolbar.Button>Bold</Toolbar.Button>
+</Toolbar.Group>
+```
+
+Props: `children`, `className?`
+
+#### `Toolbar.Button`
+
+Individual toolbar button.
+
+```tsx
+<Toolbar.Button
+  onClick={editor.formats.bold.toggle}
+  active={editor.formats.bold.isActive()}
+  title="Bold">
+  <BoldIcon />
+</Toolbar.Button>
+```
+
+Props:
+
+- `onClick?: (event) => void`
+- `active?: boolean`
+- `disabled?: boolean`
+- `title?: string`
+- `className?: string`
+- spreads native `<button>` props
+
+#### `Toolbar.Separator`
+
+Visual separator between groups.
+
+```tsx
+<Toolbar.Separator />
+```
+
+### Hook: `useToolbar()`
+
+Full hook with Floating UI, selection listeners, etc. Use only in the component that renders the toolbar.
+
+```tsx
+const { isOpen, getRootProps, state, reference } = useToolbar();
+```
+
+| Property       | Type                  | Description                            |
+| -------------- | --------------------- | -------------------------------------- |
+| `isOpen`       | `boolean`             | Whether the toolbar should be rendered |
+| `getRootProps` | `() => RootProps`     | Props for `<Toolbar.Root>`             |
+| `state`        | `'open' \| 'closed'`  | Internal state                         |
+| `reference`    | `HTMLElement \| null` | Floating reference element             |
+
+### Lightweight hook: `useToolbarActions()`
+
+Expose lightweight control (open/close/toggle) if needed.
+
+```tsx
+const { open, close, toggle, isOpen } = useToolbarActions();
+```
+
+## Examples
+
+### Rich Formatting Toolbar
+
+```tsx
+function FormattingToolbar() {
+  const editor = useYooptaEditor();
+  const { isOpen, getRootProps } = useToolbar();
+
+  if (!isOpen) return null;
+
+  const buttons = [
+    { format: 'bold', icon: <BoldIcon size={14} />, label: 'Bold' },
+    { format: 'italic', icon: <ItalicIcon size={14} />, label: 'Italic' },
+    { format: 'underline', icon: <UnderlineIcon size={14} />, label: 'Underline' },
+    { format: 'strike', icon: <StrikethroughIcon size={14} />, label: 'Strikethrough' },
+    { format: 'code', icon: <CodeIcon size={14} />, label: 'Code' },
+  ];
+
+  return (
+    <Toolbar.Root {...getRootProps()}>
+      <Toolbar.Group>
+        {buttons.map((btn) => {
+          const format = editor.formats[btn.format];
+          if (!format) return null;
+
+          return (
+            <Toolbar.Button
+              key={btn.format}
+              onClick={format.toggle}
+              active={format.isActive()}
+              title={btn.label}>
+              {btn.icon}
+            </Toolbar.Button>
+          );
+        })}
+      </Toolbar.Group>
+      <Toolbar.Separator />
+      <Toolbar.Group>
+        <Toolbar.Button onClick={() => openLinkModal()}>Link</Toolbar.Button>
+      </Toolbar.Group>
+    </Toolbar.Root>
+  );
+}
+```
+
+### Toolbar with Custom Actions
+
+```tsx
+const MyToolbar = () => {
+  const editor = useYooptaEditor();
+  const { isOpen, getRootProps } = useToolbar();
+  const { open: openActionMenuList } = useActionMenuListActions();
+
+  if (!isOpen) return null;
+
+  const onTurnIntoClick = (e: React.MouseEvent) => {
+    openActionMenuList({
+      reference: e.currentTarget as HTMLElement,
+      view: 'small',
+      placement: 'bottom-start',
+    });
+  };
+
+  return (
+    <Toolbar.Root {...getRootProps()}>
+      <Toolbar.Group>
+        <Toolbar.Button onClick={onTurnIntoClick}>
+          Turn into
+          <ChevronDownIcon size={14} />
+        </Toolbar.Button>
+      </Toolbar.Group>
+      <Toolbar.Separator />
+      <Toolbar.Group>{/* Formatting buttons */}</Toolbar.Group>
+    </Toolbar.Root>
+  );
+};
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-toolbar-bg: hsl(var(--yoopta-ui-background));
+  --yoopta-ui-toolbar-border: hsl(var(--yoopta-ui-border));
+  --yoopta-ui-toolbar-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --yoopta-ui-toolbar-radius: 0.5rem;
+  --yoopta-ui-toolbar-button-hover: var(--yoopta-ui-accent);
+  --yoopta-ui-toolbar-button-active: var(--yoopta-ui-accent);
+}
+```
+
+### Custom styles / Tailwind
+
+```tsx
+<Toolbar.Root className="bg-slate-900/90 border border-white/10 shadow-xl">
+  <Toolbar.Group>
+    <Toolbar.Button className="text-white hover:bg-white/10">Bold</Toolbar.Button>
+  </Toolbar.Group>
+</Toolbar.Root>
+```
+
+## Accessibility
+
+- Toolbar stays close to selection for context
+- Buttons use `<button type="button">` for proper semantics
+- Use `title`/`aria-label` for icons to describe actions
+
+```tsx
+<Toolbar.Button
+  onClick={editor.formats.bold.toggle}
+  active={editor.formats.bold.isActive()}
+  aria-label="Toggle bold (⌘B)"
+  title="Bold (⌘B)">
+  <BoldIcon />
+</Toolbar.Button>
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Wrap formatting logic in conditions">
+    ```tsx
+    {editor.formats.bold && (
+      <Toolbar.Button onClick={editor.formats.bold.toggle} active={editor.formats.bold.isActive()} />
+    )}
+    ```
+  </Accordion>
+
+{' '}
+<Accordion title="Avoid overloading toolbar with too many actions">
+  ```tsx // Prefer 4–8 buttons, use ActionMenuList for less frequently used options ```
+</Accordion>
+
+  <Accordion title="Use separators to group related actions">
+    ```tsx
+    <Toolbar.Group>{/* text format buttons */}</Toolbar.Group>
+    <Toolbar.Separator />
+    <Toolbar.Group>{/* alignment buttons */}</Toolbar.Group>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Open a block-type dropdown directly from the toolbar
+  </Card>
+  <Card title="Theme" icon="moon" href="/ui/theme">
+    Style toolbar with custom themes
+  </Card>
+</CardGroup>

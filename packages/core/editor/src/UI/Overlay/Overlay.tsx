@@ -1,5 +1,4 @@
 import type { MouseEvent, ReactNode } from 'react';
-import { forwardRef } from 'react';
 import { FloatingOverlay } from '@floating-ui/react';
 
 type Props = {
@@ -11,6 +10,7 @@ type Props = {
   style?: React.CSSProperties;
 };
 
+// move to @yoopta/ui packages in next PR
 const Overlay = ({ className, children, lockScroll = true, ...props }: Props) => {
   const onMouseDown = (e: MouseEvent) => {
     e.stopPropagation();

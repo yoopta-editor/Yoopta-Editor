@@ -1,77 +1,6 @@
 import { YooptaContentValue } from '@yoopta/editor';
 
 export const DEFAULT_VALUE = {
-  '5c47e38d-4213-472d-8fda-a182fbecd40c': {
-    id: '5c47e38d-4213-472d-8fda-a182fbecd40c',
-    type: 'Accordion',
-    value: [
-      {
-        id: '23cb2ea7-aeeb-47aa-9d79-3c8a23349b5b',
-        type: 'accordion-list',
-        children: [
-          {
-            id: '75e787d6-e184-4e2f-8e33-88d2243b3d94',
-            type: 'accordion-list-item',
-            children: [
-              {
-                id: '02b79be6-1b5c-4e69-ab7f-8829fcf83ed6',
-                type: 'accordion-list-item-heading',
-                children: [
-                  {
-                    text: 'heading one',
-                  },
-                ],
-              },
-              {
-                id: '65900302-ddc7-4eef-8399-2cb367b84acf',
-                type: 'accordion-list-item-content',
-                children: [
-                  {
-                    text: 'description one',
-                  },
-                ],
-              },
-            ],
-            props: {
-              isExpanded: true,
-            },
-          },
-          {
-            id: '921c492a-9eca-4c0a-852d-8670f480ea34',
-            type: 'accordion-list-item',
-            children: [
-              {
-                id: 'f8ded2a1-a29d-4296-99a1-d8364d954c4e',
-                type: 'accordion-list-item-heading',
-                children: [
-                  {
-                    text: 'heading two',
-                  },
-                ],
-              },
-              {
-                id: 'f31094a3-4da4-4e50-97b4-67dc28cc40ec',
-                type: 'accordion-list-item-content',
-                children: [
-                  {
-                    text: 'aadescription two',
-                  },
-                ],
-              },
-            ],
-            props: {
-              isExpanded: true,
-            },
-          },
-        ],
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 0,
-    },
-  },
   '6f7ba884-86eb-4022-9737-c619e82db325': {
     id: '6f7ba884-86eb-4022-9737-c619e82db325',
     type: 'Paragraph',
@@ -82,22 +11,6 @@ export const DEFAULT_VALUE = {
         children: [
           {
             text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
-          },
-          {
-            type: 'mention',
-            children: [
-              {
-                text: '',
-              },
-            ],
-            props: {
-              id: '613eaca05d44',
-              name: 'akhmed ibragimov',
-              nodeType: 'inlineVoid',
-            },
-          },
-          {
-            text: '.',
           },
         ],
         props: {

@@ -2,7 +2,7 @@ import { Elements, UI, YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { Lollipop, FlipVertical, FlipHorizontal } from 'lucide-react';
 import { CarouselElementProps } from '../types';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI;
 
 type Props = {
@@ -29,7 +29,7 @@ const CarouselBlockOptions = ({ editor, block, props }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-carousel-options">
       <BlockOptionsSeparator />
@@ -61,7 +61,7 @@ const CarouselBlockOptions = ({ editor, block, props }: Props) => {
           </button>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };
 

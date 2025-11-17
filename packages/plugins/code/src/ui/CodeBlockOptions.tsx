@@ -13,7 +13,7 @@ import { getCodeElementText } from '../utils/element';
 import { LANGUAGES_MAP } from '../utils/languages';
 import { THEMES_MAP } from '../utils/themes';
 
-const { ExtendedBlockActions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
+const { ExtendedBlockOptions, BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptionsSeparator } =
   UI_HELPERS;
 
 type Props = {
@@ -51,7 +51,7 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
   };
 
   return (
-    <ExtendedBlockActions
+    <ExtendedBlockOptions
       onClick={() => editor.setPath({ current: block.meta.order })}
       className="yoopta-code-options">
       <BlockOptionsSeparator />
@@ -94,6 +94,6 @@ export const CodeBlockOptions = ({ block, editor, element }: Props) => {
           </Select>
         </BlockOptionsMenuItem>
       </BlockOptionsMenuGroup>
-    </ExtendedBlockActions>
+    </ExtendedBlockOptions>
   );
 };

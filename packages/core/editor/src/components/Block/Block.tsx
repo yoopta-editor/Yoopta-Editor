@@ -30,11 +30,14 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
   const blockStyles = useBlockStyles(block, transform, transition, isDragging, isOver);
 
   const align = block.meta.align || 'left';
-  const className = `yoopta-block yoopta-align-${align}`;
+  const className = `yoopta-block ${
+    align === 'left' ? '' : `yoopta-align-${align}`
+  }yoopta-selection-block`;
 
   const isSelected = Paths.isBlockSelected(editor, block);
 
   const handleMouseEnter = () => {
+    // remove after move to @yoopta/ui packages
     if (!editor.readOnly && onActiveDragHandleChange) {
       onActiveDragHandleChange({
         attributes,
@@ -51,11 +54,9 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
       style={blockStyles}
       data-yoopta-block
       data-yoopta-block-id={blockId}
+      data-block-selected={isSelected}
       onMouseEnter={handleMouseEnter}>
       {children}
-      {!editor.readOnly && (
-        <div data-block-selected={isSelected} className="yoopta-selection-block" />
-      )}
     </div>
   );
 });
