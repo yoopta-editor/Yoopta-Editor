@@ -66,8 +66,6 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
   const [actions, setActions] = useState<ActionMenuItem[]>([]);
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
 
-  console.log('actions', actions);
-
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'bottom-start',
     open: state === 'open',
@@ -84,9 +82,16 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     [editor],
   );
 
+  const reset = () => {
+    setActions(blockTypes);
+    setSelectedAction(blockTypes[0]);
+    setSearchText('');
+  };
+
   // Update reference when it changes
   useEffect(() => {
     if (storeReference) {
+      reset();
       refs.setReference(storeReference);
     }
   }, [storeReference, refs]);
@@ -98,25 +103,27 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     }
   }, [state, update]);
 
+  const onClose = useCallback(() => {
+    reset();
+    storeClose();
+  }, [storeClose, blockTypes, setSearchText]);
+
   const open = (reference?: HTMLElement | null) => {
-    console.log('blockTypes', blockTypes);
-    console.log('editor.blocks', editor.blocks);
-
-    // Initialize with all block types (no filter)
-    setActions(blockTypes);
-    setSelectedAction(blockTypes[0]);
-    setSearchText('');
-
-    // Open the menu
+    reset();
     storeOpen(reference);
   };
 
-  const onClose = useCallback(() => {
-    setActions(blockTypes);
-    setSelectedAction(blockTypes[0]);
-    setSearchText('');
-    storeClose();
-  }, [storeClose, blockTypes, setSearchText]);
+  // Auto-close when no results after 3 seconds
+  useEffect(() => {
+    const empty = actions.length === 0;
+    if (!empty) return;
+
+    const timeout = setTimeout(() => {
+      if (empty) onClose();
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [actions.length, state, onClose]);
 
   const onFilter = useCallback(
     ({ text }: { text: string }) => {
@@ -347,18 +354,6 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       };
     }
   }, [actions, state, editor.path, onClose, open, onFilter, refs, editor, selectedAction]);
-
-  // Auto-close when no results after 3 seconds
-  useEffect(() => {
-    const empty = actions.length === 0;
-    if (!empty) return;
-
-    const timeout = setTimeout(() => {
-      if (empty) onClose();
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, [actions.length, state, onClose]);
 
   const getItemProps = useCallback(
     (type: string) => ({
