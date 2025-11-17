@@ -81,6 +81,7 @@ const Item = forwardRef<HTMLButtonElement, ItemProps>(
     return (
       <button
         ref={ref}
+        type="button"
         className={`yoopta-ui-slash-action-menu-list-item ${selected ? 'selected' : ''}`}
         {...props}>
         {iconProp && (
