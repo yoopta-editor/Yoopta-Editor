@@ -37,7 +37,7 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
   const isSelected = Paths.isBlockSelected(editor, block);
 
   const handleMouseEnter = () => {
-    // move to UI
+    // remove after move to @yoopta/ui packages
     if (!editor.readOnly && onActiveDragHandleChange) {
       onActiveDragHandleChange({
         attributes,
