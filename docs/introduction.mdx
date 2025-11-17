@@ -1,0 +1,112 @@
+---
+title: Welcome to Yoopta Editor
+description: A free, open-source rich-text editor built for React apps
+---
+
+<img className="block dark:hidden" src="/images/yoopta-intro-light.png" alt="Yoopta Editor" />
+<img className="hidden dark:block" src="/images/yoopta-intro-dark.png" alt="Yoopta Editor" />
+
+## What is Yoopta Editor?
+
+Yoopta Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as **Notion**, **Craft**, **Coda**, **Medium**, and more.
+
+With Yoopta Editor, you can customize everything to fit exactly what you need. Want to tweak the look, add cool features, or craft a completely custom user interface? No problem. Yoopta Editor gives you the flexibility to do it all, making it easy to create the perfect tool for your project.
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Easy Setup" icon="rocket">
+    Get started quickly with sensible defaults and minimal configuration
+  </Card>
+  <Card title="Powerful Plugins" icon="puzzle-piece">
+    Default list of powerful plugins for all your content needs
+  </Card>
+  <Card title="Drag & Drop" icon="hand-pointer">
+    Intuitive drag and drop support, including nested elements
+  </Card>
+  <Card title="Fully Customizable" icon="palette">
+    Each plugin can be easily customized and extended
+  </Card>
+  <Card title="Mobile Friendly" icon="mobile">
+    Works seamlessly on mobile devices with touch support
+  </Card>
+  <Card title="Rich Media Support" icon="image">
+    Media plugins with optimization and lazy loading
+  </Card>
+  <Card title="Export Support" icon="file-export">
+    Export to markdown, HTML, and plain text
+  </Card>
+  <Card title="Keyboard Shortcuts" icon="keyboard">
+    Full keyboard navigation and customizable shortcuts
+  </Card>
+</CardGroup>
+
+## Why Choose Yoopta Editor?
+
+<AccordionGroup>
+  <Accordion title="🎨 Complete Customization">
+    Every aspect of the editor can be customized - from the UI to the behavior of each plugin.
+    Create your own plugins or extend existing ones.
+  </Accordion>
+
+  <Accordion title="🚀 Production Ready">
+    Handles large documents efficiently with automatic lazy loading for media components and
+    optimized performance.
+  </Accordion>
+
+  <Accordion title="💪 Developer Experience">
+    Built with TypeScript, providing excellent type safety and IDE support. Clear API and
+    comprehensive documentation.
+  </Accordion>
+
+  <Accordion title="🌐 Open Source">
+    Free and open source with MIT license. Active community and regular updates.
+  </Accordion>
+</AccordionGroup>
+
+## Quick Example
+
+```jsx
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+
+const plugins = [Paragraph];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+  const [value, setValue] = useState();
+
+  return <YooptaEditor editor={editor} plugins={plugins} value={value} onChange={setValue} />;
+}
+```
+
+## Ready to Start?
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Get up and running in 5 minutes
+  </Card>
+  <Card title="Installation" icon="download" href="/installation">
+    Install Yoopta Editor in your project
+  </Card>
+  <Card title="Examples" icon="code" href="https://yoopta.dev/examples">
+    Explore live examples and demos
+  </Card>
+  <Card title="API Reference" icon="book" href="/api-reference/editor-props">
+    Dive into the complete API documentation
+  </Card>
+</CardGroup>
+
+## Community & Support
+
+Join our community to get help, share your projects, and contribute:
+
+- **[Discord Community](https://discord.gg/Dt8rhSTjsn)** - Chat with the team and community
+- **[GitHub Discussions](https://github.com/Darginec05/Yoopta-Editor/discussions)** - Ask questions and share ideas
+- **[GitHub Issues](https://github.com/Darginec05/Yoopta-Editor/issues)** - Report bugs or request features
+- **[Twitter](https://twitter.com/LebovskiYoo)** - Follow for updates and news
+
+<Note>
+  If you find Yoopta Editor useful, please give it a ⭐️ star on
+  [GitHub](https://github.com/Darginec05/Yoopta-Editor)!
+</Note>
