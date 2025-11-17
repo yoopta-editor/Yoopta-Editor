@@ -1,0 +1,250 @@
+---
+title: Installation
+description: Install Yoopta Editor and its dependencies in your React project
+---
+
+## Prerequisites
+
+Before installing Yoopta Editor, make sure you have:
+
+- **Node.js** version 14 or higher
+- **React** version 17.0.2 or higher
+- **React DOM** version 17.0.2 or higher
+
+## Package Manager
+
+Yoopta Editor supports all major package managers:
+
+<Tabs>
+  <Tab title="npm">```bash npm install slate slate-react @yoopta/editor ```</Tab>
+  <Tab title="yarn">```bash yarn add slate slate-react @yoopta/editor ```</Tab>
+  <Tab title="pnpm">```bash pnpm add slate slate-react @yoopta/editor ```</Tab>
+</Tabs>
+
+## Core Packages
+
+### Required Dependencies
+
+```bash
+# Peer dependencies
+slate@^0.102.0
+slate-react@^0.102.0
+react@>=17.0.2
+react-dom@>=17.0.2
+
+# Core package
+@yoopta/editor
+```
+
+<Note>Slate and Slate React are peer dependencies that must be installed separately.</Note>
+
+## Plugin Packages
+
+Install the plugins you need for your editor:
+
+### Text Plugins
+
+```bash
+npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
+```
+
+### List Plugins
+
+```bash
+npm install @yoopta/lists
+```
+
+### Media Plugins
+
+```bash
+npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
+```
+
+### Layout Plugins
+
+```bash
+npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout
+```
+
+### Code Plugin
+
+```bash
+npm install @yoopta/code
+```
+
+### Link Plugin
+
+```bash
+npm install @yoopta/link
+```
+
+## Tool Packages
+
+Install editor tools for enhanced functionality:
+
+```bash
+npm install @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool
+```
+
+## Marks Package
+
+Install marks for text formatting:
+
+```bash
+npm install @yoopta/marks
+```
+
+## All-in-One Installation
+
+Install everything at once:
+
+<CodeGroup>
+
+```bash npm
+npm install slate slate-react \
+  @yoopta/editor \
+  @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
+  @yoopta/lists @yoopta/code @yoopta/table \
+  @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
+  @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
+  @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool \
+  @yoopta/marks
+```
+
+```bash yarn
+yarn add slate slate-react \
+  @yoopta/editor \
+  @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
+  @yoopta/lists @yoopta/code @yoopta/table \
+  @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
+  @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
+  @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool \
+  @yoopta/marks
+```
+
+</CodeGroup>
+
+## Exports Package
+
+For exporting content to different formats:
+
+```bash
+npm install @yoopta/exports
+```
+
+This package provides functionality to export your editor content to:
+
+- Markdown
+- HTML
+- Plain text
+
+## TypeScript Support
+
+Yoopta Editor is written in TypeScript and includes type definitions out of the box. No additional `@types` packages are needed.
+
+## CSS Import
+
+Some plugins require CSS to be imported. Make sure to import the styles in your main file:
+
+```jsx
+import '@yoopta/editor/dist/index.css';
+// Import plugin-specific styles if needed
+```
+
+<Warning>Make sure your bundler (Webpack, Vite, etc.) is configured to handle CSS imports.</Warning>
+
+## Framework-Specific Setup
+
+<Tabs>
+  <Tab title="Next.js">
+    For Next.js 13+ with App Router:
+
+    ```jsx
+    'use client';
+
+    import dynamic from 'next/dynamic';
+
+    const YooptaEditor = dynamic(
+      () => import('@yoopta/editor').then((mod) => mod.default),
+      { ssr: false }
+    );
+
+    export default function Editor() {
+      // Your editor code
+    }
+    ```
+
+  </Tab>
+  
+  <Tab title="Vite">
+    Vite works out of the box with Yoopta Editor. No special configuration needed.
+
+    ```jsx
+    import YooptaEditor from '@yoopta/editor';
+    // Regular import works fine
+    ```
+
+  </Tab>
+  
+  <Tab title="Create React App">
+    Create React App works seamlessly with Yoopta Editor:
+
+    ```jsx
+    import YooptaEditor from '@yoopta/editor';
+    import '@yoopta/editor/dist/index.css';
+    ```
+
+  </Tab>
+</Tabs>
+
+## Verification
+
+Verify your installation by creating a simple editor:
+
+```jsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+
+function App() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+  const plugins = [Paragraph];
+
+  return <YooptaEditor editor={editor} plugins={plugins} placeholder="Type something..." />;
+}
+```
+
+If you see an empty editor with the placeholder text, you're all set! 🎉
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart Guide" icon="rocket" href="/quickstart">
+    Build your first editor in 5 minutes
+  </Card>
+  <Card title="Core Concepts" icon="book" href="/core/editor">
+    Understand how Yoopta Editor works
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Module not found: slate">
+    Make sure you've installed both `slate` and `slate-react`: ```bash npm install slate slate-react
+    ```
+  </Accordion>
+
+  <Accordion title="TypeScript errors">
+    Ensure you're using TypeScript 4.8 or higher and that `@yoopta/editor` is properly installed.
+  </Accordion>
+
+  <Accordion title="Styles not loading">
+    Import the CSS file in your main entry point: ```jsx import '@yoopta/editor/dist/index.css'; ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  For more help, join our [Discord community](https://discord.gg/Dt8rhSTjsn) or check [GitHub
+  Issues](https://github.com/Darginec05/Yoopta-Editor/issues).
+</Note>

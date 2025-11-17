@@ -1,0 +1,327 @@
+---
+title: Plugins
+description: Understanding and working with Yoopta Editor plugins
+---
+
+## Overview
+
+Plugins are the building blocks of Yoopta Editor. Each plugin represents a specific type of content block (paragraph, heading, image, etc.) and defines how that content is rendered and behaves.
+
+## Available Plugins
+
+Yoopta Editor provides a rich set of built-in plugins:
+
+### Text Plugins
+
+- **Paragraph** - Basic text blocks
+- **Headings** - H1, H2, H3 heading blocks
+- **Blockquote** - Quote blocks
+
+### List Plugins
+
+- **BulletedList** - Unordered lists
+- **NumberedList** - Ordered lists
+- **TodoList** - Checkable task lists
+
+### Media Plugins
+
+- **Image** - Image blocks with upload support
+- **Video** - Video blocks with upload support
+- **File** - File attachment blocks
+- **Embed** - Embed external content (YouTube, Twitter, etc.)
+
+### Layout Plugins
+
+- **Table** - Tabular data
+- **Accordion** - Collapsible content sections
+- **Divider** - Horizontal separator
+- **Callout** - Highlighted notice blocks
+
+### Special Plugins
+
+- **Code** - Syntax-highlighted code blocks
+- **Link** - Link blocks
+
+## Using Plugins
+
+### Basic Usage
+
+```jsx
+import Paragraph from '@yoopta/paragraph';
+import Blockquote from '@yoopta/blockquote';
+import Code from '@yoopta/code';
+
+const plugins = [Paragraph, Blockquote, Code];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+  // ... other props
+/>;
+```
+
+### Headings Plugin
+
+The Headings plugin exports multiple heading types:
+
+```jsx
+import Headings from '@yoopta/headings';
+
+const plugins = [
+  Headings.HeadingOne, // H1
+  Headings.HeadingTwo, // H2
+  Headings.HeadingThree, // H3
+];
+```
+
+### Lists Plugin
+
+The Lists plugin exports multiple list types:
+
+```jsx
+import Lists from '@yoopta/lists';
+
+const plugins = [Lists.BulletedList, Lists.NumberedList, Lists.TodoList];
+```
+
+## Plugin Configuration
+
+Most plugins accept configuration options:
+
+### Image Plugin
+
+```jsx
+import Image from '@yoopta/image';
+
+const plugins = [
+  Image.extend({
+    options: {
+      async onUpload(file) {
+        // Custom upload logic
+        const url = await uploadToServer(file);
+        return { src: url };
+      },
+      maxWidth: 1000,
+      minWidth: 100,
+    },
+  }),
+];
+```
+
+### Code Plugin
+
+```jsx
+import Code from '@yoopta/code';
+
+const plugins = [
+  Code.extend({
+    options: {
+      theme: 'github-dark',
+      language: 'javascript',
+      languages: ['javascript', 'typescript', 'python', 'rust'],
+    },
+  }),
+];
+```
+
+### Video Plugin
+
+```jsx
+import Video from '@yoopta/video';
+
+const plugins = [
+  Video.extend({
+    options: {
+      async onUpload(file) {
+        const url = await uploadVideo(file);
+        return { src: url, provider: 'custom' };
+      },
+      maxSize: 100 * 1024 * 1024, // 100MB
+      accept: 'video/*',
+    },
+  }),
+];
+```
+
+## Plugin Methods
+
+### extend()
+
+Extend a plugin with custom options:
+
+```jsx
+const CustomParagraph = Paragraph.extend({
+  options: {
+    // Custom options
+  },
+  renders: {
+    // Custom renderers
+  },
+});
+```
+
+### Plugin Structure
+
+Each plugin has the following structure:
+
+```typescript
+type YooptaPlugin = {
+  type: string;
+  elements: Record<string, YooptaElement>;
+  options?: PluginOptions;
+  renders?: CustomRenders;
+  shortcuts?: ShortcutMap;
+  events?: PluginEvents;
+};
+```
+
+## Custom Renders
+
+Override default rendering:
+
+```jsx
+import Paragraph from '@yoopta/paragraph';
+
+const CustomParagraph = Paragraph.extend({
+  renders: {
+    paragraph: (props) => {
+      return (
+        <p className="custom-paragraph" {...props.attributes}>
+          {props.children}
+        </p>
+      );
+    },
+  },
+});
+```
+
+## Plugin Events
+
+Handle plugin-specific events:
+
+```jsx
+const CustomImage = Image.extend({
+  events: {
+    onBeforeUpload: (file) => {
+      console.log('Uploading:', file.name);
+    },
+    onUploadSuccess: (url) => {
+      console.log('Upload complete:', url);
+    },
+    onUploadError: (error) => {
+      console.error('Upload failed:', error);
+    },
+  },
+});
+```
+
+## Plugin Shortcuts
+
+Define custom keyboard shortcuts:
+
+```jsx
+const CustomCode = Code.extend({
+  shortcuts: {
+    'mod+shift+c': (editor) => {
+      // Transform current block to code block
+      editor.blocks.toggle({ type: 'Code' });
+    },
+  },
+});
+```
+
+## Common Plugin Options
+
+Most plugins support these common options:
+
+<ParamField path="display" type="object">
+  Display configuration - `title` - Display name in UI - `description` - Plugin description - `icon`
+  - Custom icon component
+</ParamField>
+
+<ParamField path="shortcuts" type="string[]">
+  Keyboard shortcuts to trigger the plugin
+</ParamField>
+
+<ParamField path="slate" type="object">
+  Slate-specific configuration
+</ParamField>
+
+## Plugin Loading Order
+
+The order of plugins in the array affects:
+
+1. Menu display order
+2. Transform priority
+3. Shortcut precedence
+
+```jsx
+const plugins = [
+  Paragraph, // Shows first in menus
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  // ...
+  Divider, // Shows last in menus
+];
+```
+
+## Conditional Plugin Loading
+
+Load plugins based on conditions:
+
+```jsx
+const plugins = [
+  Paragraph,
+  Headings.HeadingOne,
+  // Conditionally include plugins
+  ...(enableMedia ? [Image, Video] : []),
+  ...(enableCode ? [Code] : []),
+];
+```
+
+## Plugin Detection
+
+Check if a plugin is loaded:
+
+```jsx
+const hasImagePlugin = plugins.some((p) => p.type === 'Image');
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Always include Paragraph plugin">
+    The Paragraph plugin should always be included as it's the default block type.
+  </Accordion>
+
+{' '}
+<Accordion title="Define plugins outside component">
+  Define your plugins array outside the component to prevent recreation on every render.
+</Accordion>
+
+{' '}
+<Accordion title="Use extend() for customization">
+  Use the `extend()` method instead of modifying plugin objects directly.
+</Accordion>
+
+  <Accordion title="Handle async operations properly">
+    For plugins with async operations (uploads, etc.), always handle errors and loading states.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Plugin List" icon="list" href="/plugins/overview">
+    View all available plugins
+  </Card>
+  <Card title="Custom Plugins" icon="code" href="/advanced/custom-plugins">
+    Create your own plugins
+  </Card>
+  <Card title="Plugin API" icon="book" href="/api-reference/plugin-api">
+    Detailed plugin API reference
+  </Card>
+  <Card title="Examples" icon="image" href="/examples/basic-setup">
+    See plugins in action
+  </Card>
+</CardGroup>

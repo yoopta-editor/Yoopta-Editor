@@ -1,0 +1,125 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Yoopta Editor",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#007AFF",
+    "light": "#4A9EFF",
+    "dark": "#0051D5",
+    "background": {
+      "dark": "#0F172A"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/Darginec05/Yoopta-Editor"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://yoopta.dev"
+  },
+  "anchors": [
+    {
+      "name": "Examples",
+      "icon": "code",
+      "url": "https://yoopta.dev/examples"
+    },
+    {
+      "name": "Discord Community",
+      "icon": "discord",
+      "url": "https://discord.gg/Dt8rhSTjsn"
+    },
+    {
+      "name": "Twitter",
+      "icon": "twitter",
+      "url": "https://twitter.com/LebovskiYoo"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": ["introduction", "quickstart", "installation"]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": ["core/editor", "core/plugins", "core/tools", "core/marks"]
+    },
+    {
+      "group": "Plugins",
+      "pages": [
+        "plugins/overview",
+        "plugins/paragraph",
+        "plugins/headings",
+        "plugins/blockquote",
+        "plugins/lists",
+        "plugins/code",
+        "plugins/table",
+        "plugins/image",
+        "plugins/video",
+        "plugins/file",
+        "plugins/embed",
+        "plugins/link",
+        "plugins/callout",
+        "plugins/accordion",
+        "plugins/divider"
+      ]
+    },
+    {
+      "group": "Tools",
+      "pages": ["tools/overview", "tools/action-menu", "tools/toolbar", "tools/link-tool"]
+    },
+    {
+      "group": "Marks",
+      "pages": ["marks/overview", "marks/built-in", "marks/custom-marks"]
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "advanced/editor-instance",
+        "advanced/events",
+        "advanced/exports",
+        "advanced/customization",
+        "advanced/custom-plugins",
+        "advanced/shortcuts",
+        "advanced/readonly"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/editor-props",
+        "api-reference/plugin-api",
+        "api-reference/editor-methods"
+      ]
+    },
+    {
+      "group": "Examples",
+      "pages": [
+        "examples/basic-setup",
+        "examples/custom-toolbar",
+        "examples/dark-theme",
+        "examples/media-plugins",
+        "examples/readonly-mode"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/Darginec05/Yoopta-Editor",
+    "twitter": "https://twitter.com/LebovskiYoo",
+    "discord": "https://discord.gg/Dt8rhSTjsn"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search documentation..."
+  }
+}
