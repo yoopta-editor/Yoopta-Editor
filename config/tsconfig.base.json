@@ -23,11 +23,9 @@
     "declarationMap": true
   },
   "include": [
-    "packages/**/*"
+    "packages/**/*",
+    "packages/core/editor/src/plugins/jsx.d.ts",
+    "packages/plugins/**/src/**/*"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "web"
-  ]
+  "exclude": ["node_modules", "dist", "web"]
 }

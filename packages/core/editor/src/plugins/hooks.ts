@@ -1,13 +1,10 @@
 import { useMemo } from 'react';
-import { Editor, Element, Node, Operation, Path, Range, Transforms } from 'slate';
+import { Element, Node, Operation, Path, Range, Transforms } from 'slate';
 
 import { withInlines } from './extenstions/withInlines';
 import type { PluginEventHandlerOptions, PluginEvents } from './types';
-import { buildBlockData } from '../components/Editor/utils';
 import { Blocks } from '../editor/blocks';
 import type { SetSlateOperation } from '../editor/core/applyTransforms';
-import { YooptaOperation } from '../editor/core/applyTransforms';
-import { YooptaHistory } from '../editor/core/history';
 import { Paths } from '../editor/paths';
 import type { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
 import type { EditorEventHandlers } from '../types/eventHandlers';

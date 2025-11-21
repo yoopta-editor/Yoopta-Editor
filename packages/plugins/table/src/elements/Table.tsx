@@ -34,9 +34,9 @@ const Table = ({
         className={`yoopta-table ${isSelecting ? ' yoopta-table-selecting' : ''}`}>
         <tbody {...attributes}>{children}</tbody>
       </table>
-      {!isReadOnly && (
+      {/* {!isReadOnly && (
         <TableBlockOptions block={blockData} editor={editor} table={element as TableElement} />
-      )}
+      )} */}
     </div>
   );
 };

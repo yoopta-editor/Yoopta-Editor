@@ -12,8 +12,6 @@ import { Editor, Element, Path, Transforms } from 'slate';
 
 import { TableCommands } from '../commands';
 
-const { BlockOptionsMenuGroup, BlockOptionsMenuItem, BlockOptions, BlockOptionsSeparator } = UI;
-
 export type Props = {
   isOpen: boolean;
   onClose: () => void;

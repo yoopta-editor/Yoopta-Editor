@@ -7,7 +7,7 @@ import { useYooptaDragDrop } from './dnd';
 import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
 import type { YooEditor } from '../../editor/types';
 import type { YooptaMark } from '../../marks';
-import { SlateEditorComponent } from '../../plugins/SlateEditorComponent';
+import { SlateEditorComponent } from '../../plugins/slate-editor-component';
 import { Block } from '../Block/Block';
 
 const DEFAULT_EDITOR_KEYS = [];

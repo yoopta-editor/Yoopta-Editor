@@ -47,119 +47,119 @@ export const DEFAULT_VALUE = {
       order: 2,
     },
   },
-  'f5ab2f00-721a-4234-884c-1258d0195fb1': {
-    id: 'f5ab2f00-721a-4234-884c-1258d0195fb1',
-    type: 'HeadingTwo',
-    value: [
-      {
-        id: '737bfdb0-4f23-4b8a-92ee-f84860ffdb6f',
-        type: 'heading-two',
-        children: [
-          {
-            text: 'Features',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 3,
-    },
-  },
-  'b83ebb17-28e8-4e38-867f-9911d9b50fde': {
-    id: 'b83ebb17-28e8-4e38-867f-9911d9b50fde',
-    type: 'BulletedList',
-    value: [
-      {
-        id: '6011fc69-3409-4b5d-889f-6bc494bdcc06',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Easy setup',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 4,
-    },
-  },
-  '70109e70-2637-446e-82a3-f89cb45119d2': {
-    id: '70109e70-2637-446e-82a3-f89cb45119d2',
-    type: 'BulletedList',
-    value: [
-      {
-        id: '7f49e926-6c0d-4ef6-a624-a6aef17fcfe6',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Default list of powerful plugins',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 5,
-    },
-  },
-  'f7486103-5946-4358-8d0e-58ea7593bc4f': {
-    id: 'f7486103-5946-4358-8d0e-58ea7593bc4f',
-    type: 'BulletedList',
-    value: [
-      {
-        id: 'dddf9382-b9d8-4060-863e-aba61a2eec43',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Many typical solved problems in UX behaviour.',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 6,
-    },
-  },
-  'b50225f1-89d6-46ac-9d85-b618ee1b8a32': {
-    id: 'b50225f1-89d6-46ac-9d85-b618ee1b8a32',
-    type: 'BulletedList',
-    value: [
-      {
-        id: 'b5c2ec26-9f43-4822-b5f3-8731fdc5b61d',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Media plugins on steroids with optimization and lazy loadings',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 7,
-    },
-  },
+  // 'f5ab2f00-721a-4234-884c-1258d0195fb1': {
+  //   id: 'f5ab2f00-721a-4234-884c-1258d0195fb1',
+  //   type: 'HeadingTwo',
+  //   value: [
+  //     {
+  //       id: '737bfdb0-4f23-4b8a-92ee-f84860ffdb6f',
+  //       type: 'heading-two',
+  //       children: [
+  //         {
+  //           text: 'Features',
+  //         },
+  //       ],
+  //       props: {
+  //         nodeType: 'block',
+  //       },
+  //     },
+  //   ],
+  //   meta: {
+  //     align: 'left',
+  //     depth: 0,
+  //     order: 3,
+  //   },
+  // },
+  // 'b83ebb17-28e8-4e38-867f-9911d9b50fde': {
+  //   id: 'b83ebb17-28e8-4e38-867f-9911d9b50fde',
+  //   type: 'BulletedList',
+  //   value: [
+  //     {
+  //       id: '6011fc69-3409-4b5d-889f-6bc494bdcc06',
+  //       type: 'bulleted-list',
+  //       children: [
+  //         {
+  //           text: 'Easy setup',
+  //         },
+  //       ],
+  //       props: {
+  //         nodeType: 'block',
+  //       },
+  //     },
+  //   ],
+  //   meta: {
+  //     align: 'left',
+  //     depth: 0,
+  //     order: 4,
+  //   },
+  // },
+  // '70109e70-2637-446e-82a3-f89cb45119d2': {
+  //   id: '70109e70-2637-446e-82a3-f89cb45119d2',
+  //   type: 'BulletedList',
+  //   value: [
+  //     {
+  //       id: '7f49e926-6c0d-4ef6-a624-a6aef17fcfe6',
+  //       type: 'bulleted-list',
+  //       children: [
+  //         {
+  //           text: 'Default list of powerful plugins',
+  //         },
+  //       ],
+  //       props: {
+  //         nodeType: 'block',
+  //       },
+  //     },
+  //   ],
+  //   meta: {
+  //     align: 'left',
+  //     depth: 0,
+  //     order: 5,
+  //   },
+  // },
+  // 'f7486103-5946-4358-8d0e-58ea7593bc4f': {
+  //   id: 'f7486103-5946-4358-8d0e-58ea7593bc4f',
+  //   type: 'BulletedList',
+  //   value: [
+  //     {
+  //       id: 'dddf9382-b9d8-4060-863e-aba61a2eec43',
+  //       type: 'bulleted-list',
+  //       children: [
+  //         {
+  //           text: 'Many typical solved problems in UX behaviour.',
+  //         },
+  //       ],
+  //       props: {
+  //         nodeType: 'block',
+  //       },
+  //     },
+  //   ],
+  //   meta: {
+  //     align: 'left',
+  //     depth: 0,
+  //     order: 6,
+  //   },
+  // },
+  // 'b50225f1-89d6-46ac-9d85-b618ee1b8a32': {
+  //   id: 'b50225f1-89d6-46ac-9d85-b618ee1b8a32',
+  //   type: 'BulletedList',
+  //   value: [
+  //     {
+  //       id: 'b5c2ec26-9f43-4822-b5f3-8731fdc5b61d',
+  //       type: 'bulleted-list',
+  //       children: [
+  //         {
+  //           text: 'Media plugins on steroids with optimization and lazy loadings',
+  //         },
+  //       ],
+  //       props: {
+  //         nodeType: 'block',
+  //       },
+  //     },
+  //   ],
+  //   meta: {
+  //     align: 'left',
+  //     depth: 0,
+  //     order: 7,
+  //   },
+  // },
 } as unknown as YooptaContentValue;

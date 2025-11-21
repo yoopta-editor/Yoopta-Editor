@@ -1,10 +1,5 @@
 {
-  "extends": [
-    "airbnb",
-    "plugin:import/typescript",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
+  "extends": ["airbnb", "plugin:import/typescript", "plugin:react-hooks/recommended", "prettier"],
   "env": {
     "mocha": true,
     "jest": true,
@@ -30,7 +25,7 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2022,
-    "project": "./config/tsconfig.base.json"
+    "project": ["./config/tsconfig.base.json", "./packages/**/tsconfig.json"]
   },
   "plugins": ["prettier", "@typescript-eslint"],
   "overrides": [
@@ -199,8 +194,13 @@
       "files": ["*.{js,cjs}"],
       "rules": {
         "no-unused-vars": ["error"],
-
-        "no-param-reassign": "off",
+        "no-param-reassign": [
+          "error",
+          {
+            "props": true,
+            "ignorePropertyModificationsFor": ["slate"]
+          }
+        ],
         "no-warning-comments": [
           "warn",
           {
@@ -230,7 +230,7 @@
 
         "consistent-return": "off",
 
-        "import/no-default-export": "error",
+        "import/no-default-export": "off",
 
         "react/require-default-props": "off",
 

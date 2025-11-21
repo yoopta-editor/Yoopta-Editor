@@ -55,7 +55,7 @@ const YooptaEditor = ({
   editor,
   value,
   marks: marksProps,
-  plugins: pluginsProps,
+  plugins: pluginsFromProp,
   autoFocus,
   className,
   tools,
@@ -74,8 +74,8 @@ const YooptaEditor = ({
   }, [marksProps]);
 
   const plugins = useMemo(
-    () => pluginsProps.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>),
-    [pluginsProps],
+    () => pluginsFromProp.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>),
+    [pluginsFromProp],
   );
 
   const [editorState, setEditorState] = useState<EditorState>(() => {

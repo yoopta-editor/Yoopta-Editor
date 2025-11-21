@@ -1,4 +1,11 @@
-import type { Plugin, PluginElementRenderProps, PluginEvents, PluginOptions } from './types';
+import { buildPluginElements, isReactElement } from './build-plugin-elements';
+import type {
+  Plugin,
+  PluginElementRenderProps,
+  PluginEvents,
+  PluginInputElements,
+  PluginOptions,
+} from './types';
 import type { SlateElement } from '../editor/types';
 
 export type ExtendPluginRender<TKeys extends string> = {
@@ -20,13 +27,37 @@ export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOpti
   events?: Partial<PluginEvents>;
 };
 
+type PluginInput<TElementMap extends Record<string, SlateElement>, TOptions> = Omit<
+  Plugin<TElementMap, TOptions>,
+  'elements'
+> & {
+  elements: PluginInputElements<TElementMap> | Plugin<TElementMap, TOptions>['elements'];
+};
+
 export class YooptaPlugin<
   TElementMap extends Record<string, SlateElement>,
   TOptions = Record<string, unknown>,
 > {
   private readonly plugin: Plugin<TElementMap, TOptions>;
-  constructor(plugin: Plugin<TElementMap, TOptions>) {
-    this.plugin = plugin;
+  constructor(pluginInput: PluginInput<TElementMap, TOptions>) {
+    let elements: Plugin<TElementMap, TOptions>['elements'];
+
+    // Check if elements is a React element (JSX)
+    if (isReactElement(pluginInput.elements)) {
+      // Convert JSX to PluginElementsMap
+      elements = buildPluginElements<keyof TElementMap & string>(pluginInput.elements) as Plugin<
+        TElementMap,
+        TOptions
+      >['elements'];
+    } else {
+      // Use elements as is
+      elements = pluginInput.elements as Plugin<TElementMap, TOptions>['elements'];
+    }
+
+    this.plugin = {
+      ...pluginInput,
+      elements,
+    } as Plugin<TElementMap, TOptions>;
   }
 
   get getPlugin(): Plugin<TElementMap, TOptions> {
@@ -48,7 +79,7 @@ export class YooptaPlugin<
       Object.keys(renders).forEach((elementType) => {
         const element = elements[elementType];
 
-        if (element && element.render) {
+        if (element?.render) {
           const customRenderFn = renders[elementType];
 
           const elementRender = element.render;

@@ -2,7 +2,6 @@ import type React from 'react';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import type { NodeEntry, Selection } from 'slate';
 import { Editor, Path, Range } from 'slate';
-import type { RenderElementProps } from 'slate-react';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
 import { useEventHandlers, useSlateEditor } from './hooks';
@@ -16,11 +15,11 @@ import type {
 import { TextLeaf } from '../components/TextLeaf/TextLeaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
+import { EDITOR_EVENT_HANDLERS } from '../handlers';
 import type { YooptaMark } from '../marks';
 import { deserializeHTML } from '../parsers/deserializeHTML';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
-import { EDITOR_EVENT_HANDLERS } from '../handlers';
 
 type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   TElementMap,
@@ -35,7 +34,9 @@ type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
 
 const getMappedElements = (elements) => {
   const mappedElements = {};
-  Object.keys(elements).forEach((type) => (mappedElements[type] = elements[type].render));
+  Object.keys(elements).forEach((type) => {
+    mappedElements[type] = elements[type].render;
+  });
   return mappedElements;
 };
 
@@ -43,7 +44,9 @@ const getMappedMarks = (marks?: YooptaMark<any>[]) => {
   const mappedMarks = {};
   if (!marks) return mappedMarks;
 
-  marks.forEach((mark) => (mappedMarks[mark.type] = mark));
+  marks.forEach((mark) => {
+    mappedMarks[mark.type] = mark;
+  });
   return mappedMarks;
 };
 
@@ -70,9 +73,9 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
     (value) => {
       if (editor.readOnly) return;
 
-      // @ts-ignore - fixme
+      // @ts-expect-error - fixme
       if (window.scheduler) {
-        // @ts-ignore - fixme
+        // @ts-expect-error - fixme
         window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
           priority: 'background',
         });
@@ -104,11 +107,14 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       const { attributes, ...props } = elementProps;
       attributes['data-element-type'] = props.element.type;
 
+      const pluginElementProps = elements[elementProps.element.type]?.props;
+
       if (!ElementComponent) return <DefaultElement {...props} attributes={attributes} />;
 
       return (
         <ElementComponent
           {...props}
+          {...pluginElementProps}
           attributes={attributes}
           blockId={id}
           HTMLAttributes={options?.HTMLAttributes}

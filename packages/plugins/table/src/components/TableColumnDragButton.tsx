@@ -40,7 +40,7 @@ const TableColumnDragButton = ({ editor, blockId, tdElement }: TableRowProps) =>
 
   return (
     <>
-      <TableColumnOptions
+      {/* <TableColumnOptions
         refs={refs}
         isOpen={isTableColumnActionsOpen}
         onClose={onClose}
@@ -48,7 +48,7 @@ const TableColumnDragButton = ({ editor, blockId, tdElement }: TableRowProps) =>
         editor={editor}
         blockId={blockId}
         element={tdElement}
-      />
+      /> */}
       <button
         type="button"
         ref={refs.setReference}

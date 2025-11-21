@@ -2,6 +2,8 @@ import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from
 
 import './styles.css';
 
+import { useFocused, useSelected } from 'slate-react';
+
 export { YooptaPlugin } from './plugins';
 export {
   useBlockData,
@@ -50,6 +52,7 @@ export { buildBlockElementsStructure } from './utils/blockElements';
 export { buildSlateEditor } from './utils/buildSlate';
 
 export {
+  Plugin,
   PluginElementRenderProps,
   PluginEventHandlerOptions,
   PluginCustomEditorRenderProps,
@@ -78,10 +81,9 @@ export {
 } from './editor/core/applyTransforms';
 
 export type { ExtendYooptaTypes } from './editor/custom-types';
+// eslint-disable-next-line import/no-default-export
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };
-
-import { useFocused, useSelected } from 'slate-react';
 
 // [TODO] - move to hooks
 export function useElementSelected() {

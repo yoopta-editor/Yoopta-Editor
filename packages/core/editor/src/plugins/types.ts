@@ -1,5 +1,6 @@
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
-import type { RenderLeafProps, RenderElementProps } from 'slate-react';
+import type { RenderElementProps, RenderLeafProps } from 'slate-react';
+import type { ZodTypeAny } from 'zod';
 
 import type {
   SlateEditor,
@@ -30,10 +31,6 @@ export type PluginOptions<T> = Partial<
   } & T
 >;
 
-export type PluginElementOptions = {
-  draggable?: boolean;
-};
-
 export type RenderSlateElementProps = Omit<RenderElementProps, 'element'> & {
   element: SlateElement;
 };
@@ -57,10 +54,8 @@ export type PluginElementProps<T> = PluginDefaultProps & T;
 export type PluginElement<TKeys, T> = {
   render: (props: PluginElementRenderProps) => JSX.Element;
   props?: PluginElementProps<T>;
-  options?: PluginElementOptions;
   asRoot?: boolean;
   children?: TKeys[];
-  rootPlugin?: string;
 };
 
 export type PluginElementsMap<TKeys extends string = string, TProps = PluginDefaultProps> = {
@@ -88,6 +83,15 @@ export type PluginEvents = {
   onCreate?: (editor: YooEditor, blockId: string) => void;
   onDestroy?: (editor: YooEditor, blockId: string) => void;
 } & EventHandlers;
+
+export type PluginInputElements<TElementMap extends Record<string, SlateElement>> =
+  | {
+      [K in keyof TElementMap]: PluginElement<
+        Exclude<keyof TElementMap, K>,
+        TElementMap[K]['props']
+      >;
+    }
+  | ReactElement<unknown, string>;
 
 export type Plugin<
   TElementMap extends Record<string, SlateElement>,
@@ -121,10 +125,7 @@ export type PluginSerializeParser = (
 
 export type PluginDeserializeParser = {
   nodeNames: string[];
-  parse?: (
-    el: HTMLElement,
-    editor: YooEditor,
-  ) => SlateElement<string, any> | YooptaBlockData[] | void;
+  parse?: (el: HTMLElement, editor: YooEditor) => SlateElement | YooptaBlockData[] | void;
 };
 
 export type LeafFormats<K extends string, V> = {

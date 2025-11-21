@@ -1,4 +1,5 @@
 import { YooptaPlugin } from '@yoopta/editor';
+import * as z from 'zod';
 
 import { TableCommands } from '../commands';
 import { Table as TableRender } from '../elements/Table';
@@ -13,30 +14,25 @@ import { serializeMarkown } from '../parsers/markdown/serialize';
 import type { TableElementMap } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
+const tableDataCellPropsSchema = z.object({
+  asHeader: z.boolean(),
+  width: z.number(),
+});
+
+const tablePropsSchema = z.object({
+  headerRow: z.boolean(),
+  headerColumn: z.boolean(),
+});
+
 const Table = new YooptaPlugin<TableElementMap>({
   type: 'Table',
-  elements: {
-    table: {
-      render: TableRender,
-      asRoot: true,
-      children: ['table-row'],
-      props: {
-        headerRow: false,
-        headerColumn: false,
-      },
-    },
-    'table-row': {
-      render: TableRow,
-      children: ['table-data-cell'],
-    },
-    'table-data-cell': {
-      render: TableDataCell,
-      props: {
-        asHeader: false,
-        width: 200,
-      },
-    },
-  },
+  elements: (
+    <table render={TableRender} propsSchema={tablePropsSchema}>
+      <table-row render={TableRow}>
+        <table-data-cell render={TableDataCell} propsSchema={tableDataCellPropsSchema} />
+      </table-row>
+    </table>
+  ),
   events: {
     onKeyDown,
     onBlur: (editor, slate) => () => {

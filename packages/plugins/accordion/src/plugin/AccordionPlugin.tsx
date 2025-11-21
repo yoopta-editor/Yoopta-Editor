@@ -5,8 +5,10 @@ import {
   buildBlockElementsStructure,
   serializeTextNodes,
 } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
 import { ListCollapse } from 'lucide-react';
 import { Element, Transforms } from 'slate';
+import * as z from 'zod';
 
 import { AccordionCommands } from '../commands/AccordionCommands';
 import { ACCORDION_ELEMENTS } from '../constants';
@@ -17,26 +19,22 @@ import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
 import type { AccordionElementMap } from '../types';
 
+const accordionListItemSchema = z.object({
+  isExpanded: z.boolean(),
+  // @ts-expect-error - zod enum type inference issue
+  theme: z.enum(['light', 'dark', 'system']),
+});
+
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
-  elements: {
-    'accordion-list': {
-      asRoot: true,
-      render: AccordionList,
-      children: ['accordion-list-item'],
-    },
-    'accordion-list-item': {
-      render: AccordionListItem,
-      children: ['accordion-list-item-heading', 'accordion-list-item-content'],
-      props: { isExpanded: true },
-    },
-    'accordion-list-item-heading': {
-      render: AccordionItemHeading,
-    },
-    'accordion-list-item-content': {
-      render: AccordionItemContent,
-    },
-  },
+  elements: (
+    <accordion-list render={AccordionList}>
+      <accordion-list-item render={AccordionListItem} propsSchema={accordionListItemSchema}>
+        <accordion-list-item-heading render={AccordionItemHeading} />
+        <accordion-list-item-content render={AccordionItemContent} />
+      </accordion-list-item>
+    </accordion-list>
+  ),
   commands: AccordionCommands,
   events: {
     onKeyDown(editor, slate, { hotkeys, currentBlock }) {
@@ -52,7 +50,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             type: 'accordion-list-item',
           });
 
-          const listItemChildPath = accordionListItemEntry?.[1] || slate.selection.anchor.path;
+          const listItemChildPath = accordionListItemEntry?.[1] ?? slate.selection.anchor.path;
           const currentElement = Elements.getElement(editor, currentBlock.id);
 
           const isHeadingEmpty = Elements.isElementEmpty(editor, currentBlock.id, {
@@ -162,8 +160,8 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             const summary = el.querySelector('summary');
             const p = el.querySelector('p');
             const elementsStructure = buildBlockElementsStructure(editor, 'Accordion', {
-              [ACCORDION_ELEMENTS.AccordionListItemHeading]: summary?.textContent || '',
-              [ACCORDION_ELEMENTS.AccordionListItemContent]: p?.textContent || '',
+              [ACCORDION_ELEMENTS.AccordionListItemHeading]: summary?.textContent ?? '',
+              [ACCORDION_ELEMENTS.AccordionListItemContent]: p?.textContent ?? '',
             });
 
             return elementsStructure;
@@ -171,39 +169,47 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         },
       },
       serialize: (element, text, blockMeta) => {
-        const { align = 'left', depth = 0 } = blockMeta || {};
+        const { align = 'left', depth = 0 } = blockMeta ?? {};
 
         return `<div>${element.children
           .filter(Element.isElement)
-          .map(
-            (listItem) =>
-              `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
-                .filter(Element.isElement)
-                .map((item) => {
-                  if (item.type === 'accordion-list-item-heading') {
-                    return `<summary>${serializeTextNodes(item.children)}</summary>`;
-                  }
-                  return `<p>${serializeTextNodes(item.children)}</p>`;
-                })
-                .join('')}</details>`,
-          )
+          .map((listItemNode) => {
+            const listItem = listItemNode as SlateElement;
+
+            return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
+              .filter(Element.isElement)
+              .map((itemNode) => {
+                const itemElement = itemNode as SlateElement;
+
+                if (itemElement.type === ACCORDION_ELEMENTS.AccordionListItemHeading) {
+                  return `<summary>${serializeTextNodes(itemElement.children)}</summary>`;
+                }
+
+                return `<p>${serializeTextNodes(itemElement.children)}</p>`;
+              })
+              .join('')}</details>`;
+          })
           .join('')}</div>`;
       },
     },
     email: {
       serialize: (element, text, blockMeta) => {
-        const { align = 'left', depth = 0 } = blockMeta || {};
+        const { align = 'left', depth = 0 } = blockMeta ?? {};
 
         return `
           <table data-meta-align="${align}" data-meta-depth="${depth}" style="width: 100%; border-collapse: collapse; margin-left: ${depth}px;">
             <tbody>
               ${element.children
                 .filter(Element.isElement)
-                .map((listItem) =>
-                  listItem.children
+                .map((listItemNode) => {
+                  const listItem = listItemNode as SlateElement;
+
+                  return listItem.children
                     .filter(Element.isElement)
-                    .map((item) => {
-                      if (item.type === 'accordion-list-item-heading') {
+                    .map((itemNode) => {
+                      const item = itemNode as SlateElement;
+
+                      if (item.type === ACCORDION_ELEMENTS.AccordionListItemHeading) {
                         return `
                           <tr>
                             <td style="
@@ -234,8 +240,8 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
                           </td>
                         </tr>`;
                     })
-                    .join(''),
-                )
+                    .join('');
+                })
                 .join('')}
             </tbody>
           </table>`;
