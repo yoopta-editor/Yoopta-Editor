@@ -3,6 +3,7 @@ import type { ZodTypeAny } from 'zod';
 
 import type {
   PluginElement,
+  PluginElementNodeType,
   PluginElementProps,
   PluginElementRenderProps,
   PluginElementsMap,
@@ -12,6 +13,7 @@ export type PluginJSXElementProps = {
   render: (props: PluginElementRenderProps) => JSX.Element;
   propsSchema?: ZodTypeAny;
   children?: ReactElement<PluginJSXElementProps> | ReactElement<PluginJSXElementProps>[];
+  nodeType?: PluginElementNodeType;
 };
 
 export type PluginJSXElement = ReactElement<PluginJSXElementProps, string>;
@@ -98,6 +100,10 @@ function buildElementsMap<TKeys extends string = string>(
       if (childrenArray.length > 0) {
         const childTypes = childrenArray.map((child) => traverse(child, false));
         elementConfig.children = childTypes as TKeys[];
+      }
+
+      if (props.nodeType) {
+        elementConfig.nodeType = props.nodeType;
       }
     }
 

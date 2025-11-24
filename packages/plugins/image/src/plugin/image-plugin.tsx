@@ -1,9 +1,9 @@
-import type { SlateElement } from '@yoopta/editor';
+import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
+import * as z from 'zod';
 
 import { ImageCommands } from '../commands';
 import type { ImageElementMap, ImageElementProps, ImagePluginOptions } from '../types';
-import { ImagePluginElements } from '../types';
 import { ImageRender } from '../ui/Image';
 import { limitSizes } from '../utils/limitSizes';
 
@@ -13,23 +13,36 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
-// [TODO] - caption element??
+const ImageContainerRender = (props: PluginElementRenderProps) => {
+  const { children, element, blockId, attributes } = props;
+  return (
+    <div {...attributes} className="flex flex-col gap-0">
+      {children}
+    </div>
+  );
+};
+
+const ImageCaptionRender = (props: PluginElementRenderProps) => {
+  const { children, element, blockId, attributes } = props;
+  return (
+    <div {...attributes} className="text-sm text-gray-500">
+      {children}
+    </div>
+  );
+};
+
+const imagePropsSchema = z.object({
+  src: z.string().nullable(),
+  alt: z.string().nullable(),
+  srcSet: z.string().nullable(),
+  bgColor: z.string().nullable(),
+  fit: z.enum(['contain', 'cover', 'fill']).nullable(),
+  sizes: z.object({ width: z.number(), height: z.number() }),
+});
+
 const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
   type: 'Image',
-  elements: {
-    image: {
-      render: ImageRender,
-      props: {
-        src: null,
-        alt: null,
-        srcSet: null,
-        bgColor: null,
-        fit: 'contain',
-        sizes: { width: 650, height: 500 },
-        nodeType: 'void',
-      },
-    },
-  },
+  elements: <image render={ImageRender} propsSchema={imagePropsSchema} nodeType="void" />,
   commands: ImageCommands,
   options: {
     display: {

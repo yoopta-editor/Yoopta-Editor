@@ -48,7 +48,8 @@ export type PluginCustomEditorRenderProps = {
   blockId: string;
 };
 
-export type PluginDefaultProps = { nodeType?: 'block' | 'inline' | 'void' | 'inlineVoid' };
+export type PluginElementNodeType = 'block' | 'inline' | 'void' | 'inlineVoid';
+export type PluginDefaultProps = { nodeType?: PluginElementNodeType };
 export type PluginElementProps<T> = PluginDefaultProps & T;
 
 export type PluginElement<TKeys, T> = {

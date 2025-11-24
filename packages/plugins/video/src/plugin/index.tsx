@@ -1,4 +1,5 @@
 import { YooptaPlugin, generateId } from '@yoopta/editor';
+import * as z from 'zod';
 
 import { VideoCommands } from '../commands';
 import type { VideoElementMap, VideoPluginOptions } from '../types';
@@ -11,32 +12,31 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
+const videoPropsSchema = z.object({
+  src: z.string().nullable(),
+  srcSet: z.string().nullable(),
+  bgColor: z.string().nullable(),
+  sizes: z.object({ width: z.number(), height: z.number() }),
+  nodeType: z.string(),
+  fit: z.enum(['contain', 'cover', 'fill']).nullable(),
+  settings: z.object({
+    controls: z.boolean(),
+    loop: z.boolean(),
+    muted: z.boolean(),
+    autoPlay: z.boolean(),
+  }),
+  provider: z
+    .object({
+      type: z.enum(['youtube', 'vimeo', 'dailymotion', 'loom', 'wistia']),
+      id: z.string(),
+      url: z.string().nullable(),
+    })
+    .nullable(),
+});
+
 const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
   type: 'Video',
-  elements: {
-    // [TODO] - caption element??,
-    video: {
-      render: VideoRender,
-      props: {
-        src: null,
-        srcSet: null,
-        bgColor: null,
-        sizes: { width: 650, height: 400 },
-        nodeType: 'void',
-        fit: 'cover',
-        provider: {
-          type: null,
-          id: '',
-        },
-        settings: {
-          controls: false,
-          loop: true,
-          muted: true,
-          autoPlay: true,
-        },
-      },
-    },
-  },
+  elements: <video render={VideoRender} propsSchema={videoPropsSchema} nodeType="void" />,
   options: {
     accept: 'video/*',
     maxSizes: { maxWidth: 650, maxHeight: 550 },

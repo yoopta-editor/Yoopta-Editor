@@ -154,7 +154,7 @@ export function onKeyDown(
 
       if (tdElementEntry) {
         event.preventDefault();
-        const [tdElement, tdElementPath] = tdElementEntry;
+        const [, tdElementPath] = tdElementEntry;
         const string = Editor.string(slate, tdElementPath);
 
         if (Range.isExpanded(slate.selection) || string.length === 0) {

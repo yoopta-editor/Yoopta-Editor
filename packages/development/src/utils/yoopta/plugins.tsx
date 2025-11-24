@@ -21,6 +21,7 @@ import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/pages/dev/email-plugin';
 import { SendEmailActionPlugin } from '@/pages/dev/email-action-plugin';
+import { CodeGroupPlugin } from '@/pages/dev/card-group-plugin';
 
 export const YOOPTA_PLUGINS = [
   Accordion,
@@ -28,6 +29,7 @@ export const YOOPTA_PLUGINS = [
   OrderDetailsActionPlugin,
   SendEmailActionPlugin,
   Table,
+  // CodeGroupPlugin,
   // Mention,
   // Divider.extend({
   //   elementProps: {
@@ -54,43 +56,32 @@ export const YOOPTA_PLUGINS = [
   //     },
   //   },
   // }),
-  // Image.extend({
-  //   events: {
-  //     onDestroy: (editor, id) => {
-  //       const imageElement = Elements.getElement(editor, id, { type: 'image' });
-  //       console.log('Image imageElement', imageElement);
-  //     },
-  //   },
-  //   elementProps: {
-  //     image: (props: ImageElementProps) => ({
-  //       ...props,
-  //       alt: 'cloudinary',
-  //       sizes: {
-  //         width: 500,
-  //         height: 500,
-  //       },
-  //       fit: 'contain',
-  //     }),
-  //   },
-  //   options: {
-  //     maxSizes: { maxHeight: 750, maxWidth: 750 },
-  //     // HTMLAttributes: {
-  //     //   className: 'image-element-extended',
-  //     // },
+  Image.extend({
+    events: {
+      onDestroy: (editor, id) => {
+        const imageElement = Elements.getElement(editor, id, { type: 'image' });
+        console.log('Image imageElement', imageElement);
+      },
+    },
+    options: {
+      maxSizes: { maxHeight: 750, maxWidth: 750 },
+      // HTMLAttributes: {
+      //   className: 'image-element-extended',
+      // },
 
-  //     onUpload: async (file: File) => {
-  //       const data = await uploadToCloudinary(file, 'image');
+      onUpload: async (file: File) => {
+        const data = await uploadToCloudinary(file, 'image');
 
-  //       return {
-  //         src: data.secure_url,
-  //         sizes: {
-  //           width: data.width,
-  //           height: data.height,
-  //         },
-  //       };
-  //     },
-  //   },
-  // }),
+        return {
+          src: data.secure_url,
+          sizes: {
+            width: data.width,
+            height: data.height,
+          },
+        };
+      },
+    },
+  }),
   // Headings.HeadingOne.extend({
   //   options: {
   //     // HTMLAttributes: {
