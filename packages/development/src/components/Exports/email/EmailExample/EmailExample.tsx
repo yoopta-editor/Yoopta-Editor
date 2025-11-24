@@ -1,4 +1,4 @@
-import type { ChangeEvent} from 'react';
+import type { ChangeEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import type { EmailTemplateOptions, YooptaContentValue } from '@yoopta/editor';
 import { YooEditor } from '@yoopta/editor';
@@ -201,7 +201,7 @@ const EmailExample = () => {
           </Button>
           <Button asChild className="ml-1" variant="outline">
             <a
-              href="https://yoodocs.space/yoopta-editor/yoopta/email-builder-_hZvTkSNoI?v=1.0.0&lang=en"
+              href="https://github.com/yoopta-editor/email-builder?tab=readme-ov-file#yooptaemail-builder"
               target="_blank"
               rel="noreferrer">
               Full Docs <ExternalLinkIcon size={16} className="ml-2" />

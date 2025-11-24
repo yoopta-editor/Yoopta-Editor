@@ -143,7 +143,7 @@ export const WITH_CUSTOM_PLUGIN_VALUE = {
               },
             ],
             props: {
-              url: 'https://yoodocs.space/yoopta-editor/yoopta/creating-custom-plugin-_d2Wgbql_R#4c62c0f7-044b-49e5-b1b1-69e581ab67e1',
+              url: 'https://github.com/yoopta-editor/Yoopta-Editor?tab=readme-ov-file#welcome-to-yoopta-editorv4',
               target: '_blank',
               rel: 'noopener noreferrer',
             },
@@ -535,7 +535,7 @@ export const WITH_CUSTOM_PLUGIN_VALUE = {
               },
             ],
             props: {
-              url: 'https://yoodocs.space/yoopta-editor/yoopta/creating-custom-plugin-_d2Wgbql_R#982256f0-73cd-41ae-aa84-e3cd9f2adaee',
+              url: 'https://github.com/yoopta-editor/Yoopta-Editor?tab=readme-ov-file#welcome-to-yoopta-editorv4',
               target: '_blank',
               rel: 'noopener noreferrer',
             },

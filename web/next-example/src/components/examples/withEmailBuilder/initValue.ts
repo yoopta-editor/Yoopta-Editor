@@ -239,11 +239,11 @@ export const WITH_EMAIL_BUILDER_INIT_VALUE = {
             type: 'link',
             children: [
               {
-                text: 'https://yoodocs.space/yoopta-editor/yoopta/exportsimports-fUZcaVYc7w',
+                text: 'https://yoopta.dev/examples/withExports',
               },
             ],
             props: {
-              url: 'https://yoodocs.space/yoopta-editor/yoopta/exportsimports-fUZcaVYc7w',
+              url: 'https://yoopta.dev/examples/withExports',
               target: '_blank',
               rel: 'noopener noreferrer',
             },

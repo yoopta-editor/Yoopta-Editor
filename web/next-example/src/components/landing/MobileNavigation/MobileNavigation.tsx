@@ -56,7 +56,7 @@ const MobileNavigation = () => {
       </div>
       <div className="flex flex-col space-y-2 text-white mt-2">
         <NextLink
-          href="https://yoodocs.space/yoopta-editor/yoopta/introduction-rsK_1fODIL"
+          href="https://github.com/yoopta-editor/Yoopta-Editor?tab=readme-ov-file#welcome-to-yoopta-editorv4"
           target="_blank"
           rel="noopener noreferrer"
           className="mr-4 flex items-center">

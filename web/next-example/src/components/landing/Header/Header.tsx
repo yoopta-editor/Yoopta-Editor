@@ -36,7 +36,7 @@ export const Header = () => {
         <div className="flex flex-1 items-center justify-end">
           <div className="flex items-center text-nowrap mt-0 w-full justify-end md:w-auto md:justify-start">
             <NextLink
-              href="https://yoodocs.space/yoopta-editor/yoopta/introduction-rsK_1fODIL"
+              href="https://github.com/yoopta-editor/Yoopta-Editor?tab=readme-ov-file#welcome-to-yoopta-editorv4"
               target="_blank"
               rel="noopener noreferrer"
               className="md:mr-4 mr-1 flex items-center">
