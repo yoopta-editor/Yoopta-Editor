@@ -24,8 +24,23 @@ import { SendEmailActionPlugin } from '@/pages/dev/email-action-plugin';
 import { CodeGroupPlugin } from '@/pages/dev/card-group-plugin';
 
 export const YOOPTA_PLUGINS = [
-  Accordion,
+  Accordion.extend({
+    elements: {
+      'accordion-list-item-content': {
+        // list of blocks which can be created inside this element
+        allowedPlugins: [
+          Paragraph,
+          Headings.HeadingOne,
+          Headings.HeadingTwo,
+          Headings.HeadingThree,
+        ],
+      },
+    },
+  }),
   Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
   OrderDetailsActionPlugin,
   SendEmailActionPlugin,
   Table,

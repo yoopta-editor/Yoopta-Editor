@@ -1,6 +1,7 @@
+import { Blocks, getAllowedPluginsFromElement, getRootBlockElement } from '@yoopta/editor';
 import type { YooEditor, YooptaBlock, YooptaBlockData } from '@yoopta/editor';
-import { getRootBlockElement } from '@yoopta/editor';
-import type { ActionMenuItem, ActionMenuRenderProps } from './types';
+
+import type { ActionMenuItem } from './types';
 
 const filterBy = (
   item: YooptaBlockData | YooptaBlock['options'],
@@ -49,11 +50,30 @@ export const filterActionMenuItems = (block: YooptaBlock, searchText: string): b
   });
 };
 
-export function mapActionMenuItems(
-  editor: YooEditor,
-  items: ActionMenuItem[] | string[],
-): ActionMenuItem[] {
-  return items.map((item: string | ActionMenuItem) => {
+export function mapActionMenuItems(editor: YooEditor): ActionMenuItem[] {
+  const items: string[] | ActionMenuItem[] = Object.keys(editor.blocks);
+  // Check if we're inside an element with allowedPlugins
+  let allowedPlugins: string[] | null = null;
+
+  if (typeof editor.path.current === 'number') {
+    const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
+    if (slate) {
+      allowedPlugins = getAllowedPluginsFromElement(editor, slate);
+    }
+  }
+
+  // Filter items based on allowedPlugins
+  let filteredItems = items;
+
+  if (allowedPlugins && allowedPlugins.length > 0) {
+    if (typeof items[0] === 'string') {
+      filteredItems = (items as string[]).filter((item) => allowedPlugins!.includes(item));
+    } else {
+      filteredItems = items.filter((item) => allowedPlugins!.includes(item.type));
+    }
+  }
+
+  return filteredItems.map((item: string | ActionMenuItem) => {
     if (typeof item === 'string') {
       const title = editor.blocks[item].options?.display?.title || item;
       const description = editor.blocks[item].options?.display?.description;
@@ -71,61 +91,6 @@ export function filterToggleActions(editor: YooEditor, type: string) {
   const rootBlock = getRootBlockElement(block.elements);
   if (rootBlock?.props?.nodeType === 'void') return false;
   return true;
-}
-
-type BuildRenderPropsParams = {
-  editor: YooEditor;
-  onClose: () => void;
-  onMouseEnter?: (e: React.MouseEvent) => void;
-  empty?: boolean;
-  view?: ActionMenuRenderProps['view'];
-  mode?: ActionMenuRenderProps['mode'];
-  selectedAction?: ActionMenuItem;
-};
-
-export function buildActionMenuRenderProps({
-  editor,
-  onClose,
-  onMouseEnter = () => undefined,
-  empty = false,
-  mode = 'toggle',
-  view = 'default',
-  selectedAction,
-}: BuildRenderPropsParams): ActionMenuRenderProps {
-  const getActions = () => {
-    let items = Object.keys(editor.blocks);
-    if (mode === 'toggle') {
-      items = items.filter((type) => filterToggleActions(editor, type));
-    }
-
-    return mapActionMenuItems(editor, items);
-  };
-
-  const getRootProps = () => ({
-    'data-action-menu-list': true,
-  });
-
-  const getItemProps = (type: string) => ({
-    onMouseEnter,
-    'data-action-menu-item': true,
-    'data-action-menu-item-type': type,
-    'aria-selected': type === selectedAction?.type,
-    onClick: () => {
-      editor.toggleBlock(type, { deleteText: mode === 'create', focus: true });
-      onClose();
-    },
-  });
-
-  return {
-    actions: getActions(),
-    onClose,
-    empty,
-    getItemProps,
-    getRootProps,
-    editor,
-    view,
-    mode,
-  };
 }
 
 export function isSlashPressed(event: KeyboardEvent): boolean {

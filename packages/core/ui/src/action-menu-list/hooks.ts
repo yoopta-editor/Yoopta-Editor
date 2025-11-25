@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo, useState, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Placement } from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
@@ -6,13 +8,12 @@ import {
   shift,
   useFloating,
   useTransitionStyles,
-  Placement,
 } from '@floating-ui/react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 import { useActionMenuListStore } from './store';
-import { filterToggleActions, mapActionMenuItems } from './utils';
 import type { ActionMenuItem, ActionMenuListProps } from './types';
+import { filterToggleActions, mapActionMenuItems } from './utils';
 
 /**
  * Lightweight hook for accessing only store actions

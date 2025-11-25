@@ -1,9 +1,4 @@
-// add ts ignore for entire file
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 import { YooptaPlugin } from '@yoopta/editor';
-import * as z from 'zod';
 
 import { TableCommands } from '../commands';
 import { Table as TableRender } from '../elements/Table';
@@ -18,22 +13,22 @@ import { serializeMarkown } from '../parsers/markdown/serialize';
 import type { TableElementMap } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
-const tableDataCellPropsSchema = z.object({
-  asHeader: z.boolean().default(false),
-  width: z.number().default(200),
-});
+const tableDataCellProps = {
+  asHeader: false,
+  width: 200,
+};
 
-const tablePropsSchema = z.object({
-  headerRow: z.boolean().default(false),
-  headerColumn: z.boolean().default(false),
-});
+const tableProps = {
+  headerRow: false,
+  headerColumn: false,
+};
 
 const Table = new YooptaPlugin<TableElementMap>({
   type: 'Table',
   elements: (
-    <table render={TableRender} propsSchema={tablePropsSchema}>
+    <table render={TableRender} props={tableProps}>
       <table-row render={TableRow}>
-        <table-data-cell render={TableDataCell} propsSchema={tableDataCellPropsSchema} />
+        <table-data-cell render={TableDataCell} props={tableDataCellProps} />
       </table-row>
     </table>
   ),
@@ -72,17 +67,3 @@ const Table = new YooptaPlugin<TableElementMap>({
 });
 
 export { Table };
-
-declare global {
-  namespace JSX {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-    interface IntrinsicElements {
-      // Allow any string as element name for plugin JSX elements
-      [elemName: string]: {
-        render?: ComponentType<PluginElementRenderProps>;
-        propsSchema?: ZodTypeAny;
-        children?: React.ReactNode;
-      };
-    }
-  }
-}

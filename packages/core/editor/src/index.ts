@@ -23,7 +23,11 @@ export { useYooptaTools, Tools } from './contexts/YooptaContext/ToolsContext';
 
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';
-export { getRootBlockElementType, getRootBlockElement } from './utils/blockElements';
+export {
+  getRootBlockElementType,
+  getRootBlockElement,
+  getAllowedPluginsFromElement,
+} from './utils/blockElements';
 
 // to remove
 export { findPluginBlockByPath } from './utils/findPluginBlockByPath';
@@ -61,6 +65,7 @@ export {
   YooptaMarkProps,
   PluginOptions,
 } from './plugins/types';
+export type { ExtendPlugin, ExtendPluginElementConfig } from './plugins/create-yoopta-plugin';
 
 export { Elements } from './editor/elements';
 export { Blocks } from './editor/blocks';

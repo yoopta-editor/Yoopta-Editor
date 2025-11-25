@@ -1,5 +1,4 @@
 import { YooptaPlugin, generateId } from '@yoopta/editor';
-import * as z from 'zod';
 
 import { EmbedCommands } from '../commands';
 import type { EmbedElementMap, EmbedPluginOptions } from '../types';
@@ -11,29 +10,16 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
-const embedPropsSchema = z.object({
-  sizes: z.object({ width: z.number(), height: z.number() }),
-  provider: z
-    .object({
-      type: z.enum([
-        'youtube',
-        'vimeo',
-        'dailymotion',
-        'wistia',
-        'loom',
-        'twitter',
-        'figma',
-        'instagram',
-      ]),
-      id: z.string(),
-      url: z.string().optional(),
-    })
-    .nullable(),
-});
+const embedProps = {
+  sizes: { width: 0, height: 0 },
+  provider: null,
+  nodeType: 'void',
+};
 
 const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
   type: 'Embed',
-  elements: <embed render={EmbedRender} propsSchema={embedPropsSchema} nodeType="void" />,
+  // @ts-expect-error - embed conflicts with native HTML element type
+  elements: <embed render={EmbedRender} props={embedProps} nodeType="void" />,
   options: {
     display: {
       title: 'Embed',

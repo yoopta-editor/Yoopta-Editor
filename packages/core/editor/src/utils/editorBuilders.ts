@@ -136,6 +136,8 @@ export function buildPlugins(
     }
   });
 
+  console.log('pluginsMap', pluginsMap);
+
   return pluginsMap;
 }
 

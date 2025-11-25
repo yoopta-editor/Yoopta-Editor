@@ -1,16 +1,16 @@
 import type { NodeEntry } from 'slate';
 import { Editor, Element, Path } from 'slate';
 
-import { generateId } from './generateId';
-import { buildBlockElement } from '../components/Editor/utils';
 import type { SlateEditor, SlateElement, YooEditor, YooptaBlock } from '../editor/types';
-import { YooptaBlockData } from '../editor/types';
 import type {
   Plugin,
   PluginElement,
   PluginElementProps,
   PluginElementsMap,
 } from '../plugins/types';
+import { buildBlockElement } from '../components/Editor/utils';
+import { findPluginBlockByPath } from './findPluginBlockByPath';
+import { generateId } from './generateId';
 
 export function getRootBlockElementType(
   elems: PluginElementsMap<string, unknown> | undefined,
@@ -148,8 +148,45 @@ export function getPluginByInlineElement(
   plugins: YooEditor['plugins'],
   elementType: string,
 ): Plugin<Record<string, SlateElement>, unknown> | undefined {
-  const plugin = Object.values(plugins).find(
-    (plugin) => plugin.type === plugin.elements?.[elementType]?.rootPlugin,
+  const foundPlugin = Object.values(plugins).find(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (p) => p.type === (p.elements?.[elementType] as any)?.rootPlugin,
   );
-  return plugin;
+  return foundPlugin;
+}
+
+/**
+ * Checks if the current selection is inside an element with allowedPlugins
+ * Returns allowedPlugins array if found, null otherwise
+ */
+export function getAllowedPluginsFromElement(
+  editor: YooEditor,
+  slate: SlateEditor,
+): string[] | null {
+  if (!slate.selection) return null;
+
+  const block = findPluginBlockByPath(editor, { at: editor.path.current });
+  if (!block) return null;
+
+  const blockElements = editor.blocks[block.type]?.elements;
+  if (!blockElements) return null;
+
+  // Find the element at the current selection
+  const elementNode = getBlockElementNode(slate, {
+    at: slate.selection.anchor.path,
+  });
+
+  if (!elementNode) return null;
+
+  const [element] = elementNode;
+
+  // Check if element is a SlateElement with type property
+  if (!Element.isElement(element) || !('type' in element)) return null;
+
+  const elementType = (element as SlateElement).type;
+  const elementConfig = blockElements[elementType];
+
+  if (!elementConfig?.allowedPlugins) return null;
+
+  return elementConfig.allowedPlugins;
 }

@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type { ZodTypeAny } from 'zod';
+import { isValidElement } from 'react';
 
 import type {
   PluginElement,
@@ -11,53 +11,21 @@ import type {
 
 export type PluginJSXElementProps = {
   render: (props: PluginElementRenderProps) => JSX.Element;
-  propsSchema?: ZodTypeAny;
+  props?: Record<string, unknown>;
   children?: ReactElement<PluginJSXElementProps> | ReactElement<PluginJSXElementProps>[];
   nodeType?: PluginElementNodeType;
 };
 
 export type PluginJSXElement = ReactElement<PluginJSXElementProps, string>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getDefaultValuesFromSchema(schema: ZodTypeAny): Record<string, unknown> | undefined {
-  try {
-    // Try to parse empty object - if schema has defaults, they will be applied
-    const result = schema.safeParse({});
-    if (result.success) {
-      return result.data as Record<string, unknown>;
-    }
-    // If parsing fails, try to get defaults from schema shape
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const shape = (schema as any)._def?.shape;
-    if (shape) {
-      const defaults: Record<string, unknown> = {};
-      Object.keys(shape).forEach((key) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const fieldSchema = shape[key];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const defaultValue = (fieldSchema as any)._def?.defaultValue;
-        if (defaultValue !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          defaults[key] = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
-        }
-      });
-      return Object.keys(defaults).length > 0 ? defaults : undefined;
-    }
-    return undefined;
-  } catch {
-    return undefined;
-  }
-}
-
 function buildElementsMap<TKeys extends string = string>(
   jsxElement: PluginJSXElement,
 ): PluginElementsMap<TKeys> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const elementsMap: PluginElementsMap<TKeys> = {} as any;
+  const elementsMap: PluginElementsMap<TKeys> = {} as PluginElementsMap<TKeys>;
 
   function traverse(element: PluginJSXElement, isRoot = false): TKeys {
-    const { type, props } = element;
-    const { render, propsSchema } = props;
+    const { type, props: elementProps } = element;
+    const { render, props: defaultProps } = elementProps;
 
     if (typeof type !== 'string') {
       throw new Error(`[buildPluginElements] Element type must be a string, got: ${typeof type}`);
@@ -75,15 +43,15 @@ function buildElementsMap<TKeys extends string = string>(
       elementConfig.asRoot = true;
     }
 
-    if (propsSchema) {
-      const defaultValues = getDefaultValuesFromSchema(propsSchema);
-      if (defaultValues && Object.keys(defaultValues).length > 0) {
-        elementConfig.props = defaultValues as PluginElementProps<Record<string, unknown>>;
-      }
+    const mergedProps: Record<string, unknown> = { ...defaultProps };
+    mergedProps.nodeType = elementProps.nodeType ?? 'block';
+
+    if (Object.keys(mergedProps).length > 0) {
+      elementConfig.props = mergedProps as PluginElementProps<Record<string, unknown>>;
     }
 
     // Process children - they can be in props.children or as React children
-    const children = props.children;
+    const children = elementProps.children;
     if (children) {
       const childrenArray: PluginJSXElement[] = Array.isArray(children)
         ? children.filter(
@@ -100,10 +68,6 @@ function buildElementsMap<TKeys extends string = string>(
       if (childrenArray.length > 0) {
         const childTypes = childrenArray.map((child) => traverse(child, false));
         elementConfig.children = childTypes as TKeys[];
-      }
-
-      if (props.nodeType) {
-        elementConfig.nodeType = props.nodeType;
       }
     }
 
@@ -124,11 +88,5 @@ export function buildPluginElements<TKeys extends string = string>(
 }
 
 export function isReactElement(value: unknown): value is PluginJSXElement {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'type' in value &&
-    'props' in value &&
-    typeof (value as { type: unknown }).type === 'string'
-  );
+  return isValidElement(value);
 }

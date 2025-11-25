@@ -1,6 +1,5 @@
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
-import * as z from 'zod';
 
 import { ImageCommands } from '../commands';
 import type { ImageElementMap, ImageElementProps, ImagePluginOptions } from '../types';
@@ -31,18 +30,20 @@ const ImageCaptionRender = (props: PluginElementRenderProps) => {
   );
 };
 
-const imagePropsSchema = z.object({
-  src: z.string().nullable(),
-  alt: z.string().nullable(),
-  srcSet: z.string().nullable(),
-  bgColor: z.string().nullable(),
-  fit: z.enum(['contain', 'cover', 'fill']).nullable(),
-  sizes: z.object({ width: z.number(), height: z.number() }),
-});
+const imageProps = {
+  src: null,
+  alt: null,
+  srcSet: null,
+  bgColor: null,
+  fit: null,
+  sizes: { width: 0, height: 0 },
+  nodeType: 'void',
+};
 
 const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
   type: 'Image',
-  elements: <image render={ImageRender} propsSchema={imagePropsSchema} nodeType="void" />,
+  // @ts-expect-error - image conflicts with native HTML element type
+  elements: <image render={ImageRender} props={imageProps} nodeType="void" />,
   commands: ImageCommands,
   options: {
     display: {

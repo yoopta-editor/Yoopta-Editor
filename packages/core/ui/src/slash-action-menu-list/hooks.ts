@@ -1,28 +1,32 @@
+import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   autoUpdate,
   flip,
+  inline,
   offset,
   shift,
-  inline,
   useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
 import {
   Blocks,
   HOTKEYS,
-  SlateElement,
-  useYooptaEditor,
+  type SlateElement,
   findPluginBlockByPath,
+  useYooptaEditor,
 } from '@yoopta/editor';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { Editor, Element, NodeEntry, Path, Transforms } from 'slate';
-import { ActionMenuItem } from '../action-menu-list/types';
+import type { NodeEntry } from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
+
+import { useSlashActionMenuStore } from './store';
+import { useArrowNavigation } from './useArrowNavigation';
+import type { ActionMenuItem } from '../action-menu-list/types';
 import {
   filterActionMenuItems,
   isSlashPressed,
   mapActionMenuItems,
 } from '../action-menu-list/utils';
-import { useSlashActionMenuStore } from './store';
 
 type SlashActionMenuProps = {
   trigger?: string;
@@ -56,7 +60,6 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     state,
     reference: storeReference,
     searchText: storeSearchText,
-    selectedIndex,
     open: storeOpen,
     close: storeClose,
     setSearchText,
@@ -65,6 +68,12 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
 
   const [actions, setActions] = useState<ActionMenuItem[]>([]);
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
+
+  const { handleArrowUp, handleArrowDown, handleArrowLeft, handleArrowRight } = useArrowNavigation({
+    actions,
+    selectedAction,
+    setSelectedAction,
+  });
 
   const { refs, floatingStyles, context, update } = useFloating({
     placement: 'bottom-start',
@@ -78,15 +87,15 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
   });
 
   const blockTypes: ActionMenuItem[] = useMemo(
-    () => mapActionMenuItems(editor, Object.keys(editor.blocks)),
-    [editor],
+    () => mapActionMenuItems(editor),
+    [editor.plugins, editor.blocks, editor.path],
   );
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setActions(blockTypes);
     setSelectedAction(blockTypes[0]);
     setSearchText('');
-  };
+  }, [setSearchText]);
 
   // Update reference when it changes
   useEffect(() => {
@@ -94,7 +103,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       reset();
       refs.setReference(storeReference);
     }
-  }, [storeReference, refs]);
+  }, [storeReference, refs, reset]);
 
   // Update position when menu opens
   useEffect(() => {
@@ -106,12 +115,15 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
   const onClose = useCallback(() => {
     reset();
     storeClose();
-  }, [storeClose, blockTypes, setSearchText]);
+  }, [reset, storeClose]);
 
-  const open = (reference?: HTMLElement | null) => {
-    reset();
-    storeOpen(reference);
-  };
+  const open = useCallback(
+    (reference?: HTMLElement | null) => {
+      reset();
+      storeOpen(reference);
+    },
+    [reset, storeOpen],
+  );
 
   // Auto-close when no results after 3 seconds
   useEffect(() => {
@@ -218,75 +230,19 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       }
 
       if (HOTKEYS.isArrowUp(event)) {
-        event.preventDefault();
-        const currentSelected = selectedAction || actions[0];
-        if (!currentSelected) return;
-
-        const menuList = document.querySelector('[data-action-menu-list]');
-        const menuListItems = menuList?.querySelectorAll('[data-action-menu-item]');
-        if (!menuListItems) return;
-
-        const currentListItem = menuList?.querySelector(`[aria-selected="true"]`) as HTMLElement;
-        const currentIndex = Array.from(menuListItems || []).indexOf(currentListItem);
-
-        const prevIndex = currentIndex - 1;
-        const prevEl = menuListItems[prevIndex];
-
-        if (!prevEl) {
-          const lastEl = menuListItems[menuListItems.length - 1];
-          const lastActionType = lastEl.getAttribute('data-action-menu-item-type');
-          lastEl.scrollIntoView({ block: 'nearest' });
-
-          const lastAction = actions.find((item) => item.type === lastActionType)!;
-          return setSelectedAction(lastAction);
-        }
-
-        prevEl.scrollIntoView({ block: 'nearest' });
-        const prevActionType = prevEl.getAttribute('data-action-menu-item-type');
-
-        const lastAction = actions.find((item) => item.type === prevActionType)!;
-        return setSelectedAction(lastAction);
+        return handleArrowUp(event);
       }
 
       if (HOTKEYS.isArrowDown(event)) {
-        event.preventDefault();
-        const currentSelected = selectedAction || actions[0];
-        if (!currentSelected) return;
-
-        const menuList = document.querySelector('[data-action-menu-list]');
-        const menuListItems = menuList?.querySelectorAll('[data-action-menu-item]');
-        if (!menuListItems) return;
-
-        const currentListItem = menuList?.querySelector(`[aria-selected="true"]`) as HTMLElement;
-        const currentIndex = Array.from(menuListItems || []).indexOf(currentListItem);
-
-        const nextIndex = currentIndex + 1;
-        const nextEl = menuListItems[nextIndex];
-
-        if (!nextEl) {
-          const firstEl = menuListItems[0];
-          const firstActionType = firstEl.getAttribute('data-action-menu-item-type');
-          firstEl.scrollIntoView({ block: 'nearest' });
-          const firstAction = actions.find((item) => item.type === firstActionType)!;
-
-          return setSelectedAction(firstAction);
-        }
-
-        nextEl.scrollIntoView({ block: 'nearest' });
-        const nextActionType = nextEl.getAttribute('data-action-menu-item-type');
-
-        const nextAction = actions.find((item) => item.type === nextActionType)!;
-        return setSelectedAction(nextAction);
+        return handleArrowDown(event);
       }
 
       if (HOTKEYS.isArrowLeft(event)) {
-        event.preventDefault();
-        return;
+        return handleArrowLeft(event);
       }
 
       if (HOTKEYS.isArrowRight(event)) {
-        event.preventDefault();
-        return;
+        return handleArrowRight(event);
       }
 
       if (HOTKEYS.isBackspace(event)) {
@@ -307,17 +263,17 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
         const selected = document.querySelector(
           '[data-action-menu-item][aria-selected=true]',
         ) as HTMLElement;
-        const type = selected?.dataset.actionMenuItemType;
-        if (!type) return;
+        const toType = selected?.dataset.actionMenuItemType;
+        if (!toType) return;
 
-        const blockEntry: NodeEntry<SlateElement<string>> | undefined = Editor.above(slate, {
+        const blockElementEntry: NodeEntry<SlateElement> | undefined = Editor.above(slate, {
           match: (n) => Element.isElement(n) && Editor.isBlock(slate, n),
           mode: 'lowest',
         });
 
-        if (blockEntry) {
-          const [, currentNodePath] = blockEntry;
-          const path = blockEntry ? currentNodePath : [];
+        if (blockElementEntry) {
+          const [, currentNodePath] = blockElementEntry;
+          const path = blockElementEntry ? currentNodePath : [];
 
           const start = Editor.start(slate, path);
           const range = { anchor: slate.selection.anchor, focus: start };
@@ -326,7 +282,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
           Transforms.delete(slate);
         }
 
-        editor.toggleBlock(type, { deleteText: true, focus: true });
+        editor.toggleBlock(toType, { deleteText: true, focus: true });
         return onClose();
       }
     };
@@ -353,7 +309,21 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
         document.removeEventListener('click', onClose);
       };
     }
-  }, [actions, state, editor.path, onClose, open, onFilter, refs, editor, selectedAction]);
+  }, [
+    actions,
+    state,
+    editor.path,
+    onClose,
+    open,
+    onFilter,
+    refs,
+    editor,
+    selectedAction,
+    handleArrowUp,
+    handleArrowDown,
+    handleArrowLeft,
+    handleArrowRight,
+  ]);
 
   const getItemProps = useCallback(
     (type: string) => ({

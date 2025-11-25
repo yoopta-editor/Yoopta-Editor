@@ -8,7 +8,6 @@ import {
 import type { SlateElement } from '@yoopta/editor';
 import { ListCollapse } from 'lucide-react';
 import { Element, Transforms } from 'slate';
-import * as z from 'zod';
 
 import { AccordionCommands } from '../commands/AccordionCommands';
 import { ACCORDION_ELEMENTS } from '../constants';
@@ -17,19 +16,17 @@ import { AccordionItemContent } from '../renders/AccordionItemContent';
 import { AccordionItemHeading } from '../renders/AccordionItemHeading';
 import { AccordionList } from '../renders/AccordionList';
 import { AccordionListItem } from '../renders/AccordionListItem';
-import type { AccordionElementMap } from '../types';
+import type { AccordionElementMap, AccordionListItemProps } from '../types';
 
-const accordionListItemSchema = z.object({
-  isExpanded: z.boolean(),
-  // @ts-expect-error - zod enum type inference issue
-  theme: z.enum(['light', 'dark', 'system']),
-});
+const accordionListItemProps: AccordionListItemProps = {
+  isExpanded: true,
+};
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
   elements: (
     <accordion-list render={AccordionList}>
-      <accordion-list-item render={AccordionListItem} propsSchema={accordionListItemSchema}>
+      <accordion-list-item render={AccordionListItem} props={accordionListItemProps}>
         <accordion-list-item-heading render={AccordionItemHeading} />
         <accordion-list-item-content render={AccordionItemContent} />
       </accordion-list-item>
