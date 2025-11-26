@@ -1,7 +1,7 @@
 import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
 import { deserializeTextNodes, generateId } from '@yoopta/editor';
 import type { Descendant} from 'slate';
-import { Element } from 'slate';
+import { Element, Text } from 'slate';
 
 type ListHTMLElement = HTMLUListElement | HTMLOListElement | HTMLElement;
 
@@ -86,6 +86,15 @@ export function deserializeListNodes(
 
           return acc;
         }, []);
+        // fix: unnecessary text elements only with line breaks in nested lists
+        while (children.length > 0) {
+          const lastChild = children[children.length - 1];
+          if (Text.isText(lastChild) && lastChild.text.trim() === '') {
+            children.pop();
+          } else {
+            break;
+          }
+        }
 
         blockData = {
           id: generateId(),
