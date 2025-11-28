@@ -19,9 +19,9 @@ import Video from '@yoopta/video';
 
 import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
-import { OrderDetailsActionPlugin } from '@/pages/dev/email-plugin';
-import { SendEmailActionPlugin } from '@/pages/dev/email-action-plugin';
-import { CodeGroupPlugin } from '@/pages/dev/card-group-plugin';
+import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
+import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
+import { CodeGroupPlugin } from '@/components/plugins/card-group-plugin';
 
 export const YOOPTA_PLUGINS = [
   Accordion.extend({
@@ -33,6 +33,7 @@ export const YOOPTA_PLUGINS = [
           Headings.HeadingOne,
           Headings.HeadingTwo,
           Headings.HeadingThree,
+          Lists.BulletedList,
         ],
       },
     },
@@ -42,8 +43,22 @@ export const YOOPTA_PLUGINS = [
   Headings.HeadingTwo,
   Headings.HeadingThree,
   OrderDetailsActionPlugin,
-  SendEmailActionPlugin,
+  SendEmailActionPlugin.extend({
+    elements: {
+      'email-text': {
+        allowedPlugins: [
+          Paragraph,
+          Headings.HeadingOne,
+          Headings.HeadingTwo,
+          Headings.HeadingThree,
+        ],
+      },
+    },
+  }),
+  Lists.BulletedList,
+  Lists.NumberedList,
   Table,
+  Link,
   // CodeGroupPlugin,
   // Mention,
   // Divider.extend({

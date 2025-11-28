@@ -126,7 +126,6 @@ export const OrderDetailsActionPlugin = new YooptaPlugin<OrderDetailsActionEleme
     display: {
       title: 'Order Details',
       description: 'Provide order details to the customer',
-      icon: <Package className="w-4 h-4" />,
     },
   },
 });

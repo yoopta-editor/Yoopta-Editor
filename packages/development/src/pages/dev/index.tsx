@@ -1,5 +1,5 @@
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
-import YooptaEditor, { YooEditor, createYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor, Elements } from '@yoopta/editor';
 import { useEffect, useMemo, useState } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
@@ -21,6 +21,12 @@ const YooptaUIPackageExample = () => {
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
+
+    setTimeout(() => {
+      Elements.createElement(editor, 'ccf07889-23a3-44f3-9b9d-2270b149fb26', {
+        type: 'accordion-list',
+      });
+    }, 0);
   }, []);
 
   return (

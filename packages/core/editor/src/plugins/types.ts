@@ -52,12 +52,13 @@ export type PluginDefaultProps = { nodeType?: PluginElementNodeType };
 export type PluginElementProps<T> = PluginDefaultProps & T;
 
 export type PluginElement<TKeys, T> = {
-  render: (props: PluginElementRenderProps) => JSX.Element;
+  render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: PluginElementProps<T>;
   // legacy prop
   asRoot?: boolean;
   children?: TKeys[];
   allowedPlugins?: string[];
+  rootPlugin?: string;
 };
 
 export type PluginElementsMap<TKeys extends string = string, TProps = PluginDefaultProps> = {

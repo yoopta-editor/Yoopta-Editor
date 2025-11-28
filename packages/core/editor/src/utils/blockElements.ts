@@ -1,6 +1,10 @@
 import type { NodeEntry } from 'slate';
 import { Editor, Element, Path } from 'slate';
 
+import { getBlockPlugins } from './editor-builders';
+import { generateId } from './generateId';
+import { buildBlockElement } from '../components/Editor/utils';
+import { Blocks } from '../editor/blocks';
 import type { SlateEditor, SlateElement, YooEditor, YooptaBlock } from '../editor/types';
 import type {
   Plugin,
@@ -8,9 +12,6 @@ import type {
   PluginElementProps,
   PluginElementsMap,
 } from '../plugins/types';
-import { buildBlockElement } from '../components/Editor/utils';
-import { findPluginBlockByPath } from './findPluginBlockByPath';
-import { generateId } from './generateId';
 
 export function getRootBlockElementType(
   elems: PluginElementsMap<string, unknown> | undefined,
@@ -118,7 +119,7 @@ export function buildBlockElementsStructure(
   blockType: string,
   elementsMapWithTextContent?: ElementsMapWithTextContent,
 ): SlateElement {
-  const block: YooptaBlock = editor.blocks[blockType];
+  const block: Plugin<Record<string, SlateElement>> = getBlockPlugins(editor)[blockType];
   const blockElements = block.elements;
 
   const rootBlockElementType = getRootBlockElementType(blockElements);
@@ -165,10 +166,11 @@ export function getAllowedPluginsFromElement(
 ): string[] | null {
   if (!slate.selection) return null;
 
-  const block = findPluginBlockByPath(editor, { at: editor.path.current });
+  const block = Blocks.getBlock(editor, { at: editor.path.current });
   if (!block) return null;
 
-  const blockElements = editor.blocks[block.type]?.elements;
+  const blockPlugin = editor.plugins[block.type];
+  const blockElements = blockPlugin?.elements;
   if (!blockElements) return null;
 
   // Find the element at the current selection
@@ -187,6 +189,19 @@ export function getAllowedPluginsFromElement(
   const elementConfig = blockElements[elementType];
 
   if (!elementConfig?.allowedPlugins) return null;
+
+  // Check if all allowedPlugins are defined in the editor's plugins
+  const undefinedPlugins = elementConfig.allowedPlugins.filter(
+    (plugin) => !editor.plugins?.[plugin],
+  );
+
+  if (undefinedPlugins.length > 0) {
+    throw new Error(
+      `Some "allowedPlugins" in ${block.type}->${
+        element.type
+      } are not defined in editor.plugins: ${undefinedPlugins.join(', ')}`,
+    );
+  }
 
   return elementConfig.allowedPlugins;
 }

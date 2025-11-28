@@ -4,10 +4,10 @@ import { getElement } from './getElement';
 import { getElementChildren } from './getElementChildren';
 import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
+import { getElementRect } from './getElementRect';
 import { getParentElementPath } from './getParentElementPath';
 import { insertElementText } from './insertElementText';
 import { isElementEmpty } from './isElementEmpty';
-import { getElementRect } from './getElementRect';
 import { updateElement } from './updateElement';
 
 export const Elements = {

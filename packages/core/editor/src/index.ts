@@ -1,4 +1,4 @@
-import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './YooptaEditor';
+import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './yoopta-editor';
 
 import './styles.css';
 
@@ -30,7 +30,6 @@ export {
 } from './utils/blockElements';
 
 // to remove
-export { findPluginBlockByPath } from './utils/findPluginBlockByPath';
 export { findSlateBySelectionPath } from './utils/findSlateBySelectionPath';
 export { deserializeTextNodes } from './parsers/deserializeTextNodes';
 export { serializeTextNodes, serializeTextNodesIntoMarkdown } from './parsers/serializeTextNodes';

@@ -2,7 +2,6 @@ import type { Descendant } from 'slate';
 import { Editor, Element, Text } from 'slate';
 
 import { buildBlockElementsStructure } from '../../utils/blockElements';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';
@@ -14,6 +13,7 @@ import type {
   YooptaBlockData,
   YooptaPathIndex,
 } from '../types';
+import { getBlock } from './getBlock';
 
 export type ToggleBlockOptions = {
   at?: YooptaPathIndex;
@@ -63,7 +63,7 @@ export function toggleBlock(
   toBlockTypeArg: string,
   options: ToggleBlockOptions = {},
 ) {
-  const fromBlock = findPluginBlockByPath(editor, {
+  const fromBlock = getBlock(editor, {
     at: typeof options.at === 'number' ? options.at : editor.path.current,
   });
 

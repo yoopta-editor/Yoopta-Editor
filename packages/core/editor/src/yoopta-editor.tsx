@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Editor } from './components/Editor/Editor';
+import { Editor } from './components/Editor/render-editor';
 import type { Tools } from './contexts/YooptaContext/ToolsContext';
 import { ToolsProvider } from './contexts/YooptaContext/ToolsContext';
 import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
@@ -12,13 +12,11 @@ import { FakeSelectionMark } from './marks/FakeSelectionMark';
 import type { YooptaPlugin } from './plugins';
 import type { Plugin } from './plugins/types';
 import {
-  buildBlockShortcuts,
   buildBlockSlateEditors,
-  buildBlocks,
   buildCommands,
   buildMarks,
   buildPlugins,
-} from './utils/editorBuilders';
+} from './utils/editor-builders';
 import { generateId } from './utils/generateId';
 import { validateYooptaValue } from './utils/validateYooptaValue';
 
@@ -81,8 +79,9 @@ const YooptaEditor = ({
   const [editorState, setEditorState] = useState<EditorState>(() => {
     if (!editor.id) editor.id = id || generateId();
     editor.readOnly = readOnly || false;
+    editor.plugins = buildPlugins(plugins);
+
     if (marks) editor.formats = buildMarks(editor, marks);
-    editor.blocks = buildBlocks(editor, plugins);
 
     const isValueValid = validateYooptaValue(value);
     if (!isValueValid && typeof value !== 'undefined') {
@@ -96,8 +95,6 @@ const YooptaEditor = ({
 
     editor.children = (isValueValid ? value : {}) as YooptaContentValue;
     editor.blockEditorsMap = buildBlockSlateEditors(editor);
-    editor.shortcuts = buildBlockShortcuts(editor);
-    editor.plugins = buildPlugins(plugins);
     editor.commands = buildCommands(editor, plugins);
 
     return { editor, version: 0 };

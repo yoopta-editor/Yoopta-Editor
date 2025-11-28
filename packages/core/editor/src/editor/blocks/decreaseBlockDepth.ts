@@ -1,12 +1,12 @@
 import type { BlockDepthOptions } from './increaseBlockDepth';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import type { YooptaOperation } from '../core/applyTransforms';
 import type { YooEditor } from '../types';
+import { getBlock } from './getBlock';
 
 export function decreaseBlockDepth(editor: YooEditor, options: BlockDepthOptions = {}) {
   const { at = editor.path.current, blockId } = options;
 
-  const block = blockId ? editor.children[blockId] : findPluginBlockByPath(editor, { at });
+  const block = blockId ? editor.children[blockId] : getBlock(editor, { at });
   if (!block) return;
 
   const newDepth = Math.max(0, block.meta.depth - 1);

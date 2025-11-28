@@ -19,9 +19,9 @@ export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions):
 
   const slate = editor.blockEditorsMap[blockId || ''];
   const blockData = editor.children[blockId || ''] as YooptaBlockData;
-  const blockEntity = editor.blocks[blockData?.type || ''];
+  const blockEntity = editor.plugins[blockData?.type || ''];
 
-  if (!blockEntity?.hasCustomEditor && !slate) {
+  if (!blockEntity?.customEditor && !slate) {
     throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
   }
 

@@ -11,9 +11,10 @@ import {
 } from '@floating-ui/react';
 import {
   Blocks,
+  Elements,
   HOTKEYS,
   type SlateElement,
-  findPluginBlockByPath,
+  getAllowedPluginsFromElement,
   useYooptaEditor,
 } from '@yoopta/editor';
 import type { NodeEntry } from 'slate';
@@ -88,7 +89,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
 
   const blockTypes: ActionMenuItem[] = useMemo(
     () => mapActionMenuItems(editor),
-    [editor.plugins, editor.blocks, editor.path],
+    [editor.plugins, editor.path],
   );
 
   const reset = useCallback(() => {
@@ -148,7 +149,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       }
 
       const filteredActions = blockTypes.filter((action) =>
-        filterActionMenuItems(editor.blocks[action.type], searchText),
+        filterActionMenuItems(editor.plugins[action.type], searchText),
       );
 
       if (filteredActions.length > 0) {
@@ -163,7 +164,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       setActions(filteredActions);
       setSearchText(searchText);
     },
-    [trigger, blockTypes, editor.blocks, selectedAction, setSearchText, setSelectedIndex],
+    [trigger, blockTypes, selectedAction, setSearchText, setSelectedIndex],
   );
 
   useEffect(() => {
@@ -266,6 +267,60 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
         const toType = selected?.dataset.actionMenuItemType;
         if (!toType) return;
 
+        // Check if we're inside an element with allowedPlugins
+        const block = Blocks.getBlock(editor, { at: editor.path.current });
+        if (!block) return onClose();
+
+        const allowedPlugins = getAllowedPluginsFromElement(editor, slate);
+
+        // If we're in an element with allowedPlugins and the selected type is allowed
+        if (allowedPlugins && allowedPlugins.includes(toType)) {
+          const selectedPlugin = editor.plugins[toType];
+          if (!selectedPlugin) return onClose();
+
+          // Get the root element type of the selected plugin
+          const rootElementType =
+            Object.keys(selectedPlugin.elements).find(
+              (key) => selectedPlugin.elements[key].asRoot,
+            ) || Object.keys(selectedPlugin.elements)[0];
+
+          if (!rootElementType) return onClose();
+
+          const rootElement = selectedPlugin.elements[rootElementType];
+
+          // Delete the slash command text
+          const blockElementEntry: NodeEntry<SlateElement> | undefined = Editor.above(slate, {
+            match: (n) => Element.isElement(n) && Editor.isBlock(slate, n),
+            mode: 'lowest',
+          });
+
+          if (blockElementEntry) {
+            const [, currentNodePath] = blockElementEntry;
+            const start = Editor.start(slate, currentNodePath);
+            const range = { anchor: slate.selection.anchor, focus: start };
+
+            Transforms.select(slate, range);
+            Transforms.delete(slate);
+          }
+
+          // Create the element inside the current element with allowedPlugins
+          Elements.createElement(
+            editor,
+            block.id,
+            {
+              type: rootElementType,
+              props: rootElement.props,
+            },
+            {
+              path: 'next',
+              focus: true,
+            },
+          );
+
+          return onClose();
+        }
+
+        // Default behavior: transform the current block
         const blockElementEntry: NodeEntry<SlateElement> | undefined = Editor.above(slate, {
           match: (n) => Element.isElement(n) && Editor.isBlock(slate, n),
           mode: 'lowest',
@@ -292,7 +347,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
     }
 
     if (typeof editor.path.current === 'number') {
-      const block = findPluginBlockByPath(editor, { at: editor.path.current });
+      const block = Blocks.getBlock(editor, { at: editor.path.current });
       if (!block) return;
 
       const slateEditorRef = editor.refElement?.querySelector(

@@ -52,7 +52,7 @@ export const useSlateEditor = (
 
     slate.insertText = (text) => {
       const selectedPaths = Paths.getSelectedPaths(editor);
-      const path = Paths.getPath(editor);
+      const path = Paths.getBlockOrder(editor);
       if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
         editor.setPath({ current: path });
       }
@@ -63,7 +63,7 @@ export const useSlateEditor = (
     // This normalization is needed to validate the elements structure
     slate.normalizeNode = (entry) => {
       const [node, path] = entry;
-      const blockElements = editor.blocks[block.type].elements;
+      const blockElements = editor.plugins[block.type].elements;
 
       // Normalize only `simple` block elements.
       // Simple elements are elements that have only one defined block element type.
@@ -101,7 +101,7 @@ export const useSlateEditor = (
     slate.apply = (op) => {
       if (Operation.isSelectionOperation(op)) {
         const selectedPaths = Paths.getSelectedPaths(editor);
-        const path = Paths.getPath(editor);
+        const path = Paths.getBlockOrder(editor);
 
         if (Array.isArray(selectedPaths) && slate.selection && Range.isExpanded(slate.selection)) {
           editor.setPath({ current: path });

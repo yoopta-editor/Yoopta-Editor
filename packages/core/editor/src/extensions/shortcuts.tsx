@@ -1,9 +1,12 @@
 import type { NodeEntry } from 'slate';
 import { Editor, Element, Range, Text, Transforms } from 'slate';
+import { Blocks } from '../editor/blocks';
 
 import type { SlateEditor, SlateElement, YooEditor } from '../editor/types';
 
-export const withShortcuts = (editor: YooEditor, slate: SlateEditor) => {
+type Shortcuts = Record<string, { type: string }>;
+
+export const withShortcuts = (editor: YooEditor, slate: SlateEditor, shortcuts: Shortcuts) => {
   const { insertText } = slate;
 
   slate.insertText = (text: string) => {
@@ -32,10 +35,16 @@ export const withShortcuts = (editor: YooEditor, slate: SlateEditor) => {
       const range = { anchor, focus: start };
       const beforeText = Editor.string(slate, range);
 
-      const matchedBlock = editor.shortcuts?.[beforeText];
+      const matchedBlock = shortcuts[beforeText];
       const hasMatchedBlock = !!matchedBlock;
 
-      if (hasMatchedBlock && !matchedBlock.isActive()) {
+      // add isActive method to the matched block
+      const isActive = (type: string) => {
+        const block = Blocks.getBlock(editor, { at: editor.path.current });
+        return block?.type === type;
+      };
+
+      if (hasMatchedBlock && !isActive(matchedBlock.type)) {
         Transforms.select(slate, range);
         Transforms.delete(slate);
 

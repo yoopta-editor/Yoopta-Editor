@@ -4103,7 +4103,7 @@
   dependencies:
     lucide-react "^0.378.0"
 
-"@yoopta/action-menu-list@latest":
+"@yoopta/action-menu-list@*", "@yoopta/action-menu-list@latest":
   version "4.9.9"
   resolved "https://registry.npmjs.org/@yoopta/action-menu-list/-/action-menu-list-4.9.9.tgz#6097b1351538207abdb651a2e65d31bbfb4a7cb6"
   integrity sha512-xsnKK0Oa2klq+m0AgsXeyMthMSKumrpq+cbr2WMDTTbPfDW4w9TEpvkG5HRmzhyXHSZw5xEsqaZzDE1htyD/fA==
@@ -4265,7 +4265,7 @@
     slate "^0.102.0"
     slate-react "^0.102.0"
 
-"@yoopta/toolbar@latest":
+"@yoopta/toolbar@*", "@yoopta/toolbar@latest":
   version "4.9.9"
   resolved "https://registry.npmjs.org/@yoopta/toolbar/-/toolbar-4.9.9.tgz#dcdecb92efeb31c6779492a5cb755eff1a907d18"
   integrity sha512-xYBvLOhve3b1USGbw0d/naMJOa67EuI0xOU08lQmD1Gzdpu+vWsKP+VPh52gPYKbIfmZZcdfZEc4ozykjkwn7w==
@@ -13854,11 +13854,6 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zod@^4.1.12:
-  version "4.1.12"
-  resolved "https://registry.npmjs.org/zod/-/zod-4.1.12.tgz#64f1ea53d00eab91853195653b5af9eee68970f0"
-  integrity sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==
 
 zustand@^4.5.0:
   version "4.5.7"

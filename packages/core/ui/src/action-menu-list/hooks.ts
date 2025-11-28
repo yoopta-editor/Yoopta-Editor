@@ -35,10 +35,7 @@ export const useActionMenuListActions = () => {
  * Full hook with Floating UI and all logic
  * Use this only in the component that renders the ActionMenuList
  */
-export const useActionMenuList = ({
-  items,
-  view: viewProp = 'default',
-}: ActionMenuListProps = {}) => {
+export const useActionMenuList = ({ view: viewProp = 'default' }: ActionMenuListProps = {}) => {
   const editor = useYooptaEditor();
   const store = useActionMenuListStore();
   const {
@@ -64,11 +61,8 @@ export const useActionMenuList = ({
   });
 
   const blockTypes: ActionMenuItem[] = useMemo(
-    () =>
-      mapActionMenuItems(editor, items || Object.keys(editor.blocks)).filter((item) =>
-        filterToggleActions(editor, item.type),
-      ),
-    [editor, items],
+    () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)),
+    [editor],
   );
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem>(blockTypes[0]);

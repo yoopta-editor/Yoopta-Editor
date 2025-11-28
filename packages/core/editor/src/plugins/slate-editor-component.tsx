@@ -32,7 +32,7 @@ type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   events?: PluginEvents;
 };
 
-const getMappedElements = (elements) => {
+const getElementsRender = (elements) => {
   const mappedElements = {};
   Object.keys(elements).forEach((type) => {
     mappedElements[type] = elements[type].render;
@@ -63,8 +63,10 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const editor = useYooptaEditor();
   const block = useBlockData(id);
   const initialValue = useRef(block.value).current;
-  const ELEMENTS_MAP = useMemo(() => getMappedElements(elements), [elements]);
+  const ELEMENTS_RENDER_MAP = useMemo(() => getElementsRender(elements), [elements]);
   const MARKS_MAP = useMemo(() => getMappedMarks(marks), [marks]);
+
+  // console.log(`elements of block: ${editor.children[id].type}`, elements);
 
   const slate = useSlateEditor(id, editor, block, elements, withExtensions);
   const eventHandlers = useEventHandlers(events, editor, block, slate);
@@ -103,7 +105,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
   const renderElement = useCallback(
     (elementProps: RenderSlateElementProps) => {
-      const ElementComponent = ELEMENTS_MAP[elementProps.element.type];
+      const ElementComponent = ELEMENTS_RENDER_MAP[elementProps.element.type];
       const { attributes, ...props } = elementProps;
       attributes['data-element-type'] = props.element.type;
 

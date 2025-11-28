@@ -198,7 +198,8 @@
           "error",
           {
             "props": true,
-            "ignorePropertyModificationsFor": ["slate"]
+            // recheck this
+            "ignorePropertyModificationsFor": ["slate", "editor"]
           }
         ],
         "no-warning-comments": [

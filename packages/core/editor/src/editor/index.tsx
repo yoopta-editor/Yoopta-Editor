@@ -12,23 +12,23 @@ import { moveBlock } from './blocks/moveBlock';
 import { splitBlock } from './blocks/splitBlock';
 import { toggleBlock } from './blocks/toggleBlock';
 import { updateBlock } from './blocks/updateBlock';
+import { applyTransforms } from './core/applyTransforms';
+import { batchOperations } from './core/batchOperations';
 import { blur } from './core/blur';
-import { getEditorValue } from './core/getEditorValue';
-import { setPath } from './paths/setPath';
-import { YooEditor, YooptaContentValue } from './types';
-import { setEditorValue } from './core/setEditorValue';
 import { focus } from './core/focus';
+import { getEditorValue } from './core/getEditorValue';
+import type { UndoRedoOptions } from './core/history';
+import { YooptaHistory } from './core/history';
 import { isFocused } from './core/isFocused';
+import { setEditorValue } from './core/setEditorValue';
+import { setPath } from './paths/setPath';
+import type { YooEditor, YooptaContentValue } from './types';
 import type { EmailTemplateOptions } from '../parsers/getEmail';
 import { getEmail } from '../parsers/getEmail';
 import { getHTML } from '../parsers/getHTML';
 import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
 import { isEmpty } from './core/isEmpty';
-import { applyTransforms } from './core/applyTransforms';
-import { batchOperations } from './core/batchOperations';
-import type { UndoRedoOptions } from './core/history';
-import { YooptaHistory } from './core/history';
 
 export function createYooptaEditor(): YooEditor {
   // Create a unique event emitter for each editor instance
@@ -62,9 +62,9 @@ export function createYooptaEditor(): YooEditor {
     splitBlock: (...args) => splitBlock(editor, ...args),
     mergeBlock: (...args) => mergeBlock(editor, ...args),
     setPath: (...args) => setPath(editor, ...args),
-    blocks: {},
+    // blocks: {},
+    // shortcuts: {},
     formats: {},
-    shortcuts: {},
     plugins: {},
     commands: {},
 
@@ -105,5 +105,3 @@ export function createYooptaEditor(): YooEditor {
 
   return editor;
 }
-
-export const EDITOR_TO_ON_CHANGE = new WeakMap();

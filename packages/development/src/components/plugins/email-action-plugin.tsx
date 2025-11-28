@@ -116,7 +116,6 @@ export const SendEmailActionPlugin = new YooptaPlugin<EmailActionElementsMap>({
     display: {
       title: 'Email',
       description: 'Send an email to the customer',
-      icon: <Mail className="w-4 h-4" />,
     },
   },
 });

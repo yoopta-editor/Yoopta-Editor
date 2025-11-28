@@ -2,7 +2,7 @@ import type { CSSProperties, ClipboardEvent, ReactNode } from 'react';
 import { useEffect } from 'react';
 import { Element, Path, Editor as SlateEditor } from 'slate';
 
-import { RenderBlocks } from './RenderBlocks';
+import { RenderBlocks } from './render-blocks';
 import { useMultiSelection } from './selection';
 import { buildBlockData } from './utils';
 import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
@@ -10,7 +10,6 @@ import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
 import type { YooptaContentValue } from '../../editor/types';
 import type { YooptaMark } from '../../marks';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
@@ -72,7 +71,7 @@ const Editor = ({
 
     if (e.clientY >= paddingBottomAreaTop) {
       const lastPath = Object.keys(editor.children).length - 1;
-      const lastBlock = findPluginBlockByPath(editor, { at: lastPath });
+      const lastBlock = Blocks.getBlock(editor, { at: lastPath });
       const lastSlate = findSlateBySelectionPath(editor, { at: lastPath });
 
       if (lastBlock && lastSlate && lastSlate.selection) {
