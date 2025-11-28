@@ -54,7 +54,6 @@ export type PluginElementProps<T> = PluginDefaultProps & T;
 export type PluginElement<TKeys, T> = {
   render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: PluginElementProps<T>;
-  // legacy prop
   asRoot?: boolean;
   children?: TKeys[];
   allowedPlugins?: string[];

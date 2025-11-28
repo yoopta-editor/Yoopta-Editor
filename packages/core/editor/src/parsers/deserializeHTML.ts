@@ -8,7 +8,7 @@ import type {
   YooptaBlockData,
 } from '../editor/types';
 import type { PluginDeserializeParser } from '../plugins/types';
-import { getRootBlockElementType } from '../utils/blockElements';
+import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { isYooptaBlock } from '../utils/validators';
 

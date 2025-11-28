@@ -8,7 +8,7 @@ import type { SetSlateOperation } from '../editor/core/applyTransforms';
 import { Paths } from '../editor/paths';
 import type { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
 import type { EditorEventHandlers } from '../types/eventHandlers';
-import { getRootBlockElementType } from '../utils/blockElements';
+import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
 

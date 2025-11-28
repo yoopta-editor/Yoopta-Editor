@@ -14,7 +14,6 @@
     "IS_REMOTE_DEV": "readonly"
   },
   "rules": {},
-  "ignorePatterns": ["**/generated/*"],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -194,14 +193,15 @@
       "files": ["*.{js,cjs}"],
       "rules": {
         "no-unused-vars": ["error"],
-        "no-param-reassign": [
-          "error",
-          {
-            "props": true,
-            // recheck this
-            "ignorePropertyModificationsFor": ["slate", "editor"]
-          }
-        ],
+        "no-param-reassign": "off",
+        // [
+        //   "error",
+        //   {
+        //     "props": true,
+        //     // recheck this
+        //     "ignorePropertyModificationsFor": ["slate", "editor"]
+        //   }
+        // ],
         "no-warning-comments": [
           "warn",
           {

@@ -1,6 +1,6 @@
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
-import YooptaEditor, { YooEditor, createYooptaEditor, Elements } from '@yoopta/editor';
-import { useEffect, useMemo, useState } from 'react';
+import YooptaEditor, { YooEditor, createYooptaEditor } from '@yoopta/editor';
+import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -21,13 +21,47 @@ const YooptaUIPackageExample = () => {
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
-
-    setTimeout(() => {
-      Elements.createElement(editor, 'ccf07889-23a3-44f3-9b9d-2270b149fb26', {
-        type: 'accordion-list',
-      });
-    }, 0);
   }, []);
+
+  const insertAccordion = () => {
+    const elements = editor.h('accordion-list', {
+      children: [
+        editor.h('accordion-list-item', {
+          props: { isExpanded: true },
+          children: [
+            editor.h('accordion-list-item-heading'),
+            editor.h('accordion-list-item-content', {
+              children: [editor.h('paragraph'), editor.h('heading-one'), editor.h('paragraph')],
+            }),
+          ],
+        }),
+        editor.h('accordion-list-item', {
+          props: { isExpanded: true },
+          children: [
+            editor.h('accordion-list-item-heading'),
+            editor.h('accordion-list-item-content', {
+              children: [editor.h('paragraph')],
+            }),
+          ],
+        }),
+        editor.h('accordion-list-item', {
+          props: { isExpanded: true },
+          children: [
+            editor.h('accordion-list-item-heading'),
+            editor.h('accordion-list-item-content'),
+          ],
+        }),
+      ],
+    });
+
+    editor.insertBlock('Accordion', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+
+    console.log('insertAccordion editor.h elements', elements);
+  };
 
   return (
     <YooptaEditor
@@ -40,13 +74,14 @@ const YooptaUIPackageExample = () => {
       tools={TOOLS}
       style={EDITOR_STYLE}
       onChange={(value) => console.log('value', value)}
-      value={DEFAULT_VALUE}
+      // value={DEFAULT_VALUE}
       className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
       <YooptaToolbar />
       <YooptaFloatingBlockActions />
       <YooptaBlockOptions />
       <YooptaSlashCommandMenu />
       <YooptaActionMenuList />
+      <button onClick={insertAccordion}>add accordion</button>
     </YooptaEditor>
   );
 };

@@ -29,6 +29,7 @@ import { getHTML } from '../parsers/getHTML';
 import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
 import { isEmpty } from './core/isEmpty';
+import { h } from './elements/createElementStructure';
 
 export function createYooptaEditor(): YooEditor {
   // Create a unique event emitter for each editor instance
@@ -62,6 +63,7 @@ export function createYooptaEditor(): YooEditor {
     splitBlock: (...args) => splitBlock(editor, ...args),
     mergeBlock: (...args) => mergeBlock(editor, ...args),
     setPath: (...args) => setPath(editor, ...args),
+    h: (...args) => h(editor, ...args),
     // blocks: {},
     // shortcuts: {},
     formats: {},

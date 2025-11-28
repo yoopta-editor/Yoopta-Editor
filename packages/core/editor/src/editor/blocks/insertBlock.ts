@@ -1,25 +1,57 @@
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import { buildBlockElementsStructure } from '../../utils/block-elements';
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';
-import type { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
+import type { SlateElement, YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
 
 export type InsertBlockOptions = {
   at?: YooptaPathIndex;
   focus?: boolean;
   blockData?: Omit<Partial<YooptaBlockData>, 'type'>;
+  /**
+   * Element structure created with editor.h()
+   * If provided, this will be used as the block's value
+   *
+   * @example
+   * ```typescript
+   * editor.insertBlock('Accordion', {
+   *   elements: editor.h('accordion-list', {
+   *     children: [
+   *       editor.h('accordion-list-item', {
+   *         props: { isExpanded: false },
+   *         children: [
+   *           editor.h('accordion-list-item-heading'),
+   *           editor.h('accordion-list-item-content', {
+   *             children: [
+   *               editor.h('paragraph'),
+   *               editor.h('heading-one')
+   *             ]
+   *           })
+   *         ]
+   *       })
+   *     ]
+   *   })
+   * });
+   * ```
+   */
+  elements?: SlateElement;
 };
 
 // [TEST]
 // [TEST] - TEST EVENTS
 export function insertBlock(editor: YooEditor, type: string, options: InsertBlockOptions = {}) {
-  const { at = editor.path.current, focus = false, blockData } = options;
+  const { at = editor.path.current, focus = false, blockData, elements } = options;
 
   const plugin = editor.plugins[type];
   const { onBeforeCreate, onCreate } = plugin.events || {};
 
   let slateStructure;
-  if (blockData && Array.isArray(blockData?.value)) slateStructure = blockData.value[0];
-  else slateStructure = onBeforeCreate?.(editor) || buildBlockElementsStructure(editor, type);
+  if (blockData && Array.isArray(blockData?.value)) {
+    slateStructure = blockData.value[0];
+  } else if (elements) {
+    slateStructure = elements;
+  } else {
+    slateStructure = onBeforeCreate?.(editor) || buildBlockElementsStructure(editor, type);
+  }
 
   const newBlock: YooptaBlockData = {
     id: blockData?.id || generateId(),

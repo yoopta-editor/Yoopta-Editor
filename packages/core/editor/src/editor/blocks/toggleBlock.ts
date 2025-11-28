@@ -1,7 +1,7 @@
 import type { Descendant } from 'slate';
 import { Editor, Element, Text } from 'slate';
 
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import { buildBlockElementsStructure } from '../../utils/block-elements';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';

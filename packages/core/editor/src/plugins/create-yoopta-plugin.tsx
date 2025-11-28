@@ -92,9 +92,7 @@ export class YooptaPlugin<
 
         if (element?.render) {
           const customRenderFn = renders[elementType];
-
           const elementRender = element.render;
-
           element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
         }
       });
@@ -168,7 +166,9 @@ export class YooptaPlugin<
           const customRenderFn = extendConfig.render;
           const elementRender = element.render;
 
-          element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
+          if (typeof elementRender === 'function') {
+            element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
+          }
         }
 
         // Handle props override

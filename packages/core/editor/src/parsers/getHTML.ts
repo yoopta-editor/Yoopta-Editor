@@ -1,6 +1,6 @@
 import { Paths } from '../editor/paths';
 import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
-import { getPluginByInlineElement } from '../utils/blockElements';
+import { getPluginByInlineElement } from '../utils/block-elements';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   underline: { type: 'underline', tag: 'u' },

@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import { Editor, Node } from 'slate';
 
-import { buildSlateNodeElement } from '../../utils/blockElements';
+import { buildSlateNodeElement } from '../../utils/block-elements';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';

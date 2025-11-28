@@ -27,7 +27,7 @@ export {
   getRootBlockElementType,
   getRootBlockElement,
   getAllowedPluginsFromElement,
-} from './utils/blockElements';
+} from './utils/block-elements';
 
 // to remove
 export { findSlateBySelectionPath } from './utils/findSlateBySelectionPath';
@@ -51,8 +51,8 @@ export {
   YooptaEditorEventKeys,
 } from './editor/types';
 export { buildBlockData, buildBlockElement } from './components/Editor/utils';
-export { buildBlockElementsStructure } from './utils/blockElements';
-export { buildSlateEditor } from './utils/buildSlate';
+export { buildBlockElementsStructure } from './utils/block-elements';
+export { buildSlateEditor } from './utils/build-slate';
 
 export {
   Plugin,
@@ -65,6 +65,7 @@ export {
   PluginOptions,
 } from './plugins/types';
 export type { ExtendPlugin, ExtendPluginElementConfig } from './plugins/create-yoopta-plugin';
+export type { ElementStructureOptions } from './editor/elements/createElementStructure';
 
 export { Elements } from './editor/elements';
 export { Blocks } from './editor/blocks';

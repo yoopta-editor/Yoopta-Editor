@@ -20,6 +20,7 @@ import type { YooptaMark } from '../marks';
 import { deserializeHTML } from '../parsers/deserializeHTML';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
+import { Elements } from '../editor/elements';
 
 type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   TElementMap,
@@ -32,7 +33,7 @@ type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   events?: PluginEvents;
 };
 
-const getElementsRender = (elements) => {
+const getPluginElementsRender = (elements) => {
   const mappedElements = {};
   Object.keys(elements).forEach((type) => {
     mappedElements[type] = elements[type].render;
@@ -63,7 +64,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const editor = useYooptaEditor();
   const block = useBlockData(id);
   const initialValue = useRef(block.value).current;
-  const ELEMENTS_RENDER_MAP = useMemo(() => getElementsRender(elements), [elements]);
+  const ELEMENTS_RENDER_MAP = useMemo(() => getPluginElementsRender(elements), [elements]);
   const MARKS_MAP = useMemo(() => getMappedMarks(marks), [marks]);
 
   // console.log(`elements of block: ${editor.children[id].type}`, elements);

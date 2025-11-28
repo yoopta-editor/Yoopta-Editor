@@ -9,6 +9,7 @@ import { getParentElementPath } from './getParentElementPath';
 import { insertElementText } from './insertElementText';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
+import { createJSXFactory } from './createElementStructure';
 
 export const Elements = {
   createElement,
@@ -22,6 +23,7 @@ export const Elements = {
   getElementPath,
   getParentElementPath,
   getElementRect,
+  createJSXFactory,
 };
 
 export type Elements = typeof Elements;

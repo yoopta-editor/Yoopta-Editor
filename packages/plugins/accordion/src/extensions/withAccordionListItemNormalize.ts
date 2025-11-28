@@ -1,10 +1,10 @@
-import type { SlateEditor, YooEditor } from '@yoopta/editor';
+import type { SlateEditor } from '@yoopta/editor';
 import { generateId } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
 import { ACCORDION_ELEMENTS } from '../constants';
 
-export function withAccordionListItemNormalize(slate: SlateEditor, editor: YooEditor) {
+export function withAccordionListItemNormalize(slate: SlateEditor) {
   const { normalizeNode } = slate;
 
   slate.normalizeNode = ([node, path]) => {

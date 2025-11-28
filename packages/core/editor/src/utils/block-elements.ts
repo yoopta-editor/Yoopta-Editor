@@ -1,11 +1,11 @@
 import type { NodeEntry } from 'slate';
 import { Editor, Element, Path } from 'slate';
 
-import { getBlockPlugins } from './editor-builders';
 import { generateId } from './generateId';
+import { getBlockPlugins } from './get-block-plugins';
 import { buildBlockElement } from '../components/Editor/utils';
 import { Blocks } from '../editor/blocks';
-import type { SlateEditor, SlateElement, YooEditor, YooptaBlock } from '../editor/types';
+import type { SlateEditor, SlateElement, YooEditor } from '../editor/types';
 import type {
   Plugin,
   PluginElement,
@@ -52,7 +52,7 @@ export function getBlockElementNode(
 ): NodeEntry<SlateElement> | undefined {
   const { at, elementType } = options;
 
-  const atPath = at || slate.selection?.anchor.path;
+  const atPath = at ?? slate.selection?.anchor.path;
   if (!atPath) return;
 
   let match = (n) => !Editor.isEditor(n) && Element.isElement(n);

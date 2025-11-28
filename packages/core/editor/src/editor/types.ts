@@ -28,6 +28,7 @@ import type {
   PluginElementsMap,
   PluginOptions,
 } from '../plugins/types';
+import type { ElementStructureOptions } from './elements/createElementStructure';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -115,6 +116,9 @@ export type BaseYooEditor = {
   mergeBlock: () => void;
   splitBlock: (options?: SplitBlockOptions) => void;
   getBlock: (options: GetBlockOptions) => YooptaBlockData | null;
+
+  // element structure builder
+  h: (type: string, options?: ElementStructureOptions) => SlateElement;
 
   // path handlers
   path: YooptaPath;

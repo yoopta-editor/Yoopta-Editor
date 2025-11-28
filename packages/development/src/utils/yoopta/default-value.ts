@@ -12,9 +12,7 @@ export const DEFAULT_VALUE = {
       {
         id: '28c6ec04-3d86-4d68-b0a9-2e9835d2d852',
         type: 'accordion-list',
-        props: {
-          nodeType: 'block',
-        },
+        props: { nodeType: 'block' },
         children: [
           {
             id: '3e3d5c8e-be39-4798-aeb7-57cc00c228dc',
@@ -28,27 +26,37 @@ export const DEFAULT_VALUE = {
                     text: '',
                   },
                 ],
-                props: {
-                  nodeType: 'block',
-                },
+                props: { nodeType: 'block' },
               },
               {
                 id: '3b271932-f126-48fd-acd6-5efc8a38e625',
                 type: 'accordion-list-item-content',
                 children: [
                   {
-                    text: '',
+                    id: '52badbce-e743-4cfa-a860-5f27b9ccbc56',
+                    type: 'bulleted-list',
+                    props: { nodeType: 'block' },
+                    children: [
+                      {
+                        text: 'Bullet list item inside `accordion-list-item-content`',
+                      },
+                    ],
+                  },
+                  {
+                    id: '52badbce-e743-4cfa-a860-5f27b9ccbc56',
+                    type: 'heading-three',
+                    props: { nodeType: 'block' },
+                    children: [
+                      {
+                        text: 'Heading three item inside `accordion-list-item-content`',
+                      },
+                    ],
                   },
                 ],
-                props: {
-                  nodeType: 'block',
-                },
+                props: { nodeType: 'block' },
               },
             ],
-            props: {
-              nodeType: 'block',
-              isExpanded: true,
-            },
+            props: { nodeType: 'block', isExpanded: true },
           },
         ],
       },

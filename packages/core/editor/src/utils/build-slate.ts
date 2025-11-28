@@ -1,7 +1,7 @@
 import { createEditor } from 'slate';
 import { withReact } from 'slate-react';
 
-import { getBlockPlugins } from './editor-builders';
+import { getBlockPlugins } from './get-block-plugins';
 import type { SlateEditor, YooEditor } from '../editor/types';
 import { withShortcuts } from '../extensions/shortcuts';
 

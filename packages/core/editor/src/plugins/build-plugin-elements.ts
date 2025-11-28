@@ -39,7 +39,8 @@ function buildElementsMap<TKeys extends string = string>(
       render,
     };
 
-    if (isRoot) {
+    const isInline = element.props.nodeType === 'inline' || element.props.nodeType === 'inlineVoid';
+    if (isRoot && !isInline) {
       elementConfig.asRoot = true;
     }
 

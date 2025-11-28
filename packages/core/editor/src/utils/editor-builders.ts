@@ -1,5 +1,5 @@
-import { buildBlockElementsStructure, getRootBlockElement } from './blockElements';
-import { buildSlateEditor } from './buildSlate';
+import { buildBlockElementsStructure } from './block-elements';
+import { buildSlateEditor } from './build-slate';
 import { getValue } from '../editor/textFormats/getValue';
 import { isActive } from '../editor/textFormats/isActive';
 import { toggle } from '../editor/textFormats/toggle';
@@ -24,24 +24,6 @@ export function buildMarks(editor, marks: YooptaMark<any>[]) {
   });
 
   return formats;
-}
-
-export function getBlockPlugins(
-  editor: YooEditor,
-): Record<string, Plugin<Record<string, SlateElement>>> {
-  const blockPlugins: Record<string, Plugin<Record<string, SlateElement>>> = {};
-
-  Object.values(editor.plugins).forEach((plugin) => {
-    const rootBlockElement = getRootBlockElement(plugin.elements);
-    const nodeType = rootBlockElement?.props?.nodeType;
-    const isInline = nodeType === 'inline' || nodeType === 'inlineVoid';
-
-    if (!isInline) {
-      blockPlugins[plugin.type] = plugin;
-    }
-  });
-
-  return blockPlugins;
 }
 
 export function buildBlockSlateEditors(editor: YooEditor) {
@@ -116,13 +98,11 @@ export function buildPlugins(
         const element = plugin.elements[elementKey];
 
         if (Array.isArray(element.allowedPlugins) && element.allowedPlugins.length > 0) {
-          const allowedElementTypes: string[] = [];
-
-          // For each allowed plugin, add its elements
+          // For each allowed plugin, add its elements to the plugin's elements map
           element.allowedPlugins.forEach((allowedPluginType) => {
             const allowedPlugin = plugins.find((p) => p.type === allowedPluginType);
 
-            if (allowedPlugin && allowedPlugin.elements) {
+            if (allowedPlugin?.elements) {
               // Find root element of the allowed plugin
               const rootElementType =
                 Object.keys(allowedPlugin.elements).find(
@@ -130,8 +110,6 @@ export function buildPlugins(
                 ) ?? Object.keys(allowedPlugin.elements)[0];
 
               if (rootElementType) {
-                allowedElementTypes.push(rootElementType);
-
                 // Add root element with render function and rootPlugin (if not already present)
                 if (!extendedElements[rootElementType]) {
                   extendedElements[rootElementType] = {
@@ -156,16 +134,8 @@ export function buildPlugins(
             }
           });
 
-          // Update children property in extendedElements to include allowed element types
-          if (allowedElementTypes.length > 0) {
-            const extendedElement = extendedElements[elementKey];
-            if (extendedElement) {
-              extendedElement.children = [
-                ...(extendedElement.children ?? []),
-                ...allowedElementTypes,
-              ] as any;
-            }
-          }
+          // Note: We don't add allowedPlugins elements to the children array
+          // allowedPlugins elements are available for insertion but not automatically created
         }
       });
 

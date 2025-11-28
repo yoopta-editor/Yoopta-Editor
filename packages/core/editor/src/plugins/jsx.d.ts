@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-import type { PluginElementRenderProps } from './types';
+import type { PluginElementNodeType, PluginElementRenderProps } from './types';
 
 declare global {
   namespace JSX {
@@ -11,6 +11,7 @@ declare global {
         render?: ComponentType<PluginElementRenderProps>;
         props?: Record<string, unknown>;
         children?: React.ReactNode;
+        nodeType?: PluginElementNodeType;
       };
     }
   }
