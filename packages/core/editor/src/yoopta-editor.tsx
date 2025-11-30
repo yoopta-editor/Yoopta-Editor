@@ -107,7 +107,7 @@ const YooptaEditor = ({
     onPathChange?.(path);
   }, []);
 
-  const onValueChange = useCallback((value, options: YooptaOnChangeOptions) => {
+  const onValueChange = useCallback((changeValue, options: YooptaOnChangeOptions) => {
     setEditorState((prevState) => ({
       editor: prevState.editor,
       version: prevState.version + 1,
@@ -121,7 +121,7 @@ const YooptaEditor = ({
           operation.type !== 'set_slate',
       );
 
-      if (operations.length > 0) onChange(value, { operations });
+      if (operations.length > 0) onChange(changeValue, { operations });
     }
   }, []);
 

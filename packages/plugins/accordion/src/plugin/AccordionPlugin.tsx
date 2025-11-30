@@ -11,7 +11,6 @@ import { Element, Transforms } from 'slate';
 
 import { AccordionCommands } from '../commands/AccordionCommands';
 import { ACCORDION_ELEMENTS } from '../constants';
-import { withAccordion } from '../extensions/withAccordion';
 import { AccordionItemContent } from '../renders/AccordionItemContent';
 import { AccordionItemHeading } from '../renders/AccordionItemHeading';
 import { AccordionList } from '../renders/AccordionList';
@@ -139,7 +138,6 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
       };
     },
   },
-  extensions: withAccordion,
   options: {
     display: {
       title: 'Accordion',

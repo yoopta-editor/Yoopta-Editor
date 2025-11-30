@@ -64,8 +64,7 @@ export function createYooptaEditor(): YooEditor {
     mergeBlock: (...args) => mergeBlock(editor, ...args),
     setPath: (...args) => setPath(editor, ...args),
     h: (...args) => h(editor, ...args),
-    // blocks: {},
-    // shortcuts: {},
+
     formats: {},
     plugins: {},
     commands: {},

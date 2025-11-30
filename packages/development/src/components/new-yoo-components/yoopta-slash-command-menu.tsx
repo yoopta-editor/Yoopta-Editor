@@ -17,6 +17,7 @@ export const YooptaSlashCommandMenu = () => {
         ) : (
           actions.map((action) => {
             const Icon = ACTION_MENU_LIST_DEFAULT_ICONS_MAP[action.type];
+            console.log('YooptaSlashCommandMenu Icon', Icon);
 
             return (
               <SlashActionMenuList.Item

@@ -89,7 +89,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
 
   const blockTypes: ActionMenuItem[] = useMemo(
     () => mapActionMenuItems(editor),
-    [editor.plugins, editor.path],
+    [editor.path, editor.plugins],
   );
 
   const reset = useCallback(() => {
@@ -164,7 +164,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       setActions(filteredActions);
       setSearchText(searchText);
     },
-    [trigger, blockTypes, selectedAction, setSearchText, setSelectedIndex],
+    [trigger, blockTypes, selectedAction, setSearchText, setSelectedIndex, editor.plugins],
   );
 
   useEffect(() => {

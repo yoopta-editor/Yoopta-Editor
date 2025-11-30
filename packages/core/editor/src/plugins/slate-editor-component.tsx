@@ -67,15 +67,12 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const ELEMENTS_RENDER_MAP = useMemo(() => getPluginElementsRender(elements), [elements]);
   const MARKS_MAP = useMemo(() => getMappedMarks(marks), [marks]);
 
-  // console.log(`elements of block: ${editor.children[id].type}`, elements);
-
   const slate = useSlateEditor(id, editor, block, elements, withExtensions);
   const eventHandlers = useEventHandlers(events, editor, block, slate);
 
   const onChange = useCallback(
     (value) => {
       if (editor.readOnly) return;
-
       // @ts-expect-error - fixme
       if (window.scheduler) {
         // @ts-expect-error - fixme

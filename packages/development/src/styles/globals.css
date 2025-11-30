@@ -1,21 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
-body {
-  font-family: 'Montserrat', sans-serif;
-} */
 
 #next {
   width: 100%;
   height: 100%;
   position: relative;
 }
-
-/* 
-.yoopta-editor {
-  margin: 0 auto;
-} */
 
 #slack .yoopta-editor .yoopta-block-actions-plus {
   display: none;
@@ -113,12 +104,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-/* 
-.container {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 2rem;
-  padding-left: 2rem;
-} */

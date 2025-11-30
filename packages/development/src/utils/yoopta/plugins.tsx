@@ -22,6 +22,7 @@ import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 import { CodeGroupPlugin } from '@/components/plugins/card-group-plugin';
+import { StepsPlugin } from '@/components/plugins/steps-plugin';
 
 export const YOOPTA_PLUGINS = [
   Accordion.extend({
@@ -34,6 +35,7 @@ export const YOOPTA_PLUGINS = [
           Headings.HeadingTwo,
           Headings.HeadingThree,
           Lists.BulletedList,
+          Blockquote,
         ],
       },
     },
@@ -43,6 +45,7 @@ export const YOOPTA_PLUGINS = [
   Headings.HeadingTwo,
   Headings.HeadingThree,
   OrderDetailsActionPlugin,
+  Blockquote,
   SendEmailActionPlugin.extend({
     elements: {
       'email-text': {
@@ -51,14 +54,27 @@ export const YOOPTA_PLUGINS = [
           Headings.HeadingOne,
           Headings.HeadingTwo,
           Headings.HeadingThree,
+          Blockquote,
         ],
+      },
+    },
+    events: {
+      onBeforeCreate(editor) {
+        return editor.h('email-container');
       },
     },
   }),
   Lists.BulletedList,
   Lists.NumberedList,
-  Table,
+  Table.extend({
+    elements: {
+      'table-data-cell': {
+        allowedPlugins: [Headings.HeadingThree],
+      },
+    },
+  }),
   Link,
+  StepsPlugin,
   // CodeGroupPlugin,
   // Mention,
   // Divider.extend({

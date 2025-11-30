@@ -171,12 +171,15 @@ export function getAllowedPluginsFromElement(
 
   const blockPlugin = editor.plugins[block.type];
   const blockElements = blockPlugin?.elements;
+  console.log('getAllowedPluginsFromElement blockElements', blockElements);
   if (!blockElements) return null;
 
   // Find the element at the current selection
   const elementNode = getBlockElementNode(slate, {
     at: slate.selection.anchor.path,
   });
+
+  console.log('getAllowedPluginsFromElement elementNode', elementNode);
 
   if (!elementNode) return null;
 
@@ -187,6 +190,8 @@ export function getAllowedPluginsFromElement(
 
   const elementType = (element as SlateElement).type;
   const elementConfig = blockElements[elementType];
+
+  console.log('getAllowedPluginsFromElement elementConfig', elementConfig);
 
   if (!elementConfig?.allowedPlugins) return null;
 
