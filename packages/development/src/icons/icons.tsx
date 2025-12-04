@@ -17,6 +17,7 @@ import {
   MailIcon,
   Package2Icon,
   ListOrderedIcon,
+  PanelLeftIcon,
 } from 'lucide-react';
 
 export const ACTION_MENU_LIST_DEFAULT_ICONS_MAP: Record<string, any> = {
@@ -40,4 +41,5 @@ export const ACTION_MENU_LIST_DEFAULT_ICONS_MAP: Record<string, any> = {
   SendEmailAction: MailIcon,
   OrderDetailsAction: Package2Icon,
   Steps: ListOrderedIcon,
+  Tabs: PanelLeftIcon,
 };

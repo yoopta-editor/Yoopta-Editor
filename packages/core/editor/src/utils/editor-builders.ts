@@ -51,7 +51,7 @@ export function buildBlockSlateEditors(editor: YooEditor) {
 export function buildPlugins(
   plugins: Plugin<Record<string, SlateElement>>[],
 ): Record<string, Plugin<Record<string, SlateElement>>> {
-  const pluginsMap = {};
+  const pluginsMap: Record<string, Plugin<Record<string, SlateElement>>> = {};
   const inlineTopLevelPlugins: PluginElementsMap<string, any> = {};
 
   // First pass: collect inline elements and set asRoot for single-element plugins
@@ -96,7 +96,6 @@ export function buildPlugins(
       // Find elements with allowedPlugins
       Object.keys(plugin.elements).forEach((elementKey) => {
         const element = plugin.elements[elementKey];
-
         if (Array.isArray(element.allowedPlugins) && element.allowedPlugins.length > 0) {
           // For each allowed plugin, add its elements to the plugin's elements map
           element.allowedPlugins.forEach((allowedPluginType) => {
@@ -110,16 +109,20 @@ export function buildPlugins(
                 ) ?? Object.keys(allowedPlugin.elements)[0];
 
               if (rootElementType) {
-                // Add root element with render function and rootPlugin (if not already present)
+                const rootElement = allowedPlugin.elements[rootElementType];
+
+                // Add root element WITHOUT asRoot (it's now nested, not root)
                 if (!extendedElements[rootElementType]) {
+                  // Copy element without asRoot property
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const { asRoot, ...elementWithoutAsRoot } = rootElement;
                   extendedElements[rootElementType] = {
-                    ...allowedPlugin.elements[rootElementType],
+                    ...elementWithoutAsRoot,
                     rootPlugin: allowedPluginType,
                   };
                 }
 
                 // Add children elements with render functions and rootPlugin
-                const rootElement = allowedPlugin.elements[rootElementType];
                 if (rootElement?.children) {
                   rootElement.children.forEach((childType) => {
                     if (allowedPlugin.elements[childType] && !extendedElements[childType]) {
@@ -144,7 +147,8 @@ export function buildPlugins(
       pluginsMap[plugin.type] = { ...plugin, elements: finalElements };
     }
   });
-  console.log('editor-builders buildPlugins', pluginsMap);
+
+  console.log('editor-builders buildPlugins pluginsMap', pluginsMap);
 
   return pluginsMap;
 }

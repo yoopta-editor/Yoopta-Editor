@@ -15,6 +15,7 @@ import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-s
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
 import { FixedToolbar } from '@/components/FixedToolbar/FixedToolbar';
+import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 
 const YooptaUIPackageExample = () => {
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
@@ -24,14 +25,14 @@ const YooptaUIPackageExample = () => {
   }, []);
 
   const insertAccordion = () => {
-    const elements = editor.h('accordion-list', {
+    const elements = editor.y('accordion-list', {
       children: [
-        editor.h('accordion-list-item', {
+        editor.y('accordion-list-item', {
           props: { isExpanded: true },
           children: [
-            editor.h('accordion-list-item-heading'),
-            editor.h('accordion-list-item-content', {
-              children: [editor.h('blockquote')],
+            editor.y('accordion-list-item-heading'),
+            editor.y('accordion-list-item-content', {
+              children: [editor.y('callout', { props: { theme: 'info' } })],
             }),
           ],
         }),
@@ -43,18 +44,33 @@ const YooptaUIPackageExample = () => {
       at: 0,
       focus: true,
     });
-
-    console.log('insertAccordion editor.h elements', elements);
   };
 
   const insertSteps = () => {
-    const elements = editor.h('step-container', {
+    const elements = editor.y('step-container', {
       children: [
-        editor.h('step-list', {
+        editor.y('step-list', {
           children: [
-            editor.h('step-list-item', {
+            editor.y('step-list-item', {
               props: { isCompleted: false },
-              children: [editor.h('step-list-item-heading'), editor.h('step-list-item-content')],
+              children: [
+                editor.y('step-list-item-heading'),
+                editor.y('step-list-item-content', {
+                  children: [
+                    editor.y('callout', { props: { theme: 'success' } }),
+                    editor.y('blockquote'),
+                  ],
+                }),
+              ],
+            }),
+            editor.y('step-list-item', {
+              props: { isCompleted: true },
+              children: [
+                editor.y('step-list-item-heading'),
+                editor.y('step-list-item-content', {
+                  children: [editor.y('image')],
+                }),
+              ],
             }),
           ],
         }),
@@ -62,6 +78,18 @@ const YooptaUIPackageExample = () => {
     });
 
     editor.insertBlock('Steps', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
+  const insertCallout = () => {
+    const elements = editor.y('callout', {
+      props: { theme: 'success' },
+      children: [editor.y('image')],
+    });
+    editor.insertBlock('Callout', {
       elements,
       at: 0,
       focus: true,
@@ -97,6 +125,23 @@ const YooptaUIPackageExample = () => {
           className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600">
           Add Steps
         </button>
+        <button
+          onClick={insertCallout}
+          className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600">
+          Add Callout
+        </button>
+        <button
+          onClick={() => {
+            editor.toggleBlock('HeadingOne', {
+              at: 0,
+              scope: 'element',
+              focus: true,
+              preserveContent: true,
+            });
+          }}
+          className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
+          Toggle Block
+        </button>
       </div>
       <FixedToolbar editor={editor} />
     </YooptaEditor>
@@ -104,3 +149,33 @@ const YooptaUIPackageExample = () => {
 };
 
 export default YooptaUIPackageExample;
+
+/**
+ * -- block elements before --
+ *
+ * - accordion-list
+ *  - accordion-list-item
+ *    - accordion-list-item-heading
+ *    - accordion-list-item-content
+ *      - callout (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
+ *
+ * Trigger toggleBlock
+ *
+ * -- block elements after --
+ *
+ * - accordion-list
+ *  - accordion-list-item
+ *    - accordion-list-item-heading
+ *    - accordion-list-item-content
+ *      - callout (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
+ *      - heading-one (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
+ *
+ * But it should be:
+ * -- correct block elements --
+ *
+ * - accordion-list
+ *  - accordion-list-item
+ *    - accordion-list-item-heading
+ *    - accordion-list-item-content
+ *      - heading-one (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
+ */

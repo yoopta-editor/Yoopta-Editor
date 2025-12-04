@@ -8,22 +8,22 @@ export type InsertBlockOptions = {
   focus?: boolean;
   blockData?: Omit<Partial<YooptaBlockData>, 'type'>;
   /**
-   * Element structure created with editor.h()
+   * Element structure created with editor.y()
    * If provided, this will be used as the block's value
    *
    * @example
    * ```typescript
    * editor.insertBlock('Accordion', {
-   *   elements: editor.h('accordion-list', {
+   *   elements: editor.y('accordion-list', {
    *     children: [
-   *       editor.h('accordion-list-item', {
+   *       editor.y('accordion-list-item', {
    *         props: { isExpanded: false },
    *         children: [
-   *           editor.h('accordion-list-item-heading'),
-   *           editor.h('accordion-list-item-content', {
+   *           editor.y('accordion-list-item-heading'),
+   *           editor.y('accordion-list-item-content', {
    *             children: [
-   *               editor.h('paragraph'),
-   *               editor.h('heading-one')
+   *               editor.y('paragraph'),
+   *               editor.y('heading-one')
    *             ]
    *           })
    *         ]

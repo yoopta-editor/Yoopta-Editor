@@ -39,6 +39,10 @@ const StepContainer = ({ attributes, children, element, blockId }: PluginElement
     );
   };
 
+  // Get step items to check if there are any steps
+  const stepItems = Elements.getElementChildren(editor, blockId, { type: 'step-list' });
+  const hasSteps = stepItems && stepItems.length > 0;
+
   return (
     <div
       {...attributes}
@@ -47,20 +51,28 @@ const StepContainer = ({ attributes, children, element, blockId }: PluginElement
       data-step-container-id={element.id}>
       {children}
       <div
-        className="absolute z-20 flex transition-opacity duration-300 opacity-0 group-hover/steps-node:opacity-100"
+        className="absolute z-20 flex flex-col items-center transition-opacity duration-300 opacity-0 group-hover/steps-node:opacity-100"
         contentEditable={false}
         style={{
-          left: 0,
-          opacity: 1,
+          left: 2,
           bottom: '-20px',
         }}>
+        {hasSteps && (
+          <div
+            className="absolute w-0.5 bg-border"
+            style={{
+              bottom: '28px',
+              top: '-20px',
+            }}
+          />
+        )}
         <Button
           variant="ghost"
           size="icon"
           aria-label="Add more Step"
           onClick={handleAddStep}
           contentEditable={false}
-          className="h-7 w-7 rounded-md">
+          className="h-7 w-7 rounded-md border-border border-2 relative z-10">
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -138,7 +150,7 @@ const StepListItemHeading = ({ attributes, children }: PluginElementRenderProps)
     <h3
       {...attributes}
       data-component-part="step-title"
-      className="mb-2 text-base font-semibold leading-tight text-foreground">
+      className="mb-2 mt-2 text-base font-semibold leading-tight text-foreground">
       {children}
     </h3>
   );
@@ -149,19 +161,7 @@ const StepListItemContent = ({ attributes, children }: PluginElementRenderProps)
     <div
       {...attributes}
       data-component-part="step-content"
-      className="text-sm leading-relaxed text-muted-foreground
-        [&_p]:mb-2 [&_p:last-child]:mb-0 
-        [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-2
-        [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-2
-        [&_li]:mb-1 
-        [&_strong]:font-semibold [&_strong]:text-foreground
-        [&_em]:italic
-        [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs [&_code]:font-mono [&_code]:text-foreground
-        [&_pre]:bg-muted [&_pre]:p-3 [&_pre]:rounded-md [&_pre]:overflow-x-auto [&_pre]:my-2 [&_pre]:text-sm
-        [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-2 [&_h1]:mt-4 [&_h1]:text-foreground
-        [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-2 [&_h2]:mt-4 [&_h2]:text-foreground
-        [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-foreground
-        [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary/80">
+      className="text-sm leading-relaxed text-muted-foreground">
       {children}
     </div>
   );

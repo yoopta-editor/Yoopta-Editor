@@ -1,6 +1,7 @@
-import { describe, expect, it, beforeEach } from 'vitest';
-import type { YooEditor, SlateElement } from '../types';
-import { h, createJSXFactory } from './createElementStructure';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import type { SlateElement, YooEditor } from '../types';
+import { createJSXFactory, y } from './create-element-structure';
 import type { Plugin } from '../../plugins/types';
 
 describe('createElementStructure', () => {
@@ -50,7 +51,7 @@ describe('createElementStructure', () => {
 
   describe('basic functionality', () => {
     it('should create a simple element', () => {
-      const result = h(mockEditor as YooEditor, 'paragraph');
+      const result = y(mockEditor as YooEditor, 'paragraph');
 
       expect(result).toMatchObject({
         type: 'paragraph',
@@ -62,7 +63,7 @@ describe('createElementStructure', () => {
     });
 
     it('should create element with custom props', () => {
-      const result = h(mockEditor as YooEditor, 'paragraph', {
+      const result = y(mockEditor as YooEditor, 'paragraph', {
         props: { customProp: 'value' },
       });
 
@@ -73,7 +74,7 @@ describe('createElementStructure', () => {
     });
 
     it('should override default props with custom props', () => {
-      const result = h(mockEditor as YooEditor, 'heading-one', {
+      const result = y(mockEditor as YooEditor, 'heading-one', {
         props: { level: 2 },
       });
 
@@ -86,7 +87,7 @@ describe('createElementStructure', () => {
 
   describe('nested structures', () => {
     it('should create nested structure from config', () => {
-      const result = h(mockEditor as YooEditor, 'accordion-list');
+      const result = y(mockEditor as YooEditor, 'accordion-list');
 
       expect(result.type).toBe('accordion-list');
       expect(result.children).toHaveLength(1);
@@ -106,10 +107,10 @@ describe('createElementStructure', () => {
     });
 
     it('should create nested structure with custom children', () => {
-      const paragraphChild = h(mockEditor as YooEditor, 'paragraph');
-      const headingChild = h(mockEditor as YooEditor, 'heading-one');
+      const paragraphChild = y(mockEditor as YooEditor, 'paragraph');
+      const headingChild = y(mockEditor as YooEditor, 'heading-one');
 
-      const result = h(mockEditor as YooEditor, 'accordion-list-item-content', {
+      const result = y(mockEditor as YooEditor, 'accordion-list-item-content', {
         children: [paragraphChild, headingChild],
       });
 
@@ -120,16 +121,16 @@ describe('createElementStructure', () => {
     });
 
     it('should create complex nested structure', () => {
-      const result = h(mockEditor as YooEditor, 'accordion-list', {
+      const result = y(mockEditor as YooEditor, 'accordion-list', {
         children: [
-          h(mockEditor as YooEditor, 'accordion-list-item', {
+          y(mockEditor as YooEditor, 'accordion-list-item', {
             props: { isExpanded: false },
             children: [
-              h(mockEditor as YooEditor, 'accordion-list-item-heading'),
-              h(mockEditor as YooEditor, 'accordion-list-item-content', {
+              y(mockEditor as YooEditor, 'accordion-list-item-heading'),
+              y(mockEditor as YooEditor, 'accordion-list-item-content', {
                 children: [
-                  h(mockEditor as YooEditor, 'paragraph'),
-                  h(mockEditor as YooEditor, 'heading-one'),
+                  y(mockEditor as YooEditor, 'paragraph'),
+                  y(mockEditor as YooEditor, 'heading-one'),
                 ],
               }),
             ],
@@ -150,12 +151,12 @@ describe('createElementStructure', () => {
   describe('error handling', () => {
     it('should throw error for non-existent element type', () => {
       expect(() => {
-        h(mockEditor as YooEditor, 'non-existent-element');
+        y(mockEditor as YooEditor, 'non-existent-element');
       }).toThrow('Element type "non-existent-element" not found in any plugin');
     });
 
     it('should handle empty custom children array', () => {
-      const result = h(mockEditor as YooEditor, 'paragraph', {
+      const result = y(mockEditor as YooEditor, 'paragraph', {
         children: [],
       });
 
@@ -167,7 +168,7 @@ describe('createElementStructure', () => {
       (mockEditor as any).plugins.Accordion.elements['accordion-list-item-content'].allowedPlugins =
         ['Paragraph', 'HeadingOne'];
 
-      const result = h(mockEditor as YooEditor, 'accordion-list-item-content');
+      const result = y(mockEditor as YooEditor, 'accordion-list-item-content');
 
       expect(result.type).toBe('accordion-list-item-content');
       expect(result.children).toEqual([{ text: '' }]);
@@ -178,10 +179,10 @@ describe('createElementStructure', () => {
       (mockEditor as any).plugins.Accordion.elements['accordion-list-item-content'].allowedPlugins =
         ['Paragraph', 'HeadingOne'];
 
-      const paragraph = h(mockEditor as YooEditor, 'paragraph');
-      const heading = h(mockEditor as YooEditor, 'heading-one');
+      const paragraph = y(mockEditor as YooEditor, 'paragraph');
+      const heading = y(mockEditor as YooEditor, 'heading-one');
 
-      const result = h(mockEditor as YooEditor, 'accordion-list-item-content', {
+      const result = y(mockEditor as YooEditor, 'accordion-list-item-content', {
         children: [paragraph, heading],
       });
 
@@ -194,7 +195,7 @@ describe('createElementStructure', () => {
 
   describe('props merging', () => {
     it('should merge default props with custom props', () => {
-      const result = h(mockEditor as YooEditor, 'accordion-list-item', {
+      const result = y(mockEditor as YooEditor, 'accordion-list-item', {
         props: { customProp: 'test' },
       });
 
@@ -206,7 +207,7 @@ describe('createElementStructure', () => {
     });
 
     it('should preserve all default props when no custom props provided', () => {
-      const result = h(mockEditor as YooEditor, 'heading-one');
+      const result = y(mockEditor as YooEditor, 'heading-one');
 
       expect(result.props).toEqual({
         nodeType: 'block',
@@ -218,7 +219,7 @@ describe('createElementStructure', () => {
 
 describe('createJSXFactory', () => {
   let mockEditor: Partial<YooEditor>;
-  let h: ReturnType<typeof createJSXFactory>;
+  let y: ReturnType<typeof createJSXFactory>;
 
   beforeEach(() => {
     mockEditor = {
@@ -261,12 +262,12 @@ describe('createJSXFactory', () => {
       },
     } as Partial<YooEditor>;
 
-    h = createJSXFactory(mockEditor as YooEditor);
+    y = createJSXFactory(mockEditor as YooEditor);
   });
 
   describe('JSX compatibility', () => {
     it('should work with JSX-like function calls', () => {
-      const result = h('paragraph', null);
+      const result = y('paragraph', null);
 
       expect(result).toMatchObject({
         type: 'paragraph',
@@ -276,7 +277,7 @@ describe('createJSXFactory', () => {
     });
 
     it('should handle JSX props', () => {
-      const result = h('accordion-list-item', { isExpanded: false });
+      const result = y('accordion-list-item', { isExpanded: false });
 
       expect(result.props).toMatchObject({
         nodeType: 'block',
@@ -285,9 +286,9 @@ describe('createJSXFactory', () => {
     });
 
     it('should handle JSX children', () => {
-      const child1 = h('accordion-list-item-heading', null);
-      const child2 = h('accordion-list-item-content', null);
-      const result = h('accordion-list-item', null, child1, child2);
+      const child1 = y('accordion-list-item-heading', null);
+      const child2 = y('accordion-list-item-content', null);
+      const result = y('accordion-list-item', null, child1, child2);
 
       expect(result.children).toHaveLength(2);
       expect((result.children[0] as SlateElement).type).toBe('accordion-list-item-heading');
@@ -295,23 +296,23 @@ describe('createJSXFactory', () => {
     });
 
     it('should filter out null/undefined children', () => {
-      const child1 = h('paragraph', null);
-      const result = h('accordion-list-item-content', null, child1, null, undefined);
+      const child1 = y('paragraph', null);
+      const result = y('accordion-list-item-content', null, child1, null, undefined);
 
       expect(result.children).toHaveLength(1);
       expect((result.children[0] as SlateElement).type).toBe('paragraph');
     });
 
     it('should flatten nested children arrays', () => {
-      const child1 = h('paragraph', null);
-      const child2 = h('heading-one', null);
-      const result = h('accordion-list-item-content', null, [child1, child2]);
+      const child1 = y('paragraph', null);
+      const child2 = y('heading-one', null);
+      const result = y('accordion-list-item-content', null, [child1, child2]);
 
       expect(result.children).toHaveLength(2);
     });
 
     it('should ignore React-specific props (key, ref)', () => {
-      const result = h('paragraph', { key: 'test-key', ref: () => {}, customProp: 'value' });
+      const result = y('paragraph', { key: 'test-key', ref: () => {}, customProp: 'value' });
 
       expect(result.props).toEqual({
         nodeType: 'block',
@@ -322,7 +323,7 @@ describe('createJSXFactory', () => {
     });
 
     it('should handle empty props', () => {
-      const result = h('paragraph', {});
+      const result = y('paragraph', {});
 
       expect(result.props).toEqual({
         nodeType: 'block',
@@ -332,14 +333,14 @@ describe('createJSXFactory', () => {
 
   describe('complex JSX structures', () => {
     it('should create nested structure via JSX function calls', () => {
-      const result = h(
+      const result = y(
         'accordion-list',
         null,
-        h(
+        y(
           'accordion-list-item',
           { isExpanded: false },
-          h('accordion-list-item-heading', null),
-          h('accordion-list-item-content', null, h('paragraph', null), h('heading-one', null)),
+          y('accordion-list-item-heading', null),
+          y('accordion-list-item-content', null, y('paragraph', null), y('heading-one', null)),
         ),
       );
 

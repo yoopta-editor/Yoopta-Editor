@@ -9,7 +9,7 @@ import { getParentElementPath } from './getParentElementPath';
 import { insertElementText } from './insertElementText';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
-import { createJSXFactory } from './createElementStructure';
+import { createJSXFactory } from './create-element-structure';
 
 export const Elements = {
   createElement,

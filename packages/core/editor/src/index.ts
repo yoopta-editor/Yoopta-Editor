@@ -65,7 +65,7 @@ export {
   PluginOptions,
 } from './plugins/types';
 export type { ExtendPlugin, ExtendPluginElementConfig } from './plugins/create-yoopta-plugin';
-export type { ElementStructureOptions } from './editor/elements/createElementStructure';
+export type { ElementStructureOptions } from './editor/elements/create-element-structure';
 
 export { Elements } from './editor/elements';
 export { Blocks } from './editor/blocks';

@@ -23,6 +23,18 @@ function findElementConfig(
   return null;
 }
 
+// <y.element type="step-container" render={StepContainer}> [0]
+//  <y.element type="step-list" render={StepList}> [0, 0]
+//   <y.element type="step-list-item" render={StepListItem} props={{ isCompleted: false }}> [0, 0, 0]
+//     <y.element type="step-list-item-heading" render={StepListItemHeading} /> [0, 0, 0, 0]
+//     <y.element type="step-list-item-content" render={StepListItemContent}> [0, 0, 0, 1]
+//       <y.text>Hello</y.text> [0, 0, 0, 1, 0]
+//       <y.text.mark type="bold">World</y.text.mark> [0, 0, 0, 1, 1]
+//     </y.element>
+//   </y.element>
+//  </y.element>
+// </y.element>
+
 /**
  * Creates a SlateElement structure for use in insertBlock or other operations
  *
@@ -33,26 +45,26 @@ function findElementConfig(
  * @example
  * ```typescript
  * // Simple element
- * editor.h('paragraph')
+ * editor.y('paragraph')
  *
  * // Element with custom props
- * editor.h('accordion-list-item', { props: { isExpanded: false } })
+ * editor.y('accordion-list-item', { props: { isExpanded: false } })
  *
  * // Nested structure
- * editor.h('accordion-list', {
+ * editor.y('accordion-list', {
  *   children: [
- *     editor.h('accordion-list-item', {
+ *     editor.y('accordion-list-item', {
  *       props: { isExpanded: false },
  *       children: [
- *         editor.h('accordion-list-item-heading'),
- *         editor.h('accordion-list-item-content')
+ *         editor.y('accordion-list-item-heading'),
+ *         editor.y('accordion-list-item-content')
  *       ]
  *     })
  *   ]
  * })
  * ```
  */
-export function h(
+export function y(
   editor: YooEditor,
   type: string,
   options: ElementStructureOptions = {},
@@ -88,7 +100,7 @@ export function h(
       children = [{ text: '' }];
     } else {
       // Build standard children from element config
-      children = elementConfig.children.map((childType) => h(editor, childType, {}));
+      children = elementConfig.children.map((childType) => y(editor, childType, {}));
     }
   } else {
     // Leaf element - add empty text node
@@ -111,10 +123,10 @@ export function h(
  * ```typescript
  * import { createJSXFactory } from '@yoopta/editor';
  *
- * const h = createJSXFactory(editor);
+ * const y = createJSXFactory(editor);
  *
  * // Now you can use JSX:
- * // @jsx h
+ * // @jsx y
  * const structure = (
  *   <accordion-list>
  *     <accordion-list-item props={{ isExpanded: false }}>
@@ -150,7 +162,7 @@ export function createJSXFactory(editor: YooEditor) {
         (child) => child !== null && typeof child === 'object' && 'type' in child,
       ) as SlateElement[];
 
-    return h(editor, type, {
+    return y(editor, type, {
       props: Object.keys(customProps).length > 0 ? customProps : undefined,
       children: validChildren.length > 0 ? validChildren : undefined,
     });

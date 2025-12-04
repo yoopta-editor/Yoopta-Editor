@@ -15,10 +15,9 @@ export type ExtendPluginRender<TKeys extends string> = {
 type ExtractProps<T> = T extends SlateElement<string, infer P> ? P : never;
 
 export type ExtendPluginElementConfig = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  allowedPlugins?: YooptaPlugin<any, any>[];
   render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: Record<string, unknown>;
+  allowedPlugins?: YooptaPlugin<any, any>[];
 };
 
 export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOptions> = {
@@ -32,6 +31,10 @@ export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOpti
     ) => ExtractProps<TElementMap[K]>;
   };
   events?: Partial<PluginEvents>;
+  // Plugin-level allowedPlugins: applies to ALL leaf elements
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  allowedPlugins?: YooptaPlugin<any, any>[];
+  // Element-level configuration (for fine-grained control)
   elements?: {
     [K in keyof TElementMap]?: ExtendPluginElementConfig;
   };
@@ -81,7 +84,14 @@ export class YooptaPlugin<
 
   extend(extendPlugin: ExtendPlugin<TElementMap, TOptions>): YooptaPlugin<TElementMap, TOptions> {
     // renders and elementProps are legacy
-    const { renders, options, elementProps, events, elements: extendElements } = extendPlugin;
+    const {
+      renders,
+      options,
+      elementProps,
+      events,
+      allowedPlugins,
+      elements: extendElements,
+    } = extendPlugin;
 
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
@@ -123,11 +133,28 @@ export class YooptaPlugin<
       });
     }
 
+    // Handle plugin-level allowedPlugins: apply to ALL leaf elements
+    if (allowedPlugins) {
+      const allowedPluginTypes = allowedPlugins.map((plugin) => plugin.getPlugin.type);
+
+      Object.keys(elements).forEach((elementType) => {
+        const element = elements[elementType];
+
+        // Apply to leaf elements only (no children or empty children)
+        const isLeaf = !element.children || element.children.length === 0;
+
+        if (isLeaf) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (element as any).allowedPlugins = allowedPluginTypes;
+        }
+      });
+    }
+
     // Handle elements extension
     if (extendElements) {
       Object.keys(extendElements).forEach((elementType) => {
         const element = elements[elementType];
-        const extendConfig = extendElements[elementType];
+        const extendElementConfig = extendElements[elementType];
 
         if (!element) {
           if (process.env.NODE_ENV !== 'production') {
@@ -139,10 +166,10 @@ export class YooptaPlugin<
           return;
         }
 
-        if (!extendConfig) return;
+        if (!extendElementConfig) return;
 
         // Handle allowedPlugins
-        if (extendConfig.allowedPlugins) {
+        if (extendElementConfig.allowedPlugins) {
           // Validate: element must be a leaf (no children or only text nodes)
           if (element.children && element.children.length > 0) {
             throw new Error(
@@ -153,7 +180,7 @@ export class YooptaPlugin<
           }
 
           // Convert plugin instances to plugin types
-          const allowedPluginTypes = extendConfig.allowedPlugins.map(
+          const allowedPluginTypes = extendElementConfig.allowedPlugins.map(
             (plugin) => plugin.getPlugin.type,
           );
 
@@ -162,8 +189,8 @@ export class YooptaPlugin<
         }
 
         // Handle custom render
-        if (extendConfig.render) {
-          const customRenderFn = extendConfig.render;
+        if (extendElementConfig.render) {
+          const customRenderFn = extendElementConfig.render;
           const elementRender = element.render;
 
           if (typeof elementRender === 'function') {
@@ -172,10 +199,10 @@ export class YooptaPlugin<
         }
 
         // Handle props override
-        if (extendConfig.props) {
+        if (extendElementConfig.props) {
           element.props = {
             ...element.props,
-            ...extendConfig.props,
+            ...extendElementConfig.props,
           };
         }
       });

@@ -40,7 +40,7 @@ const CalloutRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
       <div className="yoopta-callout-icon">
         <Icon />
       </div>
-      {!isReadOnly && <CalloutBlockOptions block={block} editor={editor} props={element.props} />}
+      {/* {!isReadOnly && <CalloutBlockOptions block={block} editor={editor} props={element.props} />} */}
       {children}
     </div>
   );

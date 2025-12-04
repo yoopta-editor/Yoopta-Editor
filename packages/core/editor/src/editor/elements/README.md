@@ -1,6 +1,6 @@
 # Element Structure Builder API
 
-Создавайте сложные структуры блоков с помощью `editor.h()` или JSX.
+Создавайте сложные структуры блоков с помощью `editor.y()` или JSX.
 
 ## Быстрый старт
 
@@ -9,13 +9,13 @@
 ```typescript
 // Создание простой структуры
 editor.insertBlock('Accordion', {
-  elements: editor.h('accordion-list', {
+  elements: editor.y('accordion-list', {
     children: [
-      editor.h('accordion-list-item', {
+      editor.y('accordion-list-item', {
         props: { isExpanded: false },
         children: [
-          editor.h('accordion-list-item-heading'),
-          editor.h('accordion-list-item-content'),
+          editor.y('accordion-list-item-heading'),
+          editor.y('accordion-list-item-content'),
         ],
       }),
     ],
@@ -28,14 +28,14 @@ editor.insertBlock('Accordion', {
 ```typescript
 // Вставка элементов из allowedPlugins внутрь контейнера
 editor.insertBlock('Accordion', {
-  elements: editor.h('accordion-list', {
+  elements: editor.y('accordion-list', {
     children: [
-      editor.h('accordion-list-item', {
+      editor.y('accordion-list-item', {
         children: [
-          editor.h('accordion-list-item-heading'),
-          editor.h('accordion-list-item-content', {
+          editor.y('accordion-list-item-heading'),
+          editor.y('accordion-list-item-content', {
             // paragraph и heading-one из allowedPlugins
-            children: [editor.h('paragraph'), editor.h('heading-one')],
+            children: [editor.y('paragraph'), editor.y('heading-one')],
           }),
         ],
       }),
@@ -69,7 +69,7 @@ editor.insertBlock('Accordion', { elements: structure });
 
 ## API Reference
 
-### `editor.h(type, options?)`
+### `editor.y(type, options?)`
 
 Создает структуру Slate элемента.
 

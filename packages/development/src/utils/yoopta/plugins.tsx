@@ -23,22 +23,20 @@ import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 import { CodeGroupPlugin } from '@/components/plugins/card-group-plugin';
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
+import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
 export const YOOPTA_PLUGINS = [
   Accordion.extend({
-    elements: {
-      'accordion-list-item-content': {
-        // list of blocks which can be created inside this element
-        allowedPlugins: [
-          Paragraph,
-          Headings.HeadingOne,
-          Headings.HeadingTwo,
-          Headings.HeadingThree,
-          Lists.BulletedList,
-          Blockquote,
-        ],
-      },
-    },
+    // Plugin-level: applies to ALL leaf elements (heading + content)
+    allowedPlugins: [
+      Paragraph,
+      Headings.HeadingOne,
+      Headings.HeadingTwo,
+      Headings.HeadingThree,
+      Lists.BulletedList,
+      Blockquote,
+      Callout,
+    ],
   }),
   Paragraph,
   Headings.HeadingOne,
@@ -47,34 +45,52 @@ export const YOOPTA_PLUGINS = [
   OrderDetailsActionPlugin,
   Blockquote,
   SendEmailActionPlugin.extend({
-    elements: {
-      'email-text': {
-        allowedPlugins: [
-          Paragraph,
-          Headings.HeadingOne,
-          Headings.HeadingTwo,
-          Headings.HeadingThree,
-          Blockquote,
-        ],
-      },
-    },
+    allowedPlugins: [
+      Paragraph,
+      Headings.HeadingOne,
+      Headings.HeadingTwo,
+      Headings.HeadingThree,
+      Blockquote,
+    ],
     events: {
       onBeforeCreate(editor) {
-        return editor.h('email-container');
+        return editor.y('email-container');
       },
     },
   }),
   Lists.BulletedList,
   Lists.NumberedList,
+  Lists.TodoList,
   Table.extend({
-    elements: {
-      'table-data-cell': {
-        allowedPlugins: [Headings.HeadingThree],
-      },
-    },
+    allowedPlugins: [Headings.HeadingThree],
   }),
   Link,
-  StepsPlugin,
+  StepsPlugin.extend({
+    allowedPlugins: [
+      Paragraph,
+      Headings.HeadingOne,
+      Headings.HeadingTwo,
+      Headings.HeadingThree,
+      Blockquote,
+      Callout,
+      Image,
+    ],
+  }),
+  TabsPlugin,
+  Callout.extend({
+    allowedPlugins: [
+      Paragraph,
+      Headings.HeadingOne,
+      Headings.HeadingTwo,
+      Headings.HeadingThree,
+      Blockquote,
+      Lists.BulletedList,
+      Lists.NumberedList,
+      Lists.TodoList,
+      Table,
+      Image,
+    ],
+  }),
   // CodeGroupPlugin,
   // Mention,
   // Divider.extend({

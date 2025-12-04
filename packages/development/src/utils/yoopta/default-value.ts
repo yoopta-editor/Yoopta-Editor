@@ -1,65 +1,98 @@
 import { YooptaContentValue } from '@yoopta/editor';
 
 export const DEFAULT_VALUE = {
-  'ccf07889-23a3-44f3-9b9d-2270b149fb26': {
-    id: 'ccf07889-23a3-44f3-9b9d-2270b149fb26',
-    type: 'Accordion',
-    meta: {
-      depth: 0,
-      order: 0,
-    },
-    value: [
-      {
-        id: '28c6ec04-3d86-4d68-b0a9-2e9835d2d852',
-        type: 'accordion-list',
-        props: { nodeType: 'block' },
-        children: [
-          {
-            id: '3e3d5c8e-be39-4798-aeb7-57cc00c228dc',
-            type: 'accordion-list-item',
-            children: [
-              {
-                id: '6ada1383-74b3-4aef-b80d-6133b47fcb4c',
-                type: 'accordion-list-item-heading',
-                children: [
-                  {
-                    text: '',
-                  },
-                ],
-                props: { nodeType: 'block' },
-              },
-              {
-                id: '3b271932-f126-48fd-acd6-5efc8a38e625',
-                type: 'accordion-list-item-content',
-                children: [
-                  {
-                    id: '52badbce-e743-4cfa-a860-5f27b9ccbc56',
-                    type: 'bulleted-list',
-                    props: { nodeType: 'block' },
-                    children: [
-                      {
-                        text: 'Bullet list item inside `accordion-list-item-content`',
-                      },
-                    ],
-                  },
-                  {
-                    id: '52badbce-e743-4cfa-a860-5f27b9ccbc56',
-                    type: 'heading-three',
-                    props: { nodeType: 'block' },
-                    children: [
-                      {
-                        text: 'Heading three item inside `accordion-list-item-content`',
-                      },
-                    ],
-                  },
-                ],
-                props: { nodeType: 'block' },
-              },
-            ],
-            props: { nodeType: 'block', isExpanded: true },
-          },
-        ],
-      },
-    ],
+  id: 'c66758a8-50eb-435c-a505-7d9ee5bb4c66',
+  type: 'Steps',
+  meta: {
+    depth: 0,
+    order: 0,
   },
+  value: [
+    {
+      id: '8593785d-e3e2-4f9d-80b5-399de7d017dd',
+      type: 'step-container',
+      props: {
+        nodeType: 'block',
+      },
+      children: [
+        {
+          id: 'e267838d-ff4f-4e21-bdcb-b8c5f19895f9',
+          type: 'step-list',
+          children: [
+            {
+              id: '91c3de26-212d-4783-a3fc-2cd813dd00c5',
+              type: 'step-list-item',
+              children: [
+                {
+                  id: 'dd59ac85-57b7-42ef-8e47-a2601a3323b7',
+                  type: 'step-list-item-heading',
+                  children: [
+                    {
+                      text: 'Step 1',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+                {
+                  id: '5969435f-fe21-4717-8143-4e5dd1eb8bee',
+                  type: 'step-list-item-content',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+              ],
+              props: {
+                nodeType: 'block',
+                isCompleted: false,
+              },
+            },
+            {
+              id: 'ee380e50-4371-4190-b298-4270d6bdc48d',
+              type: 'step-list-item',
+              children: [
+                {
+                  id: '4fcf037a-1b37-49e4-8f1d-ef907c018275',
+                  type: 'step-list-item-heading',
+                  children: [
+                    {
+                      text: 'Step 2',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+                {
+                  id: '62ecb774-a03b-4aa1-ab8a-2ded86f17f5d',
+                  type: 'step-list-item-content',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+              ],
+              props: {
+                nodeType: 'block',
+                isCompleted: false,
+              },
+            },
+          ],
+          props: {
+            nodeType: 'block',
+          },
+        },
+      ],
+    },
+  ],
 } as unknown as YooptaContentValue;

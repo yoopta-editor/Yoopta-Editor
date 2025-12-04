@@ -1,0 +1,458 @@
+import { Editor, Transforms } from 'slate';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import {
+  buildBlockElementsStructure,
+  getAllowedPluginsFromElement,
+} from '../../utils/block-elements';
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import { y } from '../elements/create-element-structure';
+import type { SlateEditor, SlateElement, YooEditor } from '../types';
+import { toggleBlock } from './toggleBlock';
+
+vi.mock('../../utils/block-elements', () => ({
+  buildBlockElementsStructure: vi.fn(),
+  getAllowedPluginsFromElement: vi.fn(),
+}));
+
+vi.mock('../../utils/findSlateBySelectionPath', () => ({
+  findSlateBySelectionPath: vi.fn(),
+}));
+
+vi.mock('../../utils/generateId', () => ({
+  generateId: vi.fn(() => 'new-block-id'),
+}));
+
+vi.mock('../elements/create-element-structure', () => ({
+  y: vi.fn(),
+}));
+
+vi.mock('slate', () => ({
+  Editor: {
+    isEditor: vi.fn(),
+    isInline: vi.fn(),
+    string: vi.fn(),
+    above: vi.fn(),
+    start: vi.fn(),
+    end: vi.fn(),
+  },
+  Element: {
+    isElement: vi.fn(),
+  },
+  Text: {
+    isText: vi.fn(),
+  },
+  Transforms: {
+    select: vi.fn(),
+    delete: vi.fn(),
+    insertNodes: vi.fn(),
+    removeNodes: vi.fn(),
+  },
+}));
+
+describe('toggleBlock', () => {
+  let editor: Partial<YooEditor>;
+  let mockSlate: Partial<SlateEditor>;
+  let mockParagraphStructure: SlateElement;
+  let mockHeadingStructure: SlateElement;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockParagraphStructure = {
+      id: 'paragraph-id',
+      type: 'paragraph',
+      children: [{ text: '' }],
+    };
+
+    mockHeadingStructure = {
+      id: 'heading-id',
+      type: 'heading-one',
+      children: [{ text: '' }],
+    };
+
+    mockSlate = {
+      selection: {
+        anchor: { path: [0, 0], offset: 0 },
+        focus: { path: [0, 0], offset: 0 },
+      },
+      children: [
+        {
+          id: 'current-element',
+          type: 'paragraph',
+          children: [{ text: 'Hello world' }],
+        } as SlateElement,
+      ],
+    };
+
+    editor = {
+      path: { current: 0 },
+      plugins: {
+        Paragraph: {
+          type: 'Paragraph',
+          elements: {
+            paragraph: {
+              asRoot: true,
+              render: vi.fn(),
+              props: {},
+            },
+          },
+          events: {},
+        },
+        HeadingOne: {
+          type: 'HeadingOne',
+          elements: {
+            'heading-one': {
+              asRoot: true,
+              render: vi.fn(),
+              props: {},
+            },
+          },
+          events: {},
+        },
+      },
+      children: {
+        'block-id': {
+          id: 'block-id',
+          type: 'Paragraph',
+          value: [mockParagraphStructure],
+          meta: {
+            order: 0,
+            depth: 0,
+          },
+        },
+      },
+      applyTransforms: vi.fn(),
+      focusBlock: vi.fn(),
+    };
+
+    (buildBlockElementsStructure as Mock).mockImplementation((_editor, type) => {
+      if (type === 'Paragraph') return mockParagraphStructure;
+      if (type === 'HeadingOne') return mockHeadingStructure;
+      return mockParagraphStructure;
+    });
+
+    (findSlateBySelectionPath as Mock).mockReturnValue(mockSlate);
+    (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
+    (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+    (Editor.isInline as unknown as Mock).mockReturnValue(false);
+  });
+
+  describe('Block scope', () => {
+    it('should toggle block from Paragraph to HeadingOne', () => {
+      const blockId = toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        preserveContent: false,
+      });
+
+      expect(blockId).toBe('new-block-id');
+      expect(editor.applyTransforms).toHaveBeenCalledWith([
+        {
+          type: 'toggle_block',
+          prevProperties: {
+            sourceBlock: editor.children?.['block-id'],
+            sourceSlateValue: mockSlate.children,
+          },
+          properties: {
+            toggledBlock: expect.objectContaining({
+              id: 'new-block-id',
+              type: 'HeadingOne',
+            }),
+            toggledSlateValue: expect.any(Array),
+          },
+        },
+      ]);
+    });
+
+    it('should preserve content when preserveContent is true', () => {
+      (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+      (Editor.isInline as unknown as Mock).mockReturnValue(false);
+
+      const blockId = toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        preserveContent: true,
+      });
+
+      expect(blockId).toBe('new-block-id');
+      expect(editor.applyTransforms).toHaveBeenCalled();
+
+      const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
+      const toggledBlock = operations[0].properties.toggledBlock;
+
+      // Verify structure was created
+      expect(toggledBlock.type).toBe('HeadingOne');
+    });
+
+    it('should toggle back to Paragraph when toggling to same type', () => {
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'block',
+      });
+
+      const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
+      const toggledBlock = operations[0].properties.toggledBlock;
+
+      expect(toggledBlock.type).toBe('Paragraph');
+    });
+
+    it('should focus block when focus option is true', () => {
+      const blockId = toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        focus: true,
+      });
+
+      expect(editor.focusBlock).toHaveBeenCalledWith(blockId);
+    });
+
+    it('should use custom elements structure when provided', () => {
+      const customStructure: SlateElement = {
+        id: 'custom-id',
+        type: 'heading-one',
+        children: [{ text: 'Custom' }],
+      };
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        elements: customStructure,
+      });
+
+      const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
+      const toggledBlock = operations[0].properties.toggledBlock;
+
+      expect(toggledBlock.value[0]).toEqual(customStructure);
+    });
+
+    it('should call onBeforeCreate event if available', () => {
+      const onBeforeCreate = vi.fn().mockReturnValue(mockHeadingStructure);
+      editor.plugins!.HeadingOne.events = { onBeforeCreate };
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+      });
+
+      expect(onBeforeCreate).toHaveBeenCalledWith(editor);
+    });
+
+    it('should throw error if block not found', () => {
+      if (editor.children) {
+        editor.children = {};
+      }
+
+      expect(() => {
+        toggleBlock(editor as YooEditor, 'HeadingOne', {
+          scope: 'block',
+        });
+      }).toThrow('Block not found at current selection');
+    });
+
+    it('should throw error if slate not found', () => {
+      (findSlateBySelectionPath as Mock).mockReturnValue(null);
+
+      expect(() => {
+        toggleBlock(editor as YooEditor, 'HeadingOne', {
+          scope: 'block',
+        });
+      }).toThrow('Slate not found for block in position 0');
+    });
+  });
+
+  describe('Element scope', () => {
+    beforeEach(() => {
+      // Setup for element scope
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
+      (y as Mock).mockReturnValue(mockParagraphStructure);
+
+      (Editor.above as Mock).mockReturnValue([
+        {
+          id: 'current-element',
+          type: 'callout',
+          children: [{ text: 'Hello' }],
+        },
+        [0],
+      ]);
+
+      (Editor.start as Mock).mockReturnValue({ path: [0, 0], offset: 0 });
+      (Editor.end as Mock).mockReturnValue({ path: [0, 0], offset: 5 });
+    });
+
+    it('should insert element in leaf with allowedPlugins', () => {
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'element',
+        preserveContent: false,
+      });
+
+      expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
+      expect(Transforms.insertNodes).toHaveBeenCalledWith(
+        mockSlate,
+        mockParagraphStructure,
+        expect.objectContaining({
+          at: [0],
+          select: true,
+        }),
+      );
+    });
+
+    it('should preserve content when preserveContent is true in element scope', () => {
+      (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+      (Editor.isInline as unknown as Mock).mockReturnValue(false);
+
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'element',
+        preserveContent: true,
+      });
+
+      // Should remove old element and insert new one with content
+      expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
+      expect(Transforms.insertNodes).toHaveBeenCalled();
+    });
+
+    it('should use custom elements structure in element scope', () => {
+      const customStructure: SlateElement = {
+        id: 'custom-id',
+        type: 'paragraph',
+        children: [{ text: 'Custom' }],
+      };
+
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'element',
+        elements: customStructure,
+      });
+
+      expect(Transforms.insertNodes).toHaveBeenCalledWith(
+        mockSlate,
+        customStructure,
+        expect.any(Object),
+      );
+    });
+
+    it('should throw error if no selection in element scope', () => {
+      mockSlate.selection = null;
+
+      expect(() => {
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+        });
+      }).toThrow('No selection found');
+    });
+
+    it('should throw error if plugin not found in element scope', () => {
+      expect(() => {
+        toggleBlock(editor as YooEditor, 'NonExistentPlugin', {
+          scope: 'element',
+        });
+      }).toThrow('Plugin "NonExistentPlugin" not found');
+    });
+  });
+
+  describe('Auto scope', () => {
+    it('should automatically detect block scope when no allowedPlugins', () => {
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'auto',
+      });
+
+      expect(editor.applyTransforms).toHaveBeenCalled();
+      const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
+      expect(operations[0].type).toBe('toggle_block');
+    });
+
+    it('should automatically detect element scope when allowedPlugins present', () => {
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph']);
+      (y as Mock).mockReturnValue(mockParagraphStructure);
+
+      (Editor.above as Mock).mockReturnValue([
+        {
+          id: 'current-element',
+          type: 'callout',
+          children: [{ text: '' }],
+        },
+        [0],
+      ]);
+
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'auto',
+      });
+
+      expect(Transforms.insertNodes).toHaveBeenCalled();
+    });
+
+    it('should default to auto scope when scope not specified', () => {
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
+
+      toggleBlock(editor as YooEditor, 'HeadingOne');
+
+      expect(editor.applyTransforms).toHaveBeenCalled();
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('should handle block at specific position', () => {
+      if (editor.children) {
+        editor.children = {
+          'block-0': {
+            id: 'block-0',
+            type: 'Paragraph',
+            value: [mockParagraphStructure],
+            meta: { order: 0, depth: 0 },
+          },
+          'block-1': {
+            id: 'block-1',
+            type: 'Paragraph',
+            value: [mockParagraphStructure],
+            meta: { order: 1, depth: 0 },
+          },
+        };
+      }
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        at: 1,
+        scope: 'block',
+      });
+
+      expect(findSlateBySelectionPath).toHaveBeenCalledWith(editor, { at: 1 });
+    });
+
+    it('should handle empty text nodes', () => {
+      mockSlate.children = [
+        {
+          id: 'empty-element',
+          type: 'paragraph',
+          children: [{ text: '' }],
+        } as SlateElement,
+      ];
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        preserveContent: true,
+      });
+
+      expect(editor.applyTransforms).toHaveBeenCalled();
+    });
+
+    it('should handle deeply nested text nodes', () => {
+      mockSlate.children = [
+        {
+          id: 'nested',
+          type: 'blockquote',
+          children: [
+            {
+              id: 'inner',
+              type: 'paragraph',
+              children: [{ text: 'Nested text' }],
+            } as SlateElement,
+          ],
+        } as SlateElement,
+      ];
+
+      (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+      (Editor.isInline as unknown as Mock).mockReturnValue(false);
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'block',
+        preserveContent: true,
+      });
+
+      expect(editor.applyTransforms).toHaveBeenCalled();
+    });
+  });
+});
