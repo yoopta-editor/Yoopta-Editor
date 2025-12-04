@@ -337,7 +337,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
           Transforms.delete(slate);
         }
 
-        editor.toggleBlock(toType, { scope: 'element', preserveContent: false });
+        editor.toggleBlock(toType, { scope: 'auto', focus: true, preserveContent: false });
         return onClose();
       }
     };
@@ -388,7 +388,7 @@ export const useSlashActionMenu = ({ trigger = TRIGGER }: SlashActionMenuProps =
       onClick: (e: MouseEvent) => {
         e.stopPropagation();
 
-        editor.toggleBlock(type, { scope: 'element', preserveContent: false });
+        editor.toggleBlock(type, { scope: 'auto', focus: true, preserveContent: false });
         onClose();
       },
       onMouseDown: (e: MouseEvent) => {

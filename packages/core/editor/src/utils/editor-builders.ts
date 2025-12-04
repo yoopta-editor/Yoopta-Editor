@@ -98,44 +98,47 @@ export function buildPlugins(
         const element = plugin.elements[elementKey];
         if (Array.isArray(element.allowedPlugins) && element.allowedPlugins.length > 0) {
           // For each allowed plugin, add its elements to the plugin's elements map
-          element.allowedPlugins.forEach((allowedPluginType) => {
-            const allowedPlugin = plugins.find((p) => p.type === allowedPluginType);
+          // Filter out self-references to prevent circular dependencies
+          element.allowedPlugins
+            .filter((allowedPluginType) => allowedPluginType !== pluginType)
+            .forEach((allowedPluginType) => {
+              const allowedPlugin = plugins.find((p) => p.type === allowedPluginType);
 
-            if (allowedPlugin?.elements) {
-              // Find root element of the allowed plugin
-              const rootElementType =
-                Object.keys(allowedPlugin.elements).find(
-                  (key) => allowedPlugin.elements[key].asRoot,
-                ) ?? Object.keys(allowedPlugin.elements)[0];
+              if (allowedPlugin?.elements) {
+                // Find root element of the allowed plugin
+                const rootElementType =
+                  Object.keys(allowedPlugin.elements).find(
+                    (key) => allowedPlugin.elements[key].asRoot,
+                  ) ?? Object.keys(allowedPlugin.elements)[0];
 
-              if (rootElementType) {
-                const rootElement = allowedPlugin.elements[rootElementType];
+                if (rootElementType) {
+                  const rootElement = allowedPlugin.elements[rootElementType];
 
-                // Add root element WITHOUT asRoot (it's now nested, not root)
-                if (!extendedElements[rootElementType]) {
-                  // Copy element without asRoot property
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const { asRoot, ...elementWithoutAsRoot } = rootElement;
-                  extendedElements[rootElementType] = {
-                    ...elementWithoutAsRoot,
-                    rootPlugin: allowedPluginType,
-                  };
-                }
+                  // Add root element WITHOUT asRoot (it's now nested, not root)
+                  if (!extendedElements[rootElementType]) {
+                    // Copy element without asRoot property
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { asRoot, ...elementWithoutAsRoot } = rootElement;
+                    extendedElements[rootElementType] = {
+                      ...elementWithoutAsRoot,
+                      rootPlugin: allowedPluginType,
+                    };
+                  }
 
-                // Add children elements with render functions and rootPlugin
-                if (rootElement?.children) {
-                  rootElement.children.forEach((childType) => {
-                    if (allowedPlugin.elements[childType] && !extendedElements[childType]) {
-                      extendedElements[childType] = {
-                        ...allowedPlugin.elements[childType],
-                        rootPlugin: allowedPluginType,
-                      };
-                    }
-                  });
+                  // Add children elements with render functions and rootPlugin
+                  if (rootElement?.children) {
+                    rootElement.children.forEach((childType) => {
+                      if (allowedPlugin.elements[childType] && !extendedElements[childType]) {
+                        extendedElements[childType] = {
+                          ...allowedPlugin.elements[childType],
+                          rootPlugin: allowedPluginType,
+                        };
+                      }
+                    });
+                  }
                 }
               }
-            }
-          });
+            });
 
           // Note: We don't add allowedPlugins elements to the children array
           // allowedPlugins elements are available for insertion but not automatically created
@@ -147,8 +150,6 @@ export function buildPlugins(
       pluginsMap[plugin.type] = { ...plugin, elements: finalElements };
     }
   });
-
-  console.log('editor-builders buildPlugins pluginsMap', pluginsMap);
 
   return pluginsMap;
 }

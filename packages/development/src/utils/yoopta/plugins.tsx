@@ -25,18 +25,23 @@ import { CodeGroupPlugin } from '@/components/plugins/card-group-plugin';
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
+const ALLOWED_PLUGINS = [
+  Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+  Lists.BulletedList,
+  Lists.NumberedList,
+  Lists.TodoList,
+  Blockquote,
+  Callout,
+  Image,
+];
+
 export const YOOPTA_PLUGINS = [
   Accordion.extend({
     // Plugin-level: applies to ALL leaf elements (heading + content)
-    allowedPlugins: [
-      Paragraph,
-      Headings.HeadingOne,
-      Headings.HeadingTwo,
-      Headings.HeadingThree,
-      Lists.BulletedList,
-      Blockquote,
-      Callout,
-    ],
+    allowedPlugins: ALLOWED_PLUGINS.concat(Accordion),
   }),
   Paragraph,
   Headings.HeadingOne,
@@ -45,46 +50,21 @@ export const YOOPTA_PLUGINS = [
   OrderDetailsActionPlugin,
   Blockquote,
   SendEmailActionPlugin.extend({
-    allowedPlugins: [
-      Paragraph,
-      Headings.HeadingOne,
-      Headings.HeadingTwo,
-      Headings.HeadingThree,
-      Blockquote,
-    ],
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Lists.BulletedList,
   Lists.NumberedList,
   Lists.TodoList,
   Table.extend({
-    allowedPlugins: [Headings.HeadingThree],
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Link,
   StepsPlugin.extend({
-    allowedPlugins: [
-      Paragraph,
-      Headings.HeadingOne,
-      Headings.HeadingTwo,
-      Headings.HeadingThree,
-      Blockquote,
-      Callout,
-      Image,
-    ],
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   TabsPlugin,
   Callout.extend({
-    allowedPlugins: [
-      Paragraph,
-      Headings.HeadingOne,
-      Headings.HeadingTwo,
-      Headings.HeadingThree,
-      Blockquote,
-      Lists.BulletedList,
-      Lists.NumberedList,
-      Lists.TodoList,
-      Table,
-      Image,
-    ],
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   // CodeGroupPlugin,
   // Mention,

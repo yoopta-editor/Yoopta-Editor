@@ -140,7 +140,19 @@ const YooptaUIPackageExample = () => {
             });
           }}
           className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
-          Toggle Block
+          Toggle Block into HeadingThree
+        </button>
+        <button
+          onClick={() => {
+            editor.toggleBlock('BulletedList', {
+              at: 0,
+              scope: 'element',
+              focus: true,
+              preserveContent: true,
+            });
+          }}
+          className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
+          Toggle Block into Bulleted List
         </button>
       </div>
       <FixedToolbar editor={editor} />
