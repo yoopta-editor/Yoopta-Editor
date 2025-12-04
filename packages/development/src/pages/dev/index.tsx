@@ -132,7 +132,7 @@ const YooptaUIPackageExample = () => {
         </button>
         <button
           onClick={() => {
-            editor.toggleBlock('HeadingOne', {
+            editor.toggleBlock('HeadingThree', {
               at: 0,
               scope: 'element',
               focus: true,
@@ -178,4 +178,20 @@ export default YooptaUIPackageExample;
  *    - accordion-list-item-heading
  *    - accordion-list-item-content
  *      - heading-one (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
+ */
+
+/**
+ * -- block elements before --
+ * - callout
+ *
+ * Trigger toggleBlock
+ *
+ * -- block elements after --
+ * - callout
+ * - heading-three
+ *
+ * But it should be:
+ *
+ * - callout
+ *    - heading-three
  */

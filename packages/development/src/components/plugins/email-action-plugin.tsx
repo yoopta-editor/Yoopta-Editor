@@ -29,7 +29,7 @@ const EmailContainerRender = (props: PluginElementRenderProps) => {
     const hasContent = Object.keys(editor.getEditorValue()).length > 0;
     if (hasContent) {
       editor.toggleBlock('Paragraph', {
-        deleteText: true,
+        preserveContent: false,
         focus: true,
       });
     } else {

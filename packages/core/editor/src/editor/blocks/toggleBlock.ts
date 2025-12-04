@@ -221,7 +221,7 @@ function toggleBlockElementScope(
     elementStructure = y(editor, rootElementType);
   }
 
-  // Get the current element that we're going to replace
+  // Get the current element
   const blockElementEntry = Editor.above(slate, {
     match: (n) => Element.isElement(n) && Editor.isBlock(slate, n),
     mode: 'lowest',
@@ -233,6 +233,11 @@ function toggleBlockElementScope(
 
   const [currentElement, currentNodePath] = blockElementEntry;
 
+  // Check if current element is a root element of the block
+  const currentPlugin = editor.plugins[block.type];
+  const currentElementType = (currentElement as SlateElement).type;
+  const isRootElement = currentPlugin?.elements[currentElementType]?.asRoot ?? false;
+
   // Extract text nodes if preserving content
   if (preserveContent) {
     const textNodes = extractTextNodes(slate, currentElement, block, editor);
@@ -243,12 +248,27 @@ function toggleBlockElementScope(
     }
   }
 
-  // Remove the old element and insert the new one
-  Transforms.removeNodes(slate, { at: currentNodePath });
-  Transforms.insertNodes(slate, elementStructure, {
-    at: currentNodePath,
-    select: true,
-  });
+  if (isRootElement) {
+    // If current element is root (e.g., callout), insert inside it
+    // Remove all children (text nodes) and insert new element
+    const childrenCount = (currentElement as SlateElement).children.length;
+    for (let i = childrenCount - 1; i >= 0; i -= 1) {
+      Transforms.removeNodes(slate, { at: [...currentNodePath, i] });
+    }
+
+    // Insert the new element as child
+    Transforms.insertNodes(slate, elementStructure, {
+      at: [...currentNodePath, 0],
+      select: true,
+    });
+  } else {
+    // If current element is a leaf (e.g., accordion-list-item-content), replace it
+    Transforms.removeNodes(slate, { at: currentNodePath });
+    Transforms.insertNodes(slate, elementStructure, {
+      at: currentNodePath,
+      select: true,
+    });
+  }
 
   if (options.focus) {
     editor.focusBlock(block.id);

@@ -52,11 +52,6 @@ export const YOOPTA_PLUGINS = [
       Headings.HeadingThree,
       Blockquote,
     ],
-    events: {
-      onBeforeCreate(editor) {
-        return editor.y('email-container');
-      },
-    },
   }),
   Lists.BulletedList,
   Lists.NumberedList,

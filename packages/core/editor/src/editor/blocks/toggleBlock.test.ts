@@ -256,72 +256,196 @@ describe('toggleBlock', () => {
   });
 
   describe('Element scope', () => {
-    beforeEach(() => {
-      // Setup for element scope
-      (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
-      (y as Mock).mockReturnValue(mockParagraphStructure);
+    describe('Leaf element (non-root)', () => {
+      beforeEach(() => {
+        // Setup for leaf element (e.g., accordion-list-item-content)
+        (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
+        (y as Mock).mockReturnValue(mockParagraphStructure);
 
-      (Editor.above as Mock).mockReturnValue([
-        {
-          id: 'current-element',
+        (Editor.above as Mock).mockReturnValue([
+          {
+            id: 'current-element',
+            type: 'accordion-list-item-content', // Leaf element, not root
+            children: [{ text: 'Hello' }],
+          },
+          [0],
+        ]);
+
+        // Mock plugin configuration to indicate it's NOT a root element
+        editor.plugins = {
+          ...editor.plugins,
+          Accordion: {
+            type: 'Accordion',
+            elements: {
+              'accordion-list-item-content': {
+                asRoot: false, // NOT a root element
+                render: vi.fn(),
+                props: {},
+              },
+            },
+            events: {},
+          },
+        };
+
+        editor.children = {
+          'block-id': {
+            id: 'block-id',
+            type: 'Accordion',
+            value: [],
+            meta: { order: 0, depth: 0 },
+          },
+        };
+      });
+
+      it('should replace leaf element with new element', () => {
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+          preserveContent: false,
+        });
+
+        // Should remove the leaf element and insert new one at same position
+        expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
+        expect(Transforms.insertNodes).toHaveBeenCalledWith(
+          mockSlate,
+          mockParagraphStructure,
+          expect.objectContaining({
+            at: [0],
+            select: true,
+          }),
+        );
+      });
+
+      it('should preserve content when preserveContent is true', () => {
+        (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+        (Editor.isInline as unknown as Mock).mockReturnValue(false);
+
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+          preserveContent: true,
+        });
+
+        // Should remove old element and insert new one with content
+        expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
+        expect(Transforms.insertNodes).toHaveBeenCalled();
+      });
+
+      it('should use custom elements structure', () => {
+        const customStructure: SlateElement = {
+          id: 'custom-id',
+          type: 'paragraph',
+          children: [{ text: 'Custom' }],
+        };
+
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+          elements: customStructure,
+        });
+
+        expect(Transforms.insertNodes).toHaveBeenCalledWith(
+          mockSlate,
+          customStructure,
+          expect.any(Object),
+        );
+      });
+    });
+
+    describe('Root element with allowedPlugins', () => {
+      beforeEach(() => {
+        // Setup for root element (e.g., callout)
+        (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
+        (y as Mock).mockReturnValue(mockParagraphStructure);
+
+        (Editor.above as Mock).mockReturnValue([
+          {
+            id: 'callout-element',
+            type: 'callout',
+            children: [{ text: 'Hello' }],
+          },
+          [0],
+        ]);
+
+        // Mock plugin configuration to indicate it's a ROOT element
+        editor.plugins = {
+          ...editor.plugins,
+          Callout: {
+            type: 'Callout',
+            elements: {
+              callout: {
+                asRoot: true, // Root element
+                render: vi.fn(),
+                props: {},
+              },
+            },
+            events: {},
+          },
+        };
+
+        editor.children = {
+          'block-id': {
+            id: 'block-id',
+            type: 'Callout',
+            value: [],
+            meta: { order: 0, depth: 0 },
+          },
+        };
+      });
+
+      it('should insert element inside root element, not replace it', () => {
+        const calloutElement = {
+          id: 'callout-element',
           type: 'callout',
           children: [{ text: 'Hello' }],
-        },
-        [0],
-      ]);
+        };
 
-      (Editor.start as Mock).mockReturnValue({ path: [0, 0], offset: 0 });
-      (Editor.end as Mock).mockReturnValue({ path: [0, 0], offset: 5 });
-    });
+        (Editor.above as Mock).mockReturnValue([calloutElement, [0]]);
 
-    it('should insert element in leaf with allowedPlugins', () => {
-      toggleBlock(editor as YooEditor, 'Paragraph', {
-        scope: 'element',
-        preserveContent: false,
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+          preserveContent: false,
+        });
+
+        // Should remove children of root element
+        expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0, 0] });
+
+        // Should insert new element INSIDE root element
+        expect(Transforms.insertNodes).toHaveBeenCalledWith(
+          mockSlate,
+          mockParagraphStructure,
+          expect.objectContaining({
+            at: [0, 0], // Inside the root element
+            select: true,
+          }),
+        );
       });
 
-      expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
-      expect(Transforms.insertNodes).toHaveBeenCalledWith(
-        mockSlate,
-        mockParagraphStructure,
-        expect.objectContaining({
-          at: [0],
-          select: true,
-        }),
-      );
-    });
+      it('should preserve content when inserting inside root element', () => {
+        (Editor.isEditor as unknown as Mock).mockReturnValue(false);
+        (Editor.isInline as unknown as Mock).mockReturnValue(false);
 
-    it('should preserve content when preserveContent is true in element scope', () => {
-      (Editor.isEditor as unknown as Mock).mockReturnValue(false);
-      (Editor.isInline as unknown as Mock).mockReturnValue(false);
+        const calloutElement = {
+          id: 'callout-element',
+          type: 'callout',
+          children: [{ text: 'Hello world' }],
+        };
 
-      toggleBlock(editor as YooEditor, 'Paragraph', {
-        scope: 'element',
-        preserveContent: true,
+        (Editor.above as Mock).mockReturnValue([calloutElement, [0]]);
+
+        toggleBlock(editor as YooEditor, 'Paragraph', {
+          scope: 'element',
+          preserveContent: true,
+        });
+
+        // Should remove children and insert new element with content
+        expect(Transforms.removeNodes).toHaveBeenCalled();
+        expect(Transforms.insertNodes).toHaveBeenCalledWith(
+          mockSlate,
+          expect.any(Object),
+          expect.objectContaining({
+            at: [0, 0],
+            select: true,
+          }),
+        );
       });
-
-      // Should remove old element and insert new one with content
-      expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
-      expect(Transforms.insertNodes).toHaveBeenCalled();
-    });
-
-    it('should use custom elements structure in element scope', () => {
-      const customStructure: SlateElement = {
-        id: 'custom-id',
-        type: 'paragraph',
-        children: [{ text: 'Custom' }],
-      };
-
-      toggleBlock(editor as YooEditor, 'Paragraph', {
-        scope: 'element',
-        elements: customStructure,
-      });
-
-      expect(Transforms.insertNodes).toHaveBeenCalledWith(
-        mockSlate,
-        customStructure,
-        expect.any(Object),
-      );
     });
 
     it('should throw error if no selection in element scope', () => {
@@ -360,19 +484,44 @@ describe('toggleBlock', () => {
       (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph']);
       (y as Mock).mockReturnValue(mockParagraphStructure);
 
-      (Editor.above as Mock).mockReturnValue([
-        {
-          id: 'current-element',
-          type: 'callout',
-          children: [{ text: '' }],
+      const leafElement = {
+        id: 'leaf-element',
+        type: 'accordion-list-item-content',
+        children: [{ text: '' }],
+      };
+
+      (Editor.above as Mock).mockReturnValue([leafElement, [0]]);
+
+      // Mock as leaf element
+      editor.plugins = {
+        ...editor.plugins,
+        Accordion: {
+          type: 'Accordion',
+          elements: {
+            'accordion-list-item-content': {
+              asRoot: false,
+              render: vi.fn(),
+              props: {},
+            },
+          },
+          events: {},
         },
-        [0],
-      ]);
+      };
+
+      editor.children = {
+        'block-id': {
+          id: 'block-id',
+          type: 'Accordion',
+          value: [],
+          meta: { order: 0, depth: 0 },
+        },
+      };
 
       toggleBlock(editor as YooEditor, 'Paragraph', {
         scope: 'auto',
       });
 
+      expect(Transforms.removeNodes).toHaveBeenCalled();
       expect(Transforms.insertNodes).toHaveBeenCalled();
     });
 
