@@ -160,6 +160,11 @@ export function getPluginByInlineElement(
  * Checks if the current selection is inside an element with allowedPlugins
  * Returns allowedPlugins array if found, null otherwise
  */
+/**
+ * Find allowedPlugins from current element OR nearest parent element with allowedPlugins
+ * This is important for nested structures like Steps > blockquote,
+ * where blockquote doesn't have allowedPlugins but its parent step-list-item-content does
+ */
 export function getAllowedPluginsFromElement(
   editor: YooEditor,
   slate: SlateEditor,
@@ -173,35 +178,43 @@ export function getAllowedPluginsFromElement(
   const blockElements = blockPlugin?.elements;
   if (!blockElements) return null;
 
-  // Find the element at the current selection
-  const elementNode = getBlockElementNode(slate, {
-    at: slate.selection.anchor.path,
-  });
+  // Start from current element and traverse up to find allowedPlugins
+  let currentPath = slate.selection.anchor.path;
 
-  if (!elementNode) return null;
+  // Walk up the tree from the text node to find an element with allowedPlugins
+  while (currentPath.length > 1) {
+    const elementNode = getBlockElementNode(slate, { at: currentPath });
 
-  const [element] = elementNode;
+    if (elementNode) {
+      const [element] = elementNode;
 
-  // Check if element is a SlateElement with type property
-  if (!Element.isElement(element) || !('type' in element)) return null;
+      // Check if element is a SlateElement with type property
+      if (Element.isElement(element) && 'type' in element) {
+        const elementType = (element as SlateElement).type;
+        const elementConfig = blockElements[elementType];
 
-  const elementType = (element as SlateElement).type;
-  const elementConfig = blockElements[elementType];
+        if (elementConfig?.allowedPlugins) {
+          // Check if all allowedPlugins are defined in the editor's plugins
+          const undefinedPlugins = elementConfig.allowedPlugins.filter(
+            (plugin) => !editor.plugins?.[plugin],
+          );
 
-  if (!elementConfig?.allowedPlugins) return null;
+          if (undefinedPlugins.length > 0) {
+            throw new Error(
+              `Some "allowedPlugins" in ${block.type}->${
+                element.type
+              } are not defined in editor.plugins: ${undefinedPlugins.join(', ')}`,
+            );
+          }
 
-  // Check if all allowedPlugins are defined in the editor's plugins
-  const undefinedPlugins = elementConfig.allowedPlugins.filter(
-    (plugin) => !editor.plugins?.[plugin],
-  );
+          return elementConfig.allowedPlugins;
+        }
+      }
+    }
 
-  if (undefinedPlugins.length > 0) {
-    throw new Error(
-      `Some "allowedPlugins" in ${block.type}->${
-        element.type
-      } are not defined in editor.plugins: ${undefinedPlugins.join(', ')}`,
-    );
+    // Move up to parent element (remove last index from path)
+    currentPath = currentPath.slice(0, -1);
   }
 
-  return elementConfig.allowedPlugins;
+  return null;
 }

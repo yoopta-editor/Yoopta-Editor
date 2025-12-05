@@ -256,31 +256,31 @@ describe('toggleBlock', () => {
   });
 
   describe('Element scope', () => {
-    describe('Leaf element (non-root)', () => {
+    describe('Element without allowedPlugins', () => {
       beforeEach(() => {
-        // Setup for leaf element (e.g., accordion-list-item-content)
+        // Setup for element without allowedPlugins (should be replaced)
         (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
         (y as Mock).mockReturnValue(mockParagraphStructure);
 
         (Editor.above as Mock).mockReturnValue([
           {
             id: 'current-element',
-            type: 'accordion-list-item-content', // Leaf element, not root
+            type: 'simple-element', // Element without allowedPlugins
             children: [{ text: 'Hello' }],
           },
           [0],
         ]);
 
-        // Mock plugin configuration to indicate it's NOT a root element
+        // Mock plugin configuration - element WITHOUT allowedPlugins
         editor.plugins = {
           ...editor.plugins,
-          Accordion: {
-            type: 'Accordion',
+          TestPlugin: {
+            type: 'TestPlugin',
             elements: {
-              'accordion-list-item-content': {
-                asRoot: false, // NOT a root element
+              'simple-element': {
                 render: vi.fn(),
                 props: {},
+                // No allowedPlugins - should be replaced
               },
             },
             events: {},
@@ -290,20 +290,20 @@ describe('toggleBlock', () => {
         editor.children = {
           'block-id': {
             id: 'block-id',
-            type: 'Accordion',
+            type: 'TestPlugin',
             value: [],
             meta: { order: 0, depth: 0 },
           },
         };
       });
 
-      it('should replace leaf element with new element', () => {
+      it('should replace element without allowedPlugins', () => {
         toggleBlock(editor as YooEditor, 'Paragraph', {
           scope: 'element',
           preserveContent: false,
         });
 
-        // Should remove the leaf element and insert new one at same position
+        // Should remove the element and insert new one at same position
         expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0] });
         expect(Transforms.insertNodes).toHaveBeenCalledWith(
           mockSlate,
@@ -349,9 +349,9 @@ describe('toggleBlock', () => {
       });
     });
 
-    describe('Root element with allowedPlugins', () => {
+    describe('Element with allowedPlugins', () => {
       beforeEach(() => {
-        // Setup for root element (e.g., callout)
+        // Setup for element with allowedPlugins (e.g., callout, accordion-list-item-heading)
         (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
         (y as Mock).mockReturnValue(mockParagraphStructure);
 
@@ -364,16 +364,17 @@ describe('toggleBlock', () => {
           [0],
         ]);
 
-        // Mock plugin configuration to indicate it's a ROOT element
+        // Mock plugin configuration - element WITH allowedPlugins
         editor.plugins = {
           ...editor.plugins,
           Callout: {
             type: 'Callout',
             elements: {
               callout: {
-                asRoot: true, // Root element
+                asRoot: true,
                 render: vi.fn(),
                 props: {},
+                allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
               },
             },
             events: {},
@@ -390,7 +391,7 @@ describe('toggleBlock', () => {
         };
       });
 
-      it('should insert element inside root element, not replace it', () => {
+      it('should insert element inside element with allowedPlugins, not replace it', () => {
         const calloutElement = {
           id: 'callout-element',
           type: 'callout',
@@ -418,7 +419,7 @@ describe('toggleBlock', () => {
         );
       });
 
-      it('should preserve content when inserting inside root element', () => {
+      it('should preserve content when inserting inside element with allowedPlugins', () => {
         (Editor.isEditor as unknown as Mock).mockReturnValue(false);
         (Editor.isInline as unknown as Mock).mockReturnValue(false);
 
@@ -446,10 +447,63 @@ describe('toggleBlock', () => {
           }),
         );
       });
+
+      it('should insert inside accordion-list-item-heading with allowedPlugins', () => {
+        const accordionHeadingElement = {
+          id: 'accordion-heading',
+          type: 'accordion-list-item-heading',
+          children: [{ text: 'Heading text' }],
+        };
+
+        (Editor.above as Mock).mockReturnValue([accordionHeadingElement, [0, 0]]);
+
+        // Mock Accordion plugin with allowedPlugins on heading element
+        editor.plugins = {
+          ...editor.plugins,
+          Accordion: {
+            type: 'Accordion',
+            elements: {
+              'accordion-list-item-heading': {
+                render: vi.fn(),
+                props: {},
+                allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
+              },
+            },
+            events: {},
+          },
+        };
+
+        editor.children = {
+          'block-id': {
+            id: 'block-id',
+            type: 'Accordion',
+            value: [],
+            meta: { order: 0, depth: 0 },
+          },
+        };
+
+        toggleBlock(editor as YooEditor, 'HeadingOne', {
+          scope: 'element',
+          preserveContent: false,
+        });
+
+        // Should insert inside accordion-list-item-heading, not replace it
+        expect(Transforms.removeNodes).toHaveBeenCalledWith(mockSlate, { at: [0, 0, 0] });
+        expect(Transforms.insertNodes).toHaveBeenCalledWith(
+          mockSlate,
+          mockParagraphStructure,
+          expect.objectContaining({
+            at: [0, 0, 0], // Inside the heading element
+            select: true,
+          }),
+        );
+      });
     });
 
     it('should throw error if no selection in element scope', () => {
       mockSlate.selection = null;
+      // Mock allowedPlugins so scope stays as 'element'
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
 
       expect(() => {
         toggleBlock(editor as YooEditor, 'Paragraph', {
@@ -475,6 +529,19 @@ describe('toggleBlock', () => {
         scope: 'auto',
       });
 
+      expect(editor.applyTransforms).toHaveBeenCalled();
+      const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
+      expect(operations[0].type).toBe('toggle_block');
+    });
+
+    it('should fallback to block scope when scope="element" but no allowedPlugins', () => {
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
+
+      toggleBlock(editor as YooEditor, 'HeadingOne', {
+        scope: 'element',
+      });
+
+      // Should use block scope (applyTransforms) instead of element scope (Transforms)
       expect(editor.applyTransforms).toHaveBeenCalled();
       const operations = (editor.applyTransforms as Mock).mock.calls[0][0];
       expect(operations[0].type).toBe('toggle_block');
@@ -521,6 +588,64 @@ describe('toggleBlock', () => {
         scope: 'auto',
       });
 
+      expect(Transforms.removeNodes).toHaveBeenCalled();
+      expect(Transforms.insertNodes).toHaveBeenCalled();
+    });
+
+    it('should find allowedPlugins from parent when current element has none (nested case)', () => {
+      // Simulate: Steps > step-list-item-content (has allowedPlugins) > blockquote (no allowedPlugins)
+      // When cursor is on blockquote, should find allowedPlugins from parent
+      (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
+      (y as Mock).mockReturnValue(mockParagraphStructure);
+
+      const blockquoteElement = {
+        id: 'blockquote-element',
+        type: 'blockquote',
+        children: [{ text: 'Text' }],
+      };
+
+      (Editor.above as Mock).mockReturnValue([blockquoteElement, [0, 0, 1]]);
+
+      editor.plugins = {
+        ...editor.plugins,
+        Steps: {
+          type: 'Steps',
+          elements: {
+            'step-list-item-content': {
+              render: vi.fn(),
+              props: {},
+              allowedPlugins: ['Paragraph', 'HeadingOne'], // Parent has allowedPlugins
+            },
+          },
+          events: {},
+        },
+        Blockquote: {
+          type: 'Blockquote',
+          elements: {
+            blockquote: {
+              render: vi.fn(),
+              props: {},
+              // No allowedPlugins
+            },
+          },
+          events: {},
+        },
+      };
+
+      editor.children = {
+        'block-id': {
+          id: 'block-id',
+          type: 'Steps',
+          value: [],
+          meta: { order: 0, depth: 0 },
+        },
+      };
+
+      toggleBlock(editor as YooEditor, 'Paragraph', {
+        scope: 'auto',
+      });
+
+      // Should use element scope (replace blockquote with paragraph inside step-list-item-content)
       expect(Transforms.removeNodes).toHaveBeenCalled();
       expect(Transforms.insertNodes).toHaveBeenCalled();
     });

@@ -14,6 +14,7 @@ export type PluginJSXElementProps = {
   props?: Record<string, unknown>;
   children?: ReactElement<PluginJSXElementProps> | ReactElement<PluginJSXElementProps>[];
   nodeType?: PluginElementNodeType;
+  placeholder?: string;
 };
 
 export type PluginJSXElement = ReactElement<PluginJSXElementProps, string>;
@@ -49,6 +50,11 @@ function buildElementsMap<TKeys extends string = string>(
 
     if (Object.keys(mergedProps).length > 0) {
       elementConfig.props = mergedProps as PluginElementProps<Record<string, unknown>>;
+    }
+
+    // Handle placeholder
+    if (elementProps.placeholder) {
+      elementConfig.placeholder = elementProps.placeholder;
     }
 
     // Process children - they can be in props.children or as React children

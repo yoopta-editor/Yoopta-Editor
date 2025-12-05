@@ -119,7 +119,7 @@ export const useActionMenuList = ({ view: viewProp = 'default' }: ActionMenuList
         if (!block) return;
 
         e.stopPropagation();
-        editor.toggleBlock(type, { deleteText: false, focus: true, at: block.meta.order });
+        editor.toggleBlock(type, { preserveContent: true, focus: true, at: block.meta.order });
         close();
       },
       'data-action-menu-item': true,

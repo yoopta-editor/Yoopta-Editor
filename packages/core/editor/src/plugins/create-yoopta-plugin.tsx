@@ -18,6 +18,7 @@ export type ExtendPluginElementConfig = {
   render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: Record<string, unknown>;
   allowedPlugins?: YooptaPlugin<any, any>[];
+  placeholder?: string;
 };
 
 export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOptions> = {
@@ -204,6 +205,11 @@ export class YooptaPlugin<
             ...element.props,
             ...extendElementConfig.props,
           };
+        }
+
+        // Handle placeholder override
+        if (extendElementConfig.placeholder !== undefined) {
+          element.placeholder = extendElementConfig.placeholder;
         }
       });
     }

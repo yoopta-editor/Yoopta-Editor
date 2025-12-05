@@ -31,9 +31,7 @@ const YooptaUIPackageExample = () => {
           props: { isExpanded: true },
           children: [
             editor.y('accordion-list-item-heading'),
-            editor.y('accordion-list-item-content', {
-              children: [editor.y('callout', { props: { theme: 'info' } })],
-            }),
+            editor.y('accordion-list-item-content'),
           ],
         }),
       ],
@@ -133,26 +131,27 @@ const YooptaUIPackageExample = () => {
         <button
           onClick={() => {
             editor.toggleBlock('HeadingThree', {
-              at: 0,
+              at: editor.path.current,
               scope: 'element',
               focus: true,
               preserveContent: true,
             });
           }}
           className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
-          Toggle Block into HeadingThree
+          Toggle Block into HeadingThree for {editor.path.current}
         </button>
         <button
           onClick={() => {
+            console.log('editor.path.current', editor.path.current);
             editor.toggleBlock('BulletedList', {
-              at: 0,
+              at: editor.path.current,
               scope: 'element',
               focus: true,
               preserveContent: true,
             });
           }}
           className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
-          Toggle Block into Bulleted List
+          Toggle Block into Bulleted List for {editor.path.current}
         </button>
       </div>
       <FixedToolbar editor={editor} />

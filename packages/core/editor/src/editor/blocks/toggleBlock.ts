@@ -17,6 +17,7 @@ import type {
 } from '../types';
 import { getBlock } from './getBlock';
 import { y } from '../elements/create-element-structure';
+import { ReactEditor } from 'slate-react';
 
 export type ToggleBlockOptions = {
   /**
@@ -96,17 +97,21 @@ function determineScope(
   slate: SlateEditor,
   explicitScope?: 'auto' | 'block' | 'element',
 ): 'block' | 'element' {
+  // Always use block scope if explicitly requested
   if (explicitScope === 'block') return 'block';
-  if (explicitScope === 'element') return 'element';
 
-  // Auto-detect: check if we're in a leaf element with allowedPlugins
+  // Check if current element has allowedPlugins
   const allowedPlugins = getAllowedPluginsFromElement(editor, slate);
+  const hasAllowedPlugins = Array.isArray(allowedPlugins) && allowedPlugins.length > 0;
 
-  if (allowedPlugins && allowedPlugins.length > 0) {
-    return 'element';
+  // If element scope is explicitly requested, verify that current element can contain other elements
+  if (explicitScope === 'element') {
+    // Fallback to block scope if current element doesn't have allowedPlugins
+    return hasAllowedPlugins ? 'element' : 'block';
   }
 
-  return 'block';
+  // Auto mode: use element scope only if allowedPlugins exist
+  return hasAllowedPlugins ? 'element' : 'block';
 }
 
 /**
@@ -233,10 +238,13 @@ function toggleBlockElementScope(
 
   const [currentElement, currentNodePath] = blockElementEntry;
 
-  // Check if current element is a root element of the block
+  // Check if current element has allowedPlugins (can contain other elements)
   const currentPlugin = editor.plugins[block.type];
   const currentElementType = (currentElement as SlateElement).type;
-  const isRootElement = currentPlugin?.elements[currentElementType]?.asRoot ?? false;
+  const currentElementConfig = currentPlugin?.elements[currentElementType];
+  const hasAllowedPlugins =
+    Array.isArray(currentElementConfig?.allowedPlugins) &&
+    currentElementConfig.allowedPlugins.length > 0;
 
   // Extract text nodes if preserving content
   if (preserveContent) {
@@ -248,9 +256,9 @@ function toggleBlockElementScope(
     }
   }
 
-  if (isRootElement) {
-    // If current element is root (e.g., callout), insert inside it
-    // Remove all children (text nodes) and insert new element
+  if (hasAllowedPlugins) {
+    // If current element has allowedPlugins (e.g., callout, accordion-list-item-heading)
+    // Insert inside it, don't replace
     const childrenCount = (currentElement as SlateElement).children.length;
     for (let i = childrenCount - 1; i >= 0; i -= 1) {
       Transforms.removeNodes(slate, { at: [...currentNodePath, i] });
@@ -262,7 +270,7 @@ function toggleBlockElementScope(
       select: true,
     });
   } else {
-    // If current element is a leaf (e.g., accordion-list-item-content), replace it
+    // If current element doesn't have allowedPlugins, replace it
     Transforms.removeNodes(slate, { at: currentNodePath });
     Transforms.insertNodes(slate, elementStructure, {
       at: currentNodePath,
@@ -271,7 +279,11 @@ function toggleBlockElementScope(
   }
 
   if (options.focus) {
-    editor.focusBlock(block.id);
+    // when scope is element, we need to focus/select first leaf text node of the new element
+    ReactEditor.focus(slate);
+    // const pathToSelect =
+    //   currentNodePath.length > 1 ? [...currentNodePath, 0, 0] : [currentNodePath[0], 0];
+    Transforms.select(slate, currentNodePath);
   }
 
   return block.id;
@@ -304,11 +316,10 @@ export function toggleBlock(
 ): string {
   const { scope = 'auto' } = options;
 
-  const block = getBlock(editor, {
-    at: typeof options.at === 'number' ? options.at : editor.path.current,
-  });
+  const at = typeof options.at === 'number' ? options.at : editor.path.current;
+  const block = getBlock(editor, { at });
 
-  if (!block) throw new Error('Block not found at current selection');
+  if (!block) throw new Error(`Block not found at current selection: ${at}`);
 
   const slate = findSlateBySelectionPath(editor, { at: block.meta.order });
   if (!slate) throw new Error(`Slate not found for block in position ${block.meta.order}`);

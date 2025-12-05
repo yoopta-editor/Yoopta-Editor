@@ -12,7 +12,7 @@ import type {
   PluginEvents,
   RenderSlateElementProps,
 } from './types';
-import { TextLeaf } from '../components/TextLeaf/TextLeaf';
+import { TextLeaf } from '../components/text-leaf/text-leaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
 import { EDITOR_EVENT_HANDLERS } from '../handlers';
@@ -20,7 +20,6 @@ import type { YooptaMark } from '../marks';
 import { deserializeHTML } from '../parsers/deserializeHTML';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
-import { Elements } from '../editor/elements';
 
 type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   TElementMap,
@@ -59,7 +58,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   events,
   options,
   extensions: withExtensions,
-  placeholder = `Type '/' for commands`,
 }: Props<TElementMap, TOptions>) => {
   const editor = useYooptaEditor();
   const block = useBlockData(id);
@@ -129,8 +127,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       let { children, leaf, attributes } = props;
       const { text, ...formats } = leaf;
 
-      const isCurrentPath = editor.path.current === block.meta.order;
-
       if (formats) {
         Object.keys(formats).forEach((format) => {
           const mark = MARKS_MAP[format];
@@ -138,14 +134,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         });
       }
 
-      const isParentElementVoid = props.children?.props?.parent?.props?.nodeType === 'void';
-      const showPlaceholder = !isParentElementVoid && isCurrentPath && leaf.withPlaceholder;
-
-      return (
-        <TextLeaf attributes={attributes} placeholder={showPlaceholder ? placeholder : undefined}>
-          {children}
-        </TextLeaf>
-      );
+      return <TextLeaf attributes={attributes}>{children}</TextLeaf>;
     },
     [marks],
   );

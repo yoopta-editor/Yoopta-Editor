@@ -49,7 +49,11 @@ export const withShortcuts = (editor: YooEditor, slate: SlateEditor, shortcuts: 
         Transforms.delete(slate);
 
         // [TEST]
-        editor.toggleBlock(matchedBlock.type, { deleteText: true, focus: true });
+        editor.toggleBlock(matchedBlock.type, {
+          scope: 'block',
+          preserveContent: false,
+          focus: true,
+        });
         return;
       }
     }

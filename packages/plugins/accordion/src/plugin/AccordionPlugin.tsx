@@ -23,14 +23,26 @@ const accordionListItemProps: AccordionListItemProps = {
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
-  elements: (
-    <accordion-list render={AccordionList}>
-      <accordion-list-item render={AccordionListItem} props={accordionListItemProps}>
-        <accordion-list-item-heading render={AccordionItemHeading} />
-        <accordion-list-item-content render={AccordionItemContent} />
-      </accordion-list-item>
-    </accordion-list>
-  ),
+  elements: {
+    'accordion-list': {
+      render: AccordionList,
+      asRoot: true,
+      children: ['accordion-list-item'],
+    },
+    'accordion-list-item': {
+      render: AccordionListItem,
+      props: accordionListItemProps,
+      children: ['accordion-list-item-heading', 'accordion-list-item-content'],
+    },
+    'accordion-list-item-heading': {
+      render: AccordionItemHeading,
+      placeholder: 'Accordion heading',
+    },
+    'accordion-list-item-content': {
+      render: AccordionItemContent,
+      placeholder: 'Accordion content',
+    },
+  },
   commands: AccordionCommands,
   events: {
     onKeyDown(editor, slate, { hotkeys, currentBlock }) {

@@ -41,7 +41,7 @@ const ALLOWED_PLUGINS = [
 export const YOOPTA_PLUGINS = [
   Accordion.extend({
     // Plugin-level: applies to ALL leaf elements (heading + content)
-    allowedPlugins: ALLOWED_PLUGINS.concat(Accordion),
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Paragraph,
   Headings.HeadingOne,
@@ -64,7 +64,14 @@ export const YOOPTA_PLUGINS = [
   }),
   TabsPlugin,
   Callout.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    allowedPlugins: [
+      Lists.BulletedList,
+      Lists.NumberedList,
+      Lists.TodoList,
+      Blockquote,
+      Callout,
+      Image,
+    ],
   }),
   // CodeGroupPlugin,
   // Mention,

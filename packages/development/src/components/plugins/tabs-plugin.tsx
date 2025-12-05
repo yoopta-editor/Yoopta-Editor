@@ -39,8 +39,8 @@ export const TabsPlugin = new YooptaPlugin<TabsElementMap>({
     <tabs-container render={TabsContainer} props={tabsContainerProps}>
       <tabs-list render={TabsList}>
         <tabs-item render={TabsItem}>
-          <tabs-item-heading render={TabsItemHeading} />
-          <tabs-item-content render={TabsItemContent} />
+          <tabs-item-heading render={TabsItemHeading} placeholder="Tab title" />
+          <tabs-item-content render={TabsItemContent} placeholder="Tab content" />
         </tabs-item>
       </tabs-list>
     </tabs-container>

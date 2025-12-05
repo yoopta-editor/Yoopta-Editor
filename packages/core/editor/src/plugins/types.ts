@@ -58,6 +58,11 @@ export type PluginElement<TKeys, T> = {
   children?: TKeys[];
   allowedPlugins?: string[];
   rootPlugin?: string;
+  /**
+   * Placeholder text for this element when it's empty
+   * Only applies to leaf elements (elements without children)
+   */
+  placeholder?: string;
 };
 
 export type PluginElementsMap<TKeys extends string = string, TProps = PluginDefaultProps> = {
@@ -134,7 +139,12 @@ export type LeafFormats<K extends string, V> = {
   [key in K]: V;
 };
 
-export type ExtendedLeaf<K extends string, V> = RenderLeafProps['leaf'] & LeafFormats<K, V>;
+export type ExtendedLeaf<K extends string, V> = RenderLeafProps['leaf'] &
+  LeafFormats<K, V> & {
+    withPlaceholder?: boolean;
+    elementPlaceholder?: string;
+  };
+
 export type YooptaMarkProps<K extends string, V> = {
   children: RenderLeafProps['children'];
   leaf: ExtendedLeaf<K, V>;

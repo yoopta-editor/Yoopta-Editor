@@ -173,8 +173,8 @@ export const StepsPlugin = new YooptaPlugin<StepsElementMap>({
     <step-container render={StepContainer}>
       <step-list render={StepList}>
         <step-list-item render={StepListItem} props={{ isCompleted: false }}>
-          <step-list-item-heading render={StepListItemHeading} />
-          <step-list-item-content render={StepListItemContent} />
+          <step-list-item-heading render={StepListItemHeading} placeholder="Step title" />
+          <step-list-item-content render={StepListItemContent} placeholder="Step description" />
         </step-list-item>
       </step-list>
     </step-container>
