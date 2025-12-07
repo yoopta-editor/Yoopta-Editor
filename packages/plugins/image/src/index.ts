@@ -1,6 +1,5 @@
-import { Image } from './plugin';
+import { Image } from './plugin/image-plugin';
 import { ImageElement, ImageElementProps, ImageUploadResponse } from './types';
-import './styles.css';
 
 declare module 'slate' {
   type CustomTypes = {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import Blockquote from '@yoopta/blockquote';
 import Code from '@yoopta/code';
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, { Blocks, createYooptaEditor } from '@yoopta/editor';
 import File from '@yoopta/file';
 import Image from '@yoopta/image';
 import Link from '@yoopta/link';
@@ -64,6 +64,11 @@ const MARKS = [Bold, Italic, CodeMark, Strike, Underline];
 const SlackChat = () => {
   const editor = useMemo(() => createYooptaEditor(), []);
 
+  const isBlockActive = (type: string) => {
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
+    return block?.type === type;
+  };
+
   return (
     <div id="slack" className={s.root}>
       <div className={s.chat}>
@@ -93,20 +98,20 @@ const SlackChat = () => {
           <span className={s.separator} />
           <button
             className={s.toolbarItem}
-            data-state-active={editor.blocks.NumberedList?.isActive()}
+            data-state-active={isBlockActive('NumberedList')}
             onClick={() => editor.toggleBlock('NumberedList', { focus: true })}>
             <ListOrdered size={15} strokeWidth={1.5} />
           </button>
           <button
             className={s.toolbarItem}
-            data-state-active={editor.blocks.BulletedList?.isActive()}
+            data-state-active={isBlockActive('BulletedList')}
             onClick={() => editor.toggleBlock('BulletedList', { focus: true })}>
             <List size={15} strokeWidth={1.5} />
           </button>
           <span className={s.separator} />
           <button
             className={s.toolbarItem}
-            data-state-active={editor.blocks.Blockquote?.isActive()}
+            data-state-active={isBlockActive('Blockquote')}
             onClick={() => editor.toggleBlock('Blockquote', { focus: true })}>
             <TextQuoteIcon size={15} strokeWidth={1.5} />
           </button>

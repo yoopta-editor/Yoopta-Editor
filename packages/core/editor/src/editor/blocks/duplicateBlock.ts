@@ -1,9 +1,9 @@
-import { deepClone } from '../../utils/deepClone';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import cloneDeep from 'lodash.clonedeep';
+
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';
 import type { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
-import { YooptaBlock } from '../types';
+import { getBlock } from './getBlock';
 
 export type DuplicateBlockOptions = {
   original: { blockId?: never; path: YooptaPathIndex } | { blockId: string; path?: never };
@@ -26,7 +26,7 @@ export function duplicateBlock(editor: YooEditor, options: DuplicateBlockOptions
 
   const originalBlock: YooptaBlockData | null = blockId
     ? editor.children[blockId]
-    : findPluginBlockByPath(editor, { at: path! });
+    : getBlock(editor, { at: path! });
 
   if (!originalBlock) {
     throw new Error('Block not found');
@@ -34,7 +34,7 @@ export function duplicateBlock(editor: YooEditor, options: DuplicateBlockOptions
 
   const operations: YooptaOperation[] = [];
 
-  const duplicatedBlock = deepClone(originalBlock);
+  const duplicatedBlock = cloneDeep(originalBlock);
   duplicatedBlock.id = generateId();
   // [TEST]
   duplicatedBlock.meta.order =

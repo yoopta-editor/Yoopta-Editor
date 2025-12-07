@@ -1,5 +1,5 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
+import { Blocks, Elements, generateId } from '@yoopta/editor';
 
 import type { ImageElement, ImageElementProps } from '../types';
 

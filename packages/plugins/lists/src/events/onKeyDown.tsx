@@ -4,7 +4,7 @@ import type {
   YooEditor,
   YooptaBlockData,
 } from '@yoopta/editor';
-import { Elements, buildBlockData, buildBlockElement, findPluginBlockByPath } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, buildBlockElement } from '@yoopta/editor';
 import type { Path } from 'slate';
 import { Editor, Element } from 'slate';
 
@@ -19,7 +19,7 @@ export function onKeyDown(
 ) {
   return (event) => {
     Editor.withoutNormalizing(slate, () => {
-      const block = findPluginBlockByPath(editor);
+      const block = Blocks.getBlock(editor, { at: editor.path.current });
 
       if (!slate.selection || !block) return;
       const selection = slate.selection;

@@ -1,6 +1,5 @@
 import { Divider } from './plugin';
 import { DividerElement, DividerElementProps, DividerTheme } from './types';
-import './styles.css';
 
 export { DividerCommands } from './commands';
 

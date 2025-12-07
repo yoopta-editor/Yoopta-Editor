@@ -1,165 +1,98 @@
 import { YooptaContentValue } from '@yoopta/editor';
 
 export const DEFAULT_VALUE = {
-  '6f7ba884-86eb-4022-9737-c619e82db325': {
-    id: '6f7ba884-86eb-4022-9737-c619e82db325',
-    type: 'Paragraph',
-    value: [
-      {
-        id: '6fe041be-4e0a-470b-853b-613eaca05d44',
-        type: 'paragraph',
-        children: [
-          {
-            text: 'Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and ',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 1,
-    },
+  id: 'c66758a8-50eb-435c-a505-7d9ee5bb4c66',
+  type: 'Steps',
+  meta: {
+    depth: 0,
+    order: 0,
   },
-  '35d3afa9-0504-4d39-a1e8-4e816f005730': {
-    id: '35d3afa9-0504-4d39-a1e8-4e816f005730',
-    type: 'Paragraph',
-    value: [
-      {
-        id: '4f6d474b-58dc-4715-a568-4e96445fd10f',
-        type: 'paragraph',
-        children: [
-          {
-            text: 'With Yoopta-Editor, you can customize everything to fit exactly what you need. Want to tweak the look, add cool features, or craft a completely custom user interface? No problem. Yoopta-Editor gives you the flexibility to do it all, making it easy to create the perfect tool for your project. All of this is customizable, extensible, and easy to set up!',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
+  value: [
+    {
+      id: '8593785d-e3e2-4f9d-80b5-399de7d017dd',
+      type: 'step-container',
+      props: {
+        nodeType: 'block',
       },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 2,
-    },
-  },
-  'f5ab2f00-721a-4234-884c-1258d0195fb1': {
-    id: 'f5ab2f00-721a-4234-884c-1258d0195fb1',
-    type: 'HeadingTwo',
-    value: [
-      {
-        id: '737bfdb0-4f23-4b8a-92ee-f84860ffdb6f',
-        type: 'heading-two',
-        children: [
-          {
-            text: 'Features',
+      children: [
+        {
+          id: 'e267838d-ff4f-4e21-bdcb-b8c5f19895f9',
+          type: 'step-list',
+          children: [
+            {
+              id: '91c3de26-212d-4783-a3fc-2cd813dd00c5',
+              type: 'step-list-item',
+              children: [
+                {
+                  id: 'dd59ac85-57b7-42ef-8e47-a2601a3323b7',
+                  type: 'step-list-item-heading',
+                  children: [
+                    {
+                      text: 'Step 1',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+                {
+                  id: '5969435f-fe21-4717-8143-4e5dd1eb8bee',
+                  type: 'step-list-item-content',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+              ],
+              props: {
+                nodeType: 'block',
+                isCompleted: false,
+              },
+            },
+            {
+              id: 'ee380e50-4371-4190-b298-4270d6bdc48d',
+              type: 'step-list-item',
+              children: [
+                {
+                  id: '4fcf037a-1b37-49e4-8f1d-ef907c018275',
+                  type: 'step-list-item-heading',
+                  children: [
+                    {
+                      text: 'Step 2',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+                {
+                  id: '62ecb774-a03b-4aa1-ab8a-2ded86f17f5d',
+                  type: 'step-list-item-content',
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  props: {
+                    nodeType: 'block',
+                  },
+                },
+              ],
+              props: {
+                nodeType: 'block',
+                isCompleted: false,
+              },
+            },
+          ],
+          props: {
+            nodeType: 'block',
           },
-        ],
-        props: {
-          nodeType: 'block',
         },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 3,
+      ],
     },
-  },
-  'b83ebb17-28e8-4e38-867f-9911d9b50fde': {
-    id: 'b83ebb17-28e8-4e38-867f-9911d9b50fde',
-    type: 'BulletedList',
-    value: [
-      {
-        id: '6011fc69-3409-4b5d-889f-6bc494bdcc06',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Easy setup',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 4,
-    },
-  },
-  '70109e70-2637-446e-82a3-f89cb45119d2': {
-    id: '70109e70-2637-446e-82a3-f89cb45119d2',
-    type: 'BulletedList',
-    value: [
-      {
-        id: '7f49e926-6c0d-4ef6-a624-a6aef17fcfe6',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Default list of powerful plugins',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 5,
-    },
-  },
-  'f7486103-5946-4358-8d0e-58ea7593bc4f': {
-    id: 'f7486103-5946-4358-8d0e-58ea7593bc4f',
-    type: 'BulletedList',
-    value: [
-      {
-        id: 'dddf9382-b9d8-4060-863e-aba61a2eec43',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Many typical solved problems in UX behaviour.',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 6,
-    },
-  },
-  'b50225f1-89d6-46ac-9d85-b618ee1b8a32': {
-    id: 'b50225f1-89d6-46ac-9d85-b618ee1b8a32',
-    type: 'BulletedList',
-    value: [
-      {
-        id: 'b5c2ec26-9f43-4822-b5f3-8731fdc5b61d',
-        type: 'bulleted-list',
-        children: [
-          {
-            text: 'Media plugins on steroids with optimization and lazy loadings',
-          },
-        ],
-        props: {
-          nodeType: 'block',
-        },
-      },
-    ],
-    meta: {
-      align: 'left',
-      depth: 0,
-      order: 7,
-    },
-  },
+  ],
 } as unknown as YooptaContentValue;

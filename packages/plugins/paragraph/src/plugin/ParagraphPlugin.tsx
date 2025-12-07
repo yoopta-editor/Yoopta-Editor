@@ -32,7 +32,7 @@ const Paragraph = new YooptaPlugin<ParagraphElementMap>({
       },
     },
     markdown: {
-      serialize: (element, text) => `${serializeTextNodesIntoMarkdown(element.children)}\n`,
+      serialize: (element) => `${serializeTextNodesIntoMarkdown(element.children)}\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

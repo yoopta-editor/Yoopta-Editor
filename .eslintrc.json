@@ -1,10 +1,5 @@
 {
-  "extends": [
-    "airbnb",
-    "plugin:import/typescript",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
+  "extends": ["airbnb", "plugin:import/typescript", "plugin:react-hooks/recommended", "prettier"],
   "env": {
     "mocha": true,
     "jest": true,
@@ -19,7 +14,6 @@
     "IS_REMOTE_DEV": "readonly"
   },
   "rules": {},
-  "ignorePatterns": ["**/generated/*"],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -30,7 +24,7 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2022,
-    "project": "./config/tsconfig.base.json"
+    "project": ["./config/tsconfig.base.json", "./packages/**/tsconfig.json"]
   },
   "plugins": ["prettier", "@typescript-eslint"],
   "overrides": [
@@ -199,8 +193,6 @@
       "files": ["*.{js,cjs}"],
       "rules": {
         "no-unused-vars": ["error"],
-
-        "no-param-reassign": "off",
         "no-warning-comments": [
           "warn",
           {
@@ -230,7 +222,7 @@
 
         "consistent-return": "off",
 
-        "import/no-default-export": "error",
+        "import/no-default-export": "off",
 
         "react/require-default-props": "off",
 
@@ -314,6 +306,24 @@
       "files": ["*.{spec,test,stories}.{cjs,cjsx,js,ts,jsx,tsx}"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["rollup.config.js", "rollup.config.*.js"],
+      "rules": {
+        "import/no-relative-packages": "off"
+      }
+    },
+    {
+      "files": ["*.{ts,tsx}"],
+      "rules": {
+        "no-param-reassign": [
+          "error",
+          {
+            "props": true,
+            "ignorePropertyModificationsFor": ["slate", "editor"]
+          }
+        ]
       }
     }
   ]

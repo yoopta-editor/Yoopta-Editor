@@ -4,19 +4,11 @@ import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from
 import { HeadingTwoCommands } from '../commands';
 import type { HeadingTwoElement } from '../types';
 
-const HeadingTwoRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
-  const { element, HTMLAttributes = {}, attributes, children } = props;
-  const { className = '', ...htmlAttrs } = HTMLAttributes;
-
-  if (extendRender) return extendRender(props);
+const HeadingTwoRender = (props: PluginElementRenderProps) => {
+  const { element, attributes, children } = props;
 
   return (
-    <h2
-      id={element.id}
-      draggable={false}
-      className={`yoopta-heading-two ${className}`}
-      {...htmlAttrs}
-      {...attributes}>
+    <h2 id={element.id} draggable={false} {...attributes}>
       {children}
     </h2>
   );
@@ -26,14 +18,7 @@ HeadingTwoRender.displayName = 'HeadingTwo';
 
 const HeadingTwo = new YooptaPlugin<Record<'heading-two', HeadingTwoElement>>({
   type: 'HeadingTwo',
-  elements: {
-    'heading-two': {
-      render: HeadingTwoRender,
-      props: {
-        nodeType: 'block',
-      },
-    },
-  },
+  elements: <heading-two render={HeadingTwoRender} nodeType="block" />,
   commands: HeadingTwoCommands,
   options: {
     display: {

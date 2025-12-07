@@ -1,7 +1,7 @@
 import { Editor, Range, Transforms } from 'slate';
 
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import { Blocks } from '../blocks';
 import type { YooEditor } from '../types';
 
 export type UpdateElementTextOptions = {
@@ -16,7 +16,9 @@ export function insertElementText<TElementKeys extends string, TElementProps>(
 ) {
   const { blockId, focus } = options || {};
 
-  const blockData = blockId ? editor.children[blockId] : findPluginBlockByPath(editor);
+  const blockData = blockId
+    ? editor.children[blockId]
+    : Blocks.getBlock(editor, { at: editor.path.current });
 
   if (!blockData) {
     console.warn(`To set text programmatically, you must provide a valid blockId. Got: ${blockId}`);
@@ -30,9 +32,9 @@ export function insertElementText<TElementKeys extends string, TElementProps>(
     return;
   }
 
-  const block = editor.blocks[blockData.type];
+  const blockPlugin = editor.plugins[blockData.type];
   const latestBlockElementPath = Array.from(
-    { length: Object.keys(block.elements).length },
+    { length: Object.keys(blockPlugin.elements).length },
     (_) => 0,
   );
   const path = slate.selection || latestBlockElementPath;

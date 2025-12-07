@@ -1,4 +1,4 @@
-import { useYooptaEditor } from '@yoopta/editor';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 import {
   List,
@@ -15,6 +15,10 @@ import s from './SlackChat.module.scss';
 
 const SlackTopToolbar = () => {
   const editor = useYooptaEditor();
+  const isBlockActive = (type: string) => {
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
+    return block?.type === type;
+  };
 
   return (
     <div className={s.toolbar}>
@@ -43,20 +47,20 @@ const SlackTopToolbar = () => {
       <span className={s.separator} />
       <button
         className={s.toolbarItem}
-        data-state-active={editor.blocks.NumberedList?.isActive()}
+        data-state-active={isBlockActive('NumberedList')}
         onClick={() => editor.toggleBlock('NumberedList')}>
         <ListOrdered size={15} strokeWidth={1.5} />
       </button>
       <button
         className={s.toolbarItem}
-        data-state-active={editor.blocks.BulletedList?.isActive()}
+        data-state-active={isBlockActive('BulletedList')}
         onClick={() => editor.toggleBlock('BulletedList')}>
         <List size={15} strokeWidth={1.5} />
       </button>
       <span className={s.separator} />
       <button
         className={s.toolbarItem}
-        data-state-active={editor.blocks.Blockquote?.isActive()}
+        data-state-active={isBlockActive('Blockquote')}
         onClick={() => {
           editor.toggleBlock('Blockquote');
         }}>

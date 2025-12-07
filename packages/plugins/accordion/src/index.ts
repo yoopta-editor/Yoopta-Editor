@@ -5,7 +5,6 @@ import type {
   AccordionListItemHeadingElement,
 } from './types';
 import { AccordionItemElement, AccordionListItemProps } from './types';
-import './styles.css';
 
 declare module 'slate' {
   type CustomTypes = {

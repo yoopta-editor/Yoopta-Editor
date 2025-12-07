@@ -1,6 +1,6 @@
-import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './YooptaEditor';
+import { useFocused, useSelected } from 'slate-react';
 
-import './styles.css';
+import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './yoopta-editor';
 
 export { YooptaPlugin } from './plugins';
 export {
@@ -21,10 +21,13 @@ export { useYooptaTools, Tools } from './contexts/YooptaContext/ToolsContext';
 
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';
-export { getRootBlockElementType, getRootBlockElement } from './utils/blockElements';
+export {
+  getRootBlockElementType,
+  getRootBlockElement,
+  getAllowedPluginsFromElement,
+} from './utils/block-elements';
 
 // to remove
-export { findPluginBlockByPath } from './utils/findPluginBlockByPath';
 export { findSlateBySelectionPath } from './utils/findSlateBySelectionPath';
 export { deserializeTextNodes } from './parsers/deserializeTextNodes';
 export { serializeTextNodes, serializeTextNodesIntoMarkdown } from './parsers/serializeTextNodes';
@@ -46,10 +49,11 @@ export {
   YooptaEditorEventKeys,
 } from './editor/types';
 export { buildBlockData, buildBlockElement } from './components/Editor/utils';
-export { buildBlockElementsStructure } from './utils/blockElements';
-export { buildSlateEditor } from './utils/buildSlate';
+export { buildBlockElementsStructure } from './utils/block-elements';
+export { buildSlateEditor } from './utils/build-slate';
 
 export {
+  Plugin,
   PluginElementRenderProps,
   PluginEventHandlerOptions,
   PluginCustomEditorRenderProps,
@@ -58,6 +62,8 @@ export {
   YooptaMarkProps,
   PluginOptions,
 } from './plugins/types';
+export type { ExtendPlugin, ExtendPluginElementConfig } from './plugins/create-yoopta-plugin';
+export type { ElementStructureOptions } from './editor/elements/create-element-structure';
 
 export { Elements } from './editor/elements';
 export { Blocks } from './editor/blocks';
@@ -78,10 +84,9 @@ export {
 } from './editor/core/applyTransforms';
 
 export type { ExtendYooptaTypes } from './editor/custom-types';
+// eslint-disable-next-line import/no-default-export
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };
-
-import { useFocused, useSelected } from 'slate-react';
 
 // [TODO] - move to hooks
 export function useElementSelected() {

@@ -3,7 +3,7 @@ import type { Operation, Range } from 'slate';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
-import { buildSlateEditor } from '../../utils/buildSlate';
+import { buildSlateEditor } from '../../utils/build-slate';
 import type {
   SlateEditor,
   SlateElement,

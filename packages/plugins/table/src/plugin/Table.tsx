@@ -1,42 +1,45 @@
 import { YooptaPlugin } from '@yoopta/editor';
 
 import { TableCommands } from '../commands';
-import { Table as TableRender } from '../elements/Table';
-import { TableDataCell } from '../elements/TableDataCell';
-import { TableRow } from '../elements/TableRow';
 import { onKeyDown } from '../events/onKeyDown';
 import { withTable } from '../extenstions/withTable';
 import { serializeTableToEmail } from '../parsers/email/serialize';
 import { deserializeTable } from '../parsers/html/deserialize';
-import { serializeTable } from '../parsers/html/serialize';
 import { serializeMarkown } from '../parsers/markdown/serialize';
 import type { TableElementMap } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
+const tableDataCellProps = {
+  asHeader: false,
+  width: 200,
+};
+
+const tableProps = {
+  headerRow: false,
+  headerColumn: false,
+};
+
 const Table = new YooptaPlugin<TableElementMap>({
   type: 'Table',
-  elements: {
-    table: {
-      render: TableRender,
-      asRoot: true,
-      children: ['table-row'],
-      props: {
-        headerRow: false,
-        headerColumn: false,
-      },
-    },
-    'table-row': {
-      render: TableRow,
-      children: ['table-data-cell'],
-    },
-    'table-data-cell': {
-      render: TableDataCell,
-      props: {
-        asHeader: false,
-        width: 200,
-      },
-    },
-  },
+  elements: (
+    <table
+      render={(props) => (
+        <table {...props.attributes} {...tableProps}>
+          <tbody {...props.attributes}>{props.children}</tbody>
+        </table>
+      )}
+      nodeType="block">
+      <table-row
+        render={(props) => <tr {...props.attributes}>{props.children}</tr>}
+        nodeType="block">
+        <table-data-cell
+          render={(props) => <td {...props.attributes}>{props.children}</td>}
+          props={tableDataCellProps}
+          nodeType="block"
+        />
+      </table-row>
+    </table>
+  ),
   events: {
     onKeyDown,
     onBlur: (editor, slate) => () => {
@@ -52,7 +55,6 @@ const Table = new YooptaPlugin<TableElementMap>({
         nodeNames: ['TABLE'],
         parse: deserializeTable,
       },
-      serialize: serializeTable,
     },
     markdown: {
       serialize: serializeMarkown,

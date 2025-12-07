@@ -5,6 +5,7 @@
     "packages/tools/*",
     "packages/marks",
     "packages/core/*",
+    "packages/themes/*",
     "packages/development"
   ],
   "npmClient": "yarn",

@@ -1,12 +1,7 @@
-import {
-  ReactNode,
-  forwardRef,
-  CSSProperties,
-  ReactElement,
-  cloneElement,
-  isValidElement,
-} from 'react';
-import { ActionMenuItem } from '../action-menu-list/types';
+import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import { cloneElement, forwardRef, isValidElement } from 'react';
+
+import type { ActionMenuItem } from '../action-menu-list/types';
 
 // ====================================
 // Root Component
@@ -16,20 +11,19 @@ type RootProps = {
   style?: CSSProperties;
 };
 
-const Root = forwardRef<HTMLDivElement, RootProps>(({ children, style, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      role="listbox"
-      style={style}
-      className="yoopta-ui-slash-action-menu-list-content"
-      onMouseDown={(e) => e.stopPropagation()}
-      onClick={(e) => e.stopPropagation()}
-      {...props}>
-      {children}
-    </div>
-  );
-});
+const Root = forwardRef<HTMLDivElement, RootProps>(({ children, style, ...props }, ref) => (
+  <div
+    ref={ref}
+    role="listbox"
+    tabIndex={0}
+    style={style}
+    className="yoopta-ui-slash-action-menu-list-content"
+    onMouseDown={(e) => e.stopPropagation()}
+    onClick={(e) => e.stopPropagation()}
+    {...props}>
+    {children}
+  </div>
+));
 
 Root.displayName = 'SlashActionMenuList.Root';
 
@@ -40,13 +34,11 @@ type GroupProps = {
   children: ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const Group = forwardRef<HTMLDivElement, GroupProps>(({ children, ...props }, ref) => {
-  return (
-    <div ref={ref} className="yoopta-ui-slash-action-menu-list-group" {...props}>
-      {children}
-    </div>
-  );
-});
+const Group = forwardRef<HTMLDivElement, GroupProps>(({ children, ...props }, ref) => (
+  <div ref={ref} className="yoopta-ui-slash-action-menu-list-group" {...props}>
+    {children}
+  </div>
+));
 
 Group.displayName = 'SlashActionMenuList.Group';
 
@@ -105,13 +97,11 @@ Item.displayName = 'SlashActionMenuList.Item';
 // ====================================
 // Empty Component
 // ====================================
-const Empty = () => {
-  return (
-    <div className="yoopta-ui-slash-action-menu-list-empty">
-      <span>No results</span>
-    </div>
-  );
-};
+const Empty = () => (
+  <div className="yoopta-ui-slash-action-menu-list-empty">
+    <span>No results</span>
+  </div>
+);
 
 export const SlashActionMenuList = {
   Root,

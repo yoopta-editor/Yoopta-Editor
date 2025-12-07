@@ -1,5 +1,4 @@
-import { Link } from './plugin';
-import './styles.css';
+import { Link } from './plugin/link-plugin';
 import { LinkElement, LinkElementProps } from './types';
 
 declare module 'slate' {
@@ -8,7 +7,7 @@ declare module 'slate' {
   };
 }
 
-export { LinkCommands } from './commands';
+export { LinkCommands } from './commands/link-commands';
 
 export { LinkElement, LinkElementProps };
 

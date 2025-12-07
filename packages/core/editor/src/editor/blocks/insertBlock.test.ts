@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 import { insertBlock } from './insertBlock';
 import type { PluginElement } from '../../plugins/types';
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import { buildBlockElementsStructure } from '../../utils/block-elements';
 import type { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
 
-vi.mock('../../utils/blockElements', () => ({
+vi.mock('../../utils/block-elements', () => ({
   buildBlockElementsStructure: vi.fn(),
 }));
 
@@ -26,7 +26,7 @@ describe('insertBlock', () => {
       children: [{ text: '' }],
     };
 
-    (buildBlockElementsStructure as jest.Mock).mockReturnValue(mockSlateStructure);
+    (buildBlockElementsStructure as Mock).mockReturnValue(mockSlateStructure);
 
     // Setup editor mock
     editor = {

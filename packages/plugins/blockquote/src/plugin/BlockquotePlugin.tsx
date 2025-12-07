@@ -3,13 +3,12 @@ import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from
 import { BlockquoteCommands } from '../commands/BlockquoteCommands';
 import { withBlockquote } from '../extensions/withBlockquote';
 import type { BlockquoteElement } from '../types';
-import { BlockquoteRender } from '../ui/Blockquote';
 
 const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
   type: 'Blockquote',
   elements: {
     blockquote: {
-      render: BlockquoteRender,
+      render: (props) => <blockquote {...props.attributes}>{props.children}</blockquote>,
     },
   },
   options: {
@@ -36,7 +35,7 @@ const Blockquote = new YooptaPlugin<Record<'blockquote', BlockquoteElement>>({
       },
     },
     markdown: {
-      serialize: (element, text) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
+      serialize: (element) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

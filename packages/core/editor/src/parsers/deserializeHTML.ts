@@ -8,7 +8,7 @@ import type {
   YooptaBlockData,
 } from '../editor/types';
 import type { PluginDeserializeParser } from '../plugins/types';
-import { getRootBlockElementType } from '../utils/blockElements';
+import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { isYooptaBlock } from '../utils/validators';
 
@@ -84,7 +84,7 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
     if (isInline) return nodeElementOrBlocks;
   }
 
-  const block = editor.blocks[plugin.type];
+  const block = editor.plugins[plugin.type];
   const rootElementType = getRootBlockElementType(block.elements) || '';
   const rootElement = block.elements[rootElementType];
 
@@ -93,8 +93,7 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   let rootNode: SlateElement<string, any> | YooptaBlockData[] = {
     id: generateId(),
     type: rootElementType,
-    children:
-      isVoid && !block.hasCustomEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
+    children: isVoid && !block.customEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
     props: { nodeType: 'block', ...rootElement.props },
   };
 

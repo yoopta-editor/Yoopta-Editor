@@ -42,8 +42,8 @@ export function focusBlock(editor: YooEditor, blockId: string, options: FocusBlo
 
     if (!slate || !block) return;
 
-    const currentBlock = editor.blocks[block.type];
-    if (!currentBlock.hasCustomEditor) {
+    const currentBlock = editor.plugins[block.type];
+    if (!currentBlock.customEditor) {
       try {
         const selectionPath = getSelectionPath(slate, focusAt);
         Transforms.select(slate, selectionPath);

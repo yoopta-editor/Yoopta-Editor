@@ -1,24 +1,23 @@
 import type { YooptaBlockData } from '@yoopta/editor';
-import {
-  YooptaPlugin,
-  generateId,
-  serializeTextNodes,
-  serializeTextNodesIntoMarkdown,
-} from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { BulletedListCommands } from '../commands';
-import { BulletedListRender } from '../elements/BulletedList';
 import { onKeyDown } from '../events/onKeyDown';
 import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const BulletedList = new YooptaPlugin<Pick<ListElementMap, 'bulleted-list'>>({
   type: 'BulletedList',
-  elements: {
-    'bulleted-list': {
-      render: BulletedListRender,
-    },
-  },
+  elements: (
+    <bulleted-list
+      render={(props) => <ul {...props.attributes}>{props.children}</ul>}
+      nodeType="block">
+      <bulleted-list-item
+        render={(props) => <li {...props.attributes}>{props.children}</li>}
+        nodeType="block"
+      />
+    </bulleted-list>
+  ),
   options: {
     display: {
       title: 'Bulleted List',

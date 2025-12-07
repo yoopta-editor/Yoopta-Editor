@@ -3,20 +3,16 @@ import { YooptaPlugin, generateId } from '@yoopta/editor';
 import { DividerCommands } from '../commands';
 import { DividerRender } from '../elements/Divider';
 import { onKeyDown } from '../events/onKeyDown';
-import type { DividerElementMap } from '../types';
+import type { DividerElementMap, DividerElementProps } from '../types';
+
+const dividerProps: DividerElementProps = {
+  theme: 'solid',
+  color: '#EFEFEE',
+};
 
 const Divider = new YooptaPlugin<DividerElementMap>({
   type: 'Divider',
-  elements: {
-    divider: {
-      render: DividerRender,
-      props: {
-        nodeType: 'void',
-        theme: 'solid',
-        color: '#EFEFEE',
-      },
-    },
-  },
+  elements: <divider render={DividerRender} props={dividerProps} nodeType="void" />,
   options: {
     display: {
       title: 'Divider',
@@ -44,16 +40,16 @@ const Divider = new YooptaPlugin<DividerElementMap>({
           };
         },
       },
-      serialize: (element, text, blockMeta) => {
+      serialize: (element) => {
         const { theme = 'solid', color = '#EFEFEE' } = element.props || {};
         return `<hr data-meta-theme="${theme}" data-meta-color="${color}" style="background-color: #8383e0; height: 1.2px" />`;
       },
     },
     markdown: {
-      serialize: (element, text) => '---\n',
+      serialize: () => '---\n',
     },
     email: {
-      serialize: (element, text, blockMeta) => {
+      serialize: (element) => {
         const { theme = 'solid', color = '#EFEFEE' } = element.props || {};
         let dividerHTML = `<hr data-meta-theme="${theme}" data-meta-color="${color}" style="border-color: ${color}; background-color: ${color}; height: 1.2px;" />`;
         if (theme === 'gradient') {

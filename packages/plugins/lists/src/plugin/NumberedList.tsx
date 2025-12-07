@@ -2,21 +2,22 @@ import type { YooptaBlockData } from '@yoopta/editor';
 import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { NumberedListCommands } from '../commands';
-import { NumberedListRender } from '../elements/NumberedList';
 import { onKeyDown } from '../events/onKeyDown';
 import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
   type: 'NumberedList',
-  elements: {
-    'numbered-list': {
-      render: NumberedListRender,
-      props: {
-        nodeType: 'block',
-      },
-    },
-  },
+  elements: (
+    <numbered-list
+      render={(props) => <ol {...props.attributes}>{props.children}</ol>}
+      nodeType="block">
+      <numbered-list-item
+        render={(props) => <li {...props.attributes}>{props.children}</li>}
+        nodeType="block"
+      />
+    </numbered-list>
+  ),
   options: {
     display: {
       title: 'Numbered List',

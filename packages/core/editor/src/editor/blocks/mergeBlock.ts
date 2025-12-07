@@ -1,29 +1,29 @@
 import { Editor, Text, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { getLastNodePoint } from '../../utils/getLastNodePoint';
 import type { YooptaOperation } from '../core/applyTransforms';
 import { Elements } from '../elements';
 import { Paths } from '../paths';
 import type { SlateElement, YooEditor } from '../types';
+import { getBlock } from './getBlock';
 
 export function mergeBlock(editor: YooEditor) {
-  const sourceBlock = findPluginBlockByPath(editor);
+  const sourceBlock = getBlock(editor, { at: editor.path.current });
   const sourceSlate = findSlateBySelectionPath(editor, { at: editor.path.current });
 
-  const prevBlockPath = Paths.getPreviousPath(editor);
+  const prevBlockPath = Paths.getPreviousBlockOrder(editor);
   const targetSlate = findSlateBySelectionPath(editor, { at: prevBlockPath });
-  const targetBlock = findPluginBlockByPath(editor, { at: prevBlockPath });
-  const targetBlockEntity = editor.blocks[targetBlock?.type || ''];
+  const targetBlock = getBlock(editor, { at: prevBlockPath });
+  const targetBlockEntity = editor.plugins[targetBlock?.type || ''];
 
   if (!sourceSlate || !sourceBlock || !targetSlate || !targetBlock) return;
 
   const prevBlockElementRoot = Elements.getElement(editor, targetBlock.id);
 
   if (!targetBlockEntity) return;
-  if (targetBlockEntity.hasCustomEditor) return;
+  if (targetBlockEntity.customEditor) return;
   if (prevBlockElementRoot?.props?.nodeType === 'void') return;
 
   try {

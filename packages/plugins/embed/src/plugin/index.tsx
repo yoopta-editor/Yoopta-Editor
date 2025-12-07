@@ -1,8 +1,7 @@
-import { YooptaPlugin, generateId } from '@yoopta/editor';
+import { YooptaPlugin, generateId, PluginElementRenderProps } from '@yoopta/editor';
 
 import { EmbedCommands } from '../commands';
 import type { EmbedElementMap, EmbedPluginOptions } from '../types';
-import { EmbedRender } from '../ui/Embed';
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',
@@ -10,17 +9,33 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
+const embedProps = {
+  sizes: { width: 0, height: 0 },
+  provider: null,
+  nodeType: 'void',
+};
+
 const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
   type: 'Embed',
-  elements: {
-    embed: {
-      render: EmbedRender,
-      props: {
-        sizes: { width: 650, height: 500 },
-        nodeType: 'void',
-      },
-    },
-  },
+  elements: (
+    <embed
+      render={(props: PluginElementRenderProps) => {
+        return (
+          <div {...props.attributes}>
+            <embed
+              src={props.element.props.provider.url}
+              width={props.element.props.sizes.width}
+              height={props.element.props.sizes.height}
+              contentEditable={false}
+            />
+            {props.children}
+          </div>
+        );
+      }}
+      props={embedProps}
+      nodeType="void"
+    />
+  ),
   options: {
     display: {
       title: 'Embed',

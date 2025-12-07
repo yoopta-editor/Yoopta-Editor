@@ -2,21 +2,26 @@ import type { YooptaBlockData } from '@yoopta/editor';
 import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
 import { TodoListCommands } from '../commands';
-import { TodoListRender } from '../elements/TodoList';
 import { onKeyDown } from '../events/onKeyDown';
 import type { ListElementMap } from '../types';
 import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const TodoList = new YooptaPlugin<Pick<ListElementMap, 'todo-list'>>({
   type: 'TodoList',
-  elements: {
-    'todo-list': {
-      render: TodoListRender,
-      props: {
-        checked: false,
-      },
-    },
-  },
+  elements: (
+    <todo-list
+      render={(props) => (
+        <ul {...props.attributes} style={{ listStyleType: 'none' }}>
+          {props.children}
+        </ul>
+      )}
+      nodeType="block">
+      <todo-list-item
+        render={(props) => <li {...props.attributes}>{props.children}</li>}
+        nodeType="block"
+      />
+    </todo-list>
+  ),
   options: {
     display: {
       title: 'Todo List',

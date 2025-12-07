@@ -3,7 +3,7 @@
 **/dist/
 
 # Web examples (don't lint these)
-/web/
+/web
 
 # Other common ignores
 node_modules/

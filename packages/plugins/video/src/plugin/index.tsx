@@ -1,8 +1,7 @@
-import { YooptaPlugin, generateId } from '@yoopta/editor';
+import { YooptaPlugin, generateId, PluginElementRenderProps } from '@yoopta/editor';
 
 import { VideoCommands } from '../commands';
 import type { VideoElementMap, VideoPluginOptions } from '../types';
-import { VideoRender } from '../ui/Video';
 import { limitSizes } from '../utils/limitSizes';
 
 const ALIGNS_TO_JUSTIFY = {
@@ -11,32 +10,45 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
+const videoProps = {
+  src: null,
+  srcSet: null,
+  bgColor: null,
+  sizes: { width: 0, height: 0 },
+  nodeType: 'void',
+  fit: null,
+  settings: {
+    controls: false,
+    loop: false,
+    muted: false,
+    autoPlay: false,
+  },
+  provider: null,
+};
+
 const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
   type: 'Video',
-  elements: {
-    // [TODO] - caption element??,
-    video: {
-      render: VideoRender,
-      props: {
-        src: null,
-        srcSet: null,
-        bgColor: null,
-        sizes: { width: 650, height: 400 },
-        nodeType: 'void',
-        fit: 'cover',
-        provider: {
-          type: null,
-          id: '',
-        },
-        settings: {
-          controls: false,
-          loop: true,
-          muted: true,
-          autoPlay: true,
-        },
-      },
-    },
-  },
+  elements: (
+    <video
+      render={(props: PluginElementRenderProps) => (
+        <div {...props.attributes}>
+          <video
+            src={props.element.props.src}
+            width={props.element.props.sizes.width}
+            height={props.element.props.sizes.height}
+            objectFit={props.element.props.fit}
+            controls={props.element.props.settings.controls}
+            loop={props.element.props.settings.loop}
+            muted={props.element.props.settings.muted}
+            autoplay={props.element.props.settings.autoPlay}
+          />
+          {props.children}
+        </div>
+      )}
+      props={videoProps}
+      nodeType="void"
+    />
+  ),
   options: {
     accept: 'video/*',
     maxSizes: { maxWidth: 650, maxHeight: 550 },

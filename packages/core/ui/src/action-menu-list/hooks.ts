@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo, useState, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Placement } from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
@@ -6,13 +8,12 @@ import {
   shift,
   useFloating,
   useTransitionStyles,
-  Placement,
 } from '@floating-ui/react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 import { useActionMenuListStore } from './store';
-import { filterToggleActions, mapActionMenuItems } from './utils';
 import type { ActionMenuItem, ActionMenuListProps } from './types';
+import { filterToggleActions, mapActionMenuItems } from './utils';
 
 /**
  * Lightweight hook for accessing only store actions
@@ -34,10 +35,7 @@ export const useActionMenuListActions = () => {
  * Full hook with Floating UI and all logic
  * Use this only in the component that renders the ActionMenuList
  */
-export const useActionMenuList = ({
-  items,
-  view: viewProp = 'default',
-}: ActionMenuListProps = {}) => {
+export const useActionMenuList = ({ view: viewProp = 'default' }: ActionMenuListProps = {}) => {
   const editor = useYooptaEditor();
   const store = useActionMenuListStore();
   const {
@@ -63,11 +61,8 @@ export const useActionMenuList = ({
   });
 
   const blockTypes: ActionMenuItem[] = useMemo(
-    () =>
-      mapActionMenuItems(editor, items || Object.keys(editor.blocks)).filter((item) =>
-        filterToggleActions(editor, item.type),
-      ),
-    [editor, items],
+    () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)),
+    [editor],
   );
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem>(blockTypes[0]);
@@ -124,7 +119,7 @@ export const useActionMenuList = ({
         if (!block) return;
 
         e.stopPropagation();
-        editor.toggleBlock(type, { deleteText: false, focus: true, at: block.meta.order });
+        editor.toggleBlock(type, { preserveContent: true, focus: true, at: block.meta.order });
         close();
       },
       'data-action-menu-item': true,

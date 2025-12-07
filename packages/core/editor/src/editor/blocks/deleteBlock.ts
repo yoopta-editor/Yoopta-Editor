@@ -33,7 +33,7 @@ export function deleteBlock(editor: YooEditor, options: DeleteBlockOptions) {
   // const isLastBlock = Object.values(editor.children).length === 1;
   // if (isLastBlock) return;
 
-  const prevBlockPath = Paths.getPreviousPath(editor);
+  const prevBlockPath = Paths.getPreviousBlockOrder(editor);
   const prevBlock = prevBlockPath !== null ? editor.getBlock({ at: prevBlockPath }) : undefined;
   const prevSlate = prevBlock ? getBlockSlate(editor, { id: prevBlock?.id }) : undefined;
 

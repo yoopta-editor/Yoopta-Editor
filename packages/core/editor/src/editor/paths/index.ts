@@ -1,6 +1,6 @@
-import { getNextPath } from './getNextPath';
-import { getPath } from './getPath';
-import { getPreviousPath } from './getPreviousPath';
+import { getBlockOrder } from './getBlockOrder';
+import { getNextBlockOrder } from './getNextBlockOrder';
+import { getPreviousBlockOrder } from './getPreviousBlockOrder';
 import { getSelectedPaths } from './getSelectedPaths';
 import { isBlockSelected } from './isBlockSelected';
 import { isPathEmpty } from './isPathEmpty';
@@ -8,9 +8,9 @@ import { setPath } from './setPath';
 import { getLastNodePoint } from '../../utils/getLastNodePoint';
 
 export const Paths = {
-  getPath,
-  getNextPath,
-  getPreviousPath,
+  getBlockOrder,
+  getNextBlockOrder,
+  getPreviousBlockOrder,
   isBlockSelected,
   getSelectedPaths,
   isPathEmpty,

@@ -1,7 +1,6 @@
 import { Paths } from '../editor/paths';
 import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
-import { YooptaBlockBaseMeta } from '../editor/types';
-import { getPluginByInlineElement } from '../utils/blockElements';
+import { getPluginByInlineElement } from '../utils/block-elements';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   underline: { type: 'underline', tag: 'u' },
@@ -61,14 +60,14 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
     const plugin = editor.plugins[blockData.type];
 
     if (plugin && plugin.parsers?.html?.serialize) {
-      const content = serializeChildren(
+      const htmlContent = serializeChildren(
         (blockData.value[0] as SlateElement).children,
         editor.plugins,
         editor,
       );
       return plugin.parsers.html.serialize(
         blockData.value[0] as SlateElement,
-        content,
+        htmlContent,
         blockData.meta,
       );
     }
