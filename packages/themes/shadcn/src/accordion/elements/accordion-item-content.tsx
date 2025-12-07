@@ -1,5 +1,4 @@
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import React from 'react';
 
 import { AccordionContent } from '../ui/accordion';
 

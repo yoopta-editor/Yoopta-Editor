@@ -34,6 +34,13 @@ const YooptaUIPackageExample = () => {
             editor.y('accordion-list-item-content'),
           ],
         }),
+        editor.y('accordion-list-item', {
+          props: { isExpanded: false },
+          children: [
+            editor.y('accordion-list-item-heading'),
+            editor.y('accordion-list-item-content'),
+          ],
+        }),
       ],
     });
 

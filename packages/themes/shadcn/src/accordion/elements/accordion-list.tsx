@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
-import { Elements, useYooptaEditor } from '@yoopta/editor';
+import { useMemo } from 'react';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { Editor, Element, Transforms } from 'slate';
 
 import { Accordion } from '../ui/accordion';
 
@@ -8,49 +9,50 @@ export const AccordionList = (props: PluginElementRenderProps) => {
   const { attributes, children, blockId } = props;
   const editor = useYooptaEditor();
 
-  const accordionItems = Elements.getElementChildren(editor, blockId, {
-    type: 'accordion-list',
-  });
-
   const expandedValue = useMemo(() => {
-    if (!accordionItems) return undefined;
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return [];
 
-    for (const item of accordionItems) {
-      if (
-        'props' in item &&
-        item.props &&
-        typeof item.props === 'object' &&
-        (item as SlateElement).props?.isExpanded &&
-        'id' in item
-      ) {
-        return (item as SlateElement).id as string;
+    const expandedIds: string[] = [];
+
+    // Find all accordion-list-item elements
+    const itemNodes = Editor.nodes<SlateElement>(slate, {
+      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'accordion-list-item',
+    });
+
+    for (const [node] of itemNodes) {
+      const itemElement = node as SlateElement;
+      if (itemElement.props?.isExpanded && itemElement.id) {
+        expandedIds.push(itemElement.id as string);
       }
     }
-    return undefined;
-  }, [accordionItems]);
 
-  const onValueChange = (value: string | undefined) => {
-    if (!accordionItems) return;
+    return expandedIds;
+  }, [editor, blockId]);
 
-    accordionItems.forEach((item) => {
-      if (!('id' in item)) return;
+  const onValueChange = (value: string[]) => {
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
 
-      const itemId = (item as SlateElement).id as string;
-      const shouldBeExpanded = itemId === value;
+    if (!slate) return;
 
-      const itemEntry = Elements.getElementEntry(editor, blockId, {
-        type: 'accordion-list-item',
-        id: itemId,
-      });
+    // Find all accordion-list-item elements
+    const itemNodes = Editor.nodes<SlateElement>(slate, {
+      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'accordion-list-item',
+    });
 
-      if (itemEntry) {
-        const [, itemPath] = itemEntry;
-        Elements.updateElement(
-          editor,
-          blockId,
-          { type: 'accordion-list-item', props: { isExpanded: shouldBeExpanded } },
-          { path: itemPath },
-        );
+    Editor.withoutNormalizing(slate, () => {
+      for (const [node, path] of itemNodes) {
+        const itemElement = node as SlateElement;
+        const itemId = itemElement.id as string;
+        const shouldBeExpanded = value.includes(itemId);
+
+        if (itemElement.props?.isExpanded !== shouldBeExpanded) {
+          Transforms.setNodes<SlateElement>(
+            slate,
+            { props: { ...itemElement.props, isExpanded: shouldBeExpanded } },
+            { at: path },
+          );
+        }
       }
     });
   };
@@ -58,12 +60,10 @@ export const AccordionList = (props: PluginElementRenderProps) => {
   return (
     <Accordion
       {...attributes}
-      type="single"
-      collapsible
+      type="multiple"
       value={expandedValue}
       onValueChange={onValueChange}
-      className="w-full rounded-md border"
-      defaultValue="item-1">
+      className="w-full rounded-md border">
       {children}
     </Accordion>
   );

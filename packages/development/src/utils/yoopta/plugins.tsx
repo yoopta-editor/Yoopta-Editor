@@ -24,7 +24,7 @@ import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin'
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
-import { AccordionUI } from '@yoopta/themes-shadcn';
+import { AccordionUI, TableUI, HeadingsUI } from '@yoopta/themes-shadcn';
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -45,9 +45,15 @@ export const YOOPTA_PLUGINS = [
     elements: AccordionUI,
   }),
   Paragraph,
-  Headings.HeadingOne,
-  Headings.HeadingTwo,
-  Headings.HeadingThree,
+  Headings.HeadingOne.extend({
+    elements: HeadingsUI.HeadingOne,
+  }),
+  Headings.HeadingTwo.extend({
+    elements: HeadingsUI.HeadingTwo,
+  }),
+  Headings.HeadingThree.extend({
+    elements: HeadingsUI.HeadingThree,
+  }),
   OrderDetailsActionPlugin,
   Blockquote,
   SendEmailActionPlugin.extend({
@@ -58,6 +64,7 @@ export const YOOPTA_PLUGINS = [
   Lists.TodoList,
   Table.extend({
     allowedPlugins: ALLOWED_PLUGINS,
+    elements: TableUI,
   }),
   Link,
   StepsPlugin.extend({

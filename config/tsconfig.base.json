@@ -27,5 +27,13 @@
     "packages/core/editor/src/plugins/jsx.d.ts",
     "packages/plugins/**/src/**/*"
   ],
-  "exclude": ["node_modules", "dist", "web"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "web",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
 }

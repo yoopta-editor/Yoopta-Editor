@@ -4,8 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "declaration": true,
-    "declarationMap": true,
-    "jsx": "react"
+    "declarationMap": true
   },
   "include": ["src/**/*"],
   "exclude": [
