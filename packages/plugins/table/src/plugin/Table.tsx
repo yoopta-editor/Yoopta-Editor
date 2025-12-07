@@ -1,14 +1,10 @@
 import { YooptaPlugin } from '@yoopta/editor';
 
 import { TableCommands } from '../commands';
-import { Table as TableRender } from '../elements/Table';
-import { TableDataCell } from '../elements/TableDataCell';
-import { TableRow } from '../elements/TableRow';
 import { onKeyDown } from '../events/onKeyDown';
 import { withTable } from '../extenstions/withTable';
 import { serializeTableToEmail } from '../parsers/email/serialize';
 import { deserializeTable } from '../parsers/html/deserialize';
-import { serializeTable } from '../parsers/html/serialize';
 import { serializeMarkown } from '../parsers/markdown/serialize';
 import type { TableElementMap } from '../types';
 import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
@@ -26,9 +22,21 @@ const tableProps = {
 const Table = new YooptaPlugin<TableElementMap>({
   type: 'Table',
   elements: (
-    <table render={TableRender} props={tableProps}>
-      <table-row render={TableRow}>
-        <table-data-cell render={TableDataCell} props={tableDataCellProps} />
+    <table
+      render={(props) => (
+        <table {...props.attributes} {...tableProps}>
+          <tbody {...props.attributes}>{props.children}</tbody>
+        </table>
+      )}
+      nodeType="block">
+      <table-row
+        render={(props) => <tr {...props.attributes}>{props.children}</tr>}
+        nodeType="block">
+        <table-data-cell
+          render={(props) => <td {...props.attributes}>{props.children}</td>}
+          props={tableDataCellProps}
+          nodeType="block"
+        />
       </table-row>
     </table>
   ),

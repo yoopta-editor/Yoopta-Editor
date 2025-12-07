@@ -85,7 +85,18 @@ const YooptaUIPackageExample = () => {
   const insertCallout = () => {
     const elements = editor.y('callout', {
       props: { theme: 'success' },
-      children: [editor.y('image')],
+      children: [
+        editor.y('image', {
+          props: {
+            src: 'https://optim.tildacdn.com/tild3632-6534-4865-a532-613830613038/-/cover/720x792/center/center/-/format/webp/IMG_8173.jpg.webp',
+            sizes: {
+              width: 200,
+              height: 200,
+            },
+            fit: 'contain',
+          },
+        }),
+      ],
     });
     editor.insertBlock('Callout', {
       elements,

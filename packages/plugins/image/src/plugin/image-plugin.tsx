@@ -1,9 +1,8 @@
-import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { ImageCommands } from '../commands';
 import type { ImageElementMap, ImageElementProps, ImagePluginOptions } from '../types';
-import { ImageRender } from '../ui/Image';
 import { limitSizes } from '../utils/limitSizes';
 
 const ALIGNS_TO_JUSTIFY = {
@@ -12,38 +11,34 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
-const ImageContainerRender = (props: PluginElementRenderProps) => {
-  const { children, element, blockId, attributes } = props;
-  return (
-    <div {...attributes} className="flex flex-col gap-0">
-      {children}
-    </div>
-  );
-};
-
-const ImageCaptionRender = (props: PluginElementRenderProps) => {
-  const { children, element, blockId, attributes } = props;
-  return (
-    <div {...attributes} className="text-sm text-gray-500">
-      {children}
-    </div>
-  );
-};
-
-const imageProps = {
+const imageProps: ImageElementProps = {
   src: null,
   alt: null,
   srcSet: null,
   bgColor: null,
   fit: null,
   sizes: { width: 0, height: 0 },
-  nodeType: 'void',
 };
 
 const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
   type: 'Image',
-  // @ts-expect-error - image conflicts with native HTML element type
-  elements: <image render={ImageRender} props={imageProps} nodeType="void" />,
+  elements: (
+    <image
+      render={(props) => (
+        <div {...props.attributes}>
+          <img
+            src={props.element.props.src}
+            alt={props.element.props.alt}
+            width={props.element.props.sizes?.width}
+            height={props.element.props.sizes?.height}
+            objectFit={props.element.props.fit}
+          />
+        </div>
+      )}
+      props={imageProps}
+      nodeType="void"
+    />
+  ),
   commands: ImageCommands,
   options: {
     display: {
@@ -111,7 +106,7 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => `![${element.props.alt || element.id}](${element.props.src})\n`,
+      serialize: (element) => `![${element.props.alt || element.id}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

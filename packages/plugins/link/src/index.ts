@@ -1,5 +1,4 @@
 import { Link } from './plugin/link-plugin';
-import './styles.css';
 import { LinkElement, LinkElementProps } from './types';
 
 declare module 'slate' {

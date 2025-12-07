@@ -1,6 +1,5 @@
-import type { TableCellElement, TableElement, TableRowElement } from './types';
-import './styles.css';
 import { Table } from './plugin/Table';
+import type { TableCellElement, TableElement, TableRowElement } from './types';
 
 declare module 'slate' {
   type CustomTypes = {

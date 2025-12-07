@@ -1,8 +1,6 @@
-import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './yoopta-editor';
-
-import './styles.css';
-
 import { useFocused, useSelected } from 'slate-react';
+
+import { YooptaEditor, type YooptaEditorProps, type YooptaOnChangeOptions } from './yoopta-editor';
 
 export { YooptaPlugin } from './plugins';
 export {

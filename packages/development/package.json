@@ -41,6 +41,7 @@
     "@yoopta/toolbar": "*",
     "@yoopta/ui": "*",
     "@yoopta/video": "*",
+    "@yoopta/themes-shadcn": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",

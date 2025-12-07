@@ -1,8 +1,8 @@
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { FileCommands } from '../commands';
-import type { FileElementMap, FilePluginOptions } from '../types';
-import { FileRender } from '../ui/File';
+import type { FileElementMap, FileElementProps, FilePluginOptions } from '../types';
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',
@@ -10,20 +10,32 @@ const ALIGNS_TO_JUSTIFY = {
   right: 'flex-end',
 };
 
+const fileProps: FileElementProps = {
+  size: 0,
+  name: null,
+  src: null,
+  format: null,
+};
+
 const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
   type: 'File',
-  elements: {
-    file: {
-      render: FileRender,
-      props: {
-        size: 0,
-        name: null,
-        src: null,
-        format: null,
-        nodeType: 'void',
-      },
-    },
-  },
+  elements: (
+    <file
+      render={(props: PluginElementRenderProps) => (
+        <div {...props.attributes}>
+          <a
+            href={props.element.props.src}
+            download={props.element.props.name}
+            target="_blank"
+            rel="noopener noreferrer">
+            {props.element.props.name}
+          </a>
+        </div>
+      )}
+      nodeType="void"
+      props={fileProps}
+    />
+  ),
   commands: FileCommands,
   options: {
     display: {
@@ -84,7 +96,7 @@ const File = new YooptaPlugin<FileElementMap, FilePluginOptions>({
       },
     },
     markdown: {
-      serialize: (element, text) => `[${element.props.name}](${element.props.src})`,
+      serialize: (element) => `[${element.props.name}](${element.props.src})`,
     },
     email: {
       serialize: (element, text, blockMeta) => {

@@ -1,17 +1,32 @@
-import { Command, CommandEmpty, CommandGroup, CommandList, CommandItem } from '../components/ui/command';
-import { MentionPluginOptions, MentionItem } from '../types';
-import { UI, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
 import { useEffect, useState } from 'react';
+import {
+  autoUpdate,
+  flip,
+  inline,
+  offset,
+  shift,
+  useFloating,
+  useTransitionStyles,
+} from '@floating-ui/react';
+import { UI, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
 import { useDebounce } from 'use-debounce';
+
 import { MentionCommands } from '../commands/MentionCommands';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from '../components/ui/command';
+import type { MentionItem, MentionPluginOptions } from '../types';
 import { useArrowNavigation } from './hooks';
-import { useFloating, offset, flip, shift, inline, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 
 const { Portal } = UI;
 
 const Spinner = () => (
   <div className="yoopta-mention-dropdown-spinner">
-    <div className="yoopta-mention-dropdown-spinner-circle"></div>
+    <div className="yoopta-mention-dropdown-spinner-circle" />
   </div>
 );
 
@@ -23,20 +38,23 @@ type MentionDropdownProps = {
   showLoading?: boolean;
 };
 
-export function MentionDropdown({
+export const MentionDropdown = ({
   getItems: getMentionItems,
   onSelect,
   onClose,
   debounceMs,
   showLoading,
-}: MentionDropdownProps) {
+}: MentionDropdownProps) => {
   const editor = useYooptaEditor();
   const { char = '@' } = useYooptaPluginOptions<MentionPluginOptions>('Mention');
   const isOpen = editor.mentions.target !== null;
 
   const [results, setResults] = useState<MentionItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [debouncedValue] = useDebounce(editor.mentions.search, typeof debounceMs === 'number' ? debounceMs : 1000);
+  const [debouncedValue] = useDebounce(
+    editor.mentions.search,
+    typeof debounceMs === 'number' ? debounceMs : 1000,
+  );
 
   const { refs, floatingStyles, context } = useFloating({
     placement: 'bottom-start',
@@ -99,7 +117,9 @@ export function MentionDropdown({
   };
 
   const onSelectHandler = (id: string | number) => {
-    const mention = results.find((u) => (typeof u.id === 'string' ? u.id === id : u.id === Number(id)));
+    const mention = results.find((u) =>
+      typeof u.id === 'string' ? u.id === id : u.id === Number(id),
+    );
 
     if (!mention) return;
     onSelect(mention);
@@ -131,11 +151,14 @@ export function MentionDropdown({
                 value={`${mention.id}`}
                 onSelect={onSelectHandler}
                 ref={(el) => (itemRefs.current[i] = el)}
-                className={className}
-              >
+                className={className}>
                 <div className="yoopta-mention-dropdown-item-content">
                   {mention.avatar && (
-                    <img src={mention.avatar} alt={mention.name} className="yoopta-mention-dropdown-item-avatar" />
+                    <img
+                      src={mention.avatar}
+                      alt={mention.name}
+                      className="yoopta-mention-dropdown-item-avatar"
+                    />
                   )}
                   <span>{mention.name}</span>
                 </div>
@@ -155,11 +178,10 @@ export function MentionDropdown({
           onMouseDown={onClick}
           style={style}
           ref={refs.setFloating}
-          className="yoopta-mention-dropdown"
-        >
+          className="yoopta-mention-dropdown">
           <Command loop>{renderContent()}</Command>
         </div>
       )}
     </Portal>
   );
-}
+};

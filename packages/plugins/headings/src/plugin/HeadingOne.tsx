@@ -4,19 +4,11 @@ import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from
 import { HeadingOneCommands } from '../commands';
 import type { HeadingOneElement } from '../types';
 
-const HeadingOneRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
-  const { element, HTMLAttributes = {}, attributes, children } = props;
-  const { className = '', ...htmlAttrs } = HTMLAttributes;
-
-  if (extendRender) return extendRender(props);
+const HeadingOneRender = (props: PluginElementRenderProps) => {
+  const { element, attributes, children } = props;
 
   return (
-    <h1
-      id={element.id}
-      draggable={false}
-      className={`yoopta-heading-one ${className}`}
-      {...htmlAttrs}
-      {...attributes}>
+    <h1 id={element.id} draggable={false} {...attributes}>
       {children}
     </h1>
   );
@@ -26,14 +18,7 @@ HeadingOneRender.displayName = 'HeadingOne';
 
 const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
   type: 'HeadingOne',
-  elements: {
-    'heading-one': {
-      render: HeadingOneRender,
-      props: {
-        nodeType: 'block',
-      },
-    },
-  },
+  elements: <heading-one render={HeadingOneRender} nodeType="block" />,
   commands: HeadingOneCommands,
   options: {
     display: {

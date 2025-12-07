@@ -10,6 +10,20 @@
   "type": "module",
   "module": "dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./ui/base": {
+      "import": "./dist/ui/base/index.js",
+      "types": "./dist/ui/base/index.d.ts"
+    },
+    "./ui/shadcn": {
+      "import": "./dist/ui/shadcn/index.js",
+      "types": "./dist/ui/shadcn/index.d.ts"
+    }
+  },
   "files": [
     "dist/"
   ],
@@ -19,7 +33,8 @@
     "react-dom": ">=17.0.2"
   },
   "dependencies": {
-    "lucide-react": "^0.378.0"
+    "lucide-react": "^0.378.0",
+    "@radix-ui/react-accordion": "^1.0.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

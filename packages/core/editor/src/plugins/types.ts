@@ -39,9 +39,7 @@ export type PluginElementExtendRenderProps = RenderSlateElementProps & {
   HTMLAttributes?: HTMLAttributes<HTMLElement>;
 };
 
-export type PluginElementRenderProps = PluginElementExtendRenderProps & {
-  extendRender?: (props: PluginElementExtendRenderProps) => JSX.Element;
-};
+export type PluginElementRenderProps = PluginElementExtendRenderProps;
 
 export type PluginCustomEditorRenderProps = {
   blockId: string;

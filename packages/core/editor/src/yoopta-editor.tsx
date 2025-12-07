@@ -8,7 +8,6 @@ import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
 import type { YooptaOperation } from './editor/core/applyTransforms';
 import type { SlateElement, YooEditor, YooptaContentValue, YooptaPath } from './editor/types';
 import type { YooptaMark } from './marks';
-import { FakeSelectionMark } from './marks/FakeSelectionMark';
 import type { YooptaPlugin } from './plugins';
 import type { Plugin } from './plugins/types';
 import {
@@ -52,7 +51,7 @@ const YooptaEditor = ({
   id,
   editor,
   value,
-  marks: marksProps,
+  marks,
   plugins: pluginsFromProp,
   autoFocus,
   className,
@@ -66,11 +65,6 @@ const YooptaEditor = ({
   onChange,
   onPathChange,
 }: YooptaEditorProps) => {
-  const marks = useMemo(() => {
-    if (marksProps) return [FakeSelectionMark, ...marksProps];
-    return [FakeSelectionMark];
-  }, [marksProps]);
-
   const plugins = useMemo(
     () => pluginsFromProp.map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>),
     [pluginsFromProp],

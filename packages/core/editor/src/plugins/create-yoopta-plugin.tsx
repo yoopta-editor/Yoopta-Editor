@@ -22,15 +22,15 @@ export type ExtendPluginElementConfig = {
 };
 
 export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOptions> = {
-  renders?: {
-    [K in keyof TElementMap]?: (props: PluginElementRenderProps) => JSX.Element;
-  };
+  // renders?: {
+  //   [K in keyof TElementMap]?: (props: PluginElementRenderProps) => JSX.Element;
+  // };
   options?: Partial<PluginOptions<TOptions>>;
-  elementProps?: {
-    [K in keyof TElementMap]?: (
-      props: ExtractProps<TElementMap[K]>,
-    ) => ExtractProps<TElementMap[K]>;
-  };
+  // elementProps?: {
+  //   [K in keyof TElementMap]?: (
+  //     props: ExtractProps<TElementMap[K]>,
+  //   ) => ExtractProps<TElementMap[K]>;
+  // };
   events?: Partial<PluginEvents>;
   // Plugin-level allowedPlugins: applies to ALL leaf elements
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,9 +86,9 @@ export class YooptaPlugin<
   extend(extendPlugin: ExtendPlugin<TElementMap, TOptions>): YooptaPlugin<TElementMap, TOptions> {
     // renders and elementProps are legacy
     const {
-      renders,
+      // renders,
+      // elementProps,
       options,
-      elementProps,
       events,
       allowedPlugins,
       elements: extendElements,
@@ -97,31 +97,31 @@ export class YooptaPlugin<
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
 
-    if (renders) {
-      Object.keys(renders).forEach((elementType) => {
-        const element = elements[elementType];
+    // if (renders) {
+    //   Object.keys(renders).forEach((elementType) => {
+    //     const element = elements[elementType];
 
-        if (element?.render) {
-          const customRenderFn = renders[elementType];
-          const elementRender = element.render;
-          element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
-        }
-      });
-    }
+    //     if (element?.render) {
+    //       const customRenderFn = renders[elementType];
+    //       const elementRender = element.render;
+    //       element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
+    //     }
+    //   });
+    // }
 
-    if (elementProps) {
-      Object.keys(elementProps).forEach((elementType) => {
-        const element = elements[elementType];
+    // if (elementProps) {
+    //   Object.keys(elementProps).forEach((elementType) => {
+    //     const element = elements[elementType];
 
-        if (element) {
-          const defaultPropsFn = elementProps[elementType];
-          const updatedElementProps = element.props;
-          if (defaultPropsFn && updatedElementProps) {
-            element.props = defaultPropsFn(updatedElementProps);
-          }
-        }
-      });
-    }
+    //     if (element) {
+    //       const defaultPropsFn = elementProps[elementType];
+    //       const updatedElementProps = element.props;
+    //       if (defaultPropsFn && updatedElementProps) {
+    //         element.props = defaultPropsFn(updatedElementProps);
+    //       }
+    //     }
+    //   });
+    // }
 
     if (events) {
       Object.keys(events).forEach((event) => {
@@ -191,11 +191,10 @@ export class YooptaPlugin<
 
         // Handle custom render
         if (extendElementConfig.render) {
-          const customRenderFn = extendElementConfig.render;
-          const elementRender = element.render;
+          const elementRender = extendElementConfig.render;
 
           if (typeof elementRender === 'function') {
-            element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
+            element.render = (props) => elementRender(props);
           }
         }
 

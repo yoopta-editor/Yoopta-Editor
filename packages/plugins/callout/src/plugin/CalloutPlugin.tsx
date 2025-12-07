@@ -9,20 +9,21 @@ import {
 
 import { CalloutCommands } from '../commands/CalloutCommands';
 import { withCallout } from '../extensions/withCallout';
-import type { CalloutElementMap, CalloutTheme } from '../types';
-import { CalloutRender } from '../ui/Callout';
+import type { CalloutElementMap, CalloutElementProps, CalloutTheme } from '../types';
 import { CALLOUT_THEME_STYLES } from '../utils';
+
+const calloutProps: CalloutElementProps = {
+  theme: 'default',
+};
 
 const Callout = new YooptaPlugin<CalloutElementMap>({
   type: 'Callout',
-  elements: {
-    callout: {
-      render: CalloutRender,
-      props: {
-        theme: 'default',
-      },
-    },
-  },
+  elements: (
+    <callout
+      render={(props) => <div {...props.attributes}>{props.children}</div>}
+      props={calloutProps}
+    />
+  ),
   commands: CalloutCommands,
   extensions: withCallout,
   options: {

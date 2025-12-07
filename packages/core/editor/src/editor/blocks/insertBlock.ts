@@ -42,6 +42,9 @@ export function insertBlock(editor: YooEditor, type: string, options: InsertBloc
   const { at = editor.path.current, focus = false, blockData, elements } = options;
 
   const plugin = editor.plugins[type];
+  if (!plugin) {
+    throw new Error(`Plugin "${type}" not defined in plugins`);
+  }
   const { onBeforeCreate, onCreate } = plugin.events || {};
 
   let slateStructure;

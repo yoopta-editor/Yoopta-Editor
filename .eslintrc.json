@@ -193,15 +193,6 @@
       "files": ["*.{js,cjs}"],
       "rules": {
         "no-unused-vars": ["error"],
-        "no-param-reassign": "off",
-        // [
-        //   "error",
-        //   {
-        //     "props": true,
-        //     // recheck this
-        //     "ignorePropertyModificationsFor": ["slate", "editor"]
-        //   }
-        // ],
         "no-warning-comments": [
           "warn",
           {
@@ -315,6 +306,24 @@
       "files": ["*.{spec,test,stories}.{cjs,cjsx,js,ts,jsx,tsx}"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["rollup.config.js", "rollup.config.*.js"],
+      "rules": {
+        "import/no-relative-packages": "off"
+      }
+    },
+    {
+      "files": ["*.{ts,tsx}"],
+      "rules": {
+        "no-param-reassign": [
+          "error",
+          {
+            "props": true,
+            "ignorePropertyModificationsFor": ["slate", "editor"]
+          }
+        ]
       }
     }
   ]

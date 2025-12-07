@@ -5,7 +5,7 @@ import type { ProviderRenderProps } from '../types';
 
 const YouTube = ({ provider, width, height, attributes, children }: ProviderRenderProps) => {
   const youtubeRootRef = useRef(null);
-  const [isFrameLoaded, setFrameLoaded] = useState(false);
+  const [isFrameLoaded, setIsFrameLoaded] = useState<boolean>(false);
 
   const { isIntersecting: isInViewport } = useIntersectionObserver(youtubeRootRef, {
     freezeOnceVisible: true,
@@ -24,7 +24,6 @@ const YouTube = ({ provider, width, height, attributes, children }: ProviderRend
         alt="youtube_embed_preview"
         width="100%"
         height="100%"
-        className="yoo-embed-absolute yoo-embed-top-0 yoo-embed-left-0 yoo-embed-w-full yoo-embed-h-full"
         style={{
           opacity: isInViewport && isFrameLoaded ? 0 : 1,
           zIndex: isInViewport && isFrameLoaded ? -1 : 0,
@@ -36,9 +35,8 @@ const YouTube = ({ provider, width, height, attributes, children }: ProviderRend
           // https://developers.google.com/youtube/player_parameters?hl=en
           src={`https://www.youtube.com/embed/${provider.id}`}
           frameBorder={0}
-          onLoad={() => setFrameLoaded(true)}
+          onLoad={() => setIsFrameLoaded(true)}
           allowFullScreen
-          className="yoo-embed-absolute yoo-embed-top-0 yoo-embed-left-0"
           width={width}
           height={height}
         />

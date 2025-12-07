@@ -1,31 +1,33 @@
-import { PluginElementRenderProps, useElementSelected } from '@yoopta/editor';
-import { MentionElementProps } from '../types';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useElementSelected } from '@yoopta/editor';
 
-const MentionRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
+import type { MentionElementProps } from '../types';
+
+const MentionRender = (props: PluginElementRenderProps) => {
   const { element, attributes, children } = props;
   const { id, name, avatar } = element.props as MentionElementProps;
 
   const { selected, focused } = useElementSelected();
 
-  if (typeof extendRender === 'function') {
-    return extendRender(props);
-  }
-
   return (
-    <>
-      <span
-        {...attributes}
-        contentEditable={false}
-        data-mention-id={id}
-        className={`yoopta-mention-tag ${selected && focused ? 'yoopta-mention-tag-selected' : ''}`}
-      >
-        {avatar && (
-          <img src={avatar} alt={name} width={16} height={16} loading="lazy" className="yoopta-mention-tag-avatar" />
-        )}
-        {name}
-        {children}
-      </span>
-    </>
+    <span
+      {...attributes}
+      contentEditable={false}
+      data-mention-id={id}
+      className={`yoopta-mention-tag ${selected && focused ? 'yoopta-mention-tag-selected' : ''}`}>
+      {avatar && (
+        <img
+          src={avatar}
+          alt={name}
+          width={16}
+          height={16}
+          loading="lazy"
+          className="yoopta-mention-tag-avatar"
+        />
+      )}
+      {name}
+      {children}
+    </span>
   );
 };
 

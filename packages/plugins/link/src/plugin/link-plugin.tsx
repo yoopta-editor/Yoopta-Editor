@@ -1,20 +1,40 @@
-import { YooptaPlugin, deserializeTextNodes, generateId, serializeTextNodes } from '@yoopta/editor';
+import {
+  YooptaPlugin,
+  deserializeTextNodes,
+  generateId,
+  serializeTextNodes,
+  PluginElementRenderProps,
+} from '@yoopta/editor';
 
 import { LinkCommands } from '../commands/link-commands';
 import type { LinkElementMap, LinkElementProps } from '../types';
-import { LinkRender } from '../ui/LinkRender';
 
 const linkProps: LinkElementProps = {
   url: null,
   target: '_self',
   rel: 'noopener noreferrer',
-  nodeType: 'inline',
-  title: null,
+  title: '',
 };
 
 const Link = new YooptaPlugin<LinkElementMap>({
   type: 'LinkPlugin',
-  elements: <link render={LinkRender} props={linkProps} nodeType="inline" />,
+  elements: (
+    <link
+      props={linkProps}
+      render={(props: PluginElementRenderProps) => (
+        <a
+          {...props.attributes}
+          href={props.element.props.url}
+          target={props.element.props.target}
+          rel={props.element.props.rel}
+          title={props.element.props.title}
+          nodeType="inline">
+          {props.children}
+        </a>
+      )}
+      nodeType="inline"
+    />
+  ),
   options: {
     display: {
       title: 'Link',

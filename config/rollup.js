@@ -16,7 +16,7 @@ const postcssNesting = require('postcss-nesting');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
-function getPlugins({ tailwindConfig }) {
+function getPlugins() {
   return [
     // json(),
     peerDepsExternal(),
@@ -36,22 +36,6 @@ function getPlugins({ tailwindConfig }) {
       autoModules: true,
       minimize: true,
       use: ['sass'],
-      plugins: [
-        postcssNesting(),
-        tailwindcss({
-          theme: {
-            extend: {},
-          },
-          plugins: [],
-          /* SHOULD BE REMOVED */
-          // corePlugins: {
-          //   preflight: false,
-          // },
-          ...tailwindConfig,
-          content: tailwindConfig?.content || ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
-        }),
-        autoprefixer(),
-      ],
     }),
     typescript({
       clean: true,
@@ -78,7 +62,7 @@ function getPlugins({ tailwindConfig }) {
 /**
  * @type {import('rollup').RollupOptions}
  */
-export function createRollupConfig({ pkg, tailwindConfig }) {
+export function createRollupConfig({ pkg }) {
   return {
     input: `./src/index.ts`,
     output: [
@@ -97,7 +81,7 @@ export function createRollupConfig({ pkg, tailwindConfig }) {
       //   sourcemap: isDev,
       // },
     ],
-    plugins: getPlugins({ tailwindConfig }),
+    plugins: getPlugins(),
     cache: isDev,
     external: [...Object.keys(pkg.peerDependencies)],
   };

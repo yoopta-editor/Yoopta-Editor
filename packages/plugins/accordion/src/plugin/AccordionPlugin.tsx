@@ -11,10 +11,6 @@ import { Element, Transforms } from 'slate';
 
 import { AccordionCommands } from '../commands/AccordionCommands';
 import { ACCORDION_ELEMENTS } from '../constants';
-import { AccordionItemContent } from '../renders/AccordionItemContent';
-import { AccordionItemHeading } from '../renders/AccordionItemHeading';
-import { AccordionList } from '../renders/AccordionList';
-import { AccordionListItem } from '../renders/AccordionListItem';
 import type { AccordionElementMap, AccordionListItemProps } from '../types';
 
 const accordionListItemProps: AccordionListItemProps = {
@@ -23,26 +19,20 @@ const accordionListItemProps: AccordionListItemProps = {
 
 const Accordion = new YooptaPlugin<AccordionElementMap>({
   type: 'Accordion',
-  elements: {
-    'accordion-list': {
-      render: AccordionList,
-      asRoot: true,
-      children: ['accordion-list-item'],
-    },
-    'accordion-list-item': {
-      render: AccordionListItem,
-      props: accordionListItemProps,
-      children: ['accordion-list-item-heading', 'accordion-list-item-content'],
-    },
-    'accordion-list-item-heading': {
-      render: AccordionItemHeading,
-      placeholder: 'Accordion heading',
-    },
-    'accordion-list-item-content': {
-      render: AccordionItemContent,
-      placeholder: 'Accordion content',
-    },
-  },
+  elements: (
+    <accordion-list render={(props) => <div {...props.attributes}>{props.children}</div>}>
+      <accordion-list-item
+        props={accordionListItemProps}
+        render={(props) => <details {...props.attributes}>{props.children}</details>}>
+        <accordion-list-item-heading
+          render={(props) => <summary {...props.attributes}>{props.children}</summary>}
+        />
+        <accordion-list-item-content
+          render={(props) => <p {...props.attributes}>{props.children}</p>}
+        />
+      </accordion-list-item>
+    </accordion-list>
+  ),
   commands: AccordionCommands,
   events: {
     onKeyDown(editor, slate, { hotkeys, currentBlock }) {

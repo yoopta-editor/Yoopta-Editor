@@ -5,7 +5,6 @@ import {
   TodoListElement,
   TodoListElementProps,
 } from './types';
-import './styles.css';
 
 declare module 'slate' {
   type CustomTypes = {
@@ -25,9 +24,8 @@ export {
   NumberedListElement,
   BulletedListElement,
   TodoListElement,
-  // plugins
+  TodoListElementProps,
   NumberedList,
   BulletedList,
   TodoList,
-  TodoListElementProps,
 };

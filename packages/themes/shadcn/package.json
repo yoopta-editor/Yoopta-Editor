@@ -1,0 +1,45 @@
+{
+  "name": "@yoopta/themes-shadcn",
+  "version": "6.0.0",
+  "description": "Shadcn UI theme for Yoopta Editor plugins",
+  "author": "Darginec05 <devopsbanda@gmail.com>",
+  "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "peerDependencies": {
+    "@yoopta/accordion": ">=4.0.0",
+    "@yoopta/editor": ">=4.0.0",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "tailwindcss": "^3.0.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.0.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.378.0",
+    "tailwind-merge": "^2.5.4"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/yoopta-themes-shadcn.test.js",
+    "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
+    "prepublishOnly": "yarn build",
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
+  },
+  "bugs": {
+    "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
+  }
+}

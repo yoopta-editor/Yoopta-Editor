@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
+
 import { cn } from '../../utils';
 
 const Command = React.forwardRef<
@@ -15,7 +16,11 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="yoopta-command-input-wrapper">
-    <CommandPrimitive.Input ref={ref} className={cn('yoopta-command-input', className)} {...props} />
+    <CommandPrimitive.Input
+      ref={ref}
+      className={cn('yoopta-command-input', className)}
+      {...props}
+    />
   </div>
 ));
 
@@ -50,7 +55,12 @@ const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <CommandPrimitive.Item ref={ref} disabled={false} className={cn('yoopta-command-item', className)} {...props} />
+  <CommandPrimitive.Item
+    ref={ref}
+    disabled={false}
+    className={cn('yoopta-command-item', className)}
+    {...props}
+  />
 ));
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;

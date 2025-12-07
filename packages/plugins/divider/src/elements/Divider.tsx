@@ -1,25 +1,16 @@
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import { useBlockData, useYooptaEditor } from '@yoopta/editor';
 
-import { DividerBlockOptions } from '../components/DividerBlockOptions';
-
-const DividerRender = ({ extendRender, ...props }: PluginElementRenderProps) => {
-  const { className = '', ...htmlAttrs } = props.HTMLAttributes || {};
-  const editor = useYooptaEditor();
-  const blockData = useBlockData(props.blockId);
-
-  if (extendRender) return extendRender(props);
-
+const DividerRender = (props: PluginElementRenderProps) => {
   const color = props.element.props?.color || '#e5e7eb';
   const theme = props.element.props?.theme || 'solid';
 
   const getDividerContent = () => {
     switch (theme) {
       case 'dashed':
-        return <hr className="yoopta-divider-dashed" style={{ borderColor: color }} />;
+        return <hr style={{ borderColor: color }} />;
       case 'dotted':
         return (
-          <div className="yoopta-divider-dotted">
+          <div>
             <div style={{ backgroundColor: color }} />
             <div style={{ backgroundColor: color }} />
             <div style={{ backgroundColor: color }} />
@@ -28,29 +19,16 @@ const DividerRender = ({ extendRender, ...props }: PluginElementRenderProps) => 
       case 'gradient':
         return (
           <div
-            className="yoopta-divider-gradient"
             style={{ background: `linear-gradient(to right, transparent, ${color}, transparent)` }}
           />
         );
       default:
-        return <hr className="yoopta-divider-solid" style={{ borderColor: color }} />;
+        return <hr style={{ borderColor: color }} />;
     }
   };
 
-  const onClick = (event: React.MouseEvent) => {
-    editor.setPath({ current: blockData.meta.order, selected: [blockData.meta.order] });
-  };
-
   return (
-    <div
-      onClick={onClick}
-      {...htmlAttrs}
-      className={`${className} yoopta-divider`}
-      {...props.attributes}
-      contentEditable={false}>
-      {!editor.readOnly && (
-        <DividerBlockOptions block={blockData} editor={editor} props={props.element.props} />
-      )}
+    <div {...props.attributes} contentEditable={false}>
       {getDividerContent()}
       {props.children}
     </div>
