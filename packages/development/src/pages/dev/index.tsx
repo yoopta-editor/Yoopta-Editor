@@ -164,6 +164,28 @@ const YooptaUIPackageExample = () => {
     });
   };
 
+  const insertBulletedList = () => {
+    const elements = editor.y('bulleted-list', {
+      children: [
+        editor.y('bulleted-list-item', {
+          children: [editor.y.text('Item 1'), editor.y.text(' First item', { bold: true })],
+        }),
+        editor.y('bulleted-list-item', {
+          children: [editor.y.text('Item 2')],
+        }),
+        editor.y('bulleted-list-item', {
+          children: [editor.y.text('Item 3')],
+        }),
+      ],
+    });
+
+    editor.insertBlock('BulletedList', {
+      elements,
+      at: typeof editor.path.current === 'number' ? editor.path.current : 0,
+      focus: true,
+    });
+  };
+
   return (
     <>
       <div className="flex flex-wrap gap-2 px-[100px] max-w-[900px] mx-auto my-10">
@@ -191,6 +213,11 @@ const YooptaUIPackageExample = () => {
           onClick={insertParagraphWithLink}
           className="rounded-md bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600">
           Add Paragraph with Link
+        </button>
+        <button
+          onClick={insertBulletedList}
+          className="rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600">
+          Add Bulleted List
         </button>
         <button
           onClick={() => {

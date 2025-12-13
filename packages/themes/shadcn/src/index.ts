@@ -7,3 +7,4 @@ export { BlockquoteUI } from './blockquote';
 export { ParagraphUI } from './paragraph';
 export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
+export { LinkUI } from './link';

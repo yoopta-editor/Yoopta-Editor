@@ -1,21 +1,17 @@
 import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
-import type { CalloutElement } from '@yoopta/callout';
 import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
 // import Mention from '@yoopta/mention';
-import { Elements } from '@yoopta/editor';
+import { Elements, YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
 import Headings from '@yoopta/headings';
-import type { ImageElementProps } from '@yoopta/image';
 import Image from '@yoopta/image';
 import Link from '@yoopta/link';
-import Lists, { TodoListElement } from '@yoopta/lists';
-import Table, { TableCommands } from '@yoopta/table';
-import type { VideoElementProps } from '@yoopta/video';
-import Video from '@yoopta/video';
+import Lists from '@yoopta/lists';
+import Table from '@yoopta/table';
 
 import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
@@ -32,6 +28,7 @@ import {
   ParagraphUI,
   CalloutUI,
   ListsUI,
+  LinkUI,
 } from '@yoopta/themes-shadcn';
 
 const ALLOWED_PLUGINS = [
@@ -84,7 +81,9 @@ export const YOOPTA_PLUGINS = [
     allowedPlugins: ALLOWED_PLUGINS,
     elements: TableUI,
   }),
-  Link,
+  Link.extend({
+    elements: LinkUI,
+  }),
   StepsPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
@@ -102,7 +101,7 @@ export const YOOPTA_PLUGINS = [
   }),
   Image.extend({
     events: {
-      onDestroy: (editor, id) => {
+      onDestroy: (editor: YooEditor, id: string) => {
         const imageElement = Elements.getElement(editor, id, { type: 'image' });
         console.log('Image imageElement', imageElement);
       },

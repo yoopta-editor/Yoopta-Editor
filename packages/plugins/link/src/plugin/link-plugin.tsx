@@ -1,10 +1,5 @@
-import {
-  YooptaPlugin,
-  deserializeTextNodes,
-  generateId,
-  serializeTextNodes,
-  PluginElementRenderProps,
-} from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { YooptaPlugin, deserializeTextNodes, generateId, serializeTextNodes } from '@yoopta/editor';
 
 import { LinkCommands } from '../commands/link-commands';
 import type { LinkElementMap, LinkElementProps } from '../types';
@@ -16,25 +11,20 @@ const linkProps: LinkElementProps = {
   title: '',
 };
 
+const LinkRender = (props: PluginElementRenderProps) => (
+  <a
+    {...props.attributes}
+    href={props.element.props.url}
+    target={props.element.props.target}
+    rel={props.element.props.rel}
+    title={props.element.props.title}>
+    {props.children}
+  </a>
+);
+
 const Link = new YooptaPlugin<LinkElementMap>({
   type: 'LinkPlugin',
-  elements: (
-    <link
-      props={linkProps}
-      render={(props: PluginElementRenderProps) => (
-        <a
-          {...props.attributes}
-          href={props.element.props.url}
-          target={props.element.props.target}
-          rel={props.element.props.rel}
-          title={props.element.props.title}
-          nodeType="inline">
-          {props.children}
-        </a>
-      )}
-      nodeType="inline"
-    />
-  ),
+  elements: <link render={LinkRender} props={linkProps} nodeType="inline" />,
   options: {
     display: {
       title: 'Link',
@@ -44,8 +34,8 @@ const Link = new YooptaPlugin<LinkElementMap>({
   commands: LinkCommands,
   parsers: {
     html: {
-      serialize: (element, text) => {
-        const { url, target, rel, title } = element.props;
+      serialize: (element) => {
+        const { url, target, rel } = element.props;
         return `<a href="${url}" target="${target}" rel="${rel}">${serializeTextNodes(
           element.children,
         )}</a>`;
@@ -82,8 +72,8 @@ const Link = new YooptaPlugin<LinkElementMap>({
       },
     },
     email: {
-      serialize: (element, text) => {
-        const { url, target, rel, title } = element.props;
+      serialize: (element) => {
+        const { url, target, rel } = element.props;
         return `
           <table style="width:100%;">
             <tbody style="width:100%;">

@@ -1,0 +1,3 @@
+[data-slot='table-cell'] > [data-slate-node='element'] {
+  margin: 0;
+}

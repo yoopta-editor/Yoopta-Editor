@@ -1,7 +1,8 @@
-import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
+import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+
+import { HeadingOneRender } from './render';
 import { HeadingOneCommands } from '../../commands';
 import type { HeadingOneElement } from '../../types';
-import { HeadingOneRender } from './render';
 
 const elements = <heading-one render={HeadingOneRender} nodeType="block" />;
 
