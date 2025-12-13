@@ -20,7 +20,7 @@ export const FixedToolbar = ({ editor, DEFAULT_DATA }: Props) => {
   const { toggleTheme, resolvedTheme } = useTheme();
 
   return (
-    <div className="bg-white  z-50">
+    <div className="bg-white z-50">
       <div className="flex justify-center mb-2">
         {DEFAULT_DATA && (
           <button

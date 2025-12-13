@@ -1,5 +1,5 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Blocks, Elements, generateId } from '@yoopta/editor';
+import { Blocks, Elements } from '@yoopta/editor';
 
 import type {
   BulletedListElement,
@@ -28,11 +28,14 @@ export type BulletedListCommands = {
 };
 
 export const BulletedListCommands: BulletedListCommands = {
-  buildBulletedListElements: (editor, options) => ({
-    id: generateId(),
-    type: 'bulleted-list',
-    children: [{ text: options?.text || '' }],
-  }),
+  buildBulletedListElements: (editor, options) =>
+    editor.y('bulleted-list', {
+      children: [
+        editor.y('bulleted-list-item', {
+          children: [{ text: options?.text ?? '' }],
+        }),
+      ],
+    }),
   insertBulletedList: (editor, options = {}) => {
     const { at, focus, text } = options;
     const bulletList = BulletedListCommands.buildBulletedListElements(editor, { text });
@@ -55,11 +58,14 @@ export type NumberedListCommands = {
 };
 
 export const NumberedListCommands: NumberedListCommands = {
-  buildNumberedListElements: (editor, options) => ({
-    id: generateId(),
-    type: 'numbered-list',
-    children: [{ text: options?.text || '' }],
-  }),
+  buildNumberedListElements: (editor, options) =>
+    editor.y('numbered-list', {
+      children: [
+        editor.y('numbered-list-item', {
+          children: [{ text: options?.text ?? '' }],
+        }),
+      ],
+    }),
   insertNumberedList: (editor, options = {}) => {
     const { at, focus, text } = options;
     const numberdedList = NumberedListCommands.buildNumberedListElements(editor, { text });
@@ -87,12 +93,15 @@ export type TodoListCommands = {
 };
 
 export const TodoListCommands: TodoListCommands = {
-  buildTodoListElements: (editor, options) => ({
-    id: generateId(),
-    type: 'todo-list',
-    children: [{ text: options?.text || '' }],
-    props: options?.props || { checked: false },
-  }),
+  buildTodoListElements: (editor, options) =>
+    editor.y('todo-list', {
+      children: [
+        editor.y('todo-list-item', {
+          props: { checked: options?.props?.checked ?? false },
+          children: [{ text: options?.text ?? '' }],
+        }),
+      ],
+    }),
   insertTodoList: (editor, options = {}) => {
     const { at, focus, text, props } = options;
     const todoList = TodoListCommands.buildTodoListElements(editor, { text, props });

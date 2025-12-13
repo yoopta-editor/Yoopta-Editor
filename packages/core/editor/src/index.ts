@@ -83,7 +83,6 @@ export {
   YooptaOperation,
 } from './editor/core/applyTransforms';
 
-export type { ExtendYooptaTypes } from './editor/custom-types';
 // eslint-disable-next-line import/no-default-export
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };

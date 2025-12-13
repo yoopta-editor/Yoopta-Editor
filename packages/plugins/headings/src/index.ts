@@ -1,6 +1,6 @@
-import { HeadingOne } from './plugin/HeadingOne';
-import { HeadingThree } from './plugin/HeadingThree';
-import { HeadingTwo } from './plugin/HeadingTwo';
+import { HeadingOne } from './plugin/heading-one/plugin';
+import { HeadingThree } from './plugin/heading-three/plugin';
+import { HeadingTwo } from './plugin/heading-two/plugin';
 import { HeadingOneElement, HeadingThreeElement, HeadingTwoElement } from './types';
 
 declare module 'slate' {

@@ -45,8 +45,8 @@ const YooptaUIPackageExample = () => {
     });
 
     editor.insertBlock('Accordion', {
-      elements,
       at: 0,
+      elements,
       focus: true,
     });
   };
@@ -59,11 +59,16 @@ const YooptaUIPackageExample = () => {
             editor.y('step-list-item', {
               props: { isCompleted: false },
               children: [
-                editor.y('step-list-item-heading'),
+                editor.y('step-list-item-heading', {
+                  children: [
+                    editor.y.text('Step 1: ', { bold: true }),
+                    editor.y.text('Setup project'),
+                  ],
+                }),
                 editor.y('step-list-item-content', {
                   children: [
                     editor.y('callout', { props: { theme: 'success' } }),
-                    editor.y('blockquote'),
+                    editor.y('blockquote', { children: [editor.y.text('I`m blockquote')] }),
                   ],
                 }),
               ],
@@ -71,7 +76,12 @@ const YooptaUIPackageExample = () => {
             editor.y('step-list-item', {
               props: { isCompleted: true },
               children: [
-                editor.y('step-list-item-heading'),
+                editor.y('step-list-item-heading', {
+                  children: [
+                    editor.y.text('Step 2: ', { bold: true }),
+                    editor.y.text('Completed', { strike: true }),
+                  ],
+                }),
                 editor.y('step-list-item-content', {
                   children: [editor.y('image')],
                 }),
@@ -112,25 +122,51 @@ const YooptaUIPackageExample = () => {
     });
   };
 
+  const insertParagraphWithText = () => {
+    const elements = editor.y('paragraph', {
+      children: [
+        editor.y.text('Hello '),
+        editor.y.text('world', { bold: true }),
+        editor.y.text('! ', { italic: true }),
+        editor.y.text('This is ', { underline: true }),
+        editor.y.text('formatted', { bold: true, italic: true }),
+        editor.y.text(' text.'),
+      ],
+    });
+    editor.insertBlock('Paragraph', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
+  const insertParagraphWithLink = () => {
+    // Example: paragraph with inline link element
+    const elements = editor.y('paragraph', {
+      children: [
+        editor.y.text('Visit '),
+        editor.y.inline('link', {
+          props: {
+            url: 'https://example.com',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            title: 'Example website',
+          },
+          children: [editor.y.text('example.com', { bold: true })],
+        }),
+        editor.y.text(' for more information.'),
+      ],
+    });
+    editor.insertBlock('Paragraph', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
   return (
-    <YooptaEditor
-      editor={editor}
-      plugins={YOOPTA_PLUGINS}
-      marks={MARKS}
-      autoFocus
-      readOnly={false}
-      placeholder="Type / to open menu"
-      tools={TOOLS}
-      style={EDITOR_STYLE}
-      onChange={(value) => console.log('value', value)}
-      // value={DEFAULT_VALUE}
-      className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
-      <YooptaToolbar />
-      <YooptaFloatingBlockActions />
-      <YooptaBlockOptions />
-      <YooptaSlashCommandMenu />
-      <YooptaActionMenuList />
-      <div className="flex gap-2">
+    <>
+      <div className="flex flex-wrap gap-2 px-[100px] max-w-[900px] mx-auto my-10">
         <button
           onClick={insertAccordion}
           className="rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
@@ -145,6 +181,16 @@ const YooptaUIPackageExample = () => {
           onClick={insertCallout}
           className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600">
           Add Callout
+        </button>
+        <button
+          onClick={insertParagraphWithText}
+          className="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
+          Add Paragraph with Text & Marks
+        </button>
+        <button
+          onClick={insertParagraphWithLink}
+          className="rounded-md bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600">
+          Add Paragraph with Link
         </button>
         <button
           onClick={() => {
@@ -172,8 +218,26 @@ const YooptaUIPackageExample = () => {
           Toggle Block into Bulleted List for {editor.path.current}
         </button>
       </div>
-      <FixedToolbar editor={editor} />
-    </YooptaEditor>
+      <YooptaEditor
+        editor={editor}
+        plugins={YOOPTA_PLUGINS}
+        marks={MARKS}
+        autoFocus
+        readOnly={false}
+        placeholder="Type / to open menu"
+        tools={TOOLS}
+        style={EDITOR_STYLE}
+        onChange={(value) => console.log('value', value)}
+        value={DEFAULT_VALUE}
+        className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
+        <YooptaToolbar />
+        <YooptaFloatingBlockActions />
+        <YooptaBlockOptions />
+        <YooptaSlashCommandMenu />
+        <YooptaActionMenuList />
+        <FixedToolbar editor={editor} />
+      </YooptaEditor>
+    </>
   );
 };
 

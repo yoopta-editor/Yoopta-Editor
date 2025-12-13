@@ -1,24 +1,13 @@
-import type { PluginElementRenderProps } from '@yoopta/editor';
-import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
+import { HeadingOneCommands } from '../../commands';
+import type { HeadingOneElement } from '../../types';
+import { HeadingOneRender } from './render';
 
-import { HeadingOneCommands } from '../commands';
-import type { HeadingOneElement } from '../types';
+const elements = <heading-one render={HeadingOneRender} nodeType="block" />;
 
-const HeadingOneRender = (props: PluginElementRenderProps) => {
-  const { element, attributes, children } = props;
-
-  return (
-    <h1 id={element.id} draggable={false} {...attributes}>
-      {children}
-    </h1>
-  );
-};
-
-HeadingOneRender.displayName = 'HeadingOne';
-
-const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
+export const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
   type: 'HeadingOne',
-  elements: <heading-one render={HeadingOneRender} nodeType="block" />,
+  elements,
   commands: HeadingOneCommands,
   options: {
     display: {
@@ -41,7 +30,7 @@ const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
       },
     },
     markdown: {
-      serialize: (element, text) => `# ${serializeTextNodesIntoMarkdown(element.children)}\n`,
+      serialize: (element) => `# ${serializeTextNodesIntoMarkdown(element.children)}\n`,
     },
     email: {
       serialize: (element, content, blockMeta) => {
@@ -69,5 +58,3 @@ const HeadingOne = new YooptaPlugin<Record<'heading-one', HeadingOneElement>>({
     },
   },
 });
-
-export { HeadingOne };

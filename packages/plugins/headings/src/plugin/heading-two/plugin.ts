@@ -1,24 +1,21 @@
-import type { PluginElementRenderProps } from '@yoopta/editor';
 import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
 
-import { HeadingTwoCommands } from '../commands';
-import type { HeadingTwoElement } from '../types';
+import { HeadingTwoRender } from './render';
+import { HeadingTwoCommands } from '../../commands';
+import type { HeadingTwoElement } from '../../types';
 
-const HeadingTwoRender = (props: PluginElementRenderProps) => {
-  const { element, attributes, children } = props;
-
-  return (
-    <h2 id={element.id} draggable={false} {...attributes}>
-      {children}
-    </h2>
-  );
+const props = {
+  withAnchor: false,
 };
 
-HeadingTwoRender.displayName = 'HeadingTwo';
-
-const HeadingTwo = new YooptaPlugin<Record<'heading-two', HeadingTwoElement>>({
+export const HeadingTwo = new YooptaPlugin<Record<'heading-two', HeadingTwoElement>>({
   type: 'HeadingTwo',
-  elements: <heading-two render={HeadingTwoRender} nodeType="block" />,
+  elements: {
+    'heading-two': {
+      render: HeadingTwoRender,
+      props,
+    },
+  },
   commands: HeadingTwoCommands,
   options: {
     display: {
@@ -72,5 +69,3 @@ const HeadingTwo = new YooptaPlugin<Record<'heading-two', HeadingTwoElement>>({
     },
   },
 });
-
-export { HeadingTwo };

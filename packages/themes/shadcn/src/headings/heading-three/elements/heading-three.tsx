@@ -8,7 +8,7 @@ export const HeadingThree = (props: PluginElementRenderProps) => {
       id={element.id}
       draggable={false}
       {...attributes}
-      className="scroll-m-20 text-2xl font-semibold tracking-tight">
+      className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
       {children}
     </h3>
   );

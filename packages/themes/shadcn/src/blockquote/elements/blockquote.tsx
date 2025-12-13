@@ -1,0 +1,11 @@
+import type { PluginElementRenderProps } from '@yoopta/editor';
+
+export const Blockquote = (props: PluginElementRenderProps) => {
+  const { attributes, children } = props;
+
+  return (
+    <blockquote {...attributes} className="mt-6 border-l-2 pl-6">
+      {children}
+    </blockquote>
+  );
+};

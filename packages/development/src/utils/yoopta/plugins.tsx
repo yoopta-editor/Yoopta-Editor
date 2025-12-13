@@ -24,7 +24,15 @@ import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin'
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
-import { AccordionUI, TableUI, HeadingsUI } from '@yoopta/themes-shadcn';
+import {
+  AccordionUI,
+  TableUI,
+  HeadingsUI,
+  BlockquoteUI,
+  ParagraphUI,
+  CalloutUI,
+  ListsUI,
+} from '@yoopta/themes-shadcn';
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -44,7 +52,9 @@ export const YOOPTA_PLUGINS = [
     allowedPlugins: ALLOWED_PLUGINS,
     elements: AccordionUI,
   }),
-  Paragraph,
+  Paragraph.extend({
+    elements: ParagraphUI,
+  }),
   Headings.HeadingOne.extend({
     elements: HeadingsUI.HeadingOne,
   }),
@@ -55,13 +65,21 @@ export const YOOPTA_PLUGINS = [
     elements: HeadingsUI.HeadingThree,
   }),
   OrderDetailsActionPlugin,
-  Blockquote,
+  Blockquote.extend({
+    elements: BlockquoteUI,
+  }),
   SendEmailActionPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
-  Lists.BulletedList,
-  Lists.NumberedList,
-  Lists.TodoList,
+  Lists.BulletedList.extend({
+    elements: ListsUI.BulletedList,
+  }),
+  Lists.NumberedList.extend({
+    elements: ListsUI.NumberedList,
+  }),
+  Lists.TodoList.extend({
+    elements: ListsUI.TodoList,
+  }),
   Table.extend({
     allowedPlugins: ALLOWED_PLUGINS,
     elements: TableUI,
@@ -72,6 +90,7 @@ export const YOOPTA_PLUGINS = [
   }),
   TabsPlugin,
   Callout.extend({
+    elements: CalloutUI,
     allowedPlugins: [
       Lists.BulletedList,
       Lists.NumberedList,

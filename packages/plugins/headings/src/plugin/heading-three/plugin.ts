@@ -1,24 +1,15 @@
-import type { PluginElementRenderProps } from '@yoopta/editor';
-import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+import { serializeTextNodes, serializeTextNodesIntoMarkdown, YooptaPlugin } from '@yoopta/editor';
+import { HeadingThreeCommands } from '../../commands';
+import type { HeadingThreeElement } from '../../types';
+import { HeadingThreeRender } from './render';
 
-import { HeadingThreeCommands } from '../commands';
-import type { HeadingThreeElement } from '../types';
-
-const HeadingThreeRender = (props: PluginElementRenderProps) => {
-  const { element, attributes, children } = props;
-
-  return (
-    <h3 id={element.id} draggable={false} {...attributes}>
-      {children}
-    </h3>
-  );
+const props = {
+  withAnchor: false,
 };
 
-HeadingThreeRender.displayName = 'HeadingThree';
-
-const HeadingThree = new YooptaPlugin<Record<'heading-three', HeadingThreeElement>>({
+export const HeadingThree = new YooptaPlugin<Record<'heading-three', HeadingThreeElement>>({
   type: 'HeadingThree',
-  elements: <heading-three render={HeadingThreeRender} nodeType="block" />,
+  elements: <heading-three render={HeadingThreeRender} props={props} nodeType="block" />,
   commands: HeadingThreeCommands,
   options: {
     display: {
@@ -71,5 +62,3 @@ const HeadingThree = new YooptaPlugin<Record<'heading-three', HeadingThreeElemen
     },
   },
 });
-
-export { HeadingThree };

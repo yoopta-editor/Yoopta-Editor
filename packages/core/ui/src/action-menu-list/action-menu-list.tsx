@@ -1,11 +1,6 @@
-import {
-  forwardRef,
-  HTMLAttributes,
-  cloneElement,
-  isValidElement,
-  CSSProperties,
-  ReactNode,
-} from 'react';
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
+import { cloneElement, forwardRef, isValidElement } from 'react';
+
 import type { ActionMenuItem } from './types';
 
 // ====================================
@@ -17,20 +12,19 @@ export type ActionMenuListRootProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 const ActionMenuListRoot = forwardRef<HTMLDivElement, ActionMenuListRootProps>(
-  ({ children, style, className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        role="listbox"
-        style={style}
-        className={`yoopta-ui-action-menu-list-content ${className || ''}`}
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-        {...props}>
-        {children}
-      </div>
-    );
-  },
+  ({ children, style, className, ...props }, ref) => (
+    <div
+      ref={ref}
+      role="listbox"
+      tabIndex={0}
+      style={style}
+      className={`yoopta-ui-action-menu-list-content ${className || ''}`}
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
+      {...props}>
+      {children}
+    </div>
+  ),
 );
 ActionMenuListRoot.displayName = 'ActionMenuList.Root';
 
@@ -40,13 +34,11 @@ ActionMenuListRoot.displayName = 'ActionMenuList.Root';
 export type ActionMenuListGroupProps = HTMLAttributes<HTMLDivElement>;
 
 const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>(
-  ({ children, className, ...props }, ref) => {
-    return (
-      <div ref={ref} className={`yoopta-ui-action-menu-list-group ${className || ''}`} {...props}>
-        {children}
-      </div>
-    );
-  },
+  ({ children, className, ...props }, ref) => (
+    <div ref={ref} className={`yoopta-ui-action-menu-list-group ${className || ''}`} {...props}>
+      {children}
+    </div>
+  ),
 );
 ActionMenuListGroup.displayName = 'ActionMenuList.Group';
 
@@ -102,13 +94,11 @@ ActionMenuListItem.displayName = 'ActionMenuList.Item';
 export type ActionMenuListEmptyProps = HTMLAttributes<HTMLDivElement>;
 
 const ActionMenuListEmpty = forwardRef<HTMLDivElement, ActionMenuListEmptyProps>(
-  ({ children, className, ...props }, ref) => {
-    return (
-      <div ref={ref} className={`yoopta-ui-action-menu-list-empty ${className || ''}`} {...props}>
-        {children || 'No actions available'}
-      </div>
-    );
-  },
+  ({ children, className, ...props }, ref) => (
+    <div ref={ref} className={`yoopta-ui-action-menu-list-empty ${className || ''}`} {...props}>
+      {children || 'No actions available'}
+    </div>
+  ),
 );
 ActionMenuListEmpty.displayName = 'ActionMenuList.Empty';
 
