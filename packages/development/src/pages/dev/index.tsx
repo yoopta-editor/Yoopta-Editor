@@ -74,16 +74,10 @@ const YooptaUIPackageExample = () => {
               ],
             }),
             editor.y('step-list-item', {
-              props: { isCompleted: true },
+              props: { isCompleted: false },
               children: [
                 editor.y('step-list-item-heading', {
-                  children: [
-                    editor.y.text('Step 2: ', { bold: true }),
-                    editor.y.text('Completed', { strike: true }),
-                  ],
-                }),
-                editor.y('step-list-item-content', {
-                  children: [editor.y('image')],
+                  children: [editor.y.text('Install dependencies', { bold: true })],
                 }),
               ],
             }),
@@ -186,6 +180,68 @@ const YooptaUIPackageExample = () => {
     });
   };
 
+  const insertCodeJSBlock = () => {
+    const children = [
+      { text: '// JavaScript Example' },
+      { text: 'function fibonacci(n) {' },
+      { text: '  if (n <= 1) return n;' },
+      { text: '  return fibonacci(n - 1) + fibonacci(n - 2);' },
+      { text: '}' },
+      { text: '' },
+      { text: 'const result = fibonacci(10);' },
+      { text: 'console.log(`Fibonacci(10) = ${result}`);' },
+    ];
+
+    const elements = editor.y('code', {
+      props: {
+        language: 'javascript',
+        theme: 'github-dark',
+      },
+      children: children.map((child) =>
+        editor.y('code-line', { children: [editor.y.text(child.text)] }),
+      ),
+    });
+
+    editor.insertBlock('Code', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
+  const insertCodePythonBlock = () => {
+    const children = [
+      { text: '# Python Example' },
+      { text: 'def quick_sort(arr):' },
+      { text: '    if len(arr) <= 1:' },
+      { text: '        return arr' },
+      { text: '    pivot = arr[len(arr) // 2]' },
+      { text: '    left = [x for x in arr if x < pivot]' },
+      { text: '    middle = [x for x in arr if x == pivot]' },
+      { text: '    right = [x for x in arr if x > pivot]' },
+      { text: '    return quick_sort(left) + middle + quick_sort(right)' },
+      { text: '' },
+      { text: 'numbers = [3, 6, 8, 10, 1, 2, 1]' },
+      { text: 'print(quick_sort(numbers))' },
+    ];
+
+    const elements = editor.y('code', {
+      props: {
+        language: 'python',
+        theme: 'github-dark',
+      },
+      children: children.map((child) =>
+        editor.y('code-line', { children: [editor.y.text(child.text)] }),
+      ),
+    });
+
+    editor.insertBlock('Code', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
   return (
     <>
       <div className="flex flex-wrap gap-2 px-[100px] max-w-[900px] mx-auto my-10">
@@ -232,16 +288,14 @@ const YooptaUIPackageExample = () => {
           Toggle Block into HeadingThree for {editor.path.current}
         </button>
         <button
-          onClick={() => {
-            editor.toggleBlock('BulletedList', {
-              at: editor.path.current,
-              scope: 'element',
-              focus: true,
-              preserveContent: true,
-            });
-          }}
-          className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
-          Toggle Block into Bulleted List for {editor.path.current}
+          onClick={insertCodeJSBlock}
+          className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
+          Insert Code JS Block
+        </button>
+        <button
+          onClick={insertCodePythonBlock}
+          className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
+          Insert Code Python Block
         </button>
       </div>
       <YooptaEditor
@@ -251,7 +305,6 @@ const YooptaUIPackageExample = () => {
         autoFocus
         readOnly={false}
         placeholder="Type / to open menu"
-        tools={TOOLS}
         style={EDITOR_STYLE}
         onChange={(value) => console.log('value', value)}
         value={DEFAULT_VALUE}
@@ -268,49 +321,3 @@ const YooptaUIPackageExample = () => {
 };
 
 export default YooptaUIPackageExample;
-
-/**
- * -- block elements before --
- *
- * - accordion-list
- *  - accordion-list-item
- *    - accordion-list-item-heading
- *    - accordion-list-item-content
- *      - callout (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
- *
- * Trigger toggleBlock
- *
- * -- block elements after --
- *
- * - accordion-list
- *  - accordion-list-item
- *    - accordion-list-item-heading
- *    - accordion-list-item-content
- *      - callout (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
- *      - heading-one (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
- *
- * But it should be:
- * -- correct block elements --
- *
- * - accordion-list
- *  - accordion-list-item
- *    - accordion-list-item-heading
- *    - accordion-list-item-content
- *      - heading-one (with text "nested callout (Callout plugin) to heading-one (HeadingOne plugin)")
- */
-
-/**
- * -- block elements before --
- * - callout
- *
- * Trigger toggleBlock
- *
- * -- block elements after --
- * - callout
- * - heading-three
- *
- * But it should be:
- *
- * - callout
- *    - heading-three
- */

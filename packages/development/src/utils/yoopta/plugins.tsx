@@ -22,6 +22,8 @@ import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
 // import withShadcnUI from '@yoopta/themes-shadcn';
 import withMaterialUI from '@yoopta/themes-material';
+import { ShikiCodePlugin } from '../../components/plugins/code-plugin';
+import withShadcnUI from '@yoopta/themes-shadcn';
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -36,7 +38,7 @@ const ALLOWED_PLUGINS = [
   Image,
 ];
 
-export const YOOPTA_PLUGINS = withMaterialUI([
+export const YOOPTA_PLUGINS = withShadcnUI([
   Accordion.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
@@ -46,6 +48,7 @@ export const YOOPTA_PLUGINS = withMaterialUI([
   Headings.HeadingThree,
   OrderDetailsActionPlugin,
   Blockquote,
+  ShikiCodePlugin,
   SendEmailActionPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
