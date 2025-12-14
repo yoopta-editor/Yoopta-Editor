@@ -23,7 +23,7 @@ const LinkRender = (props: PluginElementRenderProps) => (
 );
 
 const Link = new YooptaPlugin<LinkElementMap>({
-  type: 'LinkPlugin',
+  type: 'Link',
   elements: <link render={LinkRender} props={linkProps} nodeType="inline" />,
   options: {
     display: {
@@ -46,8 +46,7 @@ const Link = new YooptaPlugin<LinkElementMap>({
           if (el.nodeName === 'A') {
             const href = el.getAttribute('href') || '';
 
-            const defaultLinkProps = editor.plugins.LinkPlugin.elements.link
-              .props as LinkElementProps;
+            const defaultLinkProps = editor.plugins.Link.elements.link.props as LinkElementProps;
 
             // [TODO] Add target
             const target = el.getAttribute('target') || defaultLinkProps.target;

@@ -14,11 +14,15 @@
     "dist/"
   ],
   "peerDependencies": {
-    "@yoopta/accordion": ">=4.0.0",
     "@yoopta/editor": ">=4.0.0",
-    "@mui/material": "^5.0.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.16.0",
+    "@mui/icons-material": "^7.3.6"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

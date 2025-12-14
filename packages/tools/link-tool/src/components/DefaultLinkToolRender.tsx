@@ -9,7 +9,7 @@ import { Link } from '../types';
 const DefaultLinkToolRender = (props: LinkToolRenderProps) => {
   const { withLink = true, withTitle = true } = props;
   const editor = useYooptaEditor();
-  const defaultLinkProps = editor.plugins?.LinkPlugin?.elements?.link?.props;
+  const defaultLinkProps = editor.plugins?.Link?.elements?.link?.props;
 
   const [link, setLink] = useState(props?.link || defaultLinkProps);
   const [isAdditionalPropsOpen, setAdditionPropsOpen] = useState(false);

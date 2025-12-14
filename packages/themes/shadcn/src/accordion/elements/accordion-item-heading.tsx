@@ -1,16 +1,16 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import { ChevronDown, Plus, Trash2 } from 'lucide-react';
 import type { Location } from 'slate';
 import { Editor, Path, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 import { AccordionTrigger } from '../ui/accordion';
 
 export const AccordionItemHeading = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;
   const editor = useYooptaEditor();
+  const [_, forceRerender] = useReducer((x) => x + 1, 0);
 
   const parentListItem = useMemo(() => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
@@ -44,8 +44,6 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
 
   const isExpanded = parentListItem?.props?.isExpanded ?? false;
 
-  console.log('parentListItem?.props?.isExpanded', parentListItem?.props?.isExpanded);
-
   const toggleListItem = useCallback(() => {
     if (parentListItem && parentListItemPath) {
       Elements.updateElement(
@@ -61,6 +59,8 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
         { path: parentListItemPath },
       );
     }
+
+    forceRerender();
   }, [editor, blockId, parentListItem, parentListItemPath, isExpanded]);
 
   const deleteListItem = useCallback(
@@ -75,13 +75,11 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
         type: 'accordion-list',
       });
 
-      // If this is the last item, delete the entire block
       if (listItems?.length === 1) {
         Blocks.deleteBlock(editor, { blockId });
         return;
       }
 
-      // Otherwise, delete only this item
       Elements.deleteElement(editor, blockId, {
         type: 'accordion-list-item',
         path: parentListItemPath,

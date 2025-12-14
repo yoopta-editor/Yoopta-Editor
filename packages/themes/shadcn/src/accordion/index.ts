@@ -2,6 +2,7 @@ import { AccordionItemContent } from './elements/accordion-item-content';
 import { AccordionItemHeading } from './elements/accordion-item-heading';
 import { AccordionList } from './elements/accordion-list';
 import { AccordionListItem } from './elements/accordion-list-item';
+import './styles.css';
 
 export const AccordionUI = {
   'accordion-list': {

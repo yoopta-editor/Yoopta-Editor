@@ -233,7 +233,6 @@ const YooptaUIPackageExample = () => {
         </button>
         <button
           onClick={() => {
-            console.log('editor.path.current', editor.path.current);
             editor.toggleBlock('BulletedList', {
               at: editor.path.current,
               scope: 'element',

@@ -20,16 +20,8 @@ import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin'
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
-import {
-  AccordionUI,
-  TableUI,
-  HeadingsUI,
-  BlockquoteUI,
-  ParagraphUI,
-  CalloutUI,
-  ListsUI,
-  LinkUI,
-} from '@yoopta/themes-shadcn';
+// import withShadcnUI from '@yoopta/themes-shadcn';
+import withMaterialUI from '@yoopta/themes-material';
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -44,52 +36,39 @@ const ALLOWED_PLUGINS = [
   Image,
 ];
 
-export const YOOPTA_PLUGINS = [
+export const YOOPTA_PLUGINS = withMaterialUI([
   Accordion.extend({
     allowedPlugins: ALLOWED_PLUGINS,
-    elements: AccordionUI,
   }),
-  Paragraph.extend({
-    elements: ParagraphUI,
-  }),
-  Headings.HeadingOne.extend({
-    elements: HeadingsUI.HeadingOne,
-  }),
-  Headings.HeadingTwo.extend({
-    elements: HeadingsUI.HeadingTwo,
-  }),
-  Headings.HeadingThree.extend({
-    elements: HeadingsUI.HeadingThree,
-  }),
+  Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
   OrderDetailsActionPlugin,
-  Blockquote.extend({
-    elements: BlockquoteUI,
-  }),
+  Blockquote,
   SendEmailActionPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
   Lists.BulletedList.extend({
-    elements: ListsUI.BulletedList,
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Lists.NumberedList.extend({
-    elements: ListsUI.NumberedList,
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Lists.TodoList.extend({
-    elements: ListsUI.TodoList,
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
   Table.extend({
     allowedPlugins: ALLOWED_PLUGINS,
-    elements: TableUI,
-  }),
-  Link.extend({
-    elements: LinkUI,
   }),
   StepsPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
-  TabsPlugin,
+  TabsPlugin.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
+  Link,
   Callout.extend({
-    elements: CalloutUI,
     allowedPlugins: [
       Lists.BulletedList,
       Lists.NumberedList,
@@ -121,4 +100,4 @@ export const YOOPTA_PLUGINS = [
       },
     },
   }),
-];
+]);

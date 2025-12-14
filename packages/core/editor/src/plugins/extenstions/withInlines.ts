@@ -43,7 +43,7 @@ const addLink = (editor: YooEditor, slate: SlateEditor, url: string) => {
 
   // Should be moved to the Link plugin
   const defaultLinkProps: Record<string, unknown> | undefined =
-    editor.plugins?.LinkPlugin?.elements?.link?.props;
+    editor.plugins?.Link?.elements?.link?.props;
 
   const link = {
     type: 'link',

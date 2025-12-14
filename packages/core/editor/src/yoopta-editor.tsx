@@ -2,8 +2,6 @@ import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Editor } from './components/Editor/render-editor';
-import type { Tools } from './contexts/YooptaContext/ToolsContext';
-import { ToolsProvider } from './contexts/YooptaContext/ToolsContext';
 import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
 import type { YooptaOperation } from './editor/core/applyTransforms';
 import type { SlateElement, YooEditor, YooptaContentValue, YooptaPath } from './editor/types';
@@ -35,7 +33,6 @@ export type YooptaEditorProps = {
   className?: string;
   selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   children?: React.ReactNode;
-  tools?: Partial<Tools>;
   placeholder?: string;
   readOnly?: boolean;
   width?: number | string;
@@ -55,7 +52,6 @@ const YooptaEditor = ({
   plugins: pluginsFromProp,
   autoFocus,
   className,
-  tools,
   selectionBoxRoot,
   children,
   placeholder,
@@ -135,18 +131,16 @@ const YooptaEditor = ({
 
   return (
     <YooptaContextProvider editorState={editorState}>
-      <ToolsProvider tools={tools}>
-        <Editor
-          placeholder={placeholder}
-          marks={marks}
-          autoFocus={autoFocus}
-          className={className}
-          selectionBoxRoot={selectionBoxRoot}
-          width={width}
-          style={style}>
-          {children}
-        </Editor>
-      </ToolsProvider>
+      <Editor
+        placeholder={placeholder}
+        marks={marks}
+        autoFocus={autoFocus}
+        className={className}
+        selectionBoxRoot={selectionBoxRoot}
+        width={width}
+        style={style}>
+        {children}
+      </Editor>
     </YooptaContextProvider>
   );
 };

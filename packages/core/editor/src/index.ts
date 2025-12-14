@@ -17,8 +17,6 @@ export { type EmailTemplateOptions } from './parsers/getEmail';
 // [TODO] - should be in separated package @yoopta/common/ui or @yoopta/ui
 export { UI } from './UI';
 
-export { useYooptaTools, Tools } from './contexts/YooptaContext/ToolsContext';
-
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';
 export {
