@@ -2,8 +2,6 @@ import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { CodeCommands } from '../commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
-import { CodeElementProps, CodePluginElements } from '../types';
-import { CodeEditor } from '../ui/Code';
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',
@@ -13,10 +11,9 @@ const ALIGNS_TO_JUSTIFY = {
 
 const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
   type: 'Code',
-  customEditor: CodeEditor,
   elements: {
     code: {
-      render: (props) => <pre />,
+      render: (props) => <pre {...props.attributes}></pre>,
       props: {
         nodeType: 'void',
         language: 'javascript',

@@ -72,7 +72,6 @@ export type YooptaBlock = {
   type: string;
   options?: PluginOptions<any>;
   elements: PluginElementsMap;
-  hasCustomEditor?: boolean;
   isActive: () => boolean;
 };
 

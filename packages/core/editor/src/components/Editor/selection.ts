@@ -37,13 +37,10 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
     if (typeof path === 'number') {
       const slate = Blocks.getBlockSlate(editor, { at: path });
-      const block = Blocks.getBlock(editor, { at: path });
-      const blockEntity = editor.plugins[block?.type || ''];
-      if (!slate || blockEntity?.customEditor) return;
+      if (!slate) return;
 
       try {
         Editor.withoutNormalizing(slate, () => {
-          // [TEST]
           Transforms.select(slate, [0]);
 
           if (slate.selection && Range.isExpanded(slate.selection)) {

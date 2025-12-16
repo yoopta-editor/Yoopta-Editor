@@ -5,13 +5,7 @@ import { Editor, Path, Range } from 'slate';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
 import { useEventHandlers, useSlateEditor } from './hooks';
-import type {
-  ExtendedLeafProps,
-  Plugin,
-  PluginCustomEditorRenderProps,
-  PluginEvents,
-  RenderSlateElementProps,
-} from './types';
+import type { ExtendedLeafProps, Plugin, PluginEvents, RenderSlateElementProps } from './types';
 import { TextLeaf } from '../components/text-leaf/text-leaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
@@ -52,7 +46,6 @@ const getMappedMarks = (marks?: YooptaMark<any>[]) => {
 
 const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, TOptions>({
   id,
-  customEditor,
   elements,
   marks,
   events,
@@ -284,7 +277,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       onKeyUp={onKeyUp}
       onFocus={onFocus}
       onBlur={onBlur}
-      customEditor={customEditor}
       readOnly={editor.readOnly}
       onPaste={onPaste}
     />
@@ -306,7 +298,6 @@ type SlateEditorInstanceProps = {
   onFocus: (event: React.FocusEvent) => void;
   onBlur: (event: React.FocusEvent) => void;
   onPaste: (event: React.ClipboardEvent) => void;
-  customEditor?: (props: PluginCustomEditorRenderProps) => JSX.Element;
   decorate: (nodeEntry: NodeEntry) => any[];
 };
 
@@ -325,40 +316,33 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
     onFocus,
     onSelectionChange,
     onPaste,
-    customEditor,
     decorate,
     readOnly,
-  }) => {
-    if (typeof customEditor === 'function') {
-      return customEditor({ blockId: id });
-    }
-
-    return (
-      <Slate
-        key={`slate-${id}`}
-        editor={slate}
-        initialValue={initialValue}
-        onValueChange={onChange}
-        onSelectionChange={onSelectionChange}>
-        <Editable
-          key={`editable-${id}`}
-          renderElement={renderElement as any}
-          renderLeaf={renderLeaf}
-          className="yoopta-slate"
-          spellCheck
-          {...eventHandlers}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          onFocus={onFocus}
-          decorate={decorate}
-          // [TODO] - carefully check onBlur, e.x. transforms using functions, e.x. highlight update
-          // onBlur={onBlur}
-          readOnly={readOnly}
-          onPaste={onPaste}
-        />
-      </Slate>
-    );
-  },
+  }) => (
+    <Slate
+      key={`slate-${id}`}
+      editor={slate}
+      initialValue={initialValue}
+      onValueChange={onChange}
+      onSelectionChange={onSelectionChange}>
+      <Editable
+        key={`editable-${id}`}
+        renderElement={renderElement as any}
+        renderLeaf={renderLeaf}
+        className="yoopta-slate"
+        spellCheck
+        {...eventHandlers}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        onFocus={onFocus}
+        decorate={decorate}
+        // [TODO] - carefully check onBlur, e.x. transforms using functions, e.x. highlight update
+        // onBlur={onBlur}
+        readOnly={readOnly}
+        onPaste={onPaste}
+      />
+    </Slate>
+  ),
 );
 
 SlateEditorInstance.displayName = 'SlateEditorInstance';

@@ -53,18 +53,9 @@ const StepContainer = ({ attributes, children, element, blockId }: PluginElement
       <div
         className="absolute z-20 flex flex-col items-center transition-opacity duration-300 opacity-0 group-hover/steps-node:opacity-100"
         contentEditable={false}
-        style={{
-          left: 2,
-          bottom: '-20px',
-        }}>
+        style={{ left: 2, bottom: '-20px' }}>
         {hasSteps && (
-          <div
-            className="absolute w-0.5 bg-border"
-            style={{
-              bottom: '28px',
-              top: '-20px',
-            }}
-          />
+          <div className="absolute w-0.5 bg-border" style={{ bottom: '28px', top: '-20px' }} />
         )}
         <Button
           variant="ghost"

@@ -1,4 +1,4 @@
-import type { SlateEditor, YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
+import type { SlateEditor, YooEditor, YooptaPathIndex } from '../types';
 
 export type GetBlockSlateOptions = {
   at?: YooptaPathIndex;
@@ -18,10 +18,8 @@ export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions):
     });
 
   const slate = editor.blockEditorsMap[blockId || ''];
-  const blockData = editor.children[blockId || ''] as YooptaBlockData;
-  const blockEntity = editor.plugins[blockData?.type || ''];
 
-  if (!blockEntity?.customEditor && !slate) {
+  if (!slate) {
     throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
   }
 

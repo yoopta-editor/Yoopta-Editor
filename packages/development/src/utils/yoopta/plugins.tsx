@@ -20,10 +20,9 @@ import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin'
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
-// import withShadcnUI from '@yoopta/themes-shadcn';
-import withMaterialUI from '@yoopta/themes-material';
-import { ShikiCodePlugin } from '../../components/plugins/code-plugin';
 import withShadcnUI from '@yoopta/themes-shadcn';
+// import withMaterialUI from '@yoopta/themes-material';
+import { ShikiCodePlugin } from '../../components/plugins/code-plugin';
 
 const ALLOWED_PLUGINS = [
   Paragraph,

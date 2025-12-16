@@ -103,7 +103,6 @@ export type Plugin<
   TPluginOptions = Record<string, unknown>,
 > = {
   type: string;
-  customEditor?: (props: PluginCustomEditorRenderProps) => JSX.Element;
   extensions?: (slate: SlateEditor, editor: YooEditor, blockId: string) => SlateEditor;
   commands?: Record<string, (editor: YooEditor, ...args: any[]) => any>;
   elements: {

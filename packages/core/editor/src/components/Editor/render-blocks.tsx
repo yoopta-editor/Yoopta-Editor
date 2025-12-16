@@ -60,7 +60,6 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
           type={block.type}
           id={blockId}
           marks={marks}
-          customEditor={plugin.customEditor}
           events={plugin.events}
           elements={plugin.elements}
           options={plugin.options}

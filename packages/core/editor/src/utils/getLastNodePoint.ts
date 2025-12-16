@@ -32,3 +32,32 @@ export function getLastNodePoint(slate: SlateEditor): Point {
     };
   }
 }
+
+export function getFirstNodePoint(slate: SlateEditor): Point {
+  try {
+    let point;
+
+    const [firstElement, firstPath] = Editor.first(slate, []);
+
+    if (Element.isElement(firstElement) && !Editor.isEditor(firstElement)) {
+      const [firstTextNode, firstTextPath] = Editor.first(slate, firstPath);
+
+      if (Text.isText(firstTextNode)) {
+        point = { path: firstTextPath, offset: 0 };
+      }
+    } else if (Text.isText(firstElement)) {
+      point = { path: firstPath, offset: 0 };
+    }
+
+    if (!point) {
+      point = { path: [0, 0], offset: 0 };
+    }
+
+    return point;
+  } catch (error) {
+    return {
+      path: [0, 0],
+      offset: 0,
+    };
+  }
+}

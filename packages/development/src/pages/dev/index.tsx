@@ -14,7 +14,6 @@ import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoop
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
-import { FixedToolbar } from '@/components/FixedToolbar/FixedToolbar';
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 
 const YooptaUIPackageExample = () => {
@@ -30,8 +29,10 @@ const YooptaUIPackageExample = () => {
         editor.y('accordion-list-item', {
           props: { isExpanded: true },
           children: [
-            editor.y('accordion-list-item-heading'),
-            editor.y('accordion-list-item-content'),
+            editor.y('accordion-list-item-heading', { children: [editor.y.text('Accordion 1')] }),
+            editor.y('accordion-list-item-content', {
+              children: [editor.y.text('Accordion Content 1', { bold: true, italic: true })],
+            }),
           ],
         }),
         editor.y('accordion-list-item', {
@@ -197,9 +198,7 @@ const YooptaUIPackageExample = () => {
         language: 'javascript',
         theme: 'github-dark',
       },
-      children: children.map((child) =>
-        editor.y('code-line', { children: [editor.y.text(child.text)] }),
-      ),
+      children: [editor.y.text(children.map((child) => child.text).join('\n'))],
     });
 
     editor.insertBlock('Code', {
@@ -230,9 +229,7 @@ const YooptaUIPackageExample = () => {
         language: 'python',
         theme: 'github-dark',
       },
-      children: children.map((child) =>
-        editor.y('code-line', { children: [editor.y.text(child.text)] }),
-      ),
+      children: [editor.y.text(children.map((child) => child.text).join('\n'))],
     });
 
     editor.insertBlock('Code', {
@@ -241,6 +238,22 @@ const YooptaUIPackageExample = () => {
       focus: true,
     });
   };
+
+  // editor.y.markdown();
+  // editor.y.mdx(`
+  //   <Accordion>
+  //     <AccordionItem>
+  //       <AccordionTrigger>Accordion 1</AccordionTrigger>
+  //       <AccordionContent>Accordion Content 1</AccordionContent>
+  //     </AccordionItem>
+  //   </Accordion>
+  //   <Steps>
+  //     <Step>
+  //       <StepHeading>Step 1</StepHeading>
+  //       <StepContent>Step Content 1</StepContent>
+  //     </Step>
+  //   </Steps>
+  // `);
 
   return (
     <>
@@ -314,7 +327,6 @@ const YooptaUIPackageExample = () => {
         <YooptaBlockOptions />
         <YooptaSlashCommandMenu />
         <YooptaActionMenuList />
-        <FixedToolbar editor={editor} />
       </YooptaEditor>
     </>
   );

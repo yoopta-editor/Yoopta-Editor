@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Text } from 'slate';
-import { BundledLanguage, BundledTheme, createHighlighter, HighlighterGeneric } from 'shiki';
-import { YooptaPlugin } from '@yoopta/editor';
+import {
+  BundledLanguage,
+  BundledTheme,
+  createHighlighter,
+  HighlighterGeneric,
+  SpecialLanguage,
+} from 'shiki';
+import { PluginElementRenderProps, YooptaPlugin } from '@yoopta/editor';
 
-// Custom hook to initialize Shiki highlighter
 const useShikiHighlighter = () => {
   const [highlighter, setHighlighter] = useState<HighlighterGeneric<
     BundledLanguage,
@@ -31,7 +36,6 @@ const useShikiHighlighter = () => {
   return { highlighter, loading };
 };
 
-// Get plain text from a Slate node
 const getNodeText = (node) => {
   if (Text.isText(node)) {
     return node.text;
@@ -39,8 +43,14 @@ const getNodeText = (node) => {
   return node.children?.map(getNodeText).join('\n') || '';
 };
 
-// Highlighted overlay component - renders Shiki output
-const HighlightedOverlay = ({ code, language, highlighter, theme }) => {
+type HighlightedOverlayProps = {
+  code: string;
+  language: SpecialLanguage;
+  highlighter: HighlighterGeneric<BundledLanguage, BundledTheme>;
+  theme: BundledTheme;
+};
+
+const HighlightedOverlay = ({ code, language, highlighter, theme }: HighlightedOverlayProps) => {
   const [tokens, setTokens] = useState([]);
 
   useEffect(() => {
@@ -81,16 +91,13 @@ const HighlightedOverlay = ({ code, language, highlighter, theme }) => {
   );
 };
 
-// Code block element component
-const CodeBlockElement = ({ attributes, children, element }) => {
+const CodeBlockElement = ({ attributes, children, element }: PluginElementRenderProps) => {
   const { highlighter } = useShikiHighlighter();
   const code = getNodeText(element);
-  const language = element.props.language || 'javascript';
-  const theme = element.props.theme || 'github-dark';
-  const overlayRef = useRef(null);
-  const editableRef = useRef(null);
+  const language = element.props?.language || 'javascript';
+  const theme = element.props?.theme || 'github-dark';
+  const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Sync scroll between editable and overlay
   const handleScroll = (e) => {
     if (overlayRef.current) {
       overlayRef.current.scrollTop = e.target.scrollTop;
@@ -100,7 +107,6 @@ const CodeBlockElement = ({ attributes, children, element }) => {
 
   return (
     <div {...attributes} className="relative my-4">
-      {/* Language badge */}
       <div
         contentEditable={false}
         className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded-t-lg border-b border-gray-700">
@@ -112,9 +118,7 @@ const CodeBlockElement = ({ attributes, children, element }) => {
         </div>
       </div>
 
-      {/* Code container with overlay technique */}
       <div className="relative bg-gray-900 rounded-b-lg overflow-hidden">
-        {/* Highlighted overlay - visual layer */}
         <div
           ref={overlayRef}
           className="absolute inset-0 p-4 font-mono text-sm whitespace-pre overflow-auto pointer-events-none z-10"
@@ -131,9 +135,7 @@ const CodeBlockElement = ({ attributes, children, element }) => {
           />
         </div>
 
-        {/* Editable layer - interaction layer */}
         <div
-          ref={editableRef}
           className="relative p-4 font-mono text-sm whitespace-pre overflow-auto"
           style={{
             lineHeight: '1.6',
@@ -149,24 +151,12 @@ const CodeBlockElement = ({ attributes, children, element }) => {
   );
 };
 
-// Code line element
-const CodeLineElement = ({ attributes, children }) => {
-  return (
-    <div {...attributes} className="code-line-editable">
-      {children}
-    </div>
-  );
-};
-
 const ShikiCodePlugin = new YooptaPlugin({
   type: 'Code',
   elements: {
     code: {
       render: CodeBlockElement,
       asRoot: true,
-    },
-    'code-line': {
-      render: CodeLineElement,
     },
   },
   events: {

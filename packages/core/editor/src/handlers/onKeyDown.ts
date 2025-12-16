@@ -1,32 +1,14 @@
 import { isKeyHotkey } from 'is-hotkey';
-import type { Point } from 'slate';
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../editor/blocks';
 import { Paths } from '../editor/paths';
-import type { SlateEditor, YooEditor } from '../editor/types';
+import type { YooEditor } from '../editor/types';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
 import { generateId } from '../utils/generateId';
-import { getLastNode } from '../utils/getLastNodePoint';
+import { getFirstNodePoint, getLastNode, getLastNodePoint } from '../utils/getLastNodePoint';
 import { HOTKEYS } from '../utils/hotkeys';
-
-function getNextNodePoint(slate: SlateEditor, path: Path): Point {
-  try {
-    const [, firstNodePath] = Editor.first(slate, path);
-
-    return {
-      path: firstNodePath,
-      offset: 0,
-    };
-  } catch (error) {
-    return {
-      path: [0, 0],
-      offset: 0,
-    };
-  }
-}
-/** */
 
 export function onKeyDown(editor: YooEditor) {
   return (event: React.KeyboardEvent) => {
@@ -215,56 +197,65 @@ export function onKeyDown(editor: YooEditor) {
       return;
     }
 
-    // [TODO] - default behavior for complex plugins
     if (HOTKEYS.isArrowUp(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      // If element with any paths has all paths at 0
-      const isAllPathsInStart = new Set(slate.selection.anchor.path).size === 1;
+      const prevPath = Paths.getPreviousBlockOrder(editor);
+      if (typeof prevPath !== 'number') return;
 
-      if (isAllPathsInStart) {
-        const prevPath = Paths.getPreviousBlockOrder(editor);
+      const prevBlock = Blocks.getBlock(editor, { at: prevPath });
+      if (!prevBlock) return;
+
+      const firstLeafPoint = getFirstNodePoint(slate);
+      const isAtFirstLeafStart =
+        Path.equals(slate.selection.anchor.path, firstLeafPoint.path) &&
+        slate.selection.anchor.offset === 0;
+
+      if (isAtFirstLeafStart) {
         const prevSlate = findSlateBySelectionPath(editor, { at: prevPath });
-        const prevBlock = Blocks.getBlock(editor, { at: prevPath });
-        const prevBlockEntity = editor.plugins[prevBlock?.type || ''];
-        if (prevSlate && prevBlock && !prevBlockEntity?.customEditor) {
-          const [, prevLastPath] = Editor.last(prevSlate, [0]);
-          const prevLastNodeTextLength = Editor.string(prevSlate, prevLastPath).length;
-          const selection: Point = {
-            path: prevLastPath,
-            offset: prevLastNodeTextLength,
-          };
-          event.preventDefault();
-          editor.focusBlock(prevBlock.id, {
-            focusAt: selection,
-            waitExecution: false,
-            shouldUpdateBlockPath: true,
-          });
-          return;
-        }
+        if (!prevSlate) return;
+
+        const prevLastLeafPoint = getLastNodePoint(prevSlate);
+
+        event.preventDefault();
+        editor.focusBlock(prevBlock.id, {
+          focusAt: prevLastLeafPoint,
+          waitExecution: false,
+          shouldUpdateBlockPath: true,
+        });
+        return;
       }
     }
 
-    // [TODO] - default behavior for complex plugins
     if (HOTKEYS.isArrowDown(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      const parentPath = Path.parent(slate.selection.anchor.path);
-      const isEnd = Editor.isEnd(slate, slate.selection.anchor, parentPath);
-      if (isEnd) {
-        const nextPath = Paths.getNextBlockOrder(editor);
+      const nextPath = Paths.getNextBlockOrder(editor);
+      if (typeof nextPath !== 'number') return;
+
+      const nextBlock = Blocks.getBlock(editor, { at: nextPath });
+      if (!nextBlock) return;
+
+      const lastLeafPoint = getLastNodePoint(slate);
+      const isAtLastLeafEnd =
+        Path.equals(slate.selection.anchor.path, lastLeafPoint.path) &&
+        slate.selection.anchor.offset === lastLeafPoint.offset;
+
+      if (isAtLastLeafEnd) {
         const nextSlate = findSlateBySelectionPath(editor, { at: nextPath });
-        const nextBlock = Blocks.getBlock(editor, { at: nextPath });
-        const nextBlockEntity = editor.plugins[nextBlock?.type || ''];
-        if (nextSlate && nextBlock && !nextBlockEntity?.customEditor) {
-          // [TODO] - should parent path, but for next slate
-          const selection: Point = getNextNodePoint(nextSlate, parentPath);
-          event.preventDefault();
-          editor.focusBlock(nextBlock.id, { focusAt: selection, waitExecution: false });
-          return;
-        }
+        if (!nextSlate) return;
+
+        const nextFirstLeafPoint = getFirstNodePoint(nextSlate);
+
+        event.preventDefault();
+        editor.focusBlock(nextBlock.id, {
+          focusAt: nextFirstLeafPoint,
+          waitExecution: false,
+          shouldUpdateBlockPath: true,
+        });
+        return;
       }
     }
 

@@ -93,7 +93,7 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   let rootNode: SlateElement<string, any> | YooptaBlockData[] = {
     id: generateId(),
     type: rootElementType,
-    children: isVoid && !block.customEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
+    children: isVoid ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
     props: { nodeType: 'block', ...rootElement.props },
   };
 
