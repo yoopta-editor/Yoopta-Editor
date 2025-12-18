@@ -62,7 +62,7 @@ const YooptaUIPackageExample = () => {
               children: [
                 editor.y('step-list-item-heading', {
                   children: [
-                    editor.y.text('Step 1: ', { bold: true }),
+                    editor.y.text('Step 1: ', { bold: true, italic: true }),
                     editor.y.text('Setup project'),
                   ],
                 }),
@@ -79,6 +79,16 @@ const YooptaUIPackageExample = () => {
               children: [
                 editor.y('step-list-item-heading', {
                   children: [editor.y.text('Install dependencies', { bold: true })],
+                }),
+                editor.y('step-list-item-content', {
+                  children: [
+                    editor.y('image', {
+                      props: {
+                        src: 'https://placehold.co/600x400',
+                        sizes: { width: 600, height: 400 },
+                      },
+                    }),
+                  ],
                 }),
               ],
             }),
@@ -239,10 +249,18 @@ const YooptaUIPackageExample = () => {
     });
   };
 
-  // editor.y.markdown();
+  // editor.y.markdown(`
+  //   # Hello World
+  //   This is a test of the markdown plugin.
+  //   ## Subheading
+  //   This is a subheading.
+  //   ### Subsubheading
+  //   This is a subsubheading.
+  // `);
+
   // editor.y.mdx(`
   //   <Accordion>
-  //     <AccordionItem>
+  //     <AccordionItem isExpanded={true}>
   //       <AccordionTrigger>Accordion 1</AccordionTrigger>
   //       <AccordionContent>Accordion Content 1</AccordionContent>
   //     </AccordionItem>

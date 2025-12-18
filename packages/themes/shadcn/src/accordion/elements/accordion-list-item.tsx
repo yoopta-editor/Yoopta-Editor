@@ -1,6 +1,6 @@
 import type { PluginElementRenderProps } from '@yoopta/editor';
 
-import { AccordionItem } from '../ui/accordion';
+import { AccordionItem } from '../../ui/accordion';
 
 export const AccordionListItem = (props: PluginElementRenderProps) => {
   const { attributes, children, element } = props;

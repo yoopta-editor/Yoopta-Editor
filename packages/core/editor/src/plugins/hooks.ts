@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Element, Node, Operation, Path, Range, Transforms } from 'slate';
 
-import { withInlines } from './extenstions/withInlines';
+import { withInlines } from './extenstions/with-inlines';
 import type { PluginEventHandlerOptions, PluginEvents } from './types';
 import { Blocks } from '../editor/blocks';
 import type { SetSlateOperation } from '../editor/core/applyTransforms';

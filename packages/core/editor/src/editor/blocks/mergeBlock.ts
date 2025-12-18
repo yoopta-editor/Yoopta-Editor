@@ -2,7 +2,7 @@ import { Editor, Text, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import { getLastNodePoint } from '../../utils/getLastNodePoint';
+import { getLastNodePoint } from '../../utils/get-node-points';
 import type { YooptaOperation } from '../core/applyTransforms';
 import { Elements } from '../elements';
 import { Paths } from '../paths';

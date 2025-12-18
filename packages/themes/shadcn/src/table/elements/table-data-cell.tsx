@@ -4,7 +4,7 @@ import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Editor } from 'slate';
 import { ReactEditor } from 'slate-react';
 
-import { TableCell, TableHead } from '../ui/table';
+import { TableCell, TableHead } from '../../ui/table';
 
 export const TableDataCell = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;

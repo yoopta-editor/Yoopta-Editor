@@ -3,7 +3,7 @@ import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
-import { Accordion } from '../ui/accordion';
+import { Accordion } from '../../ui/accordion';
 
 export const AccordionList = (props: PluginElementRenderProps) => {
   const { attributes, children, blockId, element } = props;

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import type { ComponentProps } from 'react';
 
-import { cn } from '../../utils';
+import { cn } from '../utils';
 
 const Table = forwardRef<HTMLTableElement, ComponentProps<'table'>>(
   ({ className, ...props }, ref) => (

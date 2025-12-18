@@ -15,7 +15,7 @@ import {
   buildPlugins,
 } from './utils/editor-builders';
 import { generateId } from './utils/generateId';
-import { validateYooptaValue } from './utils/validateYooptaValue';
+import { validateYooptaValue } from './utils/validations';
 
 export type YooptaOnChangeOptions = {
   operations: YooptaOperation[];

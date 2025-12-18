@@ -3,7 +3,7 @@ import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element } from 'slate';
 
-import { TableBody, Table as TableUI } from '../ui/table';
+import { TableBody, Table as TableUI } from '../../ui/table';
 
 export const Table = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;

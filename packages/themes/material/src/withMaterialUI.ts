@@ -4,6 +4,7 @@ import { AccordionUI } from './accordion';
 import { BlockquoteUI } from './blockquote';
 import { CalloutUI } from './callout';
 import { HeadingsUI } from './headings';
+import { ImageUI } from './image';
 import { LinkUI } from './link';
 import { ListsUI } from './lists';
 import { ParagraphUI } from './paragraph';
@@ -60,6 +61,7 @@ export function withMaterialUI(
     BulletedList: ListsUI.BulletedList,
     NumberedList: ListsUI.NumberedList,
     TodoList: ListsUI.TodoList,
+    Image: ImageUI,
   };
 
   return plugins.map((plugin) => {

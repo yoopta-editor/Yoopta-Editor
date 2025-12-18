@@ -5,7 +5,7 @@ import { getSelectedPaths } from './getSelectedPaths';
 import { isBlockSelected } from './isBlockSelected';
 import { isPathEmpty } from './isPathEmpty';
 import { setPath } from './setPath';
-import { getLastNodePoint } from '../../utils/getLastNodePoint';
+import { getLastNodePoint } from '../../utils/get-node-points';
 
 export const Paths = {
   getBlockOrder,

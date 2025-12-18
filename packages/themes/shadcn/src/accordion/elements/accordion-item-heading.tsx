@@ -5,7 +5,7 @@ import { ChevronDown, Plus, Trash2 } from 'lucide-react';
 import type { Location } from 'slate';
 import { Editor, Path, Transforms } from 'slate';
 
-import { AccordionTrigger } from '../ui/accordion';
+import { AccordionTrigger } from '../../ui/accordion';
 
 export const AccordionItemHeading = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;

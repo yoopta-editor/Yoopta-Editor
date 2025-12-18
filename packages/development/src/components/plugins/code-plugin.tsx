@@ -7,7 +7,13 @@ import {
   HighlighterGeneric,
   SpecialLanguage,
 } from 'shiki';
-import { PluginElementRenderProps, YooptaPlugin } from '@yoopta/editor';
+import {
+  Elements,
+  generateId,
+  PluginElementRenderProps,
+  useYooptaEditor,
+  YooptaPlugin,
+} from '@yoopta/editor';
 
 const useShikiHighlighter = () => {
   const [highlighter, setHighlighter] = useState<HighlighterGeneric<
@@ -31,6 +37,11 @@ const useShikiHighlighter = () => {
       }
     };
     initHighlighter();
+
+    return () => {
+      console.log('Disposing highlighter');
+      highlighter?.dispose();
+    };
   }, []);
 
   return { highlighter, loading };
@@ -93,6 +104,7 @@ const HighlightedOverlay = ({ code, language, highlighter, theme }: HighlightedO
 
 const CodeBlockElement = ({ attributes, children, element }: PluginElementRenderProps) => {
   const { highlighter } = useShikiHighlighter();
+  const editor = useYooptaEditor();
   const code = getNodeText(element);
   const language = element.props?.language || 'javascript';
   const theme = element.props?.theme || 'github-dark';
@@ -106,7 +118,27 @@ const CodeBlockElement = ({ attributes, children, element }: PluginElementRender
   };
 
   return (
-    <div {...attributes} className="relative my-4">
+    <div
+      {...attributes}
+      className="relative my-4"
+      onPaste={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const text = e.clipboardData.getData('text/plain');
+        const elements = editor.y('code', {
+          props: {
+            language: 'javascript',
+            theme: 'github-dark',
+          },
+          children: [editor.y.text(text)],
+        });
+
+        editor.toggleBlock('Code', {
+          elements,
+          at: editor.path.current,
+          focus: true,
+        });
+      }}>
       <div
         contentEditable={false}
         className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded-t-lg border-b border-gray-700">
@@ -171,6 +203,29 @@ const ShikiCodePlugin = new YooptaPlugin({
           return;
         }
       };
+    },
+  },
+  parsers: {
+    html: {
+      deserialize: {
+        nodeNames: ['PRE'],
+        parse: (el) => {
+          if (el.nodeName === 'PRE') {
+            const code = el.querySelector('code');
+            const textContent = code ? code.textContent : el.textContent;
+            const language = el.getAttribute('data-language') || 'javascript';
+            const theme = el.getAttribute('data-theme') || 'github-dark';
+
+            console.log({ language, theme });
+
+            return {
+              children: [{ text: textContent || '' }],
+              type: 'code',
+              id: generateId(),
+            };
+          }
+        },
+      },
     },
   },
 });

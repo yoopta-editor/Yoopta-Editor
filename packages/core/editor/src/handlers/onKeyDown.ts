@@ -7,7 +7,7 @@ import { Paths } from '../editor/paths';
 import type { YooEditor } from '../editor/types';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
 import { generateId } from '../utils/generateId';
-import { getFirstNodePoint, getLastNode, getLastNodePoint } from '../utils/getLastNodePoint';
+import { getFirstNodePoint, getLastNode, getLastNodePoint } from '../utils/get-node-points';
 import { HOTKEYS } from '../utils/hotkeys';
 
 export function onKeyDown(editor: YooEditor) {

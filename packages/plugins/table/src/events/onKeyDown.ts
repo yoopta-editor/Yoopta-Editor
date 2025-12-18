@@ -102,7 +102,7 @@ export function onKeyDown(
       });
 
       if (!dataCellEntry) return;
-      const [dataCellNode, dataCellpath] = dataCellEntry;
+      const [, dataCellpath] = dataCellEntry;
 
       try {
         const columnIndex = dataCellpath[dataCellpath.length - 1];
@@ -126,7 +126,7 @@ export function onKeyDown(
       });
 
       if (!dataCellEntry) return;
-      const [dataCellNode, dataCellpath] = dataCellEntry;
+      const [, dataCellpath] = dataCellEntry;
 
       try {
         const columnIndex = dataCellpath[dataCellpath.length - 1];
@@ -136,7 +136,9 @@ export function onKeyDown(
         // throws error if no node found in the path
         Editor.node(slate, nextDataCellPath);
         Transforms.select(slate, nextDataCellPath);
-      } catch (error) {}
+      } catch {
+        // ignore
+      }
 
       return;
     }

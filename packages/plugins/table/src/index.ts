@@ -1,4 +1,4 @@
-import { Table } from './plugin/Table';
+import { Table } from './plugin/table';
 import type { TableCellElement, TableElement, TableRowElement } from './types';
 
 declare module 'slate' {
@@ -8,5 +8,6 @@ declare module 'slate' {
 }
 
 export { TableCommands } from './commands';
+export type { TableCellElement, TableElement, TableRowElement };
 
 export default Table;
