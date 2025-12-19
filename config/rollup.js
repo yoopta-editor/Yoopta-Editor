@@ -76,7 +76,7 @@ function getPlugins({ tailwindConfig }) {
 /**
  * @type {import('rollup').RollupOptions}
  */
-export function createRollupConfig({ pkg, tailwindConfig }) {
+export function createRollupConfig({ pkg, tailwindConfig, outputOptions }) {
   return {
     input: `./src/index.ts`,
     output: [
@@ -86,6 +86,7 @@ export function createRollupConfig({ pkg, tailwindConfig }) {
         globals: { react: 'React' },
         file: `./${pkg.module}`,
         exports: 'named',
+        ...outputOptions,
       },
     ],
     plugins: getPlugins({ tailwindConfig }),

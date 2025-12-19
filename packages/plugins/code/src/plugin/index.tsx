@@ -2,6 +2,10 @@ import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { CodeCommands } from '../commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
+import { escapeHTML } from '../utils/element';
+import { initHighlighter } from '../utils/shiki';
+
+initHighlighter();
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',
@@ -13,11 +17,10 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
   type: 'Code',
   elements: {
     code: {
-      render: (props) => <pre {...props.attributes}></pre>,
+      render: (props) => <pre {...props.attributes}>{props.children}</pre>,
       props: {
-        nodeType: 'void',
         language: 'javascript',
-        theme: 'VSCode',
+        theme: 'github-dark',
       },
     },
   },
@@ -39,7 +42,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
             const textContent = code ? code.textContent : el.textContent;
 
             const language = el.getAttribute('data-language') || 'javascript';
-            const theme = el.getAttribute('data-theme') || 'VSCode';
+            const theme = el.getAttribute('data-theme') || 'github-dark';
 
             return {
               children: [{ text: textContent || '' }],
@@ -48,7 +51,6 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
               props: {
                 language,
                 theme,
-                nodeType: 'void',
               },
             };
           }
@@ -83,7 +85,7 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
             <tbody style="width:100%;">
               <tr>
                 <td>
-                  <pre data-theme="${props.theme || 'VSCode'}" data-language="${
+                  <pre data-theme="${props.theme || 'github-dark'}" data-language="${
           props.language || 'javascript'
         }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
           depth * 20
@@ -96,15 +98,21 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
       },
     },
   },
-});
+  events: {
+    onKeyDown: (editor, slate, _options) => (event) => {
+      console.log('@@@ Code plugin onKeyDown', event.key, event.isDefaultPrevented());
 
-function escapeHTML(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
+      const isEnter = event.key === 'Enter';
+      const isShiftEnter = isEnter && event.shiftKey;
+
+      if (isEnter || isShiftEnter) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        slate.insertText('\n');
+      }
+    },
+  },
+});
 
 export { Code };

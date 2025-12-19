@@ -21,7 +21,7 @@ import { StepsPlugin } from '@/components/plugins/steps-plugin';
 import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
 import withShadcnUI from '@yoopta/themes-shadcn';
-import { ShikiCodePlugin } from '../../components/plugins/code-plugin';
+// import withMaterialUI from '@yoopta/themes-material';
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -34,6 +34,7 @@ const ALLOWED_PLUGINS = [
   Blockquote,
   Callout,
   Image,
+  Code,
 ];
 
 export const YOOPTA_PLUGINS = withShadcnUI([
@@ -45,8 +46,8 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   Headings.HeadingTwo,
   Headings.HeadingThree,
   OrderDetailsActionPlugin,
+  Code,
   Blockquote,
-  ShikiCodePlugin,
   SendEmailActionPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
@@ -77,6 +78,7 @@ export const YOOPTA_PLUGINS = withShadcnUI([
       Blockquote,
       Callout,
       Image,
+      Code,
     ],
   }),
   Image.extend({

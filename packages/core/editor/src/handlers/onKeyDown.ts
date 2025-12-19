@@ -36,6 +36,8 @@ export function onKeyDown(editor: YooEditor) {
     }
 
     if (HOTKEYS.isEnter(event)) {
+      console.log('@@@ Editor onKeyDown isEnter', event.key);
+      console.log('@@@ Editor onKeyDown isDefaultPrevented', event.isDefaultPrevented());
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 

@@ -3,13 +3,12 @@ import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from
 import { ParagraphCommands } from '../commands/ParagraphCommands';
 import { withParagraph } from '../extensions/withParagraph';
 import type { ParagraphElementMap } from '../types';
-import { ParagraphRender } from '../ui/Paragraph';
 
 const Paragraph = new YooptaPlugin<ParagraphElementMap>({
   type: 'Paragraph',
   elements: {
     paragraph: {
-      render: ParagraphRender,
+      render: (props) => <p {...props.attributes}>{props.children}</p>,
     },
   },
   options: {

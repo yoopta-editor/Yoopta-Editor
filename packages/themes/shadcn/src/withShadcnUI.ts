@@ -3,6 +3,7 @@ import type { YooptaPlugin } from '@yoopta/editor';
 import { AccordionUI } from './accordion';
 import { BlockquoteUI } from './blockquote';
 import { CalloutUI } from './callout';
+import { CodeUI } from './code';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -67,6 +68,7 @@ export function withShadcnUI(
     NumberedList: ListsUI.NumberedList,
     TodoList: ListsUI.TodoList,
     Image: ImageUI,
+    Code: CodeUI,
   };
 
   return plugins.map((plugin) => {

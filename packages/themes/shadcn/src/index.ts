@@ -10,4 +10,5 @@ export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
 export { LinkUI } from './link';
 export { ImageUI } from './image';
+export { CodeUI } from './code';
 export default withShadcnUI;

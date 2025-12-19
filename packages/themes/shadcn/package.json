@@ -38,7 +38,8 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
     "tailwind-merge": "^2.5.4",
-    "react-rnd": "^10.5.2"
+    "react-rnd": "^10.5.2",
+    "@yoopta/code": "*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

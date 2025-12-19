@@ -9,4 +9,5 @@ export { LinkUI } from './link';
 export { TableUI } from './table';
 export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
+export { CodeUI } from './code';
 export default withMaterialUI;

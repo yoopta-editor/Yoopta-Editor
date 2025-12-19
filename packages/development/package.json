@@ -58,8 +58,7 @@
     "slate-react": "^0.102.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.4",
-    "shiki": "^3.20.0"
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",

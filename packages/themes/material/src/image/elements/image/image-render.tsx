@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { Box, useTheme } from '@mui/material';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useElementSelected } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { Rnd } from 'react-rnd';
 
 import { ImageInlineToolbar } from './image-inline-toolbar';
-import { cn } from '../../../utils';
 import type { ImageElementProps } from '../../types';
 
 type Props = {
@@ -28,6 +28,7 @@ export const ImageRender = ({
   const [sizes, setSizes] = useState(elementProps.sizes);
   const { focused, selected } = useElementSelected();
   const isSelected = focused && selected;
+  const theme = useTheme();
 
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {
     const newWidth = parseInt(ref.style.width, 10);
@@ -78,23 +79,28 @@ export const ImageRender = ({
     }
   };
 
-  const alignmentClass = {
-    left: 'justify-start',
-    center: 'justify-center',
-    right: 'justify-end',
+  const alignmentStyles = {
+    left: { justifyContent: 'flex-start' },
+    center: { justifyContent: 'center' },
+    right: { justifyContent: 'flex-end' },
   }[elementProps.alignment ?? 'center'];
 
   return (
-    <div
+    <Box
       {...attributes}
-      className={cn('group/image relative transition-all w-full flex', alignmentClass)}>
-      <div className="relative" contentEditable={false}>
+      sx={{
+        position: 'relative',
+        width: '100%',
+        display: 'flex',
+        transition: 'all 0.2s',
+        ...alignmentStyles,
+      }}>
+      <Box sx={{ position: 'relative' }} contentEditable={false}>
         {isSelected ? (
           <Rnd
             style={{
               position: 'relative',
-              outline: '.125rem solid rgba(0, 0, 0, 0)',
-              outlineColor: 'hsl(var(--primary))',
+              outline: `0.125rem solid ${theme.palette.primary.main}`,
             }}
             size={{
               width: sizes.width,
@@ -136,34 +142,55 @@ export const ImageRender = ({
             }}
             resizeHandleComponent={{
               left: (
-                <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+                <Box
+                  sx={{
+                    height: 40,
+                    width: 8,
+                    borderRadius: '9999px',
+                    border: `1px solid ${theme.palette.primary.main}`,
+                    bgcolor: theme.palette.primary.main,
+                    boxShadow: theme.shadows[2],
+                  }}
+                />
               ),
               right: (
-                <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+                <Box
+                  sx={{
+                    height: 40,
+                    width: 8,
+                    borderRadius: '9999px',
+                    border: `1px solid ${theme.palette.primary.main}`,
+                    bgcolor: theme.palette.primary.main,
+                    boxShadow: theme.shadows[2],
+                  }}
+                />
               ),
-            }}
-            className={cn('rounded-sm')}>
-            <img
+            }}>
+            <Box
+              component="img"
               src={elementProps.src}
               alt={elementProps.alt || ''}
-              className="w-full h-full transition-all duration-200"
-              style={{
+              sx={{
+                width: '100%',
+                height: '100%',
+                transition: 'all 0.2s',
                 objectFit: elementProps.fit,
-                borderRadius: `${elementProps.borderRadius}px`,
+                borderRadius: `${elementProps.borderRadius ?? 0}px`,
               }}
               draggable={false}
             />
           </Rnd>
         ) : (
-          <img
+          <Box
+            component="img"
             src={elementProps.src}
             alt={elementProps.alt || ''}
-            className="transition-all duration-200"
-            style={{
+            sx={{
+              transition: 'all 0.2s',
               width: sizes.width,
               height: sizes.height,
               objectFit: elementProps.fit,
-              borderRadius: `${elementProps.borderRadius}px`,
+              borderRadius: `${elementProps.borderRadius ?? 0}px`,
             }}
             draggable={false}
           />
@@ -179,8 +206,8 @@ export const ImageRender = ({
             onCopy={copyImage}
           />
         )}
-      </div>
+      </Box>
       {children}
-    </div>
+    </Box>
   );
 };

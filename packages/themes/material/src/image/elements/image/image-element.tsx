@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { type PluginElementRenderProps } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element } from 'slate';
 

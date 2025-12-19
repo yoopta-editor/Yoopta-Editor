@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   AutoAwesome,
   CloudUpload,
@@ -9,9 +9,7 @@ import {
   Box,
   Button,
   CircularProgress,
-  Fade,
   Paper,
-  Popover,
   Stack,
   Tab,
   Tabs,
@@ -32,324 +30,6 @@ type ImagePlaceholderProps = {
   children: React.ReactNode;
 };
 
-export const ImagePlaceholder = ({
-  onUpload,
-  onInsertUrl,
-  onInsertFromUnsplash,
-  onInsertFromAI,
-  sx,
-  attributes,
-  children,
-}: ImagePlaceholderProps) => {
-  const theme = useTheme();
-  const [isDragging, setIsDragging] = useState(false);
-  const [urlAnchorEl, setUrlAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [aiAnchorEl, setAiAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [urlInput, setUrlInput] = useState('');
-  const [aiPrompt, setAiPrompt] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(false);
-
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        onUpload(file);
-      }
-    },
-    [onUpload],
-  );
-
-  const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        onUpload(file);
-      }
-    },
-    [onUpload],
-  );
-
-  const handleUrlSubmit = useCallback(() => {
-    if (urlInput.trim()) {
-      onInsertUrl(urlInput.trim());
-      setUrlInput('');
-      setUrlAnchorEl(null);
-    }
-  }, [urlInput, onInsertUrl]);
-
-  const handleAIGenerate = useCallback(async () => {
-    if (aiPrompt.trim() && onInsertFromAI) {
-      setIsGenerating(true);
-      try {
-        await onInsertFromAI(aiPrompt.trim());
-        setAiPrompt('');
-        setAiAnchorEl(null);
-      } finally {
-        setIsGenerating(false);
-      }
-    }
-  }, [aiPrompt, onInsertFromAI]);
-
-  const isUrlPopoverOpen = Boolean(urlAnchorEl);
-  const isAiPopoverOpen = Boolean(aiAnchorEl);
-
-  return (
-    <Paper
-      {...attributes}
-      contentEditable={false}
-      elevation={0}
-      sx={{
-        position: 'relative',
-        border: 2,
-        borderStyle: 'dashed',
-        borderColor: isDragging ? 'primary.main' : alpha(theme.palette.divider, 0.3),
-        borderRadius: 2,
-        bgcolor: isDragging ? alpha(theme.palette.primary.main, 0.04) : 'transparent',
-        transition: 'all 0.2s ease',
-        overflow: 'hidden',
-        '&:hover': {
-          borderColor: alpha(theme.palette.divider, 0.5),
-          bgcolor: alpha(theme.palette.action.hover, 0.02),
-        },
-        ...sx,
-      }}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}>
-      <Stack alignItems="center" justifyContent="center" spacing={3} sx={{ py: 8, px: 4 }}>
-        {/* Icon */}
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: isDragging ? 'primary.main' : alpha(theme.palette.action.selected, 0.08),
-            color: isDragging ? 'primary.contrastText' : 'text.secondary',
-            transition: 'all 0.2s ease',
-          }}>
-          <ImageIcon sx={{ fontSize: 32 }} />
-        </Box>
-
-        {/* Text */}
-        <Box textAlign="center">
-          <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-            {isDragging ? 'Drop image here' : 'Add an image'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Drag and drop, paste, or click to upload
-          </Typography>
-        </Box>
-
-        {/* Actions */}
-        <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center">
-          {/* Upload Button */}
-          <Button
-            variant="contained"
-            startIcon={<CloudUpload />}
-            onClick={() => fileInputRef.current?.click()}
-            sx={{ textTransform: 'none' }}>
-            Upload
-          </Button>
-
-          {/* Link Button */}
-          <Button
-            variant="outlined"
-            startIcon={<LinkIcon />}
-            onClick={(e) => setUrlAnchorEl(e.currentTarget)}
-            sx={{ textTransform: 'none' }}>
-            Link
-          </Button>
-
-          {/* Unsplash Button */}
-          {onInsertFromUnsplash && (
-            <Button
-              variant="outlined"
-              startIcon={
-                <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor">
-                  <path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z" />
-                </svg>
-              }
-              onClick={onInsertFromUnsplash}
-              sx={{ textTransform: 'none' }}>
-              Unsplash
-            </Button>
-          )}
-
-          {/* AI Generate Button */}
-          {onInsertFromAI && (
-            <Button
-              variant="outlined"
-              startIcon={<AutoAwesome />}
-              onClick={(e) => setAiAnchorEl(e.currentTarget)}
-              sx={{ textTransform: 'none' }}>
-              Generate
-            </Button>
-          )}
-        </Stack>
-
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          style={{ display: 'none' }}
-        />
-      </Stack>
-
-      {/* URL Popover */}
-      <Popover
-        open={isUrlPopoverOpen}
-        anchorEl={urlAnchorEl}
-        onClose={() => setUrlAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          sx: { width: 360, p: 2 },
-        }}>
-        <Stack spacing={2}>
-          <Box>
-            <Typography variant="subtitle2" fontWeight={600} gutterBottom>
-              Embed image
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Paste a link to an image
-            </Typography>
-          </Box>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="https://example.com/image.jpg"
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleUrlSubmit();
-                }
-              }}
-            />
-            <Button
-              variant="contained"
-              onClick={handleUrlSubmit}
-              disabled={!urlInput.trim()}
-              sx={{ textTransform: 'none' }}>
-              Embed
-            </Button>
-          </Stack>
-        </Stack>
-      </Popover>
-
-      {/* AI Popover */}
-      <Popover
-        open={isAiPopoverOpen}
-        anchorEl={aiAnchorEl}
-        onClose={() => setAiAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          sx: { width: 360, p: 2 },
-        }}>
-        <Stack spacing={2}>
-          <Box>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <AutoAwesome color="primary" fontSize="small" />
-              <Typography variant="subtitle2" fontWeight={600}>
-                Generate with AI
-              </Typography>
-            </Stack>
-            <Typography variant="caption" color="text.secondary">
-              Describe the image you want to create
-            </Typography>
-          </Box>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="A sunset over mountains..."
-              value={aiPrompt}
-              onChange={(e) => setAiPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleAIGenerate();
-                }
-              }}
-              disabled={isGenerating}
-            />
-            <Button
-              variant="contained"
-              onClick={handleAIGenerate}
-              disabled={isGenerating || !aiPrompt.trim()}
-              sx={{ textTransform: 'none', minWidth: 100 }}>
-              {isGenerating ? <CircularProgress size={20} color="inherit" /> : 'Generate'}
-            </Button>
-          </Stack>
-        </Stack>
-      </Popover>
-
-      {/* Drag overlay */}
-      <Fade in={isDragging}>
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: alpha(theme.palette.primary.main, 0.08),
-            pointerEvents: 'none',
-            borderRadius: 2,
-          }}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 2,
-              bgcolor: 'background.paper',
-            }}>
-            <Typography variant="body2" fontWeight={600}>
-              Drop to upload
-            </Typography>
-          </Paper>
-        </Box>
-      </Fade>
-      {children}
-    </Paper>
-  );
-};
-
-// Компактная версия с табами
 type TabPanelProps = {
   children?: React.ReactNode;
   index: number;
@@ -367,7 +47,7 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => (
   </div>
 );
 
-export const ImagePlaceholderCompact = ({
+export const ImagePlaceholder = ({
   onUpload,
   onInsertUrl,
   onInsertFromUnsplash,
@@ -429,9 +109,9 @@ export const ImagePlaceholderCompact = ({
           borderColor: 'divider',
           bgcolor: alpha(theme.palette.action.selected, 0.02),
         }}>
-        {tabs.map((tab, index) => (
+        {tabs.map((tab) => (
           <Tab
-            key={index}
+            key={tab.label}
             label={tab.label}
             icon={tab.icon}
             iconPosition="start"

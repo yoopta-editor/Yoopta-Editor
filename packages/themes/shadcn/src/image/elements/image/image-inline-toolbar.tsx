@@ -10,7 +10,6 @@ import type { ImageElementProps } from '../../types';
 
 type ImageInlineToolbarProps = {
   elementProps: ImageElementProps;
-  sizes: ImageElementProps['sizes'];
   onUpdate: (props: Partial<ImageElementProps>) => void;
   onReplace: () => void;
   onDelete: () => void;
@@ -20,7 +19,6 @@ type ImageInlineToolbarProps = {
 
 export const ImageInlineToolbar = ({
   elementProps,
-  sizes,
   onUpdate,
   onReplace,
   onDelete,
@@ -30,9 +28,7 @@ export const ImageInlineToolbar = ({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      setIsVisible(true);
-    });
+    setIsVisible(true);
   }, []);
 
   return (
@@ -122,7 +118,6 @@ export const ImageInlineToolbar = ({
 
         <ImageInlineToolbarSettings
           fit={elementProps.fit ?? 'contain'}
-          sizes={sizes}
           alt={elementProps.alt || ''}
           borderRadius={elementProps.borderRadius ?? 0}
           onUpdate={onUpdate}

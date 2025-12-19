@@ -1,6 +1,5 @@
-import { Paragraph } from './plugin/ParagraphPlugin';
+import { Paragraph } from './plugin/paragraph-plugin';
 import { ParagraphElement } from './types';
-import './styles.css';
 
 export { ParagraphCommands } from './commands/ParagraphCommands';
 
