@@ -73,6 +73,7 @@ export const ImageElement = ({
 
   return (
     <ImageRender
+      blockId={blockId}
       onUpdate={updateElement}
       onDelete={deleteImage}
       attributes={attributes}

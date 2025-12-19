@@ -91,7 +91,7 @@ export function useElementSelected() {
   const focused = useFocused();
 
   return {
-    selected,
-    focused,
+    isElementSelected: selected,
+    isElementFocused: focused,
   };
 }

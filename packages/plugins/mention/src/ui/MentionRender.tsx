@@ -7,14 +7,16 @@ const MentionRender = (props: PluginElementRenderProps) => {
   const { element, attributes, children } = props;
   const { id, name, avatar } = element.props as MentionElementProps;
 
-  const { selected, focused } = useElementSelected();
+  const { isElementSelected, isElementFocused } = useElementSelected();
 
   return (
     <span
       {...attributes}
       contentEditable={false}
       data-mention-id={id}
-      className={`yoopta-mention-tag ${selected && focused ? 'yoopta-mention-tag-selected' : ''}`}>
+      className={`yoopta-mention-tag ${
+        isElementSelected && isElementFocused ? 'yoopta-mention-tag-selected' : ''
+      }`}>
       {avatar && (
         <img
           src={avatar}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import { useElementSelected } from '@yoopta/editor';
+import { useBlockSelected, useElementSelected } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { Rnd } from 'react-rnd';
 
@@ -9,15 +9,17 @@ import { ImageInlineToolbar } from './image-inline-toolbar';
 import type { ImageElementProps } from '../../types';
 
 type Props = {
-  onUpdate: (props: Partial<ImageElementProps>) => void;
-  onDelete: () => void;
-  onReplace: () => void;
+  blockId: string;
   attributes: PluginElementRenderProps['attributes'];
   children: React.ReactNode;
   elementProps: ImageElementProps;
+  onUpdate: (props: Partial<ImageElementProps>) => void;
+  onDelete: () => void;
+  onReplace: () => void;
 };
 
 export const ImageRender = ({
+  blockId,
   attributes,
   children,
   elementProps,
@@ -26,8 +28,9 @@ export const ImageRender = ({
   onReplace,
 }: Props) => {
   const [sizes, setSizes] = useState(elementProps.sizes);
-  const { focused, selected } = useElementSelected();
-  const isSelected = focused && selected;
+  const { isElementSelected } = useElementSelected();
+  const isBlockSelected = useBlockSelected({ blockId });
+  const isSelected = isElementSelected && isBlockSelected;
   const theme = useTheme();
 
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {

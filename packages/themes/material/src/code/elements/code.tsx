@@ -301,7 +301,6 @@ export const CodeBlockElement = ({
             fontSize: '0.875rem',
             whiteSpace: 'pre',
             overflow: 'auto',
-            minHeight: '100px',
             lineHeight: 1.6,
             tabSize: 2,
             color: 'transparent',

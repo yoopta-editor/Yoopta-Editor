@@ -262,7 +262,7 @@ export const CodeBlockElement = ({
         </div>
 
         <div
-          className="relative p-4 font-mono text-sm whitespace-pre overflow-auto min-h-[100px]"
+          className="relative p-4 font-mono text-sm whitespace-pre overflow-auto"
           style={{
             lineHeight: '1.6',
             tabSize: 2,

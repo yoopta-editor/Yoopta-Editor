@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import { useElementSelected } from '@yoopta/editor';
+import { useBlockSelected, useElementSelected } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { Rnd } from 'react-rnd';
 
@@ -9,6 +9,7 @@ import { cn } from '../../../utils';
 import type { ImageElementProps } from '../../types';
 
 type Props = {
+  blockId: string;
   onUpdate: (props: Partial<ImageElementProps>) => void;
   onDelete: () => void;
   onReplace: () => void;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const ImageRender = ({
+  blockId,
   attributes,
   children,
   elementProps,
@@ -26,8 +28,9 @@ export const ImageRender = ({
   onReplace,
 }: Props) => {
   const [sizes, setSizes] = useState(elementProps.sizes);
-  const { focused, selected } = useElementSelected();
-  const isSelected = focused && selected;
+  const { isElementSelected } = useElementSelected();
+  const isBlockSelected = useBlockSelected({ blockId });
+  const isSelected = isElementSelected && isBlockSelected;
 
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {
     const newWidth = parseInt(ref.style.width, 10);

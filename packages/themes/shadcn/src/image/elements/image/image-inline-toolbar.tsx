@@ -28,7 +28,9 @@ export const ImageInlineToolbar = ({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
   }, []);
 
   return (
