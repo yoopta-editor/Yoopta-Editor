@@ -1,4 +1,4 @@
-import Accordion, { AccordionCommands } from '@yoopta/accordion';
+import Accordion from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
 import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';

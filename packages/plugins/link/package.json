@@ -33,9 +33,5 @@
   },
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
-  },
-  "dependencies": {
-    "lucide-react": "^0.379.0"
-  },
-  "gitHead": "054fb22aef8ca890d17616d00928eb855e77ec29"
+  }
 }

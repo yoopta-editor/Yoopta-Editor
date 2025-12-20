@@ -1,4 +1,4 @@
-import { Link } from './elements/link';
+import { Link } from './elements/link/link-element';
 
 export const LinkUI = {
   link: {

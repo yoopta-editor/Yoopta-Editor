@@ -170,26 +170,6 @@ export const CodeBlockElement = ({
     [editor, blockId, element.props],
   );
 
-  const onPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const text = e.clipboardData.getData('text/plain');
-
-    const elements = editor.y('code', {
-      props: {
-        language: language ?? 'javascript',
-        theme: theme ?? 'github-dark',
-      },
-      children: [editor.y.text(text)],
-    });
-
-    editor.toggleBlock('Code', {
-      elements,
-      at: editor.path.current,
-      focus: true,
-    });
-  };
-
   const currentLanguage = LANGUAGES.find((lang) => lang.value === language) ?? LANGUAGES[0];
   const currentTheme = THEMES.find((t) => t.value === theme) ?? THEMES[0];
 
@@ -205,9 +185,7 @@ export const CodeBlockElement = ({
         '&:hover .code-actions': {
           opacity: 1,
         },
-      }}
-      onPaste={onPaste}>
-      {/* Header */}
+      }}>
       <Box
         contentEditable={false}
         sx={{

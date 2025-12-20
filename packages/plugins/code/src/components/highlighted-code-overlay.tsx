@@ -61,8 +61,6 @@ export const HighlightedCodeOverlay = ({ element, language, theme }: Highlighted
         lang: language || 'javascript',
         theme: theme || 'github-dark',
       });
-      // const themeData = highlighter.getTheme(theme);
-      // console.log('themeData', themeData);
 
       setTokens(highlighted.tokens);
     } catch (error) {

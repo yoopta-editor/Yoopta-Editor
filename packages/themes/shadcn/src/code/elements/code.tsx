@@ -18,6 +18,7 @@ declare global {
   }
 }
 
+// move to code plugin
 const LANGUAGES = [
   { value: 'javascript', label: 'JavaScript' },
   { value: 'typescript', label: 'TypeScript' },
@@ -27,8 +28,23 @@ const LANGUAGES = [
   { value: 'json', label: 'JSON' },
   { value: 'rust', label: 'Rust' },
   { value: 'go', label: 'Go' },
+  { value: 'bash', label: 'Bash' },
+  { value: 'shell', label: 'Shell' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'dotenv', label: 'Dotenv' },
+  { value: 'docker', label: 'Docker' },
+  { value: 'c++', label: 'C++' },
+  { value: 'c#', label: 'C#' },
+  { value: 'java', label: 'Java' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'php', label: 'PHP' },
+  { value: 'ruby', label: 'Ruby' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'dart', label: 'Dart' },
+  { value: 'elixir', label: 'Elixir' },
 ] as const;
 
+// move to code plugin
 const THEMES = [
   { value: 'andromeeda', label: 'Andromeeda' },
   { value: 'aurora-x', label: 'Aurora X' },
@@ -168,41 +184,20 @@ export const CodeBlockElement = ({
     [editor, blockId, element.props],
   );
 
-  const onPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const text = e.clipboardData.getData('text/plain');
-
-    const elements = editor.y('code', {
-      props: {
-        language: language ?? 'javascript',
-        theme: theme ?? 'github-dark',
-      },
-      children: [editor.y.text(text)],
-    });
-
-    editor.toggleBlock('Code', {
-      elements,
-      at: editor.path.current,
-      focus: true,
-    });
-  };
-
   const currentLanguage = LANGUAGES.find((lang) => lang.value === language) ?? LANGUAGES[0];
   const currentTheme = THEMES.find((t) => t.value === theme) ?? THEMES[0];
 
   return (
     <div
       {...attributes}
-      className="relative my-4 group/code-block rounded-lg border border-border bg-muted/50 overflow-hidden"
-      onPaste={onPaste}>
+      className="relative my-2 group/code-block rounded-lg border border-border bg-muted/50 overflow-hidden">
       <div
         contentEditable={false}
-        className="flex items-center justify-between px-4 py-2 border-b border-border select-none"
+        className="flex items-center justify-end px-4 py-2 border-b border-border select-none"
         style={{
           backgroundColor: themeColors.tabActiveBackground || undefined,
         }}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 opacity-0 group-hover/code-block:opacity-100 transition-opacity">
           <LanguageSelect
             value={language}
             options={LANGUAGES}
@@ -215,9 +210,6 @@ export const CodeBlockElement = ({
             onValueChange={updateTheme}
             currentLabel={currentTheme.label}
           />
-        </div>
-
-        <div className="flex items-center gap-1 opacity-0 group-hover/code-block:opacity-100 transition-opacity">
           <Button
             variant="ghost"
             size="icon"

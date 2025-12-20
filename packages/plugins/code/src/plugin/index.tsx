@@ -1,4 +1,5 @@
 import { YooptaPlugin, generateId } from '@yoopta/editor';
+import { Transforms } from 'slate';
 
 import { CodeCommands } from '../commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
@@ -99,18 +100,42 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
     },
   },
   events: {
-    onKeyDown: (editor, slate, _options) => (event) => {
-      console.log('@@@ Code plugin onKeyDown', event.key, event.isDefaultPrevented());
+    onKeyDown:
+      (editor, slate, { hotkeys }) =>
+      (event) => {
+        if (!slate.selection) return;
 
-      const isEnter = event.key === 'Enter';
-      const isShiftEnter = isEnter && event.shiftKey;
+        // const isExpanded = Range.isExpanded(slate.selection);
+        // const isCollapsed = Range.isCollapsed(slate.selection);
 
-      if (isEnter || isShiftEnter) {
-        event.preventDefault();
-        event.stopPropagation();
+        // if (hotkeys.isSelect(event)) {
+        //   event.preventDefault();
+        //   event.stopPropagation();
 
-        slate.insertText('\n');
-      }
+        //   Transforms.select(slate, { path: slate.selection.anchor.path.slice(0, -1) });
+        //   return;
+        // }
+
+        // if (hotkeys.isBackspace(event) && isExpanded) {
+        //   event.preventDefault();
+        //   event.stopPropagation();
+
+        //   Transforms.delete(slate, { at: slate.selection });
+        //   return;
+        // }
+
+        if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          Transforms.insertText(slate, '\n', { at: slate.selection });
+        }
+      },
+    onPaste: (editor, slate) => (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const text = event.clipboardData.getData('text/plain');
+      slate.insertText(text);
     },
   },
 });

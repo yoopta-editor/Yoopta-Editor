@@ -110,7 +110,7 @@ const YooptaUIPackageExample = () => {
       children: [
         editor.y('image', {
           props: {
-            src: 'https://optim.tildacdn.com/tild3632-6534-4865-a532-613830613038/-/cover/720x792/center/center/-/format/webp/IMG_8173.jpg.webp',
+            src: 'https://placehold.co/600x400',
             sizes: {
               width: 200,
               height: 200,
