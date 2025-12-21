@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 
-type UploadProgress = {
+import type { ImageUploadOptions } from '../types';
+
+export type ImageUploadProgress = {
   loaded: number;
   total: number;
   percentage: number;
@@ -23,21 +25,9 @@ type UploadResult = {
 
 type UploadState = {
   isUploading: boolean;
-  progress: UploadProgress | null;
+  progress: ImageUploadProgress | null;
   error: UploadError | null;
   result: UploadResult | null;
-};
-
-type UseImageUploadOptions = {
-  endpoint: string;
-  method?: 'POST' | 'PUT';
-  headers?: Record<string, string>;
-  fieldName?: string;
-  maxSize?: number;
-  allowedTypes?: string[]; // ['image/jpeg', 'image/png', ...]
-  onSuccess?: (result: UploadResult) => void;
-  onError?: (error: UploadError) => void;
-  onProgress?: (progress: UploadProgress) => void;
 };
 
 type UseImageUploadReturn = {
@@ -46,14 +36,14 @@ type UseImageUploadReturn = {
   reset: () => void;
 } & UploadState;
 
-export const useImageUpload = (options: UseImageUploadOptions): UseImageUploadReturn => {
+export const useImageUpload = (options: ImageUploadOptions): UseImageUploadReturn => {
   const {
     endpoint,
     method = 'POST',
     headers = {},
     fieldName = 'file',
     maxSize,
-    allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
+    accept = 'image/jpeg, image/jpg, image/png, image/gif, image/webp',
     onSuccess,
     onError,
     onProgress,
@@ -70,9 +60,9 @@ export const useImageUpload = (options: UseImageUploadOptions): UseImageUploadRe
 
   const validateFile = useCallback(
     (file: File): UploadError | null => {
-      if (!allowedTypes.includes(file.type)) {
+      if (!accept.includes(file.type)) {
         return {
-          message: `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
+          message: `Invalid file type. Allowed types: ${accept}`,
           code: 'INVALID_TYPE',
         };
       }
@@ -87,7 +77,7 @@ export const useImageUpload = (options: UseImageUploadOptions): UseImageUploadRe
 
       return null;
     },
-    [allowedTypes, maxSize],
+    [accept, maxSize],
   );
 
   const upload = useCallback(
@@ -119,7 +109,7 @@ export const useImageUpload = (options: UseImageUploadOptions): UseImageUploadRe
 
         xhr.upload.addEventListener('progress', (event) => {
           if (event.lengthComputable) {
-            const progress: UploadProgress = {
+            const progress: ImageUploadProgress = {
               loaded: event.loaded,
               total: event.total,
               percentage: Math.round((event.loaded / event.total) * 100),
@@ -265,56 +255,59 @@ export const useImageUpload = (options: UseImageUploadOptions): UseImageUploadRe
 };
 
 export const useImageDimensions = () => {
-  const getDimensions = useCallback(
-    (file: File): Promise<{ width: number; height: number }> =>
-      new Promise((resolve, reject) => {
-        const img = new Image();
-        const url = URL.createObjectURL(file);
+  const getDimensions = (file: File): Promise<{ width: number; height: number }> =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
 
-        img.onload = () => {
-          URL.revokeObjectURL(url);
-          resolve({
-            width: img.naturalWidth,
-            height: img.naturalHeight,
-          });
-        };
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve({
+          width: img.naturalWidth,
+          height: img.naturalHeight,
+        });
+      };
 
-        img.onerror = () => {
-          URL.revokeObjectURL(url);
-          reject(new Error('Failed to load image'));
-        };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Failed to load image'));
+      };
 
-        img.src = url;
-      }),
-    [],
-  );
+      img.src = url;
+    });
 
   return { getDimensions };
 };
 
+export type ImageUploadPreview = {
+  url: string;
+  width?: number;
+  height?: number;
+};
+
 export const useImagePreview = () => {
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<ImageUploadPreview | null>(null);
+  // const { getDimensions } = useImageDimensions();
 
-  const generatePreview = useCallback(
-    (file: File) => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
-      }
-
-      const url = URL.createObjectURL(file);
-      setPreview(url);
-
-      return url;
-    },
-    [preview],
-  );
-
-  const clearPreview = useCallback(() => {
+  const generatePreview = (file: File) => {
     if (preview) {
-      URL.revokeObjectURL(preview);
+      URL.revokeObjectURL(preview.url);
+    }
+
+    // const sizes = await getDimensions(file);
+
+    const url = URL.createObjectURL(file);
+    setPreview({ url });
+
+    return { url };
+  };
+
+  const clearPreview = () => {
+    if (preview) {
+      URL.revokeObjectURL(preview.url);
       setPreview(null);
     }
-  }, [preview]);
+  };
 
   return {
     preview,

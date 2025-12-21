@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { HighlightedCodeOverlay } from '@yoopta/code';
+import { HighlightedCodeOverlay, SHIKI_CODE_LANGUAGES, SHIKI_CODE_THEMES } from '@yoopta/code';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
@@ -14,49 +14,9 @@ import { Button } from '../../ui/button';
 declare global {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
-    yShiki?: HighlighterGeneric<BundledLanguage, BundledTheme> | null;
+    yShiki: HighlighterGeneric<BundledLanguage, BundledTheme> | null;
   }
 }
-
-// move to code plugin
-const LANGUAGES = [
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'typescript', label: 'TypeScript' },
-  { value: 'python', label: 'Python' },
-  { value: 'html', label: 'HTML' },
-  { value: 'css', label: 'CSS' },
-  { value: 'json', label: 'JSON' },
-  { value: 'rust', label: 'Rust' },
-  { value: 'go', label: 'Go' },
-  { value: 'bash', label: 'Bash' },
-  { value: 'shell', label: 'Shell' },
-  { value: 'sql', label: 'SQL' },
-  { value: 'dotenv', label: 'Dotenv' },
-  { value: 'docker', label: 'Docker' },
-  { value: 'c++', label: 'C++' },
-  { value: 'c#', label: 'C#' },
-  { value: 'java', label: 'Java' },
-  { value: 'kotlin', label: 'Kotlin' },
-  { value: 'php', label: 'PHP' },
-  { value: 'ruby', label: 'Ruby' },
-  { value: 'swift', label: 'Swift' },
-  { value: 'dart', label: 'Dart' },
-  { value: 'elixir', label: 'Elixir' },
-] as const;
-
-// move to code plugin
-const THEMES = [
-  { value: 'andromeeda', label: 'Andromeeda' },
-  { value: 'aurora-x', label: 'Aurora X' },
-  { value: 'ayu-dark', label: 'Ayu Dark' },
-  { value: 'catppuccin-frappe', label: 'Catppuccin Frappé' },
-  { value: 'catppuccin-latte', label: 'Catppuccin Latte' },
-  { value: 'catppuccin-macchiato', label: 'Catppuccin Macchiato' },
-  { value: 'catppuccin-mocha', label: 'Catppuccin Mocha' },
-  { value: 'dark-plus', label: 'Dark Plus' },
-  { value: 'github-dark', label: 'GitHub Dark' },
-  { value: 'github-light', label: 'GitHub Light' },
-] as const;
 
 const getNodeText = (node: unknown): string => {
   if (Text.isText(node)) {
@@ -184,8 +144,9 @@ export const CodeBlockElement = ({
     [editor, blockId, element.props],
   );
 
-  const currentLanguage = LANGUAGES.find((lang) => lang.value === language) ?? LANGUAGES[0];
-  const currentTheme = THEMES.find((t) => t.value === theme) ?? THEMES[0];
+  const currentLanguage =
+    SHIKI_CODE_LANGUAGES.find((lang) => lang.value === language) ?? SHIKI_CODE_LANGUAGES[0];
+  const currentTheme = SHIKI_CODE_THEMES.find((t) => t.value === theme) ?? SHIKI_CODE_THEMES[0];
 
   return (
     <div
@@ -193,23 +154,24 @@ export const CodeBlockElement = ({
       className="relative my-2 group/code-block rounded-lg border border-border bg-muted/50 overflow-hidden">
       <div
         contentEditable={false}
-        className="flex items-center justify-end px-4 py-2 border-b border-border select-none"
-        style={{
-          backgroundColor: themeColors.tabActiveBackground || undefined,
-        }}>
-        <div className="flex items-center gap-1 opacity-0 group-hover/code-block:opacity-100 transition-opacity">
+        className="flex items-center justify-between px-4 py-2 border-b border-border select-none"
+        style={{ backgroundColor: themeColors.tabActiveBackground || undefined }}>
+        <div className="flex items-center gap-2">
           <LanguageSelect
             value={language}
-            options={LANGUAGES}
+            options={SHIKI_CODE_LANGUAGES}
             onValueChange={updateLanguage}
             currentLabel={currentLanguage.label}
           />
           <ThemeSelect
             value={theme}
-            options={THEMES}
+            options={SHIKI_CODE_THEMES}
             onValueChange={updateTheme}
             currentLabel={currentTheme.label}
           />
+        </div>
+
+        <div className="flex items-center gap-1 opacity-0 group-hover/code-block:opacity-100 transition-opacity">
           <Button
             variant="ghost"
             size="icon"
@@ -244,11 +206,12 @@ export const CodeBlockElement = ({
         }}>
         <div
           ref={overlayRef}
-          className="absolute inset-0 p-4 font-mono text-sm whitespace-pre overflow-auto pointer-events-none z-10"
+          className="absolute inset-0 p-4 font-mono text-sm whitespace-pre overflow-auto pointer-events-none z-10 select-none"
           style={{
             lineHeight: '1.6',
             tabSize: 2,
           }}
+          contentEditable={false}
           aria-hidden="true">
           <HighlightedCodeOverlay element={element} language={language} theme={theme} />
         </div>

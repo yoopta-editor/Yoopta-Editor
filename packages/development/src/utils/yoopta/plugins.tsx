@@ -89,17 +89,12 @@ export const YOOPTA_PLUGINS = withShadcnUI([
       },
     },
     options: {
-      maxSizes: { maxHeight: 750, maxWidth: 750 },
-      onUpload: async (file: File) => {
-        const data = await uploadToCloudinary(file, 'image');
-
-        return {
-          src: data.secure_url,
-          sizes: {
-            width: data.width,
-            height: data.height,
-          },
-        };
+      upload: {
+        endpoint: '/api/image-kit-upload',
+        method: 'POST',
+        fieldName: 'image',
+        maxSize: 5 * 1024 * 1024, // 5MB
+        accept: 'image/jpeg, image/jpg, image/png, image/gif, image/webp',
       },
     },
   }),

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { type PluginElementRenderProps } from '@yoopta/editor';
+import { type PluginElementRenderProps, useYooptaPluginOptions } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
+import { type ImagePluginOptions, useImageUpload, useImagePreview } from '@yoopta/image';
 import { Editor, Element } from 'slate';
 
 import { ImagePlaceholder } from './image-placeholder';
@@ -14,6 +15,9 @@ export const ImageElement = ({
   blockId,
 }: PluginElementRenderProps) => {
   const editor = useYooptaEditor();
+  const pluginOptions = useYooptaPluginOptions<ImagePluginOptions>('Image');
+  const { upload, progress, isUploading } = useImageUpload(pluginOptions.upload!);
+  const { preview, generatePreview, clearPreview } = useImagePreview();
 
   const updateElement = useCallback(
     (props: Partial<ImageElementProps>) => {
@@ -58,10 +62,30 @@ export const ImageElement = ({
     });
   }, [editor, blockId, element.props]);
 
+  const onUpload = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      generatePreview(file);
+      const result = await upload(file);
+      updateElement({
+        src: result.url,
+        alt: file.name,
+        sizes: { width: result.width!, height: result.height! },
+      });
+      clearPreview();
+    },
+    [upload, updateElement, generatePreview],
+  );
+
   if (!element.props.src) {
     return (
       <ImagePlaceholder
-        onUpload={() => {}}
+        onUpload={onUpload}
+        preview={preview}
+        progress={progress}
+        isUploading={isUploading}
         onInsertUrl={() => {}}
         onInsertFromUnsplash={() => {}}
         onInsertFromAI={async () => {}}

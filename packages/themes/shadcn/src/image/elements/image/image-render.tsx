@@ -92,86 +92,74 @@ export const ImageRender = ({
       {...attributes}
       className={cn('group/image relative transition-all w-full flex', alignmentClass)}>
       <div className="relative" contentEditable={false}>
-        {isSelected ? (
-          <Rnd
-            style={{
-              position: 'relative',
-              outline: '.125rem solid rgba(0, 0, 0, 0)',
-              outlineColor: 'hsl(var(--primary))',
-            }}
-            size={{
-              width: sizes.width,
-              height: sizes.height,
-            }}
-            onResize={onResize}
-            onResizeStop={onResizeStop}
-            lockAspectRatio
-            minWidth={100}
-            minHeight={100}
-            enableResizing={{
-              bottom: false,
-              bottomLeft: false,
-              bottomRight: false,
-              left: true,
-              right: true,
-              top: false,
-              topLeft: false,
-              topRight: false,
-            }}
-            disableDragging
-            resizeHandleStyles={{
-              left: {
-                width: 'auto',
-                height: '40px',
-                left: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'ew-resize',
-              },
-              right: {
-                width: 'auto',
-                height: '40px',
-                right: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'ew-resize',
-              },
-            }}
-            resizeHandleComponent={{
-              left: (
-                <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
-              ),
-              right: (
-                <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
-              ),
-            }}
-            className={cn('rounded-sm')}>
-            <img
-              src={elementProps.src}
-              alt={elementProps.alt || ''}
-              className="w-full h-full transition-all duration-200"
-              style={{
-                objectFit: elementProps.fit,
-                borderRadius: `${elementProps.borderRadius}px`,
-              }}
-              draggable={false}
-            />
-          </Rnd>
-        ) : (
+        <Rnd
+          style={{
+            position: 'relative',
+            outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
+            outlineColor: isSelected ? 'hsl(var(--primary))' : 'none',
+          }}
+          size={{
+            width: sizes.width,
+            height: sizes.height,
+          }}
+          onResize={onResize}
+          onResizeStop={onResizeStop}
+          lockAspectRatio
+          minWidth={100}
+          minHeight={100}
+          enableResizing={
+            isSelected
+              ? {
+                  bottom: false,
+                  bottomLeft: false,
+                  bottomRight: false,
+                  left: true,
+                  right: true,
+                  top: false,
+                  topLeft: false,
+                  topRight: false,
+                }
+              : false
+          }
+          disableDragging
+          resizeHandleStyles={{
+            left: {
+              width: 'auto',
+              height: '40px',
+              left: '-5px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'ew-resize',
+            },
+            right: {
+              width: 'auto',
+              height: '40px',
+              right: '-5px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'ew-resize',
+            },
+          }}
+          resizeHandleComponent={{
+            left: (
+              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+            ),
+            right: (
+              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+            ),
+          }}
+          className={cn('rounded-sm')}>
           <img
             src={elementProps.src}
             alt={elementProps.alt || ''}
-            className="transition-all duration-200"
+            className="w-full h-full transition-all duration-200"
             style={{
-              width: sizes.width,
-              height: sizes.height,
               objectFit: elementProps.fit,
               borderRadius: `${elementProps.borderRadius}px`,
             }}
             draggable={false}
           />
-        )}
-
+        </Rnd>
         {isSelected && (
           <ImageInlineToolbar
             elementProps={elementProps}

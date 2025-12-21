@@ -1,7 +1,7 @@
 import { createEditor } from 'slate';
 import { describe, expect, it } from 'vitest';
 
-import { getFirstNodePoint, getLastNode, getLastNodePoint } from './get-node-points';
+import { getFirstNodePoint, getLastNodePoint } from './get-node-points';
 import type { SlateEditor } from '../editor/types';
 
 // Helper to create a simple Slate editor with content
@@ -12,49 +12,6 @@ function createSlateEditorWithContent(children: any[]): SlateEditor {
 }
 
 describe('get-node-points', () => {
-  describe('getLastNode', () => {
-    it('should return the last node and its path', () => {
-      const editor = createSlateEditorWithContent([
-        {
-          type: 'paragraph',
-          children: [{ text: 'First paragraph' }],
-        },
-        {
-          type: 'paragraph',
-          children: [{ text: 'Last paragraph' }],
-        },
-      ]);
-
-      const result = getLastNode(editor);
-
-      expect(result.node).toBeDefined();
-      expect(result.path).toBeDefined();
-      expect(Array.isArray(result.path)).toBe(true);
-      expect(result.path.length).toBeGreaterThan(0);
-    });
-
-    it('should return the last node from a single element', () => {
-      const editor = createSlateEditorWithContent([
-        {
-          type: 'paragraph',
-          children: [{ text: 'Only paragraph' }],
-        },
-      ]);
-
-      const result = getLastNode(editor);
-
-      expect(result.node).toBeDefined();
-      expect(result.path).toBeDefined();
-    });
-
-    it('should handle empty editor', () => {
-      const editor = createSlateEditorWithContent([]);
-
-      // Empty editor should still return something (Editor.last will throw or return default)
-      expect(() => getLastNode(editor)).not.toThrow();
-    });
-  });
-
   describe('getLastNodePoint', () => {
     it('should return point at the end of last text node in simple element', () => {
       const editor = createSlateEditorWithContent([

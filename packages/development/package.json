@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "formidable": "^3.5.4",
     "@floating-ui/react": "^0.26.11",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -58,7 +59,8 @@
     "slate-react": "^0.102.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^10.0.4",
+    "imagekit": "^6.0.0"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",

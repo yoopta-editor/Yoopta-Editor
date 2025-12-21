@@ -99,105 +99,93 @@ export const ImageRender = ({
         ...alignmentStyles,
       }}>
       <Box sx={{ position: 'relative' }} contentEditable={false}>
-        {isSelected ? (
-          <Rnd
-            style={{
-              position: 'relative',
-              outline: `0.125rem solid ${theme.palette.primary.main}`,
-            }}
-            size={{
-              width: sizes.width,
-              height: sizes.height,
-            }}
-            onResize={onResize}
-            onResizeStop={onResizeStop}
-            lockAspectRatio
-            minWidth={100}
-            minHeight={100}
-            enableResizing={{
-              bottom: false,
-              bottomLeft: false,
-              bottomRight: false,
-              left: true,
-              right: true,
-              top: false,
-              topLeft: false,
-              topRight: false,
-            }}
-            disableDragging
-            resizeHandleStyles={{
-              left: {
-                width: 'auto',
-                height: '40px',
-                left: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'ew-resize',
-              },
-              right: {
-                width: 'auto',
-                height: '40px',
-                right: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'ew-resize',
-              },
-            }}
-            resizeHandleComponent={{
-              left: (
-                <Box
-                  sx={{
-                    height: 40,
-                    width: 8,
-                    borderRadius: '9999px',
-                    border: `1px solid ${theme.palette.primary.main}`,
-                    bgcolor: theme.palette.primary.main,
-                    boxShadow: theme.shadows[2],
-                  }}
-                />
-              ),
-              right: (
-                <Box
-                  sx={{
-                    height: 40,
-                    width: 8,
-                    borderRadius: '9999px',
-                    border: `1px solid ${theme.palette.primary.main}`,
-                    bgcolor: theme.palette.primary.main,
-                    boxShadow: theme.shadows[2],
-                  }}
-                />
-              ),
-            }}>
-            <Box
-              component="img"
-              src={elementProps.src}
-              alt={elementProps.alt || ''}
-              sx={{
-                width: '100%',
-                height: '100%',
-                transition: 'all 0.2s',
-                objectFit: elementProps.fit,
-                borderRadius: `${elementProps.borderRadius ?? 0}px`,
-              }}
-              draggable={false}
-            />
-          </Rnd>
-        ) : (
+        <Rnd
+          style={{
+            position: 'relative',
+            outline: isSelected ? `0.125rem solid ${theme.palette.primary.main}` : 'none',
+          }}
+          size={{
+            width: sizes.width,
+            height: sizes.height,
+          }}
+          onResize={onResize}
+          onResizeStop={onResizeStop}
+          lockAspectRatio
+          minWidth={100}
+          minHeight={100}
+          enableResizing={
+            isSelected
+              ? {
+                  bottom: false,
+                  bottomLeft: false,
+                  bottomRight: false,
+                  left: true,
+                  right: true,
+                  top: false,
+                  topLeft: false,
+                  topRight: false,
+                }
+              : false
+          }
+          disableDragging
+          resizeHandleStyles={{
+            left: {
+              width: 'auto',
+              height: '40px',
+              left: '-5px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'ew-resize',
+            },
+            right: {
+              width: 'auto',
+              height: '40px',
+              right: '-5px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'ew-resize',
+            },
+          }}
+          resizeHandleComponent={{
+            left: (
+              <Box
+                sx={{
+                  height: 40,
+                  width: 8,
+                  borderRadius: '9999px',
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  bgcolor: theme.palette.primary.main,
+                  boxShadow: theme.shadows[2],
+                }}
+              />
+            ),
+            right: (
+              <Box
+                sx={{
+                  height: 40,
+                  width: 8,
+                  borderRadius: '9999px',
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  bgcolor: theme.palette.primary.main,
+                  boxShadow: theme.shadows[2],
+                }}
+              />
+            ),
+          }}>
           <Box
             component="img"
             src={elementProps.src}
             alt={elementProps.alt || ''}
             sx={{
+              width: '100%',
+              height: '100%',
               transition: 'all 0.2s',
-              width: sizes.width,
-              height: sizes.height,
               objectFit: elementProps.fit,
               borderRadius: `${elementProps.borderRadius ?? 0}px`,
             }}
             draggable={false}
           />
-        )}
+        </Rnd>
 
         {isSelected && (
           <ImageInlineToolbar

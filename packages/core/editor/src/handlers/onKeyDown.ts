@@ -1,5 +1,5 @@
 import { isKeyHotkey } from 'is-hotkey';
-import { Editor, Node, Path, Range, Transforms } from 'slate';
+import { Editor, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../editor/blocks';
@@ -7,7 +7,7 @@ import { Paths } from '../editor/paths';
 import type { YooEditor } from '../editor/types';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
 import { generateId } from '../utils/generateId';
-import { getFirstNodePoint, getLastNode, getLastNodePoint } from '../utils/get-node-points';
+import { getFirstNodePoint, getLastNodePoint } from '../utils/get-node-points';
 import { HOTKEYS } from '../utils/hotkeys';
 
 export function onKeyDown(editor: YooEditor) {
@@ -36,8 +36,6 @@ export function onKeyDown(editor: YooEditor) {
     }
 
     if (HOTKEYS.isEnter(event)) {
-      console.log('@@@ Editor onKeyDown isEnter', event.key);
-      console.log('@@@ Editor onKeyDown isDefaultPrevented', event.isDefaultPrevented());
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
@@ -86,46 +84,46 @@ export function onKeyDown(editor: YooEditor) {
 
     if (HOTKEYS.isBackspace(event)) {
       if (event.isDefaultPrevented()) return;
-      if (!slate || !slate.selection) return;
+      // if (!slate || !slate.selection) return;
 
-      const parentPath = Path.parent(slate.selection.anchor.path);
-      const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
+      // const parentPath = Path.parent(slate.selection.anchor.path);
+      // const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
 
-      // When the cursor is at the start of the block, delete the block
-      if (isStart) {
-        event.preventDefault();
-        const text = Editor.string(slate, parentPath);
+      // // When the cursor is at the start of the block, delete the block
+      // if (isStart) {
+      //   event.preventDefault();
+      //   const text = Editor.string(slate, parentPath);
 
-        // If current block is empty just delete block
-        if (text.trim().length === 0) {
-          // [TEST]
-          editor.deleteBlock({ at: editor.path.current, focus: true });
-          return;
-        }
-        // If current block is not empty merge text nodes with previous block
+      //   // If current block is empty just delete block
+      //   if (text.trim().length === 0) {
+      //     // [TEST]
+      //     editor.deleteBlock({ at: editor.path.current, focus: true });
+      //     return;
+      //   }
+      //   // If current block is not empty merge text nodes with previous block
 
-        if (Range.isExpanded(slate.selection)) {
-          return Transforms.delete(slate, { at: slate.selection });
-        }
+      //   if (Range.isExpanded(slate.selection)) {
+      //     return Transforms.delete(slate, { at: slate.selection });
+      //   }
 
-        const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousBlockOrder(editor) });
-        const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
-        if (prevBlock && prevSlate) {
-          const { node: lastSlateNode } = getLastNode(prevSlate);
-          const prevSlateText = Node.string(lastSlateNode);
+      //   const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousBlockOrder(editor) });
+      //   const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
+      //   if (prevBlock && prevSlate) {
+      //     const { node: lastSlateNode } = getLastNode(prevSlate);
+      //     const prevSlateText = Node.string(lastSlateNode);
 
-          if (prevSlateText.trim().length === 0) {
-            // [TEST]
-            editor.deleteBlock({ blockId: prevBlock.id, focus: false });
-            editor.setPath({ current: prevBlock.meta.order });
-            return;
-          }
-        }
+      //     if (prevSlateText.trim().length === 0) {
+      //       // [TEST]
+      //       editor.deleteBlock({ blockId: prevBlock.id, focus: false });
+      //       editor.setPath({ current: prevBlock.meta.order });
+      //       return;
+      //     }
+      //   }
 
-        // [TEST]
-        editor.mergeBlock();
-      }
-      return;
+      //   // [TEST]
+      //   editor.mergeBlock();
+      // }
+      // return;
     }
 
     if (HOTKEYS.isSelect(event)) {

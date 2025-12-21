@@ -13,6 +13,7 @@ export const AccordionListItem = (props: PluginElementRenderProps) => {
         boxShadow: 'none',
         borderBottom: '1px solid',
         borderColor: 'divider',
+        margin: '0 !important',
         '&:before': {
           display: 'none',
         },

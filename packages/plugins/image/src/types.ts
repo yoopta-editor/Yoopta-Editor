@@ -24,15 +24,25 @@ export type ImageOptimizationFields = {
   provider?: 'imgix' | 'cloudinary' | 'akamai';
 };
 
-export type ImagePluginOptions = {
-  onUpload: (file: File) => Promise<ImageUploadResponse>;
-  onError?: (error: any) => void;
+export type ImageUploadOptions = {
+  endpoint: string;
+  method?: 'POST' | 'PUT';
+  headers?: Record<string, string>;
+  fieldName?: string;
+  maxSize?: number;
   accept?: string;
-  optimizations?: ImageOptimizationFields;
+  onProgress?: (progress: any) => void;
+  onSuccess?: (result: any) => void;
+  onError?: (error: any) => void;
+};
+
+export type ImagePluginOptions = {
+  upload?: ImageUploadOptions;
   maxSizes?: {
     maxWidth?: number | string;
     maxHeight?: number | string;
-  };
+  } | null;
+  optimizations?: ImageOptimizationFields | null;
 };
 
 export type ImageElementMap = {

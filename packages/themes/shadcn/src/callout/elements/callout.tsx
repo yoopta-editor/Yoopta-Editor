@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 
 import { cn } from '../../utils';
 
@@ -22,11 +21,7 @@ const getThemeClasses = (theme: CalloutTheme = 'default'): string => {
 
 export const Callout = (props: PluginElementRenderProps) => {
   const { attributes, children, element } = props;
-
-  const theme = useMemo(() => {
-    const calloutElement = element as SlateElement<'callout', { theme?: CalloutTheme }>;
-    return calloutElement.props?.theme ?? 'default';
-  }, [element]);
+  const theme = element.props?.theme ?? 'default';
 
   return (
     <div

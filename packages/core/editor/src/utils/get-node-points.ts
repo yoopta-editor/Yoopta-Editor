@@ -1,12 +1,7 @@
-import type { Node, Path, Point } from 'slate';
+import type { Point } from 'slate';
 import { Editor, Element, Text } from 'slate';
 
 import type { SlateEditor } from '../editor/types';
-
-export function getLastNode(slate: SlateEditor): { node: Node; path: Path } {
-  const lastNodeEntry = Editor.last(slate, []);
-  return { node: lastNodeEntry[0], path: lastNodeEntry[1] };
-}
 
 export function getLastNodePoint(slate: SlateEditor): Point {
   try {
