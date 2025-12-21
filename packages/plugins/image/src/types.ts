@@ -6,6 +6,7 @@ export type ImageSizes = {
 };
 
 export type ImageElementProps = {
+  id: string | null;
   src?: string | null;
   alt?: string | null;
   srcSet?: string | null;

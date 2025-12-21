@@ -129,15 +129,15 @@ function toggleBlockScope(
     throw new Error(`Plugin "${toTypeArg}" not found`);
   }
 
-  const { onBeforeCreate } = plugin.events ?? {};
+  const { beforeCreate } = plugin.lifecycle ?? {};
 
   // Build structure for the new block
   let toBlockSlateStructure: SlateElement;
 
   if (elements) {
     toBlockSlateStructure = elements;
-  } else if (onBeforeCreate) {
-    toBlockSlateStructure = onBeforeCreate(editor);
+  } else if (beforeCreate) {
+    toBlockSlateStructure = beforeCreate(editor);
   } else {
     toBlockSlateStructure = buildBlockElementsStructure(editor, toType);
   }

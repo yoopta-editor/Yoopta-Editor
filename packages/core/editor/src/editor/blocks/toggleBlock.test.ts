@@ -97,7 +97,7 @@ describe('toggleBlock', () => {
               props: {},
             },
           },
-          events: {},
+          lifecycle: {},
         },
         HeadingOne: {
           type: 'HeadingOne',
@@ -108,7 +108,7 @@ describe('toggleBlock', () => {
               props: {},
             },
           },
-          events: {},
+          lifecycle: {},
         },
       },
       children: {
@@ -221,15 +221,15 @@ describe('toggleBlock', () => {
       expect(toggledBlock.value[0]).toEqual(customStructure);
     });
 
-    it('should call onBeforeCreate event if available', () => {
-      const onBeforeCreate = vi.fn().mockReturnValue(mockHeadingStructure);
-      editor.plugins!.HeadingOne.events = { onBeforeCreate };
+    it('should call beforeCreate lifecycle event if available', () => {
+      const beforeCreate = vi.fn().mockReturnValue(mockHeadingStructure);
+      editor.plugins!.HeadingOne.lifecycle = { beforeCreate };
 
       toggleBlock(editor as YooEditor, 'HeadingOne', {
         scope: 'block',
       });
 
-      expect(onBeforeCreate).toHaveBeenCalledWith(editor);
+      expect(beforeCreate).toHaveBeenCalledWith(editor);
     });
 
     it('should throw error if block not found', () => {
@@ -283,7 +283,7 @@ describe('toggleBlock', () => {
                 // No allowedPlugins - should be replaced
               },
             },
-            events: {},
+            lifecycle: {},
           },
         };
 
@@ -377,7 +377,7 @@ describe('toggleBlock', () => {
                 allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
               },
             },
-            events: {},
+            lifecycle: {},
           },
         };
 
@@ -469,7 +469,7 @@ describe('toggleBlock', () => {
                 allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
               },
             },
-            events: {},
+            lifecycle: {},
           },
         };
 
@@ -571,7 +571,7 @@ describe('toggleBlock', () => {
               props: {},
             },
           },
-          events: {},
+          lifecycle: {},
         },
       };
 
@@ -617,7 +617,7 @@ describe('toggleBlock', () => {
               allowedPlugins: ['Paragraph', 'HeadingOne'], // Parent has allowedPlugins
             },
           },
-          events: {},
+          lifecycle: {},
         },
         Blockquote: {
           type: 'Blockquote',
@@ -628,7 +628,7 @@ describe('toggleBlock', () => {
               // No allowedPlugins
             },
           },
-          events: {},
+          lifecycle: {},
         },
       };
 

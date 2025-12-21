@@ -1,13 +1,7 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+import { Blocks, buildBlockData } from '@yoopta/editor';
 
-import type {
-  AccordionItemElement,
-  AccordionListElement,
-  AccordionListItemContentElement,
-  AccordionListItemHeadingElement,
-  AccordionListItemProps,
-} from '../types';
+import type { AccordionListElement, AccordionListItemProps } from '../types';
 
 type AccordionElementOptions = {
   items?: number;
@@ -30,39 +24,23 @@ export type AccordionCommands = {
 
 export const AccordionCommands: AccordionCommands = {
   buildAccordionElements: (editor: YooEditor, options = {}) => {
-    // take props from block.elements
-    const { props = { isExpanded: false }, items = 1 } = options;
+    const accordionList = editor.y('accordion-list');
+    const { items = 1, props: { isExpanded = false } = {} } = options;
 
-    const accordionList: AccordionListElement = {
-      id: generateId(),
-      type: 'accordion-list',
-      children: [],
-    };
+    for (let i = 0; i < items; i += 1) {
+      const accordionListItem = editor.y('accordion-list-item', {
+        props: { isExpanded },
+        children: [
+          editor.y('accordion-list-item-heading'),
+          editor.y('accordion-list-item-content'),
+        ],
+      });
 
-    for (let i = 0; i < items; i++) {
-      const headingListItem: AccordionListItemHeadingElement = {
-        id: generateId(),
-        type: 'accordion-list-item-heading',
-        children: [{ text: `` }],
-      };
-
-      const contentListItem: AccordionListItemContentElement = {
-        id: generateId(),
-        type: 'accordion-list-item-content',
-        children: [{ text: `` }],
-      };
-
-      const accordionListItem: AccordionItemElement = {
-        id: generateId(),
-        type: 'accordion-list-item',
-        children: [headingListItem, contentListItem],
-        props,
-      };
-
+      if (!accordionList.children) accordionList.children = [];
       accordionList.children.push(accordionListItem);
     }
 
-    return accordionList;
+    return accordionList as AccordionListElement;
   },
   insertAccordion: (editor: YooEditor, options = {}) => {
     const { at, focus, props, items } = options;

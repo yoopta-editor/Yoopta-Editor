@@ -64,14 +64,14 @@ export const TableCommands: TableCommands = {
       },
     };
 
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < rows; i += 1) {
       const row: TableRowElement = {
         id: generateId(),
         type: 'table-row',
         children: [],
       };
 
-      for (let j = 0; j < columns; j++) {
+      for (let j = 0; j < columns; j += 1) {
         const cell: TableCellElement = {
           id: generateId(),
           type: 'table-data-cell',

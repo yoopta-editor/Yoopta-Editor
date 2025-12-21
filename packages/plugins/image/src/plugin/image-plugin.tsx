@@ -12,6 +12,7 @@ const ALIGNS_TO_JUSTIFY = {
 };
 
 const imageProps: ImageElementProps = {
+  id: null,
   src: null,
   alt: null,
   srcSet: null,

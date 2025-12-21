@@ -1,10 +1,10 @@
-import Accordion from '@yoopta/accordion';
+import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
 import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
 // import Mention from '@yoopta/mention';
-import { Elements, YooEditor } from '@yoopta/editor';
+import { Elements, PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
 import Headings from '@yoopta/headings';
@@ -40,6 +40,11 @@ const ALLOWED_PLUGINS = [
 export const YOOPTA_PLUGINS = withShadcnUI([
   Accordion.extend({
     allowedPlugins: ALLOWED_PLUGINS,
+    lifecycle: {
+      beforeCreate: (editor: YooEditor) => {
+        return AccordionCommands.buildAccordionElements(editor, { items: 2 });
+      },
+    },
   }),
   Paragraph,
   Headings.HeadingOne,
@@ -82,10 +87,17 @@ export const YOOPTA_PLUGINS = withShadcnUI([
     ],
   }),
   Image.extend({
-    events: {
-      onDestroy: (editor: YooEditor, id: string) => {
-        const imageElement = Elements.getElement(editor, id, { type: 'image' });
-        console.log('Image imageElement', imageElement);
+    lifecycle: {
+      onDestroy: async (editor: YooEditor, blockId: string) => {
+        const imageElement = Elements.getElement(editor, blockId, { type: 'image' });
+        if (!imageElement) return;
+        console.log('Image imageElement?.props', imageElement?.props);
+
+        await fetch('/api/image-kit-delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileId: imageElement.props.id }),
+        });
       },
     },
     options: {

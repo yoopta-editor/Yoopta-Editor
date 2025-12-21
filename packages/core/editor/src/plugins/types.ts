@@ -83,11 +83,13 @@ export type PluginEventHandlerOptions = {
 
 export type ElementPropsMap = Record<string, Record<string, unknown>>;
 
-export type PluginEvents = {
-  onBeforeCreate?: (editor: YooEditor) => SlateElement;
+export type PluginDOMEvents = EventHandlers;
+
+export type PluginLifeCycleEvents = {
+  beforeCreate?: (editor: YooEditor) => SlateElement;
   onCreate?: (editor: YooEditor, blockId: string) => void;
   onDestroy?: (editor: YooEditor, blockId: string) => void;
-} & EventHandlers;
+};
 
 export type PluginInputElements<TElementMap extends Record<string, SlateElement>> =
   | {
@@ -108,7 +110,8 @@ export type Plugin<
   elements: {
     [K in keyof TElementMap]: PluginElement<Exclude<keyof TElementMap, K>, TElementMap[K]['props']>;
   };
-  events?: PluginEvents;
+  events?: PluginDOMEvents;
+  lifecycle?: PluginLifeCycleEvents;
   options?: PluginOptions<TPluginOptions>;
   parsers?: Partial<Record<PluginParserTypes, PluginParsers>>;
 };

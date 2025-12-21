@@ -9,7 +9,7 @@ import type { SlateElement } from '@yoopta/editor';
 import { ListCollapse } from 'lucide-react';
 import { Element, Transforms } from 'slate';
 
-import { AccordionCommands } from '../commands/AccordionCommands';
+import { AccordionCommands } from '../commands/accordion-commands';
 import { ACCORDION_ELEMENTS } from '../constants';
 import type { AccordionElementMap, AccordionListItemProps } from '../types';
 

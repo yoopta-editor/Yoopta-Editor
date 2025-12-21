@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Element, Node, Operation, Path, Range, Transforms } from 'slate';
 
 import { withInlines } from './extenstions/with-inlines';
-import type { PluginEventHandlerOptions, PluginEvents } from './types';
+import type { PluginDOMEvents, PluginEventHandlerOptions } from './types';
 import { Blocks } from '../editor/blocks';
 import type { SetSlateOperation } from '../editor/core/applyTransforms';
 import { Paths } from '../editor/paths';
@@ -175,14 +175,14 @@ export const useSlateEditor = (
   }, []);
 
 export const useEventHandlers = (
-  events: PluginEvents | undefined,
+  events: PluginDOMEvents | undefined,
   editor: YooEditor,
   block: YooptaBlockData,
   slate: SlateEditor,
 ) =>
   useMemo<EditorEventHandlers>(() => {
     if (!events || editor.readOnly) return {};
-    const { onBeforeCreate, onDestroy, onCreate, ...eventHandlers } = events || {};
+    const eventHandlers = events || {};
 
     const eventHandlersOptions: PluginEventHandlerOptions = {
       hotkeys: HOTKEYS,
@@ -203,23 +203,22 @@ export const useEventHandlers = (
     const allEventHandlers = { ...eventHandlers };
     inlinePlugins.forEach((plugin) => {
       if (plugin.events) {
-        const { onBeforeCreate, onDestroy, onCreate, ...inlineEventHandlers } = plugin.events;
-        Object.keys(inlineEventHandlers).forEach((eventType) => {
+        Object.keys(plugin.events).forEach((eventType) => {
           if (allEventHandlers[eventType]) {
             // If event handler already exists, wrap it to include inline plugin handler
             const existingHandler = allEventHandlers[eventType];
-            const inlineHandler = inlineEventHandlers[eventType];
+            const inlineHandler = plugin.events![eventType];
 
-            allEventHandlers[eventType] = (editor, slate, options) => (event) => {
+            allEventHandlers[eventType] = (yEditor, ySlate, options) => (event) => {
               // Call the block's event handler
-              const result = existingHandler(editor, slate, options)(event);
+              const result = existingHandler(yEditor, ySlate, options)(event);
               // Call the inline plugin's handler
-              inlineHandler(editor, slate, options)(event);
+              inlineHandler(yEditor, ySlate, options)(event);
               return result;
             };
           } else {
             // If no block handler exists, just use the inline handler
-            allEventHandlers[eventType] = inlineEventHandlers[eventType];
+            allEventHandlers[eventType] = plugin.events![eventType];
           }
         });
       }
@@ -237,7 +236,7 @@ export const useEventHandlers = (
     });
 
     return eventHandlersMap;
-  }, [events, editor, block]);
+  }, [events, editor, block, slate]);
 
 const shouldSave = (op: Operation): boolean => {
   if (op.type === 'set_selection') {

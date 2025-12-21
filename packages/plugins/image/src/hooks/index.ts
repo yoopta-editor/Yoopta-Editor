@@ -15,6 +15,7 @@ type UploadError = {
 };
 
 type UploadResult = {
+  id: string;
   url: string;
   width?: number;
   height?: number;

@@ -1,9 +1,10 @@
 import { buildPluginElements, isReactElement } from './build-plugin-elements';
 import type {
   Plugin,
+  PluginDOMEvents,
   PluginElementRenderProps,
-  PluginEvents,
   PluginInputElements,
+  PluginLifeCycleEvents,
   PluginOptions,
 } from './types';
 import type { SlateElement } from '../editor/types';
@@ -21,7 +22,8 @@ export type ExtendPluginElementConfig = {
 
 export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOptions> = {
   options?: Partial<PluginOptions<TOptions>>;
-  events?: Partial<PluginEvents>;
+  events?: Partial<PluginDOMEvents>;
+  lifecycle?: Partial<PluginLifeCycleEvents>;
   allowedPlugins?: YooptaPlugin<any, any>[];
   elements?: {
     [K in keyof TElementMap]?: ExtendPluginElementConfig;
@@ -71,10 +73,21 @@ export class YooptaPlugin<
   // }
 
   extend(extendPlugin: ExtendPlugin<TElementMap, TOptions>): YooptaPlugin<TElementMap, TOptions> {
-    const { options, events, allowedPlugins, elements: extendElements } = extendPlugin;
+    const { options, events, lifecycle, allowedPlugins, elements: extendElements } = extendPlugin;
 
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
+
+    if (lifecycle) {
+      Object.keys(lifecycle).forEach((event) => {
+        const eventHandler = lifecycle[event];
+
+        if (eventHandler) {
+          if (!this.plugin.lifecycle) this.plugin.lifecycle = {};
+          this.plugin.lifecycle[event] = eventHandler;
+        }
+      });
+    }
 
     if (events) {
       Object.keys(events).forEach((event) => {

@@ -28,7 +28,7 @@ const plugins = [
   Paragraph,
   Table.extend({
     events: {
-      onBeforeCreate: (editor, table) => {
+      beforeCreate: (editor, table) => {
         return editor.commands.buildTableElements({ rows: 2, columns: 2, columnWidth: 120 });
       },
     },

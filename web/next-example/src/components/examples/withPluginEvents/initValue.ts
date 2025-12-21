@@ -78,7 +78,7 @@ export const initValue = {
         },
         children: [
           {
-            text: "import Paragraph from '@yoopta/paragraph';\n\nconst plugins = [\n  Paragraph.extend({\n    events: {\n      \n      // It will be fired after the block is created\n      onCreate: (editor, blockId) => {\n        console.log('onCreate', blockId);\n      },\n      \n      // It will be fired after the block is deleted\n      onDestroy: (editor, blockId) => {\n        console.log('onCreate', blockId);\n      },\n      \n      // It will be fired before the block is created\n      // [NOTE] - USEFUL TO DEFINE INITIAL ELEMENS STRUCTURE FOR PLUGIN\n      // SEE EXAMPLE BELOW\n      onBeforeCreate: (editor, blockId) => {},\n      \n      // ...or typical DOM event handlers\n      // [NOTE] - DOM event handlers have a carry function\n      onClick(editor, slate, options) {\n        return (event) => {\n          \n        }\n      }, \n    }\n  }),\n]\n",
+            text: "import Paragraph from '@yoopta/paragraph';\n\nconst plugins = [\n  Paragraph.extend({\n    events: {\n      \n      // It will be fired after the block is created\n      onCreate: (editor, blockId) => {\n        console.log('onCreate', blockId);\n      },\n      \n      // It will be fired after the block is deleted\n      onDestroy: (editor, blockId) => {\n        console.log('onCreate', blockId);\n      },\n      \n      // It will be fired before the block is created\n      // [NOTE] - USEFUL TO DEFINE INITIAL ELEMENS STRUCTURE FOR PLUGIN\n      // SEE EXAMPLE BELOW\n      beforeCreate: (editor, blockId) => {},\n      \n      // ...or typical DOM event handlers\n      // [NOTE] - DOM event handlers have a carry function\n      onClick(editor, slate, options) {\n        return (event) => {\n          \n        }\n      }, \n    }\n  }),\n]\n",
           },
         ],
       },
@@ -163,7 +163,7 @@ export const initValue = {
         },
         children: [
           {
-            text: 'onBeforeCreate: (editor: YooEditor, blockId: string) => SlateElement',
+            text: 'beforeCreate: (editor: YooEditor, blockId: string) => SlateElement',
             code: true,
           },
         ],
@@ -253,7 +253,7 @@ export const initValue = {
         },
         children: [
           {
-            text: 'const plugins = [\n Table.extend({\n    events: {\n      onBeforeCreate: (editor, blockId) => {\n        return TableCommands.buildTableElements(editor, { rows: 4, columns: 5, headerRow: true, headerColumn: true });\n      },\n    },\n  })\n]',
+            text: 'const plugins = [\n Table.extend({\n    events: {\n      beforeCreate: (editor, blockId) => {\n        return TableCommands.buildTableElements(editor, { rows: 4, columns: 5, headerRow: true, headerColumn: true });\n      },\n    },\n  })\n]',
           },
         ],
       },

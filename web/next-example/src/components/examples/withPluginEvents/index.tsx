@@ -40,7 +40,7 @@ const plugins = [
   }),
   Table.extend({
     events: {
-      onBeforeCreate: (editor) => {
+      beforeCreate: (editor) => {
         return TableCommands.buildTableElements(editor, {
           rows: 4,
           columns: 5,

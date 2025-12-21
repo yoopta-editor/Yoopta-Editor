@@ -5,7 +5,7 @@ import { Editor, Path, Range } from 'slate';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
 import { useEventHandlers, useSlateEditor } from './hooks';
-import type { ExtendedLeafProps, Plugin, PluginEvents, RenderSlateElementProps } from './types';
+import type { ExtendedLeafProps, Plugin, PluginDOMEvents, RenderSlateElementProps } from './types';
 import { TextLeaf } from '../components/text-leaf/text-leaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
@@ -23,7 +23,7 @@ type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
   marks?: YooptaMark<any>[];
   options: Plugin<TElementMap, TOptions>['options'];
   placeholder?: string;
-  events?: PluginEvents;
+  events?: PluginDOMEvents;
 };
 
 const getPluginElementsRender = (elements) => {

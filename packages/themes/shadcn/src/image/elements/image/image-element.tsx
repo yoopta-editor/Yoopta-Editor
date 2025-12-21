@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { type PluginElementRenderProps, useYooptaPluginOptions } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
-import { type ImagePluginOptions, useImageUpload, useImagePreview } from '@yoopta/image';
+import { type ImagePluginOptions, useImagePreview, useImageUpload } from '@yoopta/image';
 import { Editor, Element } from 'slate';
 
 import { ImagePlaceholder } from './image-placeholder';
@@ -70,13 +70,14 @@ export const ImageElement = ({
       generatePreview(file);
       const result = await upload(file);
       updateElement({
+        id: result.fileId,
         src: result.url,
         alt: file.name,
         sizes: { width: result.width!, height: result.height! },
       });
       clearPreview();
     },
-    [upload, updateElement, generatePreview],
+    [upload, updateElement, generatePreview, clearPreview],
   );
 
   if (!element.props.src) {

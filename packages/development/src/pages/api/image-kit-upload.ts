@@ -27,7 +27,6 @@ type ErrorResponse = {
   status?: number;
 };
 
-// Initialize ImageKit
 const imagekit = new ImageKit({
   publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
@@ -42,7 +41,6 @@ export default async function handler(
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  // Validate credentials
   if (!process.env.IMAGEKIT_PRIVATE_KEY || !process.env.IMAGEKIT_URL_ENDPOINT) {
     return res.status(500).json({
       message: 'ImageKit credentials are not configured',
@@ -51,7 +49,6 @@ export default async function handler(
   }
 
   try {
-    // Parse multipart/form-data
     const form = formidable({
       maxFileSize: 10 * 1024 * 1024, // 10MB
       keepExtensions: true,
@@ -59,7 +56,6 @@ export default async function handler(
 
     const [fields, files] = await form.parse(req);
 
-    // Get the file
     const fileArray = files.file || files.image;
     const fileField = fileArray?.[0] || (Object.values(files)[0] as formidable.File[])?.[0];
 
@@ -70,23 +66,19 @@ export default async function handler(
       });
     }
 
-    // Read file buffer
     const fileBuffer = fs.readFileSync(fileField.filepath);
     const fileName = fileField.originalFilename || `image-${Date.now()}`;
 
-    // Upload to ImageKit
     const uploadResponse = await imagekit.upload({
-      file: fileBuffer, // Buffer or base64 string
+      file: fileBuffer,
       fileName: fileName,
-      folder: '/yoopta-uploads', // Optional: organize in folders
-      useUniqueFileName: true, // Add unique suffix
-      tags: ['yoopta-editor'], // Optional: add tags
+      folder: '/yoopta-uploads',
+      useUniqueFileName: true,
+      tags: ['yoopta-editor'],
     });
 
-    // Clean up temporary file
     fs.unlinkSync(fileField.filepath);
 
-    // Return result
     const result: UploadResult = {
       url: uploadResponse.url,
       width: uploadResponse.width,
@@ -103,7 +95,6 @@ export default async function handler(
   } catch (error) {
     console.error('Error uploading to ImageKit:', error);
 
-    // Clean up temporary file if it exists
     try {
       const form = formidable({});
       const [, files] = await form.parse(req);
@@ -111,9 +102,7 @@ export default async function handler(
       if (fileField?.filepath && fs.existsSync(fileField.filepath)) {
         fs.unlinkSync(fileField.filepath);
       }
-    } catch (cleanupError) {
-      // Ignore cleanup errors
-    }
+    } catch (cleanupError) {}
 
     return res.status(500).json({
       message: error instanceof Error ? error.message : 'Internal server error',
