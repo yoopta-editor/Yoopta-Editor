@@ -1,7 +1,13 @@
 import { useCallback } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
-import { type ImagePluginOptions, useImageUpload, useImagePreview } from '@yoopta/image';
+import {
+  type ImagePluginOptions,
+  useImageDelete,
+  useImageUpload,
+  useImagePreview,
+  type ImageElement as ImageElementType,
+} from '@yoopta/image';
 import { Editor, Element } from 'slate';
 
 import { ImagePlaceholder } from './image-placeholder';
@@ -16,8 +22,9 @@ export const ImageElement = ({
 }: PluginElementRenderProps) => {
   const editor = useYooptaEditor();
   const pluginOptions = useYooptaPluginOptions<ImagePluginOptions>('Image');
-  const { upload, progress, isUploading } = useImageUpload(pluginOptions.upload!);
+  const { upload, progress, loading } = useImageUpload(pluginOptions.upload!);
   const { preview, generatePreview, clearPreview } = useImagePreview();
+  const { deleteImage: deleteImageFromStorage } = useImageDelete(pluginOptions.delete!);
 
   const updateElement = useCallback(
     (props: Partial<ImageElementProps>) => {
@@ -33,6 +40,7 @@ export const ImageElement = ({
   );
 
   const deleteImage = useCallback(() => {
+    deleteImageFromStorage(element as ImageElementType);
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
@@ -49,7 +57,7 @@ export const ImageElement = ({
     }
 
     Blocks.deleteBlock(editor, { blockId, focus: true });
-  }, [editor, blockId, element]);
+  }, [editor, blockId, element, deleteImageFromStorage]);
 
   const replaceImage = useCallback(() => {
     Elements.updateElement(editor, blockId, {
@@ -82,7 +90,7 @@ export const ImageElement = ({
         onUpload={onUpload}
         preview={preview}
         progress={progress}
-        isUploading={isUploading}
+        loading={loading}
         onInsertUrl={() => {}}
         onInsertFromUnsplash={() => {}}
         onInsertFromAI={async () => {}}

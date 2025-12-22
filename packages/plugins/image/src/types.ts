@@ -27,7 +27,7 @@ export type ImageOptimizationFields = {
 
 export type ImageUploadOptions = {
   endpoint: string;
-  method?: 'POST' | 'PUT';
+  method?: 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   fieldName?: string;
   maxSize?: number;
@@ -37,8 +37,19 @@ export type ImageUploadOptions = {
   onError?: (error: any) => void;
 };
 
+export type ImageDeleteOptions = {
+  endpoint: string;
+  method?: 'DELETE' | 'PATCH';
+  headers?: Record<string, string>;
+  fieldName?: string;
+  onProgress?: (progress: any) => void;
+  onSuccess?: (result: any) => void;
+  onError?: (error: any) => void;
+};
+
 export type ImagePluginOptions = {
   upload?: ImageUploadOptions;
+  delete?: ImageDeleteOptions;
   maxSizes?: {
     maxWidth?: number | string;
     maxHeight?: number | string;
@@ -48,4 +59,52 @@ export type ImagePluginOptions = {
 
 export type ImageElementMap = {
   image: ImageElement;
+};
+
+// XHR Request - upload/delete
+export type ImageUploadProgress = {
+  loaded: number;
+  total: number;
+  percentage: number;
+};
+
+export type UploadError = {
+  message: string;
+  code?: string;
+  status?: number;
+};
+
+export type UploadResult = {
+  id: string;
+  url: string;
+  width?: number;
+  height?: number;
+  size?: number;
+  format?: string;
+  [key: string]: any;
+};
+
+export type UploadState = {
+  loading: boolean;
+  progress: ImageUploadProgress | null;
+  error: UploadError | null;
+  result: UploadResult | null;
+};
+
+export type UseImageUploadReturn = {
+  upload: (file: File) => Promise<UploadResult>;
+  cancel: () => void;
+  reset: () => void;
+} & UploadState;
+
+export type UseImageDeleteReturn = {
+  deleteImage: (element: ImageElement) => Promise<UploadResult>;
+  cancel: () => void;
+  reset: () => void;
+} & UploadState;
+
+export type ImageUploadPreview = {
+  url: string;
+  width?: number;
+  height?: number;
 };

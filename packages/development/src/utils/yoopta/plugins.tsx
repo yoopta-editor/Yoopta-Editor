@@ -23,6 +23,21 @@ import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 import withShadcnUI from '@yoopta/themes-shadcn';
 // import withMaterialUI from '@yoopta/themes-material';
 
+const YImage = Image.extend({
+  options: {
+    upload: {
+      endpoint: '/api/image-kit-upload',
+      method: 'POST',
+      maxSize: 5 * 1024 * 1024,
+      accept: 'image/jpeg, image/jpg, image/png, image/webp',
+    },
+    delete: {
+      endpoint: '/api/image-kit-delete',
+      method: 'DELETE',
+    },
+  },
+});
+
 const ALLOWED_PLUGINS = [
   Paragraph,
   Headings.HeadingOne,
@@ -33,7 +48,7 @@ const ALLOWED_PLUGINS = [
   Lists.TodoList,
   Blockquote,
   Callout,
-  Image,
+  YImage,
   Code,
 ];
 
@@ -82,32 +97,9 @@ export const YOOPTA_PLUGINS = withShadcnUI([
       Lists.TodoList,
       Blockquote,
       Callout,
-      Image,
+      YImage,
       Code,
     ],
   }),
-  Image.extend({
-    lifecycle: {
-      onDestroy: async (editor: YooEditor, blockId: string) => {
-        const imageElement = Elements.getElement(editor, blockId, { type: 'image' });
-        if (!imageElement) return;
-        console.log('Image imageElement?.props', imageElement?.props);
-
-        await fetch('/api/image-kit-delete', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fileId: imageElement.props.id }),
-        });
-      },
-    },
-    options: {
-      upload: {
-        endpoint: '/api/image-kit-upload',
-        method: 'POST',
-        fieldName: 'image',
-        maxSize: 5 * 1024 * 1024, // 5MB
-        accept: 'image/jpeg, image/jpg, image/png, image/gif, image/webp',
-      },
-    },
-  }),
+  YImage,
 ]);

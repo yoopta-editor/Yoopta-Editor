@@ -6,14 +6,18 @@ export {
   ImageUploadResponse,
   ImagePluginOptions,
   ImageUploadOptions,
+  ImageDeleteOptions,
+  ImageUploadPreview,
+  UseImageDeleteReturn,
+  UseImageUploadReturn,
+  ImageUploadProgress,
 } from './types';
 export {
   useImageUpload,
+  useImageDelete,
   useImageDimensions,
   useImagePreview,
-  ImageUploadProgress,
-  ImageUploadPreview,
-} from './hooks';
+} from './hooks/use-upload';
 
 export { ImageCommands } from './commands';
 

@@ -125,6 +125,9 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
         // }
 
         if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
+          console.log('CODE: event.isDefaultPrevented()', event.isDefaultPrevented());
+          console.log('CODE: event.defaultPrevented', event.defaultPrevented);
+
           event.preventDefault();
           event.stopPropagation();
 

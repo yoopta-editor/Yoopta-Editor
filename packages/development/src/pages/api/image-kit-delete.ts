@@ -24,42 +24,10 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || '',
 });
 
-/**
- * Extract fileId from ImageKit URL
- * Example: https://ik.imagekit.io/your_id/path/to/file_ABC123.jpg -> ABC123
- */
-const extractFileIdFromUrl = (url: string): string | null => {
-  try {
-    // ImageKit URL format: https://ik.imagekit.io/{imagekit_id}/{path}/{fileName}_{fileId}.{ext}
-    // FileId is usually in the filename before the extension
-
-    // Method 1: Extract from URL pattern
-    const urlObj = new URL(url);
-    const pathname = urlObj.pathname;
-    const fileName = pathname.split('/').pop();
-    console.log('fileName', fileName);
-    if (!fileName) return null;
-
-    // FileId is usually the part before the extension after underscore
-    // Example: image_ABC123.jpg -> ABC123
-    const match = fileName.match(/_([a-zA-Z0-9]+)\.[^.]+$/);
-    console.log('match', match);
-    if (match && match[1]) {
-      return match[1];
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Error extracting fileId from URL:', error);
-    return null;
-  }
-};
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DeleteResponse | ErrorResponse>,
 ) {
-  // Only allow DELETE requests
   if (req.method !== 'DELETE') {
     return res.status(405).json({
       success: false,
@@ -68,7 +36,6 @@ export default async function handler(
     });
   }
 
-  // Validate credentials
   if (!process.env.IMAGEKIT_PRIVATE_KEY || !process.env.IMAGEKIT_URL_ENDPOINT) {
     return res.status(500).json({
       success: false,
@@ -78,7 +45,8 @@ export default async function handler(
   }
 
   try {
-    const body = req.body as DeleteRequest;
+    const body = JSON.parse(req.body) as DeleteRequest;
+    console.log('DeleteRequest body', typeof body, body);
     const fileId = body.fileId;
 
     if (!fileId) {

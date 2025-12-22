@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import { ImageUploadProgress, ImageUploadPreview } from '@yoopta/image';
+import type { ImageUploadPreview, ImageUploadProgress } from '@yoopta/image';
 import { ImageIcon, LinkIcon, Loader2, Sparkles, Upload } from 'lucide-react';
 
 import { ImagePlaceholderUnsplash } from './image-placeholder-unsplash';
@@ -19,7 +19,7 @@ type ImagePlaceholderProps = {
   children: React.ReactNode;
   preview: ImageUploadPreview | null;
   progress: ImageUploadProgress | null;
-  isUploading: boolean;
+  loading: boolean;
 };
 
 // Preview Image Component
@@ -27,60 +27,56 @@ type ImagePreviewProps = {
   preview: ImageUploadPreview;
 };
 
-const ImagePreview = ({ preview }: ImagePreviewProps) => {
-  return (
-    <div
-      className="absolute inset-0 overflow-hidden"
+const ImagePreview = ({ preview }: ImagePreviewProps) => (
+  <div
+    className="absolute inset-0 overflow-hidden"
+    style={{
+      width: preview.width,
+      height: preview.height,
+    }}>
+    <img
+      src={preview.url}
+      alt="Preview"
+      className="h-full w-full object-cover object-center"
       style={{
         width: preview.width,
         height: preview.height,
-      }}>
-      <img
-        src={preview.url}
-        alt="Preview"
-        className="h-full w-full object-cover object-center"
-        style={{
-          width: preview.width,
-          height: preview.height,
-        }}
-        draggable={false}
-      />
-    </div>
-  );
-};
+      }}
+      draggable={false}
+    />
+  </div>
+);
 
 // Upload Progress Component
 type ImageUploadProgressProps = {
   progress: ImageUploadProgress;
 };
 
-const ImageUploadProgressOverlay = ({ progress }: ImageUploadProgressProps) => {
-  return (
-    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-black/70 backdrop-blur-sm p-6">
-      <div className="w-full max-w-md space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="font-medium text-white">Uploading...</span>
-            <span className="text-white/80">{progress.percentage}%</span>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
-            <div
-              className="h-full bg-primary transition-all duration-300 ease-out"
-              style={{ width: `${progress.percentage}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-xs text-white/60">
-            <span>
-              {(progress.loaded / 1024 / 1024).toFixed(2)} MB /{' '}
-              {(progress.total / 1024 / 1024).toFixed(2)} MB
-            </span>
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          </div>
+const ImageUploadProgressOverlay = ({ progress }: ImageUploadProgressProps) => (
+  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-black/70 backdrop-blur-sm p-6">
+    <div className="w-full max-w-md space-y-4">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-white">Uploading...</span>
+          <span className="text-white/80">{progress.percentage}%</span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
+          <div
+            className="h-full bg-primary transition-all duration-300 ease-out"
+            style={{ width: `${progress.percentage}%` }}
+          />
+        </div>
+        <div className="flex items-center justify-between text-xs text-white/60">
+          <span>
+            {(progress.loaded / 1024 / 1024).toFixed(2)} MB /{' '}
+            {(progress.total / 1024 / 1024).toFixed(2)} MB
+          </span>
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 // Upload Form Component
 type ImageUploadFormProps = {
@@ -235,60 +231,58 @@ const ImagePlaceholderTabs = ({
   onInsertFromUnsplash,
   onInsertFromAI,
   hasPreview,
-}: ImagePlaceholderTabsProps) => {
-  return (
-    <div className={cn('relative z-10 p-4', hasPreview && 'min-h-[300px] flex flex-col')}>
-      <Tabs defaultValue="upload" className="w-full">
-        <TabsList
-          className={cn(
-            'grid w-full grid-cols-4',
-            hasPreview && 'bg-background/80 backdrop-blur-sm',
-          )}>
-          <TabsTrigger value="upload" className="gap-1.5">
-            <Upload className="h-3.5 w-3.5" />
-            Upload
-          </TabsTrigger>
-          <TabsTrigger value="link" className="gap-1.5">
-            <LinkIcon className="h-3.5 w-3.5" />
-            Link
-          </TabsTrigger>
-          {onInsertFromUnsplash && (
-            <TabsTrigger value="unsplash" className="gap-1.5">
-              <svg className="h-3.5 w-3.5" viewBox="0 0 32 32" fill="currentColor">
-                <path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z" />
-              </svg>
-              Unsplash
-            </TabsTrigger>
-          )}
-          {onInsertFromAI && (
-            <TabsTrigger value="ai" className="gap-1.5">
-              <Sparkles className="h-3.5 w-3.5" />
-              AI
-            </TabsTrigger>
-          )}
-        </TabsList>
-
-        <TabsContent value="upload" className="mt-4">
-          <ImageUploadForm onUpload={onUpload} hasPreview={hasPreview} />
-        </TabsContent>
-
-        <TabsContent value="link">
-          <ImageLinkForm onInsertUrl={onInsertUrl} />
-        </TabsContent>
-
+}: ImagePlaceholderTabsProps) => (
+  <div className={cn('relative p-4', hasPreview && 'min-h-[300px] flex flex-col')}>
+    <Tabs defaultValue="upload" className="w-full">
+      <TabsList
+        className={cn(
+          'grid w-full grid-cols-4',
+          hasPreview && 'bg-background/80 backdrop-blur-sm',
+        )}>
+        <TabsTrigger value="upload" className="gap-1.5">
+          <Upload className="h-3.5 w-3.5" />
+          Upload
+        </TabsTrigger>
+        <TabsTrigger value="link" className="gap-1.5">
+          <LinkIcon className="h-3.5 w-3.5" />
+          Link
+        </TabsTrigger>
         {onInsertFromUnsplash && (
-          <ImagePlaceholderUnsplash onInsertFromUnsplash={onInsertFromUnsplash} />
+          <TabsTrigger value="unsplash" className="gap-1.5">
+            <svg className="h-3.5 w-3.5" viewBox="0 0 32 32" fill="currentColor">
+              <path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z" />
+            </svg>
+            Unsplash
+          </TabsTrigger>
         )}
-
         {onInsertFromAI && (
-          <TabsContent value="ai">
-            <ImageAIForm onInsertFromAI={onInsertFromAI} />
-          </TabsContent>
+          <TabsTrigger value="ai" className="gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" />
+            AI
+          </TabsTrigger>
         )}
-      </Tabs>
-    </div>
-  );
-};
+      </TabsList>
+
+      <TabsContent value="upload" className="mt-4">
+        <ImageUploadForm onUpload={onUpload} hasPreview={hasPreview} />
+      </TabsContent>
+
+      <TabsContent value="link">
+        <ImageLinkForm onInsertUrl={onInsertUrl} />
+      </TabsContent>
+
+      {onInsertFromUnsplash && (
+        <ImagePlaceholderUnsplash onInsertFromUnsplash={onInsertFromUnsplash} />
+      )}
+
+      {onInsertFromAI && (
+        <TabsContent value="ai">
+          <ImageAIForm onInsertFromAI={onInsertFromAI} />
+        </TabsContent>
+      )}
+    </Tabs>
+  </div>
+);
 
 // Main Component
 export const ImagePlaceholder = ({
@@ -301,10 +295,10 @@ export const ImagePlaceholder = ({
   children,
   preview,
   progress,
-  isUploading,
+  loading,
 }: ImagePlaceholderProps) => {
   const hasPreview = preview !== null && !!preview.url;
-  const showUploadProgress = isUploading && progress;
+  const showUploadProgress = loading && progress;
 
   return (
     <div

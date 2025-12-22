@@ -1,69 +1,39 @@
 import { useMemo } from 'react';
-import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
-import { Editor, Element } from 'slate';
+import type { TableElement } from '@yoopta/table';
+import { TABLE_SLATE_TO_SELECTION_SET } from '@yoopta/table';
 
 import { TableBody, Table as TableUI } from '../../ui/table';
+import { TableControls } from '../components/table-controls';
+import { TableMultiSelectionToolbar } from '../components/table-multi-selection-toolbar';
+import { TableSelectionOverlay } from '../components/table-selection-overlay';
 
 export const Table = (props: PluginElementRenderProps) => {
-  const { attributes, children, element, blockId } = props;
+  const { attributes, children, element } = props;
+  const tableElement = element as TableElement;
   const editor = useYooptaEditor();
-
-  const slate = useMemo(() => Blocks.getBlockSlate(editor, { id: blockId }), [editor, blockId]);
-
-  // const { headerRow } = (element as SlateElement).props || {};
-
-  // // Find first row to determine column widths
-  // const firstRow = useMemo(() => {
-  //   if (!slate) return null;
-
-  //   const [firstRowNode] = Editor.nodes<SlateElement>(slate, {
-  //     at: [0],
-  //     match: (n) => Element.isElement(n) && (n as SlateElement).type === 'table-row',
-  //     mode: 'lowest',
-  //   });
-
-  //   return firstRowNode?.[0] as SlateElement | null;
-  // }, [slate]);
-
-  // Check if first row has header cells
-  // const hasHeaderRow = useMemo(() => {
-  //   if (!firstRow || !headerRow) return false;
-
-  //   return firstRow.children.some(
-  //     (cell) =>
-  //       Element.isElement(cell) &&
-  //       (cell as SlateElement).type === 'table-data-cell' &&
-  //       (cell as SlateElement).props?.asHeader,
-  //   );
-  // }, [firstRow, headerRow]);
-
-  return (
-    <TableUI {...attributes}>
-      <TableBody>{children}</TableBody>
-    </TableUI>
+  const slate = useMemo(
+    () => Blocks.getBlockSlate(editor, { id: props.blockId }),
+    [editor, props.blockId],
   );
 
-  // return (
-  //   <div className="my-6 w-full overflow-auto">
-  //     <table {...attributes} className="w-full border-collapse border border-border">
-  //       {firstRow && (
-  //         <colgroup>
-  //           {firstRow.children.map((cell) => {
-  //             if (!Element.isElement(cell)) return null;
-  //             const cellElement = cell as SlateElement;
-  //             const width = cellElement.props?.width || 200;
+  const isSelecting = slate ? TABLE_SLATE_TO_SELECTION_SET.get(slate) : null;
 
-  //             return <col key={cellElement.id} style={{ width: `${width}px` }} />;
-  //           })}
-  //         </colgroup>
-  //       )}
-  //       {hasHeaderRow ? (
-  //         <thead className="bg-muted/50">{children}</thead>
-  //       ) : (
-  //         <tbody>{children}</tbody>
-  //       )}
-  //     </table>
-  //   </div>
-  // );
+  return (
+    <>
+      <TableUI {...attributes} data-is-selecting={!!isSelecting}>
+        <colgroup>
+          {tableElement.props?.columnWidths?.map((width, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <col key={i} style={{ width: `${width}px` }} />
+          ))}
+        </colgroup>
+        <TableBody>{children}</TableBody>
+      </TableUI>
+
+      <TableSelectionOverlay blockId={props.blockId} />
+      <TableControls blockId={props.blockId} />
+    </>
+  );
 };

@@ -76,7 +76,7 @@ const TableHead = forwardRef<HTMLTableCellElement, ComponentProps<'th'>>(
       ref={ref}
       data-slot="table-head"
       className={cn(
-        'border-border border-r last:border-r-0 text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] bg-muted/50',
+        'border-border border-r last:border-r-0 text-foreground h-10 px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] bg-muted/50',
         className,
       )}
       {...props}
@@ -91,7 +91,7 @@ const TableCell = forwardRef<HTMLTableCellElement, ComponentProps<'td'>>(
       ref={ref}
       data-slot="table-cell"
       className={cn(
-        'border-border border-r last:border-r-0 p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+        'border-border border-r last:border-r-0 p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
         className,
       )}
       {...props}

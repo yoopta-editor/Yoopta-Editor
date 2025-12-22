@@ -38,6 +38,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
     onKeyDown(editor, slate, { hotkeys, currentBlock }) {
       return (event) => {
         if (hotkeys.isBackspace(event)) {
+          if (event.isDefaultPrevented()) return;
           if (!slate.selection) return;
 
           const listItems = Elements.getElementChildren(editor, currentBlock.id, {
@@ -92,6 +93,7 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         }
 
         if (hotkeys.isSelect(event)) {
+          if (event.isDefaultPrevented()) return;
           event.preventDefault();
 
           if (slate.selection) {
@@ -102,6 +104,9 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         }
 
         if (hotkeys.isEnter(event)) {
+          if (event.isDefaultPrevented()) return;
+          console.log('ACCORDION: event.isDefaultPrevented()', event.isDefaultPrevented());
+          console.log('ACCORDION: event.defaultPrevented', event.defaultPrevented);
           event.preventDefault();
 
           const currentElement = Elements.getElement(editor, currentBlock.id);

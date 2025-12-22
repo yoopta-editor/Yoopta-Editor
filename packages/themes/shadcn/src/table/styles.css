@@ -1,3 +1,19 @@
 [data-element-type='table-data-cell'] [data-slate-node='element'] {
   margin: 0;
 }
+
+[data-slate-node='table'] {
+  user-select: none;
+}
+
+[data-slate-node='table-data-cell'] {
+  cursor: cell;
+}
+
+[data-slate-node='table-data-cell']:active {
+  cursor: crosshair;
+}
+
+[data-is-selecting='true'] *::selection {
+  background: none;
+}

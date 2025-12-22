@@ -23,6 +23,38 @@ const YooptaUIPackageExample = () => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
 
+  const insertTable = () => {
+    const elements = editor.y('table', {
+      props: { columnWidths: [200, 150, 250] },
+      children: [
+        editor.y('table-row', {
+          children: [
+            editor.y('table-data-cell', {
+              children: [editor.y.text('Cell 1')],
+            }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 2')] }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 3')] }),
+          ],
+        }),
+        editor.y('table-row', {
+          children: [
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 4')] }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 5')] }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 6')] }),
+          ],
+        }),
+        editor.y('table-row', {
+          children: [
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 7')] }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 8')] }),
+            editor.y('table-data-cell', { children: [editor.y.text('Cell 9')] }),
+          ],
+        }),
+      ],
+    });
+    editor.insertBlock('Table', { elements, at: 0, focus: true });
+  };
+
   const insertAccordion = () => {
     const elements = editor.y('accordion-list', {
       children: [
@@ -327,6 +359,11 @@ const YooptaUIPackageExample = () => {
           onClick={insertCodePythonBlock}
           className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
           Insert Code Python Block
+        </button>
+        <button
+          onClick={insertTable}
+          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
+          Insert Table
         </button>
       </div>
       <YooptaEditor

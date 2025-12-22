@@ -29,7 +29,7 @@ type ImagePlaceholderProps = {
   onInsertFromAI?: (prompt: string) => Promise<void>;
   preview: string | null;
   progress: ImageUploadProgress | null;
-  isUploading: boolean;
+  loading: boolean;
   sx?: object;
   attributes: PluginElementRenderProps['attributes'];
   children: React.ReactNode;
@@ -52,7 +52,6 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => (
   </div>
 );
 
-// Preview Image Component
 type ImagePreviewProps = {
   preview: string;
 };
@@ -81,7 +80,7 @@ const ImagePreview = ({ preview }: ImagePreviewProps) => (
 // Upload Progress Component
 type ImageUploadProgressProps = {
   progress: ImageUploadProgress;
-  theme: ReturnType<typeof useTheme>;
+  theme: ReturnType<typeof useTheme<any>>;
 };
 
 const ImageUploadProgressOverlay = ({ progress, theme }: ImageUploadProgressProps) => (
@@ -137,7 +136,7 @@ const ImageUploadProgressOverlay = ({ progress, theme }: ImageUploadProgressProp
 type ImageUploadFormProps = {
   onUpload: (file: File) => void;
   hasPreview: boolean;
-  theme: ReturnType<typeof useTheme>;
+  theme: ReturnType<typeof useTheme<any>>;
 };
 
 const ImageUploadForm = ({ onUpload, hasPreview, theme }: ImageUploadFormProps) => {
@@ -314,7 +313,7 @@ export const ImagePlaceholder = ({
   onInsertFromAI,
   preview,
   progress,
-  isUploading,
+  loading,
   sx,
   attributes,
   children,
@@ -322,7 +321,7 @@ export const ImagePlaceholder = ({
   const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
   const hasPreview = Boolean(preview);
-  const showUploadProgress = isUploading && progress;
+  const showUploadProgress = loading && progress;
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);

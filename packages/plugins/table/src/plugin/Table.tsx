@@ -1,22 +1,26 @@
 import { YooptaPlugin } from '@yoopta/editor';
 
-import { TableCommands } from '../commands';
+import { TableCommands } from '../commands/table-commands';
 import { onKeyDown } from '../events/onKeyDown';
 import { withTable } from '../extenstions/withTable';
 import { serializeTableToEmail } from '../parsers/email/serialize';
 import { deserializeTable } from '../parsers/html/deserialize';
 import { serializeMarkown } from '../parsers/markdown/serialize';
-import type { TableElementMap } from '../types';
-import { TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
+import type { TableDataCellElementProps, TableElementMap, TableElementProps } from '../types';
+import { TABLE_CELLS_IN_SELECTION, TABLE_SLATE_TO_SELECTION_SET } from '../utils/weakMaps';
 
-const tableDataCellProps = {
+const tableDataCellProps: TableDataCellElementProps = {
   asHeader: false,
-  width: 200,
+  verticalAlign: 'top',
+  align: 'left',
+  colSpan: 1,
+  rowSpan: 1,
 };
 
-const tableProps = {
+const tableProps: TableElementProps = {
   headerRow: false,
   headerColumn: false,
+  columnWidths: [200, 150, 250],
 };
 
 const Table = new YooptaPlugin<TableElementMap>({
@@ -42,8 +46,10 @@ const Table = new YooptaPlugin<TableElementMap>({
   ),
   events: {
     onKeyDown,
-    onBlur: (editor, slate) => () => {
+    onBlur: (_, slate) => () => {
+      // Clear selection on blur
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
+      TABLE_CELLS_IN_SELECTION.delete(slate);
     },
   },
   lifecycle: {

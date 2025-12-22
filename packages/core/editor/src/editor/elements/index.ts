@@ -1,3 +1,4 @@
+import { createJSXFactory } from './create-element-structure';
 import { createElement } from './createElement';
 import { deleteElement } from './deleteElement';
 import { getElement } from './getElement';
@@ -6,10 +7,10 @@ import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
 import { getElementRect } from './getElementRect';
 import { getParentElementPath } from './getParentElementPath';
+import { htmlElToSlateNode } from './htmlElToSlateNode';
 import { insertElementText } from './insertElementText';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
-import { createJSXFactory } from './create-element-structure';
 
 export const Elements = {
   createElement,
@@ -24,6 +25,7 @@ export const Elements = {
   getParentElementPath,
   getElementRect,
   createJSXFactory,
+  htmlElToSlateNode,
 };
 
 export type Elements = typeof Elements;

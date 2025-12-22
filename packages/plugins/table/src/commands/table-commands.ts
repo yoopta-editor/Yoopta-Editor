@@ -4,6 +4,8 @@ import type { Span } from 'slate';
 import { Editor, Element, Path, Transforms } from 'slate';
 
 import type { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
+import { clearContents, ClearContentsOptions } from './clear-contents';
+import { mergeCells, MergeCellsOptions } from './merge-cells';
 
 type Options = {
   path?: Location | Span;
@@ -42,6 +44,8 @@ export type TableCommands = {
   ) => void;
   toggleHeaderRow: (editor: YooEditor, blockId: string) => void;
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
+  clearContents: (editor: YooEditor, blockId: string, options: ClearContentsOptions) => void;
+  mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => void;
 };
 
 export const TableCommands: TableCommands = {
@@ -375,5 +379,11 @@ export const TableCommands: TableCommands = {
         },
       );
     });
+  },
+  clearContents: (editor: YooEditor, blockId: string, options: ClearContentsOptions) => {
+    clearContents(editor, blockId, options);
+  },
+  mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => {
+    mergeCells(editor, blockId, options);
   },
 };

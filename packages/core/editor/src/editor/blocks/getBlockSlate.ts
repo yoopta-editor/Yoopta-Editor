@@ -5,9 +5,13 @@ export type GetBlockSlateOptions = {
   id?: string;
 };
 
-export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions): SlateEditor {
+export function getBlockSlate(
+  editor: YooEditor,
+  options: GetBlockSlateOptions,
+): SlateEditor | null {
   if (!options?.id && typeof options?.at !== 'number') {
-    throw new Error('getBlockSlate requires either an id or at');
+    return null;
+    // throw new Error('getBlockSlate requires either an id or at');
   }
 
   const blockId =
@@ -20,7 +24,8 @@ export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions):
   const slate = editor.blockEditorsMap[blockId || ''];
 
   if (!slate) {
-    throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
+    return null;
+    // throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
   }
 
   return slate;
