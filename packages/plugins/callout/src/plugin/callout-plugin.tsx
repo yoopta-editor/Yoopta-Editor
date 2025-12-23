@@ -7,8 +7,8 @@ import {
   serializeTextNodesIntoMarkdown,
 } from '@yoopta/editor';
 
-import { CalloutCommands } from '../commands/CalloutCommands';
-import { withCallout } from '../extensions/withCallout';
+import { CalloutCommands } from '../commands/callout-commands';
+import { withCallout } from '../extensions/with-callout';
 import type { CalloutElementMap, CalloutElementProps, CalloutTheme } from '../types';
 import { CALLOUT_THEME_STYLES } from '../utils';
 

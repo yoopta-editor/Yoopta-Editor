@@ -1,11 +1,11 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
 import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
 
-import type { CodeElement, CodeElementProps } from '../types';
+import type { CodeGroupElement, CodeGroupElementProps } from '../types';
 
 type CodeGroupElementOptions = {
   text?: string;
-  props?: CodeElementProps;
+  props?: CodeGroupElementProps;
 };
 
 type InsertCodeOptions = CodeGroupElementOptions & {
@@ -14,14 +14,21 @@ type InsertCodeOptions = CodeGroupElementOptions & {
 };
 
 export type CodeGroupCommands = {
-  buildCodeElements: (editor: YooEditor, options?: Partial<CodeGroupElementOptions>) => CodeElement;
+  buildCodeElements: (
+    editor: YooEditor,
+    options?: Partial<CodeGroupElementOptions>,
+  ) => CodeGroupElement;
   insertCode: (editor: YooEditor, options?: Partial<InsertCodeOptions>) => void;
   deleteCode: (editor: YooEditor, blockId: string) => void;
-  updateCodeTheme: (editor: YooEditor, blockId: string, theme: CodeElementProps['theme']) => void;
+  updateCodeTheme: (
+    editor: YooEditor,
+    blockId: string,
+    theme: CodeGroupElementProps['theme'],
+  ) => void;
   updateCodeLanguage: (
     editor: YooEditor,
     blockId: string,
-    language: CodeElementProps['language'],
+    language: CodeGroupElementProps['language'],
   ) => void;
 };
 
@@ -42,14 +49,14 @@ export const CodeGroupCommands: CodeGroupCommands = {
   },
   updateCodeTheme: (editor: YooEditor, blockId, theme) => {
     const block = editor.children[blockId];
-    const element = block.value[0] as CodeElement;
+    const element = block.value[0] as CodeGroupElement;
     Blocks.updateBlock(editor, blockId, {
       value: [{ ...element, props: { ...element.props, theme } }],
     });
   },
   updateCodeLanguage: (editor: YooEditor, blockId, language) => {
     const block = editor.children[blockId];
-    const element = block.value[0] as CodeElement;
+    const element = block.value[0] as CodeGroupElement;
     Blocks.updateBlock(editor, blockId, {
       value: [{ ...element, props: { ...element.props, language } }],
     });

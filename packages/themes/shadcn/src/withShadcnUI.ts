@@ -10,6 +10,7 @@ import { LinkUI } from './link';
 import { ListsUI } from './lists';
 import { ParagraphUI } from './paragraph';
 import { TableUI } from './table';
+import { TabsUI } from './tabs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PluginWithUI = YooptaPlugin<any, any>;
@@ -69,6 +70,7 @@ export function withShadcnUI(
     TodoList: ListsUI.TodoList,
     Image: ImageUI,
     Code: CodeUI,
+    Tabs: TabsUI,
   };
 
   return plugins.map((plugin) => {

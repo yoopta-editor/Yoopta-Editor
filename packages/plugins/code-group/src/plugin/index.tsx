@@ -1,5 +1,4 @@
-import { YooptaPlugin, generateId } from '@yoopta/editor';
-import { Transforms } from 'slate';
+import { YooptaPlugin } from '@yoopta/editor';
 
 import { CodeGroupCommands } from '../commands';
 import type { CodeGroupElementMap, CodeGroupPluginBlockOptions } from '../types';

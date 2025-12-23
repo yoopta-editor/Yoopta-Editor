@@ -4482,14 +4482,6 @@
   dependencies:
     lucide-react "^0.378.0"
 
-"@yoopta/action-menu-list@*":
-  version "4.9.9"
-  resolved "https://registry.npmjs.org/@yoopta/action-menu-list/-/action-menu-list-4.9.9.tgz"
-  integrity sha512-xsnKK0Oa2klq+m0AgsXeyMthMSKumrpq+cbr2WMDTTbPfDW4w9TEpvkG5HRmzhyXHSZw5xEsqaZzDE1htyD/fA==
-  dependencies:
-    "@floating-ui/react" "^0.26.9"
-    "@radix-ui/react-icons" "^1.3.0"
-
 "@yoopta/action-menu-list@latest":
   version "4.9.9"
   resolved "https://registry.npmjs.org/@yoopta/action-menu-list/-/action-menu-list-4.9.9.tgz#6097b1351538207abdb651a2e65d31bbfb4a7cb6"
@@ -4599,7 +4591,7 @@
     "@radix-ui/react-icons" "^1.3.0"
     re-resizable "^6.9.11"
 
-"@yoopta/link-tool@*", "@yoopta/link-tool@latest":
+"@yoopta/link-tool@latest":
   version "4.9.9"
   resolved "https://registry.npmjs.org/@yoopta/link-tool/-/link-tool-4.9.9.tgz#7fbf741f3ca6555413eac343d177610f47555f25"
   integrity sha512-k/cBrRlGT10IBHEi1fVRvNkYhXGkkpo5pyadVE/ype0uYxIoT9iX05Z3fstd818werVmUWdgmi7LQDnbmgUG7A==

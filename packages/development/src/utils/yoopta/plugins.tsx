@@ -12,6 +12,7 @@ import Image from '@yoopta/image';
 import Link from '@yoopta/link';
 import Lists from '@yoopta/lists';
 import Table from '@yoopta/table';
+import Tabs from '@yoopta/tabs';
 
 import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
@@ -62,6 +63,9 @@ export const YOOPTA_PLUGINS = withShadcnUI([
     },
   }),
   Paragraph,
+  Tabs.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
   Headings.HeadingOne,
   Headings.HeadingTwo,
   Headings.HeadingThree,

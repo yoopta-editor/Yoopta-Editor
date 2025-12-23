@@ -1,67 +1,55 @@
 import { YooptaContentValue } from '@yoopta/editor';
 
 export const DEFAULT_VALUE = {
-  'a661a6ac-61ce-4ea3-a16a-ef60cb23edbb': {
-    id: 'a661a6ac-61ce-4ea3-a16a-ef60cb23edbb',
-    type: 'Table',
+  '1367eae6-3492-4929-9e3a-ce782c7129b7': {
+    id: '1367eae6-3492-4929-9e3a-ce782c7129b7',
+    type: 'Tabs',
     value: [
       {
-        id: 'd6ce6bb6-a21d-4105-b4a5-5d755b8c969b',
-        type: 'table',
+        id: 'c960a8d8-16ff-4a96-a0e9-b4069a5d178b',
+        type: 'tabs-container',
         children: [
           {
-            id: '4401b48b-daae-4f80-bcbd-1f6409e6c1a5',
-            type: 'table-row',
+            id: '6524ffdd-6ced-4120-b15e-30b2bb111d2b',
+            type: 'tabs-list',
             children: [
               {
-                id: '6cef1e18-28f9-4882-a94c-3f8f52a82d08',
-                type: 'table-data-cell',
+                id: '0a6c330e-318d-4a8c-9da4-ab92687aee4e',
+                type: 'tabs-item-heading',
                 children: [
                   {
-                    text: 'Cell 1',
+                    text: 'Tab 1',
                   },
                 ],
                 props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
                   nodeType: 'block',
+                  isActive: false,
                 },
               },
               {
-                id: '35996fe4-ee86-45b0-bf7e-4bb257350891',
-                type: 'table-data-cell',
+                id: 'c35debfe-62b2-4221-b1a8-547914d42d76',
+                type: 'tabs-item-heading',
                 children: [
                   {
-                    text: 'Cell 2',
+                    text: 'Tab 2',
                   },
                 ],
                 props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
                   nodeType: 'block',
+                  isActive: false,
                 },
               },
               {
-                id: '3e8f951e-30a5-4cec-8955-74a256091c9f',
-                type: 'table-data-cell',
+                id: '4125e499-3f2e-4334-8c90-ad261e76b845',
+                type: 'tabs-item-heading',
                 children: [
                   {
-                    text: 'Cell 3',
+                    text: 'Tab 3',
                   },
                 ],
                 props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
                   nodeType: 'block',
+                  isActive: true,
                 },
               },
             ],
@@ -70,59 +58,11 @@ export const DEFAULT_VALUE = {
             },
           },
           {
-            id: '1d72a1f2-428c-4488-aaac-cab5cdada9d4',
-            type: 'table-row',
+            id: '441bf6fc-7f06-4eb2-8ed0-9addc2238f40',
+            type: 'tabs-item-content',
             children: [
               {
-                id: 'ef91f78b-c9b7-4858-9b74-be068f67082f',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 4',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
-              },
-              {
-                id: 'ea402f74-a528-4c12-8988-598d28ac7d2c',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 5',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
-              },
-              {
-                id: 'ce74c7f2-4626-403a-bbb6-f3de8b047d36',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 6',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
+                text: 'Tab 1 content',
               },
             ],
             props: {
@@ -130,59 +70,23 @@ export const DEFAULT_VALUE = {
             },
           },
           {
-            id: 'd2f20cfc-6268-495c-8281-c3564611f255',
-            type: 'table-row',
+            id: 'c27107c4-f071-42ff-ac1d-a072eca4458a',
+            type: 'tabs-item-content',
             children: [
               {
-                id: '6fbb0393-565b-45bf-86cd-5d1d36773ead',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 7',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
+                text: 'Tab 2 content',
               },
+            ],
+            props: {
+              nodeType: 'block',
+            },
+          },
+          {
+            id: '3a36a903-e848-4172-8269-e680b50d0179',
+            type: 'tabs-item-content',
+            children: [
               {
-                id: '567dd2d0-698a-422a-a12b-dea03330b164',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 8',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
-              },
-              {
-                id: '5a295c96-9c28-40e1-8b33-7aefed716c14',
-                type: 'table-data-cell',
-                children: [
-                  {
-                    text: 'Cell 9',
-                  },
-                ],
-                props: {
-                  asHeader: false,
-                  verticalAlign: 'top',
-                  align: 'left',
-                  colSpan: 1,
-                  rowSpan: 1,
-                  nodeType: 'block',
-                },
+                text: 'Tab 3 content',
               },
             ],
             props: {
@@ -191,9 +95,7 @@ export const DEFAULT_VALUE = {
           },
         ],
         props: {
-          headerRow: false,
-          headerColumn: false,
-          columnWidths: [200, 150, 250],
+          tab: 0,
           nodeType: 'block',
         },
       },

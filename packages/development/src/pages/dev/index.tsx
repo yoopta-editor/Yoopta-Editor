@@ -23,6 +23,29 @@ const YooptaUIPackageExample = () => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
 
+  const insertTabs = () => {
+    const elements = editor.y('tabs-container', {
+      children: [
+        editor.y('tabs-list', {
+          children: [
+            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 1')] }),
+            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 2')] }),
+            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 3')] }),
+          ],
+        }),
+        editor.y('tabs-item-content', { children: [editor.y.text('Tab 1 content')] }),
+        editor.y('tabs-item-content', { children: [editor.y.text('Tab 2 content')] }),
+        editor.y('tabs-item-content', { children: [editor.y.text('Tab 3 content')] }),
+      ],
+    });
+
+    editor.insertBlock('Tabs', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
   const insertTable = () => {
     const elements = editor.y('table', {
       props: { columnWidths: [200, 150, 250] },
@@ -364,6 +387,11 @@ const YooptaUIPackageExample = () => {
           onClick={insertTable}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Insert Table
+        </button>
+        <button
+          onClick={insertTabs}
+          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
+          Insert Tabs
         </button>
       </div>
       <YooptaEditor

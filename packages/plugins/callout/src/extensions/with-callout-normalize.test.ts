@@ -4,7 +4,7 @@ import { Editor, Element, Transforms } from 'slate';
 import { createTestNode } from 'test-utils';
 import { vi } from 'vitest';
 
-import { withCalloutNormalize } from './withCalloutNormalize';
+import { withCalloutNormalize } from './with-callout-normalize';
 
 describe('withCalloutNormalize', () => {
   let editor: Partial<YooEditor>;
