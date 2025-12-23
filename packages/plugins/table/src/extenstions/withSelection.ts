@@ -53,7 +53,7 @@ function getCellsInRectangle(
   const maxCol = Math.max(startCol, endCol);
 
   // Iterate through rows in range
-  for (let rowIndex = minRow; rowIndex <= maxRow; rowIndex++) {
+  for (let rowIndex = minRow; rowIndex <= maxRow; rowIndex += 1) {
     const rowPath = [...tablePath, rowIndex];
 
     try {
@@ -64,7 +64,7 @@ function getCellsInRectangle(
       }
 
       // Iterate through cells in row
-      for (let colIndex = minCol; colIndex <= maxCol; colIndex++) {
+      for (let colIndex = minCol; colIndex <= maxCol; colIndex += 1) {
         const cellPath = [...rowPath, colIndex];
 
         try {
@@ -91,14 +91,12 @@ export function withSelection(slate: SlateEditor): SlateEditor {
   const { apply } = slate;
 
   slate.apply = (op) => {
-    // Only process selection operations
     if (!Operation.isSelectionOperation(op) || !op.newProperties) {
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
       TABLE_CELLS_IN_SELECTION.delete(slate);
       return apply(op);
     }
 
-    // Build the new selection
     const selection = {
       ...slate.selection,
       ...op.newProperties,
@@ -110,7 +108,6 @@ export function withSelection(slate: SlateEditor): SlateEditor {
       return apply(op);
     }
 
-    // Find start and end cells
     const [fromEntry] = Editor.nodes(slate, {
       match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
       at: Range.start(selection),
@@ -121,7 +118,6 @@ export function withSelection(slate: SlateEditor): SlateEditor {
       at: Range.end(selection),
     });
 
-    // If not in table cells, clear selection
     if (!fromEntry || !toEntry) {
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
       TABLE_CELLS_IN_SELECTION.delete(slate);
@@ -131,18 +127,15 @@ export function withSelection(slate: SlateEditor): SlateEditor {
     const [, fromPath] = fromEntry;
     const [, toPath] = toEntry;
 
-    // If same cell, clear multi-selection
     if (Path.equals(fromPath, toPath)) {
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
       TABLE_CELLS_IN_SELECTION.delete(slate);
       return apply(op);
     }
 
-    // Get positions
     const fromPos = getCellPosition(fromPath);
     const toPos = getCellPosition(toPath);
 
-    // Check if cells are in the same table
     const fromTableEntry = getTableNode(slate, fromPath);
     const toTableEntry = getTableNode(slate, toPath);
 
@@ -155,14 +148,12 @@ export function withSelection(slate: SlateEditor): SlateEditor {
     const [, fromTablePath] = fromTableEntry;
     const [, toTablePath] = toTableEntry;
 
-    // Must be in same table
     if (!Path.equals(fromTablePath, toTablePath)) {
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
       TABLE_CELLS_IN_SELECTION.delete(slate);
       return apply(op);
     }
 
-    // Get all cells in rectangular selection
     const cellsInRectangle = getCellsInRectangle(
       slate,
       fromTablePath,
@@ -172,20 +163,17 @@ export function withSelection(slate: SlateEditor): SlateEditor {
       toPos.colIndex,
     );
 
-    // If no cells in rectangle, clear selection
     if (cellsInRectangle.length === 0) {
       TABLE_SLATE_TO_SELECTION_SET.delete(slate);
       TABLE_CELLS_IN_SELECTION.delete(slate);
       return apply(op);
     }
 
-    // Build WeakSet for O(1) lookup
     const selectedSet = new WeakSet<SlateElement>();
     cellsInRectangle.forEach(([cell]) => {
       selectedSet.add(cell);
     });
 
-    // Update WeakMaps
     TABLE_CELLS_IN_SELECTION.set(slate, cellsInRectangle);
     TABLE_SLATE_TO_SELECTION_SET.set(slate, selectedSet);
 

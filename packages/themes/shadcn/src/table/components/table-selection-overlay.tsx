@@ -202,7 +202,6 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
         }}
       />
 
-      {/* Options button - directly on the right border */}
       <div
         className="absolute z-20 pointer-events-auto"
         style={{
@@ -215,12 +214,8 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
             <Button
               variant="secondary"
               size="icon"
-              // height - 16px, width - 16px, bg primary
               className="h-4 w-4 rounded-full shadow-lg bg-primary hover:bg-primary/90"
-              onMouseDown={(e) => {
-                // Prevent losing focus from table
-                e.preventDefault();
-              }}>
+              onMouseDown={(e) => e.preventDefault()}>
               <MoreVertical className="h-3 w-3 text-primary-foreground" />
             </Button>
           </PopoverTrigger>

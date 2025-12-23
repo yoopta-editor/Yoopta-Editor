@@ -87,13 +87,16 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
     }
   });
 
+  console.log('allContent', allContent);
+
   // Batch operations
   Editor.withoutNormalizing(slate, () => {
-    // Update anchor cell with merged content and spans
     const newContent = [
       ...anchorCellElement.children,
       ...(allContent.length > 0 ? allContent : []),
     ];
+
+    console.log('newContent', newContent);
 
     Transforms.setNodes(
       slate,

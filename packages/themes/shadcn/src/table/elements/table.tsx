@@ -6,7 +6,6 @@ import { TABLE_SLATE_TO_SELECTION_SET } from '@yoopta/table';
 
 import { TableBody, Table as TableUI } from '../../ui/table';
 import { TableControls } from '../components/table-controls';
-import { TableMultiSelectionToolbar } from '../components/table-multi-selection-toolbar';
 import { TableSelectionOverlay } from '../components/table-selection-overlay';
 
 export const Table = (props: PluginElementRenderProps) => {
@@ -21,7 +20,7 @@ export const Table = (props: PluginElementRenderProps) => {
   const isSelecting = slate ? TABLE_SLATE_TO_SELECTION_SET.get(slate) : null;
 
   return (
-    <>
+    <div className="p-4" data-yoopta-block-id={props.blockId} data-table-container>
       <TableUI {...attributes} data-is-selecting={!!isSelecting}>
         <colgroup>
           {tableElement.props?.columnWidths?.map((width, i) => (
@@ -34,6 +33,6 @@ export const Table = (props: PluginElementRenderProps) => {
 
       <TableSelectionOverlay blockId={props.blockId} />
       <TableControls blockId={props.blockId} />
-    </>
+    </div>
   );
 };

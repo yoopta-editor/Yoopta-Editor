@@ -4,8 +4,10 @@ import type { Span } from 'slate';
 import { Editor, Element, Path, Transforms } from 'slate';
 
 import type { InsertTableOptions, TableCellElement, TableElement, TableRowElement } from '../types';
-import { clearContents, ClearContentsOptions } from './clear-contents';
-import { mergeCells, MergeCellsOptions } from './merge-cells';
+import type { ClearContentsOptions } from './clear-contents';
+import { clearContents } from './clear-contents';
+import type { MergeCellsOptions } from './merge-cells';
+import { mergeCells } from './merge-cells';
 
 type Options = {
   path?: Location | Span;
@@ -110,7 +112,7 @@ export const TableCommands: TableCommands = {
       const { insertMode = 'after', path = slate.selection, select = true } = options || {};
 
       const currentRowElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-ignore [FIXME] - Fix this
+        // @ts-expect-error [FIXME] - Fix this
         path,
         type: 'table-row',
       });
@@ -147,7 +149,7 @@ export const TableCommands: TableCommands = {
       const { path = slate.selection } = options || {};
 
       const currentRowElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-ignore [FIXME] - Fix this
+        // @ts-expect-error [FIXME] - Fix this
         path,
         type: 'table-row',
       });
@@ -211,7 +213,7 @@ export const TableCommands: TableCommands = {
       const { insertMode = 'after', path = slate.selection, select = true } = options || {};
 
       const dataCellElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-ignore [FIXME] - Fix this
+        // @ts-expect-error [FIXME] - Fix this
         path,
         type: 'table-data-cell',
       });
@@ -261,7 +263,7 @@ export const TableCommands: TableCommands = {
       if (rows[0][0].children.length <= 1) return;
 
       const dataCellElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-ignore [FIXME] - Fix this
+        // @ts-expect-error [FIXME] - Fix this
         path,
         type: 'table-data-cell',
       });
