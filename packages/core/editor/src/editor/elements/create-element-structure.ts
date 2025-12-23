@@ -5,6 +5,7 @@ import { generateId } from '../../utils/generateId';
 import type { SlateElement, SlateElementTextNode, YooEditor } from '../types';
 
 export type ElementStructureOptions = {
+  id?: string;
   props?: Record<string, unknown>;
   children?: Descendant[]; // Can be SlateElement[] or Text nodes
 };
@@ -125,7 +126,7 @@ export function yInline(
     );
   }
 
-  const { props: customProps, children: customChildren } = options;
+  const { id: customId, props: customProps, children: customChildren } = options;
 
   // Merge default props from config with custom props
   // Ensure nodeType is set to 'inline'
@@ -147,7 +148,7 @@ export function yInline(
   }
 
   return {
-    id: generateId(),
+    id: customId ?? generateId(),
     type,
     children,
     props,
@@ -215,7 +216,7 @@ export function y(
     );
   }
 
-  const { props: customProps, children: customChildren } = options;
+  const { id: customId, props: customProps, children: customChildren } = options;
 
   // Merge default props from config with custom props
   const props = {
@@ -245,7 +246,7 @@ export function y(
   }
 
   return {
-    id: generateId(),
+    id: customId ?? generateId(),
     type,
     children,
     props,

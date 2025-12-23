@@ -19,7 +19,6 @@ import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 import { StepsPlugin } from '@/components/plugins/steps-plugin';
-import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
 import withShadcnUI from '@yoopta/themes-shadcn';
 // import withMaterialUI from '@yoopta/themes-material';
@@ -88,9 +87,6 @@ export const YOOPTA_PLUGINS = withShadcnUI([
     allowedPlugins: ALLOWED_PLUGINS,
   }),
   StepsPlugin.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
-  }),
-  TabsPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
   Link,

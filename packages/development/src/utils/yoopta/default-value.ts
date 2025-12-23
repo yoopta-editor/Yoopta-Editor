@@ -8,6 +8,10 @@ export const DEFAULT_VALUE = {
       {
         id: 'c960a8d8-16ff-4a96-a0e9-b4069a5d178b',
         type: 'tabs-container',
+        props: {
+          activeTabId: 'c35debfe-62b2-4221-b1a8-547914d42d76',
+          nodeType: 'block',
+        },
         children: [
           {
             id: '6524ffdd-6ced-4120-b15e-30b2bb111d2b',
@@ -23,7 +27,6 @@ export const DEFAULT_VALUE = {
                 ],
                 props: {
                   nodeType: 'block',
-                  isActive: false,
                 },
               },
               {
@@ -36,7 +39,6 @@ export const DEFAULT_VALUE = {
                 ],
                 props: {
                   nodeType: 'block',
-                  isActive: false,
                 },
               },
               {
@@ -49,7 +51,6 @@ export const DEFAULT_VALUE = {
                 ],
                 props: {
                   nodeType: 'block',
-                  isActive: true,
                 },
               },
             ],
@@ -67,6 +68,7 @@ export const DEFAULT_VALUE = {
             ],
             props: {
               nodeType: 'block',
+              referenceId: '0a6c330e-318d-4a8c-9da4-ab92687aee4e',
             },
           },
           {
@@ -79,6 +81,7 @@ export const DEFAULT_VALUE = {
             ],
             props: {
               nodeType: 'block',
+              referenceId: 'c35debfe-62b2-4221-b1a8-547914d42d76',
             },
           },
           {
@@ -91,13 +94,10 @@ export const DEFAULT_VALUE = {
             ],
             props: {
               nodeType: 'block',
+              referenceId: '4125e499-3f2e-4334-8c90-ad261e76b845',
             },
           },
         ],
-        props: {
-          tab: 0,
-          nodeType: 'block',
-        },
       },
     ],
     meta: {

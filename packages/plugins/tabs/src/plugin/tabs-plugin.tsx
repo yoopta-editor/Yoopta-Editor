@@ -20,29 +20,22 @@ const TabsItemContent = ({ attributes, children }: PluginElementRenderProps) => 
   <div {...attributes}>{children}</div>
 );
 
-// const elements = editor.y('tabs-container', {
-//   children: [
-//     editor.y('tabs-list', {
-//       children: [
-//         editor.y('tabs-item-heading', { children: [editor.y.text('Tab 1')] }),
-//         editor.y('tabs-item-heading', { children: [editor.y.text('Tab 2')] }),
-//         editor.y('tabs-item-heading', { children: [editor.y.text('Tab 3')] }),
-//       ],
-//     }),
-//     editor.y('tabs-item-content', { children: [editor.y.text('Tab 1 content')] }),
-//     editor.y('tabs-item-content', { children: [editor.y.text('Tab 2 content')] }),
-//     editor.y('tabs-item-content', { children: [editor.y.text('Tab 3 content')] }),
-//   ],
-// });
+const tabsContainerProps = {
+  activeTabId: null,
+};
+
+const tabsContentProps = {
+  referenceId: null,
+};
 
 const Tabs = new YooptaPlugin<TabsElementMap>({
   type: 'Tabs',
   elements: (
-    <tabs-container render={TabsContainer}>
+    <tabs-container render={TabsContainer} props={tabsContainerProps}>
       <tabs-list render={TabsList}>
         <tabs-item-heading render={TabsItemHeading} />
       </tabs-list>
-      <tabs-item-content render={TabsItemContent} />
+      <tabs-item-content render={TabsItemContent} props={tabsContentProps} />
     </tabs-container>
   ),
   commands: TabsCommands,

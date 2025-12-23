@@ -25,17 +25,27 @@ const YooptaUIPackageExample = () => {
 
   const insertTabs = () => {
     const elements = editor.y('tabs-container', {
+      props: { activeTabId: 'tab-1' },
       children: [
         editor.y('tabs-list', {
           children: [
-            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 1')] }),
-            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 2')] }),
-            editor.y('tabs-item-heading', { children: [editor.y.text('Tab 3')] }),
+            editor.y('tabs-item-heading', { id: 'tab-1', children: [editor.y.text('Tab 1')] }),
+            editor.y('tabs-item-heading', { id: 'tab-2', children: [editor.y.text('Tab 2')] }),
+            editor.y('tabs-item-heading', { id: 'tab-3', children: [editor.y.text('Tab 3')] }),
           ],
         }),
-        editor.y('tabs-item-content', { children: [editor.y.text('Tab 1 content')] }),
-        editor.y('tabs-item-content', { children: [editor.y.text('Tab 2 content')] }),
-        editor.y('tabs-item-content', { children: [editor.y.text('Tab 3 content')] }),
+        editor.y('tabs-item-content', {
+          props: { referenceId: 'tab-1' },
+          children: [editor.y.text('Tab 1 content')],
+        }),
+        editor.y('tabs-item-content', {
+          props: { referenceId: 'tab-2' },
+          children: [editor.y.text('Tab 2 content')],
+        }),
+        editor.y('tabs-item-content', {
+          props: { referenceId: 'tab-3' },
+          children: [editor.y.text('Tab 3 content')],
+        }),
       ],
     });
 
