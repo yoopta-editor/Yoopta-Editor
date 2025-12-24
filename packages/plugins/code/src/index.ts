@@ -1,4 +1,4 @@
-import { Code } from './plugin';
+import { Code } from './plugin/code-plugin';
 import { CodeElement, CodeElementProps } from './types';
 
 export { HighlightedCodeOverlay, useHighlighter } from './components/highlighted-code-overlay';

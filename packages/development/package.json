@@ -43,6 +43,7 @@
     "@yoopta/themes-shadcn": "*",
     "@yoopta/themes-material": "*",
     "@yoopta/tabs": "*",
+    "@yoopta/code-group": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",

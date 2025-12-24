@@ -1,8 +1,7 @@
-import { useCallback } from 'react';
-import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { useYooptaEditor } from '@yoopta/editor';
+import { TabsCommands } from '@yoopta/tabs';
 import { X } from 'lucide-react';
-import { Editor, Element, Transforms } from 'slate';
 
 import { TabsTrigger } from '../../ui/tabs';
 
@@ -10,36 +9,15 @@ export const TabsItemHeading = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;
   const editor = useYooptaEditor();
 
-  const deleteTabItem = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const slate = Blocks.getBlockSlate(editor, { id: blockId });
-    if (!slate) return;
-
-    Editor.withoutNormalizing(slate, () => {
-      Transforms.removeNodes(slate, {
-        at: [0],
-        match: (n) =>
-          Element.isElement(n) &&
-          n.type === 'tabs-item-content' &&
-          n.props?.referenceId === element.id,
-      });
-
-      Transforms.removeNodes(slate, {
-        match: (n) =>
-          Element.isElement(n) &&
-          (n as SlateElement).type === 'tabs-item-heading' &&
-          (n as SlateElement).id === element.id,
-      });
-    });
+  const deleteTabItem = () => {
+    TabsCommands.deleteTabItem(editor, blockId, { tabId: element.id });
   };
 
   return (
     <TabsTrigger
       {...attributes}
       value={element.id}
-      className="relative group/tab flex items-center gap-2 pr-8">
+      className="relative group/tab flex items-center gap-2 pr-8 whitespace-nowrap">
       <div className="flex-1 min-w-0">{children}</div>
       <span
         contentEditable={false}

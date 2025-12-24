@@ -1,4 +1,4 @@
-import { CodeGroup } from './plugin';
+import { CodeGroup } from './plugin/code-group-plugin';
 import { CodeGroupElement, CodeGroupElementProps } from './types';
 
 export { HighlightedCodeOverlay, useHighlighter } from './components/highlighted-code-overlay';

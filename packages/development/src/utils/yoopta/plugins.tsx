@@ -4,7 +4,7 @@ import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
 // import Mention from '@yoopta/mention';
-import { Elements, PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
+import { generateId, YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
 import Headings from '@yoopta/headings';
@@ -13,6 +13,7 @@ import Link from '@yoopta/link';
 import Lists from '@yoopta/lists';
 import Table from '@yoopta/table';
 import Tabs from '@yoopta/tabs';
+import CodeGroup from '@yoopta/code-group';
 
 import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
@@ -64,6 +65,31 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   Paragraph,
   Tabs.extend({
     allowedPlugins: ALLOWED_PLUGINS,
+  }),
+  CodeGroup.extend({
+    lifecycle: {
+      beforeCreate: (editor: YooEditor) => {
+        const tabId = generateId();
+
+        return editor.y('code-group-container', {
+          props: { activeTabId: tabId },
+          children: [
+            editor.y('code-group-list', {
+              children: [
+                editor.y('code-group-item-heading', {
+                  id: tabId,
+                  children: [editor.y.text('hello-world.ts')],
+                }),
+              ],
+            }),
+            editor.y('code-group-content', {
+              props: { referenceId: tabId, language: 'typescript', theme: 'dark-plus' },
+              children: [editor.y.text('console.log("Hello, world!");')],
+            }),
+          ],
+        });
+      },
+    },
   }),
   Headings.HeadingOne,
   Headings.HeadingTwo,

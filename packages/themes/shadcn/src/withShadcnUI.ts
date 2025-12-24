@@ -4,6 +4,7 @@ import { AccordionUI } from './accordion';
 import { BlockquoteUI } from './blockquote';
 import { CalloutUI } from './callout';
 import { CodeUI } from './code';
+import { CodeGroupUI } from './code-group';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -71,6 +72,7 @@ export function withShadcnUI(
     Image: ImageUI,
     Code: CodeUI,
     Tabs: TabsUI,
+    CodeGroup: CodeGroupUI,
   };
 
   return plugins.map((plugin) => {

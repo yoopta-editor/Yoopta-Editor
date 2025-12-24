@@ -1,5 +1,6 @@
-import type { PluginElementRenderProps } from '@yoopta/editor';
+import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { YooptaPlugin } from '@yoopta/editor';
+import { Editor, Element, Transforms } from 'slate';
 
 import { TabsCommands } from '../commands/tabs-commands';
 import type { TabsElementMap } from '../types';
@@ -43,6 +44,37 @@ const Tabs = new YooptaPlugin<TabsElementMap>({
     display: {
       title: 'Tabs',
       description: 'Toggle content in tabs',
+    },
+  },
+  events: {
+    onKeyDown: (editor, slate, options) => (event) => {
+      if (options.hotkeys.isEnter(event)) {
+        if (!slate.selection) return;
+        event.preventDefault();
+
+        const nodeEntry = Editor.above<SlateElement>(slate, {
+          at: slate.selection,
+          match: (n) => Element.isElement(n),
+        });
+
+        if (!nodeEntry) return;
+
+        const [node] = nodeEntry;
+
+        if (node.type === 'tabs-item-content') {
+          event.preventDefault();
+          Transforms.insertText(slate, '\n');
+          return;
+        }
+
+        if (node.type === 'tabs-item-heading') {
+          event.preventDefault();
+          TabsCommands.addTabItem(editor, options.currentBlock.id, { at: slate.selection });
+          return;
+        }
+
+        Transforms.insertText(slate, '\n');
+      }
     },
   },
 });
