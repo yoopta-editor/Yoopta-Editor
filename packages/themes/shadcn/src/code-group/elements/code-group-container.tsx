@@ -1,8 +1,8 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki';
-import { Editor, Element, Transforms } from 'slate';
+import { Element, Transforms } from 'slate';
 
 import { Tabs } from '../../ui/tabs';
 
@@ -16,40 +16,11 @@ declare global {
 export const CodeGroupContainer = (props: PluginElementRenderProps) => {
   const { attributes, children, blockId, element } = props;
   const editor = useYooptaEditor();
-
-  // Get theme from active code-group-content
-  const activeTheme = useMemo(() => {
-    const slate = Blocks.getBlockSlate(editor, { id: blockId });
-    if (!slate) return 'github-dark';
-
-    const activeTabId = element.props?.activeTabId;
-    if (!activeTabId) return 'github-dark';
-
-    try {
-      const contentNodes = Editor.nodes<SlateElement>(slate, {
-        at: [0],
-        match: (n) =>
-          Element.isElement(n) &&
-          (n as SlateElement).type === 'code-group-content' &&
-          (n as SlateElement).props?.referenceId === activeTabId,
-      });
-
-      const contentEntry = Array.from(contentNodes)[0];
-      if (contentEntry) {
-        const contentElement = contentEntry[0] as SlateElement;
-        return contentElement.props?.theme ?? 'github-dark';
-      }
-    } catch (error) {
-      // Element not found
-    }
-
-    return 'github-dark';
-  }, [editor, blockId, element.props?.activeTabId]);
+  const theme = props.element.props?.theme;
 
   useEffect(() => {
-    console.log('CodeGroupContainer activeTheme', activeTheme);
     if (window.yShiki) {
-      const themeData = window.yShiki.getTheme(activeTheme);
+      const themeData = window.yShiki.getTheme(theme);
 
       const activeBg =
         themeData.colors?.['tab.activeBackground'] ??
@@ -98,7 +69,7 @@ export const CodeGroupContainer = (props: PluginElementRenderProps) => {
         document.documentElement.style.setProperty(`--${key}`, value);
       });
     }
-  }, [activeTheme]);
+  }, [theme]);
 
   const onValueChange = (value: string) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });

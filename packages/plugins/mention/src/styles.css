@@ -43,71 +43,71 @@
 }
 
 .yoopta-mention-tag {
-  @apply yoo-mention-cursor-pointer yoo-mention-py-[0.1rem] yoo-mention-px-[0.3rem] yoo-mention-mx-[1px] yoo-mention-align-baseline yoo-mention-inline-flex yoo-mention-items-center yoo-mention-gap-[0.3rem] yoo-mention-rounded-[4px] yoo-mention-text-[var(--mention-text-color)] yoo-mention-bg-[var(--mention-bg-color)] yoo-mention-text-[0.8em] yoo-mention-leading-[120%] yoo-mention-transition-colors yoo-mention-duration-[var(--mention-transition-duration)]
+  @apply yoo-mention-cursor-pointer yoo-mention-py-[0.1rem] yoo-mention-px-[0.3rem] yoo-mention-mx-[1px] yoo-mention-align-baseline yoo-mention-inline-flex yoo-mention-items-center yoo-mention-gap-[0.3rem] yoo-mention-rounded-[4px] yoo-mention-text-[var(--mention-text-color)] yoo-mention-bg-[var(--mention-bg-color)] yoo-mention-text-[0.8em] yoo-mention-leading-[120%] yoo-mention-transition-colors yoo-mention-duration-[var(--mention-transition-duration)];
 }
 
 .yoopta-mention-tag-avatar {
-  @apply yoo-mention-w-[var(--mention-avatar-size)] yoo-mention-h-[var(--mention-avatar-size)] yoo-mention-rounded-full
+  @apply yoo-mention-w-[var(--mention-avatar-size)] yoo-mention-h-[var(--mention-avatar-size)] yoo-mention-rounded-full;
 }
 
 .yoopta-mention-tag:hover {
-  @apply yoo-mention-bg-[var(--mention-hover-bg)] yoo-mention-text-[var(--mention-hover-text)]
+  @apply yoo-mention-bg-[var(--mention-hover-bg)] yoo-mention-text-[var(--mention-hover-text)];
 }
 
 .yoopta-mention-tag-selected {
-  @apply yoo-mention-bg-[var(--mention-bg-selected)]
+  @apply yoo-mention-bg-[var(--mention-bg-selected)];
 }
 
 /* Mention Command */
 .yoopta-command {
-  @apply yoo-mention-flex yoo-mention-h-full yoo-mention-w-full yoo-mention-flex-col yoo-mention-overflow-hidden yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-bg-[var(--mention-white)] yoo-mention-text-[var(--mention-neutral-900)] yoo-mention-shadow-[var(--mention-command-shadow)] yoo-mention-border yoo-mention-border-[var(--mention-neutral-200)]
+  @apply yoo-mention-flex yoo-mention-h-full yoo-mention-w-full yoo-mention-flex-col yoo-mention-overflow-hidden yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-bg-[var(--mention-white)] yoo-mention-text-[var(--mention-neutral-900)] yoo-mention-shadow-[var(--mention-command-shadow)] yoo-mention-border yoo-mention-border-[var(--mention-neutral-200)];
 }
 
 .yoopta-command-input-wrapper {
-  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-border-b yoo-mention-px-[var(--mention-command-input-padding)] yoo-mention-bg-[var(--mention-neutral-50)]
+  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-border-b yoo-mention-px-[var(--mention-command-input-padding)] yoo-mention-bg-[var(--mention-neutral-50)];
 }
 
 .yoopta-command-list {
-  @apply yoo-mention-max-h-[300px] yoo-mention-overflow-y-auto yoo-mention-overflow-x-hidden
+  @apply yoo-mention-max-h-[300px] yoo-mention-overflow-y-auto yoo-mention-overflow-x-hidden;
 }
 
 .yoopta-command-empty {
-  @apply yoo-mention-py-[var(--mention-command-padding)] yoo-mention-text-center yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-text-[var(--mention-neutral-500)]
+  @apply yoo-mention-py-[var(--mention-command-padding)] yoo-mention-text-center yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-text-[var(--mention-neutral-500)];
 }
 
 .yoopta-command-group {
-  @apply yoo-mention-overflow-hidden yoo-mention-p-[var(--mention-command-group-padding)] yoo-mention-text-[var(--mention-neutral-800)] [&_[cmdk-group-heading]]:yoo-mention-px-[var(--mention-command-padding)] [&_[cmdk-group-heading]]:yoo-mention-py-[var(--mention-command-group-padding)] [&_[cmdk-group-heading]]:yoo-mention-text-[length:var(--mention-command-text-size)] [&_[cmdk-group-heading]]:yoo-mention-font-medium [&_[cmdk-group-heading]]:yoo-mention-text-[var(--mention-neutral-400)]
+  @apply yoo-mention-overflow-hidden yoo-mention-p-[var(--mention-command-group-padding)] yoo-mention-text-[var(--mention-neutral-800)] [&_[cmdk-group-heading]]:yoo-mention-px-[var(--mention-command-padding)] [&_[cmdk-group-heading]]:yoo-mention-py-[var(--mention-command-group-padding)] [&_[cmdk-group-heading]]:yoo-mention-text-[length:var(--mention-command-text-size)] [&_[cmdk-group-heading]]:yoo-mention-font-medium [&_[cmdk-group-heading]]:yoo-mention-text-[var(--mention-neutral-400)];
 }
 
 .yoopta-command-item {
-  @apply yoo-mention-relative yoo-mention-flex yoo-mention-cursor-pointer yoo-mention-select-none yoo-mention-items-center yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-px-[var(--mention-command-item-padding)] yoo-mention-py-[var(--mention-command-item-padding)] yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-outline-none hover:yoo-mention-bg-[var(--mention-neutral-200)] hover:yoo-mention-text-black aria-selected:yoo-mention-bg-[var(--mention-neutral-100)] aria-selected:yoo-mention-text-black data-[disabled="true"]:yoo-mention-pointer-events-none data-[disabled="true"]:yoo-mention-opacity-50
+  @apply yoo-mention-relative yoo-mention-flex yoo-mention-cursor-pointer yoo-mention-select-none yoo-mention-items-center yoo-mention-rounded-[var(--mention-command-radius)] yoo-mention-px-[var(--mention-command-item-padding)] yoo-mention-py-[var(--mention-command-item-padding)] yoo-mention-text-[length:var(--mention-command-text-size)] yoo-mention-outline-none hover:yoo-mention-bg-[var(--mention-neutral-200)] hover:yoo-mention-text-black aria-selected:yoo-mention-bg-[var(--mention-neutral-100)] aria-selected:yoo-mention-text-black data-[disabled="true"]:yoo-mention-pointer-events-none data-[disabled="true"]:yoo-mention-opacity-50;
 }
 
 /* Mention Dropdown */
 .yoopta-mention-dropdown {
-  @apply yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-[var(--mention-white)] yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-border yoo-mention-shadow-[var(--mention-dropdown-shadow)] yoo-mention-w-[300px]
+  @apply yoo-mention-fixed yoo-mention-z-50 yoo-mention-bg-[var(--mention-white)] yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-border yoo-mention-shadow-[var(--mention-dropdown-shadow)] yoo-mention-w-[300px];
 }
 
 .yoopta-mention-dropdown-spinner {
-  @apply yoo-mention-flex yoo-mention-justify-center yoo-mention-items-center yoo-mention-p-[var(--mention-dropdown-padding)]
+  @apply yoo-mention-flex yoo-mention-justify-center yoo-mention-items-center yoo-mention-p-[var(--mention-dropdown-padding)];
 }
 
 .yoopta-mention-dropdown-spinner-circle {
-  @apply yoo-mention-h-5 yoo-mention-w-5 yoo-mention-border-2 yoo-mention-border-[var(--mention-blue-500)] yoo-mention-border-t-transparent yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-animate-spin
+  @apply yoo-mention-h-5 yoo-mention-w-5 yoo-mention-border-2 yoo-mention-border-[var(--mention-blue-500)] yoo-mention-border-t-transparent yoo-mention-rounded-[var(--mention-dropdown-radius)] yoo-mention-animate-spin;
 }
 
 .yoopta-mention-dropdown-item {
-  @apply yoo-mention-transition-colors yoo-mention-cursor-pointer
+  @apply yoo-mention-transition-colors yoo-mention-cursor-pointer;
 }
 
 .yoopta-mention-dropdown-item-selected {
-  @apply yoo-mention-bg-[var(--mention-neutral-100)]
+  @apply yoo-mention-bg-[var(--mention-neutral-100)];
 }
 
 .yoopta-mention-dropdown-item-content {
-  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-gap-[var(--mention-dropdown-item-gap)]
+  @apply yoo-mention-flex yoo-mention-items-center yoo-mention-gap-[var(--mention-dropdown-item-gap)];
 }
 
 .yoopta-mention-dropdown-item-avatar {
-  @apply yoo-mention-w-[var(--mention-dropdown-avatar-size)] yoo-mention-h-[var(--mention-dropdown-avatar-size)] yoo-mention-rounded-[var(--mention-dropdown-radius)]
+  @apply yoo-mention-w-[var(--mention-dropdown-avatar-size)] yoo-mention-h-[var(--mention-dropdown-avatar-size)] yoo-mention-rounded-[var(--mention-dropdown-radius)];
 }

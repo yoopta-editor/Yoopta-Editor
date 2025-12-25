@@ -35,7 +35,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     });
 
     // [TODO] - unnecesary
-  }, [childrenUnorderedKeys]);
+  }, [childrenUnorderedKeys, editor.children]);
 
   const blocks: JSX.Element[] = [];
 
@@ -62,7 +62,6 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
           marks={marks}
           events={plugin.events}
           elements={plugin.elements}
-          options={plugin.options}
           extensions={plugin.extensions}
           placeholder={placeholder}
         />
@@ -70,7 +69,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     );
   }
 
-  if (isReadOnly) return <>{blocks}</>;
+  if (isReadOnly) return blocks;
 
   return (
     <DndContext

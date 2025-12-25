@@ -172,7 +172,7 @@ export const useSlateEditor = (
     }
 
     return slate;
-  }, []);
+  }, [id, block.type]);
 
 export const useEventHandlers = (
   events: PluginDOMEvents | undefined,

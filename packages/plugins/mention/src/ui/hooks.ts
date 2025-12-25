@@ -30,7 +30,9 @@ export const useArrowNavigation = ({ editor, items, open, onSelect, onClose }) =
 
     const block = Blocks.getBlock(editor, { at: editor.path.current });
     if (!block) return;
-    const blockEl = document.querySelector(`[data-yoopta-block-id="${block.id}"] [data-slate-editor="true"]`);
+    const blockEl = document.querySelector(
+      `[data-yoopta-block-id="${block.id}"] [data-slate-editor="true"]`,
+    );
     if (!blockEl) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -10,6 +10,7 @@ import { ImageUI } from './image';
 import { LinkUI } from './link';
 import { ListsUI } from './lists';
 import { ParagraphUI } from './paragraph';
+import { StepsUI } from './steps';
 import { TableUI } from './table';
 import { TabsUI } from './tabs';
 
@@ -73,6 +74,7 @@ export function withShadcnUI(
     Code: CodeUI,
     Tabs: TabsUI,
     CodeGroup: CodeGroupUI,
+    Steps: StepsUI,
   };
 
   return plugins.map((plugin) => {

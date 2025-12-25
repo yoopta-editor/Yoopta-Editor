@@ -3026,7 +3026,7 @@
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.2"
 
-"@radix-ui/react-slot@1.2.4", "@radix-ui/react-slot@^1.0.2", "@radix-ui/react-slot@^1.1.0":
+"@radix-ui/react-slot@1.2.4", "@radix-ui/react-slot@^1.1.0":
   version "1.2.4"
   resolved "https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.4.tgz"
   integrity sha512-Jl+bCv8HxKnlTLVrcDE8zTMJ09R9/ukw4qBs/oZClOfoQk/cOTbDn+NceXfV7j09YPVQUryJPHurafcSg6EVKA==
@@ -9578,11 +9578,6 @@ lucide-react@^0.379.0:
   resolved "https://registry.npmjs.org/lucide-react/-/lucide-react-0.379.0.tgz"
   integrity sha512-KcdeVPqmhRldldAAgptb8FjIunM2x2Zy26ZBh1RsEUcdLIvsEmbcw7KpzFYUy5BbpGeWhPu9Z9J5YXfStiXwhg==
 
-lucide-react@^0.436.0:
-  version "0.436.0"
-  resolved "https://registry.npmjs.org/lucide-react/-/lucide-react-0.436.0.tgz"
-  integrity sha512-N292bIxoqm1aObAg0MzFtvhYwgQE6qnIOWx/GLj5ONgcTPH6N0fD9bVq/GfdeC9ZORBXozt/XeEKDpiB3x3vlQ==
-
 lucide-react@^0.453.0:
   version "0.453.0"
   resolved "https://registry.npmjs.org/lucide-react/-/lucide-react-0.453.0.tgz"
@@ -12674,6 +12669,19 @@ slash@^4.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-4.0.0.tgz"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
+slate-dom@^0.119.0:
+  version "0.119.0"
+  resolved "https://registry.npmjs.org/slate-dom/-/slate-dom-0.119.0.tgz#b7e12e89ee0c22def8960f6d44b7fcf31d43afe8"
+  integrity sha512-foc8a2NkE+1SldDIYaoqjhVKupt8RSuvHI868rfYOcypD4we5TT7qunjRKJ852EIRh/Ql8sSTepXgXKOUJnt1w==
+  dependencies:
+    "@juggle/resize-observer" "^3.4.0"
+    direction "^1.0.4"
+    is-hotkey "^0.2.0"
+    is-plain-object "^5.0.0"
+    lodash "^4.17.21"
+    scroll-into-view-if-needed "^3.1.0"
+    tiny-invariant "1.3.1"
+
 slate-react@^0.102.0:
   version "0.102.0"
   resolved "https://registry.npmjs.org/slate-react/-/slate-react-0.102.0.tgz"
@@ -12689,6 +12697,18 @@ slate-react@^0.102.0:
     scroll-into-view-if-needed "^3.1.0"
     tiny-invariant "1.3.1"
 
+slate-react@^0.120.0:
+  version "0.120.0"
+  resolved "https://registry.npmjs.org/slate-react/-/slate-react-0.120.0.tgz#1a043a54b5880a11fe9df93c16190ac507405913"
+  integrity sha512-CMEJzozriddBjVmbxNvc2erCkXUuEkgdXIdM+jEMvxWMb51z0zhIVzgoxbGprVpzwBXY8Kv7aZOUDVMomzWH/g==
+  dependencies:
+    "@juggle/resize-observer" "^3.4.0"
+    direction "^1.0.4"
+    is-hotkey "^0.2.0"
+    lodash "^4.17.21"
+    scroll-into-view-if-needed "^3.1.0"
+    tiny-invariant "1.3.1"
+
 slate@^0.102.0:
   version "0.102.0"
   resolved "https://registry.npmjs.org/slate/-/slate-0.102.0.tgz"
@@ -12697,6 +12717,11 @@ slate@^0.102.0:
     immer "^10.0.3"
     is-plain-object "^5.0.0"
     tiny-warning "^1.0.3"
+
+slate@^0.120.0:
+  version "0.120.0"
+  resolved "https://registry.npmjs.org/slate/-/slate-0.120.0.tgz#e674264070b709b58e7648475c57c08191a74691"
+  integrity sha512-CXK/DADGgMZb4z9RTtXylzIDOxvmNJEF9bXV2bAGkLWhQ3rm7GORY9q0H/W41YJvAGZsLbH7nnrhMYr550hWDQ==
 
 slice-ansi@^7.1.0:
   version "7.1.2"

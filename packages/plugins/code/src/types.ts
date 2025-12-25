@@ -1,9 +1,10 @@
 import type { SlateElement } from '@yoopta/editor';
+import type { BundledLanguage, BundledTheme } from 'shiki';
 
 export type CodePluginElements = 'code';
 export type CodeElementProps = {
-  language?: string;
-  theme?: string;
+  language?: BundledLanguage;
+  theme?: BundledTheme;
 };
 
 export type CodePluginBlockOptions = {};

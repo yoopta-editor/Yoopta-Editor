@@ -14,14 +14,15 @@
     "dist/"
   ],
   "peerDependencies": {
-    "@yoopta/editor": ">=4.0.0",
+    "@yoopta/editor": ">=4.9.9",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2",
     "@yoopta/code": "*",
     "@yoopta/image": "*",
     "@yoopta/table": "*",
     "@yoopta/code-group": "*",
-    "@yoopta/tabs": "*"
+    "@yoopta/tabs": "*",
+    "@yoopta/steps": "*"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.0"
@@ -32,7 +33,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-separator": "^1.1.0",
-    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-slot": "1.2.4",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",

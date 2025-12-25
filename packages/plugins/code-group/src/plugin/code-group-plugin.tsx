@@ -1,9 +1,14 @@
-import type { PluginElementRenderProps } from '@yoopta/editor';
-import { YooptaPlugin } from '@yoopta/editor';
-import { Transforms } from 'slate';
+import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
+import { Editor, Element, Range, Transforms } from 'slate';
 
 import { CodeGroupCommands } from '../commands';
-import type { CodeGroupElementMap, CodeGroupPluginBlockOptions } from '../types';
+import type {
+  CodeGroupContainerElementProps,
+  CodeGroupContentElementProps,
+  CodeGroupElementMap,
+  CodeGroupPluginBlockOptions,
+} from '../types';
 import { initHighlighter } from '../utils/shiki';
 
 initHighlighter();
@@ -24,14 +29,14 @@ const CodeGroupContent = ({ attributes, children }: PluginElementRenderProps) =>
   <div {...attributes}>{children}</div>
 );
 
-const codeGroupContainerProps = {
+const codeGroupContainerProps: CodeGroupContainerElementProps = {
   activeTabId: null,
+  theme: 'github-dark',
 };
 
-const codeGroupContentProps = {
+const codeGroupContentProps: CodeGroupContentElementProps = {
   referenceId: null,
-  language: 'javascript',
-  theme: 'github-dark',
+  language: 'typescript',
 };
 
 const CodeGroup = new YooptaPlugin<CodeGroupElementMap, CodeGroupPluginBlockOptions>({
@@ -53,23 +58,106 @@ const CodeGroup = new YooptaPlugin<CodeGroupElementMap, CodeGroupPluginBlockOpti
   },
   commands: CodeGroupCommands,
   events: {
-    onKeyDown:
-      (editor, slate, { hotkeys }) =>
-      (event) => {
+    onKeyDown: (editor, slate, options) => (event) => {
+      if (options.hotkeys.isEnter(event)) {
         if (!slate.selection) return;
+        event.preventDefault();
 
-        if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
+        const nodeEntry = Editor.above<SlateElement>(slate, {
+          at: slate.selection,
+          match: (n) => Element.isElement(n),
+        });
+
+        if (!nodeEntry) return;
+
+        const [node] = nodeEntry;
+
+        if (node.type === 'code-group-content') {
           event.preventDefault();
-          event.stopPropagation();
-
-          Transforms.insertText(slate, '\n', { at: slate.selection });
+          Transforms.insertText(slate, '\n');
+          return;
         }
-      },
-    onPaste: (editor, slate) => (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const text = event.clipboardData.getData('text/plain');
-      slate.insertText(text);
+
+        if (node.type === 'code-group-item-heading') {
+          event.preventDefault();
+          CodeGroupCommands.addTabItem(editor, options.currentBlock.id, { at: slate.selection });
+          return;
+        }
+
+        Transforms.insertText(slate, '\n');
+      }
+
+      if (options.hotkeys.isBackspace(event)) {
+        if (!slate.selection) return;
+        const nodeEntry = Editor.above<SlateElement>(slate, {
+          at: slate.selection,
+          match: (n) => Element.isElement(n),
+        });
+
+        if (!nodeEntry) return;
+
+        const [node, path] = nodeEntry;
+
+        const isStart = Editor.isStart(slate, slate.selection.anchor, path);
+        const isCollapsed = Range.isCollapsed(slate.selection);
+        if (
+          isStart &&
+          isCollapsed &&
+          (node.type === 'code-group-content' || node.type === 'code-group-item-heading')
+        ) {
+          event.preventDefault();
+        }
+      }
+
+      if (options.hotkeys.isSelect(event)) {
+        if (!slate.selection) {
+          event.preventDefault();
+          return;
+        }
+
+        const nodeEntry = Editor.above<SlateElement>(slate, {
+          at: slate.selection,
+          match: (n) => Element.isElement(n),
+        });
+
+        if (!nodeEntry) {
+          event.preventDefault();
+          return;
+        }
+
+        const [node, path] = nodeEntry;
+
+        if (node.type === 'code-group-content' || node.type === 'code-group-item-heading') {
+          event.preventDefault();
+          Transforms.select(slate, path);
+          return;
+        }
+
+        event.preventDefault();
+      }
+    },
+  },
+  lifecycle: {
+    beforeCreate: (editor) => {
+      const tabId = generateId();
+
+      return editor.y('code-group-container', {
+        props: { activeTabId: tabId, theme: 'github-dark' },
+        children: [
+          editor.y('code-group-list', {
+            children: [
+              editor.y('code-group-item-heading', {
+                id: tabId,
+                children: [editor.y.text('hello-world.ts')],
+              }),
+            ],
+          }),
+          editor.y('code-group-content', {
+            props: { referenceId: tabId, language: 'typescript' },
+            children: [editor.y.text('console.log("Hello World");')],
+          }),
+        ],
+      });
     },
   },
 });

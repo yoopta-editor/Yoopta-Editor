@@ -1,7 +1,8 @@
 [data-code-group-container] [data-state='active'] {
   background-color: var(--code-group-tab-active-bg) !important;
   color: var(--code-group-tab-active-fg) !important;
-  border-bottom-color: var(--code-group-tab-active-border) !important;
+  border-bottom-color: var(--code-group-tab-active-fg) !important;
+  /* border-bottom-color: var(--code-group-tab-active-border) !important; */
 }
 
 [data-code-group-container] [data-state='inactive'] {

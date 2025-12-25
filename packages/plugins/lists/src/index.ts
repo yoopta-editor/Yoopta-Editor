@@ -6,12 +6,6 @@ import {
   TodoListElementProps,
 } from './types';
 
-declare module 'slate' {
-  type CustomTypes = {
-    Element: NumberedListElement | BulletedListElement | TodoListElement;
-  };
-}
-
 export default LISTS;
 
 const NumberedList = LISTS.NumberedList;

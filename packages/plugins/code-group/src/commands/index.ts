@@ -1,19 +1,9 @@
-import type { SlateElement, YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Blocks, buildBlockData, generateId } from '@yoopta/editor';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
+import { Blocks, generateId } from '@yoopta/editor';
 import type { Location } from 'slate';
 import { Editor, Element, Path, Transforms } from 'slate';
 
-import type { CodeGroupElement, CodeGroupElementProps } from '../types';
-
-type CodeGroupElementOptions = {
-  text?: string;
-  props?: CodeGroupElementProps;
-};
-
-type InsertCodeOptions = CodeGroupElementOptions & {
-  at?: YooptaPathIndex;
-  focus?: boolean;
-};
+import type { CodeGroupContainerElement } from '../types';
 
 export type InsertTabOptions = {
   afterTabId?: string;
@@ -25,54 +15,31 @@ export type DeleteTabOptions = {
 };
 
 export type CodeGroupCommandsType = {
-  buildCodeElements: (
-    editor: YooEditor,
-    options?: Partial<CodeGroupElementOptions>,
-  ) => CodeGroupElement;
-  insertCode: (editor: YooEditor, options?: Partial<InsertCodeOptions>) => void;
-  deleteCode: (editor: YooEditor, blockId: string) => void;
-  updateCodeTheme: (
-    editor: YooEditor,
-    blockId: string,
-    theme: CodeGroupElementProps['theme'],
-  ) => void;
-  updateCodeLanguage: (
-    editor: YooEditor,
-    blockId: string,
-    language: CodeGroupElementProps['language'],
-  ) => void;
+  buildCodeElements: (editor: YooEditor) => CodeGroupContainerElement;
   addTabItem: (editor: YooEditor, blockId: string, options?: InsertTabOptions) => void;
   deleteTabItem: (editor: YooEditor, blockId: string, options: DeleteTabOptions) => void;
 };
 
 export const CodeGroupCommands: CodeGroupCommandsType = {
-  buildCodeElements: (editor: YooEditor, options = {}) => ({
-    id: generateId(),
-    type: 'code',
-    children: [{ text: options?.text ?? '', props: options?.props }],
-  }),
-  insertCode: (editor: YooEditor, options = {}) => {
-    const { at, focus, text, props } = options;
-    const code = CodeGroupCommands.buildCodeElements(editor, { text, props });
-    const block = buildBlockData({ value: [code], type: 'Code' });
-    Blocks.insertBlock(editor, block.type, { focus, at, blockData: block });
-  },
-  deleteCode: (editor: YooEditor, blockId) => {
-    Blocks.deleteBlock(editor, { blockId });
-  },
-  updateCodeTheme: (editor: YooEditor, blockId, theme) => {
-    const block = editor.children[blockId];
-    const element = block.value[0] as CodeGroupElement;
-    Blocks.updateBlock(editor, blockId, {
-      value: [{ ...element, props: { ...element.props, theme } }],
-    });
-  },
-  updateCodeLanguage: (editor: YooEditor, blockId, language) => {
-    const block = editor.children[blockId];
-    const element = block.value[0] as CodeGroupElement;
-    Blocks.updateBlock(editor, blockId, {
-      value: [{ ...element, props: { ...element.props, language } }],
-    });
+  buildCodeElements: (editor: YooEditor) => {
+    const tabId = generateId();
+    return editor.y('code-group-container', {
+      props: { activeTabId: tabId },
+      children: [
+        editor.y('code-group-list', {
+          children: [
+            editor.y('code-group-item-heading', {
+              id: tabId,
+              children: [editor.y.text('hellow.ts')],
+            }),
+          ],
+        }),
+        editor.y('code-group-content', {
+          props: { referenceId: tabId, language: 'typescript', theme: 'github-dark' },
+          children: [editor.y.text('Hello World')],
+        }),
+      ],
+    }) as CodeGroupContainerElement;
   },
 
   addTabItem(editor, blockId, options) {

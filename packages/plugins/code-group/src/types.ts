@@ -1,15 +1,32 @@
 import type { SlateElement } from '@yoopta/editor';
+import type { BundledLanguage, BundledTheme } from 'shiki';
 
-export type CodeGroupPluginElements = 'code';
-export type CodeGroupElementProps = {
-  language?: string;
-  theme?: string;
+export type CodeGroupContainerElementProps = {
+  activeTabId?: string | null;
+  theme?: BundledTheme;
+};
+
+export type CodeGroupContentElementProps = {
+  referenceId?: string | null;
+  language?: BundledLanguage;
 };
 
 export type CodeGroupPluginBlockOptions = {};
 
-export type CodeGroupElement = SlateElement<'code', CodeGroupElementProps>;
+export type CodeGroupContainerElement = SlateElement<
+  'code-group-container',
+  CodeGroupContainerElementProps
+>;
+export type CodeGroupListElement = SlateElement<'code-group-list'>;
+export type CodeGroupItemHeadingElement = SlateElement<'code-group-item-heading'>;
+export type CodeGroupContentElement = SlateElement<
+  'code-group-content',
+  CodeGroupContentElementProps
+>;
 
 export type CodeGroupElementMap = {
-  code: CodeGroupElement;
+  'code-group-container': CodeGroupContainerElement;
+  'code-group-list': CodeGroupListElement;
+  'code-group-item-heading': CodeGroupItemHeadingElement;
+  'code-group-content': CodeGroupContentElement;
 };

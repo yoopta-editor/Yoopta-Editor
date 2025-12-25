@@ -1,12 +1,6 @@
 import { Video } from './plugin';
 import { VideoElement, VideoElementProps, VideoUploadResponse } from './types';
 
-declare module 'slate' {
-  type CustomTypes = {
-    Element: VideoElement;
-  };
-}
-
 export { VideoCommands } from './commands';
 
 export default Video;

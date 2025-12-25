@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { CSSProperties } from 'react';
 import { memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 
@@ -14,6 +15,10 @@ type BlockProps = {
   onActiveDragHandleChange: (props: any) => void;
 };
 
+const perfStyles: CSSProperties = {
+  contentVisibility: 'auto',
+};
+
 const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: BlockProps) => {
   const editor = useYooptaEditor();
 
@@ -27,7 +32,7 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
     isOver,
     isDragging,
   } = useSortable({ id: blockId, disabled: editor.readOnly });
-  const blockStyles = useBlockStyles(block, transform, transition, isDragging, isOver);
+  // const blockStyles = useBlockStyles(block, transform, transition, isDragging, isOver);
 
   const align = block.meta.align || 'left';
   const className = `yoopta-block ${align === 'left' ? '' : `yoopta-align-${align}`}`;
@@ -49,10 +54,10 @@ const Block = memo(({ children, block, blockId, onActiveDragHandleChange }: Bloc
     <div
       ref={setNodeRef}
       className={className}
-      style={blockStyles}
       data-yoopta-block
       data-yoopta-block-id={blockId}
       data-block-selected={isSelected}
+      style={perfStyles}
       onMouseEnter={handleMouseEnter}>
       {children}
     </div>

@@ -12,4 +12,5 @@ export { LinkUI } from './link';
 export { ImageUI } from './image';
 export { CodeUI } from './code';
 export { TabsUI } from './tabs';
+export { StepsUI } from './steps';
 export default withShadcnUI;

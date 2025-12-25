@@ -10,7 +10,6 @@ import {
 import { CalloutCommands } from '../commands/callout-commands';
 import { withCallout } from '../extensions/with-callout';
 import type { CalloutElementMap, CalloutElementProps, CalloutTheme } from '../types';
-import { CALLOUT_THEME_STYLES } from '../utils';
 
 const calloutProps: CalloutElementProps = {
   theme: 'default',
@@ -53,7 +52,11 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
         },
       },
       serialize: (element, text, blockMeta) => {
-        const theme: CSSProperties = CALLOUT_THEME_STYLES[element.props?.theme || 'default'];
+        const theme: CSSProperties = {
+          color: 'inherit',
+          borderLeft: 'inherit',
+          backgroundColor: 'inherit',
+        };
         const { align = 'left', depth = 0 } = blockMeta || {};
 
         return `<dl data-theme="${
@@ -68,11 +71,15 @@ const Callout = new YooptaPlugin<CalloutElementMap>({
       },
     },
     markdown: {
-      serialize: (element, text) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
+      serialize: (element) => `> ${serializeTextNodesIntoMarkdown(element.children)}`,
     },
     email: {
       serialize: (element, text, blockMeta) => {
-        const theme: CSSProperties = CALLOUT_THEME_STYLES[element.props?.theme || 'default'];
+        const theme: CSSProperties = {
+          color: 'inherit',
+          borderLeft: 'inherit',
+          backgroundColor: 'inherit',
+        };
         const { align = 'left', depth = 0 } = blockMeta || {};
 
         return `
