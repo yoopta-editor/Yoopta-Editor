@@ -1,5 +1,5 @@
 import type { SlateEditor } from '@yoopta/editor';
 
-export function withSteps(slate: SlateEditor) {
+export function withCarousel(slate: SlateEditor) {
   return slate;
 }

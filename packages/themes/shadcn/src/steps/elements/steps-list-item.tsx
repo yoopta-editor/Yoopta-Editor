@@ -24,9 +24,11 @@ export const StepListItem = (props: PluginElementRenderProps) => {
   const moveUp = () => {
     StepsCommands.moveUp(editor, { blockId: props.blockId, stepId: element.id });
   };
+
   const moveDown = () => {
     StepsCommands.moveDown(editor, { blockId: props.blockId, stepId: element.id });
   };
+
   const deleteStep = () => {
     StepsCommands.deleteStep(editor, { blockId: props.blockId, stepId: element.id });
   };

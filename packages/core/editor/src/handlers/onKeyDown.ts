@@ -178,24 +178,24 @@ export function onKeyDown(editor: YooEditor) {
       return;
     }
 
-    if (HOTKEYS.isTab(event)) {
-      if (event.isDefaultPrevented()) return;
-      event.preventDefault();
+    // if (HOTKEYS.isTab(event)) {
+    //   if (event.isDefaultPrevented()) return;
+    //   event.preventDefault();
 
-      const selectedPaths = editor.path.selected;
-      if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
-        editor.batchOperations(() => {
-          selectedPaths.forEach((index) => {
-            editor.increaseBlockDepth({ at: index });
-          });
-        });
+    //   const selectedPaths = editor.path.selected;
+    //   if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
+    //     editor.batchOperations(() => {
+    //       selectedPaths.forEach((index) => {
+    //         editor.increaseBlockDepth({ at: index });
+    //       });
+    //     });
 
-        return;
-      }
+    //     return;
+    //   }
 
-      editor.increaseBlockDepth();
-      return;
-    }
+    //   editor.increaseBlockDepth();
+    //   return;
+    // }
 
     if (HOTKEYS.isArrowUp(event)) {
       if (event.isDefaultPrevented()) return;

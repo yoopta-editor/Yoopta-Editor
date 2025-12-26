@@ -15,8 +15,8 @@ import Table from '@yoopta/table';
 import Tabs from '@yoopta/tabs';
 import CodeGroup from '@yoopta/code-group';
 import StepsPlugin from '@yoopta/steps';
+import CarouselPlugin from '@yoopta/carousel';
 
-import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
@@ -62,6 +62,17 @@ export const YOOPTA_PLUGINS = withShadcnUI([
       },
     },
   }),
+  CarouselPlugin.extend({
+    allowedPlugins: [
+      YImage,
+      Callout,
+      Lists.BulletedList,
+      Lists.NumberedList,
+      Lists.TodoList,
+      Blockquote,
+      Code,
+    ],
+  }),
   Paragraph,
   Tabs.extend({
     allowedPlugins: ALLOWED_PLUGINS,
@@ -88,7 +99,9 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   Table.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
-  StepsPlugin,
+  StepsPlugin.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
   Link,
   Callout.extend({
     allowedPlugins: [

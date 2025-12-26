@@ -3,6 +3,7 @@ import type { YooptaPlugin } from '@yoopta/editor';
 import { AccordionUI } from './accordion';
 import { BlockquoteUI } from './blockquote';
 import { CalloutUI } from './callout';
+import { CarouselUI } from './carousel';
 import { CodeUI } from './code';
 import { CodeGroupUI } from './code-group';
 import { HeadingsUI } from './headings';
@@ -75,6 +76,7 @@ export function withShadcnUI(
     Tabs: TabsUI,
     CodeGroup: CodeGroupUI,
     Steps: StepsUI,
+    Carousel: CarouselUI,
   };
 
   return plugins.map((plugin) => {
