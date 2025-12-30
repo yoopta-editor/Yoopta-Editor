@@ -54,20 +54,38 @@
       "group": "Plugins",
       "pages": [
         "plugins/overview",
-        "plugins/paragraph",
-        "plugins/headings",
-        "plugins/blockquote",
-        "plugins/lists",
-        "plugins/code",
-        "plugins/table",
-        "plugins/image",
-        "plugins/video",
-        "plugins/file",
-        "plugins/embed",
-        "plugins/link",
-        "plugins/callout",
-        "plugins/accordion",
-        "plugins/divider"
+        {
+          "group": "Text Plugins",
+          "pages": ["plugins/paragraph", "plugins/headings", "plugins/blockquote"]
+        },
+        {
+          "group": "List Plugins",
+          "pages": ["plugins/lists"]
+        },
+        {
+          "group": "Media Plugins",
+          "pages": ["plugins/image", "plugins/video", "plugins/file", "plugins/embed"]
+        },
+        {
+          "group": "Layout Plugins",
+          "pages": [
+            "plugins/table",
+            "plugins/tabs",
+            "plugins/steps",
+            "plugins/carousel",
+            "plugins/accordion",
+            "plugins/divider",
+            "plugins/callout"
+          ]
+        },
+        {
+          "group": "Code Plugins",
+          "pages": ["plugins/code", "plugins/code-group"]
+        },
+        {
+          "group": "Special Plugins",
+          "pages": ["plugins/link"]
+        }
       ]
     },
     {

@@ -1,0 +1,374 @@
+---
+title: Steps
+description: Create step-by-step instructions and tutorials
+---
+
+## Overview
+
+The Steps plugin allows you to create numbered, step-by-step instructions. It's perfect for tutorials, guides, and any content that requires a sequential flow.
+
+## Installation
+
+```bash
+npm install @yoopta/steps
+```
+
+## Basic Usage
+
+```jsx
+import { StepsPlugin } from '@yoopta/steps';
+
+const plugins = [
+  StepsPlugin,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Automatic Numbering**: Steps are numbered automatically
+- **Nested Content**: Each step has a heading and content area
+- **Keyboard Shortcuts**: Type `steps` to insert
+- **Easy Navigation**: Add and remove steps easily
+- **Customizable**: Full control over styling
+
+## Structure
+
+The Steps plugin consists of nested elements:
+
+```
+step-container
+└── step-list
+    └── step-list-item (multiple)
+        ├── step-list-item-heading
+        └── step-list-item-content
+```
+
+## Configuration
+
+```jsx
+import { StepsPlugin } from '@yoopta/steps';
+
+const plugins = [
+  StepsPlugin,
+];
+```
+
+## Options
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Steps">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="shortcuts" type="string[]" default="['steps']">
+  Keyboard shortcuts to trigger the plugin
+</ResponseField>
+
+## Commands
+
+### buildStepsElements
+
+Creates the initial steps structure.
+
+```typescript
+import { StepsCommands } from '@yoopta/steps';
+
+StepsCommands.buildStepsElements(editor, { items: 3 });
+```
+
+<ParamField path="items" type="number" default="2">
+  Number of steps to create initially
+</ParamField>
+
+### addStep
+
+Add a new step after the current one.
+
+```typescript
+StepsCommands.addStep(editor, {
+  blockId: 'block-id',
+  at: selection,
+});
+```
+
+### deleteStep
+
+Remove a specific step.
+
+```typescript
+StepsCommands.deleteStep(editor, {
+  blockId: 'block-id',
+  stepId: 'step-id',
+});
+```
+
+## Keyboard Behavior
+
+- **Enter on Heading**: Creates a new step
+- **Enter in Content**: Inserts newline within content
+- **Backspace on Heading**: Deletes the step (when empty)
+- **Backspace in Content**: Prevents deletion at content start
+
+## Initial Structure
+
+When created, the plugin initializes with 2 steps:
+
+```typescript
+{
+  steps: [
+    {
+      heading: 'Step 1 heading',
+      content: 'Step 1 content',
+    },
+    {
+      heading: 'Step 2 heading',
+      content: 'Step 2 content',
+    },
+  ],
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { StepsPlugin } from '@yoopta/steps';
+
+const CustomSteps = StepsPlugin.extend({
+  elements: {
+    'step-container': {
+      render: (props) => (
+        <div className="steps-container" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+    'step-list': {
+      render: (props) => (
+        <ol className="steps-list" {...props.attributes}>
+          {props.children}
+        </ol>
+      ),
+    },
+    'step-list-item': {
+      render: (props) => (
+        <li className="step-item" {...props.attributes}>
+          {props.children}
+        </li>
+      ),
+    },
+    'step-list-item-heading': {
+      render: (props) => (
+        <h3 className="step-heading" {...props.attributes}>
+          {props.children}
+        </h3>
+      ),
+    },
+    'step-list-item-content': {
+      render: (props) => (
+        <div className="step-content" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+  },
+});
+```
+
+### With Custom Numbering
+
+```jsx
+const CustomSteps = StepsPlugin.extend({
+  elements: {
+    'step-list-item': {
+      render: (props) => {
+        // Get step index from path or calculate
+        const stepNumber = getStepNumber(props);
+        
+        return (
+          <li className="step-item" {...props.attributes}>
+            <div className="step-number">{stepNumber}</div>
+            {props.children}
+          </li>
+        );
+      },
+    },
+  },
+});
+```
+
+## Styling Examples
+
+### Basic CSS
+
+```css
+.steps-container {
+  counter-reset: step-counter;
+}
+
+.step-item {
+  counter-increment: step-counter;
+  position: relative;
+  padding-left: 3rem;
+}
+
+.step-item::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+```
+
+### With Progress Line
+
+```css
+.step-list {
+  position: relative;
+}
+
+.step-list::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 2rem;
+  bottom: 2rem;
+  width: 2px;
+  background: #e5e7eb;
+}
+
+.step-item {
+  position: relative;
+  padding-left: 4rem;
+  padding-bottom: 2rem;
+}
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Tutorials">
+    Step-by-step coding or software tutorials
+  </Card>
+  <Card title="Recipes">
+    Cooking instructions with numbered steps
+  </Card>
+  <Card title="Installation Guides">
+    Software installation procedures
+  </Card>
+  <Card title="DIY Instructions">
+    Assembly or craft project steps
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Clear Headings">
+    Use concise, action-oriented headings (e.g., "Install dependencies")
+  </Accordion>
+  
+  <Accordion title="Detailed Content">
+    Provide sufficient detail in content area for each step
+  </Accordion>
+  
+  <Accordion title="Logical Flow">
+    Ensure steps follow a logical, sequential order
+  </Accordion>
+  
+  <Accordion title="Add Context">
+    Include expected outcomes or tips within steps
+  </Accordion>
+  
+  <Accordion title="Use Code Blocks">
+    Combine with Code plugin for technical steps
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Patterns
+
+### With Conditional Steps
+
+```jsx
+const ConditionalSteps = StepsPlugin.extend({
+  elements: {
+    'step-list-item': {
+      props: {
+        condition: null, // e.g., "macOS", "Windows"
+      },
+      render: (props) => {
+        const { condition } = props.element.props;
+        
+        return (
+          <li className="step-item" {...props.attributes}>
+            {condition && (
+              <span className="step-condition">{condition}</span>
+            )}
+            {props.children}
+          </li>
+        );
+      },
+    },
+  },
+});
+```
+
+### With Completion Tracking
+
+```jsx
+const TrackableSteps = StepsPlugin.extend({
+  elements: {
+    'step-list-item': {
+      props: {
+        completed: false,
+      },
+      render: (props) => {
+        const [completed, setCompleted] = useState(
+          props.element.props.completed
+        );
+        
+        return (
+          <li
+            className={`step-item ${completed ? 'completed' : ''}`}
+            {...props.attributes}
+          >
+            <input
+              type="checkbox"
+              checked={completed}
+              onChange={() => setCompleted(!completed)}
+            />
+            {props.children}
+          </li>
+        );
+      },
+    },
+  },
+});
+```
+
+## Related Plugins
+
+- [Accordion Plugin](/plugins/accordion) - For collapsible sections
+- [Tabs Plugin](/plugins/tabs) - For tabbed content
+- [Code Plugin](/plugins/code) - For code examples in steps
+

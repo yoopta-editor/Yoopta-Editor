@@ -1,0 +1,172 @@
+---
+title: Carousel
+description: Display images or content in a carousel/slider format
+---
+
+## Overview
+
+The Carousel plugin allows you to create interactive carousels to display images or content in a slider format. It's perfect for showcasing multiple items in a compact, scrollable interface.
+
+## Installation
+
+```bash
+npm install @yoopta/carousel
+```
+
+## Basic Usage
+
+```jsx
+import { CarouselPlugin } from '@yoopta/carousel';
+
+const plugins = [
+  CarouselPlugin,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Multiple Items**: Display multiple carousel items
+- **Keyboard Shortcuts**: Type `carousel` to insert
+- **Responsive**: Adapts to different screen sizes
+- **Customizable**: Extend with custom rendering
+
+## Structure
+
+The Carousel plugin consists of nested elements:
+
+```
+carousel-container
+└── carousel-list-item (multiple)
+    ├── content
+    └── ...
+```
+
+## Commands
+
+### buildCarouselElements
+
+Creates the initial carousel structure.
+
+```typescript
+CarouselCommands.buildCarouselElements(editor, { items: 5 });
+```
+
+<ParamField path="items" type="number">
+  Number of carousel items to create (default: 5)
+</ParamField>
+
+## Extending the Plugin
+
+### Custom Rendering
+
+```jsx
+import { CarouselPlugin } from '@yoopta/carousel';
+
+const CustomCarousel = CarouselPlugin.extend({
+  elements: {
+    'carousel-container': {
+      render: (props) => (
+        <div className="my-carousel-container" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+    'carousel-list-item': {
+      render: (props) => (
+        <div className="my-carousel-item" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+  },
+});
+```
+
+### Integration with Embla Carousel
+
+For advanced carousel functionality, you can integrate with [Embla Carousel](https://www.embla-carousel.com/):
+
+```jsx
+import { CarouselPlugin } from '@yoopta/carousel';
+import useEmblaCarousel from 'embla-carousel-react';
+
+const CustomCarousel = CarouselPlugin.extend({
+  elements: {
+    'carousel-container': {
+      render: (props) => {
+        const [emblaRef] = useEmblaCarousel({ loop: true });
+        
+        return (
+          <div ref={emblaRef} {...props.attributes}>
+            <div className="embla__viewport">
+              {props.children}
+            </div>
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Options
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Carousel">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="shortcuts" type="string[]" default="['carousel']">
+  Keyboard shortcuts to trigger the plugin
+</ResponseField>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Image Gallery">
+    Display multiple images in a scrollable carousel
+  </Card>
+  <Card title="Product Showcase">
+    Show product features or variations
+  </Card>
+  <Card title="Testimonials">
+    Rotate through customer testimonials
+  </Card>
+  <Card title="Portfolio">
+    Showcase portfolio items or projects
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Optimize Images">
+    Ensure images are optimized for web to maintain carousel performance
+  </Accordion>
+  
+  <Accordion title="Limit Items">
+    Keep carousel items reasonable (5-10) for better UX
+  </Accordion>
+  
+  <Accordion title="Add Navigation">
+    Provide clear navigation controls for users
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Image Plugin](/plugins/image) - For individual images
+- [Tabs Plugin](/plugins/tabs) - For tabbed content organization
+

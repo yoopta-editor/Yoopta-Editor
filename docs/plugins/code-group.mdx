@@ -1,0 +1,238 @@
+---
+title: CodeGroup
+description: Display multiple code files in tabbed interface
+---
+
+## Overview
+
+The CodeGroup plugin allows you to create tabbed code blocks, perfect for showing the same code in different languages or displaying multiple related files. Each tab can have its own language and syntax highlighting.
+
+## Installation
+
+```bash
+npm install @yoopta/code-group
+```
+
+## Basic Usage
+
+```jsx
+import { CodeGroup } from '@yoopta/code-group';
+
+const plugins = [
+  CodeGroup,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Multiple Tabs**: Display code in multiple tabs
+- **Syntax Highlighting**: Powered by Shiki
+- **Per-Tab Languages**: Each tab can have different language
+- **Active Tab State**: Track which tab is active
+- **Theme Support**: Consistent theming across tabs
+
+## Structure
+
+The CodeGroup plugin consists of nested elements:
+
+```
+code-group-container (props: activeTabId, theme)
+├── code-group-list
+│   └── code-group-item-heading (multiple tabs)
+└── code-group-content (props: referenceId, language)
+```
+
+## Configuration
+
+```jsx
+import { CodeGroup } from '@yoopta/code-group';
+
+const plugins = [
+  CodeGroup.extend({
+    options: {
+      theme: 'dracula',
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="theme" type="string" default="github-dark">
+  Shiki theme for all code blocks in the group
+</ResponseField>
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="CodeGroup">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Element Props
+
+### code-group-container
+
+<ParamField path="activeTabId" type="string | null">
+  ID of the currently active tab
+</ParamField>
+
+<ParamField path="theme" type="string" default="github-dark">
+  Theme for all code blocks
+</ParamField>
+
+### code-group-content
+
+<ParamField path="referenceId" type="string | null">
+  ID linking content to its tab heading
+</ParamField>
+
+<ParamField path="language" type="string" default="typescript">
+  Programming language for this code block
+</ParamField>
+
+## Commands
+
+### addTabItem
+
+Add a new tab to the code group.
+
+```typescript
+import { CodeGroupCommands } from '@yoopta/code-group';
+
+CodeGroupCommands.addTabItem(editor, blockId, { at: selection });
+```
+
+## Keyboard Behavior
+
+- **Enter on Tab Heading**: Creates a new tab
+- **Enter in Code Content**: Inserts newline (not a new block)
+- **Backspace**: Prevents deletion at content start
+- **Cmd/Ctrl+A**: Selects entire code content
+
+## Initial Structure
+
+When created, the plugin initializes with:
+
+```typescript
+{
+  'code-group-container': {
+    activeTabId: 'generated-id',
+    theme: 'github-dark',
+  },
+  tabs: [
+    {
+      heading: 'hello-world.ts',
+      content: 'console.log("Hello World");',
+      language: 'typescript',
+    },
+  ],
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { CodeGroup } from '@yoopta/code-group';
+
+const CustomCodeGroup = CodeGroup.extend({
+  elements: {
+    'code-group-container': {
+      render: (props) => {
+        const { activeTabId, theme } = props.element.props;
+        
+        return (
+          <div className="my-code-group" data-theme={theme}>
+            {props.children}
+          </div>
+        );
+      },
+    },
+    'code-group-list': {
+      render: (props) => (
+        <div className="tabs-header" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+    'code-group-item-heading': {
+      render: (props) => {
+        const isActive = props.element.id === getActiveTabId();
+        
+        return (
+          <button
+            className={`tab ${isActive ? 'active' : ''}`}
+            {...props.attributes}
+          >
+            {props.children}
+          </button>
+        );
+      },
+    },
+    'code-group-content': {
+      render: (props) => {
+        const { language } = props.element.props;
+        
+        return (
+          <pre data-language={language} {...props.attributes}>
+            {props.children}
+          </pre>
+        );
+      },
+    },
+  },
+});
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Multi-Language Examples">
+    Show same code in JavaScript, Python, Go, etc.
+  </Card>
+  <Card title="Related Files">
+    Display multiple files that work together
+  </Card>
+  <Card title="Before/After">
+    Show code before and after refactoring
+  </Card>
+  <Card title="API Responses">
+    Different response formats (JSON, XML, etc.)
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Clear Tab Names">
+    Use descriptive names for tabs (e.g., "package.json", "server.ts")
+  </Accordion>
+  
+  <Accordion title="Consistent Languages">
+    Group related code in logical language combinations
+  </Accordion>
+  
+  <Accordion title="Limit Tabs">
+    Keep number of tabs reasonable (2-5) for better UX
+  </Accordion>
+  
+  <Accordion title="Match Content">
+    Ensure code in different tabs is related or equivalent
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Code Plugin](/plugins/code) - For single code blocks
+- [Tabs Plugin](/plugins/tabs) - For general tabbed content
+

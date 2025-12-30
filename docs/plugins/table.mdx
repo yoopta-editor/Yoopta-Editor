@@ -1,0 +1,532 @@
+---
+title: Table
+description: Create and manage tabular data
+---
+
+## Overview
+
+The Table plugin provides a complete solution for creating and managing tables. It includes features for cell selection, merging, splitting, and formatting tabular data.
+
+## Installation
+
+```bash
+npm install @yoopta/table
+```
+
+## Basic Usage
+
+```jsx
+import { Table } from '@yoopta/table';
+
+const plugins = [
+  Table,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Flexible Tables**: Create tables of any size
+- **Cell Operations**: Merge, split, insert, delete cells
+- **Header Rows/Columns**: Mark rows and columns as headers
+- **Cell Alignment**: Horizontal and vertical alignment
+- **Column Resizing**: Adjustable column widths
+- **Cell Selection**: Select multiple cells
+- **Keyboard Shortcuts**: Type `table`, `||`, or `3x3` to insert
+
+## Structure
+
+The Table plugin consists of nested elements:
+
+```
+table (props: headerRow, headerColumn, columnWidths)
+└── table-row (multiple)
+    └── table-data-cell (props: align, verticalAlign, colSpan, rowSpan, asHeader)
+```
+
+## Configuration
+
+```jsx
+import { Table } from '@yoopta/table';
+
+const plugins = [
+  Table,
+];
+```
+
+## Options
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Table">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="shortcuts" type="string[]" default="['table', '||', '3x3']">
+  Keyboard shortcuts to trigger the plugin
+</ResponseField>
+
+## Element Props
+
+### table
+
+<ParamField path="headerRow" type="boolean" default="false">
+  Whether the first row should be treated as a header
+</ParamField>
+
+<ParamField path="headerColumn" type="boolean" default="false">
+  Whether the first column should be treated as a header
+</ParamField>
+
+<ParamField path="columnWidths" type="number[]" default="[200, 150, 250]">
+  Array of column widths in pixels
+</ParamField>
+
+### table-data-cell
+
+<ParamField path="asHeader" type="boolean" default="false">
+  Whether this cell should be rendered as a header (th)
+</ParamField>
+
+<ParamField path="align" type="'left' | 'center' | 'right'" default="left">
+  Horizontal text alignment
+</ParamField>
+
+<ParamField path="verticalAlign" type="'top' | 'middle' | 'bottom'" default="top">
+  Vertical text alignment
+</ParamField>
+
+<ParamField path="colSpan" type="number" default="1">
+  Number of columns this cell spans
+</ParamField>
+
+<ParamField path="rowSpan" type="number" default="1">
+  Number of rows this cell spans
+</ParamField>
+
+<ParamField path="backgroundColor" type="string | null">
+  Cell background color
+</ParamField>
+
+## Commands
+
+### buildTableElements
+
+Creates the initial table structure.
+
+```typescript
+import { TableCommands } from '@yoopta/table';
+
+TableCommands.buildTableElements(editor, { rows: 3, columns: 3 });
+```
+
+<ParamField path="rows" type="number" default="3">
+  Number of rows to create
+</ParamField>
+
+<ParamField path="columns" type="number" default="3">
+  Number of columns to create
+</ParamField>
+
+### insertRow
+
+Insert a new row at a specific position.
+
+```typescript
+TableCommands.insertRow(editor, blockId, {
+  at: rowIndex,
+  position: 'after', // or 'before'
+});
+```
+
+### insertColumn
+
+Insert a new column at a specific position.
+
+```typescript
+TableCommands.insertColumn(editor, blockId, {
+  at: columnIndex,
+  position: 'after', // or 'before'
+});
+```
+
+### deleteRow
+
+Delete a specific row.
+
+```typescript
+TableCommands.deleteRow(editor, blockId, rowIndex);
+```
+
+### deleteColumn
+
+Delete a specific column.
+
+```typescript
+TableCommands.deleteColumn(editor, blockId, columnIndex);
+```
+
+### mergeCells
+
+Merge selected cells into one.
+
+```typescript
+TableCommands.mergeCells(editor, blockId, {
+  startRow: 0,
+  startCol: 0,
+  endRow: 1,
+  endCol: 1,
+});
+```
+
+### splitCell
+
+Split a merged cell.
+
+```typescript
+TableCommands.splitCell(editor, blockId, {
+  row: rowIndex,
+  col: columnIndex,
+});
+```
+
+### updateCellProps
+
+Update cell properties.
+
+```typescript
+TableCommands.updateCellProps(editor, blockId, {
+  row: rowIndex,
+  col: columnIndex,
+  props: {
+    align: 'center',
+    backgroundColor: '#f3f4f6',
+  },
+});
+```
+
+### clearContents
+
+Clear contents of selected cells.
+
+```typescript
+import { clearContents } from '@yoopta/table';
+
+clearContents(editor, blockId, selectedCells);
+```
+
+## Initial Structure
+
+When created, the plugin initializes with a 3x3 table:
+
+```typescript
+{
+  table: {
+    headerRow: false,
+    headerColumn: false,
+    columnWidths: [200, 150, 250],
+  },
+  rows: [
+    // 3 rows
+    {
+      cells: [
+        // 3 cells per row
+        {
+          align: 'left',
+          verticalAlign: 'top',
+          colSpan: 1,
+          rowSpan: 1,
+        },
+      ],
+    },
+  ],
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { Table } from '@yoopta/table';
+
+const CustomTable = Table.extend({
+  elements: {
+    table: {
+      render: (props) => {
+        const { headerRow, headerColumn, columnWidths } = props.element.props;
+        
+        return (
+          <div className="table-wrapper">
+            <table
+              className="custom-table"
+              data-header-row={headerRow}
+              data-header-col={headerColumn}
+              {...props.attributes}
+            >
+              <tbody>{props.children}</tbody>
+            </table>
+          </div>
+        );
+      },
+    },
+    'table-row': {
+      render: (props) => (
+        <tr className="table-row" {...props.attributes}>
+          {props.children}
+        </tr>
+      ),
+    },
+    'table-data-cell': {
+      render: (props) => {
+        const {
+          asHeader,
+          align,
+          verticalAlign,
+          colSpan,
+          rowSpan,
+          backgroundColor,
+        } = props.element.props;
+        
+        const CellTag = asHeader ? 'th' : 'td';
+        
+        return (
+          <CellTag
+            colSpan={colSpan}
+            rowSpan={rowSpan}
+            align={align}
+            valign={verticalAlign}
+            style={{ backgroundColor }}
+            {...props.attributes}
+          >
+            {props.children}
+          </CellTag>
+        );
+      },
+    },
+  },
+});
+```
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes `<table>` tags:
+
+```html
+<table>
+  <tbody>
+    <tr>
+      <td>Cell 1</td>
+      <td>Cell 2</td>
+    </tr>
+    <tr>
+      <td>Cell 3</td>
+      <td>Cell 4</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+### HTML Serialization
+
+```html
+<table>
+  <tbody>
+    <tr>
+      <td align="left" valign="top">Cell content</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+### Markdown Serialization
+
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Cell 1   | Cell 2   | Cell 3   |
+| Cell 4   | Cell 5   | Cell 6   |
+```
+
+## Keyboard Behavior
+
+The Table plugin has special keyboard handling:
+
+- **Tab**: Move to next cell
+- **Shift+Tab**: Move to previous cell
+- **Arrow Keys**: Navigate between cells
+- **Enter**: Move to cell below
+- **Backspace**: Delete cell content (not the cell)
+
+## Cell Selection
+
+The plugin supports multi-cell selection:
+
+```typescript
+// Access selected cells
+import {
+  TABLE_CELLS_IN_SELECTION,
+  TABLE_SLATE_TO_SELECTION_SET,
+} from '@yoopta/table';
+
+const selectedCells = TABLE_CELLS_IN_SELECTION.get(slate);
+const selectionSet = TABLE_SLATE_TO_SELECTION_SET.get(slate);
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Data Tables">
+    Display structured data and statistics
+  </Card>
+  <Card title="Pricing Tables">
+    Compare pricing plans and features
+  </Card>
+  <Card title="Schedules">
+    Create timetables and schedules
+  </Card>
+  <Card title="Comparison Tables">
+    Compare products, services, or features
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use Header Rows">
+    Always use header rows for better readability and accessibility
+  </Accordion>
+  
+  <Accordion title="Keep Tables Simple">
+    Avoid overly complex tables with too many merged cells
+  </Accordion>
+  
+  <Accordion title="Responsive Design">
+    Consider mobile layouts for wide tables
+  </Accordion>
+  
+  <Accordion title="Consistent Alignment">
+    Use consistent alignment patterns within columns
+  </Accordion>
+  
+  <Accordion title="Add Context">
+    Provide table captions or descriptions for context
+  </Accordion>
+</AccordionGroup>
+
+## Styling Examples
+
+### Basic CSS
+
+```css
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.custom-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  text-align: left;
+}
+
+.custom-table tr:hover td {
+  background: #f9fafb;
+}
+```
+
+### Striped Rows
+
+```css
+.custom-table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+```
+
+### Bordered Style
+
+```css
+.custom-table {
+  border: 2px solid #e5e7eb;
+}
+
+.custom-table th {
+  border-bottom: 2px solid #e5e7eb;
+}
+```
+
+## Advanced Patterns
+
+### With Cell Selection Highlight
+
+```jsx
+const SelectableTable = Table.extend({
+  elements: {
+    'table-data-cell': {
+      render: (props) => {
+        const isSelected = checkIfSelected(props.element);
+        
+        return (
+          <td
+            className={isSelected ? 'selected' : ''}
+            {...props.attributes}
+          >
+            {props.children}
+          </td>
+        );
+      },
+    },
+  },
+});
+```
+
+### With Sortable Columns
+
+```jsx
+const SortableTable = Table.extend({
+  elements: {
+    'table-data-cell': {
+      render: (props) => {
+        if (props.element.props.asHeader) {
+          return (
+            <th {...props.attributes}>
+              <button onClick={() => sortColumn(props.element)}>
+                {props.children}
+                <SortIcon />
+              </button>
+            </th>
+          );
+        }
+        
+        return <td {...props.attributes}>{props.children}</td>;
+      },
+    },
+  },
+});
+```
+
+## Related Plugins
+
+- [Paragraph Plugin](/plugins/paragraph) - For text within cells
+- [Code Plugin](/plugins/code) - For code in cells
+

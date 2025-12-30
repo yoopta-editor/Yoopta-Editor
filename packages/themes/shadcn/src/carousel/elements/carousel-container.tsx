@@ -22,13 +22,15 @@ export const CarouselContainer = (props: PluginElementRenderProps) => {
 
   return (
     <div className="flex w-full justify-center data-[align=center]:items-center data-[align=end]:items-end data-[align=start]:items-start">
-      <div className="mx-auto max-w-xs">
+      <div
+        className="mx-auto
+      ">
         <Carousel
           {...attributes}
           setApi={setApi}
           opts={{ align: 'start', axis: 'x', loop: true }}
           orientation="horizontal"
-          className="w-full max-w-sm">
+          className="w-full max-w-lg">
           <CarouselContent>{children}</CarouselContent>
           <CarouselPrevious contentEditable={false} className="select-none" />
           <CarouselNext contentEditable={false} className="select-none" />
