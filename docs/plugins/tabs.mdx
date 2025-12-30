@@ -1,0 +1,444 @@
+---
+title: Tabs
+description: Organize content in tabbed interface
+---
+
+## Overview
+
+The Tabs plugin allows you to create tabbed content sections, perfect for organizing related information in a compact, user-friendly format. Users can switch between tabs to view different content.
+
+## Installation
+
+```bash
+npm install @yoopta/tabs
+```
+
+## Basic Usage
+
+```jsx
+import { Tabs } from '@yoopta/tabs';
+
+const plugins = [
+  Tabs,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Multiple Tabs**: Create unlimited tabs
+- **Active Tab State**: Track which tab is currently active
+- **Easy Navigation**: Switch between tabs effortlessly
+- **Keyboard Controls**: Add tabs with Enter key
+- **Custom Content**: Each tab can contain any content
+
+## Structure
+
+The Tabs plugin consists of nested elements:
+
+```
+tabs-container (props: activeTabId)
+├── tabs-list
+│   └── tabs-item-heading (multiple tabs)
+└── tabs-item-content (props: referenceId)
+```
+
+## Configuration
+
+```jsx
+import { Tabs } from '@yoopta/tabs';
+
+const plugins = [
+  Tabs,
+];
+```
+
+## Options
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Tabs">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Element Props
+
+### tabs-container
+
+<ParamField path="activeTabId" type="string | null">
+  ID of the currently active tab
+</ParamField>
+
+### tabs-item-content
+
+<ParamField path="referenceId" type="string | null">
+  ID linking content to its tab heading
+</ParamField>
+
+## Commands
+
+### addTabItem
+
+Add a new tab to the tabs container.
+
+```typescript
+import { TabsCommands } from '@yoopta/tabs';
+
+TabsCommands.addTabItem(editor, blockId, { at: selection });
+```
+
+### removeTabItem
+
+Remove a specific tab (to be implemented).
+
+```typescript
+TabsCommands.removeTabItem(editor, blockId, tabId);
+```
+
+## Keyboard Behavior
+
+- **Enter on Tab Heading**: Creates a new tab
+- **Enter in Tab Content**: Inserts newline within content
+- **Backspace**: Prevents deletion at content start
+- **Cmd/Ctrl+A in Content**: Selects entire content
+
+## Initial Structure
+
+When created, the plugin initializes with one tab:
+
+```typescript
+{
+  'tabs-container': {
+    activeTabId: 'generated-id',
+  },
+  tabs: [
+    {
+      heading: 'Tab 1',
+      content: 'Tab 1 content',
+      referenceId: 'generated-id',
+    },
+  ],
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { Tabs } from '@yoopta/tabs';
+import { useState } from 'react';
+
+const CustomTabs = Tabs.extend({
+  elements: {
+    'tabs-container': {
+      render: (props) => {
+        const { activeTabId } = props.element.props;
+        
+        return (
+          <div className="tabs-container" data-active={activeTabId} {...props.attributes}>
+            {props.children}
+          </div>
+        );
+      },
+    },
+    'tabs-list': {
+      render: (props) => (
+        <div className="tabs-header" role="tablist" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+    'tabs-item-heading': {
+      render: (props) => {
+        const isActive = checkIfActive(props.element.id);
+        
+        return (
+          <button
+            className={`tab-button ${isActive ? 'active' : ''}`}
+            role="tab"
+            aria-selected={isActive}
+            {...props.attributes}
+          >
+            {props.children}
+          </button>
+        );
+      },
+    },
+    'tabs-item-content': {
+      render: (props) => {
+        const { referenceId } = props.element.props;
+        const isActive = checkIfActive(referenceId);
+        
+        return (
+          <div
+            className="tab-panel"
+            role="tabpanel"
+            hidden={!isActive}
+            {...props.attributes}
+          >
+            {props.children}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Styling Examples
+
+### Basic CSS
+
+```css
+.tabs-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.tabs-header {
+  display: flex;
+  border-bottom: 2px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tab-panel {
+  padding: 1.5rem;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+```
+
+### With Icons
+
+```jsx
+const IconTabs = Tabs.extend({
+  elements: {
+    'tabs-item-heading': {
+      render: (props) => {
+        const icon = getTabIcon(props.element);
+        
+        return (
+          <button className="tab-button" {...props.attributes}>
+            <span className="tab-icon">{icon}</span>
+            <span className="tab-text">{props.children}</span>
+          </button>
+        );
+      },
+    },
+  },
+});
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Documentation">
+    Different programming language examples
+  </Card>
+  <Card title="Product Features">
+    Showcase different product features
+  </Card>
+  <Card title="FAQ Sections">
+    Categorized frequently asked questions
+  </Card>
+  <Card title="Pricing Plans">
+    Compare different pricing tiers
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Clear Tab Labels">
+    Use concise, descriptive labels for tabs
+  </Accordion>
+  
+  <Accordion title="Limit Tab Count">
+    Keep number of tabs reasonable (3-7) for better UX
+  </Accordion>
+  
+  <Accordion title="Consistent Content">
+    Maintain similar content structure across tabs
+  </Accordion>
+  
+  <Accordion title="Keyboard Accessibility">
+    Ensure tabs are keyboard navigable
+  </Accordion>
+  
+  <Accordion title="Mobile Responsive">
+    Consider mobile layouts with scrollable tabs
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Patterns
+
+### With Tab Icons
+
+```jsx
+const IconTabs = Tabs.extend({
+  elements: {
+    'tabs-item-heading': {
+      props: {
+        icon: null,
+      },
+      render: (props) => {
+        const { icon } = props.element.props;
+        
+        return (
+          <button {...props.attributes}>
+            {icon && <Icon name={icon} />}
+            {props.children}
+          </button>
+        );
+      },
+    },
+  },
+});
+```
+
+### With Vertical Layout
+
+```jsx
+const VerticalTabs = Tabs.extend({
+  elements: {
+    'tabs-container': {
+      render: (props) => (
+        <div className="tabs-vertical" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+  },
+});
+```
+
+```css
+.tabs-vertical {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.tabs-vertical .tabs-list {
+  flex-direction: column;
+}
+```
+
+### With Lazy Loading
+
+```jsx
+const LazyTabs = Tabs.extend({
+  elements: {
+    'tabs-item-content': {
+      render: (props) => {
+        const { referenceId } = props.element.props;
+        const isActive = checkIfActive(referenceId);
+        const [loaded, setLoaded] = useState(isActive);
+        
+        useEffect(() => {
+          if (isActive && !loaded) {
+            setLoaded(true);
+          }
+        }, [isActive]);
+        
+        return (
+          <div hidden={!isActive} {...props.attributes}>
+            {loaded ? props.children : 'Loading...'}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Accessibility
+
+The Tabs plugin should follow WAI-ARIA tabs pattern:
+
+- **Tab List**: `role="tablist"`
+- **Tab**: `role="tab"`, `aria-selected`
+- **Tab Panel**: `role="tabpanel"`, `hidden`
+
+```jsx
+const AccessibleTabs = Tabs.extend({
+  elements: {
+    'tabs-list': {
+      render: (props) => (
+        <div role="tablist" aria-label="Content tabs" {...props.attributes}>
+          {props.children}
+        </div>
+      ),
+    },
+    'tabs-item-heading': {
+      render: (props) => {
+        const isActive = checkIfActive(props.element.id);
+        
+        return (
+          <button
+            role="tab"
+            aria-selected={isActive}
+            aria-controls={`panel-${props.element.id}`}
+            id={`tab-${props.element.id}`}
+            {...props.attributes}
+          >
+            {props.children}
+          </button>
+        );
+      },
+    },
+    'tabs-item-content': {
+      render: (props) => {
+        const { referenceId } = props.element.props;
+        const isActive = checkIfActive(referenceId);
+        
+        return (
+          <div
+            role="tabpanel"
+            id={`panel-${referenceId}`}
+            aria-labelledby={`tab-${referenceId}`}
+            hidden={!isActive}
+            {...props.attributes}
+          >
+            {props.children}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Related Plugins
+
+- [Accordion Plugin](/plugins/accordion) - For collapsible content
+- [CodeGroup Plugin](/plugins/code-group) - For tabbed code blocks
+- [Steps Plugin](/plugins/steps) - For sequential content
+

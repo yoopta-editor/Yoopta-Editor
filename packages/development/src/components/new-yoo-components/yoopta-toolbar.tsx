@@ -82,7 +82,7 @@ export const YooptaToolbar = () => {
           </Toolbar.Button>
         )}
       </Toolbar.Group>
-      <Toolbar.Separator />
+      {/* <Toolbar.Separator />
       <Toolbar.Group>
         <Toolbar.Button onClick={() => console.log('Align left')}>
           <TextAlignLeftIcon />
@@ -93,7 +93,7 @@ export const YooptaToolbar = () => {
         <Toolbar.Button onClick={() => console.log('Align right')}>
           <TextAlignRightIcon />
         </Toolbar.Button>
-      </Toolbar.Group>
+      </Toolbar.Group> */}
     </Toolbar.Root>
   );
 };

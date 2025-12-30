@@ -10,7 +10,7 @@ import type {
 import type { PluginDeserializeParser } from '../plugins/types';
 import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
-import { isYooptaBlock } from '../utils/validators';
+import { isYooptaBlock } from '../utils/validations';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   B: { type: 'bold' },
@@ -42,29 +42,25 @@ function getMappedPluginByNodeNames(editor: YooEditor): PluginsMapByNodeNames {
     if (parsers) {
       const { html } = parsers;
 
-      if (html) {
-        const { deserialize } = html;
+      if (html && html.deserialize && html.deserialize.nodeNames) {
+        const { nodeNames } = html.deserialize;
+        if (nodeNames) {
+          nodeNames.forEach((nodeName) => {
+            const nodeNameMap = PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName];
 
-        if (deserialize) {
-          const { nodeNames } = deserialize;
-          if (nodeNames) {
-            nodeNames.forEach((nodeName) => {
-              const nodeNameMap = PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName];
-
-              if (nodeNameMap) {
-                const nodeNameItem = Array.isArray(nodeNameMap) ? nodeNameMap : [nodeNameMap];
-                PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName] = [
-                  ...nodeNameItem,
-                  { type: pluginType, parse: deserialize.parse },
-                ];
-              } else {
-                PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName] = {
-                  type: pluginType,
-                  parse: deserialize.parse,
-                };
-              }
-            });
-          }
+            if (nodeNameMap) {
+              const nodeNameItem = Array.isArray(nodeNameMap) ? nodeNameMap : [nodeNameMap];
+              PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName] = [
+                ...nodeNameItem,
+                { type: pluginType, parse: html.deserialize?.parse },
+              ];
+            } else {
+              PLUGINS_NODE_NAME_MATCHERS_MAP[nodeName] = {
+                type: pluginType,
+                parse: html.deserialize?.parse,
+              };
+            }
+          });
         }
       }
     }
@@ -93,7 +89,7 @@ function buildBlock(editor: YooEditor, plugin: PluginsMapByNode, el: HTMLElement
   let rootNode: SlateElement<string, any> | YooptaBlockData[] = {
     id: generateId(),
     type: rootElementType,
-    children: isVoid && !block.customEditor ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
+    children: isVoid ? [{ text: '' }] : children.map(mapNodeChildren).flat(),
     props: { nodeType: 'block', ...rootElement.props },
   };
 

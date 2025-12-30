@@ -1,0 +1,339 @@
+---
+title: Image
+description: Upload and display images with full customization
+---
+
+## Overview
+
+The Image plugin provides a complete solution for adding images to your content. It supports file uploads, URL insertion, image resizing, and various display options.
+
+## Installation
+
+```bash
+npm install @yoopta/image
+```
+
+## Basic Usage
+
+```jsx
+import { Image } from '@yoopta/image';
+
+const plugins = [
+  Image,
+  // ... other plugins
+];
+
+<YooptaEditor editor={editor} plugins={plugins} />;
+```
+
+## Features
+
+- **File Upload**: Upload images from device
+- **URL Insertion**: Insert images via URL
+- **Image Resizing**: Resize images while maintaining aspect ratio
+- **Size Limits**: Set maximum width and height
+- **Object Fit**: Control how images fit their container
+- **Image Deletion**: Optional deletion handling
+- **Responsive**: Automatically adapts to screen size
+
+## Configuration
+
+### With Upload Handler
+
+```jsx
+import { Image } from '@yoopta/image';
+
+const plugins = [
+  Image.extend({
+    options: {
+      upload: {
+        endpoint: '/api/upload',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        onSuccess: (result) => {
+          console.log('Upload successful:', result);
+        },
+        onError: (error) => {
+          console.error('Upload failed:', error);
+        },
+      },
+      maxSizes: {
+        maxWidth: 800,
+        maxHeight: 600,
+      },
+    },
+  }),
+];
+```
+
+### With Custom Upload Logic
+
+```jsx
+const plugins = [
+  Image.extend({
+    options: {
+      upload: {
+        endpoint: '/api/upload',
+        async onProgress(progress) {
+          console.log(`Upload progress: ${progress.percentage}%`);
+        },
+      },
+      delete: {
+        endpoint: '/api/delete',
+        method: 'DELETE',
+      },
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="upload" type="object">
+  <Expandable title="properties">
+    <ResponseField name="endpoint" type="string" required>
+      URL endpoint for image upload
+    </ResponseField>
+    <ResponseField name="method" type="'POST' | 'PUT' | 'PATCH'" default="POST">
+      HTTP method for upload
+    </ResponseField>
+    <ResponseField name="headers" type="Record<string, string>">
+      Custom headers for upload request
+    </ResponseField>
+    <ResponseField name="fieldName" type="string" default="file">
+      Form field name for the file
+    </ResponseField>
+    <ResponseField name="maxSize" type="number">
+      Maximum file size in bytes
+    </ResponseField>
+    <ResponseField name="accept" type="string">
+      Accepted file types (e.g., "image/png,image/jpeg")
+    </ResponseField>
+    <ResponseField name="onProgress" type="function">
+      Callback for upload progress
+    </ResponseField>
+    <ResponseField name="onSuccess" type="function">
+      Callback when upload succeeds
+    </ResponseField>
+    <ResponseField name="onError" type="function">
+      Callback when upload fails
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="delete" type="object">
+  <Expandable title="properties">
+    <ResponseField name="endpoint" type="string" required>
+      URL endpoint for image deletion
+    </ResponseField>
+    <ResponseField name="method" type="'DELETE' | 'PATCH'" default="DELETE">
+      HTTP method for deletion
+    </ResponseField>
+    <ResponseField name="headers" type="Record<string, string>">
+      Custom headers for delete request
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="maxSizes" type="object">
+  <Expandable title="properties">
+    <ResponseField name="maxWidth" type="number" default="650">
+      Maximum image width in pixels
+    </ResponseField>
+    <ResponseField name="maxHeight" type="number" default="550">
+      Maximum image height in pixels
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="optimizations" type="object">
+  <Expandable title="properties">
+    <ResponseField name="provider" type="'imgix' | 'cloudinary' | 'akamai'">
+      Image optimization provider
+    </ResponseField>
+    <ResponseField name="deviceSizes" type="number[]">
+      Responsive image sizes
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Element Props
+
+<ParamField path="src" type="string | null">
+  Image source URL
+</ParamField>
+
+<ParamField path="alt" type="string | null">
+  Alternative text for accessibility
+</ParamField>
+
+<ParamField path="srcSet" type="string | null">
+  Responsive image source set
+</ParamField>
+
+<ParamField path="fit" type="'contain' | 'cover' | 'fill' | null">
+  How the image should fit its container
+</ParamField>
+
+<ParamField path="sizes" type="object">
+  Image dimensions: `{ width: number, height: number }`
+</ParamField>
+
+<ParamField path="bgColor" type="string | null">
+  Background color for image container
+</ParamField>
+
+## Commands
+
+```typescript
+import { ImageCommands } from '@yoopta/image';
+
+// Update image source
+ImageCommands.updateImage(editor, blockId, {
+  src: 'https://example.com/image.jpg',
+  alt: 'Description',
+});
+
+// Delete image
+ImageCommands.deleteImage(editor, blockId);
+```
+
+## Upload Response Format
+
+Your upload endpoint should return:
+
+```typescript
+{
+  id: string;
+  url: string;
+  width?: number;
+  height?: number;
+  size?: number;
+  format?: string;
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { Image } from '@yoopta/image';
+
+const CustomImage = Image.extend({
+  elements: {
+    image: {
+      render: (props) => {
+        const { src, alt, sizes, fit } = props.element.props;
+
+        return (
+          <figure {...props.attributes} contentEditable={false}>
+            <img
+              src={src}
+              alt={alt}
+              width={sizes.width}
+              height={sizes.height}
+              style={{ objectFit: fit }}
+              loading="lazy"
+            />
+            {alt && <figcaption>{alt}</figcaption>}
+            {props.children}
+          </figure>
+        );
+      },
+    },
+  },
+});
+```
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes `<img>` tags:
+
+```html
+<img src="image.jpg" alt="Description" width="650" height="500" />
+```
+
+### HTML Serialization
+
+```html
+<div style="display: flex; justify-content: center;">
+  <img src="image.jpg" alt="Description" width="650" height="500" />
+</div>
+```
+
+### Markdown Serialization
+
+```markdown
+![Description](https://example.com/image.jpg)
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Blog Posts">Feature images and inline illustrations</Card>
+  <Card title="Documentation">Screenshots and diagrams</Card>
+  <Card title="Portfolios">Project images and galleries</Card>
+  <Card title="Product Catalogs">Product images with descriptions</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Optimize Before Upload">
+    Compress and resize images before uploading to reduce load times
+  </Accordion>
+
+{' '}
+<Accordion title="Always Add Alt Text">Provide descriptive alt text for accessibility</Accordion>
+
+{' '}
+<Accordion title="Set Size Limits">
+  Configure appropriate maxWidth and maxHeight for your design
+</Accordion>
+
+{' '}
+<Accordion title="Use Lazy Loading">Enable lazy loading for better performance</Accordion>
+
+  <Accordion title="Provide Fallbacks">
+    Handle upload errors gracefully with user feedback
+  </Accordion>
+</AccordionGroup>
+
+## Hooks
+
+### useImageUpload
+
+```typescript
+import { useImageUpload } from '@yoopta/image';
+
+const { upload, loading, progress, error } = useImageUpload({
+  endpoint: '/api/upload',
+  onSuccess: (result) => {
+    console.log('Uploaded:', result.url);
+  },
+});
+
+// Upload a file
+const handleUpload = async (file: File) => {
+  const result = await upload(file);
+};
+```
+
+### useImageDelete
+
+```typescript
+import { useImageDelete } from '@yoopta/image';
+
+const { deleteImage, loading, error } = useImageDelete({
+  endpoint: '/api/delete',
+});
+```
+
+## Related Plugins
+
+- [Video Plugin](/plugins/video) - For video content
+- [File Plugin](/plugins/file) - For file attachments
+- [Carousel Plugin](/plugins/carousel) - For image galleries

@@ -45,7 +45,7 @@ export function insertBlock(editor: YooEditor, type: string, options: InsertBloc
   if (!plugin) {
     throw new Error(`Plugin "${type}" not defined in plugins`);
   }
-  const { onBeforeCreate, onCreate } = plugin.events || {};
+  const { beforeCreate, onCreate } = plugin.lifecycle || {};
 
   let slateStructure;
   if (blockData && Array.isArray(blockData?.value)) {
@@ -53,7 +53,7 @@ export function insertBlock(editor: YooEditor, type: string, options: InsertBloc
   } else if (elements) {
     slateStructure = elements;
   } else {
-    slateStructure = onBeforeCreate?.(editor) || buildBlockElementsStructure(editor, type);
+    slateStructure = beforeCreate?.(editor) || buildBlockElementsStructure(editor, type);
   }
 
   const newBlock: YooptaBlockData = {

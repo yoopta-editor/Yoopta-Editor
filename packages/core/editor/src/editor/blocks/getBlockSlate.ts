@@ -1,13 +1,17 @@
-import type { SlateEditor, YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
+import type { SlateEditor, YooEditor, YooptaPathIndex } from '../types';
 
 export type GetBlockSlateOptions = {
   at?: YooptaPathIndex;
   id?: string;
 };
 
-export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions): SlateEditor {
+export function getBlockSlate(
+  editor: YooEditor,
+  options: GetBlockSlateOptions,
+): SlateEditor | null {
   if (!options?.id && typeof options?.at !== 'number') {
-    throw new Error('getBlockSlate requires either an id or at');
+    return null;
+    // throw new Error('getBlockSlate requires either an id or at');
   }
 
   const blockId =
@@ -18,11 +22,10 @@ export function getBlockSlate(editor: YooEditor, options: GetBlockSlateOptions):
     });
 
   const slate = editor.blockEditorsMap[blockId || ''];
-  const blockData = editor.children[blockId || ''] as YooptaBlockData;
-  const blockEntity = editor.plugins[blockData?.type || ''];
 
-  if (!blockEntity?.customEditor && !slate) {
-    throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
+  if (!slate) {
+    return null;
+    // throw new Error(`Slate not found with params: ${JSON.stringify(options)}`);
   }
 
   return slate;

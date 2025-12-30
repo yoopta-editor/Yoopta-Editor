@@ -6,9 +6,9 @@ function getFallbackUUID() {
   return `${S4() + S4()}-${S4()}-${S4()}-${S4()}-${S4()}${S4()}${S4()}`;
 }
 
-export const generateId = () => {
+export const generateId = (): string => {
   if (typeof window === 'undefined') return getFallbackUUID();
   if (typeof window.crypto?.randomUUID !== 'function') return getFallbackUUID();
 
-  return window.crypto?.randomUUID();
+  return window.crypto.randomUUID();
 };

@@ -1,4 +1,4 @@
-import type { SlateElement } from '@yoopta/editor';
+import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { ImageCommands } from '../commands';
@@ -12,6 +12,7 @@ const ALIGNS_TO_JUSTIFY = {
 };
 
 const imageProps: ImageElementProps = {
+  id: null,
   src: null,
   alt: null,
   srcSet: null,
@@ -20,33 +21,31 @@ const imageProps: ImageElementProps = {
   sizes: { width: 0, height: 0 },
 };
 
+const BaseImageRender = (props: PluginElementRenderProps) => {
+  return (
+    <div {...props.attributes} contentEditable={false}>
+      <img
+        src={props.element.props.src}
+        alt={props.element.props.alt}
+        width={props.element.props.sizes?.width}
+        height={props.element.props.sizes?.height}
+        style={{ objectFit: props.element.props.fit }}
+      />
+      {props.children}
+    </div>
+  );
+};
+
 const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
   type: 'Image',
-  elements: (
-    <image
-      render={(props) => (
-        <div {...props.attributes}>
-          <img
-            src={props.element.props.src}
-            alt={props.element.props.alt}
-            width={props.element.props.sizes?.width}
-            height={props.element.props.sizes?.height}
-            objectFit={props.element.props.fit}
-          />
-        </div>
-      )}
-      props={imageProps}
-      nodeType="void"
-    />
-  ),
+  elements: <image render={BaseImageRender} props={imageProps} nodeType="void" />,
   commands: ImageCommands,
   options: {
     display: {
       title: 'Image',
       description: 'Upload from device or insert with link',
     },
-    onUpload: () => Promise.resolve({ src: null, alt: null }),
-    accept: 'image/png, image/jpeg, image/gif, image/webp',
+    // accept: 'image/png, image/jpeg, image/gif, image/webp',
     maxSizes: { maxWidth: 650, maxHeight: 550 },
   },
   parsers: {

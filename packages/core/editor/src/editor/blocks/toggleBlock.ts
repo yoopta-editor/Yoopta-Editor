@@ -1,5 +1,6 @@
 import type { Descendant } from 'slate';
 import { Editor, Element, Text, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 import {
   buildBlockElementsStructure,
@@ -17,7 +18,6 @@ import type {
 } from '../types';
 import { getBlock } from './getBlock';
 import { y } from '../elements/create-element-structure';
-import { ReactEditor } from 'slate-react';
 
 export type ToggleBlockOptions = {
   /**
@@ -65,11 +65,6 @@ function extractTextNodes(
   blockData: YooptaBlockData,
   editor: YooEditor,
 ): (Text | SlateElement)[] {
-  const blockEntity = editor.plugins[blockData.type];
-  if (blockEntity?.customEditor) {
-    return (blockData.value[0] as SlateElement).children;
-  }
-
   if (Editor.isEditor(node))
     return node.children.flatMap((child) => extractTextNodes(slate, child, blockData, editor));
   if (!Element.isElement(node)) return [node];
@@ -134,15 +129,15 @@ function toggleBlockScope(
     throw new Error(`Plugin "${toTypeArg}" not found`);
   }
 
-  const { onBeforeCreate } = plugin.events ?? {};
+  const { beforeCreate } = plugin.lifecycle ?? {};
 
   // Build structure for the new block
   let toBlockSlateStructure: SlateElement;
 
   if (elements) {
     toBlockSlateStructure = elements;
-  } else if (onBeforeCreate) {
-    toBlockSlateStructure = onBeforeCreate(editor);
+  } else if (beforeCreate) {
+    toBlockSlateStructure = beforeCreate(editor);
   } else {
     toBlockSlateStructure = buildBlockElementsStructure(editor, toType);
   }

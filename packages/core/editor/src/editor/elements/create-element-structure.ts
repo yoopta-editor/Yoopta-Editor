@@ -1,10 +1,25 @@
+import type { Descendant } from 'slate';
+
 import type { PluginElement } from '../../plugins/types';
 import { generateId } from '../../utils/generateId';
-import type { SlateElement, YooEditor } from '../types';
+import type { SlateElement, SlateElementTextNode, YooEditor } from '../types';
 
 export type ElementStructureOptions = {
+  id?: string;
   props?: Record<string, unknown>;
-  children?: SlateElement[];
+  children?: Descendant[]; // Can be SlateElement[] or Text nodes
+};
+
+export type TextNodeOptions = {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  code?: boolean;
+  strike?: boolean;
+  highlight?: {
+    color?: string;
+    backgroundColor?: string;
+  };
 };
 
 /**
@@ -36,6 +51,111 @@ function findElementConfig(
 // </y.element>
 
 /**
+ * Creates a text node with optional marks (bold, italic, etc.)
+ *
+ * @param text - Text content
+ * @param marks - Optional marks (bold, italic, underline, code, strike, highlight)
+ *
+ * @example
+ * ```typescript
+ * // Plain text
+ * editor.y.text('Hello world')
+ *
+ * // Text with marks
+ * editor.y.text('Bold text', { bold: true })
+ * editor.y.text('Italic text', { italic: true })
+ * editor.y.text('Bold and italic', { bold: true, italic: true })
+ * ```
+ */
+export function yText(text: string, marks: TextNodeOptions = {}): SlateElementTextNode {
+  return {
+    text,
+    ...marks,
+  };
+}
+
+/**
+ * Creates an inline element (e.g., link, mention)
+ * Inline elements are embedded within text and can contain text nodes
+ *
+ * @param editor - YooEditor instance
+ * @param type - Inline element type (e.g., 'link', 'mention')
+ * @param options - Optional props and children (text nodes)
+ *
+ * @example
+ * ```typescript
+ * // Simple link
+ * editor.y.inline('link', {
+ *   props: { url: 'https://example.com', target: '_blank' },
+ *   children: [editor.y.text('Click me')]
+ * })
+ *
+ * // Link with formatted text
+ * editor.y.inline('link', {
+ *   props: { url: 'https://example.com' },
+ *   children: [
+ *     editor.y.text('Bold ', { bold: true }),
+ *     editor.y.text('link')
+ *   ]
+ * })
+ *
+ * // Inline element in paragraph
+ * editor.y('paragraph', {
+ *   children: [
+ *     editor.y.text('Visit '),
+ *     editor.y.inline('link', {
+ *       props: { url: 'https://example.com' },
+ *       children: [editor.y.text('example.com')]
+ *     }),
+ *     editor.y.text(' for more info')
+ *   ]
+ * })
+ * ```
+ */
+export function yInline(
+  editor: YooEditor,
+  type: string,
+  options: ElementStructureOptions = {},
+): SlateElement {
+  const elementConfig = findElementConfig(editor, type);
+
+  if (!elementConfig) {
+    throw new Error(
+      `Inline element type "${type}" not found in any plugin. ` +
+        `Make sure the plugin is registered in editor.plugins`,
+    );
+  }
+
+  const { id: customId, props: customProps, children: customChildren } = options;
+
+  // Merge default props from config with custom props
+  // Ensure nodeType is set to 'inline'
+  const props = {
+    ...elementConfig.props,
+    ...customProps,
+    nodeType: 'inline' as const,
+  };
+
+  // Determine children
+  let children: Descendant[];
+
+  if (customChildren !== undefined) {
+    // Use explicitly provided children (can be text nodes or other inline elements)
+    children = customChildren.length > 0 ? customChildren : [{ text: '' }];
+  } else {
+    // Default to empty text node for inline elements
+    children = [{ text: '' }];
+  }
+
+  return {
+    id: customId ?? generateId(),
+    type,
+    children,
+    props,
+  };
+}
+
+/**
  * Creates a SlateElement structure for use in insertBlock or other operations
  *
  * @param editor - YooEditor instance
@@ -62,6 +182,24 @@ function findElementConfig(
  *     })
  *   ]
  * })
+ *
+ * // Element with text and marks
+ * editor.y('paragraph', {
+ *   children: [
+ *     editor.y.text('Hello '),
+ *     editor.y.text('world', { bold: true }),
+ *     editor.y.text('!', { italic: true })
+ *   ]
+ * })
+ *
+ * // Mixed: elements and text
+ * editor.y('step-list-item-content', {
+ *   children: [
+ *     editor.y.text('Step 1: '),
+ *     editor.y('callout', { props: { theme: 'info' } }),
+ *     editor.y.text(' - completed', { strike: true })
+ *   ]
+ * })
  * ```
  */
 export function y(
@@ -78,7 +216,7 @@ export function y(
     );
   }
 
-  const { props: customProps, children: customChildren } = options;
+  const { id: customId, props: customProps, children: customChildren } = options;
 
   // Merge default props from config with custom props
   const props = {
@@ -87,10 +225,10 @@ export function y(
   };
 
   // Determine children
-  let children: SlateElement['children'];
+  let children: Descendant[];
 
   if (customChildren !== undefined) {
-    // Use explicitly provided children (even if empty array)
+    // Use explicitly provided children (can be SlateElement[] or Text nodes)
     children = customChildren.length > 0 ? customChildren : [{ text: '' }];
   } else if (elementConfig.children && elementConfig.children.length > 0) {
     // Only build children from config if they are NOT from allowedPlugins
@@ -108,7 +246,7 @@ export function y(
   }
 
   return {
-    id: generateId(),
+    id: customId ?? generateId(),
     type,
     children,
     props,

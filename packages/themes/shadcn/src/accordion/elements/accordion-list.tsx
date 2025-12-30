@@ -3,36 +3,26 @@ import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
-import { Accordion } from '../ui/accordion';
+import { Accordion } from '../../ui/accordion';
 
 export const AccordionList = (props: PluginElementRenderProps) => {
-  const { attributes, children, blockId } = props;
+  const { attributes, children, blockId, element } = props;
   const editor = useYooptaEditor();
 
-  const expandedValue = useMemo(() => {
-    const slate = Blocks.getBlockSlate(editor, { id: blockId });
-    if (!slate) return [];
-
+  const values = useMemo(() => {
     const expandedIds: string[] = [];
 
-    // Find all accordion-list-item elements
-    const itemNodes = Editor.nodes<SlateElement>(slate, {
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'accordion-list-item',
+    element.children.forEach((listItem: any) => {
+      if (listItem.type === 'accordion-list-item' && listItem.props?.isExpanded) {
+        expandedIds.push(listItem.id);
+      }
     });
 
-    for (const [node] of itemNodes) {
-      const itemElement = node as SlateElement;
-      if (itemElement.props?.isExpanded && itemElement.id) {
-        expandedIds.push(itemElement.id as string);
-      }
-    }
-
     return expandedIds;
-  }, [editor, blockId]);
+  }, [element]);
 
   const onValueChange = (value: string[]) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
-
     if (!slate) return;
 
     // Find all accordion-list-item elements
@@ -61,7 +51,7 @@ export const AccordionList = (props: PluginElementRenderProps) => {
     <Accordion
       {...attributes}
       type="multiple"
-      value={expandedValue}
+      value={values}
       onValueChange={onValueChange}
       className="w-full rounded-md border">
       {children}

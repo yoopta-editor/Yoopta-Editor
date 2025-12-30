@@ -1,0 +1,266 @@
+---
+title: Code
+description: Syntax-highlighted code blocks with theme support
+---
+
+## Overview
+
+The Code plugin provides syntax-highlighted code blocks powered by [Shiki](https://shiki.style/). It supports multiple programming languages and themes, making it perfect for technical documentation and tutorials.
+
+## Installation
+
+```bash
+npm install @yoopta/code
+```
+
+## Basic Usage
+
+```jsx
+import { Code } from '@yoopta/code';
+
+const plugins = [
+  Code,
+  // ... other plugins
+];
+
+<YooptaEditor
+  editor={editor}
+  plugins={plugins}
+/>
+```
+
+## Features
+
+- **Syntax Highlighting**: Powered by Shiki with accurate highlighting
+- **200+ Languages**: Support for all major programming languages
+- **Multiple Themes**: Choose from various color themes
+- **Code Copying**: Easy code copying functionality
+- **Line Numbers**: Optional line number display
+- **Keyboard Shortcuts**: Type ` ``` `, `code`, or `js` to insert
+
+## Configuration
+
+```jsx
+import { Code } from '@yoopta/code';
+
+const plugins = [
+  Code.extend({
+    options: {
+      theme: 'github-dark',
+      language: 'typescript',
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="theme" type="string" default="github-dark">
+  Shiki theme for syntax highlighting. Popular options:
+  - `github-dark`
+  - `github-light`
+  - `dracula`
+  - `monokai`
+  - `nord`
+  - `tokyo-night`
+</ResponseField>
+
+<ResponseField name="language" type="string" default="javascript">
+  Default programming language. Supported languages include:
+  - JavaScript, TypeScript
+  - Python, Java, C++, Go, Rust
+  - HTML, CSS, SCSS
+  - JSON, YAML, XML
+  - And 190+ more
+</ResponseField>
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Code">
+      Display title in UI
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="shortcuts" type="string[]" default="['```', 'code', 'js']">
+  Keyboard shortcuts to trigger the plugin
+</ResponseField>
+
+## Element Props
+
+Each code block has the following properties:
+
+<ParamField path="language" type="string" default="javascript">
+  Programming language for syntax highlighting
+</ParamField>
+
+<ParamField path="theme" type="string" default="github-dark">
+  Color theme for the code block
+</ParamField>
+
+## Commands
+
+Access code commands via `editor.blocks`:
+
+```typescript
+// Transform current block to code
+editor.blocks.toggle({ type: 'Code' });
+
+// Update code language
+editor.blocks.updateBlock(blockId, {
+  props: { language: 'python' },
+});
+
+// Update code theme
+editor.blocks.updateBlock(blockId, {
+  props: { theme: 'dracula' },
+});
+```
+
+## Custom Rendering
+
+```jsx
+import { Code } from '@yoopta/code';
+
+const CustomCode = Code.extend({
+  elements: {
+    code: {
+      render: (props) => {
+        const { language, theme } = props.element.props;
+        
+        return (
+          <div className="code-block">
+            <div className="code-header">
+              <span>{language}</span>
+            </div>
+            <pre {...props.attributes} data-language={language} data-theme={theme}>
+              {props.children}
+            </pre>
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Keyboard Behavior
+
+The Code plugin has special keyboard handling:
+
+- **Enter**: Inserts a newline within the code block (not a new block)
+- **Shift+Enter**: Also inserts a newline
+- **Tab**: Inserts tab character (doesn't switch focus)
+
+## Parsers
+
+### HTML Serialization
+
+```html
+<pre data-theme="github-dark" data-language="javascript">
+  <code>console.log("Hello World");</code>
+</pre>
+```
+
+### Markdown Serialization
+
+````markdown
+```javascript
+console.log("Hello World");
+```
+````
+
+### Email Serialization
+
+The plugin provides email-compatible HTML with inline styles for proper rendering in email clients.
+
+## Extending the Plugin
+
+### Custom Theme
+
+```jsx
+const CustomCode = Code.extend({
+  elements: {
+    code: {
+      props: {
+        theme: 'nord',
+        language: 'typescript',
+      },
+    },
+  },
+});
+```
+
+### With Line Numbers
+
+```jsx
+const CustomCode = Code.extend({
+  elements: {
+    code: {
+      render: (props) => {
+        const code = props.element.children[0]?.text || '';
+        const lines = code.split('\n');
+        
+        return (
+          <div className="code-with-line-numbers">
+            <div className="line-numbers">
+              {lines.map((_, i) => (
+                <div key={i}>{i + 1}</div>
+              ))}
+            </div>
+            <pre {...props.attributes}>
+              {props.children}
+            </pre>
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Documentation">
+    Technical documentation with code examples
+  </Card>
+  <Card title="Tutorials">
+    Step-by-step coding tutorials
+  </Card>
+  <Card title="API Reference">
+    API endpoints and code samples
+  </Card>
+  <Card title="Blog Posts">
+    Technical blog posts with code snippets
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Choose Appropriate Theme">
+    Select a theme that matches your site's design and provides good contrast
+  </Accordion>
+  
+  <Accordion title="Specify Language">
+    Always specify the language for accurate syntax highlighting
+  </Accordion>
+  
+  <Accordion title="Keep Code Concise">
+    Break long code examples into smaller, focused snippets
+  </Accordion>
+  
+  <Accordion title="Add Comments">
+    Include comments in code to explain complex logic
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [CodeGroup Plugin](/plugins/code-group) - For tabbed code blocks
+- [Paragraph Plugin](/plugins/paragraph) - For text content
+

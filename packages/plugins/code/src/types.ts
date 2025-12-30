@@ -1,18 +1,13 @@
 import type { SlateElement } from '@yoopta/editor';
-
-import type { LANGUAGES_MAP } from './utils/languages';
-import type { THEMES_MAP } from './utils/themes';
+import type { BundledLanguage, BundledTheme } from 'shiki';
 
 export type CodePluginElements = 'code';
 export type CodeElementProps = {
-  language?: keyof typeof LANGUAGES_MAP;
-  theme?: keyof typeof THEMES_MAP;
+  language?: BundledLanguage;
+  theme?: BundledTheme;
 };
 
-export type CodePluginBlockOptions = {
-  // defaultTheme: keyof typeof THEMES_MAP;
-  // defaultLanguage: keyof typeof LANGUAGES_MAP;
-};
+export type CodePluginBlockOptions = {};
 
 export type CodeElement = SlateElement<'code', CodeElementProps>;
 

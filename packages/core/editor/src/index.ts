@@ -17,8 +17,6 @@ export { type EmailTemplateOptions } from './parsers/getEmail';
 // [TODO] - should be in separated package @yoopta/common/ui or @yoopta/ui
 export { UI } from './UI';
 
-export { useYooptaTools, Tools } from './contexts/YooptaContext/ToolsContext';
-
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';
 export {
@@ -83,7 +81,6 @@ export {
   YooptaOperation,
 } from './editor/core/applyTransforms';
 
-export type { ExtendYooptaTypes } from './editor/custom-types';
 // eslint-disable-next-line import/no-default-export
 export default YooptaEditor;
 export { YooptaEditorProps, YooptaOnChangeOptions };
@@ -94,7 +91,7 @@ export function useElementSelected() {
   const focused = useFocused();
 
   return {
-    selected,
-    focused,
+    isElementSelected: selected,
+    isElementFocused: focused,
   };
 }

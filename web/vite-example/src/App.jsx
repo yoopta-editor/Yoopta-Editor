@@ -41,7 +41,7 @@ const plugins = [
   Table,
   Accordion.extend({
     events: {
-      onBeforeCreate: (editor) => {
+      beforeCreate: (editor) => {
         return AccordionCommands.buildAccordionElements(editor, { items: 2 });
       },
     },

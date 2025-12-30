@@ -42,15 +42,11 @@ export function focusBlock(editor: YooEditor, blockId: string, options: FocusBlo
 
     if (!slate || !block) return;
 
-    const currentBlock = editor.plugins[block.type];
-    if (!currentBlock.customEditor) {
-      try {
-        const selectionPath = getSelectionPath(slate, focusAt);
-        Transforms.select(slate, selectionPath);
-        // // [CHECK]
-        ReactEditor.focus(slate);
-      } catch (error) {}
-    }
+    try {
+      const selectionPath = getSelectionPath(slate, focusAt);
+      Transforms.select(slate, selectionPath);
+      ReactEditor.focus(slate);
+    } catch (error) {}
 
     if (shouldUpdateBlockPath) {
       setTimeout(() => {

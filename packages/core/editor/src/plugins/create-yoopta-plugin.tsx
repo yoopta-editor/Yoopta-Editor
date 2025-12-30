@@ -1,9 +1,10 @@
 import { buildPluginElements, isReactElement } from './build-plugin-elements';
 import type {
   Plugin,
+  PluginDOMEvents,
   PluginElementRenderProps,
-  PluginEvents,
   PluginInputElements,
+  PluginLifeCycleEvents,
   PluginOptions,
 } from './types';
 import type { SlateElement } from '../editor/types';
@@ -11,8 +12,6 @@ import type { SlateElement } from '../editor/types';
 export type ExtendPluginRender<TKeys extends string> = {
   [x in TKeys]: (props: PluginElementRenderProps) => JSX.Element;
 };
-
-type ExtractProps<T> = T extends SlateElement<string, infer P> ? P : never;
 
 export type ExtendPluginElementConfig = {
   render?: (props: PluginElementRenderProps) => JSX.Element;
@@ -22,20 +21,10 @@ export type ExtendPluginElementConfig = {
 };
 
 export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOptions> = {
-  // renders?: {
-  //   [K in keyof TElementMap]?: (props: PluginElementRenderProps) => JSX.Element;
-  // };
   options?: Partial<PluginOptions<TOptions>>;
-  // elementProps?: {
-  //   [K in keyof TElementMap]?: (
-  //     props: ExtractProps<TElementMap[K]>,
-  //   ) => ExtractProps<TElementMap[K]>;
-  // };
-  events?: Partial<PluginEvents>;
-  // Plugin-level allowedPlugins: applies to ALL leaf elements
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  events?: Partial<PluginDOMEvents>;
+  lifecycle?: Partial<PluginLifeCycleEvents>;
   allowedPlugins?: YooptaPlugin<any, any>[];
-  // Element-level configuration (for fine-grained control)
   elements?: {
     [K in keyof TElementMap]?: ExtendPluginElementConfig;
   };
@@ -84,44 +73,21 @@ export class YooptaPlugin<
   // }
 
   extend(extendPlugin: ExtendPlugin<TElementMap, TOptions>): YooptaPlugin<TElementMap, TOptions> {
-    // renders and elementProps are legacy
-    const {
-      // renders,
-      // elementProps,
-      options,
-      events,
-      allowedPlugins,
-      elements: extendElements,
-    } = extendPlugin;
+    const { options, events, lifecycle, allowedPlugins, elements: extendElements } = extendPlugin;
 
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
 
-    // if (renders) {
-    //   Object.keys(renders).forEach((elementType) => {
-    //     const element = elements[elementType];
+    if (lifecycle) {
+      Object.keys(lifecycle).forEach((event) => {
+        const eventHandler = lifecycle[event];
 
-    //     if (element?.render) {
-    //       const customRenderFn = renders[elementType];
-    //       const elementRender = element.render;
-    //       element.render = (props) => elementRender({ ...props, extendRender: customRenderFn });
-    //     }
-    //   });
-    // }
-
-    // if (elementProps) {
-    //   Object.keys(elementProps).forEach((elementType) => {
-    //     const element = elements[elementType];
-
-    //     if (element) {
-    //       const defaultPropsFn = elementProps[elementType];
-    //       const updatedElementProps = element.props;
-    //       if (defaultPropsFn && updatedElementProps) {
-    //         element.props = defaultPropsFn(updatedElementProps);
-    //       }
-    //     }
-    //   });
-    // }
+        if (eventHandler) {
+          if (!this.plugin.lifecycle) this.plugin.lifecycle = {};
+          this.plugin.lifecycle[event] = eventHandler;
+        }
+      });
+    }
 
     if (events) {
       Object.keys(events).forEach((event) => {

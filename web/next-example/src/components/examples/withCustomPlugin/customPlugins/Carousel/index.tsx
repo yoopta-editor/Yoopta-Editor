@@ -60,15 +60,4 @@ const CarouselPlugin = new YooptaPlugin({
   },
 });
 
-declare module 'slate' {
-  interface CustomTypes {
-    Element:
-      | CarouselElement
-      | CarouselItemElement
-      | CarouselItemImageElement
-      | CarouselItemTitleElement
-      | CarouselItemDescriptionElement;
-  }
-}
-
 export { CarouselPlugin };

@@ -23,11 +23,25 @@ export type MentionCommands = {
   buildMentionElements: (editor: YooEditor, options: MentionElementOptions) => MentionElement;
   getSearchQuery: (editor: YooEditor) => string;
   closeDropdown: (editor: YooEditor) => void;
-  insertMention: (editor: YooEditor, props: MentionElementOptions['props'], options?: MentionInsertOptions) => void;
+  insertMention: (
+    editor: YooEditor,
+    props: MentionElementOptions['props'],
+    options?: MentionInsertOptions,
+  ) => void;
   deleteMention: (editor: YooEditor, options: DeleteElementOptions) => void;
-  openDropdown: (editor: YooEditor, target: { domRect: DOMRect; clientRect: DOMRectList }, search: string) => void;
-  findMention: (editor: YooEditor, options?: FindMentionOptions) => NodeEntry<MentionElement> | null;
-  findMentions: (editor: YooEditor, options?: FindMentionOptions) => NodeEntry<MentionElement>[] | null;
+  openDropdown: (
+    editor: YooEditor,
+    target: { domRect: DOMRect; clientRect: DOMRectList },
+    search: string,
+  ) => void;
+  findMention: (
+    editor: YooEditor,
+    options?: FindMentionOptions,
+  ) => NodeEntry<MentionElement> | null;
+  findMentions: (
+    editor: YooEditor,
+    options?: FindMentionOptions,
+  ) => NodeEntry<MentionElement>[] | null;
 };
 
 export const MentionCommands: MentionCommands = {
@@ -94,9 +108,14 @@ export const MentionCommands: MentionCommands = {
 
     Transforms.removeNodes(slateEditor, { at: range.anchor.path });
   },
-  findMentions: (editor: YooEditor, options?: FindMentionOptions): NodeEntry<MentionElement>[] | null => {
+  findMentions: (
+    editor: YooEditor,
+    options?: FindMentionOptions,
+  ): NodeEntry<MentionElement>[] | null => {
     try {
-      const blockToFind = options?.blockId ? { id: options.blockId } : { at: options?.at ?? editor.path.current };
+      const blockToFind = options?.blockId
+        ? { id: options.blockId }
+        : { at: options?.at ?? editor.path.current };
 
       const slateEditor = Blocks.getBlockSlate(editor, blockToFind);
       if (!slateEditor) return [];
@@ -104,7 +123,8 @@ export const MentionCommands: MentionCommands = {
       const mentions = Array.from(
         Editor.nodes(slateEditor, {
           at: [],
-          match: (n): n is MentionElement => Element.isElement(n) && !Editor.isEditor(n) && n.type === 'mention',
+          match: (n): n is MentionElement =>
+            Element.isElement(n) && !Editor.isEditor(n) && n.type === 'mention',
         }),
       );
 
@@ -114,15 +134,21 @@ export const MentionCommands: MentionCommands = {
       return null;
     }
   },
-  findMention: (editor: YooEditor, options?: FindMentionOptions): NodeEntry<MentionElement> | null => {
+  findMention: (
+    editor: YooEditor,
+    options?: FindMentionOptions,
+  ): NodeEntry<MentionElement> | null => {
     try {
-      const blockToFind = options?.blockId ? { id: options.blockId } : { at: options?.at ?? editor.path.current };
+      const blockToFind = options?.blockId
+        ? { id: options.blockId }
+        : { at: options?.at ?? editor.path.current };
 
       const slateEditor = Blocks.getBlockSlate(editor, blockToFind);
       if (!slateEditor) return null;
 
       const [mention] = Editor.nodes(slateEditor, {
-        match: (n): n is MentionElement => Element.isElement(n) && !Editor.isEditor(n) && n.type === 'mention',
+        match: (n): n is MentionElement =>
+          Element.isElement(n) && !Editor.isEditor(n) && n.type === 'mention',
         mode: 'highest',
         at: [],
       });

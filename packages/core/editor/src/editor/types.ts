@@ -19,7 +19,6 @@ import type { SplitBlockOptions } from './blocks/splitBlock';
 import type { updateBlock } from './blocks/updateBlock';
 import type { YooptaOperation, applyTransforms } from './core/applyTransforms';
 import type { setEditorValue } from './core/setEditorValue';
-import type { ExtendedType } from './custom-types';
 import type { getMarkdown } from '../parsers/getMarkdown';
 import type { getPlainText } from '../parsers/getPlainText';
 import type {
@@ -28,7 +27,7 @@ import type {
   PluginElementsMap,
   PluginOptions,
 } from '../plugins/types';
-import type { ElementStructureOptions } from './elements/create-element-structure';
+import type { ElementStructureOptions, TextNodeOptions } from './elements/create-element-structure';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -73,7 +72,6 @@ export type YooptaBlock = {
   type: string;
   options?: PluginOptions<any>;
   elements: PluginElementsMap;
-  hasCustomEditor?: boolean;
   isActive: () => boolean;
 };
 
@@ -118,7 +116,10 @@ export type BaseYooEditor = {
   getBlock: (options: GetBlockOptions) => YooptaBlockData | null;
 
   // element structure builder
-  y: (type: string, options?: ElementStructureOptions) => SlateElement;
+  y: ((type: string, options?: ElementStructureOptions) => SlateElement) & {
+    text: (text: string, marks?: TextNodeOptions) => SlateElementTextNode;
+    inline: (type: string, options?: ElementStructureOptions) => SlateElement;
+  };
 
   // path handlers
   path: YooptaPath;
@@ -197,4 +198,4 @@ export type SlateElement<K extends string = string, T = any> = {
   props?: PluginElementProps<T>;
 };
 
-export type YooEditor = ExtendedType<'YooEditor', BaseYooEditor>;
+export type YooEditor = BaseYooEditor;

@@ -6,6 +6,7 @@ export type LinkElementProps = {
   target?: string;
   rel?: string;
   title?: string | null;
+  nodeType?: 'inline';
 };
 export type LinkElement = SlateElement<'link', LinkElementProps>;
 

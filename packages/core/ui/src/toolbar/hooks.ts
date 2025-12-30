@@ -1,16 +1,17 @@
-import { useEffect, useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
-  useFloating,
   autoUpdate,
-  offset,
   flip,
-  shift,
   inline,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
-import { throttle } from '../utils/throttle';
+
 import { useToolbarStore } from './store';
+import { throttle } from '../utils/throttle';
 
 /**
  * Hook for Toolbar
@@ -20,7 +21,7 @@ export const useToolbar = () => {
   const editor = useYooptaEditor();
   const { state, frozen, open, close, setFrozen, toggle, reset } = useToolbarStore();
 
-  const { refs, floatingStyles, context, update } = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     placement: 'top',
     open: state === 'open',
     middleware: [inline(), flip(), shift(), offset(10)],
@@ -113,7 +114,7 @@ export const useToolbar = () => {
 
     if (!selectedBlock) return;
 
-    const blockEl = editor.refElement?.querySelector<HTMLElement>(
+    const blockEl = editor.refElement?.querySelector(
       `[data-yoopta-block-id="${selectedBlock.id}"]`,
     );
 

@@ -1,30 +1,43 @@
 import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
-import type { CalloutElement } from '@yoopta/callout';
 import Callout from '@yoopta/callout';
 import Code from '@yoopta/code';
 import Divider from '@yoopta/divider';
 // import Mention from '@yoopta/mention';
-import { Elements } from '@yoopta/editor';
+import { generateId, YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
 import Headings from '@yoopta/headings';
-import type { ImageElementProps } from '@yoopta/image';
 import Image from '@yoopta/image';
 import Link from '@yoopta/link';
-import Lists, { TodoListElement } from '@yoopta/lists';
-import Table, { TableCommands } from '@yoopta/table';
-import type { VideoElementProps } from '@yoopta/video';
-import Video from '@yoopta/video';
+import Lists from '@yoopta/lists';
+import Table from '@yoopta/table';
+import Tabs from '@yoopta/tabs';
+import CodeGroup from '@yoopta/code-group';
+import StepsPlugin from '@yoopta/steps';
+import CarouselPlugin from '@yoopta/carousel';
 
-import { uploadToCloudinary } from '../cloudinary';
 import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
-import { StepsPlugin } from '@/components/plugins/steps-plugin';
-import { TabsPlugin } from '@/components/plugins/tabs-plugin';
 
-import { AccordionUI, TableUI, HeadingsUI } from '@yoopta/themes-shadcn';
+import withShadcnUI from '@yoopta/themes-shadcn';
+// import withMaterialUI from '@yoopta/themes-material';
+
+const YImage = Image.extend({
+  options: {
+    upload: {
+      endpoint: '/api/image-kit-upload',
+      method: 'POST',
+      maxSize: 5 * 1024 * 1024,
+      accept: 'image/jpeg, image/jpg, image/png, image/webp',
+    },
+    delete: {
+      endpoint: '/api/image-kit-delete',
+      method: 'DELETE',
+    },
+  },
+});
 
 const ALLOWED_PLUGINS = [
   Paragraph,
@@ -36,41 +49,60 @@ const ALLOWED_PLUGINS = [
   Lists.TodoList,
   Blockquote,
   Callout,
-  Image,
+  YImage,
+  Code,
 ];
 
-export const YOOPTA_PLUGINS = [
+export const YOOPTA_PLUGINS = withShadcnUI([
   Accordion.extend({
     allowedPlugins: ALLOWED_PLUGINS,
-    elements: AccordionUI,
+    lifecycle: {
+      beforeCreate: (editor: YooEditor) => {
+        return AccordionCommands.buildAccordionElements(editor, { items: 2 });
+      },
+    },
+  }),
+  CarouselPlugin.extend({
+    allowedPlugins: [
+      YImage,
+      Callout,
+      Lists.BulletedList,
+      Lists.NumberedList,
+      Lists.TodoList,
+      Blockquote,
+      Code,
+    ],
   }),
   Paragraph,
-  Headings.HeadingOne.extend({
-    elements: HeadingsUI.HeadingOne,
+  Tabs.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
   }),
-  Headings.HeadingTwo.extend({
-    elements: HeadingsUI.HeadingTwo,
-  }),
-  Headings.HeadingThree.extend({
-    elements: HeadingsUI.HeadingThree,
-  }),
+  CodeGroup,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
   OrderDetailsActionPlugin,
+  Code,
   Blockquote,
   SendEmailActionPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
-  Lists.BulletedList,
-  Lists.NumberedList,
-  Lists.TodoList,
+  Lists.BulletedList.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
+  Lists.NumberedList.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
+  Lists.TodoList.extend({
+    allowedPlugins: ALLOWED_PLUGINS,
+  }),
   Table.extend({
     allowedPlugins: ALLOWED_PLUGINS,
-    elements: TableUI,
   }),
-  Link,
   StepsPlugin.extend({
     allowedPlugins: ALLOWED_PLUGINS,
   }),
-  TabsPlugin,
+  Link,
   Callout.extend({
     allowedPlugins: [
       Lists.BulletedList,
@@ -78,29 +110,9 @@ export const YOOPTA_PLUGINS = [
       Lists.TodoList,
       Blockquote,
       Callout,
-      Image,
+      YImage,
+      Code,
     ],
   }),
-  Image.extend({
-    events: {
-      onDestroy: (editor, id) => {
-        const imageElement = Elements.getElement(editor, id, { type: 'image' });
-        console.log('Image imageElement', imageElement);
-      },
-    },
-    options: {
-      maxSizes: { maxHeight: 750, maxWidth: 750 },
-      onUpload: async (file: File) => {
-        const data = await uploadToCloudinary(file, 'image');
-
-        return {
-          src: data.secure_url,
-          sizes: {
-            width: data.width,
-            height: data.height,
-          },
-        };
-      },
-    },
-  }),
-];
+  YImage,
+]);

@@ -5,13 +5,7 @@ import { Editor, Path, Range } from 'slate';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
 
 import { useEventHandlers, useSlateEditor } from './hooks';
-import type {
-  ExtendedLeafProps,
-  Plugin,
-  PluginCustomEditorRenderProps,
-  PluginEvents,
-  RenderSlateElementProps,
-} from './types';
+import type { ExtendedLeafProps, Plugin, PluginDOMEvents, RenderSlateElementProps } from './types';
 import { TextLeaf } from '../components/text-leaf/text-leaf';
 import { useBlockData, useYooptaEditor } from '../contexts/YooptaContext/YooptaContext';
 import type { SlateElement } from '../editor/types';
@@ -27,9 +21,8 @@ type Props<TElementMap extends Record<string, SlateElement>, TOptions> = Plugin<
 > & {
   id: string;
   marks?: YooptaMark<any>[];
-  options: Plugin<TElementMap, TOptions>['options'];
   placeholder?: string;
-  events?: PluginEvents;
+  events?: PluginDOMEvents;
 };
 
 const getPluginElementsRender = (elements) => {
@@ -52,11 +45,9 @@ const getMappedMarks = (marks?: YooptaMark<any>[]) => {
 
 const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, TOptions>({
   id,
-  customEditor,
   elements,
   marks,
   events,
-  options,
   extensions: withExtensions,
 }: Props<TElementMap, TOptions>) => {
   const editor = useYooptaEditor();
@@ -96,7 +87,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         source: 'native-selection',
       });
     },
-    [editor.readOnly],
+    [editor.path, editor.readOnly],
   );
 
   const renderElement = useCallback(
@@ -110,21 +101,16 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (!ElementComponent) return <DefaultElement {...props} attributes={attributes} />;
 
       return (
-        <ElementComponent
-          {...props}
-          {...pluginElementProps}
-          attributes={attributes}
-          blockId={id}
-          HTMLAttributes={options?.HTMLAttributes}
-        />
+        <ElementComponent {...props} {...pluginElementProps} attributes={attributes} blockId={id} />
       );
     },
-    [elements],
+    [id, elements],
   );
 
   const renderLeaf = useCallback(
     (props: ExtendedLeafProps<any, any>) => {
-      let { children, leaf, attributes } = props;
+      let { children } = props;
+      const { leaf, attributes } = props;
       const { text, ...formats } = leaf;
 
       if (formats) {
@@ -284,7 +270,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       onKeyUp={onKeyUp}
       onFocus={onFocus}
       onBlur={onBlur}
-      customEditor={customEditor}
       readOnly={editor.readOnly}
       onPaste={onPaste}
     />
@@ -306,7 +291,6 @@ type SlateEditorInstanceProps = {
   onFocus: (event: React.FocusEvent) => void;
   onBlur: (event: React.FocusEvent) => void;
   onPaste: (event: React.ClipboardEvent) => void;
-  customEditor?: (props: PluginCustomEditorRenderProps) => JSX.Element;
   decorate: (nodeEntry: NodeEntry) => any[];
 };
 
@@ -325,40 +309,38 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
     onFocus,
     onSelectionChange,
     onPaste,
-    customEditor,
     decorate,
     readOnly,
-  }) => {
-    if (typeof customEditor === 'function') {
-      return customEditor({ blockId: id });
-    }
+  }) => (
+    <Slate
+      key={`slate-${id}`}
+      editor={slate}
+      initialValue={initialValue}
+      onValueChange={onChange}
+      onSelectionChange={onSelectionChange}>
+      <Editable
+        key={`editable-${id}`}
+        renderElement={renderElement as any}
+        renderLeaf={renderLeaf}
+        renderChunk={(props) => {
+          console.log('renderChunk', props.children);
 
-    return (
-      <Slate
-        key={`slate-${id}`}
-        editor={slate}
-        initialValue={initialValue}
-        onValueChange={onChange}
-        onSelectionChange={onSelectionChange}>
-        <Editable
-          key={`editable-${id}`}
-          renderElement={renderElement as any}
-          renderLeaf={renderLeaf}
-          className="yoopta-slate"
-          spellCheck
-          {...eventHandlers}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          onFocus={onFocus}
-          decorate={decorate}
-          // [TODO] - carefully check onBlur, e.x. transforms using functions, e.x. highlight update
-          // onBlur={onBlur}
-          readOnly={readOnly}
-          onPaste={onPaste}
-        />
-      </Slate>
-    );
-  },
+          return <span>{props.children}</span>;
+        }}
+        className="yoopta-slate"
+        spellCheck
+        {...eventHandlers}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        onFocus={onFocus}
+        decorate={decorate}
+        // [TODO] - carefully check onBlur, e.x. transforms using functions, e.x. highlight update
+        // onBlur={onBlur}
+        readOnly={readOnly}
+        onPaste={onPaste}
+      />
+    </Slate>
+  ),
 );
 
 SlateEditorInstance.displayName = 'SlateEditorInstance';

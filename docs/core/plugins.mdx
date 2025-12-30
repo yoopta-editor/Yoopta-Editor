@@ -7,13 +7,86 @@ description: Understanding and working with Yoopta Editor plugins
 
 Plugins are the building blocks of Yoopta Editor. Each plugin represents a specific type of content block (paragraph, heading, image, etc.) and defines how that content is rendered and behaves.
 
+Every plugin in Yoopta Editor is built using the `YooptaPlugin` class, which provides a consistent API for defining block types, handling events, managing state, and extending functionality.
+
+## Plugin Architecture
+
+### YooptaPlugin Class
+
+All plugins are created using the `YooptaPlugin` class constructor:
+
+```typescript
+import { YooptaPlugin } from '@yoopta/editor';
+
+const MyPlugin = new YooptaPlugin({
+  type: 'MyPlugin',
+  elements: {
+    // Plugin elements definition
+  },
+  options: {
+    // Plugin options
+  },
+  commands: {
+    // Plugin commands
+  },
+  events: {
+    // Event handlers
+  },
+  lifecycle: {
+    // Lifecycle hooks
+  },
+  parsers: {
+    // HTML, Markdown, Email parsers
+  },
+  extensions: {
+    // Slate extensions
+  },
+});
+```
+
+### Plugin Structure
+
+Each plugin configuration consists of:
+
+<ResponseField name="type" type="string" required>
+  Unique identifier for the plugin (e.g., 'Paragraph', 'Image', 'Code')
+</ResponseField>
+
+<ResponseField name="elements" type="object | JSX.Element" required>
+  Defines the structure and rendering of plugin elements. Can be an object or JSX syntax
+</ResponseField>
+
+<ResponseField name="options" type="object">
+  Configuration options including display settings and shortcuts
+</ResponseField>
+
+<ResponseField name="commands" type="object">
+  Methods for manipulating plugin content programmatically
+</ResponseField>
+
+<ResponseField name="events" type="object">
+  Event handlers for keyboard, mouse, and other DOM events
+</ResponseField>
+
+<ResponseField name="lifecycle" type="object">
+  Hooks that run at specific points in the plugin lifecycle
+</ResponseField>
+
+<ResponseField name="parsers" type="object">
+  Serialization and deserialization for HTML, Markdown, and Email
+</ResponseField>
+
+<ResponseField name="extensions" type="function">
+  Slate editor extensions for custom behavior
+</ResponseField>
+
 ## Available Plugins
 
 Yoopta Editor provides a rich set of built-in plugins:
 
 ### Text Plugins
 
-- **Paragraph** - Basic text blocks
+- **[Paragraph](/plugins/paragraph)** - Basic text blocks
 - **Headings** - H1, H2, H3 heading blocks
 - **Blockquote** - Quote blocks
 
@@ -25,21 +98,28 @@ Yoopta Editor provides a rich set of built-in plugins:
 
 ### Media Plugins
 
-- **Image** - Image blocks with upload support
+- **[Image](/plugins/image)** - Image blocks with upload support
 - **Video** - Video blocks with upload support
 - **File** - File attachment blocks
 - **Embed** - Embed external content (YouTube, Twitter, etc.)
 
 ### Layout Plugins
 
-- **Table** - Tabular data
+- **[Table](/plugins/table)** - Tabular data
+- **[Tabs](/plugins/tabs)** - Tabbed content sections
+- **[Steps](/plugins/steps)** - Step-by-step instructions
+- **[Carousel](/plugins/carousel)** - Image/content carousel
 - **Accordion** - Collapsible content sections
 - **Divider** - Horizontal separator
 - **Callout** - Highlighted notice blocks
 
+### Code Plugins
+
+- **[Code](/plugins/code)** - Syntax-highlighted code blocks
+- **[CodeGroup](/plugins/code-group)** - Tabbed code blocks with multiple files
+
 ### Special Plugins
 
-- **Code** - Syntax-highlighted code blocks
 - **Link** - Link blocks
 
 ## Using Plugins
@@ -160,20 +240,57 @@ const CustomParagraph = Paragraph.extend({
 });
 ```
 
-### Plugin Structure
+### Defining Elements
 
-Each plugin has the following structure:
+Elements can be defined in two ways:
+
+**1. Object Syntax:**
 
 ```typescript
-type YooptaPlugin = {
-  type: string;
-  elements: Record<string, YooptaElement>;
-  options?: PluginOptions;
-  renders?: CustomRenders;
-  shortcuts?: ShortcutMap;
-  events?: PluginEvents;
-};
+const MyPlugin = new YooptaPlugin({
+  type: 'MyPlugin',
+  elements: {
+    'my-element': {
+      render: (props) => <div {...props.attributes}>{props.children}</div>,
+      props: {
+        /* default props */
+      },
+      nodeType: 'block', // or 'void' or 'inline'
+    },
+  },
+});
 ```
+
+**2. JSX Syntax (Recommended):**
+
+```typescript
+const MyPlugin = new YooptaPlugin({
+  type: 'MyPlugin',
+  elements: (
+    <my-container render={MyContainer}>
+      <my-item render={MyItem} />
+    </my-container>
+  ),
+});
+```
+
+### Element Properties
+
+<ParamField path="render" type="function" required>
+  React component that renders the element
+</ParamField>
+
+<ParamField path="props" type="object">
+  Default props for the element
+</ParamField>
+
+<ParamField path="nodeType" type="'block' | 'void' | 'inline'">
+  Type of Slate node. Default is 'block'
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text for empty elements
+</ParamField>
 
 ## Custom Renders
 
@@ -295,11 +412,13 @@ const hasImagePlugin = plugins.some((p) => p.type === 'Image');
   </Accordion>
 
 {' '}
+
 <Accordion title="Define plugins outside component">
   Define your plugins array outside the component to prevent recreation on every render.
 </Accordion>
 
 {' '}
+
 <Accordion title="Use extend() for customization">
   Use the `extend()` method instead of modifying plugin objects directly.
 </Accordion>
@@ -309,19 +428,97 @@ const hasImagePlugin = plugins.some((p) => p.type === 'Image');
   </Accordion>
 </AccordionGroup>
 
+## Lifecycle Hooks
+
+Lifecycle hooks allow you to run code at specific points in a block's lifecycle:
+
+```typescript
+const MyPlugin = new YooptaPlugin({
+  type: 'MyPlugin',
+  lifecycle: {
+    beforeCreate: (editor) => {
+      // Return initial block structure
+      return editor.y('my-element', {
+        children: [editor.y.text('Initial content')],
+      });
+    },
+    onCreate: (editor, block) => {
+      // Run after block is created
+    },
+    onDestroy: (editor, block) => {
+      // Cleanup before block is destroyed
+    },
+  },
+});
+```
+
+### Available Lifecycle Hooks
+
+<ResponseField name="beforeCreate" type="(editor: YooEditor) => SlateElement">
+  Called before a block is created. Return the initial structure
+</ResponseField>
+
+<ResponseField name="onCreate" type="(editor: YooEditor, block: YooptaBlockData) => void">
+  Called after a block is created
+</ResponseField>
+
+<ResponseField name="onDestroy" type="(editor: YooEditor, block: YooptaBlockData) => void">
+  Called before a block is destroyed
+</ResponseField>
+
+## Parsers
+
+Parsers handle serialization and deserialization of content:
+
+```typescript
+const MyPlugin = new YooptaPlugin({
+  type: 'MyPlugin',
+  parsers: {
+    html: {
+      deserialize: {
+        nodeNames: ['DIV'],
+        parse: (el) => {
+          // Convert HTML element to Slate node
+          return {
+            type: 'my-element',
+            children: [{ text: el.textContent }],
+          };
+        },
+      },
+      serialize: (element, text, blockMeta) => {
+        // Convert Slate node to HTML string
+        return `<div>${text}</div>`;
+      },
+    },
+    markdown: {
+      serialize: (element, text) => {
+        // Convert to Markdown
+        return `${text}\n`;
+      },
+    },
+    email: {
+      serialize: (element, text) => {
+        // Convert to email-compatible HTML
+        return `<table><tr><td>${text}</td></tr></table>`;
+      },
+    },
+  },
+});
+```
+
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Plugin List" icon="list" href="/plugins/overview">
-    View all available plugins
+  <Card title="Paragraph Plugin" icon="paragraph" href="/plugins/paragraph">
+    Learn about the basic text plugin
   </Card>
-  <Card title="Custom Plugins" icon="code" href="/advanced/custom-plugins">
-    Create your own plugins
+  <Card title="Image Plugin" icon="image" href="/plugins/image">
+    Working with images and uploads
   </Card>
-  <Card title="Plugin API" icon="book" href="/api-reference/plugin-api">
-    Detailed plugin API reference
+  <Card title="Code Plugin" icon="code" href="/plugins/code">
+    Syntax-highlighted code blocks
   </Card>
-  <Card title="Examples" icon="image" href="/examples/basic-setup">
-    See plugins in action
+  <Card title="Table Plugin" icon="table" href="/plugins/table">
+    Create and manage tables
   </Card>
 </CardGroup>

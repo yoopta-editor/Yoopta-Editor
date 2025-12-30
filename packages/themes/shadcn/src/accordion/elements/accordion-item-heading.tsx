@@ -1,60 +1,121 @@
-import { useCallback, useMemo } from 'react';
-import type { MouseEvent } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
-import { ChevronDown } from 'lucide-react';
-import { Editor, Element, Path, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
+import { ChevronDown, Plus, Trash2 } from 'lucide-react';
+import type { Location } from 'slate';
+import { Editor, Path, Transforms } from 'slate';
+
+import { AccordionTrigger } from '../../ui/accordion';
 
 export const AccordionItemHeading = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;
   const editor = useYooptaEditor();
+  const [_, forceRerender] = useReducer((x) => x + 1, 0);
 
-  // Find parent accordion-list-item element using Slate API
-  const listItemEntry = useMemo(() => {
+  const parentListItem = useMemo(() => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
-
     if (!slate) return undefined;
 
     try {
-      const elementPath = ReactEditor.findPath(slate, element as SlateElement);
-      const parentPath = Path.parent(elementPath);
-
-      const [parentNode] = Editor.node(slate, parentPath);
-      if (
-        Element.isElement(parentNode) &&
-        (parentNode as SlateElement).type === 'accordion-list-item'
-      ) {
-        return [parentNode as SlateElement, parentPath] as const;
-      }
+      const elementPath = Elements.getElementPath(editor, blockId, element as SlateElement);
+      const parentElement = Editor.parent(slate, elementPath as Location);
+      return parentElement[0] as SlateElement;
     } catch (error) {
-      // Element not found in Slate tree
+      // Element path not found
     }
 
     return undefined;
   }, [editor, blockId, element]);
 
-  const isExpanded = listItemEntry?.[0]?.props?.isExpanded ?? false;
+  const parentListItemPath = useMemo(() => {
+    if (!parentListItem) return undefined;
 
-  const toggleAccordionItem = useCallback(
-    (e: MouseEvent<HTMLButtonElement>) => {
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return undefined;
+
+    try {
+      return Elements.getElementPath(editor, blockId, parentListItem);
+    } catch (error) {
+      // Element path not found
+    }
+
+    return undefined;
+  }, [editor, blockId, parentListItem]);
+
+  const isExpanded = parentListItem?.props?.isExpanded ?? false;
+
+  const toggleListItem = useCallback(() => {
+    if (parentListItem && parentListItemPath) {
+      Elements.updateElement(
+        editor,
+        blockId,
+        {
+          type: parentListItem.type,
+          props: {
+            ...parentListItem.props,
+            isExpanded: !isExpanded,
+          },
+        },
+        { path: parentListItemPath },
+      );
+    }
+
+    forceRerender();
+  }, [editor, blockId, parentListItem, parentListItemPath, isExpanded]);
+
+  const deleteListItem = useCallback(
+    (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      const slate = Blocks.getBlockSlate(editor, { id: blockId });
 
-      if (!slate || !listItemEntry) return;
+      if (!parentListItem || !parentListItemPath) return;
 
-      const [listItem, listItemPath] = listItemEntry;
+      // Get all accordion-list-item children to check if this is the last one
+      const listItems = Elements.getElementChildren(editor, blockId, {
+        type: 'accordion-list',
+      });
 
-      Editor.withoutNormalizing(slate, () => {
-        Transforms.setNodes<SlateElement>(
-          slate,
-          { props: { ...listItem.props, isExpanded: !isExpanded } },
-          { at: listItemPath },
-        );
+      if (listItems?.length === 1) {
+        Blocks.deleteBlock(editor, { blockId });
+        return;
+      }
+
+      Elements.deleteElement(editor, blockId, {
+        type: 'accordion-list-item',
+        path: parentListItemPath,
       });
     },
-    [editor, blockId, listItemEntry, isExpanded],
+    [editor, blockId, parentListItem, parentListItemPath],
+  );
+
+  const addListItem = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const slate = Blocks.getBlockSlate(editor, { id: blockId });
+      if (!slate || !parentListItemPath) return;
+
+      // Create new accordion-list-item using editor.y()
+      const newListItem = editor.y('accordion-list-item', {
+        props: { isExpanded: false },
+        children: [
+          editor.y('accordion-list-item-heading'),
+          editor.y('accordion-list-item-content'),
+        ],
+      });
+
+      Editor.withoutNormalizing(slate, () => {
+        const nextListItemPath = Path.next(parentListItemPath);
+        Transforms.insertNodes(slate, newListItem, { at: nextListItemPath });
+        const nextLeafPath = [...nextListItemPath, 0, 0];
+
+        setTimeout(() => {
+          Transforms.select(slate, { offset: 0, path: nextLeafPath });
+        }, 0);
+      });
+    },
+    [editor, blockId, parentListItemPath],
   );
 
   return (
@@ -62,18 +123,39 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
       {...attributes}
       className="flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all px-5">
       <div className="flex-1 min-w-0">{children}</div>
-      <button
-        type="button"
-        contentEditable={false}
-        onMouseDown={toggleAccordionItem}
-        className="flex shrink-0 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-        aria-label="Toggle accordion">
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${
-            isExpanded ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
+
+      <div className="flex shrink-0 items-center gap-1" contentEditable={false}>
+        <button
+          type="button"
+          contentEditable={false}
+          onClick={addListItem}
+          className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
+          title="Add accordion item">
+          <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </button>
+
+        <button
+          type="button"
+          contentEditable={false}
+          onClick={deleteListItem}
+          className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
+          title="Delete accordion item">
+          <Trash2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </button>
+
+        <AccordionTrigger
+          type="button"
+          contentEditable={false}
+          data-slot="accordion-trigger"
+          onClick={toggleListItem}
+          className="flex shrink-0 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+          <ChevronDown
+            className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${
+              isExpanded ? 'rotate-180' : ''
+            }`}
+          />
+        </AccordionTrigger>
+      </div>
     </div>
   );
 };

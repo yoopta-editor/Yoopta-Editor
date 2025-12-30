@@ -1,7 +1,8 @@
 import type { SlateEditor, SlateElement, SlateElementTextNode } from './editor/types';
 
 declare module 'slate' {
-  type CustomTypes = {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface CustomTypes {
     Editor: SlateEditor;
     Element: SlateElement;
     Text: SlateElementTextNode;

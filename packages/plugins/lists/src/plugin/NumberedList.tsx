@@ -1,10 +1,15 @@
-import type { YooptaBlockData } from '@yoopta/editor';
-import { YooptaPlugin, serializeTextNodes, serializeTextNodesIntoMarkdown } from '@yoopta/editor';
+import type { SlateElement } from '@yoopta/editor';
+import {
+  YooptaPlugin,
+  deserializeTextNodes,
+  generateId,
+  serializeTextNodes,
+  serializeTextNodesIntoMarkdown,
+} from '@yoopta/editor';
 
 import { NumberedListCommands } from '../commands';
 import { onKeyDown } from '../events/onKeyDown';
 import type { ListElementMap } from '../types';
-import { deserializeListNodes } from '../utils/deserializeListNodes';
 
 const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
   type: 'NumberedList',
@@ -25,9 +30,7 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
     },
     shortcuts: ['1.'],
   },
-  events: {
-    onKeyDown,
-  },
+  events: { onKeyDown },
   commands: NumberedListCommands,
   parsers: {
     html: {
@@ -35,39 +38,87 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
         nodeNames: ['OL'],
         parse(el, editor) {
           if (el.nodeName === 'OL') {
-            const align = (el.getAttribute('data-meta-align') ||
-              'left') as YooptaBlockData['meta']['align'];
-            const depth = parseInt(el.getAttribute('data-meta-depth') || '0', 10);
+            const listItems = Array.from(el.children).filter((child) => child.nodeName === 'LI');
 
-            const deserializedList = deserializeListNodes(editor, el, {
-              type: 'NumberedList',
-              depth,
-              align,
-            });
-            if (deserializedList.length > 0) {
-              return deserializedList;
+            // Always ensure at least one list item
+            if (listItems.length === 0) {
+              return {
+                id: generateId(),
+                type: 'numbered-list',
+                children: [
+                  {
+                    id: generateId(),
+                    type: 'numbered-list-item',
+                    children: [{ text: '' }],
+                    props: { nodeType: 'block' },
+                  },
+                ],
+                props: { nodeType: 'block' },
+              };
             }
+
+            const listItemElements = listItems.map((listItem) => {
+              const textNodes = deserializeTextNodes(editor, listItem.childNodes);
+              return {
+                id: generateId(),
+                type: 'numbered-list-item',
+                children: textNodes.length > 0 ? textNodes : [{ text: '' }],
+                props: { nodeType: 'block' },
+              };
+            });
+
+            return {
+              id: generateId(),
+              type: 'numbered-list',
+              children: listItemElements,
+              props: { nodeType: 'block' },
+            };
           }
         },
       },
       serialize: (element, text, blockMeta) => {
-        const { align = 'left', depth = 0 } = blockMeta || {};
+        const { align = 'left', depth = 0 } = blockMeta ?? {};
+
+        const listItems = element.children
+          .filter(
+            (child): child is SlateElement =>
+              'type' in child && child.type === 'numbered-list-item',
+          )
+          .map((item) => `<li>${serializeTextNodes(item.children)}</li>`)
+          .join('');
 
         return `<ol data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
           depth * 20
-        }px; text-align: ${align}"><li>${serializeTextNodes(element.children)}</li></ol>`;
+        }px; text-align: ${align}">${listItems}</ol>`;
       },
     },
     markdown: {
       serialize: (element, text, blockMeta) => {
-        const { align = 'left', depth = 0 } = blockMeta || {};
+        const { depth = 0 } = blockMeta ?? {};
         const indent = '  '.repeat(depth);
-        return `${indent}- ${serializeTextNodesIntoMarkdown(element.children)}`;
+        const listItems = element.children
+          .filter(
+            (child): child is SlateElement =>
+              'type' in child && child.type === 'numbered-list-item',
+          )
+          .map(
+            (item, index) =>
+              `${indent}${index + 1}. ${serializeTextNodesIntoMarkdown(item.children)}`,
+          )
+          .join('\n');
+        return listItems;
       },
     },
     email: {
       serialize: (element, text, blockMeta) => {
-        const { align = 'left', depth = 0 } = blockMeta || {};
+        const { align = 'left', depth = 0 } = blockMeta ?? {};
+        const listItems = element.children
+          .filter(
+            (child): child is SlateElement =>
+              'type' in child && child.type === 'numbered-list-item',
+          )
+          .map((item) => `<li>${serializeTextNodes(item.children)}</li>`)
+          .join('');
 
         return `
           <table style="width:100%;">
@@ -80,7 +131,7 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
     padding-left: 1rem;
     padding-top: 2px;
     margin: 0;
-    "><li>${serializeTextNodes(element.children)}</li></ol>
+    ">${listItems}</ol>
                 </td>
               </tr>
             </tbody>
