@@ -319,14 +319,15 @@ Handle plugin-specific events:
 ```jsx
 const CustomImage = Image.extend({
   events: {
-    onBeforeUpload: (file) => {
-      console.log('Uploading:', file.name);
+    onPaste: (editor, slate, options) => {
+      return (event) => {
+        console.log('onPaste', event);
+      };
     },
-    onUploadSuccess: (url) => {
-      console.log('Upload complete:', url);
-    },
-    onUploadError: (error) => {
-      console.error('Upload failed:', error);
+    onKeyDown: (editor, slate, options) => {
+      return (event) => {
+        console.log('onKeyDown', event);
+      };
     },
   },
 });
