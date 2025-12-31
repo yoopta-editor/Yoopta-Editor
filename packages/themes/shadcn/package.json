@@ -15,8 +15,8 @@
   ],
   "peerDependencies": {
     "@yoopta/editor": ">=4.9.9",
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
     "@yoopta/code": "*",
     "@yoopta/image": "*",
     "@yoopta/table": "*",
@@ -33,7 +33,6 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-separator": "^1.1.0",
-    "@radix-ui/react-slot": "1.2.4",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",

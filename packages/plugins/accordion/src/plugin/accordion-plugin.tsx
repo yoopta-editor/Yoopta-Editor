@@ -6,7 +6,7 @@ import {
   serializeTextNodes,
 } from '@yoopta/editor';
 import type { SlateElement } from '@yoopta/editor';
-import { ListCollapse } from 'lucide-react';
+import type { Descendant } from 'slate';
 import { Element, Transforms } from 'slate';
 
 import { AccordionCommands } from '../commands/accordion-commands';
@@ -105,8 +105,6 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
 
         if (hotkeys.isEnter(event)) {
           if (event.isDefaultPrevented()) return;
-          console.log('ACCORDION: event.isDefaultPrevented()', event.isDefaultPrevented());
-          console.log('ACCORDION: event.defaultPrevented', event.defaultPrevented);
           event.preventDefault();
 
           const currentElement = Elements.getElement(editor, currentBlock.id);
@@ -149,7 +147,6 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
     display: {
       title: 'Accordion',
       description: 'Create collapses',
-      icon: <ListCollapse size={24} />,
     },
     shortcuts: ['accordion'],
   },
@@ -174,12 +171,12 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         const { align = 'left', depth = 0 } = blockMeta ?? {};
 
         return `<div>${element.children
-          .filter(Element.isElement)
+          .filter((node) => Element.isElement(node))
           .map((listItemNode) => {
             const listItem = listItemNode as SlateElement;
 
             return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
-              .filter(Element.isElement)
+              .filter((node) => Element.isElement(node))
               .map((itemNode) => {
                 const itemElement = itemNode as SlateElement;
 
@@ -202,12 +199,12 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           <table data-meta-align="${align}" data-meta-depth="${depth}" style="width: 100%; border-collapse: collapse; margin-left: ${depth}px;">
             <tbody>
               ${element.children
-                .filter(Element.isElement)
+                .filter((node: Descendant) => Element.isElement(node))
                 .map((listItemNode) => {
                   const listItem = listItemNode as SlateElement;
 
                   return listItem.children
-                    .filter(Element.isElement)
+                    .filter((node: Descendant) => Element.isElement(node))
                     .map((itemNode) => {
                       const item = itemNode as SlateElement;
 
