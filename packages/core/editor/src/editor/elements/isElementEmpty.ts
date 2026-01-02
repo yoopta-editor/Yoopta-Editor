@@ -1,43 +1,56 @@
-import type { Path } from 'slate';
 import { Editor, Element } from 'slate';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import type { SlateElement, YooEditor } from '../types';
+import type { YooEditor } from '../types';
+import type { IsElementEmptyOptions } from './types';
 
-export type EmptyBlockElement = {
-  type: string;
-  path: Path;
-};
+/**
+ * Check if element is empty (has no text content)
+ *
+ * @param editor - YooEditor instance
+ * @param options - Check options
+ * @returns true if element is empty, false otherwise
+ *
+ * @example
+ * ```typescript
+ * // Check if content is empty
+ * const isEmpty = editor.isElementEmpty({
+ *   blockId: 'accordion-1',
+ *   type: 'accordion-list-item-content',
+ *   path: [0, 1, 1]
+ * });
+ * ```
+ */
+export function isElementEmpty(editor: YooEditor, options: IsElementEmptyOptions): boolean {
+  const { blockId, type, path } = options;
 
-export function isElementEmpty(
-  editor: YooEditor,
-  blockId: string,
-  element: EmptyBlockElement,
-): boolean | undefined {
   const block = editor.children[blockId];
-
   if (!block) {
-    throw new Error(`Block with id ${blockId} not found`);
+    return true;
   }
 
   const slate = findSlateBySelectionPath(editor, { at: block.meta.order });
-
   if (!slate) {
-    console.warn('No slate found');
-    return;
+    return true;
   }
 
-  const [elementEntry] = Editor.nodes<SlateElement>(slate, {
-    at: element.path || slate.selection,
-    match: (n) => Element.isElement(n) && n.type === element.type,
-  });
+  const atPath = path || slate.selection || [0];
 
-  if (elementEntry) {
-    const [node, nodePath] = elementEntry;
-    const string = Editor.string(slate, nodePath);
+  try {
+    const [elementEntry] = Editor.nodes(slate, {
+      at: atPath,
+      match: (n) => Element.isElement(n) && n.type === type,
+      mode: 'lowest',
+    });
 
-    return string.trim().length === 0;
+    if (elementEntry) {
+      const [, nodePath] = elementEntry;
+      const string = Editor.string(slate, nodePath);
+      return string.trim().length === 0;
+    }
+
+    return true;
+  } catch (error) {
+    return true;
   }
-
-  return false;
 }

@@ -51,13 +51,14 @@ const Editor = ({
   useEffect(() => {
     if (!autoFocus || isReadOnly) return;
     editor.focus();
-  }, [autoFocus, isReadOnly]);
+  }, [autoFocus, isReadOnly, editor]);
 
   useEffect(() => {
     if (isReadOnly) return;
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor.path, isReadOnly]);
 
   const handleEmptyZoneClick = (e: React.MouseEvent) => {
@@ -124,7 +125,7 @@ const Editor = ({
     }
   };
 
-  const onKeyDown = (event) => {
+  const onKeyDown = (event: KeyboardEvent) => {
     if (isReadOnly) return;
 
     if (HOTKEYS.isRedo(event)) {
@@ -173,19 +174,20 @@ const Editor = ({
 
         navigator.clipboard.write([clipboardItem]).then(() => {
           const html = new DOMParser().parseFromString(htmlString, 'text/html');
+          // eslint-disable-next-line no-console
           console.log('HTML copied\n', html.body);
         });
 
         if (HOTKEYS.isCut(event)) {
           // [TEST]
           editor.batchOperations(() => {
-            const selectedBlocks = Paths.getSelectedPaths(editor);
+            const selectedBlocksPaths = Paths.getSelectedPaths(editor);
 
-            if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
+            if (Array.isArray(selectedBlocksPaths) && selectedBlocksPaths.length > 0) {
               const isAllBlocksSelected =
-                selectedBlocks.length === Object.keys(editor.children).length;
+                selectedBlocksPaths.length === Object.keys(editor.children).length;
 
-              selectedBlocks.forEach((index) => {
+              selectedBlocksPaths.forEach((index) => {
                 const blockId = Blocks.getBlock(editor, { at: index })?.id;
                 if (blockId) editor.deleteBlock({ blockId });
               });
@@ -226,11 +228,11 @@ const Editor = ({
 
       // [TEST]
       editor.batchOperations(() => {
-        const selectedBlocks = Paths.getSelectedPaths(editor);
+        const selectedBlocksPaths = Paths.getSelectedPaths(editor);
 
-        if (Array.isArray(selectedBlocks) && selectedBlocks?.length > 0) {
+        if (Array.isArray(selectedBlocksPaths) && selectedBlocksPaths?.length > 0) {
           event.preventDefault();
-          selectedBlocks.forEach((index) => editor.deleteBlock({ at: index }));
+          selectedBlocksPaths.forEach((index) => editor.deleteBlock({ at: index }));
 
           editor.setPath({ current: null, selected: null });
           resetSelectionState();
@@ -321,6 +323,7 @@ const Editor = ({
 
   return (
     <div
+      // eslint-disable-next-line no-return-assign
       ref={(ref) => (editor.refElement = ref)}
       className={className ? `yoopta-editor ${className}` : 'yoopta-editor'}
       style={editorStyles}

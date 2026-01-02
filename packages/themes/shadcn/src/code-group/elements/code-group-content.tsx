@@ -92,21 +92,18 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
   };
 
   const updateLanguage = (newLanguage: string) => {
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
-    Elements.updateElement(
-      editor,
+    Elements.updateElement(editor, {
       blockId,
-      {
-        type: 'code-group-content',
-        props: {
-          ...element.props,
-          language: newLanguage,
-        },
+      type: 'code-group-content',
+      props: {
+        ...element.props,
+        language: newLanguage,
       },
-      { path: elementPath },
-    );
+      path: elementPath,
+    });
   };
 
   const currentLanguage =

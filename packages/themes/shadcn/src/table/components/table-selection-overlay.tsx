@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
-import { TableCommands, TABLE_CELLS_IN_SELECTION } from '@yoopta/table';
+import { TABLE_CELLS_IN_SELECTION, TableCommands } from '@yoopta/table';
 import type { TableCellElement } from '@yoopta/table';
 import {
   ChevronDown,
@@ -65,19 +65,17 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
   } | null>(null);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
-  // Save selected cells to prevent losing them when popover opens
-  const [savedSelectedCells, setSavedSelectedCells] = useState<[TableCellElement, Path][]>([]);
+  const [savedSelectedCells, setSavedSelectedCells] = useState<
+    [TableCellElement, Path][] | undefined
+  >([]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedCells = slate ? TABLE_CELLS_IN_SELECTION.get(slate) : [];
 
-  // Update saved cells when selection changes
   useEffect(() => {
-    if (selectedCells && selectedCells.length > 0) {
-      setSavedSelectedCells(selectedCells);
-    }
+    setSavedSelectedCells(selectedCells);
   }, [selectedCells]);
 
-  // Use saved cells for operations
   const cellsToUse =
     Array.isArray(selectedCells) && selectedCells?.length > 0 ? selectedCells : savedSelectedCells;
 
@@ -147,7 +145,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
   }, [cellsToUse]);
 
   const mergeCells = () => {
-    if (!editor || cellsToUse.length <= 1) return;
+    if (!editor || !cellsToUse || cellsToUse.length <= 1) return;
     TableCommands.mergeCells(editor, blockId, {
       cells: cellsToUse,
     });
@@ -156,7 +154,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
   };
 
   const clearContents = () => {
-    if (!editor || cellsToUse.length === 0) return;
+    if (!editor || !cellsToUse || cellsToUse.length === 0) return;
     TableCommands.clearContents(editor, blockId, {
       cells: cellsToUse,
     });
@@ -227,7 +225,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
                 size="sm"
                 className="w-full justify-start gap-2"
                 onClick={mergeCells}
-                disabled={cellsToUse.length <= 1}>
+                disabled={!cellsToUse || cellsToUse.length <= 1}>
                 <Merge className="h-4 w-4" />
                 Merge cells
               </Button>

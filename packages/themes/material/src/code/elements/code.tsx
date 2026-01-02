@@ -7,18 +7,10 @@ import { HighlightedCodeOverlay } from '@yoopta/code';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
-import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki';
 import { Editor, Element, Text } from 'slate';
 
 import { LanguageSelect } from './language-select';
 import { ThemeSelect } from './theme-select';
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface Window {
-    yShiki?: HighlighterGeneric<BundledLanguage, BundledTheme> | null;
-  }
-}
 
 const LANGUAGES = [
   { value: 'javascript', label: 'JavaScript' },
@@ -129,12 +121,13 @@ export const CodeBlockElement = ({
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
     const parentEntry = elementPath ? Editor.parent(slate, elementPath) : undefined;
     if (parentEntry && Element.isElement(parentEntry[0]) && !Editor.isEditor(parentEntry[0])) {
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'code',
         path: elementPath,
       });
@@ -146,7 +139,8 @@ export const CodeBlockElement = ({
 
   const updateLanguage = useCallback(
     (newLanguage: string) => {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'code',
         props: {
           ...element.props,
@@ -159,7 +153,8 @@ export const CodeBlockElement = ({
 
   const updateTheme = useCallback(
     (newTheme: string) => {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'code',
         props: {
           ...element.props,

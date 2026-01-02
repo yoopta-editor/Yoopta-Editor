@@ -8,6 +8,7 @@ import type { focusBlock } from './blocks/focusBlock';
 import type { GetBlockOptions } from './blocks/getBlock';
 import type { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import type { insertBlock } from './blocks/insertBlock';
+import type { mergeBlock } from './blocks/mergeBlock';
 import type { toggleBlock } from './blocks/toggleBlock';
 import type { EditorBlurOptions } from './core/blur';
 import type { HistoryStack, HistoryStackName, YooptaHistory } from './core/history';
@@ -28,6 +29,16 @@ import type {
   PluginOptions,
 } from '../plugins/types';
 import type { ElementStructureOptions, TextNodeOptions } from './elements/create-element-structure';
+import type { deleteElement } from './elements/deleteElement';
+import type { getElement } from './elements/getElement';
+import type { getElementChildren } from './elements/getElementChildren';
+import type { getElementEntry } from './elements/getElementEntry';
+import type { getElementPath } from './elements/getElementPath';
+import type { getElements } from './elements/getElements';
+import type { getParentElementPath } from './elements/getParentElementPath';
+import type { insertElement } from './elements/insertElement';
+import type { isElementEmpty } from './elements/isElementEmpty';
+import type { updateElement } from './elements/updateElement';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -111,9 +122,21 @@ export type BaseYooEditor = {
   decreaseBlockDepth: WithoutFirstArg<typeof decreaseBlockDepth>;
   moveBlock: WithoutFirstArg<typeof moveBlock>;
   focusBlock: WithoutFirstArg<typeof focusBlock>;
-  mergeBlock: () => void;
-  splitBlock: (options?: SplitBlockOptions) => void;
+  mergeBlock: WithoutFirstArg<typeof mergeBlock>;
+  splitBlock: (options?: SplitBlockOptions) => string | undefined;
   getBlock: (options: GetBlockOptions) => YooptaBlockData | null;
+
+  // element handlers
+  insertElement: WithoutFirstArg<typeof insertElement>;
+  updateElement: WithoutFirstArg<typeof updateElement>;
+  deleteElement: WithoutFirstArg<typeof deleteElement>;
+  getElement: WithoutFirstArg<typeof getElement>;
+  getElements: WithoutFirstArg<typeof getElements>;
+  getElementEntry: WithoutFirstArg<typeof getElementEntry>;
+  getElementPath: WithoutFirstArg<typeof getElementPath>;
+  getParentElementPath: WithoutFirstArg<typeof getParentElementPath>;
+  getElementChildren: WithoutFirstArg<typeof getElementChildren>;
+  isElementEmpty: WithoutFirstArg<typeof isElementEmpty>;
 
   // element structure builder
   y: ((type: string, options?: ElementStructureOptions) => SlateElement) & {

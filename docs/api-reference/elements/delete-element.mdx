@@ -1,0 +1,221 @@
+---
+title: deleteElement
+description: Remove elements from a block
+---
+
+## Overview
+
+The `deleteElement` method removes an element from a block.
+
+## Signature
+
+```typescript
+editor.deleteElement(options: DeleteElementOptions): void
+```
+
+## Parameters
+
+<ParamField path="options" type="DeleteElementOptions" required>
+  Configuration object for deleting the element
+
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string" required>
+      Type of element to delete
+    </ParamField>
+
+    <ParamField path="path" type="ElementPath">
+      Path to the element:
+      - `'first'` - First element of the specified type
+      - `'last'` - Last element of the specified type
+      - `'selection'` - Element at current selection
+      - `number[]` - Specific Slate path
+    </ParamField>
+
+    <ParamField path="match" type="(element: SlateElement) => boolean">
+      Custom matcher function to find the element to delete
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { useYooptaEditor } from '@yoopta/editor';
+
+function AccordionItem({ blockId, itemPath }: Props) {
+  const editor = useYooptaEditor();
+
+  const deleteItem = () => {
+    editor.deleteElement({
+      blockId,
+      type: 'accordion-list-item',
+      path: itemPath
+    });
+  };
+
+  return <button onClick={deleteItem}>Delete</button>;
+}
+```
+
+### Delete by Matcher
+
+```typescript
+// Delete tab by ID
+editor.deleteElement({
+  blockId: 'tabs-1',
+  type: 'tabs-item-heading',
+  match: (el) => el.id === tabId
+});
+
+// Delete expanded accordion item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  match: (el) => el.props?.isExpanded === true
+});
+```
+
+### Delete by Position
+
+```typescript
+// Delete first item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: 'first'
+});
+
+// Delete last row
+editor.deleteElement({
+  blockId: 'table-1',
+  type: 'table-row',
+  path: 'last'
+});
+
+// Delete at specific path
+editor.deleteElement({
+  blockId: 'table-1',
+  type: 'table-data-cell',
+  path: [0, 2, 1]
+});
+```
+
+## Use Cases
+
+### Delete Tab
+
+```typescript
+const deleteTab = (blockId: string, tabId: string) => {
+  // Delete tab heading
+  editor.deleteElement({
+    blockId,
+    type: 'tabs-item-heading',
+    match: (el) => el.id === tabId
+  });
+
+  // Delete tab content
+  editor.deleteElement({
+    blockId,
+    type: 'tabs-item-content',
+    match: (el) => el.props?.referenceId === tabId
+  });
+};
+```
+
+### Delete Empty Items
+
+```typescript
+const deleteEmptyItems = (blockId: string) => {
+  const items = editor.getElements({
+    blockId,
+    type: 'accordion-list-item'
+  });
+
+  items.forEach((item, index) => {
+    const isEmpty = editor.isElementEmpty({
+      blockId,
+      type: 'accordion-list-item-content',
+      path: [0, 0, index, 1]
+    });
+
+    if (isEmpty) {
+      editor.deleteElement({
+        blockId,
+        type: 'accordion-list-item',
+        path: [0, 0, index]
+      });
+    }
+  });
+};
+```
+
+### Delete Table Column
+
+```typescript
+const deleteTableColumn = (blockId: string, columnIndex: number) => {
+  const rows = editor.getElements({
+    blockId,
+    type: 'table-row'
+  });
+
+  rows.forEach((row, rowIndex) => {
+    editor.deleteElement({
+      blockId,
+      type: 'table-data-cell',
+      path: [0, 0, rowIndex, columnIndex]
+    });
+  });
+};
+```
+
+## Notes
+
+<Warning>
+  Be careful when deleting elements. There's no undo for programmatic deletions (unless you implement it yourself).
+</Warning>
+
+<Note>
+  If the element is not found, the operation will fail silently. Consider checking if the element exists before deletion.
+</Note>
+
+<Info>
+  When deleting parent elements, all child elements are automatically deleted as well.
+</Info>
+
+## Type Definition
+
+```typescript
+type DeleteElementOptions = {
+  blockId: string;
+  type: string;
+  path?: ElementPath;
+  match?: (element: SlateElement) => boolean;
+};
+
+type ElementPath = number[] | 'selection' | 'first' | 'last';
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getElement" icon="search" href="/api-reference/elements/get-element">
+    Check element before deletion
+  </Card>
+  <Card title="insertElement" icon="plus" href="/api-reference/elements/insert-element">
+    Create new elements
+  </Card>
+  <Card title="isElementEmpty" icon="check-circle" href="/api-reference/elements/is-element-empty">
+    Check if element is empty
+  </Card>
+  <Card title="getElements" icon="list" href="/api-reference/elements/get-elements">
+    Get multiple elements for batch deletion
+  </Card>
+</CardGroup>
+
+

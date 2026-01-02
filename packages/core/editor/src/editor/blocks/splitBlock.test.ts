@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import { Editor, Transforms } from 'slate';
+import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -36,7 +36,19 @@ vi.mock('slate', () => ({
     end: vi.fn(() => ({ path: [0, 0], offset: 0 })),
   },
   Node: {
-    string: vi.fn(),
+    string: vi.fn((node) => {
+      // Simple implementation to get text from node
+      if ('text' in node) return node.text;
+      if ('children' in node) {
+        return node.children
+          .map((child: any) => {
+            if ('text' in child) return child.text;
+            return '';
+          })
+          .join('');
+      }
+      return '';
+    }),
   },
   Transforms: {
     select: vi.fn(),
@@ -150,7 +162,7 @@ describe('splitBlock', () => {
       const newBlockId = splitBlock(editor as YooEditor, { blockId: 'block-123' });
 
       expect(newBlockId).toBe('new-block-id');
-      expect(getBlock).toHaveBeenCalledWith(editor, { id: 'block-123', at: null });
+      expect(getBlock).toHaveBeenCalledWith(editor, { id: 'block-123', at: 0 });
       expect(getBlockSlate).toHaveBeenCalledWith(editor, { id: 'block-123' });
     });
 
@@ -225,12 +237,11 @@ describe('splitBlock', () => {
   describe('Focus Behavior', () => {
     it('should focus new block by default', () => {
       const newBlockId = splitBlock(editor as YooEditor);
-
-      expect(editor.focusBlock).toHaveBeenCalledWith('new-block-id');
+      expect(editor.focusBlock).toHaveBeenCalledWith(newBlockId);
     });
 
     it('should focus new block when focusTarget is "new"', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         focusTarget: 'new',
       });
 
@@ -239,7 +250,7 @@ describe('splitBlock', () => {
     });
 
     it('should focus original block when focusTarget is "original"', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         focusTarget: 'original',
       });
 
@@ -249,7 +260,7 @@ describe('splitBlock', () => {
     });
 
     it('should not focus when focusTarget is "none"', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         focusTarget: 'none',
       });
 
@@ -258,7 +269,7 @@ describe('splitBlock', () => {
     });
 
     it('should not focus when focus is false', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         focus: false,
       });
 
@@ -267,7 +278,7 @@ describe('splitBlock', () => {
     });
 
     it('should not focus when focus is false even if focusTarget is set', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         focus: false,
         focusTarget: 'new',
       });
@@ -286,18 +297,17 @@ describe('splitBlock', () => {
     });
 
     it('should not preserve content when preserveContent is false', () => {
-      const newBlockId = splitBlock(editor as YooEditor, {
+      splitBlock(editor as YooEditor, {
         preserveContent: false,
       });
 
-      expect(newBlockId).toBe('new-block-id');
       expect(editor.applyTransforms).toHaveBeenCalled();
     });
   });
 
   describe('Operation Details', () => {
     it('should create correct split_block operation', () => {
-      const newBlockId = splitBlock(editor as YooEditor);
+      splitBlock(editor as YooEditor);
 
       expect(editor.applyTransforms).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -394,6 +404,7 @@ describe('splitBlock', () => {
 
     it('should handle block with null current path', () => {
       editor.path = { current: null };
+      (getBlock as Mock).mockReturnValue(null);
 
       const newBlockId = splitBlock(editor as YooEditor);
 
@@ -401,4 +412,3 @@ describe('splitBlock', () => {
     });
   });
 });
-

@@ -41,23 +41,29 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           if (event.isDefaultPrevented()) return;
           if (!slate.selection) return;
 
-          const listItems = Elements.getElementChildren(editor, currentBlock.id, {
+          const listItems = Elements.getElementChildren(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list',
           });
-          const accordionListItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
-            path: slate.selection,
+          const accordionListItemEntry = Elements.getElementEntry(editor, {
+            blockId: currentBlock.id,
+            path: slate.selection.anchor.path,
             type: 'accordion-list-item',
           });
 
           const listItemChildPath = accordionListItemEntry?.[1] ?? slate.selection.anchor.path;
-          const currentElement = Elements.getElement(editor, currentBlock.id);
+          const currentElement = Elements.getElement(editor, {
+            blockId: currentBlock.id,
+          });
 
-          const isHeadingEmpty = Elements.isElementEmpty(editor, currentBlock.id, {
+          const isHeadingEmpty = Elements.isElementEmpty(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item-heading',
             path: listItemChildPath,
           });
 
-          const isContentEmpty = Elements.isElementEmpty(editor, currentBlock.id, {
+          const isContentEmpty = Elements.isElementEmpty(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item-content',
             path: listItemChildPath,
           });
@@ -84,7 +90,8 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             if (accordionListItemEntry) {
               const [, listItemPath] = accordionListItemEntry;
 
-              Elements.deleteElement(editor, currentBlock.id, {
+              Elements.deleteElement(editor, {
+                blockId: currentBlock.id,
                 type: 'accordion-list-item',
                 path: listItemPath,
               });
@@ -107,8 +114,11 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           if (event.isDefaultPrevented()) return;
           event.preventDefault();
 
-          const currentElement = Elements.getElement(editor, currentBlock.id);
-          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
+          const currentElement = Elements.getElement(editor, {
+            blockId: currentBlock.id,
+          });
+          const listItemEntry = Elements.getElementEntry(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item',
           });
 
@@ -118,27 +128,25 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           ) {
             const [listItem, listItemPath] = listItemEntry;
 
-            Elements.updateElement(
-              editor,
-              currentBlock.id,
-              {
-                type: ACCORDION_ELEMENTS.AccordionListItem,
-                props: {
-                  isExpanded: !listItem?.props?.isExpanded,
-                },
+            Elements.updateElement(editor, {
+              blockId: currentBlock.id,
+              type: ACCORDION_ELEMENTS.AccordionListItem,
+              props: {
+                isExpanded: !listItem?.props?.isExpanded,
               },
-              { path: listItemPath },
-            );
+              path: listItemPath,
+            });
 
             return;
           }
 
-          Elements.createElement(
-            editor,
-            currentBlock.id,
-            { type: 'accordion-list-item', props: { isExpanded: true } },
-            { path: 'next', focus: true, split: false },
-          );
+          Elements.insertElement(editor, {
+            blockId: currentBlock.id,
+            type: 'accordion-list-item',
+            props: { isExpanded: true },
+            at: 'next',
+            focus: true,
+          });
         }
       };
     },

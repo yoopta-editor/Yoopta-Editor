@@ -39,5 +39,5 @@ export const clearContents = (
   });
 
   // Update Yoopta editor state
-  editor.emit('change', slate);
+  // editor.emit('change', slate);
 };

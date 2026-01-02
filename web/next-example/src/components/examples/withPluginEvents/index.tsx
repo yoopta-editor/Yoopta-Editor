@@ -66,7 +66,7 @@ const plugins = [
   Image.extend({
     events: {
       onDestroy(editor, blockId) {
-        const imageElement = Elements.getElement(editor, blockId, { type: 'image' });
+        const imageElement = Elements.getElement(editor, { blockId, type: 'image' });
         console.log('Image destroyed', imageElement);
       },
     },

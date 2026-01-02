@@ -1,0 +1,310 @@
+---
+title: Elements API
+description: High-level API for manipulating elements within blocks
+---
+
+## Overview
+
+The Elements API provides a high-level, unified interface for working with elements inside blocks. It abstracts away Slate.js complexity, making it easier to manipulate block content without deep knowledge of the underlying editor structure.
+
+<Info>
+  The Elements API follows CRUD patterns familiar to most developers: create (insert), read (get),
+  update, and delete.
+</Info>
+
+## Why Elements API?
+
+- **No Slate.js Knowledge Required**: Work with elements using simple, semantic methods
+- **Type Safety**: Full TypeScript support with proper type inference
+- **Consistent API**: All methods follow the same pattern and naming convention
+- **Better DX**: Excellent autocomplete and inline documentation
+
+## Core Methods
+
+The Elements API consists of three main categories:
+
+### CRUD Operations
+
+- [`insertElement`](/api-reference/elements/insert-element) - Create new elements
+- [`updateElement`](/api-reference/elements/update-element) - Modify element properties
+- [`deleteElement`](/api-reference/elements/delete-element) - Remove elements
+
+### Retrieval Methods
+
+- [`getElement`](/api-reference/elements/get-element) - Get single element
+- [`getElements`](/api-reference/elements/get-elements) - Get multiple elements
+- [`getElementEntry`](/api-reference/elements/get-element-entry) - Get element with path
+- [`getElementPath`](/api-reference/elements/get-element-path) - Get element's Slate path
+- [`getParentElementPath`](/api-reference/elements/get-parent-element-path) - Get parent path
+- [`getElementChildren`](/api-reference/elements/get-element-children) - Get element children
+- [`isElementEmpty`](/api-reference/elements/is-element-empty) - Check if element is empty
+
+## Quick Example
+
+```typescript
+import { useYooptaEditor } from '@yoopta/editor';
+
+function MyComponent() {
+  const editor = useYooptaEditor();
+
+  const handleAddItem = () => {
+    // Insert new accordion item
+    editor.insertElement({
+      blockId: 'accordion-1',
+      type: 'accordion-list-item',
+      props: { isExpanded: true },
+      children: [
+        editor.y('accordion-list-item-heading', {
+          children: [editor.y.text('New Item')]
+        }),
+        editor.y('accordion-list-item-content')
+      ],
+      at: 'next',
+      focus: true
+    });
+  };
+
+  const handleToggleItem = (itemPath: number[]) => {
+    // Get current item
+    const item = editor.getElement({
+      blockId: 'accordion-1',
+      type: 'accordion-list-item',
+      path: itemPath
+    });
+
+    // Toggle expanded state
+    if (item) {
+      editor.updateElement({
+        blockId: 'accordion-1',
+        type: 'accordion-list-item',
+        props: { isExpanded: !item.props?.isExpanded },
+        path: itemPath
+      });
+    }
+  };
+
+  return (
+    // Your component JSX
+  );
+}
+```
+
+## Common Use Cases
+
+### Working with Accordion
+
+```typescript
+// Get all accordion items
+const items = editor.getElements({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+});
+
+// Find expanded item
+const expandedItem = editor.getElement({
+  blockId: 'accordion-1',
+  match: (el) => el.type === 'accordion-list-item' && el.props?.isExpanded,
+});
+
+// Delete specific item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 2], // Third item
+});
+```
+
+### Working with Tabs
+
+```typescript
+// Add new tab
+const tabId = generateId();
+
+editor.insertElement({
+  blockId: 'tabs-1',
+  type: 'tabs-item-heading',
+  props: { id: tabId },
+  children: [editor.y.text('New Tab')],
+  at: 'next',
+});
+
+editor.insertElement({
+  blockId: 'tabs-1',
+  type: 'tabs-item-content',
+  props: { referenceId: tabId },
+  at: 'end',
+});
+
+// Get active tab
+const activeTab = editor.getElement({
+  blockId: 'tabs-1',
+  match: (el) => el.type === 'tabs-item-heading' && el.props?.active,
+});
+```
+
+### Working with Tables
+
+```typescript
+// Update cell properties
+editor.updateElement({
+  blockId: 'table-1',
+  type: 'table-data-cell',
+  props: { width: 300, asHeader: true },
+  path: [0, 0, 0], // First cell in first row
+});
+
+// Get all rows
+const rows = editor.getElements({
+  blockId: 'table-1',
+  type: 'table-row',
+});
+
+// Insert new row
+editor.insertElement({
+  blockId: 'table-1',
+  type: 'table-row',
+  children: [
+    editor.y('table-data-cell', { children: [editor.y.text('')] }),
+    editor.y('table-data-cell', { children: [editor.y.text('')] }),
+  ],
+  at: 'next',
+});
+```
+
+## Type Definitions
+
+### Common Types
+
+```typescript
+// Element path specification
+type ElementPath = number[] | 'selection' | 'first' | 'last';
+
+// Element matcher function
+type ElementMatcher = (element: SlateElement) => boolean;
+```
+
+### Element Structure
+
+Elements in Yoopta Editor follow this structure:
+
+```typescript
+type SlateElement = {
+  id?: string;
+  type: string;
+  props?: Record<string, unknown>;
+  children: (SlateElement | SlateElementTextNode)[];
+};
+```
+
+## Best Practices
+
+<Warning>
+  Always use `blockId` to specify which block you're working with. Element operations are scoped to
+  specific blocks.
+</Warning>
+
+### 1. Use Specific Paths When Possible
+
+```typescript
+// ✅ Good - specific path
+editor.updateElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  path: [0, 1],
+});
+
+// ❌ Avoid - relies on selection
+editor.updateElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+});
+```
+
+### 2. Use Matchers for Dynamic Queries
+
+```typescript
+// Find element by specific condition
+const activeItem = editor.getElement({
+  blockId: 'tabs-1',
+  match: (el) => el.type === 'tabs-item-heading' && el.props?.active === true,
+});
+```
+
+### 3. Check Existence Before Operations
+
+```typescript
+const element = editor.getElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: itemPath,
+});
+
+if (element) {
+  editor.updateElement({
+    blockId: 'accordion-1',
+    type: 'accordion-list-item',
+    props: { isExpanded: !element.props?.isExpanded },
+    path: itemPath,
+  });
+}
+```
+
+### 4. Use Helper Methods
+
+```typescript
+// Check if content is empty before operations
+const isEmpty = editor.isElementEmpty({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item-content',
+  path: [0, 1, 1],
+});
+
+if (isEmpty) {
+  // Handle empty content
+}
+```
+
+## Migration from Old API
+
+If you're migrating from the old `Elements` namespace:
+
+```typescript
+// ❌ Old API
+Elements.updateElement(
+  editor,
+  blockId,
+  {
+    type: 'accordion-list-item',
+    props: { isExpanded: true },
+  },
+  { path: itemPath },
+);
+
+// ✅ New API
+editor.updateElement({
+  blockId,
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  path: itemPath,
+});
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Insert Element" icon="plus" href="/api-reference/elements/insert-element">
+    Learn how to create new elements
+  </Card>
+  <Card title="Update Element" icon="pen" href="/api-reference/elements/update-element">
+    Modify element properties
+  </Card>
+  <Card title="Delete Element" icon="trash" href="/api-reference/elements/delete-element">
+    Remove elements from blocks
+  </Card>
+  <Card title="Get Element" icon="search" href="/api-reference/elements/get-element">
+    Retrieve elements by type or matcher
+  </Card>
+</CardGroup>
+

@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import type { SlateElement } from '@yoopta/editor';
-import type { TableCellElement } from '@yoopta/table';
+import {
+  TableCellElement,
+  TABLE_CELLS_IN_SELECTION,
+  TABLE_SLATE_TO_SELECTION_SET,
+} from '@yoopta/table';
 import { TableCommands } from '@yoopta/table';
 import {
   ArrowDown,
@@ -9,7 +13,6 @@ import {
   ArrowRight,
   ArrowUp,
   MoreHorizontal,
-  MoreVertical,
   Plus,
   Trash2,
 } from 'lucide-react';

@@ -1,17 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
 
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import type { EmbedElementProps, EmbedPluginElements, ProviderRenderProps } from '../types';
+import type { ProviderRenderProps } from '../types';
 
-const Twitter = ({
-  provider,
-  blockId,
-  attributes,
-  children,
-  height,
-  width,
-}: ProviderRenderProps) => {
+const Twitter = ({ provider, blockId, attributes, children }: ProviderRenderProps) => {
   const twitterRootRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 
@@ -41,14 +34,10 @@ const Twitter = ({
           })
           .then((el) => {
             if (el) {
-              Elements.updateElement<EmbedPluginElements, EmbedElementProps>(editor, blockId, {
+              Elements.updateElement(editor, {
+                blockId,
                 type: 'embed',
-                props: {
-                  sizes: {
-                    height: el.offsetHeight + 16,
-                    width: el.offsetWidth,
-                  },
-                },
+                props: { sizes: { height: el.offsetHeight + 16, width: el.offsetWidth } },
               });
             }
           });
@@ -64,7 +53,7 @@ const Twitter = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, [provider.id, isInViewport, blockId, editor]);
+  }, [provider.id, isInViewport, blockId, editor, elementId]);
 
   return (
     <div className="yoo-embed-w-full" {...attributes}>

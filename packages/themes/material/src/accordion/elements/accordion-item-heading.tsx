@@ -19,7 +19,7 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
     if (!slate) return undefined;
 
     try {
-      const elementPath = Elements.getElementPath(editor, blockId, element as SlateElement);
+      const elementPath = Elements.getElementPath(editor, { blockId, element });
       const parentElement = Editor.parent(slate, elementPath as Location);
       return parentElement[0] as SlateElement;
     } catch (error) {
@@ -36,7 +36,7 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
     if (!slate) return undefined;
 
     try {
-      return Elements.getElementPath(editor, blockId, parentListItem);
+      return Elements.getElementPath(editor, { blockId, element: parentListItem });
     } catch (error) {
       // Element path not found
     }
@@ -48,18 +48,15 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
 
   const toggleListItem = useCallback(() => {
     if (parentListItem && parentListItemPath) {
-      Elements.updateElement(
-        editor,
+      Elements.updateElement(editor, {
         blockId,
-        {
-          type: parentListItem.type,
-          props: {
-            ...parentListItem.props,
-            isExpanded: !isExpanded,
-          },
+        type: parentListItem.type,
+        props: {
+          ...parentListItem.props,
+          isExpanded: !isExpanded,
         },
-        { path: parentListItemPath },
-      );
+        path: parentListItemPath,
+      });
     }
 
     forceRerender();
@@ -73,16 +70,15 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
       if (!parentListItem || !parentListItemPath) return;
 
       // Get all accordion-list-item children to check if this is the last one
-      const listItems = Elements.getElementChildren(editor, blockId, {
-        type: 'accordion-list',
-      });
+      const listItems = Elements.getElementChildren(editor, { blockId, type: 'accordion-list' });
 
       if (listItems?.length === 1) {
         Blocks.deleteBlock(editor, { blockId });
         return;
       }
 
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'accordion-list-item',
         path: parentListItemPath,
       });

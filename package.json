@@ -57,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "@vitejs/plugin-react": "^4.5.1",
+    "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^3.2.2",
     "autoprefixer": "^10.4.17",
     "babel-plugin-prismjs": "^2.1.0",

@@ -2,53 +2,135 @@ import type { Path } from 'slate';
 import { Editor, Element, Transforms } from 'slate';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import type { SlateElement, YooEditor } from '../types';
+import type { SlateEditor, SlateElement, YooEditor } from '../types';
+import type { ElementPath, UpdateElementOptions } from './types';
 
-export type UpdateElementOptions = {
-  path?: Path;
-};
+/**
+ * Update element props in a block
+ *
+ * @param editor - YooEditor instance
+ * @param options - Update options
+ *
+ * @example
+ * ```typescript
+ * // Update element props
+ * editor.updateElement({
+ *   blockId: 'accordion-1',
+ *   type: 'accordion-list-item',
+ *   props: { isExpanded: true },
+ *   path: [0, 1]
+ * });
+ *
+ * // Update with matcher
+ * editor.updateElement({
+ *   blockId: 'tabs-1',
+ *   type: 'tabs-item-heading',
+ *   props: { active: true },
+ *   match: (el) => el.id === 'tab-1'
+ * });
+ * ```
+ */
+export function updateElement(editor: YooEditor, options: UpdateElementOptions): void {
+  const { blockId, type, props, path, match } = options;
 
-export type UpdateElement<TElementKeys extends string, TElementProps> = Partial<
-  Omit<SlateElement<TElementKeys, TElementProps>, 'id'>
->;
-
-export function updateElement<TElementKeys extends string, TElementProps>(
-  editor: YooEditor,
-  blockId: string,
-  element: UpdateElement<TElementKeys, TElementProps>,
-  options?: UpdateElementOptions,
-) {
   const block = editor.children[blockId];
-
   if (!block) {
-    throw new Error(`Block with id ${blockId} not found`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[updateElement] Block with id ${blockId} not found`);
+    }
+    return;
   }
 
   const slate = findSlateBySelectionPath(editor, { at: block.meta.order });
-
   if (!slate) {
-    console.warn('No slate found');
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[updateElement] Slate not found for block ${blockId}`);
+    }
     return;
   }
 
   Editor.withoutNormalizing(slate, () => {
+    // Resolve matcher function
+    const matchFn = match || ((n: SlateElement) => Element.isElement(n) && n.type === type);
+
+    // Resolve path
+    const atPath = resolveElementPath(slate, path, type);
+
+    // Find element
     const [elementEntry] = Editor.nodes<SlateElement>(slate, {
-      at: options?.path || [0],
-      match: (n) => Element.isElement(n) && n.type === element.type,
-    });
-
-    const elementToUpdate = elementEntry?.[0];
-    const elementToUpdatePath = elementEntry?.[1];
-
-    const props = elementToUpdate?.props || {};
-    const updatedElement = { props: { ...props, ...element.props } };
-
-    Transforms.setNodes<SlateElement>(slate, updatedElement, {
-      at: options?.path || elementToUpdatePath || [0],
-      match: (n) => Element.isElement(n) && n.type === element.type,
+      at: atPath,
+      match: matchFn,
       mode: 'lowest',
     });
 
-    // editor.emit('change', { value: editor.children, operations: [] });
+    if (!elementEntry) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`[updateElement] Element of type "${type}" not found`);
+      }
+      return;
+    }
+
+    const [element, elementPath] = elementEntry;
+
+    // Update element props
+    Transforms.setNodes<SlateElement>(
+      slate,
+      {
+        props: {
+          ...element.props,
+          ...props,
+        },
+      },
+      {
+        at: elementPath,
+        match: matchFn,
+      },
+    );
   });
+}
+
+/**
+ * Resolve element path based on various path options
+ */
+function resolveElementPath(
+  slate: SlateEditor,
+  path: ElementPath | undefined,
+  type: string,
+): Path | undefined {
+  // No path specified - use selection or root
+  if (!path) {
+    return slate.selection?.anchor.path || [0];
+  }
+
+  // Direct path array
+  if (Array.isArray(path)) {
+    return path;
+  }
+
+  // Selection path
+  if (path === 'selection') {
+    return slate.selection?.anchor.path;
+  }
+
+  // First element of type
+  if (path === 'first') {
+    const [entry] = Editor.nodes(slate, {
+      match: (n) => Element.isElement(n) && n.type === type,
+      mode: 'lowest',
+    });
+    return entry?.[1];
+  }
+
+  // Last element of type
+  if (path === 'last') {
+    const entries = Array.from(
+      Editor.nodes(slate, {
+        match: (n) => Element.isElement(n) && n.type === type,
+        mode: 'lowest',
+      }),
+    );
+    return entries[entries.length - 1]?.[1];
+  }
+
+  return undefined;
 }

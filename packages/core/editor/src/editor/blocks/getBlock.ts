@@ -8,7 +8,6 @@ export type GetBlockOptions = {
 export function getBlock(editor: YooEditor, options: GetBlockOptions): YooptaBlockData | null {
   if (!options?.id && typeof options?.at !== 'number') {
     return null;
-    // throw new Error(`getBlock requires either an id or at: ${JSON.stringify(options)}`);
   }
 
   if (options?.id) {

@@ -67,4 +67,4 @@ export default defineConfig({
       'test-utils': resolve(__dirname, 'tests/test-utils.tsx'),
     },
   },
-} as VitestConfig);
+});

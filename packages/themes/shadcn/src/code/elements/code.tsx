@@ -103,12 +103,13 @@ export const CodeBlockElement = ({
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
     const parentEntry = elementPath ? Editor.parent(slate, elementPath) : undefined;
     if (parentEntry && Element.isElement(parentEntry[0]) && !Editor.isEditor(parentEntry[0])) {
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'code',
         path: elementPath,
       });
@@ -120,7 +121,8 @@ export const CodeBlockElement = ({
 
   const updateLanguage = useCallback(
     (newLanguage: string) => {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'code',
         props: {
           ...element.props,
@@ -133,7 +135,8 @@ export const CodeBlockElement = ({
 
   const updateTheme = useCallback(
     (newTheme: string) => {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'code',
         props: {
           ...element.props,

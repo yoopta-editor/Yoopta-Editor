@@ -125,7 +125,23 @@
       "pages": [
         "api-reference/editor-props",
         "api-reference/plugin-api",
-        "api-reference/editor-methods"
+        "api-reference/editor-methods",
+        {
+          "group": "Elements API",
+          "pages": [
+            "api-reference/elements/overview",
+            "api-reference/elements/insert-element",
+            "api-reference/elements/update-element",
+            "api-reference/elements/delete-element",
+            "api-reference/elements/get-element",
+            "api-reference/elements/get-elements",
+            "api-reference/elements/get-element-entry",
+            "api-reference/elements/get-element-path",
+            "api-reference/elements/get-parent-element-path",
+            "api-reference/elements/get-element-children",
+            "api-reference/elements/is-element-empty"
+          ]
+        }
       ]
     },
     {

@@ -39,6 +39,6 @@ export const FileCommands: FileCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateFile: (editor: YooEditor, blockId, props) => {
-    Elements.updateElement(editor, blockId, { props });
+    Elements.updateElement(editor, { blockId, type: 'file', props });
   },
 };

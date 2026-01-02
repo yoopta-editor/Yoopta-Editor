@@ -27,23 +27,20 @@ const Link = (props: PluginElementRenderProps) => {
       const slate = Blocks.getBlockSlate(editor, { id: blockId });
       if (!slate) return;
 
-      const elementPath = Elements.getElementPath(editor, blockId, element);
+      const elementPath = Elements.getElementPath(editor, { blockId, element });
       if (!elementPath) return;
 
       Editor.withoutNormalizing(slate, () => {
         if (newProps) {
-          Elements.updateElement(
-            editor,
+          Elements.updateElement(editor, {
             blockId,
-            {
-              type: 'link',
-              props: {
-                ...element.props,
-                ...newProps,
-              },
+            type: 'link',
+            props: {
+              ...element.props,
+              ...newProps,
             },
-            { path: elementPath },
-          );
+            path: elementPath,
+          });
         }
 
         // Update children (text)
@@ -60,6 +57,7 @@ const Link = (props: PluginElementRenderProps) => {
 
   const deleteLink = useCallback(() => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
     Editor.withoutNormalizing(slate, () => {
       if (!slate?.selection || !Range.isRange(slate.selection)) return;
 
@@ -67,8 +65,6 @@ const Link = (props: PluginElementRenderProps) => {
       if (!Element.isElement(node) || node.type !== 'link' || !Editor.isInline(slate, node)) {
         return;
       }
-
-      console.log('unwrapNodes slate.selection', slate.selection);
 
       Transforms.unwrapNodes(slate, {
         at: slate.selection.anchor.path,

@@ -1,46 +1,111 @@
-import type { Location, NodeEntry, Span } from 'slate';
-import { Editor, Element, Selection } from 'slate';
+import type { Location, NodeEntry, Path } from 'slate';
+import { Editor, Element } from 'slate';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import type { SlateElement, YooEditor } from '../types';
+import type { SlateEditor, SlateElement, YooEditor } from '../types';
+import type { ElementPath, GetElementEntryOptions } from './types';
 
-export type GetBlockElementEntryOptions = {
-  path?: Location | Span | undefined;
-  type?: string;
-};
+/**
+ * Resolve element path based on various path options
+ */
+function resolveElementPath(
+  slate: SlateEditor,
+  path: ElementPath | undefined,
+  type: string | undefined,
+): Location {
+  // No path specified - use selection or root
+  if (!path) {
+    return slate.selection ?? [0];
+  }
 
-export function getElementEntry<TElementKeys extends string>(
+  // Direct path array
+  if (Array.isArray(path)) {
+    return path;
+  }
+
+  // Selection path
+  if (path === 'selection') {
+    return slate.selection ?? [0];
+  }
+
+  // First element of type
+  if (path === 'first' && type) {
+    const [entry] = Editor.nodes(slate, {
+      match: (n) => Element.isElement(n) && n.type === type,
+      mode: 'lowest',
+    });
+    return entry?.[1] ?? [0];
+  }
+
+  // Last element of type
+  if (path === 'last' && type) {
+    const entries = Array.from(
+      Editor.nodes(slate, {
+        match: (n) => Element.isElement(n) && n.type === type,
+        mode: 'lowest',
+      }),
+    );
+    return entries[entries.length - 1]?.[1] ?? [0];
+  }
+
+  return [0];
+}
+
+/**
+ * Get element entry [element, path] from a block
+ *
+ * @param editor - YooEditor instance
+ * @param options - Get options
+ * @returns Element entry or null if not found
+ *
+ * @example
+ * ```typescript
+ * // Get entry by type and path
+ * const entry = editor.getElementEntry({
+ *   blockId: 'accordion-1',
+ *   type: 'accordion-list-item',
+ *   path: [0, 1]
+ * });
+ *
+ * if (entry) {
+ *   const [element, path] = entry;
+ *   console.log('Element at path:', path);
+ * }
+ * ```
+ */
+export function getElementEntry(
   editor: YooEditor,
-  blockId: string,
-  options?: GetBlockElementEntryOptions,
-): NodeEntry<SlateElement<TElementKeys>> | undefined {
-  const block = editor.children[blockId];
+  options: GetElementEntryOptions,
+): NodeEntry<SlateElement> | null {
+  const { blockId, type, path } = options;
 
+  const block = editor.children[blockId];
   if (!block) {
-    throw new Error(`Block with id ${blockId} not found`);
+    return null;
   }
 
   const slate = findSlateBySelectionPath(editor, { at: block.meta.order });
-
   if (!slate) {
-    console.warn('No slate found');
-    return;
+    return null;
   }
 
-  let match = (n): boolean => Element.isElement(n);
+  // Build matcher function
+  const matchFn = type
+    ? (n) => Element.isElement(n) && n.type === type
+    : (n) => Element.isElement(n);
 
-  if (options?.type) {
-    match = (n): boolean => Element.isElement(n) && n.type === options?.type;
-  }
+  // Resolve path
+  const atPath = resolveElementPath(slate, path, type);
 
   try {
-    // to Editor.above
     const [elementEntry] = Editor.nodes<SlateElement>(slate, {
-      at: options?.path || slate.selection || [0],
-      match,
+      at: atPath,
+      match: matchFn,
       mode: 'lowest',
     });
 
-    return elementEntry as NodeEntry<SlateElement<TElementKeys>>;
-  } catch (error) {}
+    return elementEntry || null;
+  } catch (error) {
+    return null;
+  }
 }

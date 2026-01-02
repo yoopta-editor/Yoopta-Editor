@@ -23,6 +23,8 @@ const YooptaUIPackageExample = () => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
 
+  console.log('editor', editor);
+
   const insertTabs = () => {
     const elements = editor.y('tabs-container', {
       props: { activeTabId: 'tab-1' },
