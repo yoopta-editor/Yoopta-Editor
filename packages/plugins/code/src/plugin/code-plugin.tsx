@@ -1,7 +1,7 @@
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 import { Transforms } from 'slate';
 
-import { CodeCommands } from '../commands';
+import { CodeCommands } from '../commands/code-commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
 import { escapeHTML } from '../utils/element';
 import { initHighlighter } from '../utils/shiki';
@@ -87,10 +87,10 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
               <tr>
                 <td>
                   <pre data-theme="${props.theme || 'github-dark'}" data-language="${
-          props.language || 'javascript'
-        }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
+                    props.language || 'javascript'
+                  }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
+                    depth * 20
+                  }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
                 </td>
               </tr>
             </tbody>
@@ -104,26 +104,6 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
       (editor, slate, { hotkeys }) =>
       (event) => {
         if (!slate.selection) return;
-
-        // const isExpanded = Range.isExpanded(slate.selection);
-        // const isCollapsed = Range.isCollapsed(slate.selection);
-
-        // if (hotkeys.isSelect(event)) {
-        //   event.preventDefault();
-        //   event.stopPropagation();
-
-        //   Transforms.select(slate, { path: slate.selection.anchor.path.slice(0, -1) });
-        //   return;
-        // }
-
-        // if (hotkeys.isBackspace(event) && isExpanded) {
-        //   event.preventDefault();
-        //   event.stopPropagation();
-
-        //   Transforms.delete(slate, { at: slate.selection });
-        //   return;
-        // }
-
         if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
           event.preventDefault();
           event.stopPropagation();

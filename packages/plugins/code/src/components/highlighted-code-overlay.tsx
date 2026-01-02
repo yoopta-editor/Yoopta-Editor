@@ -51,21 +51,23 @@ export const HighlightedCodeOverlay = ({ element, language, theme }: Highlighted
   const { highlighter } = useHighlighter();
 
   useEffect(() => {
-    if (!highlighter || !code) {
-      setTokens([]);
-      return;
-    }
+    const highlightCode = async () => {
+      if (!highlighter || !code) {
+        setTokens([]);
+        return;
+      }
 
-    try {
-      const highlighted = highlighter.codeToTokens(code, {
+      // const formattedCode = await CodeCommands.prettifyCode(code, language || 'javascript');
+      const highlighted = highlighter?.codeToTokens(code, {
         lang: language || 'javascript',
         theme: theme || 'github-dark',
       });
+      if (highlighted) {
+        setTokens(highlighted.tokens);
+      }
+    };
 
-      setTokens(highlighted.tokens);
-    } catch (error) {
-      setTokens([]);
-    }
+    highlightCode();
   }, [code, language, highlighter, theme]);
 
   if (!tokens.length) {
