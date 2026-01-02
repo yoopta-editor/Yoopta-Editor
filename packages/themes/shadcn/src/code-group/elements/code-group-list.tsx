@@ -1,4 +1,4 @@
-import { CodeGroupCommands } from '@yoopta/code-group';
+import { CodeGroupCommands } from '@yoopta/code';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useYooptaEditor } from '@yoopta/editor';
 import { Plus } from 'lucide-react';

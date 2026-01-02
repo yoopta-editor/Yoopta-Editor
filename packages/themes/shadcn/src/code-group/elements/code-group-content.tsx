@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  CodeGroupCommands,
-  HighlightedCodeOverlay,
-  SHIKI_CODE_LANGUAGES,
-} from '@yoopta/code-group';
+import { CodeGroupCommands, HighlightedCodeOverlay, SHIKI_CODE_LANGUAGES } from '@yoopta/code';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
@@ -113,8 +109,8 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
     <TabsContent
       {...attributes}
       value={element.props?.referenceId}
-      className="mt-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0">
-      <div className="relative group/code-group-content rounded-b-lg overflow-hidden">
+      className="rounded-b-lg mt-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0">
+      <div className="relative group/code-group-content overflow-hidden">
         <div
           contentEditable={false}
           className="absolute top-2 right-2 z-20 flex items-center gap-2 opacity-0 group-hover/code-group-content:opacity-100 transition-opacity"
@@ -154,7 +150,7 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
         </div>
 
         <div
-          className="relative bg-background overflow-hidden"
+          className="relative bg-background overflow-hidden rounded-lg"
           style={{
             backgroundColor: 'var(--code-group-editor-bg)',
             color: 'var(--code-group-editor-fg)',

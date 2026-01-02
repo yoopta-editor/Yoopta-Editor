@@ -10,23 +10,20 @@ The CodeGroup plugin allows you to create tabbed code blocks, perfect for showin
 ## Installation
 
 ```bash
-npm install @yoopta/code-group
+npm install @yoopta/code
 ```
 
 ## Basic Usage
 
 ```jsx
-import { CodeGroup } from '@yoopta/code-group';
+import { CodeGroup } from '@yoopta/code';
 
 const plugins = [
   CodeGroup,
   // ... other plugins
 ];
 
-<YooptaEditor
-  editor={editor}
-  plugins={plugins}
-/>
+<YooptaEditor editor={editor} plugins={plugins} />;
 ```
 
 ## Features
@@ -51,7 +48,7 @@ code-group-container (props: activeTabId, theme)
 ## Configuration
 
 ```jsx
-import { CodeGroup } from '@yoopta/code-group';
+import { CodeGroup } from '@yoopta/code';
 
 const plugins = [
   CodeGroup.extend({
@@ -108,7 +105,7 @@ const plugins = [
 Add a new tab to the code group.
 
 ```typescript
-import { CodeGroupCommands } from '@yoopta/code-group';
+import { CodeGroupCommands } from '@yoopta/code';
 
 CodeGroupCommands.addTabItem(editor, blockId, { at: selection });
 ```
@@ -143,14 +140,14 @@ When created, the plugin initializes with:
 ## Custom Rendering
 
 ```jsx
-import { CodeGroup } from '@yoopta/code-group';
+import { CodeGroup } from '@yoopta/code';
 
 const CustomCodeGroup = CodeGroup.extend({
   elements: {
     'code-group-container': {
       render: (props) => {
         const { activeTabId, theme } = props.element.props;
-        
+
         return (
           <div className="my-code-group" data-theme={theme}>
             {props.children}
@@ -168,12 +165,9 @@ const CustomCodeGroup = CodeGroup.extend({
     'code-group-item-heading': {
       render: (props) => {
         const isActive = props.element.id === getActiveTabId();
-        
+
         return (
-          <button
-            className={`tab ${isActive ? 'active' : ''}`}
-            {...props.attributes}
-          >
+          <button className={`tab ${isActive ? 'active' : ''}`} {...props.attributes}>
             {props.children}
           </button>
         );
@@ -182,7 +176,7 @@ const CustomCodeGroup = CodeGroup.extend({
     'code-group-content': {
       render: (props) => {
         const { language } = props.element.props;
-        
+
         return (
           <pre data-language={language} {...props.attributes}>
             {props.children}
@@ -197,18 +191,10 @@ const CustomCodeGroup = CodeGroup.extend({
 ## Use Cases
 
 <CardGroup cols={2}>
-  <Card title="Multi-Language Examples">
-    Show same code in JavaScript, Python, Go, etc.
-  </Card>
-  <Card title="Related Files">
-    Display multiple files that work together
-  </Card>
-  <Card title="Before/After">
-    Show code before and after refactoring
-  </Card>
-  <Card title="API Responses">
-    Different response formats (JSON, XML, etc.)
-  </Card>
+  <Card title="Multi-Language Examples">Show same code in JavaScript, Python, Go, etc.</Card>
+  <Card title="Related Files">Display multiple files that work together</Card>
+  <Card title="Before/After">Show code before and after refactoring</Card>
+  <Card title="API Responses">Different response formats (JSON, XML, etc.)</Card>
 </CardGroup>
 
 ## Best Practices
@@ -217,15 +203,13 @@ const CustomCodeGroup = CodeGroup.extend({
   <Accordion title="Clear Tab Names">
     Use descriptive names for tabs (e.g., "package.json", "server.ts")
   </Accordion>
-  
+
   <Accordion title="Consistent Languages">
     Group related code in logical language combinations
   </Accordion>
-  
-  <Accordion title="Limit Tabs">
-    Keep number of tabs reasonable (2-5) for better UX
-  </Accordion>
-  
+
+  <Accordion title="Limit Tabs">Keep number of tabs reasonable (2-5) for better UX</Accordion>
+
   <Accordion title="Match Content">
     Ensure code in different tabs is related or equivalent
   </Accordion>
@@ -235,4 +219,3 @@ const CustomCodeGroup = CodeGroup.extend({
 
 - [Code Plugin](/plugins/code) - For single code blocks
 - [Tabs Plugin](/plugins/tabs) - For general tabbed content
-

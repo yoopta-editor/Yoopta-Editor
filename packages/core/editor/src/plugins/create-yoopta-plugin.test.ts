@@ -292,8 +292,8 @@ describe('YooptaPlugin', () => {
       });
     });
 
-    describe('allowedPlugins extension (plugin-level)', () => {
-      it('should apply allowedPlugins to all leaf elements', () => {
+    describe('injectElementsFromPlugins extension (plugin-level)', () => {
+      it('should apply injectElementsFromPlugins to all leaf elements', () => {
         const paragraphRender = createMockRender('paragraph');
         const headingRender = createMockRender('heading');
         const contentRender = createMockRender('content');
@@ -331,20 +331,20 @@ describe('YooptaPlugin', () => {
         });
 
         const extendedPlugin = basePlugin.extend({
-          allowedPlugins: [allowedPlugin1, allowedPlugin2],
+          injectElementsFromPlugins: [allowedPlugin1, allowedPlugin2],
         });
 
         const pluginData = extendedPlugin.getPlugin;
-        // content is a leaf element (no children), so it should have allowedPlugins
-        expect(pluginData.elements.content.allowedPlugins).toEqual([
+        // content is a leaf element (no children), so it should have injectElementsFromPlugins
+        expect(pluginData.elements.content.injectElementsFromPlugins).toEqual([
           'AllowedPlugin1',
           'AllowedPlugin2',
         ]);
-        // paragraph has children, so it should not have allowedPlugins
-        expect(pluginData.elements.paragraph.allowedPlugins).toBeUndefined();
+        // paragraph has children, so it should not have injectElementsFromPlugins
+        expect(pluginData.elements.paragraph.injectElementsFromPlugins).toBeUndefined();
       });
 
-      it('should not apply allowedPlugins to elements with children', () => {
+      it('should not apply injectElementsFromPlugins to elements with children', () => {
         const parentRender = createMockRender('parent');
         const childRender = createMockRender('child');
 
@@ -373,12 +373,12 @@ describe('YooptaPlugin', () => {
         });
 
         const extendedPlugin = basePlugin.extend({
-          allowedPlugins: [allowedPlugin],
+          injectElementsFromPlugins: [allowedPlugin],
         });
 
         const pluginData = extendedPlugin.getPlugin;
-        expect(pluginData.elements.parent.allowedPlugins).toBeUndefined();
-        expect(pluginData.elements.child.allowedPlugins).toEqual(['AllowedPlugin']);
+        expect(pluginData.elements.parent.injectElementsFromPlugins).toBeUndefined();
+        expect(pluginData.elements.child.injectElementsFromPlugins).toEqual(['AllowedPlugin']);
       });
     });
 
@@ -477,7 +477,7 @@ describe('YooptaPlugin', () => {
         expect(pluginData.elements.paragraph.placeholder).toBe('New placeholder');
       });
 
-      it('should extend element allowedPlugins', () => {
+      it('should extend element injectElementsFromPlugins', () => {
         const paragraphRender = createMockRender('paragraph');
         const jsxElement = createMockJSXElement('paragraph', {
           render: paragraphRender,
@@ -508,19 +508,19 @@ describe('YooptaPlugin', () => {
         const extendedPlugin = basePlugin.extend({
           elements: {
             paragraph: {
-              allowedPlugins: [allowedPlugin1, allowedPlugin2],
+              injectElementsFromPlugins: [allowedPlugin1, allowedPlugin2],
             },
           },
         });
 
         const pluginData = extendedPlugin.getPlugin;
-        expect(pluginData.elements.paragraph.allowedPlugins).toEqual([
+        expect(pluginData.elements.paragraph.injectElementsFromPlugins).toEqual([
           'AllowedPlugin1',
           'AllowedPlugin2',
         ]);
       });
 
-      it('should throw error when setting allowedPlugins on element with children', () => {
+      it('should throw error when setting injectElementsFromPlugins on element with children', () => {
         const parentRender = createMockRender('parent');
         const childRender = createMockRender('child');
 
@@ -552,12 +552,12 @@ describe('YooptaPlugin', () => {
           basePlugin.extend({
             elements: {
               parent: {
-                allowedPlugins: [allowedPlugin],
+                injectElementsFromPlugins: [allowedPlugin],
               },
             },
           });
         }).toThrow(
-          '[extend] Cannot set allowedPlugins on element "parent" in plugin "TestPlugin": element has children. allowedPlugins can only be set on leaf elements.',
+          '[extend] Cannot set injectElementsFromPlugins on element "parent" in plugin "TestPlugin": element has children. injectElementsFromPlugins can only be set on leaf elements.',
         );
       });
 

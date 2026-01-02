@@ -1,7 +1,7 @@
 import Accordion, { AccordionCommands } from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
 import Callout from '@yoopta/callout';
-import Code from '@yoopta/code';
+import { Code, CodeGroup } from '@yoopta/code';
 import Divider from '@yoopta/divider';
 // import Mention from '@yoopta/mention';
 import { generateId, YooEditor } from '@yoopta/editor';
@@ -13,7 +13,6 @@ import Link from '@yoopta/link';
 import Lists from '@yoopta/lists';
 import Table from '@yoopta/table';
 import Tabs from '@yoopta/tabs';
-import CodeGroup from '@yoopta/code-group';
 import StepsPlugin from '@yoopta/steps';
 import CarouselPlugin from '@yoopta/carousel';
 
@@ -55,7 +54,7 @@ const ALLOWED_PLUGINS = [
 
 export const YOOPTA_PLUGINS = withShadcnUI([
   Accordion.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
     lifecycle: {
       beforeCreate: (editor: YooEditor) => {
         return AccordionCommands.buildAccordionElements(editor, { items: 2 });
@@ -63,7 +62,7 @@ export const YOOPTA_PLUGINS = withShadcnUI([
     },
   }),
   CarouselPlugin.extend({
-    allowedPlugins: [
+    injectElementsFromPlugins: [
       YImage,
       Callout,
       Lists.BulletedList,
@@ -75,7 +74,7 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   }),
   Paragraph,
   Tabs.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   CodeGroup,
   Headings.HeadingOne,
@@ -85,26 +84,26 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   Code,
   Blockquote,
   SendEmailActionPlugin.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   Lists.BulletedList.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   Lists.NumberedList.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   Lists.TodoList.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   Table.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   StepsPlugin.extend({
-    allowedPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: ALLOWED_PLUGINS,
   }),
   Link,
   Callout.extend({
-    allowedPlugins: [
+    injectElementsFromPlugins: [
       Lists.BulletedList,
       Lists.NumberedList,
       Lists.TodoList,

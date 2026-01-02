@@ -80,7 +80,7 @@
         },
         {
           "group": "Code Plugins",
-          "pages": ["plugins/code", "plugins/code-group"]
+          "pages": ["plugins/code"]
         },
         {
           "group": "Special Plugins",

@@ -20,7 +20,6 @@
     "@yoopta/code": "*",
     "@yoopta/image": "*",
     "@yoopta/table": "*",
-    "@yoopta/code-group": "*",
     "@yoopta/tabs": "*",
     "@yoopta/steps": "*"
   },

@@ -232,7 +232,7 @@ describe('editor-builders', () => {
       expect((result.Paragraph.elements as any).link.rootPlugin).toBe('Link');
     });
 
-    it('should extend plugin with allowedPlugins elements', () => {
+    it('should extend plugin with injectElementsFromPlugins elements', () => {
       const plugins: Plugin<any>[] = [
         {
           type: 'Callout',
@@ -241,7 +241,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Paragraph'],
+              injectElementsFromPlugins: ['Paragraph'],
             },
           },
         },
@@ -259,7 +259,7 @@ describe('editor-builders', () => {
 
       const result = buildPlugins(plugins);
 
-      // Callout should have paragraph element from allowedPlugins
+      // Callout should have paragraph element from injectElementsFromPlugins
       expect(result.Callout.elements).toHaveProperty('paragraph');
       expect((result.Callout.elements as any).paragraph.rootPlugin).toBe('Paragraph');
     });
@@ -273,7 +273,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Paragraph'],
+              injectElementsFromPlugins: ['Paragraph'],
             },
           },
         },
@@ -295,7 +295,7 @@ describe('editor-builders', () => {
       expect((result.Callout.elements as any).paragraph.asRoot).toBeUndefined();
     });
 
-    it('should filter out self-references in allowedPlugins', () => {
+    it('should filter out self-references in injectElementsFromPlugins', () => {
       const plugins: Plugin<any>[] = [
         {
           type: 'Accordion',
@@ -314,7 +314,7 @@ describe('editor-builders', () => {
             'accordion-list-item-content': {
               render: vi.fn(),
               props: {},
-              allowedPlugins: ['Accordion', 'Paragraph'], // Self-reference + valid plugin
+              injectElementsFromPlugins: ['Accordion', 'Paragraph'], // Self-reference + valid plugin
             },
           },
         },
@@ -342,7 +342,7 @@ describe('editor-builders', () => {
       expect(accordionListCount).toBe(1);
     });
 
-    it('should add children elements from allowedPlugins', () => {
+    it('should add children elements from injectElementsFromPlugins', () => {
       const plugins: Plugin<any>[] = [
         {
           type: 'Callout',
@@ -351,7 +351,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Accordion'],
+              injectElementsFromPlugins: ['Accordion'],
             },
           },
         },
@@ -402,7 +402,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Paragraph', 'Paragraph'], // Duplicate
+              injectElementsFromPlugins: ['Paragraph', 'Paragraph'], // Duplicate
             },
           },
         },
@@ -427,7 +427,7 @@ describe('editor-builders', () => {
       expect(paragraphKeys).toHaveLength(1);
     });
 
-    it('should handle multiple plugins with allowedPlugins', () => {
+    it('should handle multiple plugins with injectElementsFromPlugins', () => {
       const plugins: Plugin<any>[] = [
         {
           type: 'Callout',
@@ -436,7 +436,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Paragraph'],
+              injectElementsFromPlugins: ['Paragraph'],
             },
           },
         },
@@ -447,7 +447,7 @@ describe('editor-builders', () => {
               render: vi.fn(),
               props: {},
               asRoot: true,
-              allowedPlugins: ['Paragraph'],
+              injectElementsFromPlugins: ['Paragraph'],
             },
           },
         },

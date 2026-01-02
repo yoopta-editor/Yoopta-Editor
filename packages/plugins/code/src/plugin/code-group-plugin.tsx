@@ -2,7 +2,7 @@ import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 import { Editor, Element, Range, Transforms } from 'slate';
 
-import { CodeGroupCommands } from '../commands';
+import { CodeGroupCommands } from '../commands/code-group-commands';
 import type {
   CodeGroupContainerElementProps,
   CodeGroupContentElementProps,

@@ -163,10 +163,11 @@ describe('createElementStructure', () => {
       expect(result.children).toEqual([{ text: '' }]);
     });
 
-    it('should create text node for element with allowedPlugins when children not specified', () => {
-      // Add allowedPlugins to accordion-list-item-content
-      (mockEditor as any).plugins.Accordion.elements['accordion-list-item-content'].allowedPlugins =
-        ['Paragraph', 'HeadingOne'];
+    it('should create text node for element with injectElementsFromPlugins when children not specified', () => {
+      // Add injectElementsFromPlugins to accordion-list-item-content
+      (mockEditor as any).plugins.Accordion.elements[
+        'accordion-list-item-content'
+      ].injectElementsFromPlugins = ['Paragraph', 'HeadingOne'];
 
       const result = y(mockEditor as YooEditor, 'accordion-list-item-content');
 
@@ -174,10 +175,11 @@ describe('createElementStructure', () => {
       expect(result.children).toEqual([{ text: '' }]);
     });
 
-    it('should use explicit children for element with allowedPlugins when children are specified', () => {
-      // Add allowedPlugins to accordion-list-item-content
-      (mockEditor as any).plugins.Accordion.elements['accordion-list-item-content'].allowedPlugins =
-        ['Paragraph', 'HeadingOne'];
+    it('should use explicit children for element with injectElementsFromPlugins when children are specified', () => {
+      // Add injectElementsFromPlugins to accordion-list-item-content
+      (mockEditor as any).plugins.Accordion.elements[
+        'accordion-list-item-content'
+      ].injectElementsFromPlugins = ['Paragraph', 'HeadingOne'];
 
       const paragraph = y(mockEditor as YooEditor, 'paragraph');
       const heading = y(mockEditor as YooEditor, 'heading-one');

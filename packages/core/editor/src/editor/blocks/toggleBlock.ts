@@ -30,7 +30,7 @@ export type ToggleBlockOptions = {
    * Scope of the toggle operation:
    * - 'auto': automatically determine from context (default)
    * - 'block': transform the entire block (Paragraph → Heading)
-   * - 'element': insert element in current leaf with allowedPlugins
+   * - 'element': insert element in current leaf with injectElementsFromPlugins
    *
    * @default 'auto'
    */
@@ -95,17 +95,18 @@ function determineScope(
   // Always use block scope if explicitly requested
   if (explicitScope === 'block') return 'block';
 
-  // Check if current element has allowedPlugins
-  const allowedPlugins = getAllowedPluginsFromElement(editor, slate);
-  const hasAllowedPlugins = Array.isArray(allowedPlugins) && allowedPlugins.length > 0;
+  // Check if current element has injectElementsFromPlugins
+  const injectElementsFromPlugins = getAllowedPluginsFromElement(editor, slate);
+  const hasAllowedPlugins =
+    Array.isArray(injectElementsFromPlugins) && injectElementsFromPlugins.length > 0;
 
   // If element scope is explicitly requested, verify that current element can contain other elements
   if (explicitScope === 'element') {
-    // Fallback to block scope if current element doesn't have allowedPlugins
+    // Fallback to block scope if current element doesn't have injectElementsFromPlugins
     return hasAllowedPlugins ? 'element' : 'block';
   }
 
-  // Auto mode: use element scope only if allowedPlugins exist
+  // Auto mode: use element scope only if injectElementsFromPlugins exist
   return hasAllowedPlugins ? 'element' : 'block';
 }
 
@@ -233,13 +234,13 @@ function toggleBlockElementScope(
 
   const [currentElement, currentNodePath] = blockElementEntry;
 
-  // Check if current element has allowedPlugins (can contain other elements)
+  // Check if current element has injectElementsFromPlugins (can contain other elements)
   const currentPlugin = editor.plugins[block.type];
   const currentElementType = (currentElement as SlateElement).type;
   const currentElementConfig = currentPlugin?.elements[currentElementType];
   const hasAllowedPlugins =
-    Array.isArray(currentElementConfig?.allowedPlugins) &&
-    currentElementConfig.allowedPlugins.length > 0;
+    Array.isArray(currentElementConfig?.injectElementsFromPlugins) &&
+    currentElementConfig.injectElementsFromPlugins.length > 0;
 
   // Extract text nodes if preserving content
   if (preserveContent) {
@@ -252,7 +253,7 @@ function toggleBlockElementScope(
   }
 
   if (hasAllowedPlugins) {
-    // If current element has allowedPlugins (e.g., callout, accordion-list-item-heading)
+    // If current element has injectElementsFromPlugins (e.g., callout, accordion-list-item-heading)
     // Insert inside it, don't replace
     const childrenCount = (currentElement as SlateElement).children.length;
     for (let i = childrenCount - 1; i >= 0; i -= 1) {
@@ -265,7 +266,7 @@ function toggleBlockElementScope(
       select: true,
     });
   } else {
-    // If current element doesn't have allowedPlugins, replace it
+    // If current element doesn't have injectElementsFromPlugins, replace it
     Transforms.removeNodes(slate, { at: currentNodePath });
     Transforms.insertNodes(slate, elementStructure, {
       at: currentNodePath,
@@ -285,11 +286,11 @@ function toggleBlockElementScope(
 }
 
 /**
- * Toggle block type or insert element in leaf with allowedPlugins
+ * Toggle block type or insert element in leaf with injectElementsFromPlugins
  *
  * Behavior depends on scope:
  * - scope: 'block' → transforms the block (Paragraph → Heading)
- * - scope: 'element' → inserts element in current leaf with allowedPlugins
+ * - scope: 'element' → inserts element in current leaf with injectElementsFromPlugins
  * - scope: 'auto' → automatically determines based on context
  *
  * @example

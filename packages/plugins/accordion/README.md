@@ -170,7 +170,7 @@ Accordion.extend({
   elements: AccordionElements,
 
   // Allow nested plugins (in heading and content)
-  allowedPlugins: [Paragraph, Headings, Lists, Image],
+  injectElementsFromPlugins: [Paragraph, Headings, Lists, Image],
 
   // Custom options
   options: {

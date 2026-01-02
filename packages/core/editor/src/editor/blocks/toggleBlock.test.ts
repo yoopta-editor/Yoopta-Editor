@@ -256,22 +256,22 @@ describe('toggleBlock', () => {
   });
 
   describe('Element scope', () => {
-    describe('Element without allowedPlugins', () => {
+    describe('Element without injectElementsFromPlugins', () => {
       beforeEach(() => {
-        // Setup for element without allowedPlugins (should be replaced)
+        // Setup for element without injectElementsFromPlugins (should be replaced)
         (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
         (y as Mock).mockReturnValue(mockParagraphStructure);
 
         (Editor.above as Mock).mockReturnValue([
           {
             id: 'current-element',
-            type: 'simple-element', // Element without allowedPlugins
+            type: 'simple-element', // Element without injectElementsFromPlugins
             children: [{ text: 'Hello' }],
           },
           [0],
         ]);
 
-        // Mock plugin configuration - element WITHOUT allowedPlugins
+        // Mock plugin configuration - element WITHOUT injectElementsFromPlugins
         editor.plugins = {
           ...editor.plugins,
           TestPlugin: {
@@ -280,7 +280,7 @@ describe('toggleBlock', () => {
               'simple-element': {
                 render: vi.fn(),
                 props: {},
-                // No allowedPlugins - should be replaced
+                // No injectElementsFromPlugins - should be replaced
               },
             },
             lifecycle: {},
@@ -297,7 +297,7 @@ describe('toggleBlock', () => {
         };
       });
 
-      it('should replace element without allowedPlugins', () => {
+      it('should replace element without injectElementsFromPlugins', () => {
         toggleBlock(editor as YooEditor, 'Paragraph', {
           scope: 'element',
           preserveContent: false,
@@ -349,9 +349,9 @@ describe('toggleBlock', () => {
       });
     });
 
-    describe('Element with allowedPlugins', () => {
+    describe('Element with injectElementsFromPlugins', () => {
       beforeEach(() => {
-        // Setup for element with allowedPlugins (e.g., callout, accordion-list-item-heading)
+        // Setup for element with injectElementsFromPlugins (e.g., callout, accordion-list-item-heading)
         (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
         (y as Mock).mockReturnValue(mockParagraphStructure);
 
@@ -364,7 +364,7 @@ describe('toggleBlock', () => {
           [0],
         ]);
 
-        // Mock plugin configuration - element WITH allowedPlugins
+        // Mock plugin configuration - element WITH injectElementsFromPlugins
         editor.plugins = {
           ...editor.plugins,
           Callout: {
@@ -374,7 +374,7 @@ describe('toggleBlock', () => {
                 asRoot: true,
                 render: vi.fn(),
                 props: {},
-                allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
+                injectElementsFromPlugins: ['Paragraph', 'HeadingOne'], // Has injectElementsFromPlugins
               },
             },
             lifecycle: {},
@@ -391,7 +391,7 @@ describe('toggleBlock', () => {
         };
       });
 
-      it('should insert element inside element with allowedPlugins, not replace it', () => {
+      it('should insert element inside element with injectElementsFromPlugins, not replace it', () => {
         const calloutElement = {
           id: 'callout-element',
           type: 'callout',
@@ -419,7 +419,7 @@ describe('toggleBlock', () => {
         );
       });
 
-      it('should preserve content when inserting inside element with allowedPlugins', () => {
+      it('should preserve content when inserting inside element with injectElementsFromPlugins', () => {
         (Editor.isEditor as unknown as Mock).mockReturnValue(false);
         (Editor.isInline as unknown as Mock).mockReturnValue(false);
 
@@ -448,7 +448,7 @@ describe('toggleBlock', () => {
         );
       });
 
-      it('should insert inside accordion-list-item-heading with allowedPlugins', () => {
+      it('should insert inside accordion-list-item-heading with injectElementsFromPlugins', () => {
         const accordionHeadingElement = {
           id: 'accordion-heading',
           type: 'accordion-list-item-heading',
@@ -457,7 +457,7 @@ describe('toggleBlock', () => {
 
         (Editor.above as Mock).mockReturnValue([accordionHeadingElement, [0, 0]]);
 
-        // Mock Accordion plugin with allowedPlugins on heading element
+        // Mock Accordion plugin with injectElementsFromPlugins on heading element
         editor.plugins = {
           ...editor.plugins,
           Accordion: {
@@ -466,7 +466,7 @@ describe('toggleBlock', () => {
               'accordion-list-item-heading': {
                 render: vi.fn(),
                 props: {},
-                allowedPlugins: ['Paragraph', 'HeadingOne'], // Has allowedPlugins
+                injectElementsFromPlugins: ['Paragraph', 'HeadingOne'], // Has injectElementsFromPlugins
               },
             },
             lifecycle: {},
@@ -502,7 +502,7 @@ describe('toggleBlock', () => {
 
     it('should throw error if no selection in element scope', () => {
       mockSlate.selection = null;
-      // Mock allowedPlugins so scope stays as 'element'
+      // Mock injectElementsFromPlugins so scope stays as 'element'
       (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
 
       expect(() => {
@@ -522,7 +522,7 @@ describe('toggleBlock', () => {
   });
 
   describe('Auto scope', () => {
-    it('should automatically detect block scope when no allowedPlugins', () => {
+    it('should automatically detect block scope when no injectElementsFromPlugins', () => {
       (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
 
       toggleBlock(editor as YooEditor, 'HeadingOne', {
@@ -534,7 +534,7 @@ describe('toggleBlock', () => {
       expect(operations[0].type).toBe('toggle_block');
     });
 
-    it('should fallback to block scope when scope="element" but no allowedPlugins', () => {
+    it('should fallback to block scope when scope="element" but no injectElementsFromPlugins', () => {
       (getAllowedPluginsFromElement as Mock).mockReturnValue(null);
 
       toggleBlock(editor as YooEditor, 'HeadingOne', {
@@ -547,7 +547,7 @@ describe('toggleBlock', () => {
       expect(operations[0].type).toBe('toggle_block');
     });
 
-    it('should automatically detect element scope when allowedPlugins present', () => {
+    it('should automatically detect element scope when injectElementsFromPlugins present', () => {
       (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph']);
       (y as Mock).mockReturnValue(mockParagraphStructure);
 
@@ -592,9 +592,9 @@ describe('toggleBlock', () => {
       expect(Transforms.insertNodes).toHaveBeenCalled();
     });
 
-    it('should find allowedPlugins from parent when current element has none (nested case)', () => {
-      // Simulate: Steps > step-list-item-content (has allowedPlugins) > blockquote (no allowedPlugins)
-      // When cursor is on blockquote, should find allowedPlugins from parent
+    it('should find injectElementsFromPlugins from parent when current element has none (nested case)', () => {
+      // Simulate: Steps > step-list-item-content (has injectElementsFromPlugins) > blockquote (no injectElementsFromPlugins)
+      // When cursor is on blockquote, should find injectElementsFromPlugins from parent
       (getAllowedPluginsFromElement as Mock).mockReturnValue(['Paragraph', 'HeadingOne']);
       (y as Mock).mockReturnValue(mockParagraphStructure);
 
@@ -614,7 +614,7 @@ describe('toggleBlock', () => {
             'step-list-item-content': {
               render: vi.fn(),
               props: {},
-              allowedPlugins: ['Paragraph', 'HeadingOne'], // Parent has allowedPlugins
+              injectElementsFromPlugins: ['Paragraph', 'HeadingOne'], // Parent has injectElementsFromPlugins
             },
           },
           lifecycle: {},
@@ -625,7 +625,7 @@ describe('toggleBlock', () => {
             blockquote: {
               render: vi.fn(),
               props: {},
-              // No allowedPlugins
+              // No injectElementsFromPlugins
             },
           },
           lifecycle: {},

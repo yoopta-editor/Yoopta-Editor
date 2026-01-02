@@ -22,7 +22,7 @@ type PluginWithUI = YooptaPlugin<any, any>;
 type PluginExtensions = Record<
   string,
   {
-    allowedPlugins?: PluginWithUI[];
+    injectElementsFromPlugins?: PluginWithUI[];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     events?: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +47,7 @@ type PluginExtensions = Record<
  *   Headings.HeadingOne,
  * ], {
  *   Accordion: {
- *     allowedPlugins: [Paragraph, Headings.HeadingOne]
+ *     injectElementsFromPlugins: [Paragraph, Headings.HeadingOne]
  *   }
  * });
  * ```
@@ -98,7 +98,7 @@ export function withShadcnUI(
     return plugin.extend({
       elements: elementsToApply,
       ...(extension && {
-        allowedPlugins: extension.allowedPlugins,
+        injectElementsFromPlugins: extension.injectElementsFromPlugins,
         events: extension.events,
         options: extension.options,
       }),

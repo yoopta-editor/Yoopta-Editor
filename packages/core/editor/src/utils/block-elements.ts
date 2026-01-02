@@ -157,13 +157,13 @@ export function getPluginByInlineElement(
 }
 
 /**
- * Checks if the current selection is inside an element with allowedPlugins
- * Returns allowedPlugins array if found, null otherwise
+ * Checks if the current selection is inside an element with injectElementsFromPlugins
+ * Returns injectElementsFromPlugins array if found, null otherwise
  */
 /**
- * Find allowedPlugins from current element OR nearest parent element with allowedPlugins
+ * Find injectElementsFromPlugins from current element OR nearest parent element with injectElementsFromPlugins
  * This is important for nested structures like Steps > blockquote,
- * where blockquote doesn't have allowedPlugins but its parent step-list-item-content does
+ * where blockquote doesn't have injectElementsFromPlugins but its parent step-list-item-content does
  */
 export function getAllowedPluginsFromElement(
   editor: YooEditor,
@@ -178,10 +178,10 @@ export function getAllowedPluginsFromElement(
   const blockElements = blockPlugin?.elements;
   if (!blockElements) return null;
 
-  // Start from current element and traverse up to find allowedPlugins
+  // Start from current element and traverse up to find injectElementsFromPlugins
   let currentPath = slate.selection.anchor.path;
 
-  // Walk up the tree from the text node to find an element with allowedPlugins
+  // Walk up the tree from the text node to find an element with injectElementsFromPlugins
   while (currentPath.length > 1) {
     const elementNode = getBlockElementNode(slate, { at: currentPath });
 
@@ -193,21 +193,21 @@ export function getAllowedPluginsFromElement(
         const elementType = (element as SlateElement).type;
         const elementConfig = blockElements[elementType];
 
-        if (elementConfig?.allowedPlugins) {
-          // Check if all allowedPlugins are defined in the editor's plugins
-          const undefinedPlugins = elementConfig.allowedPlugins.filter(
+        if (elementConfig?.injectElementsFromPlugins) {
+          // Check if all injectElementsFromPlugins are defined in the editor's plugins
+          const undefinedPlugins = elementConfig.injectElementsFromPlugins.filter(
             (plugin) => !editor.plugins?.[plugin],
           );
 
           if (undefinedPlugins.length > 0) {
             throw new Error(
-              `Some "allowedPlugins" in ${block.type}->${
+              `Some "injectElementsFromPlugins" in ${block.type}->${
                 element.type
               } are not defined in editor.plugins: ${undefinedPlugins.join(', ')}`,
             );
           }
 
-          return elementConfig.allowedPlugins;
+          return elementConfig.injectElementsFromPlugins;
         }
       }
     }

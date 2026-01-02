@@ -53,24 +53,26 @@ export const filterActionMenuItems = (
 
 export function mapActionMenuItems(editor: YooEditor): ActionMenuItem[] {
   const items: string[] | ActionMenuItem[] = Object.keys(editor.plugins);
-  // Check if we're inside an element with allowedPlugins
-  let allowedPlugins: string[] | null = null;
+  // Check if we're inside an element with injectElementsFromPlugins
+  let injectElementsFromPlugins: string[] | null = null;
 
   if (typeof editor.path.current === 'number') {
     const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
     if (slate) {
-      allowedPlugins = getAllowedPluginsFromElement(editor, slate);
+      injectElementsFromPlugins = getAllowedPluginsFromElement(editor, slate);
     }
   }
 
-  // Filter items based on allowedPlugins
+  // Filter items based on injectElementsFromPlugins
   let filteredItems = items;
 
-  if (allowedPlugins && allowedPlugins.length > 0) {
+  if (injectElementsFromPlugins && injectElementsFromPlugins.length > 0) {
     if (typeof items[0] === 'string') {
-      filteredItems = (items as string[]).filter((item) => allowedPlugins!.includes(item));
+      filteredItems = (items as string[]).filter((item) =>
+        injectElementsFromPlugins!.includes(item),
+      );
     } else {
-      filteredItems = items.filter((item) => allowedPlugins!.includes(item.type));
+      filteredItems = items.filter((item) => injectElementsFromPlugins!.includes(item.type));
     }
   }
 

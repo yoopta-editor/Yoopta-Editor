@@ -42,7 +42,6 @@
     "@yoopta/themes-shadcn": "*",
     "@yoopta/themes-material": "*",
     "@yoopta/tabs": "*",
-    "@yoopta/code-group": "*",
     "@yoopta/steps": "*",
     "@yoopta/carousel": "*",
     "class-variance-authority": "^0.7.0",
