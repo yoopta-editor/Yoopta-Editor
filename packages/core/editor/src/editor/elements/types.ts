@@ -20,6 +20,8 @@ export type InsertElementOptions = {
   at?: 'next' | 'prev' | 'start' | 'end' | number[];
   focus?: boolean;
   select?: boolean;
+  text?: string;
+  match?: ElementMatcher;
 };
 
 // ========================================
@@ -32,6 +34,7 @@ export type UpdateElementOptions = {
   props?: Record<string, unknown>;
   path?: ElementPath;
   match?: ElementMatcher;
+  text?: string;
 };
 
 // ========================================
@@ -43,6 +46,7 @@ export type DeleteElementOptions = {
   type: string;
   path?: ElementPath;
   match?: ElementMatcher;
+  mode?: 'unwrap' | 'remove';
 };
 
 // ========================================

@@ -1,4 +1,3 @@
-// renders/StepList.tsx
 import type { PluginElementRenderProps } from '@yoopta/editor';
 
 export const StepList = (props: PluginElementRenderProps) => {

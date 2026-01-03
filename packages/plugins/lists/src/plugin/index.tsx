@@ -1,6 +1,6 @@
-import { BulletedList } from './BulletedList';
-import { NumberedList } from './NumberedList';
-import { TodoList } from './TodoList';
+import { BulletedList } from './bulleted-list';
+import { NumberedList } from './numbered-list';
+import { TodoList } from './todo-list';
 
 export const LISTS = {
   BulletedList,

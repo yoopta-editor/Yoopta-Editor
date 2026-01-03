@@ -27,16 +27,20 @@ editor.deleteElement(options: DeleteElementOptions): void
       Type of element to delete
     </ParamField>
 
-    <ParamField path="path" type="ElementPath">
-      Path to the element:
-      - `'first'` - First element of the specified type
-      - `'last'` - Last element of the specified type
-      - `'selection'` - Element at current selection
-      - `number[]` - Specific Slate path
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, the method will search for the element in the current selection (for inline elements) or at the root (for block elements).
     </ParamField>
 
     <ParamField path="match" type="(element: SlateElement) => boolean">
-      Custom matcher function to find the element to delete
+      Custom matcher function to find the element to delete. If provided, searches for the element matching this function in the current selection.
+    </ParamField>
+
+    <ParamField path="mode" type="'unwrap' | 'remove'">
+      Deletion mode for inline elements:
+      - `'unwrap'` (default) - Removes the inline wrapper but keeps the text content. Example: `<link>text</link>` → `text`
+      - `'remove'` - Removes the entire element including its content
+      
+      For block elements, this option is ignored and the element is always fully removed.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -63,6 +67,33 @@ function AccordionItem({ blockId, itemPath }: Props) {
 }
 ```
 
+### Delete Inline Element (Link)
+
+```typescript
+// Delete link at current selection (unwrap - keeps text)
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  // If path not specified, finds link in current selection
+  mode: 'unwrap', // Removes link wrapper but keeps text
+});
+
+// Delete link completely (removes link and text)
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  mode: 'remove', // Removes entire link element
+});
+
+// Delete link by path
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  path: [0, 2], // Direct path to link element
+  mode: 'unwrap',
+});
+```
+
 ### Delete by Matcher
 
 ```typescript
@@ -81,28 +112,21 @@ editor.deleteElement({
 });
 ```
 
-### Delete by Position
+### Delete by Path
 
 ```typescript
-// Delete first item
-editor.deleteElement({
-  blockId: 'accordion-1',
-  type: 'accordion-list-item',
-  path: 'first'
-});
-
-// Delete last row
-editor.deleteElement({
-  blockId: 'table-1',
-  type: 'table-row',
-  path: 'last'
-});
-
 // Delete at specific path
 editor.deleteElement({
   blockId: 'table-1',
   type: 'table-data-cell',
   path: [0, 2, 1]
+});
+
+// Delete accordion item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1]
 });
 ```
 
@@ -174,15 +198,61 @@ const deleteTableColumn = (blockId: string, columnIndex: number) => {
 };
 ```
 
+### Remove Link from Text
+
+```typescript
+// Remove link but keep the text
+const removeLink = (blockId: string) => {
+  editor.deleteElement({
+    blockId,
+    type: 'link',
+    mode: 'unwrap', // Converts <link>text</link> to just "text"
+  });
+};
+
+// Remove link completely
+const removeLinkAndText = (blockId: string) => {
+  editor.deleteElement({
+    blockId,
+    type: 'link',
+    mode: 'remove', // Removes link and its text content
+  });
+};
+```
+
+### Delete Mention
+
+```typescript
+// Delete mention at selection
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'mention',
+  // Finds mention in current selection
+  mode: 'remove', // Removes mention completely
+});
+```
+
 ## Notes
+
+<Note>
+  For **inline elements** (like `link`, `mention`), if `path` is not specified, the method will automatically search for the element in the current selection. This makes it easy to delete links or mentions where the cursor is positioned.
+</Note>
+
+<Note>
+  For inline elements, you can choose between two deletion modes:
+  - `'unwrap'` - Removes the inline wrapper but preserves the text content (default)
+  - `'remove'` - Completely removes the element and its content
+  
+  For block elements, the element is always fully removed regardless of the `mode` option.
+</Note>
 
 <Warning>
   Be careful when deleting elements. There's no undo for programmatic deletions (unless you implement it yourself).
 </Warning>
 
-<Note>
-  If the element is not found, the operation will fail silently. Consider checking if the element exists before deletion.
-</Note>
+<Warning>
+  If the element is not found, the operation will fail with a console warning. Consider checking if the element exists before deletion.
+</Warning>
 
 <Info>
   When deleting parent elements, all child elements are automatically deleted as well.
@@ -194,11 +264,10 @@ const deleteTableColumn = (blockId: string, columnIndex: number) => {
 type DeleteElementOptions = {
   blockId: string;
   type: string;
-  path?: ElementPath;
+  path?: number[]; // Direct Slate path
   match?: (element: SlateElement) => boolean;
+  mode?: 'unwrap' | 'remove'; // Only for inline elements
 };
-
-type ElementPath = number[] | 'selection' | 'first' | 'last';
 ```
 
 ## Related Methods

@@ -288,10 +288,12 @@ export function createJSXFactory(editor: YooEditor) {
     ...children: unknown[]
   ): SlateElement {
     // Extract custom props (everything except 'children' and React-specific props)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       children: UNUSED_CHILDREN,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       key: UNUSED_KEY,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ref: UNUSED_REF,
       ...customProps
     } = props ?? {};

@@ -31,16 +31,16 @@ editor.updateElement(options: UpdateElementOptions): void
       Properties to update on the element. Will be merged with existing props.
     </ParamField>
 
-    <ParamField path="path" type="ElementPath">
-      Path to the element:
-      - `'first'` - First element of the specified type
-      - `'last'` - Last element of the specified type
-      - `'selection'` - Element at current selection
-      - `number[]` - Specific Slate path
+    <ParamField path="text" type="string">
+      Text content to update (only for inline elements like `link`, `mention`). Replaces the text content of the inline element.
+    </ParamField>
+
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, the method will search for the element in the current selection (for inline elements) or at the root (for block elements).
     </ParamField>
 
     <ParamField path="match" type="(element: SlateElement) => boolean">
-      Custom matcher function to find the element. If provided, takes precedence over `type` and `path`.
+      Custom matcher function to find the element. If provided, searches for the element matching this function in the current selection.
     </ParamField>
 
   </Expandable>
@@ -87,31 +87,51 @@ editor.updateElement({
 });
 ```
 
+### Update Inline Element (Link)
+
+```typescript
+// Update link at current selection
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://example.com', target: '_blank' },
+  // If path not specified, finds link in current selection
+});
+
+// Update link text and URL
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://new-url.com' },
+  text: 'New link text', // Updates the displayed text
+});
+
+// Update link by path
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://example.com' },
+  path: [0, 2], // Direct path to link element
+});
+```
+
 ### Update by Path
 
 ```typescript
-// Update first item
-editor.updateElement({
-  blockId: 'accordion-1',
-  type: 'accordion-list-item',
-  props: { isExpanded: true },
-  path: 'first',
-});
-
-// Update last item
-editor.updateElement({
-  blockId: 'accordion-1',
-  type: 'accordion-list-item',
-  props: { isExpanded: false },
-  path: 'last',
-});
-
 // Update at specific path
 editor.updateElement({
   blockId: 'table-1',
   type: 'table-data-cell',
   props: { width: 300, asHeader: true },
   path: [0, 0, 0],
+});
+
+// Update accordion item
+editor.updateElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  path: [0, 1],
 });
 ```
 
@@ -189,6 +209,18 @@ const markStepComplete = (blockId: string, stepIndex: number) => {
 };
 ```
 
+### Update Mention Element
+
+```typescript
+// Update mention at selection
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'mention',
+  props: { name: 'Jane Doe', id: 'user-123' },
+  text: '@Jane Doe', // Update displayed text
+});
+```
+
 ## Advanced Usage
 
 ### Update Multiple Elements
@@ -238,14 +270,25 @@ const updateIfNotEmpty = (blockId: string, itemPath: number[]) => {
   Properties are merged with existing props. To remove a property, set it to `undefined` or `null`.
 </Note>
 
+<Note>
+  For **inline elements** (like `link`, `mention`), if `path` is not specified, the method will
+  automatically search for the element in the current selection. This makes it easy to update links
+  or mentions where the cursor is positioned.
+</Note>
+
+<Note>
+  The `text` parameter is only supported for inline elements. For block elements, use
+  `insertElement` or `updateBlock` to modify content.
+</Note>
+
 <Warning>
-  If the element is not found (no match for type, path, or matcher), the operation will silently
-  fail. Always check if the element exists before updating if you're unsure.
+  If the element is not found (no match for type, path, or matcher), the operation will fail with a
+  console warning. Always check if the element exists before updating if you're unsure.
 </Warning>
 
 <Info>
-  When using a custom `match` function, it takes precedence over `type` and `path`. The function
-  receives each element and should return `true` for the element you want to update.
+  When using a custom `match` function, it searches for the element in the current selection. The
+  function receives each element and should return `true` for the element you want to update.
 </Info>
 
 ## Type Definition
@@ -255,11 +298,10 @@ type UpdateElementOptions = {
   blockId: string;
   type: string;
   props?: Record<string, unknown>;
-  path?: ElementPath;
+  text?: string; // Only for inline elements
+  path?: number[]; // Direct Slate path
   match?: (element: SlateElement) => boolean;
 };
-
-type ElementPath = number[] | 'selection' | 'first' | 'last';
 ```
 
 ## Related Methods

@@ -18,7 +18,7 @@ export const StepContainer = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <div {...attributes} role="list" className="ml-3.5 mt-10 mb-6 relative group/steps-node">
+    <div {...attributes} role="list" className="ml-3.5 my-4 relative group/steps-node">
       {children}
       <div
         contentEditable={false}

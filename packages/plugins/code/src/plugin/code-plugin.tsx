@@ -4,9 +4,6 @@ import { Transforms } from 'slate';
 import { CodeCommands } from '../commands/code-commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
 import { escapeHTML } from '../utils/element';
-import { initHighlighter } from '../utils/shiki';
-
-initHighlighter();
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',

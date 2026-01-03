@@ -5,7 +5,7 @@ import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
 // import prettier from 'prettier/standalone';
 
 import type { CodeElement, CodeElementProps } from '../types';
-import { PLUGIN_LOADERS, PRETTIER_PARSER_MAP } from '../utils/prettier';
+// import { PLUGIN_LOADERS, PRETTIER_PARSER_MAP } from '../utils/prettier';
 
 type CodeElementOptions = {
   text?: string;
@@ -27,7 +27,7 @@ export type CodeCommands = {
     blockId: string,
     language: CodeElementProps['language'],
   ) => void;
-  prettifyCode: (code: string, language: string) => Promise<string>;
+  prettifyCode: (_editor: YooEditor, code: string, language: string) => Promise<string>;
 };
 
 export const CodeCommands: CodeCommands = {
@@ -64,24 +64,23 @@ export const CodeCommands: CodeCommands = {
     });
   },
   // TODO: Implement this
-  prettifyCode: async (code: string, language: string) => {
-    // const loader = PLUGIN_LOADERS[language];
-    // if (!loader) {
-    //   console.warn(`No formatter available for: ${language}`);
-    //   return code;
-    // }
-    // try {
-    //   // Dynamically import Prettier core and specific plugins in parallel
-    //   const [prettier, plugins] = await Promise.all([import('prettier/standalone'), loader()]);
-    //   return await prettier.format(code, {
-    //     parser: PRETTIER_PARSER_MAP[language],
-    //     plugins: plugins.map((p) => p.default || p), // Handle ESM default exports
-    //     printWidth: 120,
-    //     semi: true,
-    //   });
-    // } catch (err) {
-    //   console.error('Formatting error:', err);
-    //   return code;
-    // }
-  },
+  prettifyCode: async (_editor, code: string, _language: string) => Promise.resolve(code),
+  // const loader = PLUGIN_LOADERS[language];
+  // if (!loader) {
+  //   console.warn(`No formatter available for: ${language}`);
+  //   return code;
+  // }
+  // try {
+  //   // Dynamically import Prettier core and specific plugins in parallel
+  //   const [prettier, plugins] = await Promise.all([import('prettier/standalone'), loader()]);
+  //   return await prettier.format(code, {
+  //     parser: PRETTIER_PARSER_MAP[language],
+  //     plugins: plugins.map((p) => p.default || p), // Handle ESM default exports
+  //     printWidth: 120,
+  //     semi: true,
+  //   });
+  // } catch (err) {
+  //   console.error('Formatting error:', err);
+  //   return code;
+  // }
 };

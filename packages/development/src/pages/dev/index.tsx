@@ -1,4 +1,4 @@
-import YooptaEditor, { YooEditor, createYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor, generateId } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
@@ -21,9 +21,23 @@ const YooptaUIPackageExample = () => {
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
-  }, []);
 
-  console.log('editor', editor);
+    const paragraphBlockId = editor.insertBlock('Paragraph', {
+      elements: editor.y('paragraph', {
+        children: [editor.y.text('Hello world')],
+      }),
+      focus: true,
+    });
+
+    console.log('paragraphBlockId', paragraphBlockId);
+
+    editor.insertElement({
+      blockId: paragraphBlockId,
+      type: 'link',
+      props: { url: 'https://example.com' },
+      at: [0, 0],
+    });
+  }, []);
 
   const insertTabs = () => {
     const elements = editor.y('tabs-container', {

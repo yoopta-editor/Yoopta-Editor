@@ -9,9 +9,6 @@ import type {
   CodeGroupElementMap,
   CodeGroupPluginBlockOptions,
 } from '../types';
-import { initHighlighter } from '../utils/shiki';
-
-initHighlighter();
 
 const CodeGroupContainer = ({ attributes, children }: PluginElementRenderProps) => (
   <div {...attributes}>{children}</div>
@@ -54,9 +51,23 @@ const CodeGroup = new YooptaPlugin<CodeGroupElementMap, CodeGroupPluginBlockOpti
       title: 'CodeGroup',
       description: 'A group of code blocks',
     },
-    // shortcuts: ['```', 'code', 'js'],
+    shortcuts: ['```tabs'],
   },
   commands: CodeGroupCommands,
+  extensions: (slate, editor, blockId) => {
+    const { normalizeNode } = slate;
+
+    slate.normalizeNode = (entry) => {
+      const [node, path] = entry;
+
+      if (Element.isElement(node) && node.type === 'code-group-content') {
+        console.log('extensions node', node);
+      }
+      normalizeNode(entry);
+    };
+
+    return slate;
+  },
   events: {
     onKeyDown: (editor, slate, options) => (event) => {
       if (options.hotkeys.isEnter(event)) {

@@ -6,6 +6,9 @@ import {
   CodeGroupElementMap,
   CodeGroupPluginBlockOptions,
 } from './types';
+import { initHighlighter } from './utils/shiki';
+
+initHighlighter();
 
 export { HighlightedCodeOverlay, useHighlighter } from './components/highlighted-code-overlay';
 export { CodeCommands } from './commands/code-commands';
