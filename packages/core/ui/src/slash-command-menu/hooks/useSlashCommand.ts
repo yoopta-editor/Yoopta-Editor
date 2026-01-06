@@ -8,7 +8,6 @@ import { Editor, Path } from 'slate';
 import { SLASH_TRIGGER } from '../constants';
 import type { SlashCommandActions, SlashCommandItem, SlashCommandState } from '../types';
 import { useFilter } from './useFilter';
-import { useKeyboardNavigation } from './useKeyboardNavigation';
 import { getVirtualElementRects, usePositioning } from './usePositioning';
 
 type Action =
@@ -165,16 +164,6 @@ export function useSlashCommand({
     close();
   }, [filteredItems, state.selectedIndex, onSelect, editor, close]);
 
-  const { selectNext, selectPrevious } = useKeyboardNavigation({
-    isOpen: state.isOpen,
-    itemCount: filteredItems.length,
-    selectedIndex: state.selectedIndex,
-    onSelectIndex: setSelectedIndex,
-    onExecute: executeSelected,
-    onClose: close,
-    loop: true,
-  });
-
   useEffect(() => {
     if (typeof editor.path.current !== 'number') return;
 
@@ -288,12 +277,10 @@ export function useSlashCommand({
       open,
       close,
       setSearch,
-      selectNext,
-      selectPrevious,
       selectItem: setSelectedIndex,
       executeSelected,
     }),
-    [open, close, setSearch, selectNext, selectPrevious, setSelectedIndex, executeSelected],
+    [open, close, setSearch, setSelectedIndex, executeSelected],
   );
 
   return {

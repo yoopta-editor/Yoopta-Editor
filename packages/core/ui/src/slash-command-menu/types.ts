@@ -36,8 +36,6 @@ export type SlashCommandActions = {
   open: (virtualElement: VirtualElement, floatingContext: FloatingContext<VirtualElement>) => void;
   close: () => void;
   setSearch: (search: string) => void;
-  selectNext: () => void;
-  selectPrevious: () => void;
   selectItem: (index: number) => void;
   executeSelected: () => void;
 };

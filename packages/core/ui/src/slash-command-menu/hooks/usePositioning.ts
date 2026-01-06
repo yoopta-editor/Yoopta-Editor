@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
 import type { VirtualElement } from '@floating-ui/react';
-import { flip, offset, shift, useFloating } from '@floating-ui/react';
+import { flip, inline, offset, shift, useFloating } from '@floating-ui/react';
 
 import { MENU_OFFSET } from '../constants';
 
@@ -13,7 +13,7 @@ export function usePositioning({ isOpen, virtualElement }: UsePositioningOptions
   const { refs, floatingStyles, context, update } = useFloating({
     open: isOpen,
     placement: 'bottom-start',
-    middleware: [offset(MENU_OFFSET), flip(), shift()],
+    middleware: [inline(), offset(MENU_OFFSET), flip(), shift()],
     strategy: 'fixed',
   });
 

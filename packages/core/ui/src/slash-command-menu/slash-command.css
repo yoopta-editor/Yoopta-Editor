@@ -1,8 +1,3 @@
-/* ============================================================================
-   SLASH COMMAND MENU STYLES
-   ============================================================================ */
-
-/* CSS Variables for theming */
 .slash-command-root {
   --slash-command-bg: #ffffff;
   --slash-command-bg-hover: #f4f4f5;
@@ -22,7 +17,6 @@
   --slash-command-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 }
 
-/* Dark mode */
 .slash-command-root[data-theme="dark"],
 .dark .slash-command-root {
   --slash-command-bg: #18181b;
@@ -43,7 +37,7 @@
 .slash-command-content {
   position: fixed;
   z-index: 9999;
-  width: 320px;
+  width: 300px;
   max-height: 400px;
   overflow: hidden;
   background-color: var(--slash-command-bg);
@@ -67,10 +61,6 @@
     transform: translateY(0) scale(1);
   }
 }
-
-/* ============================================================================
-   INPUT / SEARCH
-   ============================================================================ */
 
 .slash-command-input-wrapper {
   display: flex;
@@ -128,7 +118,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding: 8px;
+  padding: .5rem .25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .slash-command-list::-webkit-scrollbar {
@@ -179,7 +172,7 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 4px 6px;
   border: none;
   border-radius: var(--slash-command-item-radius);
   background-color: transparent;
