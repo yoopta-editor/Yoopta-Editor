@@ -66,6 +66,7 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   const editUrl = (e: React.MouseEvent) => {
+    if (editedUrl.length === 0) return;
     e.preventDefault();
     e.stopPropagation();
     setIsEditing(true);
@@ -88,12 +89,13 @@ const Link = (props: PluginElementRenderProps) => {
   const cancelEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
     setEditedUrl(element.props.url ?? '');
     setEditedText(linkText);
     setIsEditing(false);
   };
 
-  const handleDeleteLink = (e: React.MouseEvent) => {
+  const deleteLink = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -129,7 +131,7 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <HoverCard openDelay={200} closeDelay={100}>
+    <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger asChild>
         <a
           {...attributes}
@@ -187,7 +189,12 @@ const Link = (props: PluginElementRenderProps) => {
             </div>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Button size="sm" variant="default" className="h-7 text-xs" onClick={saveEdit}>
+                <Button
+                  size="sm"
+                  variant="default"
+                  className="h-7 text-xs"
+                  onClick={saveEdit}
+                  disabled={editedUrl.length === 0 || editedText.length === 0}>
                   Save
                 </Button>
                 <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={cancelEdit}>
@@ -198,16 +205,16 @@ const Link = (props: PluginElementRenderProps) => {
                 size="sm"
                 variant="ghost"
                 className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={handleDeleteLink}>
+                onClick={deleteLink}>
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
           </div>
         ) : (
-          <div className="p-2">
-            <div className="flex items-center gap-2">
+          <div className="px-2 py-1">
+            <div className="flex items-center gap-1">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-mono truncate text-foreground">
+                <div className="text-sm truncate text-foreground">
                   {element.props.url ?? 'No URL'}
                 </div>
               </div>

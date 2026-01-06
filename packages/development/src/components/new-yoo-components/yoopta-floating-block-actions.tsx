@@ -2,7 +2,7 @@ import { DragHandleDots2Icon, MagicWandIcon, PlusIcon } from '@radix-ui/react-ic
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import {
   FloatingBlockActions,
-  useSlashActionMenuActions,
+  // useSlashActionMenuActions,
   useBlockOptionsActions,
   useFloatingBlockActions,
 } from '@yoopta/ui';
@@ -10,7 +10,7 @@ import {
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
   const { open: openBlockOptions } = useBlockOptionsActions();
-  const { open: openSlashActionMenu } = useSlashActionMenuActions();
+  // const { open: openSlashActionMenu } = useSlashActionMenuActions();
   const {
     toggle: toggleFloatingBlockActions,
     reference,
@@ -31,10 +31,10 @@ export const YooptaFloatingBlockActions = () => {
       const blockEl = document.querySelector(`[data-yoopta-block-id="${nextBlockId}"]`);
       if (!blockEl) return;
 
-      openSlashActionMenu({
-        getBoundingClientRect: () => blockEl.getBoundingClientRect(),
-        getClientRects: () => blockEl.getClientRects(),
-      } as HTMLElement);
+      // openSlashActionMenu({
+      //   getBoundingClientRect: () => blockEl.getBoundingClientRect(),
+      //   getClientRects: () => blockEl.getClientRects(),
+      // } as HTMLElement);
     }, 0);
   };
 

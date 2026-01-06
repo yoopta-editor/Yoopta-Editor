@@ -38,8 +38,7 @@ const YImage = Image.extend({
   },
 });
 
-const ALLOWED_PLUGINS = [
-  Paragraph,
+const PLUGIN_ELEMENTS_TO_INJECT = [
   Headings.HeadingOne,
   Headings.HeadingTwo,
   Headings.HeadingThree,
@@ -54,7 +53,7 @@ const ALLOWED_PLUGINS = [
 
 export const YOOPTA_PLUGINS = withShadcnUI([
   Accordion.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
     lifecycle: {
       beforeCreate: (editor: YooEditor) => {
         return AccordionCommands.buildAccordionElements(editor, { items: 2 });
@@ -74,7 +73,7 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   }),
   Paragraph,
   Tabs.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   CodeGroup,
   Headings.HeadingOne,
@@ -84,22 +83,22 @@ export const YOOPTA_PLUGINS = withShadcnUI([
   Code,
   Blockquote,
   SendEmailActionPlugin.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   Lists.BulletedList.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   Lists.NumberedList.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   Lists.TodoList.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   Table.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   StepsPlugin.extend({
-    injectElementsFromPlugins: ALLOWED_PLUGINS,
+    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),
   Link,
   Callout.extend({

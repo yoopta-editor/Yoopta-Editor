@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { Check } from 'lucide-react';
@@ -9,7 +10,10 @@ export const TodoList = (props: PluginElementRenderProps) => {
   const isChecked = element.props.checked;
   const editor = useYooptaEditor();
 
-  const toggleChecked = () => {
+  const toggleChecked = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     Elements.updateElement(editor, {
       blockId,
       type: 'todo-list',
@@ -20,16 +24,12 @@ export const TodoList = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <div {...attributes} className="my-0 ml-6 list-none">
+    <div {...attributes} className="m-0 mt-2 ml-6 list-none">
       <div className="flex items-start gap-2 pl-2">
         <button
           type="button"
           contentEditable={false}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleChecked();
-          }}
+          onMouseDown={toggleChecked}
           className={cn(
             'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 transition-colors',
             isChecked

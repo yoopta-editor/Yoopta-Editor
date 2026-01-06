@@ -60,8 +60,8 @@ const CodeGroup = new YooptaPlugin<CodeGroupElementMap, CodeGroupPluginBlockOpti
     slate.normalizeNode = (entry) => {
       const [node, path] = entry;
 
-      if (Element.isElement(node) && node.type === 'code-group-content') {
-        console.log('extensions node', node);
+      if (Element.isElement(node) && node.type === 'code-group-container') {
+        // if several elements code-group-content has the same referenceId merge these nodes into a single node
       }
       normalizeNode(entry);
     };

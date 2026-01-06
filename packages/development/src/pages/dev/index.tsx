@@ -21,22 +21,6 @@ const YooptaUIPackageExample = () => {
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
-
-    const paragraphBlockId = editor.insertBlock('Paragraph', {
-      elements: editor.y('paragraph', {
-        children: [editor.y.text('Hello world')],
-      }),
-      focus: true,
-    });
-
-    console.log('paragraphBlockId', paragraphBlockId);
-
-    editor.insertElement({
-      blockId: paragraphBlockId,
-      type: 'link',
-      props: { url: 'https://example.com' },
-      at: [0, 0],
-    });
   }, []);
 
   const insertTabs = () => {
@@ -251,24 +235,21 @@ const YooptaUIPackageExample = () => {
   };
 
   const insertBulletedList = () => {
-    const elements = editor.y('bulleted-list', {
-      children: [
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 1'), editor.y.text(' First item', { bold: true })],
-        }),
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 2')],
-        }),
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 3')],
-        }),
-      ],
-    });
+    const bulletItemIds = [generateId(), generateId(), generateId()];
 
-    editor.insertBlock('BulletedList', {
-      elements,
-      at: typeof editor.path.current === 'number' ? editor.path.current : 0,
-      focus: true,
+    editor.batchOperations(() => {
+      bulletItemIds.forEach((id, idx) => {
+        const bulletItemElements = editor.y('bulleted-list', {
+          id,
+          children: [editor.y.text(`Item ${idx + 1}`)],
+        });
+
+        editor.insertBlock('BulletedList', {
+          elements: bulletItemElements,
+          at: typeof editor.path.current === 'number' ? editor.path.current : 0,
+          focus: true,
+        });
+      });
     });
   };
 
