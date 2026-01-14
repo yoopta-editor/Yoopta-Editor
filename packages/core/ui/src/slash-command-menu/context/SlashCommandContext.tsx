@@ -2,17 +2,8 @@ import { createContext, useContext } from 'react';
 
 import type { SlashCommandContextValue } from '../types';
 
-// ============================================================================
-// CONTEXT
-// ============================================================================
-
 export const SlashCommandContext = createContext<SlashCommandContextValue | null>(null);
-
 SlashCommandContext.displayName = 'SlashCommandContext';
-
-// ============================================================================
-// HOOK
-// ============================================================================
 
 export function useSlashCommandContext(): SlashCommandContextValue {
   const context = useContext(SlashCommandContext);
@@ -23,10 +14,6 @@ export function useSlashCommandContext(): SlashCommandContextValue {
 
   return context;
 }
-
-// ============================================================================
-// SELECTORS (for optimized re-renders)
-// ============================================================================
 
 export function useSlashCommandState() {
   const { state } = useSlashCommandContext();

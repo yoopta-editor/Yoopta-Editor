@@ -1,5 +1,4 @@
-import type { Path } from 'slate';
-import { Editor, Element, Transforms } from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
 
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import type { SlateEditor, YooEditor } from '../types';
@@ -33,7 +32,7 @@ function findElement(
     return null;
   }
 
-  const matcher = customMatcher || ((n: any) => Element.isElement(n) && n.type === type);
+  const matcher = customMatcher ?? ((n) => Element.isElement(n) && n.type === type);
 
   const [entry] = Editor.nodes(slate, {
     at: slate.selection,
@@ -175,6 +174,7 @@ export function deleteElement(editor: YooEditor, options: DeleteElementOptions):
   const { blockId, type, path, match, mode = 'remove' } = options;
 
   const block = editor.children[blockId];
+
   if (!block) {
     console.warn(`Block ${blockId} not found`);
     return;
@@ -205,7 +205,7 @@ export function deleteElement(editor: YooEditor, options: DeleteElementOptions):
     let targetElement: Element | null = null;
 
     // Case 1: Direct path provided
-    if (path) {
+    if (Path.isPath(path)) {
       targetPath = path;
       try {
         const node = Editor.node(slate, targetPath);

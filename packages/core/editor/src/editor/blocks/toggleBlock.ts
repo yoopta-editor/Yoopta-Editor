@@ -244,7 +244,7 @@ function toggleBlockElementScope(
 
   // Extract text nodes if preserving content
   if (preserveContent) {
-    const textNodes = extractTextNodes(slate, currentElement, block, editor);
+    const textNodes = extractTextNodes(slate, currentElement as Descendant, block, editor);
     const firstLeaf = findFirstLeaf(elementStructure, preserveContent);
 
     if (firstLeaf) {

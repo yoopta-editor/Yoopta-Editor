@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Elements, useYooptaEditor } from '@yoopta/editor';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
-import { Check, Copy, Edit2, ExternalLink, Trash2 } from 'lucide-react';
 import { Text } from 'slate';
 
-import { Button } from '../../../ui/button';
+import { LinkEdit } from './link-edit';
+import { LinkPreview } from './link-preview';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../ui/hover-card';
-import { Input } from '../../../ui/input';
-import { Label } from '../../../ui/label';
 
 const getNodeText = (node: unknown): string => {
   if (Text.isText(node)) {
@@ -65,23 +63,49 @@ const Link = (props: PluginElementRenderProps) => {
     }
   };
 
-  const editUrl = (e: React.MouseEvent) => {
+  const openEdit = (e: React.MouseEvent) => {
     if (editedUrl.length === 0) return;
     e.preventDefault();
     e.stopPropagation();
+
+    // const linkElementPath = Elements.getElementPath(editor, {
+    //   blockId,
+    //   element,
+    // });
+
+    // if (!linkElementPath) return;
+
+    // const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    // if (!slate) return;
+
+    // const [linkEntry] = Editor.nodes(slate, {
+    //   match: (n) => Element.isElement(n) && n.type === 'link',
+    //   mode: 'lowest',
+    //   at: linkElementPath,
+    // });
+
+    // Transforms.select(slate, linkEntry?.[1]);
+
     setIsEditing(true);
   };
 
   const saveEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const linkElementPath = Elements.getElementPath(editor, {
+      blockId,
+      element,
+    });
+
+    if (!linkElementPath) return;
+
     Elements.updateElement(editor, {
       blockId,
       type: 'link',
       text: editedText,
-      props: {
-        url: editedUrl,
-      },
+      path: linkElementPath,
+      props: { url: editedUrl },
     });
     setIsEditing(false);
   };
@@ -99,9 +123,17 @@ const Link = (props: PluginElementRenderProps) => {
     e.preventDefault();
     e.stopPropagation();
 
+    const linkElementPath = Elements.getElementPath(editor, {
+      blockId,
+      element,
+    });
+
+    if (!linkElementPath) return;
+
     Elements.deleteElement(editor, {
       mode: 'unwrap',
       type: 'link',
+      path: linkElementPath,
       blockId,
     });
     setIsEditing(false);
@@ -130,6 +162,12 @@ const Link = (props: PluginElementRenderProps) => {
     }
   };
 
+  const onClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger asChild>
@@ -141,12 +179,7 @@ const Link = (props: PluginElementRenderProps) => {
           title={element.props.title || undefined}
           className="text-primary font-medium underline underline-offset-4 cursor-pointer hover:text-primary/80 transition-colors"
           contentEditable={false}
-          onClick={(e) => {
-            // Prevent navigation when clicking in edit mode
-            if (isEditing) {
-              e.preventDefault();
-            }
-          }}>
+          onClick={onClick}>
           {children}
         </a>
       </HoverCardTrigger>
@@ -155,98 +188,26 @@ const Link = (props: PluginElementRenderProps) => {
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}>
         {isEditing ? (
-          <div className="p-3 space-y-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="link-text" className="text-xs">
-                Link text
-              </Label>
-              <Input
-                id="link-text"
-                ref={textInputRef}
-                value={editedText}
-                onChange={(e) => setEditedText(e.target.value)}
-                placeholder="Link text..."
-                className="h-8 text-sm"
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="link-url" className="text-xs">
-                URL
-              </Label>
-              <Input
-                id="link-url"
-                ref={urlInputRef}
-                value={editedUrl}
-                onChange={(e) => setEditedUrl(e.target.value)}
-                onKeyDown={onKeyDown}
-                placeholder="Enter URL..."
-                className="h-8 text-sm"
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="h-7 text-xs"
-                  onClick={saveEdit}
-                  disabled={editedUrl.length === 0 || editedText.length === 0}>
-                  Save
-                </Button>
-                <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={cancelEdit}>
-                  Cancel
-                </Button>
-              </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={deleteLink}>
-                <Trash2 className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
+          <LinkEdit
+            textInputRef={textInputRef}
+            urlInputRef={urlInputRef}
+            editedText={editedText}
+            editedUrl={editedUrl}
+            onChangeText={(e) => setEditedText(e.target.value)}
+            onChangeUrl={(e) => setEditedUrl(e.target.value)}
+            onKeyDown={onKeyDown}
+            saveEdit={saveEdit}
+            cancelEdit={cancelEdit}
+            deleteLink={deleteLink}
+          />
         ) : (
-          <div className="px-2 py-1">
-            <div className="flex items-center gap-1">
-              <div className="flex-1 min-w-0">
-                <div className="text-sm truncate text-foreground">
-                  {element.props.url ?? 'No URL'}
-                </div>
-              </div>
-              <div className="h-4 w-px bg-border" />
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 w-7 p-0"
-                onClick={openLink}
-                disabled={!element.props.url}
-                title="Open link">
-                <ExternalLink className="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 w-7 p-0"
-                onClick={copyUrl}
-                disabled={!element.props.url}
-                title={copied ? 'Copied!' : 'Copy URL'}>
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 w-7 p-0"
-                onClick={editUrl}
-                title="Edit URL">
-                <Edit2 className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
+          <LinkPreview
+            element={element}
+            openLink={openLink}
+            copyUrl={copyUrl}
+            openEdit={openEdit}
+            copied={copied}
+          />
         )}
       </HoverCardContent>
     </HoverCard>

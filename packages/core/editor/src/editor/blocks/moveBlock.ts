@@ -9,7 +9,6 @@ export function moveBlock(editor: YooEditor, draggedBlockId: string, newPath: Yo
   );
 
   if (!draggedBlock || !blockInNewPosition) {
-    console.warn('Invalid block ids for move operation');
     return;
   }
   const operations: YooptaOperation[] = [];

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import type { VirtualElement } from '@floating-ui/dom';
 import type { FloatingContext } from '@floating-ui/react';
 import { useTransitionStyles } from '@floating-ui/react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Path } from 'slate';
 
-import { SLASH_TRIGGER } from '../constants';
-import type { SlashCommandActions, SlashCommandItem, SlashCommandState } from '../types';
+import { KEYS, SLASH_TRIGGER } from '../constants';
+import type { SlashCommandItem, SlashCommandState } from '../types';
 import { useFilter } from './useFilter';
 import { getVirtualElementRects, usePositioning } from './usePositioning';
 
@@ -55,14 +55,15 @@ function reducer(state: SlashCommandState, action: Action): SlashCommandState {
       return {
         ...state,
         search: action.search,
-        selectedIndex: 0, // Reset selection on search change
+        selectedIndex: 0,
       };
 
-    case 'SET_SELECTED_INDEX':
+    case 'SET_SELECTED_INDEX': {
       return {
         ...state,
         selectedIndex: action.index,
       };
+    }
 
     case 'RESET_SELECTION':
       return {
@@ -127,21 +128,11 @@ export function useSlashCommand({
     dispatch({ type: 'SET_SEARCH', search });
   }, []);
 
-  const setSelectedIndex = useCallback(
-    (indexOrUpdater: number | ((prev: number) => number)) => {
-      if (typeof indexOrUpdater === 'function') {
-        dispatch({
-          type: 'SET_SELECTED_INDEX',
-          index: indexOrUpdater(state.selectedIndex),
-        });
-      } else {
-        dispatch({ type: 'SET_SELECTED_INDEX', index: indexOrUpdater });
-      }
-    },
-    [state.selectedIndex],
-  );
+  const setSelectedIndex = (index: number) => {
+    dispatch({ type: 'SET_SELECTED_INDEX', index });
+  };
 
-  const executeSelected = useCallback(() => {
+  const executeSelected = () => {
     const selectedItem = filteredItems[state.selectedIndex];
     if (!selectedItem) return;
 
@@ -162,7 +153,7 @@ export function useSlashCommand({
     }
 
     close();
-  }, [filteredItems, state.selectedIndex, onSelect, editor, close]);
+  };
 
   useEffect(() => {
     if (typeof editor.path.current !== 'number') return;
@@ -198,10 +189,38 @@ export function useSlashCommand({
           if (virtualElement) open(virtualElement, floatingContext);
         }
       }
+
+      if (event.key === KEYS.ARROW_DOWN) {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedIndex(
+          state.selectedIndex === filteredItems.length - 1 ? 0 : state.selectedIndex + 1,
+        );
+      } else if (event.key === KEYS.ARROW_UP) {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedIndex(
+          state.selectedIndex === 0 ? filteredItems.length - 1 : state.selectedIndex - 1,
+        );
+      } else if (event.key === KEYS.ENTER) {
+        if (state.isOpen) {
+          event.preventDefault();
+          event.stopPropagation();
+          executeSelected();
+        }
+      } else if (event.key === KEYS.ESCAPE) {
+        if (state.isOpen) {
+          event.preventDefault();
+          event.stopPropagation();
+          close();
+        }
+      }
     };
 
     // Handle keyup for search updates
-    const handleKeyUp = () => {
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.isComposing) return;
+      if (event.key === KEYS.ARROW_DOWN || event.key === KEYS.ARROW_UP) return;
       if (!state.isOpen) return;
 
       const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
@@ -216,28 +235,29 @@ export function useSlashCommand({
       }
 
       const searchText = text.replace(trigger, '').trim();
+
       setSearch(searchText);
-    };
-
-    const disableScroll = (event: Event) => {
-      if (!state.isOpen) return;
-      if (!refs.floating?.current?.contains(event.target as Node)) return;
-
-      event.preventDefault();
-      event.stopPropagation();
     };
 
     slateEl.addEventListener('keydown', handleKeyDown);
     slateEl.addEventListener('keyup', handleKeyUp);
-    document.addEventListener('scroll', disableScroll);
 
     return () => {
       slateEl.removeEventListener('keydown', handleKeyDown);
       slateEl.removeEventListener('keyup', handleKeyUp);
-      document.removeEventListener('scroll', disableScroll);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor.path.current, state.isOpen, refs.setReference, trigger, open, close, setSearch]);
+  }, [
+    editor.path.current,
+    state.isOpen,
+    state.selectedIndex,
+    refs.setReference,
+    trigger,
+    open,
+    close,
+    setSearch,
+    filteredItems.length,
+  ]);
 
   useEffect(() => {
     if (!state.isOpen) return;
@@ -272,16 +292,32 @@ export function useSlashCommand({
     return () => clearTimeout(timeoutId);
   }, [state.isOpen, isEmpty, state.search, close]);
 
-  const actions: SlashCommandActions = useMemo(
-    () => ({
-      open,
-      close,
-      setSearch,
-      selectItem: setSelectedIndex,
-      executeSelected,
-    }),
-    [open, close, setSearch, setSelectedIndex, executeSelected],
-  );
+  useEffect(() => {
+    if (!state.isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [state.isOpen]);
+
+  const actions = {
+    open,
+    close,
+    setSearch,
+    selectItem: setSelectedIndex,
+    executeSelected,
+  };
 
   return {
     refs,

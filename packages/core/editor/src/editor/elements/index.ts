@@ -1,13 +1,10 @@
-import { createJSXFactory } from './create-element-structure';
 import { deleteElement } from './deleteElement';
 import { getElement } from './getElement';
 import { getElementChildren } from './getElementChildren';
 import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
-import { getElementRect } from './getElementRect';
 import { getElements } from './getElements';
 import { getParentElementPath } from './getParentElementPath';
-import { htmlElToSlateNode } from './htmlElToSlateNode';
 import { insertElement } from './insertElement';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
@@ -25,11 +22,6 @@ export const Elements = {
   getParentElementPath,
   getElementChildren,
   isElementEmpty,
-
-  // Legacy methods (kept for backwards compatibility)
-  getElementRect,
-  createJSXFactory,
-  htmlElToSlateNode,
 };
 
 // Export new methods individually

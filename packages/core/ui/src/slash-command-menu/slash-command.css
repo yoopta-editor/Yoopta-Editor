@@ -30,12 +30,7 @@
   --slash-command-icon-border: #3f3f46;
 }
 
-/* ============================================================================
-   CONTENT / POPOVER
-   ============================================================================ */
-
 .slash-command-content {
-  position: fixed;
   z-index: 9999;
   width: 300px;
   max-height: 400px;

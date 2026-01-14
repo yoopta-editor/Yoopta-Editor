@@ -1,16 +1,7 @@
-// Need to import these types
 import type { SlateEditor, SlateElement, YooptaBlockData } from '../types';
-
-// ========================================
-// Core types
-// ========================================
 
 export type ElementPath = number[] | 'selection' | 'first' | 'last';
 export type ElementMatcher = (element: SlateElement) => boolean;
-
-// ========================================
-// INSERT Element
-// ========================================
 
 export type InsertElementOptions = {
   blockId: string;
@@ -24,10 +15,6 @@ export type InsertElementOptions = {
   match?: ElementMatcher;
 };
 
-// ========================================
-// UPDATE Element
-// ========================================
-
 export type UpdateElementOptions = {
   blockId: string;
   type: string;
@@ -36,11 +23,6 @@ export type UpdateElementOptions = {
   match?: ElementMatcher;
   text?: string;
 };
-
-// ========================================
-// DELETE Element
-// ========================================
-
 export type DeleteElementOptions = {
   blockId: string;
   type: string;
@@ -48,10 +30,6 @@ export type DeleteElementOptions = {
   match?: ElementMatcher;
   mode?: 'unwrap' | 'remove';
 };
-
-// ========================================
-// Helper types (existing methods)
-// ========================================
 
 export type GetElementOptions = {
   blockId: string;
@@ -99,10 +77,6 @@ export type GetElementRectOptions = {
   blockId: string;
   element: SlateElement;
 };
-
-// ========================================
-// Transform Block (Escape hatch)
-// ========================================
 
 export type TransformBlockOptions = {
   blockId: string;

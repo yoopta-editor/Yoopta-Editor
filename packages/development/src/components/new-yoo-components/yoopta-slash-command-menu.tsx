@@ -1,4 +1,3 @@
-import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons/icons';
 import { SlashCommandMenu } from '@yoopta/ui';
 import {
   CheckSquare,
