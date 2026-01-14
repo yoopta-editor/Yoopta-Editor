@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createDraft, finishDraft, isDraft, produce } from 'immer';
 import type { Operation, Range } from 'slate';
 import { Editor, Transforms } from 'slate';
@@ -156,7 +157,9 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
             try {
               Transforms.select(slate, selectionBefore);
               ReactEditor.focus(slate);
-            } catch (error) {}
+            } catch (error) {
+              console.error(error);
+            }
           }
         });
       }
@@ -173,7 +176,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
         const existingBlock = editor.children[blockId];
         if (existingBlock.meta.order >= op.block.meta.order && existingBlock.id !== op.block.id) {
           if (isDraft(editor.children[existingBlock.id])) {
-            existingBlock.meta.order = existingBlock.meta.order + 1;
+            existingBlock.meta.order += 1;
           }
         }
       });
@@ -197,10 +200,10 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       blocks.forEach((existingBlock) => {
         if (existingBlock.meta.order > op.block.meta.order) {
           if (isDraft(existingBlock)) {
-            existingBlock.meta.order--;
+            existingBlock.meta.order -= 1;
           } else {
             produce(existingBlock, (draft) => {
-              draft.meta.order--;
+              draft.meta.order -= 1;
             });
           }
         }
@@ -280,10 +283,10 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
           block.id !== properties.nextBlock.id
         ) {
           if (isDraft(block)) {
-            block.meta.order++;
+            block.meta.order += 1;
           } else {
             produce(block, (draft) => {
-              draft.meta.order++;
+              draft.meta.order += 1;
             });
           }
         }
@@ -303,10 +306,10 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       Object.values(editor.children).forEach((block) => {
         if (block.meta.order > properties.mergedBlock.meta.order) {
           if (isDraft(block)) {
-            block.meta.order--;
+            block.meta.order -= 1;
           } else {
             produce(block, (draft) => {
-              draft.meta.order--;
+              draft.meta.order -= 1;
             });
           }
         }
@@ -342,13 +345,13 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
                 otherBlock.meta.order > prevProperties.order &&
                 otherBlock.meta.order <= properties.order
               ) {
-                otherBlock.meta.order--;
+                otherBlock.meta.order -= 1;
               }
             } else if (
               otherBlock.meta.order < prevProperties.order &&
               otherBlock.meta.order >= properties.order
             ) {
-              otherBlock.meta.order++;
+              otherBlock.meta.order += 1;
             }
           }
         });
@@ -394,6 +397,11 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       });
       break;
     }
+
+    default: {
+      console.warn(`Unknown operation type, operation:`, op);
+      break;
+    }
   }
 }
 
@@ -403,6 +411,18 @@ export type ApplyTransformsOptions = {
 };
 
 const MAX_HISTORY_LENGTH = 100;
+
+function assertValidPaths(editor: YooEditor) {
+  const blocks = [...Object.values(editor.children)];
+  blocks.sort((a, b) => a.meta.order - b.meta.order);
+  blocks.forEach((block, index) => {
+    if (block.meta.order !== index) {
+      console.warn(
+        `Block path inconsistency detected: Block ${block.id} has order ${block.meta.order}, expected ${index}`,
+      );
+    }
+  });
+}
 
 export function applyTransforms(
   editor: YooEditor,
@@ -475,16 +495,4 @@ export function applyTransforms(
   if (process.env.NODE_ENV !== 'production') {
     assertValidPaths(editor);
   }
-}
-
-function assertValidPaths(editor: YooEditor) {
-  const blocks = [...Object.values(editor.children)];
-  blocks.sort((a, b) => a.meta.order - b.meta.order);
-  blocks.forEach((block, index) => {
-    if (block.meta.order !== index) {
-      console.warn(
-        `Block path inconsistency detected: Block ${block.id} has order ${block.meta.order}, expected ${index}`,
-      );
-    }
-  });
 }

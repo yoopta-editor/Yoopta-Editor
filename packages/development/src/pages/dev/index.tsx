@@ -1,4 +1,4 @@
-import YooptaEditor, { YooEditor, createYooptaEditor, generateId } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
@@ -15,6 +15,7 @@ import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-s
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
+import { Transforms } from 'slate';
 
 const YooptaUIPackageExample = () => {
   const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
@@ -162,11 +163,18 @@ const YooptaUIPackageExample = () => {
       ],
     });
 
-    editor.insertBlock('Steps', {
+    const blockId = editor.insertBlock('Steps', {
       elements,
       at: 0,
       focus: true,
     });
+
+    setTimeout(() => {
+      const slate = Blocks.getBlockSlate(editor, { id: blockId });
+      if (!slate) return;
+
+      Transforms.select(slate, [0, 0, 0]);
+    }, 100);
   };
 
   const insertCallout = () => {

@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import { useYooptaEditor } from '@yoopta/editor';
+import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { StepsCommands } from '@yoopta/steps';
 import { ArrowDown, ArrowUp, MoreVertical, Trash2 } from 'lucide-react';
 
@@ -17,8 +18,16 @@ export const StepListItem = (props: PluginElementRenderProps) => {
   const { attributes, children, element } = props;
   const editor = useYooptaEditor();
 
-  const stepNumber = element.props.order + 1;
-  const isLast = element.props.order === element.children.length - 1;
+  const order = useMemo(() => {
+    const path = Elements.getElementPath(editor, { blockId: props.blockId, element });
+    const orderNumber = path?.[path.length - 1];
+    if (!orderNumber) return 0;
+
+    return orderNumber;
+  }, [editor, element, props.blockId]);
+
+  const stepNumber = order + 1;
+  const isLast = order === element.children.length - 1;
   const isEmpty = element.children.length === 0;
 
   const moveUp = () => {

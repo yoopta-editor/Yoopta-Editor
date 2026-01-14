@@ -42,7 +42,7 @@ export type SlashCommandActions = {
 
 export type SlashCommandContextValue = {
   state: SlashCommandState;
-  actions: SlashCommandActions;
+  actionHandlers: SlashCommandActions;
   items: SlashCommandItem[];
   filteredItems: SlashCommandItem[];
   groupedItems: Map<string, SlashCommandItem[]>;

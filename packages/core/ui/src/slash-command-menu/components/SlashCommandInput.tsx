@@ -22,7 +22,7 @@ export const SlashCommandInput = forwardRef<HTMLInputElement, SlashCommandInputP
     { placeholder = 'Search blocks...', className, showTrigger = true, showEscHint = true },
     ref,
   ) => {
-    const { state, actions } = useSlashCommandContext();
+    const { state, actionHandlers } = useSlashCommandContext();
 
     return (
       <div className={`slash-command-input-wrapper ${className || ''}`}>
@@ -33,7 +33,7 @@ export const SlashCommandInput = forwardRef<HTMLInputElement, SlashCommandInputP
           className="slash-command-input"
           placeholder={placeholder}
           value={state.search}
-          onChange={(e) => actions.setSearch(e.target.value)}
+          onChange={(e) => actionHandlers.setSearch(e.target.value)}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

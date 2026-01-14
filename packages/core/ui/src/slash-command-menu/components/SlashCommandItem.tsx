@@ -1,13 +1,14 @@
+import type { ReactNode } from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { useSlashCommandContext } from '../context/SlashCommandContext';
 
 export type SlashCommandItemProps = {
-  children?: React.ReactNode;
+  children?: ReactNode;
   value: string;
   title?: string;
   description?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   shortcut?: string[];
   disabled?: boolean;
   onSelect?: () => void;
@@ -25,7 +26,7 @@ export const SlashCommandItem = ({
   onSelect,
   className,
 }: SlashCommandItemProps) => {
-  const { state, actions, filteredItems } = useSlashCommandContext();
+  const { state, actionHandlers, filteredItems } = useSlashCommandContext();
   const itemRef = useRef<HTMLButtonElement>(null);
 
   // Find index of this item in filtered list
@@ -49,15 +50,15 @@ export const SlashCommandItem = ({
       onSelect();
     }
 
-    actions.selectItem(itemIndex);
-    actions.executeSelected();
-  }, [disabled, onSelect, actions, itemIndex]);
+    actionHandlers.selectItem(itemIndex);
+    actionHandlers.executeSelected();
+  }, [disabled, onSelect, actionHandlers, itemIndex]);
 
   const handleMouseEnter = useCallback(() => {
     if (!disabled && itemIndex !== -1) {
-      actions.selectItem(itemIndex);
+      actionHandlers.selectItem(itemIndex);
     }
-  }, [disabled, itemIndex, actions]);
+  }, [disabled, itemIndex, actionHandlers]);
 
   if (!isVisible) return null;
 

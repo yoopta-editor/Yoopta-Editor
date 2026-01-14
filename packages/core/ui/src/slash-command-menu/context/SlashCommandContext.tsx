@@ -21,8 +21,8 @@ export function useSlashCommandState() {
 }
 
 export function useSlashCommandActions() {
-  const { actions } = useSlashCommandContext();
-  return actions;
+  const { actionHandlers } = useSlashCommandContext();
+  return actionHandlers;
 }
 
 export function useSlashCommandItems() {

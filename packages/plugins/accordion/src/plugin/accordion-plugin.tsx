@@ -99,17 +99,6 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           }
         }
 
-        if (hotkeys.isSelect(event)) {
-          if (event.isDefaultPrevented()) return;
-          event.preventDefault();
-
-          if (slate.selection) {
-            Transforms.select(slate, slate.selection.anchor.path.slice(0, -1));
-          }
-
-          return;
-        }
-
         if (hotkeys.isEnter(event)) {
           if (event.isDefaultPrevented()) return;
           event.preventDefault();

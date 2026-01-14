@@ -190,6 +190,8 @@ export function useSlashCommand({
         }
       }
 
+      if (!state.isOpen) return;
+
       if (event.key === KEYS.ARROW_DOWN) {
         event.preventDefault();
         event.stopPropagation();
@@ -203,25 +205,21 @@ export function useSlashCommand({
           state.selectedIndex === 0 ? filteredItems.length - 1 : state.selectedIndex - 1,
         );
       } else if (event.key === KEYS.ENTER) {
-        if (state.isOpen) {
-          event.preventDefault();
-          event.stopPropagation();
-          executeSelected();
-        }
+        event.preventDefault();
+        event.stopPropagation();
+        executeSelected();
       } else if (event.key === KEYS.ESCAPE) {
-        if (state.isOpen) {
-          event.preventDefault();
-          event.stopPropagation();
-          close();
-        }
+        event.preventDefault();
+        event.stopPropagation();
+        close();
       }
     };
 
     // Handle keyup for search updates
     const handleKeyUp = (event: KeyboardEvent) => {
       if (event.isComposing) return;
-      if (event.key === KEYS.ARROW_DOWN || event.key === KEYS.ARROW_UP) return;
       if (!state.isOpen) return;
+      if (event.key === KEYS.ARROW_DOWN || event.key === KEYS.ARROW_UP) return;
 
       const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
       if (!slate?.selection) return;
@@ -311,7 +309,7 @@ export function useSlashCommand({
     };
   }, [state.isOpen]);
 
-  const actions = {
+  const actionHandlers = {
     open,
     close,
     setSearch,
@@ -324,7 +322,7 @@ export function useSlashCommand({
     state,
     items,
     isEmpty,
-    actions,
+    actionHandlers,
     groupedItems,
     filteredItems,
     floatingStyles,

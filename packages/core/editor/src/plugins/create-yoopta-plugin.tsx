@@ -108,7 +108,7 @@ export class YooptaPlugin<
 
     // Handle plugin-level injectElementsFromPlugins: apply to ALL leaf elements
     if (injectElementsFromPlugins) {
-      const allowedPluginTypes = injectElementsFromPlugins.map((plugin) => plugin.getPlugin.type);
+      const injectedPluginTypes = injectElementsFromPlugins.map((plugin) => plugin.getPlugin.type);
 
       Object.keys(elements).forEach((elementType) => {
         const element = elements[elementType];
@@ -118,7 +118,7 @@ export class YooptaPlugin<
 
         if (isLeaf) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (element as any).injectElementsFromPlugins = allowedPluginTypes;
+          (element as any).injectElementsFromPlugins = injectedPluginTypes;
         }
       });
     }
@@ -153,12 +153,12 @@ export class YooptaPlugin<
           }
 
           // Convert plugin instances to plugin types
-          const allowedPluginTypes = extendElementConfig.injectElementsFromPlugins.map(
+          const injectedPluginTypes = extendElementConfig.injectElementsFromPlugins.map(
             (plugin) => plugin.getPlugin.type,
           );
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (element as any).injectElementsFromPlugins = allowedPluginTypes;
+          (element as any).injectElementsFromPlugins = injectedPluginTypes;
         }
 
         // Handle custom render

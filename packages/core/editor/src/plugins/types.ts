@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement } from 'react';
+import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
 import type { RenderElementProps, RenderLeafProps } from 'slate-react';
 
 import type {
@@ -23,6 +23,7 @@ export type PluginOptions<T> = Partial<
     display?: {
       title?: string;
       description?: string;
+      icon?: ReactNode;
     };
     shortcuts?: string[];
     HTMLAttributes?: HTMLAttributes<HTMLElement>;

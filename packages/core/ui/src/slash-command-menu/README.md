@@ -107,15 +107,15 @@ function Editor() {
     <SlashCommand.Input />
     <SlashCommand.List>
       <SlashCommand.Empty>No blocks found</SlashCommand.Empty>
-      
+
       <SlashCommand.Group heading="Basic Blocks">
         {basicItems.map((item) => (
           <SlashCommand.Item key={item.id} {...item} />
         ))}
       </SlashCommand.Group>
-      
+
       <SlashCommand.Separator />
-      
+
       <SlashCommand.Group heading="Advanced">
         {advancedItems.map((item) => (
           <SlashCommand.Item key={item.id} {...item} />
@@ -130,13 +130,12 @@ function Editor() {
 ## Custom Selection Handler
 
 ```tsx
-<SlashCommand.Root 
+<SlashCommand.Root
   items={items}
   onSelect={(item) => {
     console.log('Selected:', item.id);
     // Default behavior (editor.toggleBlock) also runs
-  }}
->
+  }}>
   {/* ... */}
 </SlashCommand.Root>
 ```
@@ -145,49 +144,49 @@ function Editor() {
 
 ### SlashCommand.Root
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `items` | `SlashCommandItem[]` | Array of available commands |
-| `trigger` | `string` | Trigger character (default: `/`) |
-| `onSelect` | `(item) => void` | Callback when item selected |
+| Prop       | Type                 | Description                      |
+| ---------- | -------------------- | -------------------------------- |
+| `items`    | `SlashCommandItem[]` | Array of available commands      |
+| `trigger`  | `string`             | Trigger character (default: `/`) |
+| `onSelect` | `(item) => void`     | Callback when item selected      |
 
 ### SlashCommand.Item
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `value` | `string` | Unique identifier (block type) |
-| `title` | `string` | Display title |
-| `description` | `string` | Description text |
-| `icon` | `ReactNode` | Icon element |
-| `shortcut` | `string[]` | Keyboard shortcut display |
-| `disabled` | `boolean` | Disable selection |
-| `onSelect` | `() => void` | Item-specific callback |
+| Prop          | Type         | Description                    |
+| ------------- | ------------ | ------------------------------ |
+| `value`       | `string`     | Unique identifier (block type) |
+| `title`       | `string`     | Display title                  |
+| `description` | `string`     | Description text               |
+| `icon`        | `ReactNode`  | Icon element                   |
+| `shortcut`    | `string[]`   | Keyboard shortcut display      |
+| `disabled`    | `boolean`    | Disable selection              |
+| `onSelect`    | `() => void` | Item-specific callback         |
 
 ### SlashCommandItem Type
 
 ```typescript
 type SlashCommandItem = {
-  id: string;           // Block type / unique id
-  title: string;        // Display title
+  id: string; // Block type / unique id
+  title: string; // Display title
   description?: string; // Optional description
-  icon?: ReactNode;     // Optional icon
-  keywords?: string[];  // Search keywords
-  group?: string;       // Group identifier
-  disabled?: boolean;   // Disable item
+  icon?: ReactNode; // Optional icon
+  keywords?: string[]; // Search keywords
+  group?: string; // Group identifier
+  disabled?: boolean; // Disable item
   onSelect?: () => void; // Custom handler
 };
 ```
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `/` | Open menu (at empty line start) |
-| `↑` | Previous item (loops to last) |
-| `↓` | Next item (loops to first) |
-| `Enter` | Select current item |
-| `Escape` | Close menu |
-| `Tab` | Prevented (keeps focus) |
+| Key      | Action                          |
+| -------- | ------------------------------- |
+| `/`      | Open menu (at empty line start) |
+| `↑`      | Previous item (loops to last)   |
+| `↓`      | Next item (loops to first)      |
+| `Enter`  | Select current item             |
+| `Escape` | Close menu                      |
+| `Tab`    | Prevented (keeps focus)         |
 
 ## CSS Customization
 
@@ -222,12 +221,12 @@ Main hook for building custom implementations:
 
 ```tsx
 const {
-  state,          // { isOpen, search, selectedIndex, position }
-  actions,        // { open, close, setSearch, selectNext, selectPrevious, ... }
-  filteredItems,  // Items filtered by search
-  groupedItems,   // Items grouped by category (Map)
-  isEmpty,        // No results
-  refs,           // DOM refs
+  state, // { isOpen, search, selectedIndex, position }
+  actionHandlers, // { open, close, setSearch, selectNext, selectPrevious, ... }
+  filteredItems, // Items filtered by search
+  groupedItems, // Items grouped by category (Map)
+  isEmpty, // No results
+  refs, // DOM refs
   floatingStyles, // Positioning styles
 } = useSlashCommand({ items, trigger, onSelect });
 ```
