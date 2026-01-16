@@ -6,6 +6,7 @@ import { CalloutUI } from './callout';
 import { CarouselUI } from './carousel';
 import { CodeUI } from './code';
 import { CodeGroupUI } from './code-group';
+import { DividerUI } from './divider';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -77,6 +78,7 @@ export function withShadcnUI(
     CodeGroup: CodeGroupUI,
     Steps: StepsUI,
     Carousel: CarouselUI,
+    Divider: DividerUI,
   };
 
   return plugins.map((plugin) => {

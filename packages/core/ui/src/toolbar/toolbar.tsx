@@ -1,8 +1,7 @@
 import type { HTMLAttributes } from 'react';
 import { forwardRef } from 'react';
-import { UI } from '@yoopta/editor';
 
-const { Portal } = UI;
+import { Portal } from '../portal';
 
 export type ToolbarRootProps = Partial<HTMLAttributes<HTMLDivElement>>;
 

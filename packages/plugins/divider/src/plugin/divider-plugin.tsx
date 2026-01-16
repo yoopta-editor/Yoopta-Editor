@@ -1,7 +1,7 @@
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { DividerCommands } from '../commands';
-import { DividerRender } from '../elements/Divider';
 import { onKeyDown } from '../events/onKeyDown';
 import type { DividerElementMap, DividerElementProps } from '../types';
 
@@ -9,6 +9,13 @@ const dividerProps: DividerElementProps = {
   theme: 'solid',
   color: '#EFEFEE',
 };
+
+const DividerRender = (props: PluginElementRenderProps) => (
+  <div contentEditable={false}>
+    <hr {...props.attributes} />
+    {props.children}
+  </div>
+);
 
 const Divider = new YooptaPlugin<DividerElementMap>({
   type: 'Divider',

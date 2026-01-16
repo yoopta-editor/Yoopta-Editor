@@ -1,15 +1,13 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { FloatingPortal } from '@floating-ui/react';
-
-import { useYooptaEditor } from '../../contexts/YooptaContext/YooptaContext';
+import { useYooptaEditor } from '@yoopta/editor';
 
 type Props = {
   children: ReactNode;
   id: string;
 };
 
-// move to @yoopta/ui packages in next PR
 const Portal = (props: Props) => {
   const [isMounted, setIsMounted] = useState(false);
   const rootEl = useRef<HTMLElement | null>(null);
@@ -33,7 +31,7 @@ const Portal = (props: Props) => {
         rootEl.current.remove();
       }
     };
-  }, []);
+  }, [editor]);
 
   if (!isMounted) return null;
 

@@ -21,6 +21,7 @@ export type PluginJSXElement = ReactElement<PluginJSXElementProps, string>;
 
 function buildElementsMap<TKeys extends string = string>(
   jsxElement: PluginJSXElement,
+  pluginType: string,
 ): PluginElementsMap<TKeys> {
   const elementsMap: PluginElementsMap<TKeys> = {} as PluginElementsMap<TKeys>;
 
@@ -29,11 +30,13 @@ function buildElementsMap<TKeys extends string = string>(
     const { render, props: defaultProps } = elementProps;
 
     if (typeof type !== 'string') {
-      throw new Error(`[buildPluginElements] Element type must be a string, got: ${typeof type}`);
+      throw new Error(
+        `[Incorrect type of element in plugin ${pluginType}] Element type must be a string, got: ${typeof type}`,
+      );
     }
 
     if (!render || typeof render !== 'function') {
-      throw new Error(`[buildPluginElements] Element "${type}" must define a render function`);
+      throw new Error(`Missing render of element ${type} in ${pluginType} plugin`);
     }
 
     const elementConfig: PluginElement<TKeys, PluginElementProps<Record<string, unknown>>> = {
@@ -89,8 +92,9 @@ function buildElementsMap<TKeys extends string = string>(
 
 export function buildPluginElements<TKeys extends string = string>(
   jsxElement: PluginJSXElement,
+  pluginType: string,
 ): PluginElementsMap<TKeys> {
-  const elementsMap = buildElementsMap<TKeys>(jsxElement);
+  const elementsMap = buildElementsMap<TKeys>(jsxElement, pluginType);
   return elementsMap;
 }
 

@@ -20,7 +20,7 @@ import {
   PanelLeftIcon,
 } from 'lucide-react';
 
-export const ACTION_MENU_LIST_DEFAULT_ICONS_MAP: Record<string, any> = {
+export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, any> = {
   Paragraph: TextIcon,
   HeadingOne: Heading1Icon,
   HeadingTwo: Heading2Icon,

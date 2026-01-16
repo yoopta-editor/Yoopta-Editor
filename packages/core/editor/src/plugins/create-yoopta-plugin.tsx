@@ -48,10 +48,10 @@ export class YooptaPlugin<
     // Check if elements is a React element (JSX)
     if (isReactElement(pluginInput.elements)) {
       // Convert JSX to PluginElementsMap
-      elements = buildPluginElements<keyof TElementMap & string>(pluginInput.elements) as Plugin<
-        TElementMap,
-        TOptions
-      >['elements'];
+      elements = buildPluginElements<keyof TElementMap & string>(
+        pluginInput.elements,
+        pluginInput.type,
+      ) as Plugin<TElementMap, TOptions>['elements'];
     } else {
       // Use elements as is
       elements = pluginInput.elements as Plugin<TElementMap, TOptions>['elements'];

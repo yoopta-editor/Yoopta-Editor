@@ -40,14 +40,23 @@ export const SlashCommandRoot = ({
       const rootElement = rootElementType
         ? editor.plugins[pluginType].elements[rootElementType]
         : undefined;
-      return rootElement?.props?.nodeType === 'block' || rootElement?.props?.nodeType === 'void';
+
+      return (
+        rootElement?.props?.nodeType !== 'inline' && rootElement?.props?.nodeType !== 'inlineVoid'
+      );
     });
 
-    return pluginTypes.map((pluginType) => ({
-      id: pluginType,
-      title: editor.plugins[pluginType].options?.display?.title ?? pluginType,
-      description: editor.plugins[pluginType].options?.display?.description,
-    }));
+    return pluginTypes.map((pluginType) => {
+      const plugin = editor.plugins[pluginType];
+      const display = plugin.options?.display;
+
+      return {
+        id: pluginType,
+        title: display?.title ?? pluginType,
+        description: display?.description,
+        icon: display?.icon,
+      };
+    });
   }, [itemsProps, editor]);
 
   const {

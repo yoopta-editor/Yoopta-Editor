@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import type { VirtualElement } from '@floating-ui/dom';
 import type { FloatingContext } from '@floating-ui/react';
 import { useTransitionStyles } from '@floating-ui/react';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { Blocks, getAllowedPluginsFromElement, useYooptaEditor } from '@yoopta/editor';
 import { Editor, Path } from 'slate';
 
 import { KEYS, SLASH_TRIGGER } from '../constants';
@@ -102,8 +102,60 @@ export function useSlashCommand({
   const editor = useYooptaEditor();
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Filter items based on injectElementsFromPlugins when menu is open
+  const filteredItemsByContext = useMemo(() => {
+    // Only filter when menu is open to get current context
+    if (!state.isOpen) {
+      return items;
+    }
+
+    // Check if we're inside an element with injectElementsFromPlugins
+    let injectElementsFromPlugins: string[] | null = null;
+
+    if (typeof editor.path.current === 'number') {
+      const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
+      if (slate) {
+        injectElementsFromPlugins = getAllowedPluginsFromElement(editor, slate);
+      }
+    }
+
+    console.log('injectElementsFromPlugins', injectElementsFromPlugins);
+
+    // Filter items based on injectElementsFromPlugins
+    if (injectElementsFromPlugins && injectElementsFromPlugins.length > 0) {
+      console.log(
+        'filtered items',
+        injectElementsFromPlugins.map((pluginType) => {
+          const plugin = editor.plugins[pluginType];
+          const display = plugin.options?.display;
+
+          return {
+            id: pluginType,
+            title: display?.title ?? pluginType,
+            description: display?.description,
+            icon: display?.icon,
+          };
+        }),
+      );
+
+      return injectElementsFromPlugins.map((pluginType) => {
+        const plugin = editor.plugins[pluginType];
+        const display = plugin.options?.display;
+
+        return {
+          id: pluginType,
+          title: display?.title ?? pluginType,
+          description: display?.description,
+          icon: display?.icon,
+        };
+      });
+    }
+
+    return items;
+  }, [items, state.isOpen, editor]);
+
   const { filteredItems, groupedItems, isEmpty } = useFilter({
-    items,
+    items: filteredItemsByContext,
     search: state.search,
   });
 

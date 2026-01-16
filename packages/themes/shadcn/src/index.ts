@@ -13,4 +13,5 @@ export { ImageUI } from './image';
 export { CodeUI } from './code';
 export { TabsUI } from './tabs';
 export { StepsUI } from './steps';
+export { DividerUI } from './divider';
 export default withShadcnUI;

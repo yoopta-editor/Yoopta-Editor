@@ -21,20 +21,18 @@ const imageProps: ImageElementProps = {
   sizes: { width: 0, height: 0 },
 };
 
-const BaseImageRender = (props: PluginElementRenderProps) => {
-  return (
-    <div {...props.attributes} contentEditable={false}>
-      <img
-        src={props.element.props.src}
-        alt={props.element.props.alt}
-        width={props.element.props.sizes?.width}
-        height={props.element.props.sizes?.height}
-        style={{ objectFit: props.element.props.fit }}
-      />
-      {props.children}
-    </div>
-  );
-};
+const BaseImageRender = (props: PluginElementRenderProps) => (
+  <div {...props.attributes} contentEditable={false}>
+    <img
+      src={props.element.props.src}
+      alt={props.element.props.alt}
+      width={props.element.props.sizes?.width}
+      height={props.element.props.sizes?.height}
+      style={{ objectFit: props.element.props.fit }}
+    />
+    {props.children}
+  </div>
+);
 
 const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
   type: 'Image',
@@ -70,6 +68,7 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
             });
 
             const props: SlateElement<'image', ImageElementProps>['props'] = {
+              id: generateId(),
               nodeType: 'void',
               src: el.getAttribute('src') || '',
               alt: el.getAttribute('alt') || '',

@@ -30,6 +30,9 @@ const YImage = Image.extend({
       method: 'POST',
       maxSize: 5 * 1024 * 1024,
       accept: 'image/jpeg, image/jpg, image/png, image/webp',
+      onSuccess(result) {
+        console.log('Image uploaded', result);
+      },
     },
     delete: {
       endpoint: '/api/image-kit-delete',
@@ -60,6 +63,7 @@ export const YOOPTA_PLUGINS = withShadcnUI([
       },
     },
   }),
+  Divider,
   CarouselPlugin.extend({
     injectElementsFromPlugins: [
       YImage,

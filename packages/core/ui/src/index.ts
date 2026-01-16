@@ -9,3 +9,5 @@ export { ActionMenuList, useActionMenuList, useActionMenuListActions } from './a
 export { SlashCommandMenu } from './slash-command-menu';
 export { useTheme, ThemeProvider, ThemeToggle, useThemeContext } from './theme';
 export type { Theme } from './theme';
+export { Portal } from './portal';
+export { Overlay } from './overlay';

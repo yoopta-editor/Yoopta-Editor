@@ -14,9 +14,6 @@ export {
 export { deserializeHTML } from './parsers/deserializeHTML';
 export { type EmailTemplateOptions } from './parsers/getEmail';
 
-// [TODO] - should be in separated package @yoopta/common/ui or @yoopta/ui
-export { UI } from './UI';
-
 export { generateId } from './utils/generateId';
 export { HOTKEYS } from './utils/hotkeys';
 export {
