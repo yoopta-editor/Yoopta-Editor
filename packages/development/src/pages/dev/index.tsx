@@ -245,8 +245,7 @@ const YooptaUIPackageExample = () => {
 
         editor.insertBlock('BulletedList', {
           elements: bulletItemElements,
-          at: typeof editor.path.current === 'number' ? editor.path.current : 0,
-          focus: true,
+          at: idx,
         });
       });
     });

@@ -18,6 +18,7 @@ import {
   Package2Icon,
   ListOrderedIcon,
   PanelLeftIcon,
+  GridIcon,
 } from 'lucide-react';
 
 export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, any> = {
@@ -42,4 +43,6 @@ export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, any> = {
   OrderDetailsAction: Package2Icon,
   Steps: ListOrderedIcon,
   Tabs: PanelLeftIcon,
+  CodeGroup: CodeIcon,
+  Carousel: GridIcon,
 };

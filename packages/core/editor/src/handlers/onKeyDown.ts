@@ -43,8 +43,6 @@ export function onKeyDown(editor: YooEditor) {
 
       const result = getEnterAction(editor, slate);
 
-      console.log('HOTKEYS.isEnter(event) result', result);
-
       switch (result.action) {
         case 'delegate-to-plugin':
           return;

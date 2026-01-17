@@ -1,6 +1,7 @@
 // utils/handle-backspace.ts
 import { Editor, Element, Path, Range, Transforms } from 'slate';
 
+import { getRootBlockElement } from '..';
 import { findSlateBySelectionPath } from './findSlateBySelectionPath';
 import { getLastNodePoint } from './get-node-points';
 import { Blocks } from '../editor/blocks';
@@ -212,13 +213,11 @@ function canMergeWithPrevious(editor: YooEditor): boolean {
 
   if (!currentBlock || !prevBlock) return false;
 
-  const mergeableTypes = new Set([
-    'Paragraph',
-    'HeadingOne',
-    'HeadingTwo',
-    'HeadingThree',
-    'Blockquote',
-  ]);
+  const mergeableTypes = new Set<string>(Object.keys(editor.plugins).filter(type => {
+    const plugin = editor.plugins[type];
+    const rootElement = getRootBlockElement(plugin.elements);
+    return rootElement?.props?.nodeType === 'block';
+  }));
 
   return mergeableTypes.has(currentBlock.type) && mergeableTypes.has(prevBlock.type);
 }

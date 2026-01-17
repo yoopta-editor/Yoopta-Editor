@@ -76,17 +76,21 @@ function reducer(state: SlashCommandState, action: Action): SlashCommandState {
   }
 }
 
-// ============================================================================
-// UTILITY: Check if slash pressed
-// ============================================================================
-
-function isSlashKey(event: KeyboardEvent): boolean {
-  return event.key === '/' || event.key === SLASH_TRIGGER;
+function isSlashPressed(event: KeyboardEvent): boolean {
+  return (
+    event.key === '/' ||
+    event.keyCode === 191 ||
+    event.which === 191 ||
+    // [TODO] - event.code Slash works for both '/' and '?' keys
+    event.code === 'Slash' ||
+    event.key === '/' ||
+    (event.key === '.' && event.shiftKey)
+  );
 }
 
-// ============================================================================
-// MAIN HOOK
-// ============================================================================
+function isSlashKey(event: KeyboardEvent): boolean {
+  return isSlashPressed(event);
+}
 
 type UseSlashCommandOptions = {
   items: SlashCommandItem[];
@@ -119,25 +123,8 @@ export function useSlashCommand({
       }
     }
 
-    console.log('injectElementsFromPlugins', injectElementsFromPlugins);
-
     // Filter items based on injectElementsFromPlugins
     if (injectElementsFromPlugins && injectElementsFromPlugins.length > 0) {
-      console.log(
-        'filtered items',
-        injectElementsFromPlugins.map((pluginType) => {
-          const plugin = editor.plugins[pluginType];
-          const display = plugin.options?.display;
-
-          return {
-            id: pluginType,
-            title: display?.title ?? pluginType,
-            description: display?.description,
-            icon: display?.icon,
-          };
-        }),
-      );
-
       return injectElementsFromPlugins.map((pluginType) => {
         const plugin = editor.plugins[pluginType];
         const display = plugin.options?.display;
@@ -213,11 +200,8 @@ export function useSlashCommand({
     const block = Blocks.getBlock(editor, { at: editor.path.current });
     if (!block) return;
 
-    const slateEl = editor.refElement?.querySelector(
-      `[data-yoopta-block-id="${block.id}"] [data-slate-editor="true"]`,
-    ) as HTMLElement | null;
-
-    if (!slateEl) return;
+    const editorRef = editor.refElement;
+    if (!editorRef) return;
 
     // Handle keydown for slash trigger
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -226,7 +210,7 @@ export function useSlashCommand({
       const slate = Blocks.getBlockSlate(editor, { at: editor.path.current });
       if (!slate?.selection) return;
 
-      const isInsideEditor = slateEl.contains(event.target as Node);
+      const isInsideEditor = editorRef.contains(event.target as Node);
       if (!isInsideEditor) return;
 
       // Trigger on slash
@@ -289,12 +273,12 @@ export function useSlashCommand({
       setSearch(searchText);
     };
 
-    slateEl.addEventListener('keydown', handleKeyDown);
-    slateEl.addEventListener('keyup', handleKeyUp);
+    editor.refElement?.addEventListener('keydown', handleKeyDown);
+    editor.refElement?.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      slateEl.removeEventListener('keydown', handleKeyDown);
-      slateEl.removeEventListener('keyup', handleKeyUp);
+      editor.refElement?.removeEventListener('keydown', handleKeyDown);
+      editor.refElement?.removeEventListener('keyup', handleKeyUp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

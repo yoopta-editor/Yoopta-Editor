@@ -1,9 +1,10 @@
-import { YooptaPlugin, generateId } from '@yoopta/editor';
+import { YooptaPlugin } from '@yoopta/editor';
 import { Transforms } from 'slate';
 
 import { CodeCommands } from '../commands/code-commands';
 import type { CodeElementMap, CodePluginBlockOptions } from '../types';
 import { escapeHTML } from '../utils/element';
+import { SHIKI_CODE_LANGUAGES, SHIKI_CODE_THEMES } from '../utils/shiki';
 
 const ALIGNS_TO_JUSTIFY = {
   left: 'flex-start',
@@ -34,23 +35,24 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
     html: {
       deserialize: {
         nodeNames: ['PRE'],
-        parse: (el) => {
+        parse: (el, editor) => {
           if (el.nodeName === 'PRE') {
             const code = el.querySelector('code');
             const textContent = code ? code.textContent : el.textContent;
 
-            const language = el.getAttribute('data-language') || 'javascript';
-            const theme = el.getAttribute('data-theme') || 'github-dark';
+            const isLanguageValid = SHIKI_CODE_LANGUAGES.some(l => l.value === el.getAttribute('data-language'));
+            const language = isLanguageValid ? el.getAttribute('data-language') : 'javascript';
 
-            return {
-              children: [{ text: textContent || '' }],
-              type: 'code',
-              id: generateId(),
+            const isThemeValid = SHIKI_CODE_THEMES.some(theme => theme.value === el.getAttribute('data-theme'));
+            const theme = isThemeValid ? el.getAttribute('data-theme') : 'github-dark';
+
+            return editor.y('code', {
+              children: [editor.y.text(textContent ?? '')],
               props: {
                 language,
                 theme,
               },
-            };
+            });
           }
         },
       },
@@ -59,11 +61,9 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'left';
         const escapedText = escapeHTML(text);
 
-        return `<pre data-theme="${element.props.theme}" data-language="${
-          element.props.language
-        }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: 100%; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px; white-space: pre-line;"><code>${escapedText}</code></pre>`.toString();
+        return `<pre data-theme="${element.props.theme}" data-language="${element.props.language
+          }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px; white-space: pre-line;"><code>${escapedText}</code></pre>`.toString();
       },
     },
     markdown: {
@@ -83,11 +83,9 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
             <tbody style="width:100%;">
               <tr>
                 <td>
-                  <pre data-theme="${props.theme || 'github-dark'}" data-language="${
-                    props.language || 'javascript'
-                  }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-                    depth * 20
-                  }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
+                  <pre data-theme="${props.theme || 'github-dark'}" data-language="${props.language || 'javascript'
+          }" data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; display: flex; width: auto; justify-content: ${justify}; background-color: #263238; color: #fff; padding: 20px 24px;"><code>${escapedText}</code></pre>
                 </td>
               </tr>
             </tbody>
@@ -99,15 +97,15 @@ const Code = new YooptaPlugin<CodeElementMap, CodePluginBlockOptions>({
   events: {
     onKeyDown:
       (editor, slate, { hotkeys }) =>
-      (event) => {
-        if (!slate.selection) return;
-        if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
-          event.preventDefault();
-          event.stopPropagation();
+        (event) => {
+          if (!slate.selection) return;
+          if (hotkeys.isEnter(event) || hotkeys.isShiftEnter(event)) {
+            event.preventDefault();
+            event.stopPropagation();
 
-          Transforms.insertText(slate, '\n', { at: slate.selection });
-        }
-      },
+            Transforms.insertText(slate, '\n', { at: slate.selection });
+          }
+        },
     onPaste: (editor, slate) => (event) => {
       event.preventDefault();
       event.stopPropagation();
