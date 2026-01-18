@@ -31,7 +31,7 @@ export const Table = (props: PluginElementRenderProps) => {
         <TableBody>{children}</TableBody>
       </TableUI>
 
-      <TableSelectionOverlay blockId={props.blockId} />
+      {/* <TableSelectionOverlay blockId={props.blockId} /> */}
       <TableControls blockId={props.blockId} />
     </div>
   );

@@ -22,15 +22,11 @@ const YooptaUIPackageExample = () => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
 
-  const markBlocksToBold = (blockPaths: number[]) => {
+  const markBlocksToBold = () => {
     Marks.update(editor, {
-      type: 'italic',
-      value: true,
-    });
-
-    Selection.setSlateSelection(editor, {
-      selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 5 } },
-      at: 0,
+      type: 'highlight',
+      value: { color: 'red', backgroundImage: 'linear-gradient(to right, red, blue)' },
+      at: [0, 1, 2]
     });
   }
 
@@ -411,7 +407,7 @@ const YooptaUIPackageExample = () => {
           Insert Tabs
         </button>
         <button
-          onClick={() => markBlocksToBold([0, 1, 2])}
+          onClick={() => markBlocksToBold()}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Mark Blocks to Bold
         </button>

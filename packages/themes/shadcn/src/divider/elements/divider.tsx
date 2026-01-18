@@ -1,4 +1,5 @@
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import { Blocks, Selection, useYooptaEditor } from '@yoopta/editor';
 
 import { Separator } from '../../ui/separator';
 import { cn } from '../../utils';
@@ -6,6 +7,7 @@ import { cn } from '../../utils';
 type DividerTheme = 'solid' | 'dashed' | 'dotted' | 'gradient';
 
 export const Divider = (props: PluginElementRenderProps) => {
+  const editor = useYooptaEditor();
   const { attributes, element } = props;
   const dividerElement = element as SlateElement<
     'divider',
@@ -56,8 +58,14 @@ export const Divider = (props: PluginElementRenderProps) => {
     }
   };
 
+  const onClick = () => {
+    const block = Blocks.getBlock(editor, { id: props.blockId })
+    if (!block) return;
+    Selection.setSelected(editor, { at: block.meta.order });
+  }
+
   return (
-    <div {...attributes} contentEditable={false} className="w-full my-4">
+    <div {...attributes} contentEditable={false} className="w-full py-3" onClick={onClick}>
       <Separator
         orientation="horizontal"
         decorative

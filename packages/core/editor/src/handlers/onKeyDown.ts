@@ -42,7 +42,6 @@ export function onKeyDown(editor: YooEditor) {
       if (!slate || !slate.selection) return;
 
       const result = getEnterAction(editor, slate);
-      console.log('getEnterAction result', result);
 
       switch (result.action) {
         case 'delegate-to-plugin':

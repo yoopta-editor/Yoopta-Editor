@@ -52,8 +52,8 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState<'color' | 'backgroundColor'>('backgroundColor');
-    const [color, setColor] = useState(value.backgroundColor ?? '#FFFF00');
-    const [textColor, setTextColor] = useState(value.color ?? '#000000');
+    const [color, setColor] = useState(value.backgroundColor);
+    const [textColor, setTextColor] = useState(value.color);
 
     const { refs, floatingStyles } = useFloating({
       open: isOpen,
@@ -164,7 +164,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
             {presets.length > 0 && (
               <div className="yoopta-highlight-color-picker__presets">
                 {presets.map((presetColor) => {
-                  const isSelected = currentColor.toLowerCase() === presetColor.toLowerCase();
+                  const isSelected = currentColor?.toLowerCase() === presetColor.toLowerCase();
                   return (
                     <button
                       key={presetColor}
