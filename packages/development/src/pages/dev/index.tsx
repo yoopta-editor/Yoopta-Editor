@@ -1,4 +1,4 @@
-import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks, Marks, Selection } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
@@ -21,6 +21,18 @@ const YooptaUIPackageExample = () => {
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
+
+  const markBlocksToBold = (blockPaths: number[]) => {
+    Marks.update(editor, {
+      type: 'italic',
+      value: true,
+    });
+
+    Selection.setSlateSelection(editor, {
+      selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 5 } },
+      at: 0,
+    });
+  }
 
   const insertTabs = () => {
     const elements = editor.y('tabs-container', {
@@ -397,6 +409,11 @@ const YooptaUIPackageExample = () => {
           onClick={insertTabs}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Insert Tabs
+        </button>
+        <button
+          onClick={() => markBlocksToBold([0, 1, 2])}
+          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
+          Mark Blocks to Bold
         </button>
       </div>
       <YooptaEditor

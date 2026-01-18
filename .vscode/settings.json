@@ -18,11 +18,11 @@
   "[scss]": {
     "editor.defaultFormatter": "vscode.css-language-features"
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
+  "prettier.configPath": ".prettierrc.json",
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
-  // "prettier.configPath": ".prettierrc.cjs"
 }

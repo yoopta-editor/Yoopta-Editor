@@ -16,10 +16,10 @@ export function buildMarks(editor, marks: YooptaMark<any>[]) {
     formats[type] = {
       hotkey: mark.hotkey,
       type,
-      getValue: () => getValue(editor, type),
-      isActive: () => isActive(editor, type),
-      toggle: () => toggle(editor, type),
-      update: (props) => update(editor, type, props),
+      getValue: () => getValue(editor, { type }),
+      isActive: () => isActive(editor, { type }),
+      toggle: () => toggle(editor, { type }),
+      update: (props) => update(editor, { type, value: props }),
     };
   });
 

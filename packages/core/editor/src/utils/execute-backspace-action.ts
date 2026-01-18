@@ -1,7 +1,6 @@
-// utils/handle-backspace.ts
 import { Editor, Element, Path, Range, Transforms } from 'slate';
 
-import { getRootBlockElement } from '..';
+import { getRootBlockElement } from './block-elements';
 import { findSlateBySelectionPath } from './findSlateBySelectionPath';
 import { getLastNodePoint } from './get-node-points';
 import { Blocks } from '../editor/blocks';

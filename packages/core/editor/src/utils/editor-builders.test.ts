@@ -59,21 +59,21 @@ describe('editor-builders', () => {
       const formats = buildMarks(mockEditor, mockMarks);
 
       formats.bold.getValue();
-      expect(getValue).toHaveBeenCalledWith(mockEditor, 'bold');
+      expect(getValue).toHaveBeenCalledWith(mockEditor, { type: 'bold' });
     });
 
     it('should create isActive function for each mark', () => {
       const formats = buildMarks(mockEditor, mockMarks);
 
       formats.bold.isActive();
-      expect(isActive).toHaveBeenCalledWith(mockEditor, 'bold');
+      expect(isActive).toHaveBeenCalledWith(mockEditor, { type: 'bold' });
     });
 
     it('should create toggle function for each mark', () => {
       const formats = buildMarks(mockEditor, mockMarks);
 
       formats.bold.toggle();
-      expect(toggle).toHaveBeenCalledWith(mockEditor, 'bold');
+      expect(toggle).toHaveBeenCalledWith(mockEditor, { type: 'bold' });
     });
 
     it('should create update function for each mark', () => {
@@ -81,7 +81,7 @@ describe('editor-builders', () => {
       const props = { color: 'red' };
 
       formats.bold.update(props);
-      expect(update).toHaveBeenCalledWith(mockEditor, 'bold', props);
+      expect(update).toHaveBeenCalledWith(mockEditor, { type: 'bold', value: props });
     });
 
     it('should handle empty marks array', () => {

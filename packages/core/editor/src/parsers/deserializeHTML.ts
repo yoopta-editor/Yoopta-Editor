@@ -32,6 +32,32 @@ type PluginsMapByNode = {
 
 type PluginsMapByNodeNames = Record<string, PluginsMapByNode | PluginsMapByNode[]>;
 
+
+function mapNodeChildren(child) {
+  if (typeof child === 'string') {
+    return { text: child };
+  }
+
+  if (Element.isElement(child)) {
+    return child;
+  }
+
+  if (Array.isArray(child)) {
+    return child.map(mapNodeChildren).flat();
+  }
+
+  if (child?.text) {
+    return child;
+  }
+
+  if (isYooptaBlock(child)) {
+    const block = child as YooptaBlockData;
+    return (block.value[0] as SlateElement).children.map(mapNodeChildren).flat();
+  }
+
+  return { text: '' };
+}
+
 function getMappedPluginByNodeNames(editor: YooEditor): PluginsMapByNodeNames {
   const PLUGINS_NODE_NAME_MATCHERS_MAP: PluginsMapByNodeNames = {};
 
@@ -174,31 +200,6 @@ function deserialize(
   }
 
   return children;
-}
-
-function mapNodeChildren(child) {
-  if (typeof child === 'string') {
-    return { text: child };
-  }
-
-  if (Element.isElement(child)) {
-    return child;
-  }
-
-  if (Array.isArray(child)) {
-    return child.map(mapNodeChildren).flat();
-  }
-
-  if (child?.text) {
-    return child;
-  }
-
-  if (isYooptaBlock(child)) {
-    const block = child as YooptaBlockData;
-    return (block.value[0] as SlateElement).children.map(mapNodeChildren).flat();
-  }
-
-  return { text: '' };
 }
 
 export function deserializeHTML(editor: YooEditor, html: HTMLElement) {

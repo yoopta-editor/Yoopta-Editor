@@ -1,6 +1,7 @@
 import type { Path } from 'slate';
 import { Editor, Element, Range, Transforms } from 'slate';
 
+import { getRootBlockElement } from './block-elements';
 import { generateId } from './generateId';
 import { Blocks } from '../editor/blocks';
 import { Paths } from '../editor/paths';
@@ -162,7 +163,11 @@ function shouldResetToParagraph(editor: YooEditor): boolean {
   const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
   if (!currentBlock) return false;
 
-  const resetTypes = new Set(['HeadingOne', 'HeadingTwo', 'HeadingThree', 'Blockquote']);
+  const resetTypes = new Set<string>(Object.keys(editor.plugins).filter(type => {
+    const plugin = editor.plugins[type];
+    const rootElement = getRootBlockElement(plugin.elements);
+    return rootElement?.props?.nodeType === 'block';
+  }));
 
   return resetTypes.has(currentBlock.type);
 }
