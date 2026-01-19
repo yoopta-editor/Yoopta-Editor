@@ -1,0 +1,104 @@
+---
+title: isElementEmpty
+description: Check if element has no text content
+---
+
+## Overview
+
+The `isElementEmpty` method checks if an element contains any text content.
+
+## Signature
+
+```typescript
+editor.isElementEmpty(options: IsElementEmptyOptions): boolean
+```
+
+## Parameters
+
+<ParamField path="options" type="IsElementEmptyOptions" required>
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string" required>
+      Type of element to check
+    </ParamField>
+
+    <ParamField path="path" type="number[]">
+      Path to the element
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns `true` if element is empty, `false` otherwise.
+
+## Examples
+
+```typescript
+// Check if accordion content is empty
+const isEmpty = editor.isElementEmpty({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item-content',
+  path: [0, 1, 1]
+});
+
+if (isEmpty) {
+  console.log('Content is empty');
+}
+```
+
+## Use Cases
+
+### Conditional Deletion
+
+```typescript
+const deleteIfEmpty = (blockId: string, itemPath: number[]) => {
+  const isEmpty = editor.isElementEmpty({
+    blockId,
+    type: 'accordion-list-item-content',
+    path: [...itemPath, 1]
+  });
+
+  if (isEmpty) {
+    editor.deleteElement({
+      blockId,
+      type: 'accordion-list-item',
+      path: itemPath
+    });
+  }
+};
+```
+
+### Validation
+
+```typescript
+const validateContent = (blockId: string): boolean => {
+  const items = editor.getElements({
+    blockId,
+    type: 'accordion-list-item'
+  });
+
+  return items.every((item, index) => {
+    return !editor.isElementEmpty({
+      blockId,
+      type: 'accordion-list-item-content',
+      path: [0, 0, index, 1]
+    });
+  });
+};
+```
+
+## Type Definition
+
+```typescript
+type IsElementEmptyOptions = {
+  blockId: string;
+  type: string;
+  path?: number[];
+};
+```
+
+

@@ -1,4 +1,5 @@
-import { YooptaPlugin, generateId, PluginElementRenderProps } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
 
 import { VideoCommands } from '../commands';
 import type { VideoElementMap, VideoPluginOptions } from '../types';
@@ -40,7 +41,7 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
             controls={props.element.props.settings.controls}
             loop={props.element.props.settings.loop}
             muted={props.element.props.settings.muted}
-            autoplay={props.element.props.settings.autoPlay}
+            autoPlay={props.element.props.settings.autoPlay}
           />
           {props.children}
         </div>

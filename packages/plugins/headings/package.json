@@ -15,8 +15,8 @@
   ],
   "peerDependencies": {
     "@yoopta/editor": ">=4.9.9",
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2"
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
@@ -38,6 +38,5 @@
   },
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
-  },
-  "gitHead": "054fb22aef8ca890d17616d00928eb855e77ec29"
+  }
 }

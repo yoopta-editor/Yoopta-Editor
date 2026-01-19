@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { HighlightedCodeOverlay, SHIKI_CODE_LANGUAGES, SHIKI_CODE_THEMES } from '@yoopta/code';
+import {
+  CodeCommands,
+  HighlightedCodeOverlay,
+  SHIKI_CODE_LANGUAGES,
+  SHIKI_CODE_THEMES,
+} from '@yoopta/code';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
@@ -103,12 +108,13 @@ export const CodeBlockElement = ({
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
     const parentEntry = elementPath ? Editor.parent(slate, elementPath) : undefined;
     if (parentEntry && Element.isElement(parentEntry[0]) && !Editor.isEditor(parentEntry[0])) {
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'code',
         path: elementPath,
       });
@@ -119,29 +125,17 @@ export const CodeBlockElement = ({
   }, [editor, blockId, element]);
 
   const updateLanguage = useCallback(
-    (newLanguage: string) => {
-      Elements.updateElement(editor, blockId, {
-        type: 'code',
-        props: {
-          ...element.props,
-          language: newLanguage,
-        },
-      });
+    (newLanguage: BundledLanguage) => {
+      CodeCommands.updateCodeLanguage(editor, blockId, newLanguage);
     },
-    [editor, blockId, element.props],
+    [editor, blockId],
   );
 
   const updateTheme = useCallback(
-    (newTheme: string) => {
-      Elements.updateElement(editor, blockId, {
-        type: 'code',
-        props: {
-          ...element.props,
-          theme: newTheme,
-        },
-      });
+    (newTheme: BundledTheme) => {
+      CodeCommands.updateCodeTheme(editor, blockId, newTheme);
     },
-    [editor, blockId, element.props],
+    [editor, blockId],
   );
 
   const currentLanguage =
@@ -160,13 +154,13 @@ export const CodeBlockElement = ({
           <LanguageSelect
             value={language}
             options={SHIKI_CODE_LANGUAGES}
-            onValueChange={updateLanguage}
+            onValueChange={(value: string) => updateLanguage(value as BundledLanguage)}
             currentLabel={currentLanguage.label}
           />
           <ThemeSelect
             value={theme}
             options={SHIKI_CODE_THEMES}
-            onValueChange={updateTheme}
+            onValueChange={(value: string) => updateTheme(value as BundledTheme)}
             currentLabel={currentTheme.label}
           />
         </div>

@@ -231,10 +231,13 @@ export function y(
     // Use explicitly provided children (can be SlateElement[] or Text nodes)
     children = customChildren.length > 0 ? customChildren : [{ text: '' }];
   } else if (elementConfig.children && elementConfig.children.length > 0) {
-    // Only build children from config if they are NOT from allowedPlugins
-    // If element has allowedPlugins, default to text node unless explicitly specified
-    if (elementConfig.allowedPlugins && elementConfig.allowedPlugins.length > 0) {
-      // Element with allowedPlugins defaults to empty text node
+    // Only build children from config if they are NOT from injectElementsFromPlugins
+    // If element has injectElementsFromPlugins, default to text node unless explicitly specified
+    if (
+      elementConfig.injectElementsFromPlugins &&
+      elementConfig.injectElementsFromPlugins.length > 0
+    ) {
+      // Element with injectElementsFromPlugins defaults to empty text node
       children = [{ text: '' }];
     } else {
       // Build standard children from element config
@@ -285,10 +288,12 @@ export function createJSXFactory(editor: YooEditor) {
     ...children: unknown[]
   ): SlateElement {
     // Extract custom props (everything except 'children' and React-specific props)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       children: UNUSED_CHILDREN,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       key: UNUSED_KEY,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ref: UNUSED_REF,
       ...customProps
     } = props ?? {};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import type { SlateElement } from '@yoopta/editor';
 import type {
   BundledLanguage,
@@ -11,13 +11,15 @@ import { Text } from 'slate';
 
 import { initHighlighter } from '../utils/shiki';
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 export const useHighlighter = () => {
   const [highlighter, setHighlighter] = useState<HighlighterGeneric<
     BundledLanguage,
     BundledTheme
   > | null>(null);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const init = async () => {
       const hl = await initHighlighter();
       if (!hl) {
@@ -50,22 +52,24 @@ export const HighlightedCodeOverlay = ({ element, language, theme }: Highlighted
   const [tokens, setTokens] = useState<ThemedToken[][]>([]);
   const { highlighter } = useHighlighter();
 
-  useEffect(() => {
-    if (!highlighter || !code) {
-      setTokens([]);
-      return;
-    }
+  useIsomorphicLayoutEffect(() => {
+    const highlightCode = async () => {
+      if (!highlighter || !code) {
+        setTokens([]);
+        return;
+      }
 
-    try {
-      const highlighted = highlighter.codeToTokens(code, {
+      // const formattedCode = await CodeCommands.prettifyCode(code, language || 'javascript');
+      const highlighted = highlighter?.codeToTokens(code, {
         lang: language || 'javascript',
         theme: theme || 'github-dark',
       });
+      if (highlighted) {
+        setTokens(highlighted.tokens);
+      }
+    };
 
-      setTokens(highlighted.tokens);
-    } catch (error) {
-      setTokens([]);
-    }
+    highlightCode();
   }, [code, language, highlighter, theme]);
 
   if (!tokens.length) {

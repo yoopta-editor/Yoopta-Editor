@@ -1,12 +1,14 @@
 import { isKeyHotkey } from 'is-hotkey';
-import { Editor, Path, Range, Transforms } from 'slate';
+import { Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../editor/blocks';
 import { Paths } from '../editor/paths';
 import type { YooEditor } from '../editor/types';
+import { executeEnterAction, getEnterAction } from '../utils/enter-action';
+import { executeBackspaceAction, getBackspaceAction } from '../utils/execute-backspace-action';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
-import { generateId } from '../utils/generateId';
+import { getNextHierarchicalSelection } from '../utils/get-next-hierarchical-selection';
 import { getFirstNodePoint, getLastNodePoint } from '../utils/get-node-points';
 import { HOTKEYS } from '../utils/hotkeys';
 
@@ -39,120 +41,90 @@ export function onKeyDown(editor: YooEditor) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      event.preventDefault();
+      const result = getEnterAction(editor, slate);
 
-      const first = Editor.first(slate, []);
-      const last = Editor.last(slate, []);
-      const isStart = Editor.isStart(slate, slate.selection.anchor, first[1]);
-      const isEnd = Editor.isEnd(slate, slate.selection.anchor, last[1]);
+      switch (result.action) {
+        case 'delegate-to-plugin':
+          return;
 
-      if (Range.isExpanded(slate.selection)) {
-        Transforms.delete(slate, { at: slate.selection });
+        case 'default':
+          return;
+
+        case 'prevent':
+          event.preventDefault();
+          return;
+
+        default:
+          event.preventDefault();
+          executeEnterAction(editor, slate, result);
+          return;
       }
-
-      // when the cursor is between start and end of the block
-      if (!isStart && !isEnd) {
-        // [TEST]
-        editor.splitBlock({ slate, focus: true });
-        return;
-      }
-
-      const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
-      const defaultBlock = Blocks.buildBlockData({ id: generateId() });
-
-      const string = Editor.string(slate, []);
-      const insertBefore = isStart && string.length > 0;
-
-      const nextPath = Paths.getNextBlockOrder(editor);
-
-      // [TEST]
-      editor.batchOperations(() => {
-        // [TEST]
-        editor.insertBlock(defaultBlock.type, {
-          at: insertBefore ? editor.path.current : nextPath,
-          focus: !insertBefore,
-        });
-
-        // [TEST]
-        if (insertBefore && currentBlock) {
-          editor.focusBlock(currentBlock.id);
-        }
-      });
-
-      return;
     }
 
     if (HOTKEYS.isBackspace(event)) {
       if (event.isDefaultPrevented()) return;
-      // if (!slate || !slate.selection) return;
+      if (!slate || !slate.selection) return;
 
-      // const parentPath = Path.parent(slate.selection.anchor.path);
-      // const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
+      const result = getBackspaceAction(editor, slate);
 
-      // // When the cursor is at the start of the block, delete the block
-      // if (isStart) {
-      //   event.preventDefault();
-      //   const text = Editor.string(slate, parentPath);
+      switch (result.action) {
+        case 'default':
+          // Allow Slate to handle it normally
+          return;
 
-      //   // If current block is empty just delete block
-      //   if (text.trim().length === 0) {
-      //     // [TEST]
-      //     editor.deleteBlock({ at: editor.path.current, focus: true });
-      //     return;
-      //   }
-      //   // If current block is not empty merge text nodes with previous block
+        case 'prevent':
+          // Block the action
+          event.preventDefault();
+          return;
 
-      //   if (Range.isExpanded(slate.selection)) {
-      //     return Transforms.delete(slate, { at: slate.selection });
-      //   }
-
-      //   const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousBlockOrder(editor) });
-      //   const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
-      //   if (prevBlock && prevSlate) {
-      //     const { node: lastSlateNode } = getLastNode(prevSlate);
-      //     const prevSlateText = Node.string(lastSlateNode);
-
-      //     if (prevSlateText.trim().length === 0) {
-      //       // [TEST]
-      //       editor.deleteBlock({ blockId: prevBlock.id, focus: false });
-      //       editor.setPath({ current: prevBlock.meta.order });
-      //       return;
-      //     }
-      //   }
-
-      //   // [TEST]
-      //   editor.mergeBlock();
-      // }
-      // return;
+        default:
+          // Execute custom action
+          event.preventDefault();
+          executeBackspaceAction(editor, slate, result);
+          return;
+      }
     }
 
     if (HOTKEYS.isSelect(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      const [, firstElementPath] = Editor.first(slate, [0]);
-      const [, lastElementPath] = Editor.last(slate, [slate.children.length - 1]);
+      const result = getNextHierarchicalSelection(editor, slate);
 
-      const fullRange = Editor.range(slate, firstElementPath, lastElementPath);
-      const isAllBlockElementsSelected = Range.equals(slate.selection, fullRange);
+      switch (result.action) {
+        case 'select-path':
+          event.preventDefault();
+          Transforms.select(slate, result.path);
+          break;
 
-      const string = Editor.string(slate, fullRange);
-      const isElementEmpty = string.trim().length === 0;
+        case 'select-range':
+          event.preventDefault();
+          Transforms.select(slate, result.range);
+          break;
 
-      // [TODO] - handle cases for void node elements
-      if ((Range.isExpanded(slate.selection) && isAllBlockElementsSelected) || isElementEmpty) {
-        event.preventDefault();
+        case 'select-block':
+          event.preventDefault();
+          ReactEditor.blur(slate);
+          ReactEditor.deselect(slate);
+          Transforms.deselect(slate);
+          editor.setPath({
+            current: null,
+            selected: [result.blockOrder],
+            source: 'keyboard',
+          });
+          break;
 
-        ReactEditor.blur(slate);
-        ReactEditor.deselect(slate);
-        Transforms.deselect(slate);
+        case 'select-all-blocks':
+          event.preventDefault();
+          editor.setPath({
+            current: null,
+            selected: result.blockOrders,
+            source: 'keyboard',
+          });
+          break;
 
-        const allBlockPaths = Array.from(
-          { length: Object.keys(editor.children).length },
-          (_, i) => i,
-        );
-        editor.setPath({ current: null, selected: allBlockPaths, source: 'keyboard' });
-        return;
+        default:
+          break;
       }
     }
 

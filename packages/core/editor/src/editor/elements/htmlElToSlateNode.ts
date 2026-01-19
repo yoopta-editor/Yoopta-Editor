@@ -1,7 +1,7 @@
 import type { Editor, Element, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 
-import { Blocks } from '../blocks';
+import { getBlockSlate } from '../blocks/getBlockSlate';
 import type { YooEditor } from '../types';
 
 export function htmlElToSlateNode(
@@ -15,12 +15,10 @@ export function htmlElToSlateNode(
       throw new Error(`Block with id ${blockId} not found`);
     }
 
-    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    const slate = getBlockSlate(editor, { id: blockId });
     if (!slate) {
       throw new Error(`No slate found`);
     }
-
-    console.log('ReactEditor.toSlateNode htmlEl', htmlEl);
 
     return ReactEditor.toSlateNode(slate, htmlEl);
   } catch (error) {

@@ -16,10 +16,10 @@ export function buildMarks(editor, marks: YooptaMark<any>[]) {
     formats[type] = {
       hotkey: mark.hotkey,
       type,
-      getValue: () => getValue(editor, type),
-      isActive: () => isActive(editor, type),
-      toggle: () => toggle(editor, type),
-      update: (props) => update(editor, type, props),
+      getValue: () => getValue(editor, { type }),
+      isActive: () => isActive(editor, { type }),
+      toggle: () => toggle(editor, { type }),
+      update: (props) => update(editor, { type, value: props }),
     };
   });
 
@@ -87,19 +87,22 @@ export function buildPlugins(
     }
   });
 
-  // Second pass: extend plugins with allowedPlugins elements
+  // Second pass: extend plugins with injectElementsFromPlugins elements
   Object.keys(pluginsMap).forEach((pluginType) => {
     const plugin = pluginsMap[pluginType];
     if (plugin.elements) {
       const extendedElements = { ...plugin.elements };
 
-      // Find elements with allowedPlugins
+      // Find elements with injectElementsFromPlugins
       Object.keys(plugin.elements).forEach((elementKey) => {
         const element = plugin.elements[elementKey];
-        if (Array.isArray(element.allowedPlugins) && element.allowedPlugins.length > 0) {
+        if (
+          Array.isArray(element.injectElementsFromPlugins) &&
+          element.injectElementsFromPlugins.length > 0
+        ) {
           // For each allowed plugin, add its elements to the plugin's elements map
           // Filter out self-references to prevent circular dependencies
-          element.allowedPlugins
+          element.injectElementsFromPlugins
             .filter((allowedPluginType) => allowedPluginType !== pluginType)
             .forEach((allowedPluginType) => {
               const allowedPlugin = plugins.find((p) => p.type === allowedPluginType);
@@ -140,8 +143,8 @@ export function buildPlugins(
               }
             });
 
-          // Note: We don't add allowedPlugins elements to the children array
-          // allowedPlugins elements are available for insertion but not automatically created
+          // Note: We don't add injectElementsFromPlugins elements to the children array
+          // injectElementsFromPlugins elements are available for insertion but not automatically created
         }
       });
 

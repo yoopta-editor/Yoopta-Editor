@@ -1,29 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import type { SlateElement } from '@yoopta/editor';
-import type { TableCellElement } from '@yoopta/table';
-import { TableCommands } from '@yoopta/table';
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  MoreHorizontal,
-  MoreVertical,
-  Plus,
-  Trash2,
-} from 'lucide-react';
+import { type TableCellElement } from '@yoopta/table';
 import { Editor, Element } from 'slate';
 import type { Path } from 'slate';
 
-import { Button } from '../../ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+import { AddColumnButton } from './add-column-button';
+import { AddRowButton } from './add-row-button';
+import { ColumnControls } from './column-controls';
+import { RowControls } from './row-controls';
 
 type TableControlsProps = {
   blockId: string;
@@ -37,16 +22,30 @@ type HoveredCell = {
   rect: DOMRect;
   totalRows: number;
   totalColumns: number;
+  columnRect: DOMRect;
+  rowRect: DOMRect;
 };
 
 export const TableControls = ({ blockId }: TableControlsProps) => {
   const editor = useYooptaEditor();
   const slate = useMemo(() => Blocks.getBlockSlate(editor, { id: blockId }), [blockId, editor]);
   const [hoveredCell, setHoveredCell] = useState<HoveredCell | null>(null);
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const [tableRect, setTableRect] = useState<DOMRect | null>(null);
+  const [containerRect, setContainerRect] = useState<DOMRect | null>(null);
   const [containerPadding, setContainerPadding] = useState({ top: 0, left: 0 });
-  const [isOverControls, setIsOverControls] = useState(false);
+
+  const [isOverRowControls, setIsOverRowControls] = useState(false);
+  const [isOverColumnControls, setIsOverColumnControls] = useState(false);
+  const [isOverAddRowButton, setIsOverAddRowButton] = useState(false);
+  const [isOverAddColumnButton, setIsOverAddColumnButton] = useState(false);
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rowControlsRef = useRef<HTMLDivElement | null>(null);
+  const columnControlsRef = useRef<HTMLDivElement | null>(null);
+  const addRowButtonRef = useRef<HTMLDivElement | null>(null);
+  const addColumnButtonRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const tableContainer = document.querySelector(
@@ -65,6 +64,9 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       const paddingLeft = parseInt(containerStyles.paddingLeft, 10) || 0;
 
       setContainerPadding({ top: paddingTop, left: paddingLeft });
+
+      // Get container rect (for absolute positioning)
+      setContainerRect(tableContainer.getBoundingClientRect());
 
       // Get table rect (the actual table, not container)
       setTableRect(tableElement.getBoundingClientRect());
@@ -105,16 +107,90 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       const cellElement = target.closest('[data-element-type="table-data-cell"]') as HTMLElement;
 
       if (!cellElement) {
-        if (!isOverControls) {
+        // Check if mouse is over row controls area
+        if (rowControlsRef.current) {
+          const controlsRect = rowControlsRef.current.getBoundingClientRect();
+          const isOverRowArea =
+            mouseEvent.clientX >= controlsRect.left - 10 &&
+            mouseEvent.clientX <= controlsRect.right + 10 &&
+            mouseEvent.clientY >= controlsRect.top - 10 &&
+            mouseEvent.clientY <= controlsRect.bottom + 10;
+
+          if (isOverRowArea) {
+            setIsOverRowControls(true);
+            return;
+          }
+        }
+
+        // Check if mouse is over column controls area
+        if (columnControlsRef.current) {
+          const controlsRect = columnControlsRef.current.getBoundingClientRect();
+          const isOverColumnArea =
+            mouseEvent.clientX >= controlsRect.left - 10 &&
+            mouseEvent.clientX <= controlsRect.right + 10 &&
+            mouseEvent.clientY >= controlsRect.top - 10 &&
+            mouseEvent.clientY <= controlsRect.bottom + 10;
+
+          if (isOverColumnArea) {
+            setIsOverColumnControls(true);
+            return;
+          }
+        }
+
+        // Check if mouse is over add row button area
+        if (addRowButtonRef.current) {
+          const buttonRect = addRowButtonRef.current.getBoundingClientRect();
+          const isOverAddRowArea =
+            mouseEvent.clientX >= buttonRect.left - 10 &&
+            mouseEvent.clientX <= buttonRect.right + 10 &&
+            mouseEvent.clientY >= buttonRect.top - 10 &&
+            mouseEvent.clientY <= buttonRect.bottom + 10;
+
+          if (isOverAddRowArea) {
+            setIsOverAddRowButton(true);
+            return;
+          }
+        }
+
+        // Check if mouse is over add column button area
+        if (addColumnButtonRef.current) {
+          const buttonRect = addColumnButtonRef.current.getBoundingClientRect();
+          const isOverAddColumnArea =
+            mouseEvent.clientX >= buttonRect.left - 10 &&
+            mouseEvent.clientX <= buttonRect.right + 10 &&
+            mouseEvent.clientY >= buttonRect.top - 10 &&
+            mouseEvent.clientY <= buttonRect.bottom + 10;
+
+          if (isOverAddColumnArea) {
+            setIsOverAddColumnButton(true);
+            return;
+          }
+        }
+
+        if (
+          !isOverRowControls &&
+          !isOverColumnControls &&
+          !isOverAddRowButton &&
+          !isOverAddColumnButton
+        ) {
           setHoveredCell(null);
+          setHoveredColumn(null);
+          setHoveredRow(null);
         }
         return;
       }
 
       const elementId = cellElement.getAttribute('data-yoopta-element-id');
       if (!elementId) {
-        if (!isOverControls) {
+        if (
+          !isOverRowControls &&
+          !isOverColumnControls &&
+          !isOverAddRowButton &&
+          !isOverAddColumnButton
+        ) {
           setHoveredCell(null);
+          setHoveredColumn(null);
+          setHoveredRow(null);
         }
         return;
       }
@@ -134,8 +210,15 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       );
 
       if (cellEntries.length === 0) {
-        if (!isOverControls) {
+        if (
+          !isOverRowControls &&
+          !isOverColumnControls &&
+          !isOverAddRowButton &&
+          !isOverAddColumnButton
+        ) {
           setHoveredCell(null);
+          setHoveredColumn(null);
+          setHoveredRow(null);
         }
         return;
       }
@@ -162,30 +245,167 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       if (!Element.isElement(tableNode)) return;
 
       const totalRows = tableNode.children.length;
-      const firstRow = tableNode.children[0];
-      if (!Element.isElement(firstRow)) return;
+      const firstRowNode = tableNode.children[0];
+      if (!Element.isElement(firstRowNode)) return;
 
-      const totalColumns = firstRow.children.length;
+      const totalColumns = firstRowNode.children.length;
 
       const rect = cellElement.getBoundingClientRect();
 
-      setHoveredCell({
-        cell,
-        path,
-        rowIndex,
-        colIndex,
-        rect,
-        totalRows,
-        totalColumns,
+      // Get all cells in the column to calculate column width and position
+      // Find the first cell in this column (from first row)
+      const tableRows = Array.from(tableContainer.querySelectorAll('tr')) as HTMLElement[];
+      const firstRowElement = tableRows[0];
+
+      // Default rects (fallback to cell rect)
+      const defaultColumnRect = {
+        left: rect.left,
+        width: rect.width,
+        top: rect.top,
+        height: rect.height,
+      } as DOMRect;
+      const defaultRowRect = {
+        left: rect.left,
+        width: rect.width,
+        top: rect.top,
+        height: rect.height,
+      } as DOMRect;
+
+      if (!firstRowElement) {
+        setHoveredCell({
+          cell,
+          path,
+          rowIndex,
+          colIndex,
+          rect,
+          totalRows,
+          totalColumns,
+          columnRect: defaultColumnRect,
+          rowRect: defaultRowRect,
+        });
+        return;
+      }
+
+      const firstRowCells = Array.from(
+        firstRowElement.querySelectorAll('[data-element-type="table-data-cell"]'),
+      ) as HTMLElement[];
+
+      const firstColumnCell = firstRowCells[colIndex];
+      if (!firstColumnCell) {
+        setHoveredCell({
+          cell,
+          path,
+          rowIndex,
+          colIndex,
+          rect,
+          totalRows,
+          totalColumns,
+          columnRect: defaultColumnRect,
+          rowRect: defaultRowRect,
+        });
+        return;
+      }
+
+      // Get all cells in this column
+      const columnCells: DOMRect[] = [];
+      tableRows.forEach((row) => {
+        const cells = Array.from(
+          row.querySelectorAll('[data-element-type="table-data-cell"]'),
+        ) as HTMLElement[];
+        if (cells[colIndex]) {
+          columnCells.push(cells[colIndex].getBoundingClientRect());
+        }
       });
+
+      // Calculate column bounds
+      const columnLeft = columnCells.length > 0
+        ? Math.min(...columnCells.map((r) => r.left))
+        : rect.left;
+      const columnRight = columnCells.length > 0
+        ? Math.max(...columnCells.map((r) => r.right))
+        : rect.right;
+      const columnWidth = columnRight - columnLeft;
+      const columnTop = columnCells.length > 0
+        ? Math.min(...columnCells.map((r) => r.top))
+        : rect.top;
+
+      // Get all cells in the row to calculate row height and position
+      const currentRow = tableRows[rowIndex];
+      if (!currentRow) {
+        setHoveredCell({
+          cell,
+          path,
+          rowIndex,
+          colIndex,
+          rect,
+          totalRows,
+          totalColumns,
+          columnRect: {
+            left: columnLeft,
+            width: columnWidth,
+            top: columnTop,
+            height: columnCells[0]?.height ?? rect.height,
+          } as DOMRect,
+          rowRect: defaultRowRect,
+        });
+        return;
+      }
+
+      const rowCells = Array.from(
+        currentRow.querySelectorAll('[data-element-type="table-data-cell"]'),
+      ) as HTMLElement[];
+
+      // Calculate row bounds
+      const rowCellsRects = rowCells.length > 0
+        ? rowCells.map((cellEl) => cellEl.getBoundingClientRect())
+        : [rect];
+      const rowTop = Math.min(...rowCellsRects.map((r) => r.top));
+      const rowBottom = Math.max(...rowCellsRects.map((r) => r.bottom));
+      const rowHeight = rowBottom - rowTop;
+      const rowLeft = Math.min(...rowCellsRects.map((r) => r.left));
+
+
+      // Only update if column or row changed
+      if (hoveredColumn !== colIndex || hoveredRow !== rowIndex) {
+        setHoveredColumn(colIndex);
+        setHoveredRow(rowIndex);
+        setHoveredCell({
+          cell,
+          path,
+          rowIndex,
+          colIndex,
+          rect,
+          totalRows,
+          totalColumns,
+          columnRect: {
+            left: columnLeft,
+            width: columnWidth,
+            top: columnTop,
+            height: columnCells[0]?.height ?? rect.height,
+          } as DOMRect,
+          rowRect: {
+            left: rowLeft,
+            width: Math.max(...rowCellsRects.map((r) => r.right)) - rowLeft,
+            top: rowTop,
+            height: rowHeight,
+          } as DOMRect,
+        });
+      }
     };
 
     const handleMouseLeave = () => {
       timeoutRef.current = setTimeout(() => {
-        if (!isOverControls) {
+        if (
+          !isOverRowControls &&
+          !isOverColumnControls &&
+          !isOverAddRowButton &&
+          !isOverAddColumnButton
+        ) {
           setHoveredCell(null);
+          setHoveredColumn(null);
+          setHoveredRow(null);
         }
-      }, 100);
+      }, 150);
     };
 
     tableContainer.addEventListener('mousemove', handleMouseMove as EventListener);
@@ -198,253 +418,177 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       tableContainer.removeEventListener('mousemove', handleMouseMove as EventListener);
       tableContainer.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [blockId, slate, isOverControls]);
+  }, [
+    blockId,
+    slate,
+    isOverRowControls,
+    isOverColumnControls,
+    isOverAddRowButton,
+    isOverAddColumnButton,
+    hoveredColumn,
+    hoveredRow,
+  ]);
 
-  const handleInsertRowAbove = useCallback(() => {
-    if (!hoveredCell) return;
-    const rowPath = hoveredCell.path.slice(0, -1);
-    TableCommands.insertTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
-      insertMode: 'before',
-    });
-  }, [editor, blockId, hoveredCell]);
-
-  const handleInsertRowBelow = useCallback(() => {
-    if (!hoveredCell) return;
-    const rowPath = hoveredCell.path.slice(0, -1);
-    TableCommands.insertTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
-      insertMode: 'after',
-    });
-  }, [editor, blockId, hoveredCell]);
-
-  const handleDeleteRow = useCallback(() => {
-    if (!hoveredCell) return;
-    const rowPath = hoveredCell.path.slice(0, -1);
-    TableCommands.deleteTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
-    });
-    setHoveredCell(null);
-  }, [editor, blockId, hoveredCell]);
-
-  const handleInsertColumnLeft = useCallback(() => {
-    if (!hoveredCell) return;
-    TableCommands.insertTableColumn(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: hoveredCell.path,
-      insertMode: 'before',
-    });
-  }, [editor, blockId, hoveredCell]);
-
-  const handleInsertColumnRight = useCallback(() => {
-    if (!hoveredCell) return;
-    TableCommands.insertTableColumn(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: hoveredCell.path,
-      insertMode: 'after',
-    });
-  }, [editor, blockId, hoveredCell]);
-
-  const handleDeleteColumn = useCallback(() => {
-    if (!hoveredCell) return;
-    TableCommands.deleteTableColumn(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: hoveredCell.path,
-    });
-    setHoveredCell(null);
-  }, [editor, blockId, hoveredCell]);
-
-  const handleAddRowBelow = useCallback(() => {
-    if (!hoveredCell || !slate) return;
-    const lastRowPath = [hoveredCell.totalRows - 1];
-    TableCommands.insertTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: lastRowPath,
-      insertMode: 'after',
-    });
-  }, [editor, blockId, hoveredCell, slate]);
-
-  const handleAddColumnRight = useCallback(() => {
-    if (!hoveredCell || !slate) return;
-    const lastColumnCellPath = [0, 0, hoveredCell.totalColumns - 1];
-    TableCommands.insertTableColumn(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
-      path: lastColumnCellPath,
-      insertMode: 'after',
-    });
-  }, [editor, blockId, hoveredCell, slate]);
-
-  const handleControlsMouseEnter = useCallback(() => {
-    setIsOverControls(true);
+  const handleRowControlsMouseEnter = useCallback(() => {
+    setIsOverRowControls(true);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
   }, []);
 
-  const handleControlsMouseLeave = useCallback(() => {
-    setIsOverControls(false);
+  const handleRowControlsMouseLeave = useCallback(() => {
+    setIsOverRowControls(false);
     timeoutRef.current = setTimeout(() => {
       setHoveredCell(null);
-    }, 100);
+      setHoveredColumn(null);
+      setHoveredRow(null);
+    }, 150);
   }, []);
 
-  if (!hoveredCell || !tableRect) return null;
+  const handleColumnControlsMouseEnter = useCallback(() => {
+    setIsOverColumnControls(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
 
-  const isFirstRow = hoveredCell.rowIndex === 0;
-  const isFirstColumn = hoveredCell.colIndex === 0;
-  const isLastRow = hoveredCell.rowIndex === hoveredCell.totalRows - 1;
-  const isLastColumn = hoveredCell.colIndex === hoveredCell.totalColumns - 1;
+  const handleColumnControlsMouseLeave = useCallback(() => {
+    setIsOverColumnControls(false);
+    timeoutRef.current = setTimeout(() => {
+      setHoveredCell(null);
+      setHoveredColumn(null);
+      setHoveredRow(null);
+    }, 150);
+  }, []);
 
-  // Calculate positions relative to table (accounting for padding)
-  const cellLeft = hoveredCell.rect.left - tableRect.left;
-  const cellTop = hoveredCell.rect.top - tableRect.top;
-  const cellWidth = hoveredCell.rect.width;
-  const cellHeight = hoveredCell.rect.height;
+  const handleAddRowButtonMouseEnter = useCallback(() => {
+    setIsOverAddRowButton(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  const handleAddRowButtonMouseLeave = useCallback(() => {
+    setIsOverAddRowButton(false);
+    timeoutRef.current = setTimeout(() => {
+      setHoveredCell(null);
+      setHoveredColumn(null);
+      setHoveredRow(null);
+    }, 150);
+  }, []);
+
+  const handleAddColumnButtonMouseEnter = useCallback(() => {
+    setIsOverAddColumnButton(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  const handleAddColumnButtonMouseLeave = useCallback(() => {
+    setIsOverAddColumnButton(false);
+    timeoutRef.current = setTimeout(() => {
+      setHoveredCell(null);
+      setHoveredColumn(null);
+      setHoveredRow(null);
+    }, 150);
+  }, []);
+
+  if (!tableRect || !containerRect) return null;
+
+  // Show add buttons only on hover of last row/column
+  const showAddRowButton = hoveredCell
+    ? hoveredCell.rowIndex === hoveredCell.totalRows - 1
+    : false;
+  const showAddColumnButton = hoveredCell
+    ? hoveredCell.colIndex === hoveredCell.totalColumns - 1
+    : false;
+
+  // Column controls position (above the column) - viewport coordinates
+  const columnControlsTop = hoveredCell ? hoveredCell.columnRect.top - 32 : 0;
+  const columnControlsLeft = hoveredCell ? hoveredCell.columnRect.left : 0;
+
+  // Row controls position (left of the row) - viewport coordinates
+  const rowControlsTop = hoveredCell ? hoveredCell.rowRect.top : 0;
+  const rowControlsLeft = hoveredCell ? Math.max(0, hoveredCell.rowRect.left - 32) : 0;
+
+  // Add row button position (below the table) - viewport coordinates
+  const addRowButtonLeft = containerRect.left + containerPadding.left;
+  const addRowButtonTop = containerRect.top + containerPadding.top + tableRect.height;
+
+  // Add column button position (right of the table) - viewport coordinates
+  const addColumnButtonLeft = containerRect.left + containerPadding.left + tableRect.width;
+  const addColumnButtonTop = containerRect.top + containerPadding.top;
 
   return (
     <>
-      {/* Row controls */}
-      {true && (
-        <div
-          className="absolute z-20 pointer-events-auto"
-          style={{
-            left: containerPadding.left,
-            top: containerPadding.top + cellTop,
-            width: 'auto',
-            height: 'auto',
+      {/* Row controls - rendered in Portal */}
+      {hoveredCell && (
+        <RowControls
+          blockId={blockId}
+          rowIndex={hoveredCell.rowIndex}
+          path={hoveredCell.path}
+          position={{
+            left: rowControlsLeft,
+            top: rowControlsTop,
+            height: hoveredCell.rowRect.height,
           }}
-          onMouseEnter={handleControlsMouseEnter}
-          onMouseLeave={handleControlsMouseLeave}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div
-                style={{
-                  transform: 'translateY(-50%)',
-                  insetInlineStart: '-3px',
-                  top: '50%',
-                  width: '6px',
-                  height: cellHeight / 2,
-                  opacity: 1,
-                  zIndex: 4,
-                  position: 'absolute',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  background: '#7d7a75',
-                  border: '2px solid #191919',
-                }}
-                onMouseDown={(e) => e.preventDefault()}
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" side="left">
-              <DropdownMenuItem onClick={handleInsertRowAbove}>
-                <ArrowUp className="mr-2 h-4 w-4" />
-                Insert row above
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleInsertRowBelow}>
-                <ArrowDown className="mr-2 h-4 w-4" />
-                Insert row below
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleDeleteRow}
-                className="text-destructive focus:text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete row
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          onMouseEnter={handleRowControlsMouseEnter}
+          onMouseLeave={handleRowControlsMouseLeave}
+          controlsRef={rowControlsRef}
+        />
       )}
 
-      {/* Column controls */}
-      {true && (
-        <div
-          className="absolute z-20 pointer-events-auto"
-          style={{
-            left: containerPadding.left + cellLeft,
-            top: containerPadding.top - 28,
-            width: cellWidth,
-            height: 24,
+      {/* Column controls - rendered in Portal */}
+      {hoveredCell && (
+        <ColumnControls
+          blockId={blockId}
+          colIndex={hoveredCell.colIndex}
+          path={hoveredCell.path}
+          position={{
+            left: columnControlsLeft,
+            top: columnControlsTop,
+            width: hoveredCell.columnRect.width,
           }}
-          onMouseEnter={handleControlsMouseEnter}
-          onMouseLeave={handleControlsMouseLeave}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-full w-full bg-muted/80 hover:bg-muted rounded-sm p-0"
-                onMouseDown={(e) => e.preventDefault()}>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" side="top">
-              <DropdownMenuItem onClick={handleInsertColumnLeft}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Insert column left
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleInsertColumnRight}>
-                <ArrowRight className="mr-2 h-4 w-4" />
-                Insert column right
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleDeleteColumn}
-                className="text-destructive focus:text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete column
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          onMouseEnter={handleColumnControlsMouseEnter}
+          onMouseLeave={handleColumnControlsMouseLeave}
+          controlsRef={columnControlsRef}
+        />
       )}
 
-      {/* Add column button */}
-      {isLastColumn && (
-        <div
-          className="absolute z-20 pointer-events-auto"
-          style={{
-            left: containerPadding.left + tableRect.width,
-            top: containerPadding.top,
-            width: 24,
+      {/* Add column button - rendered in Portal */}
+      {showAddColumnButton && hoveredCell && (
+        <AddColumnButton
+          blockId={blockId}
+          totalColumns={hoveredCell.totalColumns}
+          position={{
+            left: addColumnButtonLeft,
+            top: addColumnButtonTop,
             height: tableRect.height,
           }}
-          onMouseEnter={handleControlsMouseEnter}
-          onMouseLeave={handleControlsMouseLeave}>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-full w-full bg-primary/10 hover:bg-primary/20 border-l-2 border-primary/30 rounded-none p-0"
-            onClick={handleAddColumnRight}>
-            <Plus className="h-4 w-4 text-primary" />
-          </Button>
-        </div>
+          onMouseEnter={handleAddColumnButtonMouseEnter}
+          onMouseLeave={handleAddColumnButtonMouseLeave}
+          buttonRef={addColumnButtonRef}
+        />
       )}
 
-      {/* Add row button */}
-      {isLastRow && (
-        <div
-          className="absolute z-20 pointer-events-auto"
-          style={{
-            left: containerPadding.left,
-            top: containerPadding.top + tableRect.height,
+      {/* Add row button - rendered in Portal */}
+      {showAddRowButton && hoveredCell && (
+        <AddRowButton
+          blockId={blockId}
+          totalRows={hoveredCell.totalRows}
+          position={{
+            left: addRowButtonLeft,
+            top: addRowButtonTop,
             width: tableRect.width,
-            height: 24,
           }}
-          onMouseEnter={handleControlsMouseEnter}
-          onMouseLeave={handleControlsMouseLeave}>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-full w-full bg-primary/10 hover:bg-primary/20 border-t-2 border-primary/30 rounded-none p-0"
-            onClick={handleAddRowBelow}>
-            <Plus className="h-4 w-4 text-primary" />
-          </Button>
-        </div>
+          onMouseEnter={handleAddRowButtonMouseEnter}
+          onMouseLeave={handleAddRowButtonMouseLeave}
+          buttonRef={addRowButtonRef}
+        />
       )}
     </>
   );

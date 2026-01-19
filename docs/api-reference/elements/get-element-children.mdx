@@ -1,0 +1,68 @@
+---
+title: getElementChildren
+description: Get children elements of an element
+---
+
+## Overview
+
+The `getElementChildren` method retrieves the children array of an element.
+
+## Signature
+
+```typescript
+editor.getElementChildren(options: GetElementChildrenOptions): SlateElement['children'] | null
+```
+
+## Parameters
+
+<ParamField path="options" type="GetElementChildrenOptions" required>
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string">
+      Type of element
+    </ParamField>
+
+    <ParamField path="path" type="ElementPath">
+      Path to the element
+    </ParamField>
+
+    <ParamField path="match" type="(element: SlateElement) => boolean">
+      Custom matcher function
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns the children array or `null` if element not found.
+
+## Examples
+
+```typescript
+// Get children of accordion item
+const children = editor.getElementChildren({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1]
+});
+
+if (children) {
+  console.log(`Element has ${children.length} children`);
+}
+```
+
+## Type Definition
+
+```typescript
+type GetElementChildrenOptions = {
+  blockId: string;
+  type?: string;
+  path?: ElementPath;
+  match?: (element: SlateElement) => boolean;
+};
+```
+
+

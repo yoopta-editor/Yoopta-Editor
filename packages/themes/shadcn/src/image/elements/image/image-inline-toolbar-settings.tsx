@@ -56,12 +56,13 @@ export const ImageInlineToolbarSettings = ({
       </TooltipProvider>
 
       <PopoverContent
-        className="w-80"
+        className="w-80 p-3"
         align="start"
         contentEditable={false}
         onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}>
-        <div className="space-y-4">
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="space-y-3">
           <div>
             <h4 className="font-semibold">Image settings</h4>
             <p className="text-xs text-muted-foreground">Customize how the image appears</p>

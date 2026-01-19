@@ -1,4 +1,4 @@
-import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons/icons';
+import { COMMAND_MENU_DEFAULT_ICONS_MAP } from '@/icons/icons';
 import {
   ActionMenuList,
   useActionMenuList,
@@ -21,7 +21,7 @@ export const YooptaActionMenuList = () => {
           <ActionMenuList.Empty />
         ) : (
           actions.map((action) => {
-            const Icon = ACTION_MENU_LIST_DEFAULT_ICONS_MAP[action.type];
+            const Icon = COMMAND_MENU_DEFAULT_ICONS_MAP[action.type];
             const itemProps = getItemProps(action.type);
             const onClick = (e: React.MouseEvent) => {
               itemProps.onClick(e);

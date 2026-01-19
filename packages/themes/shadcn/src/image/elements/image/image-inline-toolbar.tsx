@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, Copy, Download, RotateCw, Trash2 } from 'lucide-react';
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
 
 import { ImageInlineToolbarSettings } from './image-inline-toolbar-settings';
 import { Button } from '../../../ui/button';
@@ -9,6 +10,7 @@ import { cn } from '../../../utils';
 import type { ImageElementProps } from '../../types';
 
 type ImageInlineToolbarProps = {
+  referenceRef: React.MutableRefObject<HTMLElement | null>;
   elementProps: ImageElementProps;
   onUpdate: (props: Partial<ImageElementProps>) => void;
   onReplace: () => void;
@@ -18,6 +20,7 @@ type ImageInlineToolbarProps = {
 };
 
 export const ImageInlineToolbar = ({
+  referenceRef,
   elementProps,
   onUpdate,
   onReplace,
@@ -27,26 +30,45 @@ export const ImageInlineToolbar = ({
 }: ImageInlineToolbarProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
+  const { refs, floatingStyles } = useFloating({
+    placement: 'top-end',
+    strategy: 'fixed',
+    middleware: [
+      offset(8),
+      flip({
+        fallbackPlacements: ['bottom', 'top'],
+        padding: 10,
+      }),
+      shift({ padding: 10 }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
   useEffect(() => {
     requestAnimationFrame(() => {
       setIsVisible(true);
     });
   }, []);
 
+  useEffect(() => {
+    const element = referenceRef.current;
+    if (element) {
+      refs.setReference(element);
+    }
+  }, [referenceRef, refs]);
+
   return (
     <div
+      ref={refs.setFloating}
       onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
       className={cn(
-        'absolute left-1/2 -translate-x-1/2 z-10',
-        'flex items-center gap-1 rounded-lg border bg-white/95 p-1 shadow-lg backdrop-blur-sm',
+        'pointer-events-auto',
+        'flex items-center gap-1 rounded-lg border bg-background/95 backdrop-blur-sm p-1 shadow-lg',
         'transition-all duration-200 ease-out',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
       )}
-      style={{
-        bottom: '100%',
-        marginBottom: '8px',
-      }}>
+      style={floatingStyles}>
       <TooltipProvider delayDuration={0}>
         <div className="flex items-center gap-0.5 border-r pr-1">
           <Tooltip>

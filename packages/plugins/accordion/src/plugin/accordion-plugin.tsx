@@ -6,7 +6,7 @@ import {
   serializeTextNodes,
 } from '@yoopta/editor';
 import type { SlateElement } from '@yoopta/editor';
-import { ListCollapse } from 'lucide-react';
+import type { Descendant } from 'slate';
 import { Element, Transforms } from 'slate';
 
 import { AccordionCommands } from '../commands/accordion-commands';
@@ -41,23 +41,29 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           if (event.isDefaultPrevented()) return;
           if (!slate.selection) return;
 
-          const listItems = Elements.getElementChildren(editor, currentBlock.id, {
+          const listItems = Elements.getElementChildren(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list',
           });
-          const accordionListItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
-            path: slate.selection,
+          const accordionListItemEntry = Elements.getElementEntry(editor, {
+            blockId: currentBlock.id,
+            path: slate.selection.anchor.path,
             type: 'accordion-list-item',
           });
 
           const listItemChildPath = accordionListItemEntry?.[1] ?? slate.selection.anchor.path;
-          const currentElement = Elements.getElement(editor, currentBlock.id);
+          const currentElement = Elements.getElement(editor, {
+            blockId: currentBlock.id,
+          });
 
-          const isHeadingEmpty = Elements.isElementEmpty(editor, currentBlock.id, {
+          const isHeadingEmpty = Elements.isElementEmpty(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item-heading',
             path: listItemChildPath,
           });
 
-          const isContentEmpty = Elements.isElementEmpty(editor, currentBlock.id, {
+          const isContentEmpty = Elements.isElementEmpty(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item-content',
             path: listItemChildPath,
           });
@@ -84,7 +90,8 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
             if (accordionListItemEntry) {
               const [, listItemPath] = accordionListItemEntry;
 
-              Elements.deleteElement(editor, currentBlock.id, {
+              Elements.deleteElement(editor, {
+                blockId: currentBlock.id,
                 type: 'accordion-list-item',
                 path: listItemPath,
               });
@@ -92,25 +99,15 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           }
         }
 
-        if (hotkeys.isSelect(event)) {
-          if (event.isDefaultPrevented()) return;
-          event.preventDefault();
-
-          if (slate.selection) {
-            Transforms.select(slate, slate.selection.anchor.path.slice(0, -1));
-          }
-
-          return;
-        }
-
         if (hotkeys.isEnter(event)) {
           if (event.isDefaultPrevented()) return;
-          console.log('ACCORDION: event.isDefaultPrevented()', event.isDefaultPrevented());
-          console.log('ACCORDION: event.defaultPrevented', event.defaultPrevented);
           event.preventDefault();
 
-          const currentElement = Elements.getElement(editor, currentBlock.id);
-          const listItemEntry = Elements.getElementEntry(editor, currentBlock.id, {
+          const currentElement = Elements.getElement(editor, {
+            blockId: currentBlock.id,
+          });
+          const listItemEntry = Elements.getElementEntry(editor, {
+            blockId: currentBlock.id,
             type: 'accordion-list-item',
           });
 
@@ -120,27 +117,25 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           ) {
             const [listItem, listItemPath] = listItemEntry;
 
-            Elements.updateElement(
-              editor,
-              currentBlock.id,
-              {
-                type: ACCORDION_ELEMENTS.AccordionListItem,
-                props: {
-                  isExpanded: !listItem?.props?.isExpanded,
-                },
+            Elements.updateElement(editor, {
+              blockId: currentBlock.id,
+              type: ACCORDION_ELEMENTS.AccordionListItem,
+              props: {
+                isExpanded: !listItem?.props?.isExpanded,
               },
-              { path: listItemPath },
-            );
+              path: listItemPath,
+            });
 
             return;
           }
 
-          Elements.createElement(
-            editor,
-            currentBlock.id,
-            { type: 'accordion-list-item', props: { isExpanded: true } },
-            { path: 'next', focus: true, split: false },
-          );
+          Elements.insertElement(editor, {
+            blockId: currentBlock.id,
+            type: 'accordion-list-item',
+            props: { isExpanded: true },
+            at: 'next',
+            focus: true,
+          });
         }
       };
     },
@@ -149,7 +144,6 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
     display: {
       title: 'Accordion',
       description: 'Create collapses',
-      icon: <ListCollapse size={24} />,
     },
     shortcuts: ['accordion'],
   },
@@ -174,12 +168,12 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
         const { align = 'left', depth = 0 } = blockMeta ?? {};
 
         return `<div>${element.children
-          .filter(Element.isElement)
+          .filter((node) => Element.isElement(node))
           .map((listItemNode) => {
             const listItem = listItemNode as SlateElement;
 
             return `<details data-meta-align="${align}" data-meta-depth="${depth}">${listItem.children
-              .filter(Element.isElement)
+              .filter((node) => Element.isElement(node))
               .map((itemNode) => {
                 const itemElement = itemNode as SlateElement;
 
@@ -202,12 +196,12 @@ const Accordion = new YooptaPlugin<AccordionElementMap>({
           <table data-meta-align="${align}" data-meta-depth="${depth}" style="width: 100%; border-collapse: collapse; margin-left: ${depth}px;">
             <tbody>
               ${element.children
-                .filter(Element.isElement)
+                .filter((node: Descendant) => Element.isElement(node))
                 .map((listItemNode) => {
                   const listItem = listItemNode as SlateElement;
 
                   return listItem.children
-                    .filter(Element.isElement)
+                    .filter((node: Descendant) => Element.isElement(node))
                     .map((itemNode) => {
                       const item = itemNode as SlateElement;
 

@@ -1,16 +1,32 @@
 import { getElement } from './getElement';
-import type { GetBlockElementEntryOptions } from './getElementEntry';
 import type { SlateElement, YooEditor } from '../types';
+import type { GetElementChildrenOptions } from './types';
 
-export type GetElementChildrenOptions = GetBlockElementEntryOptions;
-
-export function getElementChildren<TElementKeys extends string>(
+/**
+ * Get children of an element
+ *
+ * @param editor - YooEditor instance
+ * @param options - Get options
+ * @returns Element children or null if element not found
+ *
+ * @example
+ * ```typescript
+ * // Get children of accordion item
+ * const children = editor.getElementChildren({
+ *   blockId: 'accordion-1',
+ *   type: 'accordion-list-item',
+ *   path: [0, 1]
+ * });
+ * ```
+ */
+export function getElementChildren(
   editor: YooEditor,
-  blockId: string,
-  options?: GetElementChildrenOptions,
-): SlateElement<TElementKeys>['children'] | undefined {
-  const element = getElement(editor, blockId, options);
-  if (element) return element.children;
+  options: GetElementChildrenOptions,
+): SlateElement['children'] | null {
+  const element = getElement(editor, options);
+  if (element && 'children' in element) {
+    return element.children;
+  }
 
-  return undefined;
+  return null;
 }

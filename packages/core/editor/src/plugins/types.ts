@@ -23,7 +23,7 @@ export type PluginOptions<T> = Partial<
     display?: {
       title?: string;
       description?: string;
-      icon?: string | ReactNode | ReactElement;
+      icon?: ReactNode;
     };
     shortcuts?: string[];
     HTMLAttributes?: HTMLAttributes<HTMLElement>;
@@ -54,7 +54,7 @@ export type PluginElement<TKeys, T> = {
   props?: PluginElementProps<T>;
   asRoot?: boolean;
   children?: TKeys[];
-  allowedPlugins?: string[];
+  injectElementsFromPlugins?: string[];
   rootPlugin?: string;
   /**
    * Placeholder text for this element when it's empty

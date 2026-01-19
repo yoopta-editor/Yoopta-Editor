@@ -4,24 +4,27 @@ import {
   FontBoldIcon,
   FontItalicIcon,
   StrikethroughIcon,
-  TextAlignCenterIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
   UnderlineIcon,
 } from '@radix-ui/react-icons';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
-import { Toolbar, useToolbar, useActionMenuListActions } from '@yoopta/ui';
+import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import { Toolbar, useToolbar, useActionMenuListActions, HighlightColorPicker } from '@yoopta/ui';
+import { HighlighterIcon } from 'lucide-react';
 
 export const YooptaToolbar = () => {
   const editor = useYooptaEditor();
   const { isOpen, getRootProps } = useToolbar();
   const { open: openActionMenuList } = useActionMenuListActions();
 
-  const isBoldActive = editor.formats.bold?.isActive();
-  const isItalicActive = editor.formats.italic?.isActive();
-  const isUnderlineActive = editor.formats.underline?.isActive();
-  const isStrikeActive = editor.formats.strike?.isActive();
-  const isCodeActive = editor.formats.code?.isActive();
+  const isBoldActive = Marks.isActive(editor, { type: 'bold' });
+  const isItalicActive = Marks.isActive(editor, { type: 'italic' });
+  const isUnderlineActive = Marks.isActive(editor, { type: 'underline' });
+  const isStrikeActive = Marks.isActive(editor, { type: 'strike' });
+  const isCodeActive = Marks.isActive(editor, { type: 'code' });
+  const isHighlightActive = Marks.isActive(editor, { type: 'highlight' });
+
+  const highlightValue = Marks.getValue(editor, { type: 'highlight' }) as
+    | { color?: string; backgroundColor?: string }
+    | null;
 
   const onTurnIntoClick = (e: React.MouseEvent) => {
     const block = Blocks.getBlock(editor, { at: editor.path.current });
@@ -48,13 +51,13 @@ export const YooptaToolbar = () => {
       <Toolbar.Separator />
       <Toolbar.Group>
         {editor.formats.bold && (
-          <Toolbar.Button onClick={editor.formats.bold?.toggle} active={isBoldActive} title="Bold">
+          <Toolbar.Button onClick={() => Marks.toggle(editor, { type: 'bold' })} active={isBoldActive} title="Bold">
             <FontBoldIcon />
           </Toolbar.Button>
         )}
         {editor.formats.italic && (
           <Toolbar.Button
-            onClick={editor.formats.italic?.toggle}
+            onClick={() => Marks.toggle(editor, { type: 'italic' })}
             active={isItalicActive}
             title="Italic">
             <FontItalicIcon />
@@ -62,7 +65,7 @@ export const YooptaToolbar = () => {
         )}
         {editor.formats.underline && (
           <Toolbar.Button
-            onClick={editor.formats.underline?.toggle}
+            onClick={() => Marks.toggle(editor, { type: 'underline' })}
             active={isUnderlineActive}
             title="Underline">
             <UnderlineIcon />
@@ -70,16 +73,55 @@ export const YooptaToolbar = () => {
         )}
         {editor.formats.strike && (
           <Toolbar.Button
-            onClick={editor.formats.strike?.toggle}
+            onClick={() => Marks.toggle(editor, { type: 'strike' })}
             active={isStrikeActive}
             title="Strikethrough">
             <StrikethroughIcon />
           </Toolbar.Button>
         )}
         {editor.formats.code && (
-          <Toolbar.Button onClick={editor.formats.code?.toggle} active={isCodeActive} title="Code">
+          <Toolbar.Button onClick={() => Marks.toggle(editor, { type: 'code' })} active={isCodeActive} title="Code">
             <CodeIcon />
           </Toolbar.Button>
+        )}
+        {editor.formats.highlight && (
+          <HighlightColorPicker
+            value={highlightValue ?? {}}
+            presets={[
+              '#FFFF00',
+              '#FFE066',
+              '#FFCC99',
+              '#FF9999',
+              '#99CCFF',
+              '#99FF99',
+              '#FF99FF',
+              '#000000',
+            ]}
+            onChange={(values) => {
+              Marks.add(editor, {
+                type: 'highlight',
+                value: {
+                  color: values.color,
+                  backgroundColor: values.backgroundColor,
+                },
+              });
+            }}>
+            <Toolbar.Button
+              active={isHighlightActive}
+              title="Highlight"
+              onContextMenu={(e) => {
+                e.preventDefault();
+                if (isHighlightActive) {
+                  Marks.remove(editor, { type: 'highlight' });
+                }
+              }}
+              style={{
+                backgroundColor: isHighlightActive ? highlightValue?.backgroundColor : undefined,
+                color: isHighlightActive ? highlightValue?.color : undefined,
+              }}>
+              <HighlighterIcon />
+            </Toolbar.Button>
+          </HighlightColorPicker>
         )}
       </Toolbar.Group>
       {/* <Toolbar.Separator />

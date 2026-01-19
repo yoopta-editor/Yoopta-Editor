@@ -1,4 +1,4 @@
-import { Divider } from './plugin';
+import { Divider } from './plugin/divider-plugin';
 import { DividerElement, DividerElementProps, DividerTheme } from './types';
 
 export { DividerCommands } from './commands';

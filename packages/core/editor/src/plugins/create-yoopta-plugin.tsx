@@ -16,7 +16,7 @@ export type ExtendPluginRender<TKeys extends string> = {
 export type ExtendPluginElementConfig = {
   render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: Record<string, unknown>;
-  allowedPlugins?: YooptaPlugin<any, any>[];
+  injectElementsFromPlugins?: YooptaPlugin<any, any>[];
   placeholder?: string;
 };
 
@@ -24,7 +24,7 @@ export type ExtendPlugin<TElementMap extends Record<string, SlateElement>, TOpti
   options?: Partial<PluginOptions<TOptions>>;
   events?: Partial<PluginDOMEvents>;
   lifecycle?: Partial<PluginLifeCycleEvents>;
-  allowedPlugins?: YooptaPlugin<any, any>[];
+  injectElementsFromPlugins?: YooptaPlugin<any, any>[];
   elements?: {
     [K in keyof TElementMap]?: ExtendPluginElementConfig;
   };
@@ -48,10 +48,10 @@ export class YooptaPlugin<
     // Check if elements is a React element (JSX)
     if (isReactElement(pluginInput.elements)) {
       // Convert JSX to PluginElementsMap
-      elements = buildPluginElements<keyof TElementMap & string>(pluginInput.elements) as Plugin<
-        TElementMap,
-        TOptions
-      >['elements'];
+      elements = buildPluginElements<keyof TElementMap & string>(
+        pluginInput.elements,
+        pluginInput.type,
+      ) as Plugin<TElementMap, TOptions>['elements'];
     } else {
       // Use elements as is
       elements = pluginInput.elements as Plugin<TElementMap, TOptions>['elements'];
@@ -73,7 +73,13 @@ export class YooptaPlugin<
   // }
 
   extend(extendPlugin: ExtendPlugin<TElementMap, TOptions>): YooptaPlugin<TElementMap, TOptions> {
-    const { options, events, lifecycle, allowedPlugins, elements: extendElements } = extendPlugin;
+    const {
+      options,
+      events,
+      lifecycle,
+      injectElementsFromPlugins,
+      elements: extendElements,
+    } = extendPlugin;
 
     const extendedOptions = { ...this.plugin.options, ...options };
     const elements = { ...this.plugin.elements };
@@ -100,9 +106,9 @@ export class YooptaPlugin<
       });
     }
 
-    // Handle plugin-level allowedPlugins: apply to ALL leaf elements
-    if (allowedPlugins) {
-      const allowedPluginTypes = allowedPlugins.map((plugin) => plugin.getPlugin.type);
+    // Handle plugin-level injectElementsFromPlugins: apply to ALL leaf elements
+    if (injectElementsFromPlugins) {
+      const injectedPluginTypes = injectElementsFromPlugins.map((plugin) => plugin.getPlugin.type);
 
       Object.keys(elements).forEach((elementType) => {
         const element = elements[elementType];
@@ -112,7 +118,7 @@ export class YooptaPlugin<
 
         if (isLeaf) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (element as any).allowedPlugins = allowedPluginTypes;
+          (element as any).injectElementsFromPlugins = injectedPluginTypes;
         }
       });
     }
@@ -135,24 +141,24 @@ export class YooptaPlugin<
 
         if (!extendElementConfig) return;
 
-        // Handle allowedPlugins
-        if (extendElementConfig.allowedPlugins) {
+        // Handle injectElementsFromPlugins
+        if (extendElementConfig.injectElementsFromPlugins) {
           // Validate: element must be a leaf (no children or only text nodes)
           if (element.children && element.children.length > 0) {
             throw new Error(
-              `[extend] Cannot set allowedPlugins on element "${elementType}" ` +
+              `[extend] Cannot set injectElementsFromPlugins on element "${elementType}" ` +
                 `in plugin "${this.plugin.type}": element has children. ` +
-                `allowedPlugins can only be set on leaf elements.`,
+                `injectElementsFromPlugins can only be set on leaf elements.`,
             );
           }
 
           // Convert plugin instances to plugin types
-          const allowedPluginTypes = extendElementConfig.allowedPlugins.map(
+          const injectedPluginTypes = extendElementConfig.injectElementsFromPlugins.map(
             (plugin) => plugin.getPlugin.type,
           );
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (element as any).allowedPlugins = allowedPluginTypes;
+          (element as any).injectElementsFromPlugins = injectedPluginTypes;
         }
 
         // Handle custom render

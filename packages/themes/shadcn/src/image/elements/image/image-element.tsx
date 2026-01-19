@@ -28,7 +28,8 @@ export const ImageElement = ({
 
   const updateElement = useCallback(
     (props: Partial<ImageElementProps>) => {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'image',
         props: {
           ...element.props,
@@ -44,12 +45,13 @@ export const ImageElement = ({
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
     const parentEntry = elementPath ? Editor.parent(slate, elementPath) : undefined;
     if (parentEntry && Element.isElement(parentEntry[0]) && !Editor.isEditor(parentEntry[0])) {
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'image',
         path: elementPath,
       });
@@ -60,7 +62,8 @@ export const ImageElement = ({
   }, [editor, blockId, element, deleteImageFromStorage]);
 
   const replaceImage = useCallback(() => {
-    Elements.updateElement(editor, blockId, {
+    Elements.updateElement(editor, {
+      blockId,
       type: 'image',
       props: {
         ...element.props,
@@ -95,9 +98,9 @@ export const ImageElement = ({
         preview={preview}
         progress={progress}
         loading={loading}
-        onInsertUrl={() => {}}
-        onInsertFromUnsplash={() => {}}
-        onInsertFromAI={async () => {}}
+        onInsertUrl={() => { }}
+        onInsertFromUnsplash={() => { }}
+        onInsertFromAI={async () => { }}
         attributes={attributes}>
         {children}
       </ImagePlaceholder>
@@ -107,11 +110,13 @@ export const ImageElement = ({
   return (
     <ImageRender
       blockId={blockId}
+      elementId={element.id}
       onUpdate={updateElement}
       onDelete={deleteImage}
       attributes={attributes}
       onReplace={replaceImage}
-      elementProps={element.props}>
+      elementProps={element.props}
+      pluginOptions={pluginOptions}>
       {children}
     </ImageRender>
   );

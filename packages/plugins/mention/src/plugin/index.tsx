@@ -1,7 +1,9 @@
-import { Blocks, Elements, YooEditor, YooptaPlugin } from '@yoopta/editor';
+import type { YooEditor } from '@yoopta/editor';
+import { Blocks, Elements, YooptaPlugin } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
+
 import { MentionCommands } from '../commands/MentionCommands';
-import { MentionElementMap, MentionPluginOptions } from '../types';
+import type { MentionElementMap, MentionPluginOptions } from '../types';
 import { MentionRender } from '../ui/MentionRender';
 
 const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
@@ -34,7 +36,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     return slate;
   },
   events: {
-    onKeyDown: (editor, slate) => (event) => {
+    onKeyDown: (editor, slate) => (event: KeyboardEvent) => {
       const { key } = event;
 
       const pluginOptions = (editor.plugins.Mention.options as MentionPluginOptions) || {};
@@ -45,7 +47,7 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
           const slateEditor = Blocks.getBlockSlate(editor, { at: editor.path.current });
           if (!slateEditor || !slateEditor.selection) return;
 
-          const elRect = Elements.getElementRect(editor, slateEditor);
+          const elRect = Elements.getElementRect(slate, slate.selection);
           if (!elRect) return;
 
           const currentNode = Node.get(slateEditor, slate.selection.anchor.path);

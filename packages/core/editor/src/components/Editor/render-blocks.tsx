@@ -1,10 +1,5 @@
-import { useMemo, useState } from 'react';
-// remove from packages after move to @yoopta/ui packages
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useMemo } from 'react';
 
-import { useYooptaDragDrop } from './dnd';
-import { useYooptaReadOnly } from '../../contexts/YooptaContext/YooptaContext';
 import type { YooEditor } from '../../editor/types';
 import type { YooptaMark } from '../../marks';
 import { SlateEditorComponent } from '../../plugins/slate-editor-component';
@@ -19,10 +14,6 @@ type Props = {
 };
 
 const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
-  const isReadOnly = useYooptaReadOnly();
-  const { sensors, handleDragEnd, handleDragStart } = useYooptaDragDrop({ editor });
-  const [dragHandleProps, setActiveDragHandleProps] = useState(null);
-
   const childrenUnorderedKeys = Object.keys(editor.children);
   const childrenKeys = useMemo(() => {
     if (childrenUnorderedKeys.length === 0) return DEFAULT_EDITOR_KEYS;
@@ -39,7 +30,8 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
 
   const blocks: JSX.Element[] = [];
 
-  for (let i = 0; i < childrenKeys.length; i++) {
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
+  for (let i = 0; i < childrenKeys.length; i += 1) {
     const blockId = childrenKeys[i];
     const block = editor.children[blockId];
     const plugin = editor.plugins[block.type];
@@ -50,11 +42,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     }
 
     blocks.push(
-      <Block
-        key={blockId}
-        block={block}
-        blockId={blockId}
-        onActiveDragHandleChange={setActiveDragHandleProps}>
+      <Block key={blockId} block={block} blockId={blockId}>
         <SlateEditorComponent
           key={blockId}
           type={block.type}
@@ -69,23 +57,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     );
   }
 
-  if (isReadOnly) return blocks;
-
-  return (
-    <DndContext
-      id="yoopta-dnd-context"
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}>
-      <SortableContext
-        disabled={isReadOnly}
-        items={childrenKeys}
-        strategy={verticalListSortingStrategy}>
-        {blocks}
-      </SortableContext>
-    </DndContext>
-  );
+  return blocks;
 };
 
 export { RenderBlocks };

@@ -40,11 +40,10 @@ export const DividerCommands: DividerCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateDivider: (editor: YooEditor, blockId: string, props) => {
-    Elements.updateElement(editor, blockId, {
+    Elements.updateElement(editor, {
+      blockId,
       type: 'divider',
-      props: {
-        ...props,
-      },
+      props,
     });
   },
 };

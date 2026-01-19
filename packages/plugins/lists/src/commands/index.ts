@@ -113,7 +113,8 @@ export const TodoListCommands: TodoListCommands = {
   },
   updateTodoList: (editor, blockId, props) => {
     if (typeof props?.checked === 'boolean') {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'todo-list',
         props: { checked: props?.checked },
       });

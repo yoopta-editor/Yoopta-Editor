@@ -10,31 +10,13 @@
   "type": "module",
   "module": "dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./ui/base": {
-      "import": "./dist/ui/base/index.js",
-      "types": "./dist/ui/base/index.d.ts"
-    },
-    "./ui/shadcn": {
-      "import": "./dist/ui/shadcn/index.js",
-      "types": "./dist/ui/shadcn/index.d.ts"
-    }
-  },
   "files": [
     "dist/"
   ],
   "peerDependencies": {
     "@yoopta/editor": ">=4.9.9",
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2"
-  },
-  "dependencies": {
-    "lucide-react": "^0.378.0",
-    "@radix-ui/react-accordion": "^1.0.0"
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -51,6 +33,5 @@
   },
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
-  },
-  "gitHead": "054fb22aef8ca890d17616d00928eb855e77ec29"
+  }
 }

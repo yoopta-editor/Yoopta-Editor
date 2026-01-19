@@ -65,6 +65,6 @@ export const EmbedCommands: EmbedCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateEmbed: (editor: YooEditor, blockId, props) => {
-    Elements.updateElement(editor, blockId, { props });
+    Elements.updateElement(editor, { blockId, type: 'embed', props });
   },
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import type { YooEditor } from '@yoopta/editor';
 import { Blocks } from '@yoopta/editor';
 import type { Path } from 'slate';
@@ -87,16 +88,12 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
     }
   });
 
-  console.log('allContent', allContent);
-
   // Batch operations
   Editor.withoutNormalizing(slate, () => {
     const newContent = [
       ...anchorCellElement.children,
       ...(allContent.length > 0 ? allContent : []),
     ];
-
-    console.log('newContent', newContent);
 
     Transforms.setNodes(
       slate,

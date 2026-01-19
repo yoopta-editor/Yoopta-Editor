@@ -181,6 +181,8 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (parsedHTML.body.childNodes.length > 0) {
         const blocks = deserializeHTML(editor, parsedHTML.body);
 
+        console.log('blocks', blocks);
+
         // If no blocks from HTML, then paste as plain text using default behavior from Slate
         if (blocks.length > 0 && editor.path.current !== null) {
           event.preventDefault();

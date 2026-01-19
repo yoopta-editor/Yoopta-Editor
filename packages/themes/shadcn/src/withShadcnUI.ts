@@ -6,6 +6,7 @@ import { CalloutUI } from './callout';
 import { CarouselUI } from './carousel';
 import { CodeUI } from './code';
 import { CodeGroupUI } from './code-group';
+import { DividerUI } from './divider';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -22,7 +23,7 @@ type PluginWithUI = YooptaPlugin<any, any>;
 type PluginExtensions = Record<
   string,
   {
-    allowedPlugins?: PluginWithUI[];
+    injectElementsFromPlugins?: PluginWithUI[];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     events?: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +48,7 @@ type PluginExtensions = Record<
  *   Headings.HeadingOne,
  * ], {
  *   Accordion: {
- *     allowedPlugins: [Paragraph, Headings.HeadingOne]
+ *     injectElementsFromPlugins: [Paragraph, Headings.HeadingOne]
  *   }
  * });
  * ```
@@ -77,6 +78,7 @@ export function withShadcnUI(
     CodeGroup: CodeGroupUI,
     Steps: StepsUI,
     Carousel: CarouselUI,
+    Divider: DividerUI,
   };
 
   return plugins.map((plugin) => {
@@ -98,7 +100,7 @@ export function withShadcnUI(
     return plugin.extend({
       elements: elementsToApply,
       ...(extension && {
-        allowedPlugins: extension.allowedPlugins,
+        injectElementsFromPlugins: extension.injectElementsFromPlugins,
         events: extension.events,
         options: extension.options,
       }),

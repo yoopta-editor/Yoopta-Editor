@@ -1,14 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
   autoUpdate,
+  flip,
   inline,
+  offset,
+  shift,
+  useFloating,
   useTransitionStyles,
 } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
+
 import { useBlockOptionsStore } from './store';
 
 type UseBlockOptionsOpenOptions = {
@@ -31,7 +32,7 @@ export const useBlockOptionsActions = () => {
         throw new Error('Block ID is required to duplicate block');
       }
 
-      editor.duplicateBlock({ original: { blockId }, focus: true });
+      editor.duplicateBlock({ blockId, focus: true });
       store.close();
     },
     [editor, store],
@@ -49,7 +50,7 @@ export const useBlockOptionsActions = () => {
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url).then(() => {
-            console.log('Block link copied to clipboard');
+            // console.log('Block link copied to clipboard');
           });
         } else {
           const textarea = document.createElement('textarea');
@@ -104,11 +105,9 @@ export const useBlockOptions = () => {
   const editor = useYooptaEditor();
   const {
     state,
-    blockId,
     reference: storeReference,
     open: storeOpen,
     close: storeClose,
-    setReference,
   } = useBlockOptionsStore();
 
   const isOpen = state === 'open';
@@ -150,7 +149,7 @@ export const useBlockOptions = () => {
         throw new Error('Block ID is required to duplicate block');
       }
 
-      editor.duplicateBlock({ original: { blockId }, focus: true });
+      editor.duplicateBlock({ blockId, focus: true });
       close();
     },
     [editor, close],
@@ -168,7 +167,7 @@ export const useBlockOptions = () => {
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url).then(() => {
-            console.log('Block link copied to clipboard');
+            // console.log('Block link copied to clipboard');
           });
         } else {
           const textarea = document.createElement('textarea');
@@ -203,14 +202,12 @@ export const useBlockOptions = () => {
     [editor, close],
   );
 
-  const getRootProps = () => {
-    return {
-      ref: refs.setFloating,
-      style: { ...floatingStyles, ...transitionStyles },
-      onClick: (e: React.MouseEvent) => e.stopPropagation(),
-      onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
-    };
-  };
+  const getRootProps = () => ({
+    ref: refs.setFloating,
+    style: { ...floatingStyles, ...transitionStyles },
+    onClick: (e: React.MouseEvent) => e.stopPropagation(),
+    onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
+  });
 
   return {
     isOpen: isMounted,

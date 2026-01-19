@@ -1,0 +1,290 @@
+---
+title: deleteElement
+description: Remove elements from a block
+---
+
+## Overview
+
+The `deleteElement` method removes an element from a block.
+
+## Signature
+
+```typescript
+editor.deleteElement(options: DeleteElementOptions): void
+```
+
+## Parameters
+
+<ParamField path="options" type="DeleteElementOptions" required>
+  Configuration object for deleting the element
+
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string" required>
+      Type of element to delete
+    </ParamField>
+
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, the method will search for the element in the current selection (for inline elements) or at the root (for block elements).
+    </ParamField>
+
+    <ParamField path="match" type="(element: SlateElement) => boolean">
+      Custom matcher function to find the element to delete. If provided, searches for the element matching this function in the current selection.
+    </ParamField>
+
+    <ParamField path="mode" type="'unwrap' | 'remove'">
+      Deletion mode for inline elements:
+      - `'unwrap'` (default) - Removes the inline wrapper but keeps the text content. Example: `<link>text</link>` → `text`
+      - `'remove'` - Removes the entire element including its content
+      
+      For block elements, this option is ignored and the element is always fully removed.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { useYooptaEditor } from '@yoopta/editor';
+
+function AccordionItem({ blockId, itemPath }: Props) {
+  const editor = useYooptaEditor();
+
+  const deleteItem = () => {
+    editor.deleteElement({
+      blockId,
+      type: 'accordion-list-item',
+      path: itemPath
+    });
+  };
+
+  return <button onClick={deleteItem}>Delete</button>;
+}
+```
+
+### Delete Inline Element (Link)
+
+```typescript
+// Delete link at current selection (unwrap - keeps text)
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  // If path not specified, finds link in current selection
+  mode: 'unwrap', // Removes link wrapper but keeps text
+});
+
+// Delete link completely (removes link and text)
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  mode: 'remove', // Removes entire link element
+});
+
+// Delete link by path
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  path: [0, 2], // Direct path to link element
+  mode: 'unwrap',
+});
+```
+
+### Delete by Matcher
+
+```typescript
+// Delete tab by ID
+editor.deleteElement({
+  blockId: 'tabs-1',
+  type: 'tabs-item-heading',
+  match: (el) => el.id === tabId
+});
+
+// Delete expanded accordion item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  match: (el) => el.props?.isExpanded === true
+});
+```
+
+### Delete by Path
+
+```typescript
+// Delete at specific path
+editor.deleteElement({
+  blockId: 'table-1',
+  type: 'table-data-cell',
+  path: [0, 2, 1]
+});
+
+// Delete accordion item
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1]
+});
+```
+
+## Use Cases
+
+### Delete Tab
+
+```typescript
+const deleteTab = (blockId: string, tabId: string) => {
+  // Delete tab heading
+  editor.deleteElement({
+    blockId,
+    type: 'tabs-item-heading',
+    match: (el) => el.id === tabId
+  });
+
+  // Delete tab content
+  editor.deleteElement({
+    blockId,
+    type: 'tabs-item-content',
+    match: (el) => el.props?.referenceId === tabId
+  });
+};
+```
+
+### Delete Empty Items
+
+```typescript
+const deleteEmptyItems = (blockId: string) => {
+  const items = editor.getElements({
+    blockId,
+    type: 'accordion-list-item'
+  });
+
+  items.forEach((item, index) => {
+    const isEmpty = editor.isElementEmpty({
+      blockId,
+      type: 'accordion-list-item-content',
+      path: [0, 0, index, 1]
+    });
+
+    if (isEmpty) {
+      editor.deleteElement({
+        blockId,
+        type: 'accordion-list-item',
+        path: [0, 0, index]
+      });
+    }
+  });
+};
+```
+
+### Delete Table Column
+
+```typescript
+const deleteTableColumn = (blockId: string, columnIndex: number) => {
+  const rows = editor.getElements({
+    blockId,
+    type: 'table-row'
+  });
+
+  rows.forEach((row, rowIndex) => {
+    editor.deleteElement({
+      blockId,
+      type: 'table-data-cell',
+      path: [0, 0, rowIndex, columnIndex]
+    });
+  });
+};
+```
+
+### Remove Link from Text
+
+```typescript
+// Remove link but keep the text
+const removeLink = (blockId: string) => {
+  editor.deleteElement({
+    blockId,
+    type: 'link',
+    mode: 'unwrap', // Converts <link>text</link> to just "text"
+  });
+};
+
+// Remove link completely
+const removeLinkAndText = (blockId: string) => {
+  editor.deleteElement({
+    blockId,
+    type: 'link',
+    mode: 'remove', // Removes link and its text content
+  });
+};
+```
+
+### Delete Mention
+
+```typescript
+// Delete mention at selection
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'mention',
+  // Finds mention in current selection
+  mode: 'remove', // Removes mention completely
+});
+```
+
+## Notes
+
+<Note>
+  For **inline elements** (like `link`, `mention`), if `path` is not specified, the method will automatically search for the element in the current selection. This makes it easy to delete links or mentions where the cursor is positioned.
+</Note>
+
+<Note>
+  For inline elements, you can choose between two deletion modes:
+  - `'unwrap'` - Removes the inline wrapper but preserves the text content (default)
+  - `'remove'` - Completely removes the element and its content
+  
+  For block elements, the element is always fully removed regardless of the `mode` option.
+</Note>
+
+<Warning>
+  Be careful when deleting elements. There's no undo for programmatic deletions (unless you implement it yourself).
+</Warning>
+
+<Warning>
+  If the element is not found, the operation will fail with a console warning. Consider checking if the element exists before deletion.
+</Warning>
+
+<Info>
+  When deleting parent elements, all child elements are automatically deleted as well.
+</Info>
+
+## Type Definition
+
+```typescript
+type DeleteElementOptions = {
+  blockId: string;
+  type: string;
+  path?: number[]; // Direct Slate path
+  match?: (element: SlateElement) => boolean;
+  mode?: 'unwrap' | 'remove'; // Only for inline elements
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getElement" icon="search" href="/api-reference/elements/get-element">
+    Check element before deletion
+  </Card>
+  <Card title="insertElement" icon="plus" href="/api-reference/elements/insert-element">
+    Create new elements
+  </Card>
+  <Card title="isElementEmpty" icon="check-circle" href="/api-reference/elements/is-element-empty">
+    Check if element is empty
+  </Card>
+  <Card title="getElements" icon="list" href="/api-reference/elements/get-elements">
+    Get multiple elements for batch deletion
+  </Card>
+</CardGroup>
+
+

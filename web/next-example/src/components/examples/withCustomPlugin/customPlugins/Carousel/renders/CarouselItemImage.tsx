@@ -27,14 +27,14 @@ const CarouselItemImage = ({
     reader.onload = (e) => {
       const src = e.target?.result as string;
 
-      const elementPath = Elements.getElementPath(editor, blockId, element);
+      const elementPath = Elements.getElementPath(editor, { blockId, element });
 
-      Elements.updateElement(
-        editor,
+      Elements.updateElement(editor, {
         blockId,
-        { type: 'carousel-item-image', props: { ...element.props, src } },
-        { path: elementPath },
-      );
+        type: 'carousel-item-image',
+        props: { ...element.props, src },
+        path: elementPath ?? undefined,
+      });
     };
     reader.readAsDataURL(file);
   };
@@ -42,14 +42,14 @@ const CarouselItemImage = ({
   const onDeleteImage = () => {
     if (readOnly) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
 
-    Elements.updateElement(
-      editor,
+    Elements.updateElement(editor, {
       blockId,
-      { type: 'carousel-item-image', props: { ...element.props, src: null } },
-      { path: elementPath },
-    );
+      type: 'carousel-item-image',
+      props: { ...element.props, src: null },
+      path: elementPath ?? undefined,
+    });
   };
 
   return (

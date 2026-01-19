@@ -46,7 +46,9 @@ export function focusBlock(editor: YooEditor, blockId: string, options: FocusBlo
       const selectionPath = getSelectionPath(slate, focusAt);
       Transforms.select(slate, selectionPath);
       ReactEditor.focus(slate);
-    } catch (error) {}
+    } catch (error) {
+      // Ignore focus errors
+    }
 
     if (shouldUpdateBlockPath) {
       setTimeout(() => {

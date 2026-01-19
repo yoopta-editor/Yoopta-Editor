@@ -5,6 +5,7 @@ import {
   TodoListElement,
   TodoListElementProps,
 } from './types';
+import { useNumberListCount } from './utils/use-number-list-count';
 
 export default LISTS;
 
@@ -19,6 +20,7 @@ export {
   BulletedListElement,
   TodoListElement,
   TodoListElementProps,
+  useNumberListCount,
   NumberedList,
   BulletedList,
   TodoList,

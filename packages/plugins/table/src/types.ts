@@ -4,10 +4,11 @@ export type TablePluginElementKeys = 'table' | 'table-row' | 'table-data-cell';
 
 export type TableDataCellElementProps = {
   asHeader?: boolean;
-  align?: 'left' | 'center' | 'right';
+  align?: 'left' | 'center' | 'right' | 'justify';
   colSpan?: number;
   rowSpan?: number;
   backgroundColor?: string;
+  color?: string;
   verticalAlign?: 'top' | 'middle' | 'bottom';
   minWidth?: number;
   maxWidth?: number;

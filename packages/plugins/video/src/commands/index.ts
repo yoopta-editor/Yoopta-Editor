@@ -43,6 +43,6 @@ export const VideoCommands: VideoCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateVideo: (editor: YooEditor, blockId, props) => {
-    Elements.updateElement(editor, blockId, { props });
+    Elements.updateElement(editor, { blockId, type: 'video', props });
   },
 };

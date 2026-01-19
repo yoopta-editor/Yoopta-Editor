@@ -1,5 +1,5 @@
-import { CodeGroupCommands } from '@yoopta/code-group';
-import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
+import { CodeGroupCommands } from '@yoopta/code';
+import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import { X } from 'lucide-react';
 import { Transforms } from 'slate';
@@ -14,7 +14,7 @@ export const CodeGroupItemHeading = (props: PluginElementRenderProps) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
-    const elementPath = Elements.getElementPath(editor, blockId, element as SlateElement);
+    const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
     Transforms.select(slate, elementPath);

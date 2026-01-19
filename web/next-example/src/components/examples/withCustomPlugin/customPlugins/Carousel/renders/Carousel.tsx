@@ -19,12 +19,12 @@ const Carousel = ({ children, element, blockId, attributes }: PluginElementRende
   const block = useBlockData(blockId);
 
   const onAddCarouselItem = () => {
-    Elements.createElement(
-      editor,
-      blockId,
-      { type: 'carousel-item' },
-      { path: 'next', focus: true, split: false },
-    );
+    // Elements.insertElement(editor, {
+    //   blockId,
+    //   type: 'carousel-item',
+    //   at: 'next',
+    //   focus: true,
+    // });
   };
 
   const orientation = element.props?.orientation;

@@ -28,6 +28,10 @@ type InsertOptions = Partial<
   }
 >;
 
+type UpdateCellsOptions = {
+  cells: [TableCellElement, Path][];
+};
+
 export type TableCommands = {
   buildTableElements: (editor: YooEditor, options?: InsertOptions) => TableElement;
   insertTable: (editor: YooEditor, options?: InsertOptions) => void;
@@ -48,6 +52,10 @@ export type TableCommands = {
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
   clearContents: (editor: YooEditor, blockId: string, options: ClearContentsOptions) => void;
   mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => void;
+  setCellBackgroundColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => void;
+  setCellTextColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => void;
+  setCellHorizontalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'left' | 'center' | 'right' | 'justify' }) => void;
+  setCellVerticalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'top' | 'middle' | 'bottom' }) => void;
 };
 
 export const TableCommands: TableCommands = {
@@ -83,7 +91,7 @@ export const TableCommands: TableCommands = {
           type: 'table-data-cell',
           children: [{ text: '' }],
           props: {
-            width: columnWidth || 200,
+            // columnWidth: columnWidth ?? 200,
             asHeader: i === 0 ? !!headerRow : false,
           },
         };
@@ -109,11 +117,11 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { insertMode = 'after', path = slate.selection, select = true } = options || {};
+      const { insertMode = 'after', select = true } = options || {};
 
-      const currentRowElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-expect-error [FIXME] - Fix this
-        path,
+      const currentRowElementEntryByPath = Elements.getElementEntry(editor, {
+        blockId,
+        path: slate.selection?.anchor.path,
         type: 'table-row',
       });
 
@@ -141,22 +149,20 @@ export const TableCommands: TableCommands = {
       }
     });
   },
-  deleteTableRow: (editor: YooEditor, blockId: string, options?: DeleteOptions) => {
+  deleteTableRow: (editor: YooEditor, blockId: string, _options?: DeleteOptions) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { path = slate.selection } = options || {};
-
-      const currentRowElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-expect-error [FIXME] - Fix this
-        path,
+      const currentRowElementEntryByPath = Elements.getElementEntry(editor, {
+        blockId,
+        path: slate.selection?.anchor.path,
         type: 'table-row',
       });
 
       if (!currentRowElementEntryByPath) return;
 
-      const [_, currentRowPath] = currentRowElementEntryByPath;
+      const [, currentRowPath] = currentRowElementEntryByPath;
 
       const tableRowEntries = Editor.nodes<SlateElement>(slate, {
         at: [0],
@@ -196,7 +202,7 @@ export const TableCommands: TableCommands = {
         mode: 'all',
       });
 
-      Array.from(tableRowEntries).forEach(([tableRowElement, tableRowPath]) => {
+      Array.from(tableRowEntries).forEach(([_tableRowElement, tableRowPath]) => {
         Transforms.moveNodes(slate, {
           at: tableRowPath.concat(from[from.length - 1]),
           to: [...tableRowPath, to[to.length - 1]],
@@ -210,17 +216,17 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { insertMode = 'after', path = slate.selection, select = true } = options || {};
+      const { insertMode = 'after', select = true } = options || {};
 
-      const dataCellElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-expect-error [FIXME] - Fix this
-        path,
+      const dataCellElementEntryByPath = Elements.getElementEntry(editor, {
+        blockId,
+        path: slate.selection?.anchor.path,
         type: 'table-data-cell',
       });
 
       if (!dataCellElementEntryByPath) return;
 
-      const [_, dataCellPath] = dataCellElementEntryByPath;
+      const [, dataCellPath] = dataCellElementEntryByPath;
       const columnIndex = dataCellPath[dataCellPath.length - 1];
       const columnInsertIndex =
         insertMode === 'before' ? columnIndex : Path.next(dataCellPath)[dataCellPath.length - 1];
@@ -246,13 +252,11 @@ export const TableCommands: TableCommands = {
       }
     });
   },
-  deleteTableColumn: (editor: YooEditor, blockId: string, options?: DeleteOptions) => {
+  deleteTableColumn: (editor: YooEditor, blockId: string, _options?: DeleteOptions) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { path = slate.selection } = options || {};
-
       const tableRowEntries = Editor.nodes<SlateElement>(slate, {
         at: [0],
         match: (n) => Element.isElement(n) && n.type === 'table-row',
@@ -262,9 +266,9 @@ export const TableCommands: TableCommands = {
       const rows = Array.from(tableRowEntries);
       if (rows[0][0].children.length <= 1) return;
 
-      const dataCellElementEntryByPath = Elements.getElementEntry(editor, blockId, {
-        // @ts-expect-error [FIXME] - Fix this
-        path,
+      const dataCellElementEntryByPath = Elements.getElementEntry(editor, {
+        blockId,
+        path: slate.selection?.anchor.path,
         type: 'table-data-cell',
       });
 
@@ -300,7 +304,7 @@ export const TableCommands: TableCommands = {
         if (path[path.length - 1] === columnIndex) {
           Transforms.setNodes(
             slate,
-            { props: { ...cell.props, width } },
+            { ...cell, props: { ...cell.props, width } },
             {
               at: path,
               match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
@@ -315,7 +319,7 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const table = Elements.getElement(editor, blockId, { type: 'table', path: [0] });
+      const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
       const headerRow = table?.props?.headerRow || false;
 
       const firstTableRowChildren = Editor.nodes<SlateElement>(slate, {
@@ -327,7 +331,7 @@ export const TableCommands: TableCommands = {
       Array.from(firstTableRowChildren).forEach(([cell, path]) => {
         Transforms.setNodes(
           slate,
-          { props: { ...cell.props, asHeader: !cell.props?.asHeader } },
+          { ...cell, props: { ...cell.props, asHeader: !cell.props?.asHeader } },
           {
             at: path,
             match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
@@ -337,7 +341,7 @@ export const TableCommands: TableCommands = {
 
       Transforms.setNodes(
         slate,
-        { props: { ...table?.props, headerRow: !headerRow } },
+        { ...table, props: { ...table?.props, headerRow: !headerRow } },
         {
           at: [0],
           match: (n) => Element.isElement(n) && n.type === 'table',
@@ -350,7 +354,7 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const table = Elements.getElement(editor, blockId, { type: 'table', path: [0] });
+      const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
       const headerColumn = table?.props?.headerColumn || false;
 
       const tableRows = Editor.nodes<SlateElement>(slate, {
@@ -364,7 +368,7 @@ export const TableCommands: TableCommands = {
 
         Transforms.setNodes(
           slate,
-          { props: { ...cell.props, asHeader: !cell.props?.asHeader } },
+          { ...cell, props: { ...cell.props, asHeader: !cell.props?.asHeader } },
           {
             at: path.concat(0),
             match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
@@ -374,7 +378,7 @@ export const TableCommands: TableCommands = {
 
       Transforms.setNodes(
         slate,
-        { props: { ...table?.props, headerColumn: !headerColumn } },
+        { ...table, props: { ...table?.props, headerColumn: !headerColumn } },
         {
           at: [0],
           match: (n) => Element.isElement(n) && n.type === 'table',
@@ -387,5 +391,127 @@ export const TableCommands: TableCommands = {
   },
   mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => {
     mergeCells(editor, blockId, options);
+  },
+  setCellBackgroundColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => {
+    const { cells, color } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              backgroundColor: color === 'transparent' ? undefined : color,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellTextColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => {
+    const { cells, color } = options;
+
+    console.log('setCellTextColor cells', cells);
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              color: color === 'inherit' ? undefined : color,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellHorizontalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'left' | 'center' | 'right' | 'justify' }) => {
+    const { cells, align } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              align,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellVerticalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'top' | 'middle' | 'bottom' }) => {
+    const { cells, align } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              verticalAlign: align,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
   },
 };

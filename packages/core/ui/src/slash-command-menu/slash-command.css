@@ -1,0 +1,332 @@
+.slash-command-root {
+  --slash-command-bg: #ffffff;
+  --slash-command-bg-hover: #f4f4f5;
+  --slash-command-bg-selected: #f4f4f5;
+  --slash-command-border: #e4e4e7;
+  --slash-command-border-radius: .375rem;
+  --slash-command-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.18),
+    0 4px 16px -4px rgba(0, 0, 0, 0.1);
+  --slash-command-text: #18181b;
+  --slash-command-text-muted: #71717a;
+  --slash-command-text-disabled: #a1a1aa;
+  --slash-command-accent: #3b82f6;
+  --slash-command-item-radius: 8px;
+  --slash-command-icon-bg: #ffffff;
+  --slash-command-icon-border: #e4e4e7;
+  --slash-command-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --slash-command-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+}
+
+.slash-command-root[data-theme="dark"],
+.dark .slash-command-root {
+  --slash-command-bg: #18181b;
+  --slash-command-bg-hover: #27272a;
+  --slash-command-bg-selected: #27272a;
+  --slash-command-border: #3f3f46;
+  --slash-command-text: #fafafa;
+  --slash-command-text-muted: #a1a1aa;
+  --slash-command-text-disabled: #52525b;
+  --slash-command-icon-bg: #27272a;
+  --slash-command-icon-border: #3f3f46;
+}
+
+.slash-command-content {
+  z-index: 9999;
+  width: 300px;
+  max-height: 400px;
+  overflow: hidden;
+  background-color: var(--slash-command-bg);
+  border: 1px solid var(--slash-command-border);
+  border-radius: var(--slash-command-border-radius);
+  box-shadow: var(--slash-command-shadow);
+  font-family: var(--slash-command-font-family);
+  animation: slash-command-in 150ms ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slash-command-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.slash-command-input-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--slash-command-border);
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.slash-command-input-trigger {
+  color: var(--slash-command-text-muted);
+  font-size: 14px;
+  font-family: var(--slash-command-font-mono);
+  font-weight: 500;
+  user-select: none;
+}
+
+.slash-command-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--slash-command-text);
+  background-color: transparent;
+  font-family: var(--slash-command-font-family);
+  min-width: 0;
+}
+
+.slash-command-input::placeholder {
+  color: var(--slash-command-text-muted);
+}
+
+.slash-command-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--slash-command-text-muted);
+  background-color: var(--slash-command-bg-hover);
+  border: 1px solid var(--slash-command-border);
+  border-radius: 4px;
+  font-family: var(--slash-command-font-family);
+  user-select: none;
+}
+
+/* ============================================================================
+   LIST
+   ============================================================================ */
+
+.slash-command-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: .5rem .25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.slash-command-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.slash-command-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slash-command-list::-webkit-scrollbar-thumb {
+  background-color: var(--slash-command-border);
+  border-radius: 3px;
+}
+
+.slash-command-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--slash-command-text-muted);
+}
+
+/* ============================================================================
+   GROUP
+   ============================================================================ */
+
+.slash-command-group {
+  margin-bottom: 8px;
+}
+
+.slash-command-group:last-child {
+  margin-bottom: 0;
+}
+
+.slash-command-group-heading {
+  padding: 8px 12px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slash-command-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+/* ============================================================================
+   ITEM
+   ============================================================================ */
+
+.slash-command-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 4px 6px;
+  border: none;
+  border-radius: var(--slash-command-item-radius);
+  background-color: transparent;
+  cursor: pointer;
+  text-align: left;
+  outline: none;
+  transition: background-color 100ms ease;
+  font-family: var(--slash-command-font-family);
+}
+
+.slash-command-item:hover,
+.slash-command-item[data-selected="true"] {
+  background-color: var(--slash-command-bg-selected);
+}
+
+.slash-command-item:focus-visible {
+  outline: 2px solid var(--slash-command-accent);
+  outline-offset: -2px;
+}
+
+.slash-command-item[data-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Item Icon */
+.slash-command-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: var(--slash-command-icon-bg);
+  border: 1px solid var(--slash-command-icon-border);
+  flex-shrink: 0;
+  transition: border-color 100ms ease, box-shadow 100ms ease;
+  color: var(--slash-command-text-muted);
+}
+
+.slash-command-item[data-selected="true"] .slash-command-item-icon {
+  border-color: var(--slash-command-text-muted);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.slash-command-item-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Item Content */
+.slash-command-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.slash-command-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slash-command-text);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slash-command-item-description {
+  font-size: 12px;
+  color: var(--slash-command-text-muted);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+
+/* Item Shortcut */
+.slash-command-item-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   EMPTY STATE
+   ============================================================================ */
+
+.slash-command-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: var(--slash-command-text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.slash-command-empty-icon {
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+/* ============================================================================
+   SEPARATOR
+   ============================================================================ */
+
+.slash-command-separator {
+  height: 1px;
+  margin: 8px 12px;
+  background-color: var(--slash-command-border);
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.slash-command-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--slash-command-border);
+  background-color: var(--slash-command-bg-hover);
+  flex-shrink: 0;
+}
+
+.slash-command-footer-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--slash-command-text-muted);
+}
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+
+.slash-command-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.slash-command-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--slash-command-border);
+  border-top-color: var(--slash-command-accent);
+  border-radius: 50%;
+  animation: slash-command-spin 600ms linear infinite;
+}
+
+@keyframes slash-command-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

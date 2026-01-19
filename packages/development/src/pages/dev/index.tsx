@@ -1,9 +1,8 @@
-import YooptaEditor, { YooEditor, createYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks, Marks, Selection } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
-import { TOOLS } from '../../utils/yoopta/tools';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -22,6 +21,14 @@ const YooptaUIPackageExample = () => {
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
   }, []);
+
+  const markBlocksToBold = () => {
+    Marks.update(editor, {
+      type: 'highlight',
+      value: { color: 'red', backgroundImage: 'linear-gradient(to right, red, blue)' },
+      at: [0, 1, 2]
+    });
+  }
 
   const insertTabs = () => {
     const elements = editor.y('tabs-container', {
@@ -162,7 +169,7 @@ const YooptaUIPackageExample = () => {
       ],
     });
 
-    editor.insertBlock('Steps', {
+    const blockId = editor.insertBlock('Steps', {
       elements,
       at: 0,
       focus: true,
@@ -235,24 +242,20 @@ const YooptaUIPackageExample = () => {
   };
 
   const insertBulletedList = () => {
-    const elements = editor.y('bulleted-list', {
-      children: [
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 1'), editor.y.text(' First item', { bold: true })],
-        }),
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 2')],
-        }),
-        editor.y('bulleted-list-item', {
-          children: [editor.y.text('Item 3')],
-        }),
-      ],
-    });
+    const bulletItemIds = [generateId(), generateId(), generateId()];
 
-    editor.insertBlock('BulletedList', {
-      elements,
-      at: typeof editor.path.current === 'number' ? editor.path.current : 0,
-      focus: true,
+    editor.batchOperations(() => {
+      bulletItemIds.forEach((id, idx) => {
+        const bulletItemElements = editor.y('bulleted-list', {
+          id,
+          children: [editor.y.text(`Item ${idx + 1}`)],
+        });
+
+        editor.insertBlock('BulletedList', {
+          elements: bulletItemElements,
+          at: idx,
+        });
+      });
     });
   };
 
@@ -402,6 +405,11 @@ const YooptaUIPackageExample = () => {
           onClick={insertTabs}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Insert Tabs
+        </button>
+        <button
+          onClick={() => markBlocksToBold()}
+          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
+          Mark Blocks to Bold
         </button>
       </div>
       <YooptaEditor

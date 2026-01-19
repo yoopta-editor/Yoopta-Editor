@@ -10,14 +10,17 @@ import { AccordionTrigger } from '../../ui/accordion';
 export const AccordionItemHeading = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;
   const editor = useYooptaEditor();
-  const [_, forceRerender] = useReducer((x) => x + 1, 0);
+  const [, forceRerender] = useReducer((x) => x + 1, 0);
 
   const parentListItem = useMemo(() => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return undefined;
 
     try {
-      const elementPath = Elements.getElementPath(editor, blockId, element as SlateElement);
+      const elementPath = Elements.getElementPath(editor, {
+        blockId,
+        element,
+      });
       const parentElement = Editor.parent(slate, elementPath as Location);
       return parentElement[0] as SlateElement;
     } catch (error) {
@@ -34,7 +37,7 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
     if (!slate) return undefined;
 
     try {
-      return Elements.getElementPath(editor, blockId, parentListItem);
+      return Elements.getElementPath(editor, { blockId, element: parentListItem });
     } catch (error) {
       // Element path not found
     }
@@ -46,18 +49,15 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
 
   const toggleListItem = useCallback(() => {
     if (parentListItem && parentListItemPath) {
-      Elements.updateElement(
-        editor,
+      Elements.updateElement(editor, {
         blockId,
-        {
-          type: parentListItem.type,
-          props: {
-            ...parentListItem.props,
-            isExpanded: !isExpanded,
-          },
+        type: parentListItem.type,
+        props: {
+          ...parentListItem.props,
+          isExpanded: !isExpanded,
         },
-        { path: parentListItemPath },
-      );
+        path: parentListItemPath,
+      });
     }
 
     forceRerender();
@@ -71,7 +71,8 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
       if (!parentListItem || !parentListItemPath) return;
 
       // Get all accordion-list-item children to check if this is the last one
-      const listItems = Elements.getElementChildren(editor, blockId, {
+      const listItems = Elements.getElementChildren(editor, {
+        blockId,
         type: 'accordion-list',
       });
 
@@ -80,7 +81,8 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
         return;
       }
 
-      Elements.deleteElement(editor, blockId, {
+      Elements.deleteElement(editor, {
+        blockId,
         type: 'accordion-list-item',
         path: parentListItemPath,
       });
