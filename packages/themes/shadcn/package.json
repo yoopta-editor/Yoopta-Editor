@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/themes-shadcn",
-  "version": "6.0.0",
+  "version": "4.9.9",
   "description": "Shadcn UI theme for Yoopta Editor plugins",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -22,7 +22,8 @@
     "@yoopta/table": "*",
     "@yoopta/tabs": "*",
     "@yoopta/steps": "*",
-    "@yoopta/lists": "*"
+    "@yoopta/lists": "*",
+    "@yoopta/ui": "*"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.0"

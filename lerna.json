@@ -12,10 +12,17 @@
   "useWorkspaces": true,
   "version": "4.9.9",
   "command": {
+    "version": {
+      "conventionalCommits": true
+    },
     "publish": {
       "registry": "https://registry.npmjs.org/",
       "access": "public",
-      "ignoreChanges": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"]
+      "ignoreChanges": [
+        "**/__tests__/**",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
     }
   }
 }
