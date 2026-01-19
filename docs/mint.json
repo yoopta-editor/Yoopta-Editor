@@ -141,6 +141,26 @@
             "api-reference/elements/get-element-children",
             "api-reference/elements/is-element-empty"
           ]
+        },
+        {
+          "group": "Blocks API",
+          "pages": [
+            "api-reference/blocks/overview",
+            "api-reference/blocks/insert-block",
+            "api-reference/blocks/delete-block",
+            "api-reference/blocks/update-block",
+            "api-reference/blocks/get-block",
+            "api-reference/blocks/move-block",
+            "api-reference/blocks/focus-block",
+            "api-reference/blocks/duplicate-block",
+            "api-reference/blocks/split-block",
+            "api-reference/blocks/merge-block",
+            "api-reference/blocks/toggle-block",
+            "api-reference/blocks/increase-block-depth",
+            "api-reference/blocks/decrease-block-depth",
+            "api-reference/blocks/get-block-slate",
+            "api-reference/blocks/build-block-data"
+          ]
         }
       ]
     },

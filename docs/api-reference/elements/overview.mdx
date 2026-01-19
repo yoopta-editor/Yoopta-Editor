@@ -12,6 +12,45 @@ The Elements API provides a high-level, unified interface for working with eleme
   update, and delete.
 </Info>
 
+## Accessing Elements API
+
+Elements API methods are available in two ways:
+
+### 1. Through Editor Instance (Recommended)
+
+All methods are available directly on the editor instance:
+
+```typescript
+import { useYooptaEditor } from '@yoopta/editor';
+
+function MyComponent() {
+  const editor = useYooptaEditor();
+
+  // Use methods directly on editor
+  editor.insertElement({ /* ... */ });
+  editor.getElement({ /* ... */ });
+  editor.updateElement({ /* ... */ });
+  editor.deleteElement({ /* ... */ });
+}
+```
+
+### 2. Through Elements Namespace (For Backwards Compatibility)
+
+You can also import and use the `Elements` namespace:
+
+```typescript
+import { Elements } from '@yoopta/editor';
+
+// Methods are available on Elements namespace
+Elements.insertElement(editor, { /* ... */ });
+Elements.getElement(editor, { /* ... */ });
+Elements.updateElement(editor, { /* ... */ });
+```
+
+<Warning>
+  The namespace export is provided for backwards compatibility. We recommend using methods directly on the editor instance for better TypeScript support and cleaner code.
+</Warning>
+
 ## Why Elements API?
 
 - **No Slate.js Knowledge Required**: Work with elements using simple, semantic methods
@@ -171,15 +210,92 @@ editor.insertElement({
 });
 ```
 
+### Working with Inline Elements (Links, Mentions)
+
+```typescript
+// Insert link at current selection
+editor.insertElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://example.com', target: '_blank' },
+  text: 'Click here',
+  at: 'selection',
+});
+
+// Update link URL and text
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://new-url.com' },
+  text: 'Updated link text',
+});
+
+// Remove link but keep text (unwrap)
+editor.deleteElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  mode: 'unwrap', // Keeps text, removes link wrapper
+});
+
+// Get all links in a block
+const links = editor.getElements({
+  blockId: 'paragraph-1',
+  type: 'link',
+});
+
+// Find specific link by URL
+const specificLink = editor.getElement({
+  blockId: 'paragraph-1',
+  match: (el) => el.type === 'link' && el.props?.url === 'https://example.com',
+});
+```
+
+### Working with Element Paths
+
+```typescript
+// Get element path
+const elementPath = editor.getElementPath({
+  blockId: 'accordion-1',
+  element: accordionItem,
+});
+
+// Get parent element path
+const parentPath = editor.getParentElementPath({
+  blockId: 'accordion-1',
+  element: accordionContent,
+});
+
+// Get element with its path (entry)
+const entry = editor.getElementEntry({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+
+if (entry) {
+  const [element, path] = entry;
+  console.log('Element:', element);
+  console.log('Path:', path);
+}
+
+// Get element children
+const children = editor.getElementChildren({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+```
+
 ## Type Definitions
 
 ### Common Types
 
 ```typescript
 // Element path specification
+// Can be a specific Slate path, or a semantic path
 type ElementPath = number[] | 'selection' | 'first' | 'last';
 
-// Element matcher function
+// Element matcher function for custom queries
 type ElementMatcher = (element: SlateElement) => boolean;
 ```
 
@@ -194,6 +310,49 @@ type SlateElement = {
   props?: Record<string, unknown>;
   children: (SlateElement | SlateElementTextNode)[];
 };
+```
+
+### Available Type Exports
+
+All types are exported from `@yoopta/editor`:
+
+```typescript
+import type {
+  ElementPath,
+  ElementMatcher,
+  InsertElementOptions,
+  UpdateElementOptions,
+  DeleteElementOptions,
+  GetElementOptions,
+  GetElementsOptions,
+  GetElementEntryOptions,
+  GetElementPathOptions,
+  GetElementChildrenOptions,
+  IsElementEmptyOptions,
+} from '@yoopta/editor';
+```
+
+### Path Options Explained
+
+The `ElementPath` type supports multiple ways to specify element location:
+
+- **`number[]`**: Direct Slate path (e.g., `[0, 1, 2]`)
+- **`'selection'`**: Element at current cursor/selection
+- **`'first'`**: First element of the specified type
+- **`'last'`**: Last element of the specified type
+
+```typescript
+// Direct path
+editor.getElement({ blockId: 'accordion-1', type: 'item', path: [0, 1] });
+
+// First element of type
+editor.getElement({ blockId: 'accordion-1', type: 'item', path: 'first' });
+
+// Last element of type
+editor.getElement({ blockId: 'accordion-1', type: 'item', path: 'last' });
+
+// Element at selection
+editor.getElement({ blockId: 'accordion-1', type: 'item', path: 'selection' });
 ```
 
 ## Best Practices
@@ -266,12 +425,54 @@ if (isEmpty) {
 }
 ```
 
-## Migration from Old API
-
-If you're migrating from the old `Elements` namespace:
+### 5. Handle Inline vs Block Elements
 
 ```typescript
-// ❌ Old API
+// Inline elements (links, mentions) support text updates
+editor.updateElement({
+  blockId: 'paragraph-1',
+  type: 'link',
+  props: { url: 'https://example.com' },
+  text: 'New link text', // Only works for inline elements
+});
+
+// Block elements don't support text option
+editor.updateElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  // text option is ignored for block elements
+});
+```
+
+### 6. Use Element Entry for Path Information
+
+```typescript
+// When you need both element and its path
+const entry = editor.getElementEntry({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+
+if (entry) {
+  const [element, path] = entry;
+  // Use path for subsequent operations
+  editor.updateElement({
+    blockId: 'accordion-1',
+    type: 'accordion-list-item',
+    props: { isExpanded: true },
+    path, // Reuse the path
+  });
+}
+```
+
+## Migration from Old API
+
+If you're migrating from the old `Elements` namespace API:
+
+```typescript
+// ❌ Old API (namespace with separate parameters)
 Elements.updateElement(
   editor,
   blockId,
@@ -282,7 +483,7 @@ Elements.updateElement(
   { path: itemPath },
 );
 
-// ✅ New API
+// ✅ New API (options object on editor instance)
 editor.updateElement({
   blockId,
   type: 'accordion-list-item',
@@ -290,6 +491,35 @@ editor.updateElement({
   path: itemPath,
 });
 ```
+
+### Key Changes
+
+1. **Unified Options Object**: All parameters are now in a single options object
+2. **Editor Instance Methods**: Methods are available directly on the editor instance
+3. **Consistent Naming**: All methods follow the same naming pattern
+4. **Better TypeScript Support**: Improved type inference and autocomplete
+
+## Method Reference
+
+### CRUD Operations
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `insertElement` | Create and insert a new element | `void` |
+| `updateElement` | Modify element properties and/or text | `void` |
+| `deleteElement` | Remove or unwrap an element | `void` |
+
+### Retrieval Methods
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `getElement` | Get a single element | `SlateElement \| null` |
+| `getElements` | Get multiple elements | `SlateElement[]` |
+| `getElementEntry` | Get element with its path | `[SlateElement, Path] \| null` |
+| `getElementPath` | Get element's Slate path | `Path \| null` |
+| `getParentElementPath` | Get parent element's path | `Path \| null` |
+| `getElementChildren` | Get element's children | `SlateElement['children'] \| null` |
+| `isElementEmpty` | Check if element has no text content | `boolean` |
 
 ## Next Steps
 

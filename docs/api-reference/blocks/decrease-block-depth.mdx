@@ -1,0 +1,130 @@
+---
+title: decreaseBlockDepth
+description: Decrease block indentation (outdent block)
+---
+
+## Overview
+
+The `decreaseBlockDepth` method decreases a block's depth level, effectively outdenting it in the editor.
+
+## Signature
+
+```typescript
+Blocks.decreaseBlockDepth(
+  editor: YooEditor,
+  options?: BlockDepthOptions
+): void
+```
+
+## Parameters
+
+<ParamField path="editor" type="YooEditor" required>
+  The editor instance
+</ParamField>
+
+<ParamField path="options" type="BlockDepthOptions">
+  Configuration object
+
+  <Expandable title="properties">
+    <ParamField path="at" type="number" default="editor.path.current">
+      Position of the block
+    </ParamField>
+
+    <ParamField path="blockId" type="string">
+      ID of the block. Takes precedence over `at`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+// Decrease depth of current block
+Blocks.decreaseBlockDepth(editor);
+
+// Decrease depth of specific block by path
+Blocks.decreaseBlockDepth(editor, { at: 3 });
+
+// Decrease depth by block ID
+Blocks.decreaseBlockDepth(editor, { blockId: 'block-123' });
+```
+
+### Outdent Multiple Blocks
+
+```typescript
+const outdentBlocks = (editor: YooEditor, blockIds: string[]) => {
+  blockIds.forEach((blockId) => {
+    Blocks.decreaseBlockDepth(editor, { blockId });
+  });
+};
+```
+
+## Use Cases
+
+### Outdent on Shift+Tab
+
+```typescript
+const handleShiftTab = (editor: YooEditor) => {
+  Blocks.decreaseBlockDepth(editor, {
+    at: editor.path.current,
+  });
+};
+```
+
+### Reset Block Depth
+
+```typescript
+const resetDepth = (editor: YooEditor, blockId: string) => {
+  const block = Blocks.getBlock(editor, { id: blockId });
+  if (!block) return;
+
+  // Decrease until depth is 0
+  while (block.meta.depth > 0) {
+    Blocks.decreaseBlockDepth(editor, { blockId });
+    const updatedBlock = Blocks.getBlock(editor, { id: blockId });
+    if (!updatedBlock || updatedBlock.meta.depth === block.meta.depth) {
+      break; // Prevent infinite loop
+    }
+    block.meta.depth = updatedBlock.meta.depth;
+  }
+};
+```
+
+## Notes
+
+<Note>
+  The depth is decreased by 1 each time the method is called. The minimum depth is 0 (cannot go negative).
+</Note>
+
+<Note>
+  If the block doesn't exist, the method will silently return without error.
+</Note>
+
+<Info>
+  Block depth is used for visual indentation in the editor UI. Depth 0 means no indentation.
+</Info>
+
+## Type Definition
+
+```typescript
+type BlockDepthOptions = {
+  at?: number; // YooptaPathIndex
+  blockId?: string;
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="increaseBlockDepth" icon="indent" href="/api-reference/blocks/increase-block-depth">
+    Increase block depth (indent)
+  </Card>
+  <Card title="updateBlock" icon="pen" href="/api-reference/blocks/update-block">
+    Update block depth manually
+  </Card>
+</CardGroup>
+

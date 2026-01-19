@@ -25,8 +25,8 @@ editor.getElementEntry(options: GetElementEntryOptions): [SlateElement, Path] | 
       Type of element to retrieve
     </ParamField>
 
-    <ParamField path="path" type="ElementPath">
-      Path specification ('first' | 'last' | 'selection' | number[])
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, defaults to current selection or `[0]`.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -76,7 +76,7 @@ if (entry) {
 type GetElementEntryOptions = {
   blockId: string;
   type?: string;
-  path?: ElementPath;
+  path?: number[];
 };
 ```
 

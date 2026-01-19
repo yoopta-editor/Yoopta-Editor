@@ -21,16 +21,12 @@ editor.getElementChildren(options: GetElementChildrenOptions): SlateElement['chi
       ID of the block containing the element
     </ParamField>
 
-    <ParamField path="type" type="string">
-      Type of element
+    <ParamField path="type" type="string" required>
+      Type of element to get children from
     </ParamField>
 
-    <ParamField path="path" type="ElementPath">
-      Path to the element
-    </ParamField>
-
-    <ParamField path="match" type="(element: SlateElement) => boolean">
-      Custom matcher function
+    <ParamField path="path" type="number[]">
+      Path to the element. If not provided, defaults to current selection or `[0]`.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -59,9 +55,8 @@ if (children) {
 ```typescript
 type GetElementChildrenOptions = {
   blockId: string;
-  type?: string;
-  path?: ElementPath;
-  match?: (element: SlateElement) => boolean;
+  type: string;
+  path?: number[];
 };
 ```
 

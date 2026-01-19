@@ -27,12 +27,8 @@ editor.getElement(options: GetElementOptions): SlateElement | null
       Type of element to retrieve
     </ParamField>
 
-    <ParamField path="path" type="ElementPath">
-      Path to the element:
-      - `'first'` - First element of the specified type
-      - `'last'` - Last element of the specified type
-      - `'selection'` - Element at current selection
-      - `number[]` - Specific Slate path
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, defaults to current selection or `[0]`.
     </ParamField>
 
     <ParamField path="match" type="(element: SlateElement) => boolean">
@@ -78,21 +74,21 @@ const expandedItem = editor.getElement({
 });
 ```
 
-### Get by Position
+### Get by Path
 
 ```typescript
-// Get first item
-const firstItem = editor.getElement({
+// Get item at specific path
+const item = editor.getElement({
   blockId: 'accordion-1',
   type: 'accordion-list-item',
-  path: 'first'
+  path: [0, 0] // First item
 });
 
-// Get last item
+// Get item at another path
 const lastItem = editor.getElement({
   blockId: 'accordion-1',
   type: 'accordion-list-item',
-  path: 'last'
+  path: [0, 2] // Third item
 });
 ```
 
@@ -152,11 +148,9 @@ const getCellWidth = (blockId: string, cellPath: number[]): number | undefined =
 type GetElementOptions = {
   blockId: string;
   type?: string;
-  path?: ElementPath;
+  path?: number[];
   match?: (element: SlateElement) => boolean;
 };
-
-type ElementPath = number[] | 'selection' | 'first' | 'last';
 
 type SlateElement = {
   id?: string;
