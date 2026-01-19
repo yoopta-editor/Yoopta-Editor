@@ -16,9 +16,9 @@ Before installing Yoopta Editor, make sure you have:
 Yoopta Editor supports all major package managers:
 
 <Tabs>
-  <Tab title="npm">```bash npm install slate slate-react @yoopta/editor ```</Tab>
-  <Tab title="yarn">```bash yarn add slate slate-react @yoopta/editor ```</Tab>
-  <Tab title="pnpm">```bash pnpm add slate slate-react @yoopta/editor ```</Tab>
+  <Tab title="npm">```bash npm install slate slate-react slate-dom @yoopta/editor ```</Tab>
+  <Tab title="yarn">```bash yarn add slate slate-react slate-dom @yoopta/editor ```</Tab>
+  <Tab title="pnpm">```bash pnpm add slate slate-react slate-dom @yoopta/editor ```</Tab>
 </Tabs>
 
 ## Package Categories
@@ -29,10 +29,10 @@ Yoopta Editor is organized into several package categories. Install only what yo
 
 #### Required: Core Editor
 ```bash
-npm install slate slate-react @yoopta/editor
+npm install slate slate-react slate-dom @yoopta/editor
 ```
 
-- **`slate`** & **`slate-react`** - Peer dependencies (required)
+- **`slate`** & **`slate-react slate-dom`** - Peer dependencies (required)
 - **`@yoopta/editor`** - Core headless editor package
 
 #### Optional: UI Components
@@ -88,13 +88,22 @@ npm install @yoopta/code
 npm install @yoopta/link
 ```
 
-### Tool Packages
+### UI Components Package
 
-Install UI tools for editor interactions:
+Install UI components for editor interactions:
 
 ```bash
-npm install @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool
+npm install @yoopta/ui
 ```
+
+**Available Components:**
+- `Toolbar` - Text formatting toolbar
+- `ActionMenuList` - Block insertion menu
+- `SlashCommandMenu` - Inline slash command menu
+- `BlockOptions` - Block action menu
+- `FloatingBlockActions` - Floating action buttons
+- `HighlightColorPicker` - Color picker component
+- `Portal` & `Overlay` - Utility components
 
 ### Marks Package
 
@@ -125,24 +134,24 @@ Install everything at once:
 <CodeGroup>
 
 ```bash npm
-npm install slate slate-react \
+npm install slate slate-react slate-dom \
   @yoopta/editor \
+  @yoopta/ui \
   @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
   @yoopta/lists @yoopta/code @yoopta/table \
   @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
   @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
-  @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool \
   @yoopta/marks
 ```
 
 ```bash yarn
-yarn add slate slate-react \
+yarn add slate slate-react slate-dom \
   @yoopta/editor \
+  @yoopta/ui \
   @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
   @yoopta/lists @yoopta/code @yoopta/table \
   @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
   @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
-  @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool \
   @yoopta/marks
 ```
 
@@ -255,7 +264,7 @@ If you see an empty editor with the placeholder text, you're all set! 🎉
 
 <AccordionGroup>
   <Accordion title="Module not found: slate">
-    Make sure you've installed both `slate` and `slate-react`: ```bash npm install slate slate-react
+    Make sure you've installed both `slate` and `slate-react`: ```bash npm install slate slate-react slate-dom
     ```
   </Accordion>
 

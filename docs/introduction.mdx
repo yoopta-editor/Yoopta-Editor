@@ -68,7 +68,7 @@ The core headless editor package. Contains all the logic for:
 
 **Installation:**
 ```bash
-npm install @yoopta/editor slate slate-react
+npm install @yoopta/editor slate slate-react slate-dom
 ```
 
 #### `@yoopta/ui`
@@ -145,17 +145,23 @@ npm install @yoopta/link
 
 - **`@yoopta/link`** - Inline link element
 
-### Tool Packages
+### UI Components Package
 
-Tools provide UI components for editor interactions:
+The `@yoopta/ui` package provides all UI components for editor interactions. No separate tool packages needed.
 
+**Installation:**
 ```bash
-npm install @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool
+npm install @yoopta/ui
 ```
 
-- **`@yoopta/toolbar`** - Text formatting toolbar
-- **`@yoopta/action-menu-list`** - Block insertion menu
-- **`@yoopta/link-tool`** - Link insertion tool
+**Available Components:**
+- **`Toolbar`** - Text formatting toolbar
+- **`ActionMenuList`** - Block insertion menu (slash command menu)
+- **`SlashCommandMenu`** - Inline slash command menu
+- **`BlockOptions`** - Block-level action menu
+- **`FloatingBlockActions`** - Floating action buttons
+- **`HighlightColorPicker`** - Color picker for text highlighting
+- **`Portal`** & **`Overlay`** - Utility components for rendering outside DOM
 
 ### Marks Package
 

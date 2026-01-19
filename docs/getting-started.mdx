@@ -114,51 +114,43 @@ export default function MyEditor() {
 }
 ```
 
-## Step 4: Add UI Tools
+## Step 4: Add UI Components
 
-Tools provide UI components for editor interactions. Install the toolbar and action menu:
+UI components enhance the editor with toolbars and action menus. All components are available from `@yoopta/ui`:
 
 <CodeGroup>
 
 ```bash npm
-npm install @yoopta/toolbar @yoopta/action-menu-list
+npm install @yoopta/ui
 ```
 
 ```bash yarn
-yarn add @yoopta/toolbar @yoopta/action-menu-list
+yarn add @yoopta/ui
 ```
 
 </CodeGroup>
 
 ```jsx
-import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
-import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
-
-// Define tools outside the component
-const TOOLS = {
-  Toolbar: {
-    tool: Toolbar,
-    render: DefaultToolbarRender,
-  },
-  ActionMenu: {
-    tool: ActionMenu,
-    render: DefaultActionMenuRender,
-  },
-};
+import { Toolbar, useToolbar, ActionMenuList, useActionMenuList } from '@yoopta/ui';
 
 export default function MyEditor() {
   const editor = useMemo(() => createYooptaEditor(), []);
   const [value, setValue] = useState();
+  const { isOpen: isToolbarOpen, getRootProps: getToolbarProps } = useToolbar();
+  const { isOpen: isActionMenuOpen, getRootProps: getActionMenuProps } = useActionMenuList();
 
   return (
-    <YooptaEditor
-      editor={editor}
-      plugins={plugins}
-      value={value}
-      onChange={setValue}
-      tools={TOOLS}
-      placeholder="Start typing..."
-    />
+    <div>
+      {isToolbarOpen && <Toolbar {...getToolbarProps()} />}
+      {isActionMenuOpen && <ActionMenuList {...getActionMenuProps()} />}
+      <YooptaEditor
+        editor={editor}
+        plugins={plugins}
+        value={value}
+        onChange={setValue}
+        placeholder="Start typing..."
+      />
+    </div>
   );
 }
 ```
@@ -193,8 +185,7 @@ export default function MyEditor() {
       plugins={plugins}
       value={value}
       onChange={setValue}
-      tools={TOOLS}
-      marks={MARKS}
+        marks={MARKS}
       placeholder="Start typing..."
     />
   );
@@ -254,8 +245,7 @@ import Blockquote from '@yoopta/blockquote';
 import Headings from '@yoopta/headings';
 import Lists from '@yoopta/lists';
 import Code from '@yoopta/code';
-import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
-import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
+import { Toolbar, useToolbar, ActionMenuList, useActionMenuList } from '@yoopta/ui';
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
 import { withShadcnUI } from '@yoopta/themes-shadcn';
 
@@ -271,22 +261,13 @@ const plugins = withShadcnUI([
   Code,
 ]);
 
-const TOOLS = {
-  Toolbar: {
-    tool: Toolbar,
-    render: DefaultToolbarRender,
-  },
-  ActionMenu: {
-    tool: ActionMenu,
-    render: DefaultActionMenuRender,
-  },
-};
-
 const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 export default function MyEditor() {
   const editor = useMemo(() => createYooptaEditor(), []);
   const [value, setValue] = useState();
+  const { isOpen: isToolbarOpen, getRootProps: getToolbarProps } = useToolbar();
+  const { isOpen: isActionMenuOpen, getRootProps: getActionMenuProps } = useActionMenuList();
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -296,10 +277,11 @@ export default function MyEditor() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+      {isToolbarOpen && <Toolbar {...getToolbarProps()} />}
+      {isActionMenuOpen && <ActionMenuList {...getActionMenuProps()} />}
       <YooptaEditor
         editor={editor}
         plugins={plugins}
-        tools={TOOLS}
         marks={MARKS}
         value={value}
         onChange={onChange}
