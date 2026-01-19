@@ -98,9 +98,9 @@ export const ImageElement = ({
         preview={preview}
         progress={progress}
         loading={loading}
-        onInsertUrl={() => {}}
-        onInsertFromUnsplash={() => {}}
-        onInsertFromAI={async () => {}}
+        onInsertUrl={() => { }}
+        onInsertFromUnsplash={() => { }}
+        onInsertFromAI={async () => { }}
         attributes={attributes}>
         {children}
       </ImagePlaceholder>
@@ -110,11 +110,13 @@ export const ImageElement = ({
   return (
     <ImageRender
       blockId={blockId}
+      elementId={element.id}
       onUpdate={updateElement}
       onDelete={deleteImage}
       attributes={attributes}
       onReplace={replaceImage}
-      elementProps={element.props}>
+      elementProps={element.props}
+      pluginOptions={pluginOptions}>
       {children}
     </ImageRender>
   );
