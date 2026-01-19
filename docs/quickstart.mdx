@@ -1,6 +1,6 @@
 ---
-title: Quickstart
-description: Get started with Yoopta Editor in 5 minutes
+title: "Quickstart"
+description: "Get started with Yoopta Editor in 5 minutes"
 ---
 
 ## Installation
@@ -13,9 +13,11 @@ First, install the required dependencies:
 npm install slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 ```
 
+
 ```bash yarn
 yarn add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 ```
+
 
 ```bash pnpm
 pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
@@ -23,7 +25,9 @@ pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 
 </CodeGroup>
 
-<Note>`slate` and `slate-react` are peer dependencies required by Yoopta Editor.</Note>
+<Note>
+  `slate` and `slate-react` are peer dependencies required by Yoopta Editor.
+</Note>
 
 ## Basic Setup
 
@@ -67,6 +71,7 @@ Install additional plugins for richer content:
 ```bash npm
 npm install @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
 ```
+
 
 ```bash yarn
 yarn add @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
@@ -147,21 +152,9 @@ export default function MyEditor() {
 
 ## Adding Marks
 
-Marks provide text formatting options:
+<u>Marks provide text formatting options:</u>
 
-<CodeGroup>
-
-```bash npm
-npm install @yoopta/marks
 ```
-
-```bash yarn
-yarn add @yoopta/marks
-```
-
-</CodeGroup>
-
-```jsx
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
 
 const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
@@ -183,8 +176,6 @@ export default function MyEditor() {
 ```
 
 ## Full Example
-
-Here's a complete editor with all the features:
 
 ```jsx
 import { useMemo, useState } from 'react';
@@ -239,6 +230,8 @@ export default function MyEditor() {
 }
 ```
 
+Here's a complete editor with all the features:
+
 ## Next Steps
 
 <CardGroup cols={2}>
@@ -246,7 +239,7 @@ export default function MyEditor() {
     Learn about all available plugins
   </Card>
   <Card title="Configure Tools" icon="wrench" href="/tools/overview">
-    Customize toolbar and action menus
+    Customizeлл and action menus
   </Card>
   <Card title="Editor Instance" icon="code" href="/advanced/editor-instance">
     Control editor programmatically
@@ -257,6 +250,5 @@ export default function MyEditor() {
 </CardGroup>
 
 <Tip>
-  Check out our [live examples](https://yoopta.dev/examples) to see what's possible with Yoopta
-  Editor!
+  Check out our [live examples](https://yoopta.dev/examples) to see what's possible with Yoopta Editor!
 </Tip>
