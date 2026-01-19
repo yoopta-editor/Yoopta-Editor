@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import type { SlateElement } from '@yoopta/editor';
-import { type TableCellElement, TableCommands } from '@yoopta/table';
+import { type TableCellElement } from '@yoopta/table';
 import { Editor, Element } from 'slate';
 import type { Path } from 'slate';
 
@@ -40,6 +40,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
   const [isOverColumnControls, setIsOverColumnControls] = useState(false);
   const [isOverAddRowButton, setIsOverAddRowButton] = useState(false);
   const [isOverAddColumnButton, setIsOverAddColumnButton] = useState(false);
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rowControlsRef = useRef<HTMLDivElement | null>(null);
   const columnControlsRef = useRef<HTMLDivElement | null>(null);
@@ -424,6 +425,8 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     isOverColumnControls,
     isOverAddRowButton,
     isOverAddColumnButton,
+    hoveredColumn,
+    hoveredRow,
   ]);
 
   const handleRowControlsMouseEnter = useCallback(() => {
@@ -510,7 +513,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
 
   // Row controls position (left of the row) - viewport coordinates
   const rowControlsTop = hoveredCell ? hoveredCell.rowRect.top : 0;
-  const rowControlsLeft = hoveredCell ? hoveredCell.rowRect.left - 12 : 0;
+  const rowControlsLeft = hoveredCell ? Math.max(0, hoveredCell.rowRect.left - 32) : 0;
 
   // Add row button position (below the table) - viewport coordinates
   const addRowButtonLeft = containerRect.left + containerPadding.left;

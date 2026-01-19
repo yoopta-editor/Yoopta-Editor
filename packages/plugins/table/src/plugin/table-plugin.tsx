@@ -15,6 +15,8 @@ const tableDataCellProps: TableDataCellElementProps = {
   align: 'left',
   colSpan: 1,
   rowSpan: 1,
+  backgroundColor: undefined,
+  color: undefined,
 };
 
 const tableProps: TableElementProps = {

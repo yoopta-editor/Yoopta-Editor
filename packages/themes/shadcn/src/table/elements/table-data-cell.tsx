@@ -41,12 +41,12 @@ export const TableDataCell = (props: PluginElementRenderProps) => {
       data-yoopta-element-id={cellElement.id}
       className={cn(
         'relative group transition-colors',
-        // isSelected && 'ring-2 ring-primary ring-inset bg-primary/10',
       )}
       style={{
         backgroundColor: isSelected
           ? 'var(--background)'
           : cellElement.props?.backgroundColor ?? 'transparent',
+        color: cellElement.props?.color ?? 'inherit',
       }}>
       {children}
     </CellTag>

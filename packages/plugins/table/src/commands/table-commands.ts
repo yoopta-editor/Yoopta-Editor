@@ -28,6 +28,10 @@ type InsertOptions = Partial<
   }
 >;
 
+type UpdateCellsOptions = {
+  cells: [TableCellElement, Path][];
+};
+
 export type TableCommands = {
   buildTableElements: (editor: YooEditor, options?: InsertOptions) => TableElement;
   insertTable: (editor: YooEditor, options?: InsertOptions) => void;
@@ -48,6 +52,10 @@ export type TableCommands = {
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
   clearContents: (editor: YooEditor, blockId: string, options: ClearContentsOptions) => void;
   mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => void;
+  setCellBackgroundColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => void;
+  setCellTextColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => void;
+  setCellHorizontalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'left' | 'center' | 'right' | 'justify' }) => void;
+  setCellVerticalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'top' | 'middle' | 'bottom' }) => void;
 };
 
 export const TableCommands: TableCommands = {
@@ -383,5 +391,127 @@ export const TableCommands: TableCommands = {
   },
   mergeCells: (editor: YooEditor, blockId: string, options: MergeCellsOptions) => {
     mergeCells(editor, blockId, options);
+  },
+  setCellBackgroundColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => {
+    const { cells, color } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              backgroundColor: color === 'transparent' ? undefined : color,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellTextColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => {
+    const { cells, color } = options;
+
+    console.log('setCellTextColor cells', cells);
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              color: color === 'inherit' ? undefined : color,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellHorizontalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'left' | 'center' | 'right' | 'justify' }) => {
+    const { cells, align } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              align,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
+  },
+  setCellVerticalAlign: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { align: 'top' | 'middle' | 'bottom' }) => {
+    const { cells, align } = options;
+
+    if (!cells || cells.length === 0) {
+      console.warn('No cells to update');
+      return;
+    }
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    Editor.withoutNormalizing(slate, () => {
+      cells.forEach(([cell, path]) => {
+        Transforms.setNodes(
+          slate,
+          {
+            ...cell,
+            props: {
+              ...cell.props,
+              verticalAlign: align,
+            },
+          } as any,
+          {
+            at: path,
+            match: (n) => Element.isElement(n) && (n as any).type === 'table-data-cell',
+          },
+        );
+      });
+    });
   },
 };

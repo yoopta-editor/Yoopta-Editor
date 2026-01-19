@@ -3,9 +3,10 @@ import { useCallback, useRef } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui';
-import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, MoreVertical, Trash2 } from 'lucide-react';
 import type { Path } from 'slate';
 
+import { Button } from '../../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,39 +70,24 @@ export const RowControls = ({
     <Portal id={`table-row-controls-${blockId}-${rowIndex}`}>
       <div
         ref={controlsRef}
-        className="fixed z-[9999] pointer-events-auto"
+        className="fixed z-[9998] pointer-events-auto"
         style={{
-          left: `${position.left}px`,
+          left: `${position.left + 20}px`,
           top: `${position.top}px`,
-          width: '8px',
+          width: '18px',
           height: `${position.height}px`,
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                background: 'hsl(var(--muted))',
-                border: '1px solid hsl(var(--border))',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'hsl(var(--accent))';
-                e.currentTarget.style.borderColor = 'hsl(var(--ring))';
-                e.currentTarget.style.width = '10px';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'hsl(var(--muted))';
-                e.currentTarget.style.borderColor = 'hsl(var(--border))';
-                e.currentTarget.style.width = '8px';
-              }}
-              onMouseDown={(e) => e.preventDefault()}
-            />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-full w-full bg-background/95 hover:bg-accent border border-border/50 shadow-sm rounded-md p-0 transition-all hover:shadow-md flex items-center justify-center"
+              onMouseDown={(e) => e.preventDefault()}>
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="left" className="w-48">
             <DropdownMenuItem onClick={handleInsertRowAbove}>

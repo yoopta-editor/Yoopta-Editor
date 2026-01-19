@@ -163,23 +163,39 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
   };
 
   const setBackgroundColor = (color: string) => {
-    console.log('Background color:', color, cellsToUse);
-    // TODO: Update backgroundColor for all selected cells
+    if (!editor || !cellsToUse || cellsToUse.length === 0) return;
+    TableCommands.setCellBackgroundColor(editor, blockId, {
+      cells: cellsToUse,
+      color,
+    });
+    setIsOptionsOpen(false);
   };
 
   const setTextColor = (color: string) => {
-    console.log('Text color:', color, cellsToUse);
-    // TODO: Update text color for all selected cells
+    if (!editor || !cellsToUse || cellsToUse.length === 0) return;
+    TableCommands.setCellTextColor(editor, blockId, {
+      cells: cellsToUse,
+      color,
+    });
+    setIsOptionsOpen(false);
   };
 
   const setHorizontalAlign = (align: 'left' | 'center' | 'right' | 'justify') => {
-    console.log('Horizontal align:', align, cellsToUse);
-    // TODO: Update alignment for all selected cells
+    if (!editor || !cellsToUse || cellsToUse.length === 0) return;
+    TableCommands.setCellHorizontalAlign(editor, blockId, {
+      cells: cellsToUse,
+      align,
+    });
+    setIsOptionsOpen(false);
   };
 
   const setVerticalAlign = (align: 'top' | 'middle' | 'bottom') => {
-    console.log('Vertical align:', align, cellsToUse);
-    // TODO: Update vertical alignment for all selected cells
+    if (!editor || !cellsToUse || cellsToUse.length === 0) return;
+    TableCommands.setCellVerticalAlign(editor, blockId, {
+      cells: cellsToUse,
+      align,
+    });
+    setIsOptionsOpen(false);
   };
 
   if (!selectionRect) return null;
@@ -188,7 +204,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
     <>
       {/* Selection overlay */}
       <div
-        className="pointer-events-none absolute z-10"
+        className="pointer-events-none absolute z-[9999]"
         style={{
           top: `${selectionRect.top}px`,
           left: `${selectionRect.left}px`,
@@ -217,8 +233,8 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
               <MoreVertical className="h-3 w-3 text-primary-foreground" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3" align="start" side="right">
-            <div className="space-y-3">
+          <PopoverContent className="w-64 p-2" align="start" side="right">
+            <div className="space-y-2">
               {/* Merge cells */}
               <Button
                 variant="ghost"
@@ -233,7 +249,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
               <Separator />
 
               {/* Color dropdown */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label className="text-sm font-medium">Color</Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -297,7 +313,7 @@ export const TableSelectionOverlay = ({ blockId }: TableSelectionOverlayProps) =
               </div>
 
               {/* Alignment dropdown */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label className="text-sm font-medium">Alignment</Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
