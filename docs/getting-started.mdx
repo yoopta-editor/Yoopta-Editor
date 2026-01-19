@@ -1,0 +1,388 @@
+---
+title: Getting Started
+description: Build your first Yoopta Editor in 5 minutes
+---
+
+This guide will walk you through creating your first Yoopta Editor with a few plugins and tools.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- **Node.js** version 14 or higher
+- **React** version 17.0.2 or higher
+- **React DOM** version 17.0.2 or higher
+
+## Step 1: Installation
+
+Install the core editor and required dependencies:
+
+<CodeGroup>
+
+```bash npm
+npm install slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+```
+
+```bash yarn
+yarn add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+```
+
+```bash pnpm
+pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+```
+
+</CodeGroup>
+
+<Note>`slate` and `slate-react` are peer dependencies required by Yoopta Editor.</Note>
+
+## Step 2: Basic Editor
+
+Create a simple editor component:
+
+```jsx
+import { useMemo, useState } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+
+const plugins = [Paragraph];
+
+export default function MyEditor() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+  const [value, setValue] = useState();
+
+  const onChange = (newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+      <YooptaEditor
+        editor={editor}
+        plugins={plugins}
+        value={value}
+        onChange={onChange}
+        placeholder="Type something..."
+      />
+    </div>
+  );
+}
+```
+
+<Note>
+The `editor` instance should be created with `useMemo` to avoid recreating it on every render.
+The `value` state stores the editor content, and `onChange` is called whenever the content changes.
+</Note>
+
+## Step 3: Add More Plugins
+
+Install additional plugins for richer content:
+
+<CodeGroup>
+
+```bash npm
+npm install @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
+```
+
+```bash yarn
+yarn add @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
+```
+
+</CodeGroup>
+
+Update your editor:
+
+```jsx
+import Paragraph from '@yoopta/paragraph';
+import Blockquote from '@yoopta/blockquote';
+import Headings from '@yoopta/headings';
+import Lists from '@yoopta/lists';
+import Code from '@yoopta/code';
+
+const plugins = [
+  Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+  Blockquote,
+  Lists.BulletedList,
+  Lists.NumberedList,
+  Code,
+];
+
+export default function MyEditor() {
+  // ... rest of the code
+}
+```
+
+## Step 4: Add UI Tools
+
+Tools provide UI components for editor interactions. Install the toolbar and action menu:
+
+<CodeGroup>
+
+```bash npm
+npm install @yoopta/toolbar @yoopta/action-menu-list
+```
+
+```bash yarn
+yarn add @yoopta/toolbar @yoopta/action-menu-list
+```
+
+</CodeGroup>
+
+```jsx
+import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
+import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
+
+// Define tools outside the component
+const TOOLS = {
+  Toolbar: {
+    tool: Toolbar,
+    render: DefaultToolbarRender,
+  },
+  ActionMenu: {
+    tool: ActionMenu,
+    render: DefaultActionMenuRender,
+  },
+};
+
+export default function MyEditor() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+  const [value, setValue] = useState();
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      plugins={plugins}
+      value={value}
+      onChange={setValue}
+      tools={TOOLS}
+      placeholder="Start typing..."
+    />
+  );
+}
+```
+
+## Step 5: Add Text Formatting (Marks)
+
+Marks provide text formatting options like bold, italic, etc.:
+
+<CodeGroup>
+
+```bash npm
+npm install @yoopta/marks
+```
+
+```bash yarn
+yarn add @yoopta/marks
+```
+
+</CodeGroup>
+
+```jsx
+import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
+
+const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
+
+export default function MyEditor() {
+  // ... rest of the code
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      plugins={plugins}
+      value={value}
+      onChange={setValue}
+      tools={TOOLS}
+      marks={MARKS}
+      placeholder="Start typing..."
+    />
+  );
+}
+```
+
+## Step 6: Apply a Theme (Optional)
+
+For a beautiful, ready-made design, apply a theme:
+
+<CodeGroup>
+
+```bash npm
+npm install @yoopta/themes-shadcn
+```
+
+```bash yarn
+yarn add @yoopta/themes-shadcn
+```
+
+</CodeGroup>
+
+```jsx
+import { withShadcnUI } from '@yoopta/themes-shadcn';
+import Paragraph from '@yoopta/paragraph';
+import Headings from '@yoopta/headings';
+import Blockquote from '@yoopta/blockquote';
+import Lists from '@yoopta/lists';
+import Code from '@yoopta/code';
+
+// Apply theme to plugins
+const plugins = withShadcnUI([
+  Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+  Blockquote,
+  Lists.BulletedList,
+  Lists.NumberedList,
+  Code,
+]);
+```
+
+<Note>
+Themes automatically apply styled components to your plugins. You can still customize individual elements if needed.
+</Note>
+
+## Complete Example
+
+Here's a complete editor with all the features:
+
+```jsx
+import { useMemo, useState } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import Blockquote from '@yoopta/blockquote';
+import Headings from '@yoopta/headings';
+import Lists from '@yoopta/lists';
+import Code from '@yoopta/code';
+import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
+import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
+import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
+import { withShadcnUI } from '@yoopta/themes-shadcn';
+
+// Apply theme to plugins
+const plugins = withShadcnUI([
+  Paragraph,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+  Blockquote,
+  Lists.BulletedList,
+  Lists.NumberedList,
+  Code,
+]);
+
+const TOOLS = {
+  Toolbar: {
+    tool: Toolbar,
+    render: DefaultToolbarRender,
+  },
+  ActionMenu: {
+    tool: ActionMenu,
+    render: DefaultActionMenuRender,
+  },
+};
+
+const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
+
+export default function MyEditor() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+  const [value, setValue] = useState();
+
+  const onChange = (newValue) => {
+    setValue(newValue);
+    // Save to database, localStorage, etc.
+    console.log('Editor value:', newValue);
+  };
+
+  return (
+    <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+      <YooptaEditor
+        editor={editor}
+        plugins={plugins}
+        tools={TOOLS}
+        marks={MARKS}
+        value={value}
+        onChange={onChange}
+        placeholder="Start typing..."
+        autoFocus
+      />
+    </div>
+  );
+}
+```
+
+## Understanding the Editor Value
+
+The `value` prop and `onChange` callback work with a `YooptaContentValue` structure:
+
+```typescript
+type YooptaContentValue = Record<string, YooptaBlockData>;
+
+// Example value:
+{
+  "block-1": {
+    id: "block-1",
+    type: "Paragraph",
+    value: [
+      {
+        id: "element-1",
+        type: "paragraph",
+        children: [{ text: "Hello, world!" }]
+      }
+    ],
+    meta: {
+      order: 0,
+      depth: 0,
+      align: "left"
+    }
+  }
+}
+```
+
+You can:
+- **Save** the value to your backend/database
+- **Load** existing content by passing it as the `value` prop
+- **Transform** the value for export (HTML, Markdown, etc.)
+
+## Keyboard Shortcuts
+
+Yoopta Editor comes with built-in keyboard shortcuts:
+
+- **`/`** - Open slash command menu (block insertion)
+- **`Cmd/Ctrl + B`** - Bold text
+- **`Cmd/Ctrl + I`** - Italic text
+- **`Cmd/Ctrl + U`** - Underline text
+- **`Cmd/Ctrl + K`** - Insert link
+- **`Tab`** - Increase block indent
+- **`Shift + Tab`** - Decrease block indent
+- **`Backspace`** - Delete selected blocks
+- **`Cmd/Ctrl + A`** - Select all blocks
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Explore Plugins" icon="puzzle-piece" href="/plugins/overview">
+    Learn about all available plugins and their features
+  </Card>
+  <Card title="Customize UI" icon="palette" href="/ui/overview">
+    Customize toolbar, action menu, and other UI components
+  </Card>
+  <Card title="Create Plugins" icon="code" href="/plugins/create-plugin">
+    Build your own custom plugins
+  </Card>
+  <Card title="Editor API" icon="book" href="/api-reference/editor-props">
+    Learn about the editor instance and programmatic control
+  </Card>
+  <Card title="View Examples" icon="image" href="https://yoopta.dev/examples">
+    See more complex examples and use cases
+  </Card>
+  <Card title="Core Concepts" icon="lightbulb" href="/core/editor">
+    Deep dive into editor architecture and concepts
+  </Card>
+</CardGroup>
+
+<Tip>
+  Check out our [live examples](https://yoopta.dev/examples) to see what's possible with Yoopta
+  Editor!
+</Tip>
+

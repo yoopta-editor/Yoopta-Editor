@@ -21,78 +21,102 @@ Yoopta Editor supports all major package managers:
   <Tab title="pnpm">```bash pnpm add slate slate-react @yoopta/editor ```</Tab>
 </Tabs>
 
-## Core Packages
+## Package Categories
 
-### Required Dependencies
+Yoopta Editor is organized into several package categories. Install only what you need:
 
+### Core Packages
+
+#### Required: Core Editor
 ```bash
-# Peer dependencies
-slate@^0.102.0
-slate-react@^0.102.0
-react@>=17.0.2
-react-dom@>=17.0.2
-
-# Core package
-@yoopta/editor
+npm install slate slate-react @yoopta/editor
 ```
 
-<Note>Slate and Slate React are peer dependencies that must be installed separately.</Note>
+- **`slate`** & **`slate-react`** - Peer dependencies (required)
+- **`@yoopta/editor`** - Core headless editor package
 
-## Plugin Packages
+#### Optional: UI Components
+```bash
+npm install @yoopta/ui
+```
 
-Install the plugins you need for your editor:
+Provides unstyled UI components:
+- `Toolbar`, `ActionMenuList`, `SlashCommandMenu`
+- `BlockOptions`, `FloatingBlockActions`
+- `HighlightColorPicker`, `Portal`, `Overlay`
 
-### Text Plugins
+#### Optional: Themes
+```bash
+# Shadcn UI theme (production ready)
+npm install @yoopta/themes-shadcn
 
+# Material Design theme (in development)
+npm install @yoopta/themes-material
+```
+
+### Plugin Packages
+
+Install plugins based on the content types you need:
+
+#### Text Plugins
 ```bash
 npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
 ```
 
-### List Plugins
-
+#### List Plugins
 ```bash
 npm install @yoopta/lists
 ```
 
-### Media Plugins
-
+#### Media Plugins
 ```bash
 npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
 ```
 
-### Layout Plugins
-
+#### Layout Plugins
 ```bash
-npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout
+npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/tabs @yoopta/steps @yoopta/carousel
 ```
 
-### Code Plugin
-
+#### Code Plugin
 ```bash
 npm install @yoopta/code
 ```
 
-### Link Plugin
-
+#### Link Plugin
 ```bash
 npm install @yoopta/link
 ```
 
-## Tool Packages
+### Tool Packages
 
-Install editor tools for enhanced functionality:
+Install UI tools for editor interactions:
 
 ```bash
 npm install @yoopta/toolbar @yoopta/action-menu-list @yoopta/link-tool
 ```
 
-## Marks Package
+### Marks Package
 
 Install marks for text formatting:
 
 ```bash
 npm install @yoopta/marks
 ```
+
+**Available Marks:**
+- `Bold`, `Italic`, `Underline`, `Strike`
+- `Code` - Inline code
+- `Highlight` - Text highlighting with colors
+
+### Utility Packages
+
+#### Exports Package
+```bash
+npm install @yoopta/exports
+```
+
+Export content to Markdown, HTML, Plain Text, and Email formats.
 
 ## All-in-One Installation
 
@@ -219,7 +243,7 @@ If you see an empty editor with the placeholder text, you're all set! 🎉
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Quickstart Guide" icon="rocket" href="/quickstart">
+  <Card title="Getting Started" icon="rocket" href="/getting-started">
     Build your first editor in 5 minutes
   </Card>
   <Card title="Core Concepts" icon="book" href="/core/editor">
