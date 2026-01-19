@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/themes-material",
-  "version": "4.9.9",
+  "version": "6.0.0-beta.0",
   "description": "Material UI theme for Yoopta Editor plugins",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -20,12 +20,12 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.16.0",
     "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^5.16.0",
+    "@yoopta/code": "^6.0.0-beta.0",
+    "@yoopta/image": "^6.0.0-beta.0",
     "copy-to-clipboard": "^3.3.3",
-    "react-rnd": "^10.5.2",
-    "@yoopta/code": "*",
-    "@yoopta/image": "*"
+    "react-rnd": "^10.5.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
