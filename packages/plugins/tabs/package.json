@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/tabs",
-  "version": "6.0.0-beta.0",
+  "version": "6.0.3-beta.0",
   "description": "Tabs plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -19,7 +19,8 @@
     "react-dom": ">=18.2.0"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,5 @@
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
   },
-  "gitHead": "900c22a4d9d8b711b9cd1efcade0e7ab7d9763df"
+  "gitHead": "0c1eed956a263573e6aff9bdf58dcaf834deadf5"
 }

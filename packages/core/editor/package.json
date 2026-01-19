@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/editor",
-  "version": "6.0.0-beta.0",
+  "version": "6.0.3-beta.0",
   "license": "MIT",
   "private": false,
   "main": "dist/index.js",
@@ -64,5 +64,9 @@
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
   },
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
-  "gitHead": "900c22a4d9d8b711b9cd1efcade0e7ab7d9763df"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "gitHead": "0c1eed956a263573e6aff9bdf58dcaf834deadf5"
 }
