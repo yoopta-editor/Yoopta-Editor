@@ -11,7 +11,65 @@
     "light": "#4A9EFF",
     "dark": "#0051D5",
     "background": {
-      "dark": "#0F172A"
+      "light": "#FFFFFF",
+      "dark": "#000000"
+    },
+    "anchors": {
+      "default": "#A1A1AA",
+      "hover": "#FFFFFF"
+    },
+    "topbar": {
+      "background": {
+        "dark": "#000000"
+      },
+      "icons": {
+        "dark": "#FFFFFF"
+      }
+    },
+    "sidebar": {
+      "background": {
+        "dark": "#000000"
+      },
+      "text": {
+        "dark": "#888888"
+      },
+      "activeText": {
+        "dark": "#FFFFFF"
+      },
+      "activeBackground": {
+        "dark": "#111111"
+      },
+      "hoverBackground": {
+        "dark": "#111111"
+      },
+      "groupText": {
+        "dark": "#666666"
+      }
+    },
+    "code": {
+      "background": {
+        "dark": "#111111"
+      },
+      "text": {
+        "dark": "#E5E5E5"
+      },
+      "border": {
+        "dark": "#1A1A1A"
+      }
+    },
+    "card": {
+      "background": {
+        "dark": "#0A0A0A"
+      },
+      "border": {
+        "dark": "#1A1A1A"
+      }
+    },
+    "text": {
+      "dark": "#E5E5E5"
+    },
+    "heading": {
+      "dark": "#FFFFFF"
     }
   },
   "topbarLinks": [
@@ -44,11 +102,20 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["introduction", "quickstart", "installation"]
+      "pages": [
+        "introduction",
+        "quickstart",
+        "installation"
+      ]
     },
     {
       "group": "Core Concepts",
-      "pages": ["core/editor", "core/plugins", "core/tools", "core/marks"]
+      "pages": [
+        "core/editor",
+        "core/plugins",
+        "core/tools",
+        "core/marks"
+      ]
     },
     {
       "group": "Plugins",
@@ -56,15 +123,26 @@
         "plugins/overview",
         {
           "group": "Text Plugins",
-          "pages": ["plugins/paragraph", "plugins/headings", "plugins/blockquote"]
+          "pages": [
+            "plugins/paragraph",
+            "plugins/headings",
+            "plugins/blockquote"
+          ]
         },
         {
           "group": "List Plugins",
-          "pages": ["plugins/lists"]
+          "pages": [
+            "plugins/lists"
+          ]
         },
         {
           "group": "Media Plugins",
-          "pages": ["plugins/image", "plugins/video", "plugins/file", "plugins/embed"]
+          "pages": [
+            "plugins/image",
+            "plugins/video",
+            "plugins/file",
+            "plugins/embed"
+          ]
         },
         {
           "group": "Layout Plugins",
@@ -80,21 +158,34 @@
         },
         {
           "group": "Code Plugins",
-          "pages": ["plugins/code"]
+          "pages": [
+            "plugins/code"
+          ]
         },
         {
           "group": "Special Plugins",
-          "pages": ["plugins/link"]
+          "pages": [
+            "plugins/link"
+          ]
         }
       ]
     },
     {
       "group": "Tools",
-      "pages": ["tools/overview", "tools/action-menu", "tools/toolbar", "tools/link-tool"]
+      "pages": [
+        "tools/overview",
+        "tools/action-menu",
+        "tools/toolbar",
+        "tools/link-tool"
+      ]
     },
     {
       "group": "Marks",
-      "pages": ["marks/overview", "marks/built-in", "marks/custom-marks"]
+      "pages": [
+        "marks/overview",
+        "marks/built-in",
+        "marks/custom-marks"
+      ]
     },
     {
       "group": "UI Components",
