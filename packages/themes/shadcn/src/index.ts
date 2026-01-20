@@ -1,3 +1,6 @@
+// CSS is automatically imported when you import this package
+// No need to manually import CSS files - they are embedded in the JS bundle
+import './variables.css';
 import './styles.css';
 import { withShadcnUI } from './withShadcnUI';
 

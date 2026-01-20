@@ -217,6 +217,7 @@ import Lists from '@yoopta/lists';
 import Code from '@yoopta/code';
 
 // Apply theme to plugins
+// CSS is automatically imported - no need to manually import CSS files!
 const plugins = withShadcnUI([
   Paragraph,
   Headings.HeadingOne,
@@ -230,7 +231,9 @@ const plugins = withShadcnUI([
 ```
 
 <Note>
-Themes automatically apply styled components to your plugins. You can still customize individual elements if needed.
+Themes automatically apply styled components to your plugins. CSS styles are automatically imported when you import the theme package, so you don't need to manually import any CSS files.
+
+You can still customize individual elements if needed.
 </Note>
 
 ## Complete Example
@@ -248,6 +251,7 @@ import Code from '@yoopta/code';
 import { Toolbar, useToolbar, ActionMenuList, useActionMenuList } from '@yoopta/ui';
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
 import { withShadcnUI } from '@yoopta/themes-shadcn';
+// CSS is automatically imported - no manual import needed!
 
 // Apply theme to plugins
 const plugins = withShadcnUI([

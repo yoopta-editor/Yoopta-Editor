@@ -4,6 +4,7 @@ const pkg = require('./package.json');
 
 const config = createRollupConfig({
   pkg,
+  extractCSS: false, // Set to false to embed CSS in JS bundle for automatic import
   tailwindConfig: {
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
     darkMode: 'class',

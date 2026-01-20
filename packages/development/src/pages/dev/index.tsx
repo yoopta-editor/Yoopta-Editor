@@ -1,5 +1,6 @@
 import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks, Marks, Selection } from '@yoopta/editor';
 import { useEffect, useMemo } from 'react';
+// import '@yoopta/themes-shadcn/dist/index.css';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';

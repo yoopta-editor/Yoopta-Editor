@@ -12,7 +12,6 @@ const Table = forwardRef<HTMLTableElement, ComponentProps<'table'>>(
         ref={ref}
         data-slot="table"
         className={cn('caption-bottom text-sm table-fixed', className)}
-        style={{ minWidth: 'max-content' }}
         {...props}
       />
     </div>

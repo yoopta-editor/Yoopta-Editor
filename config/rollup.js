@@ -15,7 +15,7 @@ const tailwindcss = require('tailwindcss');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
-function getPlugins({ tailwindConfig }) {
+function getPlugins({ tailwindConfig, extractCSS }) {
   const postcssPlugins = [postcssNesting(), autoprefixer()];
 
   // Add Tailwind only if tailwindConfig is provided
@@ -43,7 +43,10 @@ function getPlugins({ tailwindConfig }) {
     }),
     postcss({
       plugins: postcssPlugins,
-      extract: false,
+      extract: extractCSS !== undefined ? extractCSS : false,
+      ...(extractCSS && {
+        file: './dist/styles.css',
+      }),
       modules: {
         generateScopedName: isProd ? '[hash:base64:8]' : '[name]_[local]',
       },
@@ -76,7 +79,7 @@ function getPlugins({ tailwindConfig }) {
 /**
  * @type {import('rollup').RollupOptions}
  */
-export function createRollupConfig({ pkg, tailwindConfig, outputOptions }) {
+export function createRollupConfig({ pkg, tailwindConfig, outputOptions, extractCSS }) {
   return {
     input: `./src/index.ts`,
     output: [
@@ -89,7 +92,7 @@ export function createRollupConfig({ pkg, tailwindConfig, outputOptions }) {
         ...outputOptions,
       },
     ],
-    plugins: getPlugins({ tailwindConfig }),
+    plugins: getPlugins({ tailwindConfig, extractCSS }),
     cache: isDev,
     external: [...Object.keys(pkg.peerDependencies)],
   };

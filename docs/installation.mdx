@@ -184,6 +184,19 @@ import '@yoopta/editor/dist/index.css';
 // Import plugin-specific styles if needed
 ```
 
+### Theme CSS
+
+If you're using a theme (e.g., `@yoopta/themes-shadcn`), **CSS is automatically imported** when you import the theme package. No manual CSS import is needed!
+
+```jsx
+// Just import the theme - CSS is included automatically!
+import { withShadcnUI } from '@yoopta/themes-shadcn';
+```
+
+<Note>
+The theme's CSS (including all Tailwind utilities) is embedded in the JavaScript bundle, so it's automatically loaded when you import the theme. You don't need to configure Tailwind CSS in your project or manually import any CSS files.
+</Note>
+
 <Warning>Make sure your bundler (Webpack, Vite, etc.) is configured to handle CSS imports.</Warning>
 
 ## Framework-Specific Setup
