@@ -22,7 +22,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^5.16.0",
-    "@yoopta/code": "^6.0.0-beta.2",
+    "@yoopta/code": "^6.0.0-beta.3",
     "@yoopta/image": "^6.0.0-beta.3",
     "copy-to-clipboard": "^3.3.3",
     "react-rnd": "^10.5.2"
