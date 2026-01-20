@@ -81,7 +81,7 @@ export const ImageElement = ({
       generatePreview(file);
       const result = await uploadImageToStorage(file);
       updateElement({
-        id: result.fileId,
+        id: result.id || (result as any).fileId,
         src: result.url,
         alt: file.name,
         sizes: { width: result.width!, height: result.height! },

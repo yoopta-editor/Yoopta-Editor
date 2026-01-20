@@ -1,93 +1,236 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import type {
+  ImageDeleteEndpointOptions,
+  ImageDeleteOptions,
   ImageElement,
+  ImageElementProps,
+  ImageUploadEndpointOptions,
+  ImageUploadFn,
   ImageUploadOptions,
   ImageUploadPreview,
+  ImageUploadProgress,
+  UploadError,
+  UploadResult,
+  UploadState,
   UseImageDeleteReturn,
   UseImageUploadReturn,
 } from '../types';
 import { useXHRRequest } from './use-xhr';
 
-export const useImageDelete = (options: ImageUploadOptions): UseImageDeleteReturn => {
-  const {
-    endpoint,
-    method = 'DELETE',
-    headers = {},
-    fieldName = 'file',
-    onSuccess,
-    onError,
-    onProgress,
-  } = options;
+// Type guard to check if options is a custom function
+const isUploadFn = (
+  options: ImageUploadOptions,
+): options is (file: File, onProgress?: (progress: ImageUploadProgress) => void) => Promise<ImageElementProps> =>
+  typeof options === 'function';
 
-  const { xhrFetch, cancel, reset, loading, progress, error, result } = useXHRRequest({
-    onError,
-    onSuccess,
-    onProgress,
-    fieldName,
-    method,
-    endpoint,
-    headers,
+// Type guard to check if delete options is a custom function
+const isDeleteFn = (options: ImageDeleteOptions): options is (src: string) => Promise<void> =>
+  typeof options === 'function';
+
+export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteReturn => {
+  const isCustomFn = isDeleteFn(options);
+
+  // State for custom function approach - always called
+  const [customState, setCustomState] = useState<UploadState>({
+    loading: false,
+    progress: null,
+    error: null,
+    result: null,
   });
 
-  const deleteImage = (element: ImageElement) => {
-    const fileId = element.props?.id;
-    if (!fileId) {
-      throw new Error('FileId is required');
-    }
-    return xhrFetch(JSON.stringify({ fileId }));
-  };
+  // For endpoint-based approach - create endpoint options (use dummy if custom fn)
+  const endpointOpts: ImageDeleteEndpointOptions = isCustomFn
+    ? { endpoint: '' }
+    : (options as ImageDeleteEndpointOptions);
+
+  // Always call useXHRRequest (with dummy options if using custom function)
+  const xhrResult = useXHRRequest({
+    endpoint: endpointOpts.endpoint,
+    method: endpointOpts.method ?? 'DELETE',
+    headers: endpointOpts.headers ?? {},
+    fieldName: endpointOpts.fieldName ?? 'file',
+    onSuccess: endpointOpts.onSuccess,
+    onError: endpointOpts.onError,
+    onProgress: endpointOpts.onProgress,
+  });
+
+  // Custom delete function - always defined with useCallback
+  const customDeleteImage = useCallback(
+    async (element: ImageElement): Promise<UploadResult> => {
+      if (!isCustomFn) {
+        throw new Error('Custom delete called but options is not a function');
+      }
+
+      const src = element.props?.src;
+      if (!src) {
+        throw new Error('Image src is required');
+      }
+
+      setCustomState((prev) => ({ ...prev, loading: true, error: null }));
+
+      try {
+        await (options as (src: string) => Promise<void>)(src);
+        const result: UploadResult = { id: element.props?.id ?? '', url: src };
+        setCustomState((prev) => ({ ...prev, loading: false, result }));
+        return result;
+      } catch (err) {
+        const error: UploadError = {
+          message: err instanceof Error ? err.message : 'Delete failed',
+          code: 'CUSTOM_DELETE_ERROR',
+        };
+        setCustomState((prev) => ({ ...prev, loading: false, error }));
+        throw error;
+      }
+    },
+    [options, isCustomFn],
+  );
+
+  const customReset = useCallback(() => {
+    setCustomState({ loading: false, progress: null, error: null, result: null });
+  }, []);
+
+  // Endpoint-based delete function
+  const endpointDeleteImage = useCallback(
+    (element: ImageElement) => {
+      const fileId = element.props?.id;
+      if (!fileId) {
+        throw new Error('FileId is required');
+      }
+      return xhrResult.xhrFetch(JSON.stringify({ fileId }));
+    },
+    [xhrResult],
+  );
+
+  // Return appropriate implementation based on options type
+  if (isCustomFn) {
+    return {
+      ...customState,
+      deleteImage: customDeleteImage,
+      cancel: () => {},
+      reset: customReset,
+    };
+  }
 
   return {
-    loading,
-    progress,
-    error,
-    result,
-    deleteImage,
-    cancel,
-    reset,
+    loading: xhrResult.loading,
+    progress: xhrResult.progress,
+    error: xhrResult.error,
+    result: xhrResult.result,
+    deleteImage: endpointDeleteImage,
+    cancel: xhrResult.cancel,
+    reset: xhrResult.reset,
   };
 };
 
 export const useImageUpload = (options: ImageUploadOptions): UseImageUploadReturn => {
-  const {
-    endpoint,
-    method = 'POST',
-    headers = {},
-    fieldName = 'file',
-    maxSize,
-    accept = 'image/jpeg, image/jpg, image/png, image/gif, image/webp',
-    onSuccess,
-    onError,
-    onProgress,
-  } = options;
+  const isCustomFn = isUploadFn(options);
 
-  const { xhrFetch, cancel, reset, loading, progress, error, result } = useXHRRequest({
-    onError,
-    onSuccess,
-    onProgress,
-    fieldName,
-    accept,
-    maxSize,
-    method,
-    endpoint,
-    headers,
+  // State for custom function approach - always called
+  const [customState, setCustomState] = useState<UploadState>({
+    loading: false,
+    progress: null,
+    error: null,
+    result: null,
   });
 
-  const upload = (file: File) => {
-    const formData = new FormData();
-    formData.append(fieldName ?? 'yoopta-image-file', file);
-    return xhrFetch(formData);
-  };
+  // For endpoint-based approach - create endpoint options (use dummy if custom fn)
+  const endpointOpts: ImageUploadEndpointOptions = isCustomFn
+    ? { endpoint: '' }
+    : (options as ImageUploadEndpointOptions);
+
+  // Always call useXHRRequest (with dummy options if using custom function)
+  const xhrResult = useXHRRequest({
+    endpoint: endpointOpts.endpoint,
+    method: endpointOpts.method ?? 'POST',
+    headers: endpointOpts.headers ?? {},
+    fieldName: endpointOpts.fieldName ?? 'file',
+    maxSize: endpointOpts.maxSize,
+    accept: endpointOpts.accept ?? 'image/jpeg, image/jpg, image/png, image/gif, image/webp',
+    onSuccess: endpointOpts.onSuccess,
+    onError: endpointOpts.onError,
+    onProgress: endpointOpts.onProgress,
+  });
+
+  // Custom upload function - always defined with useCallback
+  const customUpload = useCallback(
+    async (file: File): Promise<UploadResult> => {
+      if (!isCustomFn) {
+        throw new Error('Custom upload called but options is not a function');
+      }
+
+      setCustomState((prev) => ({
+        ...prev,
+        loading: true,
+        progress: { loaded: 0, total: file.size, percentage: 0 },
+        error: null,
+      }));
+
+      try {
+        const onProgress = (progress: ImageUploadProgress) => {
+          setCustomState((prev) => ({ ...prev, progress }));
+        };
+
+        const imageProps = await (options as ImageUploadFn)(file, onProgress);
+        const result: UploadResult = {
+          id: imageProps.id ?? '',
+          url: imageProps.src ?? '',
+          width: typeof imageProps.sizes?.width === 'number' ? imageProps.sizes.width : undefined,
+          height: typeof imageProps.sizes?.height === 'number' ? imageProps.sizes.height : undefined,
+        };
+
+        setCustomState((prev) => ({
+          ...prev,
+          loading: false,
+          progress: { loaded: file.size, total: file.size, percentage: 100 },
+          result,
+        }));
+
+        return result;
+      } catch (err) {
+        const error: UploadError = {
+          message: err instanceof Error ? err.message : 'Upload failed',
+          code: 'CUSTOM_UPLOAD_ERROR',
+        };
+        setCustomState((prev) => ({ ...prev, loading: false, error }));
+        throw error;
+      }
+    },
+    [options, isCustomFn],
+  );
+
+  const customReset = useCallback(() => {
+    setCustomState({ loading: false, progress: null, error: null, result: null });
+  }, []);
+
+  // Endpoint-based upload function
+  const endpointUpload = useCallback(
+    (file: File) => {
+      const formData = new FormData();
+      formData.append(endpointOpts.fieldName ?? 'yoopta-image-file', file);
+      return xhrResult.xhrFetch(formData);
+    },
+    [endpointOpts.fieldName, xhrResult],
+  );
+
+  // Return appropriate implementation based on options type
+  if (isCustomFn) {
+    return {
+      ...customState,
+      upload: customUpload,
+      cancel: () => {},
+      reset: customReset,
+    };
+  }
 
   return {
-    loading,
-    progress,
-    error,
-    result,
-    upload,
-    cancel,
-    reset,
+    loading: xhrResult.loading,
+    progress: xhrResult.progress,
+    error: xhrResult.error,
+    result: xhrResult.result,
+    upload: endpointUpload,
+    cancel: xhrResult.cancel,
+    reset: xhrResult.reset,
   };
 };
 
@@ -118,14 +261,11 @@ export const useImageDimensions = () => {
 
 export const useImagePreview = () => {
   const [preview, setPreview] = useState<ImageUploadPreview | null>(null);
-  // const { getDimensions } = useImageDimensions();
 
   const generatePreview = (file: File) => {
     if (preview) {
       URL.revokeObjectURL(preview.url);
     }
-
-    // const sizes = await getDimensions(file);
 
     const url = URL.createObjectURL(file);
     setPreview({ url });

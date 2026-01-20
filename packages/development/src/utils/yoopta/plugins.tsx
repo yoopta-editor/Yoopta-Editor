@@ -25,14 +25,20 @@ import withShadcnUI from '@yoopta/themes-shadcn';
 
 const YImage = Image.extend({
   options: {
-    upload: {
-      endpoint: '/api/image-kit-upload',
-      method: 'POST',
-      maxSize: 5 * 1024 * 1024,
-      accept: 'image/jpeg, image/jpg, image/png, image/webp',
-      onSuccess(result) {
-        console.log('Image uploaded', result);
-      },
+    upload: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      const request = await fetch('/api/image-kit-upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await request.json();
+      return {
+        id: result.fileId,
+        src: result.url,
+        width: result.width,
+        height: result.height,
+      }
     },
     delete: {
       endpoint: '/api/image-kit-delete',

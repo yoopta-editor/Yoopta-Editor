@@ -30,15 +30,21 @@ const plugins = [
 
 - **File Upload**: Upload images from device
 - **URL Insertion**: Insert images via URL
+- **Custom Upload Functions**: Direct uploads to Cloudinary, S3, Firebase, etc.
 - **Image Resizing**: Resize images while maintaining aspect ratio
 - **Size Limits**: Set maximum width and height
 - **Object Fit**: Control how images fit their container
-- **Image Deletion**: Optional deletion handling
+- **Image Deletion**: Optional deletion handling with custom functions
 - **Responsive**: Automatically adapts to screen size
 
 ## Configuration
 
-### With Upload Handler
+The Image plugin supports two approaches for upload and delete operations:
+
+1. **Endpoint-based**: Configure an API endpoint and the plugin handles the request
+2. **Custom function**: Provide your own async function for complete control (useful for direct uploads to Cloudinary, S3, Firebase, etc.)
+
+### Endpoint-based Upload (Backend API)
 
 ```jsx
 import { Image } from '@yoopta/image';
@@ -59,6 +65,10 @@ const plugins = [
           console.error('Upload failed:', error);
         },
       },
+      delete: {
+        endpoint: '/api/delete',
+        method: 'DELETE',
+      },
       maxSizes: {
         maxWidth: 800,
         maxHeight: 600,
@@ -68,21 +78,93 @@ const plugins = [
 ];
 ```
 
-### With Custom Upload Logic
+### Custom Upload Function (Direct to Cloud)
+
+For direct uploads to third-party services like Cloudinary, AWS S3, or Firebase Storage, you can provide a custom async function:
 
 ```jsx
+import { Image } from '@yoopta/image';
+
 const plugins = [
   Image.extend({
     options: {
-      upload: {
-        endpoint: '/api/upload',
-        async onProgress(progress) {
-          console.log(`Upload progress: ${progress.percentage}%`);
-        },
+      // Custom upload function
+      upload: async (file, onProgress) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'your_preset');
+
+        const response = await fetch(
+          'https://api.cloudinary.com/v1_1/your_cloud/image/upload',
+          { method: 'POST', body: formData }
+        );
+        const data = await response.json();
+
+        // Return ImageElementProps
+        return {
+          id: data.public_id,
+          src: data.secure_url,
+          sizes: {
+            width: data.width,
+            height: data.height,
+          },
+        };
       },
-      delete: {
-        endpoint: '/api/delete',
-        method: 'DELETE',
+      // Custom delete function
+      delete: async (src) => {
+        // Extract public_id and delete from your service
+        const publicId = extractPublicId(src);
+        await fetch(`/api/cloudinary-delete/${publicId}`, { method: 'DELETE' });
+      },
+      maxSizes: {
+        maxWidth: 800,
+        maxHeight: 600,
+      },
+    },
+  }),
+];
+```
+
+### Custom Fetch to Your API
+
+You can also use a custom function to call your own API with fetch:
+
+```jsx
+import { Image } from '@yoopta/image';
+
+const plugins = [
+  Image.extend({
+    options: {
+      upload: async (file, onProgress) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/image-kit-upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const data = await response.json();
+
+        return {
+          id: data.fileId,
+          src: data.url,
+          sizes: {
+            width: data.width,
+            height: data.height,
+          },
+        };
+      },
+      delete: async (src) => {
+        await fetch('/api/image-kit-delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ src }),
+        });
       },
     },
   }),
@@ -91,51 +173,95 @@ const plugins = [
 
 ## Options
 
-<ResponseField name="upload" type="object">
-  <Expandable title="properties">
-    <ResponseField name="endpoint" type="string" required>
-      URL endpoint for image upload
-    </ResponseField>
-    <ResponseField name="method" type="'POST' | 'PUT' | 'PATCH'" default="POST">
-      HTTP method for upload
-    </ResponseField>
-    <ResponseField name="headers" type="Record<string, string>">
-      Custom headers for upload request
-    </ResponseField>
-    <ResponseField name="fieldName" type="string" default="file">
-      Form field name for the file
-    </ResponseField>
-    <ResponseField name="maxSize" type="number">
-      Maximum file size in bytes
-    </ResponseField>
-    <ResponseField name="accept" type="string">
-      Accepted file types (e.g., "image/png,image/jpeg")
-    </ResponseField>
-    <ResponseField name="onProgress" type="function">
-      Callback for upload progress
-    </ResponseField>
-    <ResponseField name="onSuccess" type="function">
-      Callback when upload succeeds
-    </ResponseField>
-    <ResponseField name="onError" type="function">
-      Callback when upload fails
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+### upload
 
-<ResponseField name="delete" type="object">
-  <Expandable title="properties">
-    <ResponseField name="endpoint" type="string" required>
-      URL endpoint for image deletion
+Can be either an **object** (endpoint-based) or a **function** (custom upload):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="upload" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for image upload
+        </ResponseField>
+        <ResponseField name="method" type="'POST' | 'PUT' | 'PATCH'" default="POST">
+          HTTP method for upload
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for upload request
+        </ResponseField>
+        <ResponseField name="fieldName" type="string" default="file">
+          Form field name for the file
+        </ResponseField>
+        <ResponseField name="maxSize" type="number">
+          Maximum file size in bytes
+        </ResponseField>
+        <ResponseField name="accept" type="string">
+          Accepted file types (e.g., "image/png,image/jpeg")
+        </ResponseField>
+        <ResponseField name="onProgress" type="function">
+          Callback for upload progress
+        </ResponseField>
+        <ResponseField name="onSuccess" type="function">
+          Callback when upload succeeds
+        </ResponseField>
+        <ResponseField name="onError" type="function">
+          Callback when upload fails
+        </ResponseField>
+      </Expandable>
     </ResponseField>
-    <ResponseField name="method" type="'DELETE' | 'PATCH'" default="DELETE">
-      HTTP method for deletion
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="upload" type="function">
+      Custom async function for direct uploads to third-party services.
+
+      **Signature:**
+      ```typescript
+      (file: File, onProgress?: (progress: ImageUploadProgress) => void) => Promise<ImageElementProps>
+      ```
+
+      **Returns `ImageElementProps`:**
+      - `id` - Unique identifier for the image
+      - `src` - URL of the uploaded image
+      - `sizes` - Object with `width` and `height`
     </ResponseField>
-    <ResponseField name="headers" type="Record<string, string>">
-      Custom headers for delete request
+  </Tab>
+</Tabs>
+
+### delete
+
+Can be either an **object** (endpoint-based) or a **function** (custom delete):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="delete" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for image deletion
+        </ResponseField>
+        <ResponseField name="method" type="'DELETE' | 'PATCH'" default="DELETE">
+          HTTP method for deletion
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for delete request
+        </ResponseField>
+      </Expandable>
     </ResponseField>
-  </Expandable>
-</ResponseField>
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="delete" type="function">
+      Custom async function for deleting images from third-party services.
+
+      **Signature:**
+      ```typescript
+      (src: string) => Promise<void>
+      ```
+
+      **Parameters:**
+      - `src` - The URL/source of the image to delete
+    </ResponseField>
+  </Tab>
+</Tabs>
 
 <ResponseField name="maxSizes" type="object">
   <Expandable title="properties">
@@ -306,6 +432,10 @@ The plugin automatically deserializes `<img>` tags:
 
 ### useImageUpload
 
+Supports both endpoint-based and custom function approaches:
+
+<Tabs>
+  <Tab title="Endpoint-based">
 ```typescript
 import { useImageUpload } from '@yoopta/image';
 
@@ -321,9 +451,43 @@ const handleUpload = async (file: File) => {
   const result = await upload(file);
 };
 ```
+  </Tab>
+  <Tab title="Custom Function">
+```typescript
+import { useImageUpload } from '@yoopta/image';
+
+const { upload, loading, progress, error } = useImageUpload(
+  async (file, onProgress) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('https://api.cloudinary.com/v1_1/cloud/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+
+    return {
+      id: data.public_id,
+      src: data.secure_url,
+      sizes: { width: data.width, height: data.height },
+    };
+  }
+);
+
+const handleUpload = async (file: File) => {
+  const result = await upload(file);
+};
+```
+  </Tab>
+</Tabs>
 
 ### useImageDelete
 
+Supports both endpoint-based and custom function approaches:
+
+<Tabs>
+  <Tab title="Endpoint-based">
 ```typescript
 import { useImageDelete } from '@yoopta/image';
 
@@ -331,6 +495,22 @@ const { deleteImage, loading, error } = useImageDelete({
   endpoint: '/api/delete',
 });
 ```
+  </Tab>
+  <Tab title="Custom Function">
+```typescript
+import { useImageDelete } from '@yoopta/image';
+
+const { deleteImage, loading, error } = useImageDelete(
+  async (src) => {
+    await fetch('/api/delete', {
+      method: 'DELETE',
+      body: JSON.stringify({ src }),
+    });
+  }
+);
+```
+  </Tab>
+</Tabs>
 
 ## Related Plugins
 

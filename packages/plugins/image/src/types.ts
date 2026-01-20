@@ -25,27 +25,44 @@ export type ImageOptimizationFields = {
   provider?: 'imgix' | 'cloudinary' | 'akamai';
 };
 
-export type ImageUploadOptions = {
+// Custom function type for direct uploads (Cloudinary, S3, Firebase, etc.)
+export type ImageUploadFn = (
+  file: File,
+  onProgress?: (progress: ImageUploadProgress) => void,
+) => Promise<ImageElementProps>;
+
+// Custom function type for direct deletes
+export type ImageDeleteFn = (src: string) => Promise<void>;
+
+// Endpoint-based upload options (for backend API)
+export type ImageUploadEndpointOptions = {
   endpoint: string;
-  method?: 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method?: 'POST' | 'PUT' | 'PATCH';
   headers?: Record<string, string>;
   fieldName?: string;
   maxSize?: number;
   accept?: string;
-  onProgress?: (progress: any) => void;
-  onSuccess?: (result: any) => void;
-  onError?: (error: any) => void;
+  onProgress?: (progress: ImageUploadProgress) => void;
+  onSuccess?: (result: UploadResult) => void;
+  onError?: (error: UploadError) => void;
 };
 
-export type ImageDeleteOptions = {
+// Endpoint-based delete options (for backend API)
+export type ImageDeleteEndpointOptions = {
   endpoint: string;
   method?: 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   fieldName?: string;
-  onProgress?: (progress: any) => void;
-  onSuccess?: (result: any) => void;
-  onError?: (error: any) => void;
+  onProgress?: (progress: ImageUploadProgress) => void;
+  onSuccess?: (result: UploadResult) => void;
+  onError?: (error: UploadError) => void;
 };
+
+// Upload options: endpoint-based OR custom function
+export type ImageUploadOptions = ImageUploadEndpointOptions | ImageUploadFn;
+
+// Delete options: endpoint-based OR custom function
+export type ImageDeleteOptions = ImageDeleteEndpointOptions | ImageDeleteFn;
 
 export type ImagePluginOptions = {
   upload?: ImageUploadOptions;
@@ -55,6 +72,19 @@ export type ImagePluginOptions = {
     maxHeight?: number | string;
   } | null;
   optimizations?: ImageOptimizationFields | null;
+};
+
+// Internal XHR request options (supports all HTTP methods)
+export type XHRRequestOptions = {
+  endpoint: string;
+  method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  headers?: Record<string, string>;
+  fieldName?: string;
+  maxSize?: number;
+  accept?: string;
+  onProgress?: (progress: ImageUploadProgress) => void;
+  onSuccess?: (result: UploadResult) => void;
+  onError?: (error: UploadError) => void;
 };
 
 export type ImageElementMap = {

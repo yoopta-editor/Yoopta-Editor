@@ -1,11 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
 
 import type {
-  ImageUploadOptions,
   ImageUploadProgress,
   UploadError,
   UploadResult,
   UploadState,
+  XHRRequestOptions,
 } from '../types';
 
 const validateFile = (file: File, accept?: string, maxSize?: number): UploadError | null => {
@@ -36,7 +36,7 @@ export const useXHRRequest = ({
   method = 'POST',
   endpoint,
   headers,
-}: ImageUploadOptions) => {
+}: XHRRequestOptions) => {
   const [state, setState] = useState<UploadState>({
     loading: false,
     progress: null,

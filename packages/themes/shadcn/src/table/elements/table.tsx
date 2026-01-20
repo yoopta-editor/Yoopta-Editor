@@ -5,6 +5,7 @@ import type { TableElement } from '@yoopta/table';
 import { TABLE_SLATE_TO_SELECTION_SET } from '@yoopta/table';
 
 import { TableBody, Table as TableUI } from '../../ui/table';
+import { ColumnResizeHandles } from '../components/column-resize-handles';
 import { TableControls } from '../components/table-controls';
 import { TableSelectionOverlay } from '../components/table-selection-overlay';
 
@@ -33,6 +34,7 @@ export const Table = (props: PluginElementRenderProps) => {
 
       <TableSelectionOverlay blockId={props.blockId} />
       <TableControls blockId={props.blockId} />
+      <ColumnResizeHandles blockId={props.blockId} />
     </div>
   );
 };

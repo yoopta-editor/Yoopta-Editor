@@ -48,6 +48,12 @@ export type TableCommands = {
     columnIndex: number,
     width: number,
   ) => void;
+  setColumnWidth: (
+    editor: YooEditor,
+    blockId: string,
+    columnIndex: number,
+    width: number,
+  ) => void;
   toggleHeaderRow: (editor: YooEditor, blockId: string) => void;
   toggleHeaderColumn: (editor: YooEditor, blockId: string) => void;
   clearContents: (editor: YooEditor, blockId: string, options: ClearContentsOptions) => void;
@@ -68,6 +74,9 @@ export const TableCommands: TableCommands = {
       headerRow = false,
     } = options || {};
 
+    // Initialize columnWidths array
+    const columnWidths = Array(columns).fill(columnWidth);
+
     const table: TableElement = {
       id: generateId(),
       type: 'table',
@@ -75,6 +84,7 @@ export const TableCommands: TableCommands = {
       props: {
         headerColumn,
         headerRow,
+        columnWidths,
       },
     };
 
@@ -247,6 +257,36 @@ export const TableCommands: TableCommands = {
         Transforms.insertNodes(slate, newDataCell, { at: [...tableRowPath, columnInsertIndex] });
       }
 
+      // Update columnWidths array
+      const tableEntry = Editor.nodes<TableElement>(slate, {
+        at: [0],
+        match: (n) => Element.isElement(n) && n.type === 'table',
+        mode: 'highest',
+      });
+
+      const tableEntryArray = Array.from(tableEntry);
+      if (tableEntryArray.length > 0) {
+        const [tableElement, tablePath] = tableEntryArray[0];
+        const currentWidths = tableElement.props?.columnWidths ?? [];
+        const newWidths = [...currentWidths];
+        // Insert default width at the new column position
+        newWidths.splice(columnInsertIndex, 0, 200);
+
+        Transforms.setNodes(
+          slate,
+          {
+            props: {
+              ...tableElement.props,
+              columnWidths: newWidths,
+            },
+          } as Partial<TableElement>,
+          {
+            at: tablePath,
+            match: (n) => Element.isElement(n) && n.type === 'table',
+          },
+        );
+      }
+
       if (select) {
         Transforms.select(slate, [0, 0, columnInsertIndex, 0]);
       }
@@ -281,12 +321,42 @@ export const TableCommands: TableCommands = {
         row.children[columnIndex] ? [...path, columnIndex] : null,
       );
 
-      // [TODO] - Check if there are other columns
+      // Remove cells from each row
       dataCellPaths.forEach((path) => {
         if (path) {
           Transforms.removeNodes(slate, { at: path });
         }
       });
+
+      // Update columnWidths array
+      const tableEntry = Editor.nodes<TableElement>(slate, {
+        at: [0],
+        match: (n) => Element.isElement(n) && n.type === 'table',
+        mode: 'highest',
+      });
+
+      const tableEntryArray = Array.from(tableEntry);
+      if (tableEntryArray.length > 0) {
+        const [tableElement, tablePath] = tableEntryArray[0];
+        const currentWidths = tableElement.props?.columnWidths ?? [];
+        const newWidths = [...currentWidths];
+        // Remove width at the deleted column position
+        newWidths.splice(columnIndex, 1);
+
+        Transforms.setNodes(
+          slate,
+          {
+            props: {
+              ...tableElement.props,
+              columnWidths: newWidths,
+            },
+          } as Partial<TableElement>,
+          {
+            at: tablePath,
+            match: (n) => Element.isElement(n) && n.type === 'table',
+          },
+        );
+      }
     });
   },
   updateColumnWidth: (editor: YooEditor, blockId: string, columnIndex: number, width: number) => {
@@ -312,6 +382,59 @@ export const TableCommands: TableCommands = {
           );
         }
       });
+    });
+  },
+  setColumnWidth: (editor: YooEditor, blockId: string, columnIndex: number, width: number) => {
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) return;
+
+    const minWidth = 50;
+    const clampedWidth = Math.max(minWidth, width);
+
+    Editor.withoutNormalizing(slate, () => {
+      // Get the table element
+      const tableEntry = Editor.nodes<TableElement>(slate, {
+        at: [0],
+        match: (n) => Element.isElement(n) && n.type === 'table',
+        mode: 'highest',
+      });
+
+      const tableEntryArray = Array.from(tableEntry);
+      if (tableEntryArray.length === 0) return;
+
+      const [tableElement, tablePath] = tableEntryArray[0];
+
+      // Get current columnWidths or create default array
+      const currentWidths = tableElement.props?.columnWidths ?? [];
+      const firstRow = tableElement.children[0] as SlateElement;
+      const numColumns = firstRow?.children?.length ?? 0;
+
+      // Ensure we have widths for all columns
+      const newWidths: number[] = [];
+      for (let i = 0; i < numColumns; i++) {
+        if (i === columnIndex) {
+          newWidths.push(clampedWidth);
+        } else if (currentWidths[i] !== undefined) {
+          newWidths.push(typeof currentWidths[i] === 'number' ? currentWidths[i] : parseInt(String(currentWidths[i]), 10) || 200);
+        } else {
+          newWidths.push(200); // Default width
+        }
+      }
+
+      // Update the table element with new columnWidths
+      Transforms.setNodes(
+        slate,
+        {
+          props: {
+            ...tableElement.props,
+            columnWidths: newWidths,
+          },
+        } as Partial<TableElement>,
+        {
+          at: tablePath,
+          match: (n) => Element.isElement(n) && n.type === 'table',
+        },
+      );
     });
   },
   toggleHeaderRow: (editor: YooEditor, blockId: string) => {
