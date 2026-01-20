@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
+import { Portal } from '@yoopta/ui';
 
 type ColumnResizeHandlesProps = {
   blockId: string;
@@ -18,7 +18,6 @@ const MIN_COLUMN_WIDTH = 50;
 export const ColumnResizeHandles = ({ blockId }: ColumnResizeHandlesProps) => {
   const editor = useYooptaEditor();
 
-  const [columns, setColumns] = useState<ColumnInfo[]>([]);
   const [tableRect, setTableRect] = useState<DOMRect | null>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [resizingColumnIndex, setResizingColumnIndex] = useState<number | null>(null);
@@ -88,7 +87,7 @@ export const ColumnResizeHandles = ({ blockId }: ColumnResizeHandlesProps) => {
         accumulatedLeft += width;
       });
 
-      setColumns(columnInfos);
+      // setColumns(columnInfos);
       setLocalWidths(widths);
     } else if (firstRow) {
       // Fallback to measuring cells
@@ -106,7 +105,7 @@ export const ColumnResizeHandles = ({ blockId }: ColumnResizeHandlesProps) => {
         });
       });
 
-      setColumns(columnInfos);
+      // setColumns(columnInfos);
       setLocalWidths(widths);
     }
   }, [blockId]);
@@ -289,13 +288,12 @@ export const ColumnResizeHandles = ({ blockId }: ColumnResizeHandlesProps) => {
     );
   });
 
-  return createPortal(
+  return <Portal id='column-resize-handles-container'>
     <div
       className="column-resize-handles-container"
       style={{ pointerEvents: isResizing ? 'auto' : undefined }}
     >
       {resizeHandles}
-    </div>,
-    document.body,
-  );
+    </div>
+  </Portal>
 };
