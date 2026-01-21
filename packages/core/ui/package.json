@@ -12,15 +12,33 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "toolbar": ["./dist/toolbar/index.d.ts"],
-      "action-menu-list": ["./dist/action-menu-list/index.d.ts"],
-      "slash-command-menu": ["./dist/slash-command-menu/index.d.ts"],
-      "block-options": ["./dist/block-options/index.d.ts"],
-      "floating-block-actions": ["./dist/floating-block-actions/index.d.ts"],
-      "highlight-color-picker": ["./dist/highlight-color-picker/index.d.ts"],
-      "portal": ["./dist/portal/index.d.ts"],
-      "overlay": ["./dist/overlay/index.d.ts"],
-      "theme": ["./dist/theme/index.d.ts"]
+      "toolbar": [
+        "./dist/toolbar/index.d.ts"
+      ],
+      "action-menu-list": [
+        "./dist/action-menu-list/index.d.ts"
+      ],
+      "slash-command-menu": [
+        "./dist/slash-command-menu/index.d.ts"
+      ],
+      "block-options": [
+        "./dist/block-options/index.d.ts"
+      ],
+      "floating-block-actions": [
+        "./dist/floating-block-actions/index.d.ts"
+      ],
+      "highlight-color-picker": [
+        "./dist/highlight-color-picker/index.d.ts"
+      ],
+      "portal": [
+        "./dist/portal/index.d.ts"
+      ],
+      "overlay": [
+        "./dist/overlay/index.d.ts"
+      ],
+      "theme": [
+        "./dist/theme/index.d.ts"
+      ]
     }
   },
   "sideEffects": [
@@ -72,7 +90,7 @@
     "dist/"
   ],
   "peerDependencies": {
-    "@yoopta/editor": ">=4.9.9",
+    "@yoopta/editor": "6.0.0-beta.4",
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },

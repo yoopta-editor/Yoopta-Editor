@@ -18,6 +18,8 @@ import type {
 } from '../types';
 import { useXHRRequest } from './use-xhr';
 
+const DOCS_URL = 'https://yoopta.dev/docs/plugins/image';
+
 // Type guard to check if options is a custom function
 const isUploadFn = (
   options: ImageUploadOptions,
@@ -28,8 +30,97 @@ const isUploadFn = (
 const isDeleteFn = (options: ImageDeleteOptions): options is (src: string) => Promise<void> =>
   typeof options === 'function';
 
-export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteReturn => {
-  const isCustomFn = isDeleteFn(options);
+// Validation helpers
+const validateUploadOptions = (options: ImageUploadOptions | undefined): void => {
+  if (options === undefined || options === null) {
+    throw new Error(
+      `[Yoopta Image] Upload options are not configured. ` +
+        `Please provide 'upload' option when extending the Image plugin.\n\n` +
+        `Example:\n` +
+        `Image.extend({\n` +
+        `  options: {\n` +
+        `    upload: async (file) => {\n` +
+        `      // Upload file to your storage and return image props\n` +
+        `      return { id: '...', src: '...' };\n` +
+        `    },\n` +
+        `  },\n` +
+        `})\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+
+  if (typeof options !== 'function' && typeof options !== 'object') {
+    throw new Error(
+      `[Yoopta Image] Invalid upload options. Expected a function or endpoint configuration object.\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+
+  if (typeof options === 'object' && !options.endpoint) {
+    throw new Error(
+      `[Yoopta Image] Missing 'endpoint' in upload options. ` +
+        `When using endpoint-based upload, you must provide an 'endpoint' URL.\n\n` +
+        `Example:\n` +
+        `Image.extend({\n` +
+        `  options: {\n` +
+        `    upload: {\n` +
+        `      endpoint: '/api/upload-image',\n` +
+        `    },\n` +
+        `  },\n` +
+        `})\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+};
+
+const validateDeleteOptions = (options: ImageDeleteOptions | undefined): void => {
+  if (options === undefined || options === null) {
+    throw new Error(
+      `[Yoopta Image] Delete options are not configured. ` +
+        `Please provide 'delete' option when extending the Image plugin.\n\n` +
+        `Example:\n` +
+        `Image.extend({\n` +
+        `  options: {\n` +
+        `    delete: async (src) => {\n` +
+        `      // Delete file from your storage\n` +
+        `    },\n` +
+        `  },\n` +
+        `})\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+
+  if (typeof options !== 'function' && typeof options !== 'object') {
+    throw new Error(
+      `[Yoopta Image] Invalid delete options. Expected a function or endpoint configuration object.\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+
+  if (typeof options === 'object' && !options.endpoint) {
+    throw new Error(
+      `[Yoopta Image] Missing 'endpoint' in delete options. ` +
+        `When using endpoint-based delete, you must provide an 'endpoint' URL.\n\n` +
+        `Example:\n` +
+        `Image.extend({\n` +
+        `  options: {\n` +
+        `    delete: {\n` +
+        `      endpoint: '/api/delete-image',\n` +
+        `    },\n` +
+        `  },\n` +
+        `})\n\n` +
+        `See documentation: ${DOCS_URL}`,
+    );
+  }
+};
+
+export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImageDeleteReturn => {
+  // Validate options - will throw descriptive error if invalid
+  validateDeleteOptions(options);
+
+  // After validation, options is guaranteed to be defined
+  const validOptions = options as ImageDeleteOptions;
+  const isCustomFn = isDeleteFn(validOptions);
 
   // State for custom function approach - always called
   const [customState, setCustomState] = useState<UploadState>({
@@ -42,7 +133,7 @@ export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteRetur
   // For endpoint-based approach - create endpoint options (use dummy if custom fn)
   const endpointOpts: ImageDeleteEndpointOptions = isCustomFn
     ? { endpoint: '' }
-    : (options as ImageDeleteEndpointOptions);
+    : (validOptions as ImageDeleteEndpointOptions);
 
   // Always call useXHRRequest (with dummy options if using custom function)
   const xhrResult = useXHRRequest({
@@ -70,7 +161,7 @@ export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteRetur
       setCustomState((prev) => ({ ...prev, loading: true, error: null }));
 
       try {
-        await (options as (src: string) => Promise<void>)(src);
+        await (validOptions as (src: string) => Promise<void>)(src);
         const result: UploadResult = { id: element.props?.id ?? '', url: src };
         setCustomState((prev) => ({ ...prev, loading: false, result }));
         return result;
@@ -83,7 +174,7 @@ export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteRetur
         throw error;
       }
     },
-    [options, isCustomFn],
+    [validOptions, isCustomFn],
   );
 
   const customReset = useCallback(() => {
@@ -123,8 +214,13 @@ export const useImageDelete = (options: ImageDeleteOptions): UseImageDeleteRetur
   };
 };
 
-export const useImageUpload = (options: ImageUploadOptions): UseImageUploadReturn => {
-  const isCustomFn = isUploadFn(options);
+export const useImageUpload = (options: ImageUploadOptions | undefined): UseImageUploadReturn => {
+  // Validate options - will throw descriptive error if invalid
+  validateUploadOptions(options);
+
+  // After validation, options is guaranteed to be defined
+  const validOptions = options as ImageUploadOptions;
+  const isCustomFn = isUploadFn(validOptions);
 
   // State for custom function approach - always called
   const [customState, setCustomState] = useState<UploadState>({
@@ -137,7 +233,7 @@ export const useImageUpload = (options: ImageUploadOptions): UseImageUploadRetur
   // For endpoint-based approach - create endpoint options (use dummy if custom fn)
   const endpointOpts: ImageUploadEndpointOptions = isCustomFn
     ? { endpoint: '' }
-    : (options as ImageUploadEndpointOptions);
+    : (validOptions as ImageUploadEndpointOptions);
 
   // Always call useXHRRequest (with dummy options if using custom function)
   const xhrResult = useXHRRequest({
@@ -171,7 +267,7 @@ export const useImageUpload = (options: ImageUploadOptions): UseImageUploadRetur
           setCustomState((prev) => ({ ...prev, progress }));
         };
 
-        const imageProps = await (options as ImageUploadFn)(file, onProgress);
+        const imageProps = await (validOptions as ImageUploadFn)(file, onProgress);
         const result: UploadResult = {
           id: imageProps.id ?? '',
           url: imageProps.src ?? '',
@@ -196,7 +292,7 @@ export const useImageUpload = (options: ImageUploadOptions): UseImageUploadRetur
         throw error;
       }
     },
-    [options, isCustomFn],
+    [validOptions, isCustomFn],
   );
 
   const customReset = useCallback(() => {
