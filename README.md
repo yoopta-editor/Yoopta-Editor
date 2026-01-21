@@ -63,13 +63,6 @@ All of this is customizable, extensible, and easy to set up!
   - [**@yoopta/lists**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/lists/README.md)
   - [**@yoopta/headings**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/headings/README.md)
 
-- Tools
-
-  - **@yoopta/action-menu-list**
-  - **@yoopta/toolbar**
-  - **@yoopta/link-tool**
-  - _@yoopta/chat-gpt-assistant_ - **soon**
-
 - Marks
   - **@yoopta/marks** - _[Bold, Italic, CodeMark, Underline, Strike, Highlight]_
 
@@ -140,8 +133,6 @@ type YooptaEditor = {
   [Default] - document */
   selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   children?: React.ReactNode;
-  /* Props for tools. You can get access to any passed tools using `useTools` hook from @yoopta/editor  */
-  tools?: Partial<Tools>;
   placeholder?: string;
   readOnly?: boolean;
   /* Width. [Default] - 400px. Will be DEPRECATED, use style object  */
@@ -204,66 +195,6 @@ export default function Editor() {
 ```
 
 **_[Check code with plugins](https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-example/src/components/examples/withBaseFullSetup/index.tsx#L27)_**
-
-### Tools
-
-Yoopta-Editor provides useful tools that can help you when working with the editor
-
-Here is a list of available tools
-
-- @yoopta/action-menu-list
-- @yoopta/toolbar
-- @yoopta/link-tool
-- _@yoopta/chat-gpt-assistant_ - **soon**
-
-**_[Check code with tools](https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-example/src/components/examples/withBaseFullSetup/index.tsx#L76)_**
-
-### How to use
-
-```jsx
-// IMPORT TOOLS
-import LinkTool, { DefaultLinkToolRender } from '@yoopta/link-tool';
-import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
-import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
-
-// Tools should be defined outside component
-const TOOLS = {
-  Toolbar: {
-    tool: Toolbar,
-    render: DefaultToolbarRender,
-  },
-  ActionMenu: {
-    tool: ActionMenu,
-    render: DefaultActionMenuRender,
-  },
-  LinkTool: {
-    tool: LinkTool,
-    render: DefaultLinkToolRender,
-  },
-};
-
-export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState<YooptaContentValue>();
-  const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    setValue(value);
-  };
-
-  return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        plugins={plugins}
-        placeholder="Type text.."
-        value={value}
-        onChange={onChange}
-        // here we go
-        tools={TOOLS}
-      />
-    </div>
-  );
-}
-```
 
 ### Marks
 

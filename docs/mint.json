@@ -118,15 +118,6 @@
       ]
     },
     {
-      "group": "Tools",
-      "pages": [
-        "tools/overview",
-        "tools/action-menu",
-        "tools/toolbar",
-        "tools/link-tool"
-      ]
-    },
-    {
       "group": "Marks",
       "pages": [
         "marks/overview",
