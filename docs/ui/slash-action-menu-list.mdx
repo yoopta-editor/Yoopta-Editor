@@ -24,7 +24,11 @@ icon: 'slash'
 ## Basic Usage
 
 ```tsx
-import { SlashActionMenuList, useSlashActionMenu } from '@yoopta/ui';
+// Full import
+import { SlashCommandMenu, useSlashCommand } from '@yoopta/ui';
+// Or subpath import (smaller bundle)
+// import { SlashCommandMenu, useSlashCommand } from '@yoopta/ui/slash-command-menu';
+
 import { ACTION_MENU_LIST_DEFAULT_ICONS_MAP } from '@/icons';
 
 const SlashActionMenuListComponent = () => {

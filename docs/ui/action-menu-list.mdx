@@ -31,7 +31,11 @@ icon: "list"
 ## Basic Usage
 
 ```tsx
+// Full import
 import { ActionMenuList, useActionMenuList, useActionMenuListActions } from '@yoopta/ui';
+// Or subpath import (smaller bundle)
+// import { ActionMenuList, useActionMenuList, useActionMenuListActions } from '@yoopta/ui/action-menu-list';
+
 import { useYooptaEditor } from '@yoopta/editor';
 
 const MyActionMenuList = () => {
@@ -333,15 +337,3 @@ const { actions, getItemProps } = useActionMenuList({ items: customActions });
     Use for slash command menus
   </Card>
 </CardGroup>
-
-<CodeGroup>
-
-``` kjlkjlkjlkjlkjkljjkklkj
-// add code here
-```
-
-
-``` kljkljljl
-```
-
-</CodeGroup>

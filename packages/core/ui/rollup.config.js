@@ -12,15 +12,19 @@ const createMultiEntryConfig = () => {
   return {
     ...baseConfig,
     input: {
+      // Main entry (includes all components for convenience)
       index: './src/index.ts',
+
+      // Individual component entries (for tree-shaking)
       'floating-block-actions': './src/floating-block-actions/index.tsx',
-      // portal: './src/portal.ts',
-      // overlay: './src/overlay.ts',
-      // 'block-options': './src/block-options.ts',
-      // 'dnd-kit': './src/dnd-kit.ts',
-      // toolbar: './src/toolbar.ts',
-      // 'highlight-color': './src/highlight-color.ts',
-      // 'action-menu': './src/action-menu.ts',
+      toolbar: './src/toolbar/index.ts',
+      'action-menu-list': './src/action-menu-list/index.ts',
+      'slash-command-menu': './src/slash-command-menu/index.ts',
+      'block-options': './src/block-options/index.ts',
+      'highlight-color-picker': './src/highlight-color-picker/index.ts',
+      portal: './src/portal/index.ts',
+      overlay: './src/overlay/index.ts',
+      theme: './src/theme/index.ts',
     },
     output: {
       format: 'es',
@@ -28,6 +32,7 @@ const createMultiEntryConfig = () => {
       globals: { react: 'React' },
       dir: './dist',
       entryFileNames: '[name].js',
+      chunkFileNames: 'chunks/[name]-[hash].js',
       exports: 'named',
     },
   };

@@ -1,5 +1,6 @@
-import { BlockOptions, useActionMenuListActions } from '@yoopta/ui';
-import { useBlockOptions, useBlockOptionsActions, useFloatingBlockActions } from '@yoopta/ui';
+import { BlockOptions, useBlockOptions, useBlockOptionsActions } from '@yoopta/ui/block-options';
+import { useActionMenuListActions } from '@yoopta/ui/action-menu-list';
+import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 
 export const YooptaBlockOptions = () => {
   const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();

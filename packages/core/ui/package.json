@@ -10,14 +10,62 @@
   "type": "module",
   "module": "dist/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "toolbar": ["./dist/toolbar/index.d.ts"],
+      "action-menu-list": ["./dist/action-menu-list/index.d.ts"],
+      "slash-command-menu": ["./dist/slash-command-menu/index.d.ts"],
+      "block-options": ["./dist/block-options/index.d.ts"],
+      "floating-block-actions": ["./dist/floating-block-actions/index.d.ts"],
+      "highlight-color-picker": ["./dist/highlight-color-picker/index.d.ts"],
+      "portal": ["./dist/portal/index.d.ts"],
+      "overlay": ["./dist/overlay/index.d.ts"],
+      "theme": ["./dist/theme/index.d.ts"]
+    }
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./toolbar": {
+      "types": "./dist/toolbar/index.d.ts",
+      "import": "./dist/toolbar.js"
+    },
+    "./action-menu-list": {
+      "types": "./dist/action-menu-list/index.d.ts",
+      "import": "./dist/action-menu-list.js"
+    },
+    "./slash-command-menu": {
+      "types": "./dist/slash-command-menu/index.d.ts",
+      "import": "./dist/slash-command-menu.js"
+    },
+    "./block-options": {
+      "types": "./dist/block-options/index.d.ts",
+      "import": "./dist/block-options.js"
     },
     "./floating-block-actions": {
-      "import": "./dist/floating-block-actions.js",
-      "types": "./dist/floating-block-actions.d.ts"
+      "types": "./dist/floating-block-actions/index.d.ts",
+      "import": "./dist/floating-block-actions.js"
+    },
+    "./highlight-color-picker": {
+      "types": "./dist/highlight-color-picker/index.d.ts",
+      "import": "./dist/highlight-color-picker.js"
+    },
+    "./portal": {
+      "types": "./dist/portal/index.d.ts",
+      "import": "./dist/portal.js"
+    },
+    "./overlay": {
+      "types": "./dist/overlay/index.d.ts",
+      "import": "./dist/overlay.js"
+    },
+    "./theme": {
+      "types": "./dist/theme/index.d.ts",
+      "import": "./dist/theme.js"
     }
   },
   "files": [

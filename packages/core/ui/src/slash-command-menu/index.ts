@@ -67,5 +67,3 @@ export const SlashCommandMenu = Object.assign(SlashCommandRoot, {
   Footer: SlashCommandFooter,
   Loading: SlashCommandLoading,
 });
-
-export default SlashCommandMenu;

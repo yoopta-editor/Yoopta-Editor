@@ -40,6 +40,76 @@ npm install @yoopta/ui
 yarn add @yoopta/ui
 ```
 
+## Import Styles
+
+Two ways to import the `@yoopta/ui` package:
+
+### 1. Full Package Import
+
+Import everything from the main entry point:
+
+```tsx
+import {
+  Toolbar,
+  ActionMenuList,
+  SlashCommandMenu,
+  FloatingBlockActions,
+  BlockOptions,
+  useToolbar,
+  useActionMenuList,
+} from '@yoopta/ui';
+```
+
+### 2. Subpath Imports (Recommended for Bundle Size)
+
+Import only what you need using subpath exports for better tree-shaking and smaller bundles:
+
+```tsx
+// Only import the toolbar (smaller bundle)
+import { Toolbar, useToolbar } from '@yoopta/ui/toolbar';
+
+// Only import action menu list
+import { ActionMenuList, useActionMenuList } from '@yoopta/ui/action-menu-list';
+
+// Only import slash command menu
+import { SlashCommandMenu, useSlashCommand } from '@yoopta/ui/slash-command-menu';
+
+// Other available subpaths
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions } from '@yoopta/ui/block-options';
+import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
+import { Portal } from '@yoopta/ui/portal';
+import { Overlay } from '@yoopta/ui/overlay';
+import { ThemeProvider, useTheme } from '@yoopta/ui/theme';
+```
+
+<Tip>
+  **When to use subpath imports:**
+  - You only need 1-2 components
+  - Bundle size is critical (e.g., landing pages)
+  - You want explicit control over what's included
+
+  **When to use full import:**
+  - You use most components
+  - Convenience over optimization
+  - Your bundler has good tree-shaking
+</Tip>
+
+### Available Subpaths
+
+| Subpath | Exports |
+|---------|---------|
+| `@yoopta/ui` | Everything (convenience) |
+| `@yoopta/ui/toolbar` | `Toolbar`, `useToolbar`, `useToolbarStore` |
+| `@yoopta/ui/action-menu-list` | `ActionMenuList`, `useActionMenuList`, `useActionMenuListActions` |
+| `@yoopta/ui/slash-command-menu` | `SlashCommandMenu`, `useSlashCommand`, context hooks |
+| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`, `useFloatingBlockActions` |
+| `@yoopta/ui/block-options` | `BlockOptions`, `useBlockOptions`, `useBlockOptionsActions` |
+| `@yoopta/ui/highlight-color-picker` | `HighlightColorPicker` |
+| `@yoopta/ui/portal` | `Portal` |
+| `@yoopta/ui/overlay` | `Overlay` |
+| `@yoopta/ui/theme` | `ThemeProvider`, `useTheme`, `ThemeToggle` |
+
 ## Available Components
 
 ### Core UI Components
@@ -127,16 +197,22 @@ Here's a complete example using the new UI components:
 
 ```tsx
 import { createYooptaEditor, YooptaEditor } from '@yoopta/editor';
+
+// Option 1: Full import
 import {
   FloatingBlockActions,
   BlockOptions,
   Toolbar,
-  SlashActionMenuList,
+  SlashCommandMenu,
   useFloatingBlockActions,
   useBlockOptions,
   useToolbar,
-  useSlashActionMenu,
 } from '@yoopta/ui';
+
+// Option 2: Subpath imports (better for bundle size)
+// import { FloatingBlockActions, useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+// import { Toolbar, useToolbar } from '@yoopta/ui/toolbar';
+// import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
 
 // FloatingBlockActions Component
 const MyFloatingBlockActions = () => {

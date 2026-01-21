@@ -2,9 +2,9 @@ import { COMMAND_MENU_DEFAULT_ICONS_MAP } from '@/icons/icons';
 import {
   ActionMenuList,
   useActionMenuList,
-  useBlockOptionsActions,
-  useFloatingBlockActions,
-} from '@yoopta/ui';
+} from '@yoopta/ui/action-menu-list';
+import { useBlockOptionsActions } from '@yoopta/ui/block-options';
+import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 
 export const YooptaActionMenuList = () => {
   const { close: closeBlockOptions } = useBlockOptionsActions();

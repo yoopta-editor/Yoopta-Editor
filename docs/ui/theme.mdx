@@ -21,7 +21,10 @@ All UI components consume shared CSS variables, so changing theme affects every 
 ## Quick Start
 
 ```tsx
+// Full import
 import { ThemeProvider, ThemeToggle } from '@yoopta/ui';
+// Or subpath import (smaller bundle)
+// import { ThemeProvider, ThemeToggle, useTheme } from '@yoopta/ui/theme';
 
 function App() {
   return (

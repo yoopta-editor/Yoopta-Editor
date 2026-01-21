@@ -32,12 +32,17 @@ yarn add @yoopta/ui
 ## Basic Usage
 
 ```tsx
+// Full import
 import {
   BlockOptions,
   useBlockOptions,
   useBlockOptionsActions,
   useFloatingBlockActionsActions,
 } from '@yoopta/ui';
+// Or subpath imports (smaller bundle)
+// import { BlockOptions, useBlockOptions, useBlockOptionsActions } from '@yoopta/ui/block-options';
+// import { useFloatingBlockActionsActions } from '@yoopta/ui/floating-block-actions';
+
 import { CopyIcon, Trash2Icon } from 'lucide-react';
 
 function MyBlockOptions() {
