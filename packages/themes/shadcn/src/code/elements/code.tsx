@@ -4,11 +4,12 @@ import {
   HighlightedCodeOverlay,
   SHIKI_CODE_LANGUAGES,
   SHIKI_CODE_THEMES,
+  isLanguageSupported,
 } from '@yoopta/code';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
-import { Check, Copy, Trash2 } from 'lucide-react';
+import { Check, Copy, Sparkles, Trash2 } from 'lucide-react';
 import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki';
 import { Editor, Element, Text } from 'slate';
 
@@ -55,6 +56,7 @@ export const CodeBlockElement = ({
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const [copied, setCopied] = useState(false);
+  const [isBeautifying, setIsBeautifying] = useState(false);
   const [themeColors, setThemeColors] = useState<ThemeColors>({
     background: '',
     foreground: '',
@@ -138,6 +140,19 @@ export const CodeBlockElement = ({
     [editor, blockId],
   );
 
+  const beautifyCode = useCallback(async () => {
+    if (isBeautifying) return;
+
+    setIsBeautifying(true);
+    try {
+      await CodeCommands.beautifyCode(editor, blockId);
+    } finally {
+      setIsBeautifying(false);
+    }
+  }, [editor, blockId, isBeautifying]);
+
+  const canBeautify = isLanguageSupported(language);
+
   const currentLanguage =
     SHIKI_CODE_LANGUAGES.find((lang) => lang.value === language) ?? SHIKI_CODE_LANGUAGES[0];
   const currentTheme = SHIKI_CODE_THEMES.find((t) => t.value === theme) ?? SHIKI_CODE_THEMES[0];
@@ -166,6 +181,20 @@ export const CodeBlockElement = ({
         </div>
 
         <div className="flex items-center gap-1 opacity-0 group-hover/code-block:opacity-100 transition-opacity">
+          {canBeautify && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={beautifyCode}
+              disabled={isBeautifying}
+              title="Beautify code"
+              style={{
+                color: themeColors.buttonForeground || undefined,
+              }}>
+              <Sparkles className={`h-4 w-4 ${isBeautifying ? 'animate-pulse' : ''}`} />
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"

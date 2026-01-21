@@ -1,9 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CodeGroupCommands, HighlightedCodeOverlay, SHIKI_CODE_LANGUAGES } from '@yoopta/code';
+import {
+  CodeGroupCommands,
+  HighlightedCodeOverlay,
+  SHIKI_CODE_LANGUAGES,
+  isLanguageSupported,
+} from '@yoopta/code';
 import type { PluginElementRenderProps, SlateElement } from '@yoopta/editor';
 import { Blocks, Elements, useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
-import { Check, Copy, Trash2 } from 'lucide-react';
+import { Check, Copy, Sparkles, Trash2 } from 'lucide-react';
 import { Editor, Element, Text } from 'slate';
 
 import { LanguageSelect } from '../../code/elements/language-select';
@@ -50,6 +55,7 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
   }, [editor, blockId]);
 
   const [copied, setCopied] = useState(false);
+  const [isBeautifying, setIsBeautifying] = useState(false);
   const [themeColors, setThemeColors] = useState<ThemeColors>({
     buttonForeground: '',
   });
@@ -102,6 +108,21 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
     });
   };
 
+  const beautifyCode = async () => {
+    if (isBeautifying) return;
+    const tabId = element.props?.referenceId;
+    if (!tabId) return;
+
+    setIsBeautifying(true);
+    try {
+      await CodeGroupCommands.beautifyTab(editor, blockId, tabId);
+    } finally {
+      setIsBeautifying(false);
+    }
+  };
+
+  const canBeautify = isLanguageSupported(language);
+
   const currentLanguage =
     SHIKI_CODE_LANGUAGES.find((lang) => lang.value === language) ?? SHIKI_CODE_LANGUAGES[0];
 
@@ -125,6 +146,20 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
             onValueChange={updateLanguage}
             currentLabel={currentLanguage.label}
           />
+          {canBeautify && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={beautifyCode}
+              disabled={isBeautifying}
+              title="Beautify code"
+              style={{
+                color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
+              }}>
+              <Sparkles className={`h-4 w-4 ${isBeautifying ? 'animate-pulse' : ''}`} />
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"

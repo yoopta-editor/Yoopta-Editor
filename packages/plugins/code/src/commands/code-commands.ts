@@ -1,11 +1,9 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
 import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
-// import parserBabel from 'prettier/plugins/babel';
-// import estreeParser from 'prettier/plugins/estree';
-// import prettier from 'prettier/standalone';
+import { Editor, Node, Transforms } from 'slate';
 
 import type { CodeElement, CodeElementProps } from '../types';
-// import { PLUGIN_LOADERS, PRETTIER_PARSER_MAP } from '../utils/prettier';
+import { type FormatCodeOptions, formatCode, isLanguageSupported } from '../utils/prettier';
 
 type CodeElementOptions = {
   text?: string;
@@ -17,7 +15,12 @@ type InsertCodeOptions = CodeElementOptions & {
   focus?: boolean;
 };
 
-export type CodeCommands = {
+export type BeautifyCodeResult = {
+  success: boolean;
+  error?: string;
+};
+
+export type CodeCommandsType = {
   buildCodeElements: (editor: YooEditor, options?: Partial<CodeElementOptions>) => CodeElement;
   insertCode: (editor: YooEditor, options?: Partial<InsertCodeOptions>) => void;
   deleteCode: (editor: YooEditor, blockId: string) => void;
@@ -27,14 +30,28 @@ export type CodeCommands = {
     blockId: string,
     language: CodeElementProps['language'],
   ) => void;
-  prettifyCode: (_editor: YooEditor, code: string, language: string) => Promise<string>;
+  /** Formats the code string and returns the result (does not modify editor) */
+  prettifyCode: (
+    editor: YooEditor,
+    code: string,
+    language: string,
+    options?: FormatCodeOptions,
+  ) => Promise<{ formatted: string; success: boolean; error?: string }>;
+  /** Beautifies the code in the specified block (modifies editor content) */
+  beautifyCode: (
+    editor: YooEditor,
+    blockId: string,
+    options?: FormatCodeOptions,
+  ) => Promise<BeautifyCodeResult>;
+  /** Checks if a language supports formatting */
+  isLanguageSupported: (language: string) => boolean;
 };
 
-export const CodeCommands: CodeCommands = {
-  buildCodeElements: (editor: YooEditor, options = {}) => ({
+export const CodeCommands: CodeCommandsType = {
+  buildCodeElements: (_editor: YooEditor, options = {}) => ({
     id: generateId(),
     type: 'code',
-    children: [{ text: options?.text || '', props: options?.props }],
+    children: [{ text: options?.text ?? '', props: options?.props }],
   }),
   insertCode: (editor: YooEditor, options = {}) => {
     const { at, focus, text, props } = options;
@@ -63,24 +80,47 @@ export const CodeCommands: CodeCommands = {
       props: { ...element.props, language },
     });
   },
-  // TODO: Implement this
-  prettifyCode: async (_editor, code: string, _language: string) => Promise.resolve(code),
-  // const loader = PLUGIN_LOADERS[language];
-  // if (!loader) {
-  //   console.warn(`No formatter available for: ${language}`);
-  //   return code;
-  // }
-  // try {
-  //   // Dynamically import Prettier core and specific plugins in parallel
-  //   const [prettier, plugins] = await Promise.all([import('prettier/standalone'), loader()]);
-  //   return await prettier.format(code, {
-  //     parser: PRETTIER_PARSER_MAP[language],
-  //     plugins: plugins.map((p) => p.default || p), // Handle ESM default exports
-  //     printWidth: 120,
-  //     semi: true,
-  //   });
-  // } catch (err) {
-  //   console.error('Formatting error:', err);
-  //   return code;
-  // }
+
+  prettifyCode: async (_editor, code, language, options) => formatCode(code, language, options),
+
+  beautifyCode: async (editor, blockId, options) => {
+    const block = editor.children[blockId];
+    if (!block) {
+      return { success: false, error: 'Block not found' };
+    }
+
+    const element = block.value[0] as CodeElement;
+    const language = element.props?.language ?? 'javascript';
+
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) {
+      return { success: false, error: 'Could not access block slate' };
+    }
+
+    // Use Slate's Node.string to properly extract all text content
+    const currentCode = Node.string(slate.children[0]);
+
+    if (!currentCode.trim()) {
+      return { success: false, error: 'No code to format' };
+    }
+
+    const result = await formatCode(currentCode, language, options);
+
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+
+    // Select all content in the code element and replace it
+    const codeElementPath = [0];
+    const start = Editor.start(slate, codeElementPath);
+    const end = Editor.end(slate, codeElementPath);
+
+    Transforms.select(slate, { anchor: start, focus: end });
+    Transforms.delete(slate);
+    Transforms.insertText(slate, result.formatted);
+
+    return { success: true };
+  },
+
+  isLanguageSupported,
 };

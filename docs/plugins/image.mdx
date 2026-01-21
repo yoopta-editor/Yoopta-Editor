@@ -26,6 +26,31 @@ const plugins = [
 <YooptaEditor editor={editor} plugins={plugins} />;
 ```
 
+<Warning>
+  **Required Configuration**
+
+  You **must** configure the `upload` and `delete` options. Without these options, you'll see an error when trying to use the Image plugin.
+
+  ```jsx
+  // Required when using themes
+  const plugins = [
+    Image.extend({
+      options: {
+        upload: async (file) => {
+          // Your upload logic here
+          return { id: '...', src: '...' };
+        },
+        delete: async (src) => {
+          // Your delete logic here
+        },
+      },
+    }),
+  ];
+  ```
+
+  See the [Configuration](#configuration) section below for detailed examples.
+</Warning>
+
 ## Features
 
 - **File Upload**: Upload images from device
@@ -511,6 +536,62 @@ const { deleteImage, loading, error } = useImageDelete(
 ```
   </Tab>
 </Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error: Upload options are not configured">
+    This error occurs when you're using a theme but haven't configured the `upload` option.
+
+    **Solution:** Add an `upload` configuration to your Image plugin:
+
+    ```jsx
+    Image.extend({
+      options: {
+        upload: async (file) => {
+          // Your upload logic
+          return { id: '...', src: '...' };
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Delete options are not configured">
+    This error occurs when you're using a theme but haven't configured the `delete` option.
+
+    **Solution:** Add a `delete` configuration to your Image plugin:
+
+    ```jsx
+    Image.extend({
+      options: {
+        delete: async (src) => {
+          // Your delete logic
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Missing 'endpoint' in upload/delete options">
+    This error occurs when using endpoint-based configuration without providing the `endpoint` URL.
+
+    **Solution:** Make sure to include the `endpoint` property:
+
+    ```jsx
+    Image.extend({
+      options: {
+        upload: {
+          endpoint: '/api/upload-image', // Required!
+        },
+        delete: {
+          endpoint: '/api/delete-image', // Required!
+        },
+      },
+    })
+    ```
+  </Accordion>
+</AccordionGroup>
 
 ## Related Plugins
 

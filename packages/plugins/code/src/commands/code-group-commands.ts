@@ -1,9 +1,10 @@
 import type { SlateElement, YooEditor } from '@yoopta/editor';
 import { Blocks, generateId } from '@yoopta/editor';
 import type { Location } from 'slate';
-import { Editor, Element, Path, Transforms } from 'slate';
+import { Editor, Element, Node, Path, Transforms } from 'slate';
 
-import type { CodeGroupContainerElement } from '../types';
+import type { CodeGroupContainerElement, CodeGroupContentElement } from '../types';
+import { type FormatCodeOptions, formatCode, isLanguageSupported } from '../utils/prettier';
 
 export type InsertTabOptions = {
   afterTabId?: string;
@@ -14,10 +15,24 @@ export type DeleteTabOptions = {
   tabId: string;
 };
 
+export type BeautifyTabResult = {
+  success: boolean;
+  error?: string;
+};
+
 export type CodeGroupCommandsType = {
   buildCodeElements: (editor: YooEditor) => CodeGroupContainerElement;
   addTabItem: (editor: YooEditor, blockId: string, options?: InsertTabOptions) => void;
   deleteTabItem: (editor: YooEditor, blockId: string, options: DeleteTabOptions) => void;
+  /** Beautifies the code in the specified tab (modifies editor content) */
+  beautifyTab: (
+    editor: YooEditor,
+    blockId: string,
+    tabId: string,
+    options?: FormatCodeOptions,
+  ) => Promise<BeautifyTabResult>;
+  /** Checks if a language supports formatting */
+  isLanguageSupported: (language: string) => boolean;
 };
 
 export const CodeGroupCommands: CodeGroupCommandsType = {
@@ -238,4 +253,52 @@ export const CodeGroupCommands: CodeGroupCommandsType = {
       }
     });
   },
+
+  beautifyTab: async (editor, blockId, tabId, options) => {
+    const slate = Blocks.getBlockSlate(editor, { id: blockId });
+    if (!slate) {
+      return { success: false, error: 'Could not access block slate' };
+    }
+
+    // Find code-group-content with matching referenceId
+    const contentNodes = Editor.nodes<SlateElement>(slate, {
+      at: [0],
+      match: (n) =>
+        Element.isElement(n) &&
+        (n as SlateElement).type === 'code-group-content' &&
+        (n as SlateElement).props?.referenceId === tabId,
+    });
+
+    const contentEntry = Array.from(contentNodes)[0];
+    if (!contentEntry) {
+      return { success: false, error: 'Tab content not found' };
+    }
+
+    const [contentElement, contentPath] = contentEntry;
+    const language = (contentElement as CodeGroupContentElement).props?.language ?? 'javascript';
+
+    // Use Slate's Node.string to properly extract all text content
+    const currentCode = Node.string(contentElement);
+    if (!currentCode.trim()) {
+      return { success: false, error: 'No code to format' };
+    }
+
+    const result = await formatCode(currentCode, language, options);
+
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+
+    // Select all content in the code-group-content element and replace it
+    const start = Editor.start(slate, contentPath);
+    const end = Editor.end(slate, contentPath);
+
+    Transforms.select(slate, { anchor: start, focus: end });
+    Transforms.delete(slate);
+    Transforms.insertText(slate, result.formatted);
+
+    return { success: true };
+  },
+
+  isLanguageSupported,
 };
