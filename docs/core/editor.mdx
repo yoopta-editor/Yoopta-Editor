@@ -184,29 +184,6 @@ type YooptaOnChangeOptions = {
 };
 ```
 
-## Editor Lifecycle
-
-```jsx
-import { useEffect } from 'react';
-
-export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
-
-  useEffect(() => {
-    // Editor is mounted and ready
-    console.log('Editor ready:', editor);
-
-    return () => {
-      // Cleanup when editor unmounts
-      console.log('Editor unmounting');
-    };
-  }, [editor]);
-
-  return <YooptaEditor editor={editor} plugins={plugins} value={value} onChange={setValue} />;
-}
-```
-
 ## Styling the Editor
 
 ### Using className

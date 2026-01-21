@@ -16,9 +16,6 @@ export const TableDataCell = (props: PluginElementRenderProps) => {
     [editor, props.blockId],
   );
 
-  const selectionSet = slate ? TABLE_SLATE_TO_SELECTION_SET.get(slate) : null;
-  const isSelected = selectionSet?.has(cellElement) ?? false;
-
   const CellTag = cellElement.props?.asHeader ? TableHead : TableCell;
 
   const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => {
@@ -37,15 +34,13 @@ export const TableDataCell = (props: PluginElementRenderProps) => {
       colSpan={cellElement.props?.colSpan ?? 1}
       rowSpan={cellElement.props?.rowSpan ?? 1}
       align={cellElement.props?.align ?? 'left'}
-      valign={cellElement.props?.verticalAlign ?? 'top'}
+      valign={cellElement.props?.verticalAlign ?? 'middle'}
       data-yoopta-element-id={cellElement.id}
       className={cn(
         'relative group transition-colors',
       )}
       style={{
-        backgroundColor: isSelected
-          ? 'var(--background)'
-          : cellElement.props?.backgroundColor ?? 'transparent',
+        backgroundColor: cellElement.props?.backgroundColor,
         color: cellElement.props?.color ?? 'inherit',
       }}>
       {children}

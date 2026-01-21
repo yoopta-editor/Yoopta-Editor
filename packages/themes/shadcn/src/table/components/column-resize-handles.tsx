@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
-import { Portal } from '@yoopta/ui';
+import { Portal } from '@yoopta/ui/portal';
 
 type ColumnResizeHandlesProps = {
   blockId: string;
@@ -288,12 +288,12 @@ export const ColumnResizeHandles = ({ blockId }: ColumnResizeHandlesProps) => {
     );
   });
 
-  return <Portal id='column-resize-handles-container'>
+  return (<Portal id='column-resize-handles-container'>
     <div
       className="column-resize-handles-container"
       style={{ pointerEvents: isResizing ? 'auto' : undefined }}
     >
       {resizeHandles}
     </div>
-  </Portal>
+  </Portal>)
 };

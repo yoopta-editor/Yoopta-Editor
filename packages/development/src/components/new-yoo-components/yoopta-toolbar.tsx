@@ -7,7 +7,9 @@ import {
   UnderlineIcon,
 } from '@radix-ui/react-icons';
 import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
-import { Toolbar, useToolbar, useActionMenuListActions, HighlightColorPicker } from '@yoopta/ui';
+import { Toolbar, useToolbar } from '@yoopta/ui/toolbar';
+import { useActionMenuListActions } from '@yoopta/ui/action-menu-list';
+import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
 import { HighlighterIcon } from 'lucide-react';
 
 export const YooptaToolbar = () => {

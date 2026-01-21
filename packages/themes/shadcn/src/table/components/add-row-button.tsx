@@ -2,7 +2,7 @@ import type React from 'react';
 import { useCallback, useRef } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
-import { Portal } from '@yoopta/ui';
+import { Portal } from '@yoopta/ui/portal';
 import { Plus } from 'lucide-react';
 
 import { Button } from '../../ui/button';

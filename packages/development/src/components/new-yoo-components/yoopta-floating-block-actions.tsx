@@ -1,11 +1,7 @@
 import { DragHandleDots2Icon, MagicWandIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
-import {
-  FloatingBlockActions,
-  // useSlashActionMenuActions,
-  useBlockOptionsActions,
-  useFloatingBlockActions,
-} from '@yoopta/ui';
+import { FloatingBlockActions, useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { useBlockOptionsActions } from '@yoopta/ui/block-options';
 
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
