@@ -49,7 +49,7 @@ Themes provide pre-styled element components that make it easy to get started:
 - **`@yoopta/themes-shadcn`** - Shadcn UI styled components (production ready)
 - **`@yoopta/themes-material`** - Material Design styled components (in development)
 
-Themes use helper functions like `withShadcnUI()` to automatically apply styled components to your plugins.
+Themes use helper functions like `applyTheme()` to automatically apply styled components to your plugins.
 
 ## Package Structure
 
@@ -187,11 +187,11 @@ npm install @yoopta/themes-shadcn
 
 **Usage:**
 ```jsx
-import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { applyTheme } from '@yoopta/themes-shadcn';
 import Paragraph from '@yoopta/paragraph';
 import Headings from '@yoopta/headings';
 
-const plugins = withShadcnUI([
+const plugins = applyTheme([
   Paragraph,
   Headings.HeadingOne,
   Headings.HeadingTwo,
@@ -477,9 +477,9 @@ Elements define the structure and rendering:
 import { useMemo, useState } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
-import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { applyTheme } from '@yoopta/themes-shadcn';
 
-const plugins = withShadcnUI([Paragraph]);
+const plugins = applyTheme([Paragraph]);
 
 export default function Editor() {
   const editor = useMemo(() => createYooptaEditor(), []);

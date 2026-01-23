@@ -1,64 +1,90 @@
-import { BlockOptions, useBlockOptions, useBlockOptionsActions } from '@yoopta/ui/block-options';
+import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
 import { useActionMenuListActions } from '@yoopta/ui/action-menu-list';
-import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 
-export const YooptaBlockOptions = () => {
-  const { toggle: toggleFloatingBlockActions, floatingBlockId } = useFloatingBlockActions();
-  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockOptionsActions();
-  const { isOpen, getRootProps, close } = useBlockOptions();
-  const { open: openActionMenuList, close: closeActionMenuList } = useActionMenuListActions();
+type YooptaBlockOptionsProps = {
+  /** Controlled open state */
+  open?: boolean;
+  /** Callback when open state changes */
+  onOpenChange?: (open: boolean) => void;
+  /** Block ID to operate on */
+  blockId: string | null;
+  /** Anchor element for positioning */
+  anchor?: HTMLButtonElement | null;
+};
+
+export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: YooptaBlockOptionsProps) => {
+  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
+  const { open: openActionMenuList } = useActionMenuListActions();
 
   const onTurnInto = (e: React.MouseEvent) => {
-    if (!floatingBlockId) return;
+    if (!blockId) return;
 
     openActionMenuList({
       reference: e.currentTarget as HTMLElement,
       view: 'small',
       placement: 'right',
-      blockId: floatingBlockId,
+      blockId,
     });
   };
 
-  const onDuplicateBlock = () => {
-    if (!floatingBlockId) return;
-
-    duplicateBlock(floatingBlockId);
-    toggleFloatingBlockActions('hovering');
+  const onDuplicate = () => {
+    if (!blockId) return;
+    duplicateBlock(blockId);
+    onOpenChange?.(false);
   };
 
-  const onCopyBlockLink = () => {
-    if (!floatingBlockId) return;
-
-    copyBlockLink(floatingBlockId);
-    toggleFloatingBlockActions('hovering');
+  const onCopyLink = () => {
+    if (!blockId) return;
+    copyBlockLink(blockId);
+    onOpenChange?.(false);
   };
 
-  const onDeleteBlock = () => {
-    if (!floatingBlockId) return;
-
-    deleteBlock(floatingBlockId);
-    toggleFloatingBlockActions('hovering');
+  const onDelete = () => {
+    if (!blockId) return;
+    deleteBlock(blockId);
+    onOpenChange?.(false);
   };
-
-  const onClose = () => {
-    closeActionMenuList();
-    toggleFloatingBlockActions('hovering');
-    close();
-  };
-
-  if (!isOpen) return null;
 
   return (
-    <BlockOptions.Root {...getRootProps()} onClose={onClose}>
-      <BlockOptions.Group>
-        <BlockOptions.Button onClick={onTurnInto}>Turn into</BlockOptions.Button>
-      </BlockOptions.Group>
-      <BlockOptions.Separator />
-      <BlockOptions.Group>
-        <BlockOptions.Button onClick={onDuplicateBlock}>Duplicate</BlockOptions.Button>
-        <BlockOptions.Button onClick={onCopyBlockLink}>Copy link to block</BlockOptions.Button>
-        <BlockOptions.Button onClick={onDeleteBlock}>Delete</BlockOptions.Button>
-      </BlockOptions.Group>
-    </BlockOptions.Root>
+    <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+      <BlockOptions.Content side="right" align="end">
+        <BlockOptions.Group>
+          <BlockOptions.Item onSelect={onTurnInto} keepOpen>
+            Turn into
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Item onSelect={onDuplicate}>Duplicate</BlockOptions.Item>
+          <BlockOptions.Item onSelect={onCopyLink}>Copy link to block</BlockOptions.Item>
+          <BlockOptions.Item variant="destructive" onSelect={onDelete}>
+            Delete
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions>
+  );
+};
+
+/**
+ * Example of uncontrolled usage with trigger
+ */
+export const YooptaBlockOptionsUncontrolled = ({ blockId }: { blockId: string }) => {
+  const { duplicateBlock, deleteBlock } = useBlockActions();
+
+  return (
+    <BlockOptions>
+      <BlockOptions.Trigger>
+        <button>Open Options</button>
+      </BlockOptions.Trigger>
+      <BlockOptions.Content>
+        <BlockOptions.Group>
+          <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>Duplicate</BlockOptions.Item>
+          <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+            Delete
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions>
   );
 };

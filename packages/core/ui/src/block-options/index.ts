@@ -1,4 +1,12 @@
-export { useBlockOptions, useBlockOptionsActions } from './hooks';
 export { BlockOptions } from './block-options';
-export { useBlockOptionsStore } from './store';
-export type { BlockOptionsStore } from './store';
+export type {
+  BlockOptionsContentProps,
+  BlockOptionsGroupProps,
+  BlockOptionsItemProps,
+  BlockOptionsLabelProps,
+  BlockOptionsRootProps,
+  BlockOptionsSeparatorProps,
+  BlockOptionsTriggerProps,
+} from './block-options';
+
+export { useBlockActions, useBlockOptionsContext } from './hooks';

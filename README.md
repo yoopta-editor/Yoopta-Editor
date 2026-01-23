@@ -25,7 +25,6 @@ All of this is customizable, extensible, and easy to set up!
 - Drag and drop, nested dnd is supported also
 - Selection box for manipulating multiple blocks at once
 - You can create your own plugin
-- A list of useful tools (ActionMenu, Toolbar etc.) for the convenience of working with the editor
 - Automatic lazy loading for media components (eg. embeds)
 - Large documents
 - Mobile friendly
@@ -233,7 +232,6 @@ export default function Editor() {
         plugins={plugins}
         value={value}
         onChange={onChange}
-        tools={TOOLS}
         // here we go
         marks={MARKS}
       />
@@ -303,7 +301,6 @@ packages/
 ├── core - core components of the editor
 ├── marks - text marks
 ├── plugins - editor plugin extensions
-├── tools - tools packages
 └── development - developer playground
 ```
 

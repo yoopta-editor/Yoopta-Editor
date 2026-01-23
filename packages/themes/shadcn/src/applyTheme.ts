@@ -42,7 +42,7 @@ type PluginExtensions = Record<
  *
  * @example
  * ```typescript
- * const plugins = withShadcnUI([
+ * const plugins = applyTheme([
  *   Accordion,
  *   Paragraph,
  *   Headings.HeadingOne,
@@ -53,7 +53,7 @@ type PluginExtensions = Record<
  * });
  * ```
  */
-export function withShadcnUI(
+export function applyTheme(
   plugins: PluginWithUI[],
   extensions?: PluginExtensions,
 ): PluginWithUI[] {

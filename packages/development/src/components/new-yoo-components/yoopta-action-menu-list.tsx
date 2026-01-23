@@ -3,11 +3,11 @@ import {
   ActionMenuList,
   useActionMenuList,
 } from '@yoopta/ui/action-menu-list';
-import { useBlockOptionsActions } from '@yoopta/ui/block-options';
+import { useBlockOptions } from '@yoopta/ui/block-options';
 import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 
 export const YooptaActionMenuList = () => {
-  const { close: closeBlockOptions } = useBlockOptionsActions();
+  const { close: closeBlockOptions } = useBlockOptions();
   const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
   const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
     useActionMenuList();

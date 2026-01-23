@@ -1,9 +1,9 @@
 export {
   FloatingBlockActions,
   useFloatingBlockActions,
-  useFloatingBlockActionsActions,
+  useFloatingBlockActionsContext,
 } from './floating-block-actions';
-export { BlockOptions, useBlockOptions, useBlockOptionsActions } from './block-options';
+export { BlockOptions, useBlockActions, useBlockOptionsContext } from './block-options';
 export { Toolbar, useToolbar } from './toolbar';
 export { ActionMenuList, useActionMenuList, useActionMenuListActions } from './action-menu-list';
 export { SlashCommandMenu } from './slash-command-menu';

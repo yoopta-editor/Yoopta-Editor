@@ -2,7 +2,6 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "packages": [
     "packages/plugins/*",
-    "packages/tools/*",
     "packages/marks",
     "packages/core/*",
     "packages/themes/*",
@@ -15,7 +14,11 @@
     "publish": {
       "registry": "https://registry.npmjs.org/",
       "access": "public",
-      "ignoreChanges": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"]
+      "ignoreChanges": [
+        "**/__tests__/**",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
     }
   }
 }

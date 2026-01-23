@@ -2,7 +2,6 @@
   "name": "yoopta",
   "workspaces": [
     "packages/plugins/*",
-    "packages/tools/*",
     "packages/marks",
     "packages/core/*",
     "packages/themes/*",

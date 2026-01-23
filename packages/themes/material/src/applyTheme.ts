@@ -32,7 +32,7 @@ type PluginExtensions = Record<
  *
  * @example
  * ```typescript
- * const plugins = withMaterialUI([
+ * const plugins = applyTheme([
  *   Accordion,
  *   Paragraph,
  *   Headings.HeadingOne,
@@ -43,7 +43,7 @@ type PluginExtensions = Record<
  * });
  * ```
  */
-export function withMaterialUI(
+export function applyTheme(
   plugins: PluginWithUI[],
   extensions?: PluginExtensions,
 ): PluginWithUI[] {

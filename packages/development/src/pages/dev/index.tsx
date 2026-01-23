@@ -426,7 +426,6 @@ const YooptaUIPackageExample = () => {
         className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
         <YooptaToolbar />
         <YooptaFloatingBlockActions />
-        <YooptaBlockOptions />
         <YooptaSlashCommandMenu />
         <YooptaActionMenuList />
       </YooptaEditor>

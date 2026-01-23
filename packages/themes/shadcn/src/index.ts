@@ -2,7 +2,7 @@
 // No need to manually import CSS files - they are embedded in the JS bundle
 import './variables.css';
 import './styles.css';
-import { withShadcnUI } from './withShadcnUI';
+import { applyTheme } from './applyTheme';
 
 export { AccordionUI } from './accordion';
 export { TableUI } from './table';
@@ -17,4 +17,4 @@ export { CodeUI } from './code';
 export { TabsUI } from './tabs';
 export { StepsUI } from './steps';
 export { DividerUI } from './divider';
-export default withShadcnUI;
+export default applyTheme;

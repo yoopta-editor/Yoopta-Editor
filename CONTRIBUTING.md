@@ -46,7 +46,6 @@ packages/
 ├── core - core components of the editor
 ├── marks - text marks
 ├── plugins - editor plugin extensions
-├── tools - tools packages
 └── development - developer playground
 └── web/next-example - all examples
 ```

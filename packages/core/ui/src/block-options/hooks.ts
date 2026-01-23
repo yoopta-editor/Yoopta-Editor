@@ -1,30 +1,21 @@
-import { useCallback, useEffect } from 'react';
-import {
-  autoUpdate,
-  flip,
-  inline,
-  offset,
-  shift,
-  useFloating,
-  useTransitionStyles,
-} from '@floating-ui/react';
+import { useCallback } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 
-import { useBlockOptionsStore } from './store';
-
-type UseBlockOptionsOpenOptions = {
-  reference: HTMLElement;
-  blockId?: string;
-};
-
 /**
- * Lightweight hook for accessing only store actions
- * Use this when you only need to open/close the menu programmatically
- * without rendering the menu itself
+ * Hook that provides common block actions (duplicate, copy link, delete)
+ * Use this alongside BlockOptions component for easy action handling
+ *
+ * @example
+ * ```tsx
+ * const { duplicateBlock, deleteBlock, copyBlockLink } = useBlockActions();
+ *
+ * <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+ *   Duplicate
+ * </BlockOptions.Item>
+ * ```
  */
-export const useBlockOptionsActions = () => {
+export const useBlockActions = () => {
   const editor = useYooptaEditor();
-  const store = useBlockOptionsStore();
 
   const duplicateBlock = useCallback(
     (blockId: string) => {
@@ -33,9 +24,8 @@ export const useBlockOptionsActions = () => {
       }
 
       editor.duplicateBlock({ blockId, focus: true });
-      store.close();
     },
-    [editor, store],
+    [editor],
   );
 
   const copyBlockLink = useCallback(
@@ -49,10 +39,9 @@ export const useBlockOptionsActions = () => {
         const url = `${window.location.origin}${window.location.pathname}#${block.id}`;
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(() => {
-            // console.log('Block link copied to clipboard');
-          });
+          navigator.clipboard.writeText(url);
         } else {
+          // Fallback for older browsers
           const textarea = document.createElement('textarea');
           textarea.value = url;
           textarea.style.position = 'fixed';
@@ -65,157 +54,28 @@ export const useBlockOptionsActions = () => {
 
         editor.emit?.('block:copy', block);
       }
-
-      store.close();
     },
-    [editor, store],
+    [editor],
   );
 
   const deleteBlock = useCallback(
-    (blockId: string | null) => {
+    (blockId: string) => {
       if (!blockId) {
         throw new Error('Block ID is required to delete block');
       }
 
       editor.deleteBlock({ blockId });
       editor.setPath({ current: null });
-
-      store.close();
     },
-    [editor, store],
+    [editor],
   );
 
   return {
-    open: store.open,
-    close: store.close,
-    state: store.state,
-    blockId: store.blockId,
-    reference: store.reference,
     duplicateBlock,
     copyBlockLink,
     deleteBlock,
   };
 };
 
-/**
- * Full hook with Floating UI, event listeners, and all logic
- * Use this only in the component that renders the BlockOptions
- */
-export const useBlockOptions = () => {
-  const editor = useYooptaEditor();
-  const {
-    state,
-    reference: storeReference,
-    open: storeOpen,
-    close: storeClose,
-  } = useBlockOptionsStore();
-
-  const isOpen = state === 'open';
-
-  const { refs, floatingStyles, context, update } = useFloating({
-    placement: 'right-start',
-    open: isOpen,
-    middleware: [inline(), flip(), shift(), offset({ mainAxis: 5 })],
-    whileElementsMounted: autoUpdate,
-    strategy: 'fixed',
-  });
-
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: 150,
-  });
-
-  // Sync store reference with Floating UI
-  useEffect(() => {
-    if (storeReference) {
-      refs.setReference(storeReference);
-    }
-    if (isOpen) update();
-  }, [refs, storeReference, isOpen, update]);
-
-  const open = useCallback(
-    ({ reference, blockId }: UseBlockOptionsOpenOptions) => {
-      storeOpen({ reference, blockId });
-    },
-    [storeOpen],
-  );
-
-  const close = useCallback(() => {
-    storeClose();
-  }, [storeClose]);
-
-  const duplicateBlock = useCallback(
-    (blockId: string) => {
-      if (!blockId) {
-        throw new Error('Block ID is required to duplicate block');
-      }
-
-      editor.duplicateBlock({ blockId, focus: true });
-      close();
-    },
-    [editor, close],
-  );
-
-  const copyBlockLink = useCallback(
-    (blockId: string) => {
-      if (!blockId) {
-        throw new Error('Block ID is required to copy block link');
-      }
-
-      const block = editor.children[blockId];
-      if (block) {
-        const url = `${window.location.origin}${window.location.pathname}#${block.id}`;
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(() => {
-            // console.log('Block link copied to clipboard');
-          });
-        } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = url;
-          textarea.style.position = 'fixed';
-          textarea.style.opacity = '0';
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-        }
-
-        editor.emit?.('block:copy', block);
-      }
-
-      close();
-    },
-    [editor, close],
-  );
-
-  const deleteBlock = useCallback(
-    (blockId: string | null) => {
-      if (!blockId) {
-        throw new Error('Block ID is required to delete block');
-      }
-
-      editor.deleteBlock({ blockId });
-      editor.setPath({ current: null });
-
-      close();
-    },
-    [editor, close],
-  );
-
-  const getRootProps = () => ({
-    ref: refs.setFloating,
-    style: { ...floatingStyles, ...transitionStyles },
-    onClick: (e: React.MouseEvent) => e.stopPropagation(),
-    onMouseDown: (e: React.MouseEvent) => e.stopPropagation(),
-  });
-
-  return {
-    isOpen: isMounted,
-    getRootProps,
-    open,
-    close,
-    duplicateBlock,
-    copyBlockLink,
-    deleteBlock,
-  };
-};
+// Re-export context hook for advanced usage
+export { useBlockOptionsContext } from './context';

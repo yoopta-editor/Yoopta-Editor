@@ -1,56 +1,82 @@
-import { DragHandleDots2Icon, MagicWandIcon, PlusIcon } from '@radix-ui/react-icons';
+import { useRef, useState } from 'react';
+import { DragHandleDots2Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingBlockActions, useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
-import { useBlockOptionsActions } from '@yoopta/ui/block-options';
+
+import { YooptaBlockOptions } from './yoopta-block-options';
 
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
-  const { open: openBlockOptions } = useBlockOptionsActions();
-  // const { open: openSlashActionMenu } = useSlashActionMenuActions();
-  const {
-    toggle: toggleFloatingBlockActions,
-    reference,
-    floatingBlockId,
-  } = useFloatingBlockActions();
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
 
-  // Programmatic way to open the slash action menu
-  const onPlusClick = (e: React.MouseEvent) => {
-    if (!floatingBlockId) return;
-    const floatingBlock = Blocks.getBlock(editor, { id: floatingBlockId });
-    if (!floatingBlock) return;
-
-    const nextOrder = floatingBlock.meta.order + 1;
-    const nextBlockId = editor.insertBlock('Paragraph', { at: nextOrder, focus: true });
-
-    // Wait for the block to be rendered, then get block element and open slash menu
-    setTimeout(() => {
-      const blockEl = document.querySelector(`[data-yoopta-block-id="${nextBlockId}"]`);
-      if (!blockEl) return;
-
-      // openSlashActionMenu({
-      //   getBoundingClientRect: () => blockEl.getBoundingClientRect(),
-      //   getClientRects: () => blockEl.getClientRects(),
-      // } as HTMLElement);
-    }, 0);
-  };
-
-  const onDragClick = (e: React.MouseEvent) => {
-    if (!floatingBlockId) return;
-    openBlockOptions({ reference: reference as HTMLElement, blockId: floatingBlockId });
-    toggleFloatingBlockActions('frozen', floatingBlockId);
-  };
+  // State for controlling BlockOptions
+  const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
 
   return (
     <FloatingBlockActions.Root>
-      <FloatingBlockActions.Button onClick={onPlusClick}>
+      <FloatingBlockActionsContent
+        editor={editor}
+        dragHandleRef={dragHandleRef}
+        blockOptionsOpen={blockOptionsOpen}
+        setBlockOptionsOpen={setBlockOptionsOpen}
+      />
+    </FloatingBlockActions.Root>
+  );
+};
+
+// Inner component that can use the context
+type FloatingBlockActionsContentProps = {
+  editor: ReturnType<typeof useYooptaEditor>;
+  dragHandleRef: React.RefObject<HTMLButtonElement>;
+  blockOptionsOpen: boolean;
+  setBlockOptionsOpen: (open: boolean) => void;
+};
+
+const FloatingBlockActionsContent = ({
+  editor,
+  dragHandleRef,
+  blockOptionsOpen,
+  setBlockOptionsOpen,
+}: FloatingBlockActionsContentProps) => {
+  const { blockId, toggle } = useFloatingBlockActions();
+
+  const onPlusClick = () => {
+    if (!blockId) return;
+    const floatingBlock = Blocks.getBlock(editor, { id: blockId });
+    if (!floatingBlock) return;
+
+    const nextOrder = floatingBlock.meta.order + 1;
+    editor.insertBlock('Paragraph', { at: nextOrder, focus: true });
+  };
+
+  const onDragClick = () => {
+    if (!blockId) return;
+    setBlockOptionsOpen(true);
+    toggle('frozen', blockId);
+  };
+
+  const onBlockOptionsChange = (open: boolean) => {
+    setBlockOptionsOpen(open);
+    if (!open) {
+      toggle('hovering');
+    }
+  };
+
+  return (
+    <>
+      <FloatingBlockActions.Button onClick={onPlusClick} title="Add block">
         <PlusIcon />
       </FloatingBlockActions.Button>
-      <FloatingBlockActions.Button onClick={onDragClick}>
+      <FloatingBlockActions.Button ref={dragHandleRef} onClick={onDragClick} title="Block options">
         <DragHandleDots2Icon />
       </FloatingBlockActions.Button>
-      <FloatingBlockActions.Button onClick={onDragClick}>
-        <MagicWandIcon />
-      </FloatingBlockActions.Button>
-    </FloatingBlockActions.Root>
+
+      <YooptaBlockOptions
+        open={blockOptionsOpen}
+        onOpenChange={onBlockOptionsChange}
+        blockId={blockId}
+        anchor={dragHandleRef.current}
+      />
+    </>
   );
 };

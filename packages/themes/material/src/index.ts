@@ -1,4 +1,4 @@
-import { withMaterialUI } from './withMaterialUI';
+import { applyTheme } from './applyTheme';
 import './styles.css';
 
 export { AccordionUI } from './accordion';
@@ -10,4 +10,4 @@ export { TableUI } from './table';
 export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
 export { CodeUI } from './code';
-export default withMaterialUI;
+export default applyTheme;

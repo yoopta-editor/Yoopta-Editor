@@ -209,7 +209,7 @@ yarn add @yoopta/themes-shadcn
 </CodeGroup>
 
 ```jsx
-import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { applyTheme } from '@yoopta/themes-shadcn';
 import Paragraph from '@yoopta/paragraph';
 import Headings from '@yoopta/headings';
 import Blockquote from '@yoopta/blockquote';
@@ -218,7 +218,7 @@ import Code from '@yoopta/code';
 
 // Apply theme to plugins
 // CSS is automatically imported - no need to manually import CSS files!
-const plugins = withShadcnUI([
+const plugins = applyTheme([
   Paragraph,
   Headings.HeadingOne,
   Headings.HeadingTwo,
@@ -250,11 +250,11 @@ import Lists from '@yoopta/lists';
 import Code from '@yoopta/code';
 import { Toolbar, useToolbar, ActionMenuList, useActionMenuList } from '@yoopta/ui';
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
-import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { applyTheme } from '@yoopta/themes-shadcn';
 // CSS is automatically imported - no manual import needed!
 
 // Apply theme to plugins
-const plugins = withShadcnUI([
+const plugins = applyTheme([
   Paragraph,
   Headings.HeadingOne,
   Headings.HeadingTwo,

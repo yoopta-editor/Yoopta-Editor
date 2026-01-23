@@ -20,8 +20,8 @@ import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 
-import withShadcnUI from '@yoopta/themes-shadcn';
-// import withMaterialUI from '@yoopta/themes-material';
+import applyTheme from '@yoopta/themes-shadcn';
+// import applyTheme from '@yoopta/themes-material';
 
 const YImage = Image.extend({
   options: {
@@ -60,7 +60,7 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
   Code,
 ];
 
-export const YOOPTA_PLUGINS = withShadcnUI([
+export const YOOPTA_PLUGINS = applyTheme([
   Accordion.extend({
     injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
     lifecycle: {
