@@ -15,6 +15,7 @@ import { ParagraphUI } from './paragraph';
 import { StepsUI } from './steps';
 import { TableUI } from './table';
 import { TabsUI } from './tabs';
+import { VideoUI } from './video';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PluginWithUI = YooptaPlugin<any, any>;
@@ -73,6 +74,7 @@ export function applyTheme(
     NumberedList: ListsUI.NumberedList,
     TodoList: ListsUI.TodoList,
     Image: ImageUI,
+    Video: VideoUI,
     Code: CodeUI,
     Tabs: TabsUI,
     CodeGroup: CodeGroupUI,

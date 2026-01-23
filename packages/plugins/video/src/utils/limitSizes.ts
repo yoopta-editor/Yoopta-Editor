@@ -7,7 +7,7 @@ import type { VideoSizes } from '../types';
  */
 const parseSize = (value: string | number): number => {
   if (typeof value === 'number') return value;
-  return parseInt(value.replace(/[^\d]/g, ''));
+  return parseInt(value.replace(/[^\d]/g, ''), 10);
 };
 
 /**

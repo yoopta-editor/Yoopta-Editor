@@ -1,0 +1,797 @@
+---
+title: Video
+description: Upload videos, embed from providers, and display with full customization
+---
+
+## Overview
+
+The Video plugin provides a complete solution for adding videos to your content. It supports file uploads, embedding from video providers (YouTube, Vimeo, Dailymotion, Loom, Wistia), video resizing, and various playback options.
+
+## Installation
+
+```bash
+npm install @yoopta/video
+```
+
+## Basic Usage
+
+```jsx
+import { Video } from '@yoopta/video';
+
+const plugins = [
+  Video,
+  // ... other plugins
+];
+
+<YooptaEditor editor={editor} plugins={plugins} />;
+```
+
+<Warning>
+  **Required Configuration**
+
+  You **must** configure the `upload` and `delete` options. Without these options, you'll see an error when trying to use the Video plugin.
+
+  ```jsx
+  // Required when using themes
+  const plugins = [
+    Video.extend({
+      options: {
+        upload: async (file) => {
+          // Your upload logic here
+          return { id: '...', src: '...' };
+        },
+        delete: async (src) => {
+          // Your delete logic here
+        },
+      },
+    }),
+  ];
+  ```
+
+  See the [Configuration](#configuration) section below for detailed examples.
+</Warning>
+
+## Features
+
+- **File Upload**: Upload videos from device
+- **Provider Embedding**: Embed videos from YouTube, Vimeo, Dailymotion, Loom, and Wistia
+- **URL Insertion**: Insert videos via URL (automatically detects provider)
+- **Custom Upload Functions**: Direct uploads to Cloudinary, S3, Firebase, Mux, etc.
+- **Video Resizing**: Resize videos while maintaining aspect ratio
+- **Size Limits**: Set maximum width and height
+- **Object Fit**: Control how videos fit their container
+- **Playback Settings**: Configure controls, loop, muted, and autoplay
+- **Poster Images**: Set custom poster/thumbnail images
+- **Video Deletion**: Optional deletion handling with custom functions
+- **Responsive**: Automatically adapts to screen size
+
+## Configuration
+
+The Video plugin supports two approaches for upload and delete operations:
+
+1. **Endpoint-based**: Configure an API endpoint and the plugin handles the request
+2. **Custom function**: Provide your own async function for complete control (useful for direct uploads to Cloudinary, S3, Firebase, Mux, etc.)
+
+### Endpoint-based Upload (Backend API)
+
+```jsx
+import { Video } from '@yoopta/video';
+
+const plugins = [
+  Video.extend({
+    options: {
+      upload: {
+        endpoint: '/api/upload-video',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        onSuccess: (result) => {
+          console.log('Upload successful:', result);
+        },
+        onError: (error) => {
+          console.error('Upload failed:', error);
+        },
+      },
+      delete: {
+        endpoint: '/api/delete-video',
+        method: 'DELETE',
+      },
+      maxSizes: {
+        maxWidth: 800,
+        maxHeight: 600,
+      },
+      defaultSettings: {
+        controls: true,
+        loop: false,
+        muted: false,
+        autoPlay: false,
+      },
+    },
+  }),
+];
+```
+
+### Custom Upload Function (Direct to Cloud)
+
+For direct uploads to third-party services like Cloudinary, AWS S3, Firebase Storage, or Mux, you can provide a custom async function:
+
+```jsx
+import { Video } from '@yoopta/video';
+
+const plugins = [
+  Video.extend({
+    options: {
+      // Custom upload function
+      upload: async (file, onProgress) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'your_preset');
+
+        const response = await fetch(
+          'https://api.cloudinary.com/v1_1/your_cloud/video/upload',
+          { method: 'POST', body: formData }
+        );
+        const data = await response.json();
+
+        // Return VideoUploadResponse
+        return {
+          id: data.public_id,
+          src: data.secure_url,
+          sizes: {
+            width: data.width,
+            height: data.height,
+          },
+          poster: data.thumbnail_url,
+        };
+      },
+      // Custom delete function
+      delete: async (src) => {
+        // Extract public_id and delete from your service
+        const publicId = extractPublicId(src);
+        await fetch(`/api/cloudinary-delete/${publicId}`, { method: 'DELETE' });
+      },
+      maxSizes: {
+        maxWidth: 800,
+        maxHeight: 600,
+      },
+    },
+  }),
+];
+```
+
+### Provider URL Embedding
+
+The Video plugin automatically detects and embeds videos from supported providers when you paste a URL:
+
+```jsx
+import { Video } from '@yoopta/video';
+
+const plugins = [
+  Video.extend({
+    options: {
+      upload: async (file) => {
+        // Your upload logic
+        return { id: '...', src: '...' };
+      },
+      delete: async (src) => {
+        // Your delete logic
+      },
+      // Optional: Restrict which providers are allowed
+      allowedProviders: ['youtube', 'vimeo'], // Only allow YouTube and Vimeo
+    },
+  }),
+];
+```
+
+**Supported Providers:**
+- **YouTube**: `youtube.com`, `youtu.be`
+- **Vimeo**: `vimeo.com`
+- **Dailymotion**: `dailymotion.com`, `dai.ly`
+- **Loom**: `loom.com`
+- **Wistia**: `wistia.com`, `wistia.net`
+
+When a user pastes a URL from any of these providers, the plugin automatically:
+1. Detects the provider
+2. Extracts the video ID
+3. Generates the embed URL
+4. Optionally fetches the thumbnail
+
+## Options
+
+### upload
+
+Can be either an **object** (endpoint-based) or a **function** (custom upload):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="upload" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for video upload
+        </ResponseField>
+        <ResponseField name="method" type="'POST' | 'PUT' | 'PATCH'" default="POST">
+          HTTP method for upload
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for upload request
+        </ResponseField>
+        <ResponseField name="fieldName" type="string" default="file">
+          Form field name for the file
+        </ResponseField>
+        <ResponseField name="maxSize" type="number">
+          Maximum file size in bytes
+        </ResponseField>
+        <ResponseField name="accept" type="string" default="video/*">
+          Accepted file types (e.g., "video/mp4,video/webm")
+        </ResponseField>
+        <ResponseField name="onProgress" type="function">
+          Callback for upload progress
+        </ResponseField>
+        <ResponseField name="onSuccess" type="function">
+          Callback when upload succeeds
+        </ResponseField>
+        <ResponseField name="onError" type="function">
+          Callback when upload fails
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="upload" type="function">
+      Custom async function for direct uploads to third-party services.
+
+      **Signature:**
+      ```typescript
+      (file: File, onProgress?: (progress: VideoUploadProgress) => void) => Promise<VideoUploadResponse>
+      ```
+
+      **Returns `VideoUploadResponse`:**
+      - `id` - Unique identifier for the video
+      - `src` - URL of the uploaded video
+      - `sizes` - Object with `width` and `height` (optional)
+      - `poster` - URL of the poster/thumbnail image (optional)
+      - `provider` - Provider information if from a video service (optional)
+    </ResponseField>
+  </Tab>
+</Tabs>
+
+### delete
+
+Can be either an **object** (endpoint-based) or a **function** (custom delete):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="delete" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for video deletion
+        </ResponseField>
+        <ResponseField name="method" type="'DELETE' | 'PATCH'" default="DELETE">
+          HTTP method for deletion
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for delete request
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="delete" type="function">
+      Custom async function for deleting videos from third-party services.
+
+      **Signature:**
+      ```typescript
+      (src: string) => Promise<void>
+      ```
+
+      **Parameters:**
+      - `src` - The URL/source of the video to delete
+    </ResponseField>
+  </Tab>
+</Tabs>
+
+<ResponseField name="uploadPoster" type="object | function">
+  Optional. Upload function for poster/thumbnail images. Can be endpoint-based or custom function, similar to `upload`.
+</ResponseField>
+
+<ResponseField name="maxSizes" type="object">
+  <Expandable title="properties">
+    <ResponseField name="maxWidth" type="number | string" default="650">
+      Maximum video width in pixels (or CSS value like "100%")
+    </ResponseField>
+    <ResponseField name="maxHeight" type="number | string" default="550">
+      Maximum video height in pixels (or CSS value like "100%")
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="defaultSettings" type="object">
+  <Expandable title="properties">
+    <ResponseField name="controls" type="boolean" default="false">
+      Show video controls
+    </ResponseField>
+    <ResponseField name="loop" type="boolean" default="false">
+      Loop video playback
+    </ResponseField>
+    <ResponseField name="muted" type="boolean" default="false">
+      Mute video by default
+    </ResponseField>
+    <ResponseField name="autoPlay" type="boolean" default="false">
+      Autoplay video (may require muted: true in some browsers)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="allowedProviders" type="array">
+  Optional. Array of allowed video provider types. If not set, all providers are allowed.
+
+  **Supported values:** `'youtube' | 'vimeo' | 'dailymotion' | 'loom' | 'wistia'`
+</ResponseField>
+
+<ResponseField name="accept" type="string" default="video/*">
+  Accepted video file types (e.g., "video/mp4,video/webm,video/ogg")
+</ResponseField>
+
+<ResponseField name="maxFileSize" type="number">
+  Maximum file size in bytes
+</ResponseField>
+
+## Element Props
+
+<ParamField path="src" type="string | null">
+  Video source URL (for direct video files) or embed URL (for provider videos)
+</ParamField>
+
+<ParamField path="provider" type="object | null">
+  Provider information for embedded videos:
+  ```typescript
+  {
+    type: 'youtube' | 'vimeo' | 'dailymotion' | 'loom' | 'wistia' | 'custom' | null;
+    id: string;
+    url?: string;
+  }
+  ```
+</ParamField>
+
+<ParamField path="settings" type="object">
+  Video playback settings:
+  ```typescript
+  {
+    controls?: boolean;
+    loop?: boolean;
+    muted?: boolean;
+    autoPlay?: boolean;
+  }
+  ```
+</ParamField>
+
+<ParamField path="sizes" type="object">
+  Video dimensions: `{ width: number | string, height: number | string }`
+</ParamField>
+
+<ParamField path="fit" type="'contain' | 'cover' | 'fill' | null">
+  How the video should fit its container
+</ParamField>
+
+<ParamField path="poster" type="string | null">
+  URL of the poster/thumbnail image to display before video loads
+</ParamField>
+
+<ParamField path="srcSet" type="string | null">
+  Responsive video source set
+</ParamField>
+
+<ParamField path="bgColor" type="string | null">
+  Background color for video container
+</ParamField>
+
+## Commands
+
+```typescript
+import { VideoCommands } from '@yoopta/video';
+
+// Insert a video
+VideoCommands.insertVideo(editor, {
+  props: {
+    src: 'https://example.com/video.mp4',
+    sizes: { width: 650, height: 400 },
+  },
+});
+
+// Update video properties
+VideoCommands.updateVideo(editor, blockId, {
+  src: 'https://example.com/new-video.mp4',
+  settings: {
+    controls: true,
+    loop: false,
+  },
+});
+
+// Delete video
+VideoCommands.deleteVideo(editor, blockId);
+```
+
+## Provider Utilities
+
+The Video plugin exports utility functions for working with video providers:
+
+```typescript
+import {
+  parseVideoUrl,
+  buildVideoProvider,
+  getEmbedUrl,
+  isValidVideoUrl,
+  isProviderUrl,
+  getSupportedProviders,
+  isProviderSupported,
+} from '@yoopta/video';
+
+// Parse a video URL and extract provider information
+const parsed = parseVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+// {
+//   provider: 'youtube',
+//   id: 'dQw4w9WgXcQ',
+//   originalUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+//   embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+//   thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+//   isValid: true
+// }
+
+// Check if a URL is a valid video URL
+const isValid = isValidVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+
+// Check if a URL is from a specific provider
+const isYouTube = isProviderUrl('https://www.youtube.com/watch?v=...', 'youtube');
+
+// Get embed URL for a provider
+const embedUrl = getEmbedUrl('youtube', 'dQw4w9WgXcQ');
+// 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+
+// Get all supported providers
+const providers = getSupportedProviders();
+// ['youtube', 'vimeo', 'dailymotion', 'loom', 'wistia']
+
+// Check if a provider is supported
+const isSupported = isProviderSupported('youtube');
+```
+
+## Upload Response Format
+
+Your upload endpoint should return:
+
+```typescript
+{
+  id: string;
+  src: string;
+  width?: number;
+  height?: number;
+  poster?: string;
+  duration?: number;
+  size?: number;
+  format?: string;
+  provider?: {
+    type: string;
+    id: string;
+    url?: string;
+  };
+}
+```
+
+## Custom Rendering
+
+```jsx
+import { Video } from '@yoopta/video';
+
+const CustomVideo = Video.extend({
+  elements: {
+    video: {
+      render: (props) => {
+        const { src, provider, sizes, settings, poster } = props.element.props;
+
+        return (
+          <div {...props.attributes} contentEditable={false}>
+            {provider && provider.type ? (
+              <iframe
+                src={getEmbedUrl(provider.type, provider.id)}
+                width={sizes?.width}
+                height={sizes?.height}
+                frameBorder="0"
+                allowFullScreen
+              />
+            ) : (
+              <video
+                src={src}
+                controls={settings?.controls}
+                loop={settings?.loop}
+                muted={settings?.muted}
+                autoPlay={settings?.autoPlay}
+                poster={poster || undefined}
+                width={sizes?.width}
+                height={sizes?.height}
+              />
+            )}
+            {props.children}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes `<video>` tags:
+
+```html
+<video src="video.mp4" width="650" height="400" controls loop muted autoplay />
+```
+
+### HTML Serialization
+
+```html
+<div style="display: flex; justify-content: center;">
+  <video src="video.mp4" width="650" height="400" controls="true" loop="true" muted="true" autoplay="true" />
+</div>
+```
+
+### Markdown Serialization
+
+```markdown
+![Video](https://example.com/video.mp4)
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Blog Posts">Embed tutorial videos and demonstrations</Card>
+  <Card title="Documentation">Video guides and walkthroughs</Card>
+  <Card title="Portfolios">Showcase project videos and reels</Card>
+  <Card title="Product Demos">Feature product videos and tutorials</Card>
+  <Card title="Educational Content">Course videos and lectures</Card>
+  <Card title="Social Media">Embed YouTube and Vimeo content</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Optimize Video Files">
+    Compress videos before uploading to reduce file size and improve load times
+  </Accordion>
+
+  <Accordion title="Use Poster Images">
+    Set a poster image to improve user experience while video loads
+  </Accordion>
+
+  <Accordion title="Set Size Limits">
+    Configure appropriate maxWidth and maxHeight for your design
+  </Accordion>
+
+  <Accordion title="Consider Autoplay Policies">
+    Browser autoplay policies may require videos to be muted for autoplay to work
+  </Accordion>
+
+  <Accordion title="Provide Fallbacks">
+    Handle upload errors gracefully with user feedback
+  </Accordion>
+
+  <Accordion title="Use Provider Embedding">
+    For large videos, consider using provider embedding (YouTube, Vimeo) instead of direct uploads
+  </Accordion>
+</AccordionGroup>
+
+## Hooks
+
+### useVideoUpload
+
+Supports both endpoint-based and custom function approaches:
+
+<Tabs>
+  <Tab title="Endpoint-based">
+```typescript
+import { useVideoUpload } from '@yoopta/video';
+
+const { upload, loading, progress, error } = useVideoUpload({
+  endpoint: '/api/upload-video',
+  onSuccess: (result) => {
+    console.log('Uploaded:', result.url);
+  },
+});
+
+// Upload a file
+const handleUpload = async (file: File) => {
+  const result = await upload(file);
+};
+```
+  </Tab>
+  <Tab title="Custom Function">
+```typescript
+import { useVideoUpload } from '@yoopta/video';
+
+const { upload, loading, progress, error } = useVideoUpload(
+  async (file, onProgress) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('https://api.cloudinary.com/v1_1/cloud/video/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+
+    return {
+      id: data.public_id,
+      src: data.secure_url,
+      sizes: { width: data.width, height: data.height },
+      poster: data.thumbnail_url,
+    };
+  }
+);
+
+const handleUpload = async (file: File) => {
+  const result = await upload(file);
+};
+```
+  </Tab>
+</Tabs>
+
+### useVideoDelete
+
+Supports both endpoint-based and custom function approaches:
+
+<Tabs>
+  <Tab title="Endpoint-based">
+```typescript
+import { useVideoDelete } from '@yoopta/video';
+
+const { deleteVideo, loading, error } = useVideoDelete({
+  endpoint: '/api/delete-video',
+});
+```
+  </Tab>
+  <Tab title="Custom Function">
+```typescript
+import { useVideoDelete } from '@yoopta/video';
+
+const { deleteVideo, loading, error } = useVideoDelete(
+  async (src) => {
+    await fetch('/api/delete-video', {
+      method: 'DELETE',
+      body: JSON.stringify({ src }),
+    });
+  }
+);
+```
+  </Tab>
+</Tabs>
+
+### useVideoPreview
+
+Generate a preview URL for a video file before uploading:
+
+```typescript
+import { useVideoPreview } from '@yoopta/video';
+
+const { preview, generatePreview, clearPreview } = useVideoPreview();
+
+const handleFileSelect = (file: File) => {
+  const previewData = generatePreview(file);
+  // previewData.url contains the object URL
+  // Use it to show a preview before upload
+};
+```
+
+### useVideoPosterUpload
+
+Upload poster/thumbnail images separately:
+
+```typescript
+import { useVideoPosterUpload } from '@yoopta/video';
+
+const { uploadPoster, loading, error } = useVideoPosterUpload({
+  endpoint: '/api/upload-poster',
+});
+
+const handlePosterUpload = async (file: File) => {
+  const posterUrl = await uploadPoster(file);
+  // Use posterUrl to set the poster prop
+};
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error: Upload options are not configured">
+    This error occurs when you're using a theme but haven't configured the `upload` option.
+
+    **Solution:** Add an `upload` configuration to your Video plugin:
+
+    ```jsx
+    Video.extend({
+      options: {
+        upload: async (file) => {
+          // Your upload logic
+          return { id: '...', src: '...' };
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Delete options are not configured">
+    This error occurs when you're using a theme but haven't configured the `delete` option.
+
+    **Solution:** Add a `delete` configuration to your Video plugin:
+
+    ```jsx
+    Video.extend({
+      options: {
+        delete: async (src) => {
+          // Your delete logic
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Missing 'endpoint' in upload/delete options">
+    This error occurs when using endpoint-based configuration without providing the `endpoint` URL.
+
+    **Solution:** Make sure to include the `endpoint` property:
+
+    ```jsx
+    Video.extend({
+      options: {
+        upload: {
+          endpoint: '/api/upload-video', // Required!
+        },
+        delete: {
+          endpoint: '/api/delete-video', // Required!
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Provider URL not detected">
+    If a provider URL is not being detected, check:
+
+    1. The URL format matches supported patterns
+    2. The provider is in the `allowedProviders` list (if configured)
+    3. The URL is from a supported provider (YouTube, Vimeo, Dailymotion, Loom, Wistia)
+
+    **Solution:** Use the `parseVideoUrl` utility to debug:
+
+    ```typescript
+    import { parseVideoUrl } from '@yoopta/video';
+    const parsed = parseVideoUrl('your-url-here');
+    console.log(parsed); // Check if isValid is true
+    ```
+  </Accordion>
+
+  <Accordion title="Video not autoplaying">
+    Many browsers block autoplay unless the video is muted. Make sure to set `muted: true` when using `autoPlay: true`.
+
+    **Solution:**
+    ```jsx
+    Video.extend({
+      options: {
+        defaultSettings: {
+          autoPlay: true,
+          muted: true, // Required for autoplay in most browsers
+        },
+      },
+    })
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Image Plugin](/plugins/image) - For image content
+- [File Plugin](/plugins/file) - For file attachments
+- [Carousel Plugin](/plugins/carousel) - For media galleries
+

@@ -3,11 +3,11 @@ import {
   ActionMenuList,
   useActionMenuList,
 } from '@yoopta/ui/action-menu-list';
-import { useBlockOptions } from '@yoopta/ui/block-options';
+// import { useBlockOptions } from '@yoopta/ui/block-options';
 import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 
 export const YooptaActionMenuList = () => {
-  const { close: closeBlockOptions } = useBlockOptions();
+  // const { close: closeBlockOptions } = useBlockOptions();
   const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
   const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
     useActionMenuList();
@@ -25,7 +25,7 @@ export const YooptaActionMenuList = () => {
             const itemProps = getItemProps(action.type);
             const onClick = (e: React.MouseEvent) => {
               itemProps.onClick(e);
-              closeBlockOptions();
+              // closeBlockOptions();
               toggleFloatingBlockActions('hovering');
             };
 

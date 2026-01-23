@@ -7,6 +7,7 @@ import Divider from '@yoopta/divider';
 import { YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
+import Video from '@yoopta/video';
 import Headings from '@yoopta/headings';
 import Image from '@yoopta/image';
 import Link from '@yoopta/link';
@@ -80,6 +81,30 @@ export const YOOPTA_PLUGINS = applyTheme([
       Blockquote,
       Code,
     ],
+  }),
+  Video.extend({
+    options: {
+      upload: async (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const request = await fetch('/api/video-kit-upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await request.json();
+
+        return {
+          id: result.fileId,
+          src: result.url,
+          width: result.width,
+          height: result.height,
+        }
+      },
+      delete: {
+        endpoint: '/api/video-kit-delete',
+        method: 'DELETE',
+      },
+    }
   }),
   Paragraph,
   Tabs.extend({

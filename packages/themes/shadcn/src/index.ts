@@ -13,6 +13,7 @@ export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
 export { LinkUI } from './link';
 export { ImageUI } from './image';
+export { VideoUI } from './video';
 export { CodeUI } from './code';
 export { TabsUI } from './tabs';
 export { StepsUI } from './steps';

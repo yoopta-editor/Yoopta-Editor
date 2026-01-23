@@ -1,7 +1,6 @@
 export {
   FloatingBlockActions,
   useFloatingBlockActions,
-  useFloatingBlockActionsContext,
 } from './floating-block-actions';
 export { BlockOptions, useBlockActions, useBlockOptionsContext } from './block-options';
 export { Toolbar, useToolbar } from './toolbar';

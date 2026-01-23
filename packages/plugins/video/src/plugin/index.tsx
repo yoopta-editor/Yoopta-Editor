@@ -53,7 +53,6 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
   options: {
     accept: 'video/*',
     maxSizes: { maxWidth: 650, maxHeight: 550 },
-    onUpload: async () => Promise.resolve({ src: '' }),
     display: {
       title: 'Video',
       description: 'Upload from device, insert from Youtube, Vimeo, DailyMotion, Loom, Wistia',
@@ -142,23 +141,18 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
         const justify = ALIGNS_TO_JUSTIFY[align] || 'center';
 
         return `
-        <div style="margin-left: ${
-          depth * 20
-        }px; display: flex; width: 100%; justify-content: ${justify};">
-        <video data-meta-align="${align}" data-meta-depth="${depth}" src="${
-          element.props.src
-        }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" controls="${
-          element.props.settings.controls
-        }" loop="${element.props.settings.loop}" muted="${
-          element.props.settings.muted
-        }" autoplay="${element.props.settings.autoPlay}" style="margin: 0 auto;" objectFit="${
-          element.props.fit
-        }" />
+        <div style="margin-left: ${depth * 20
+          }px; display: flex; width: 100%; justify-content: ${justify};">
+        <video data-meta-align="${align}" data-meta-depth="${depth}" src="${element.props.src
+          }" width="${element.props.sizes.width}" height="${element.props.sizes.height}" controls="${element.props.settings.controls
+          }" loop="${element.props.settings.loop}" muted="${element.props.settings.muted
+          }" autoplay="${element.props.settings.autoPlay}" style="margin: 0 auto;" objectFit="${element.props.fit
+          }" />
         </div>`;
       },
     },
     markdown: {
-      serialize: (element, text) => `![${element.props.src}](${element.props.src})\n`,
+      serialize: (element) => `![${element.props.src}](${element.props.src})\n`,
     },
     email: {
       serialize: (element, text, blockMeta) => {
