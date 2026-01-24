@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
+import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -14,10 +15,17 @@ import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoop
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
-import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 
 const YooptaUIPackageExample = () => {
-  const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
+  const editor: YooEditor = useMemo(
+    () =>
+      createYooptaEditor({
+        plugins: YOOPTA_PLUGINS,
+        marks: MARKS,
+        value: DEFAULT_VALUE,
+      }),
+    [],
+  );
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
@@ -415,14 +423,10 @@ const YooptaUIPackageExample = () => {
       </div>
       <YooptaEditor
         editor={editor}
-        plugins={YOOPTA_PLUGINS}
-        marks={MARKS}
         autoFocus
-        readOnly={false}
         placeholder="Type / to open menu"
         style={EDITOR_STYLE}
         onChange={(value) => console.log('value', value)}
-        value={DEFAULT_VALUE}
         className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
         <YooptaToolbar />
         <YooptaFloatingBlockActions />

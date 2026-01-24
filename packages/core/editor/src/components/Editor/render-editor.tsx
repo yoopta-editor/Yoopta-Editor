@@ -9,7 +9,6 @@ import { useYooptaEditor, useYooptaReadOnly } from '../../contexts/YooptaContext
 import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
 import type { YooptaContentValue } from '../../editor/types';
-import type { YooptaMark } from '../../marks';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
@@ -17,7 +16,6 @@ import { useRectangeSelectionBox } from '../SelectionBox/hooks';
 import { SelectionBox } from '../SelectionBox/SelectionBox';
 
 type Props = {
-  marks?: YooptaMark<any>[];
   selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   autoFocus?: boolean;
   className?: string;
@@ -29,13 +27,12 @@ type Props = {
 
 const getEditorStyles = (styles: CSSProperties) => ({
   ...styles,
-  width: styles.width || 400,
+  width: styles.width ?? 400,
   paddingBottom: typeof styles.paddingBottom === 'number' ? styles.paddingBottom : 100,
 });
 
 const Editor = ({
   placeholder,
-  marks,
   className,
   selectionBoxRoot,
   width,
@@ -44,6 +41,7 @@ const Editor = ({
   autoFocus = true,
 }: Props) => {
   const editor = useYooptaEditor();
+  const { marks } = editor;
   const isReadOnly = useYooptaReadOnly();
   const selectionBox = useRectangeSelectionBox({ editor, root: selectionBoxRoot });
   const multiSelection = useMultiSelection({ editor });
@@ -297,7 +295,7 @@ const Editor = ({
       if (!blocksEl.length) return;
 
       const content: YooptaContentValue = Array.from(blocksEl).reduce((acc, blockEl) => {
-        const blockId = blockEl.getAttribute('data-yoopta-block-id') || '';
+        const blockId = blockEl.getAttribute('data-yoopta-block-id') ?? '';
         const block = editor.children[blockId];
         if (block) acc[blockId] = block;
         return acc;

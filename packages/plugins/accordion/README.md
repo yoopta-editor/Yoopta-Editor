@@ -151,15 +151,7 @@ type AccordionElementMap = {
 
 ```typescript
 import { AccordionCommands } from '@yoopta/accordion';
-
-// Expand accordion item
-editor.commands.accordion.expand(blockId);
-
-// Collapse accordion item
-editor.commands.accordion.collapse(blockId);
-
-// Toggle accordion item
-editor.commands.accordion.toggle(blockId);
+[TODO]
 ```
 
 ### Extend Options

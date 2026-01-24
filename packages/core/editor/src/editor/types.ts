@@ -1,6 +1,7 @@
 import type { Descendant, Path, Point, Selection } from 'slate';
 import type { ReactEditor } from 'slate-react';
 
+import type { YooptaMark } from '../marks';
 import type { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import type { deleteBlock } from './blocks/deleteBlock';
 import type { duplicateBlock } from './blocks/duplicateBlock';
@@ -154,9 +155,9 @@ export type BaseYooEditor = {
   blockEditorsMap: YooptaPluginsEditorMap;
   // blocks: YooptaBlocks;
   formats: YooptaFormats;
+  marks: YooptaMark<any>[];
   // shortcuts: Record<string, YooptaBlock>;
   plugins: Record<string, Plugin<Record<string, SlateElement>, unknown>>;
-  commands: Record<string, (...args: any[]) => any>;
 
   // core handlers
   applyTransforms: WithoutFirstArg<typeof applyTransforms>;

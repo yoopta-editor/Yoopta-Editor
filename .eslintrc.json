@@ -216,7 +216,6 @@
         "@typescript-eslint/no-throw-literal": "off",
         "@typescript-eslint/return-await": "off",
 
-        "react/hook-use-state": "error",
         "react/jsx-handler-names": "error",
         "no-nested-ternary": "off",
 

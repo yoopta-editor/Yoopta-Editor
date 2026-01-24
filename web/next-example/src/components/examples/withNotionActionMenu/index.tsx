@@ -26,13 +26,7 @@ import { NotionToolbar } from '@/components/Toolbars/NotionToolbar/NotionToolbar
 
 const plugins = [
   Paragraph,
-  Table.extend({
-    events: {
-      beforeCreate: (editor, table) => {
-        return editor.commands.buildTableElements({ rows: 2, columns: 2, columnWidth: 120 });
-      },
-    },
-  }),
+  Table,
   Divider,
   HeadingOne,
   HeadingTwo,

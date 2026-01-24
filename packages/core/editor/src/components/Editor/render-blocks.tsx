@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 
 import type { YooEditor } from '../../editor/types';
@@ -13,7 +14,7 @@ type Props = {
   placeholder?: string;
 };
 
-const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
+const RenderBlocks = ({ editor, marks, placeholder }: Props): ReactElement<any, any> => {
   const childrenUnorderedKeys = Object.keys(editor.children);
   const childrenKeys = useMemo(() => {
     if (childrenUnorderedKeys.length === 0) return DEFAULT_EDITOR_KEYS;
@@ -57,7 +58,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props) => {
     );
   }
 
-  return blocks;
+  return blocks as ReactElement<any, any>[];
 };
 
 export { RenderBlocks };

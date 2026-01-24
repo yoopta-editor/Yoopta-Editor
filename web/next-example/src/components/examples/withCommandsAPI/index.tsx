@@ -259,14 +259,6 @@ const FixedToolbar = ({ editor }: Props) => {
         <button
           type="button"
           onClick={() => {
-            editor.commands.insertBlockquote({ at: 1, text: 'Blockquote with text', focus: true });
-          }}
-          className="p-2 text-xs shadow-md border-r hover:bg-[#64748b] hover:text-[#fff]">
-          Insert Blockquote with text
-        </button>
-        <button
-          type="button"
-          onClick={() => {
             CalloutCommands.updateCalloutTheme(
               editor,
               '46f231b7-74c0-4c2d-ba29-2e192e5720a3',

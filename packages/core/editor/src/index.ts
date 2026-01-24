@@ -27,7 +27,7 @@ export { findSlateBySelectionPath } from './utils/findSlateBySelectionPath';
 export { deserializeTextNodes } from './parsers/deserializeTextNodes';
 export { serializeTextNodes, serializeTextNodesIntoMarkdown } from './parsers/serializeTextNodes';
 
-export { createYooptaEditor } from './editor';
+export { createYooptaEditor, CreateYooptaEditorOptions } from './editor';
 export { createYooptaMark, YooptaMarkParams, YooptaMark } from './marks';
 export {
   YooEditor,

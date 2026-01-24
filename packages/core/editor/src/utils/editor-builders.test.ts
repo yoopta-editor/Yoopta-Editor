@@ -2,7 +2,7 @@ import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { buildBlockElementsStructure } from './block-elements';
 import { buildSlateEditor } from './build-slate';
-import { buildBlockSlateEditors, buildCommands, buildMarks, buildPlugins } from './editor-builders';
+import { buildBlockSlateEditors, buildMarks, buildPlugins } from './editor-builders';
 import { getValue } from '../editor/textFormats/getValue';
 import { isActive } from '../editor/textFormats/isActive';
 import { toggle } from '../editor/textFormats/toggle';
@@ -468,105 +468,6 @@ describe('editor-builders', () => {
       // Both Callout and Accordion should have paragraph
       expect(result.Callout.elements).toHaveProperty('paragraph');
       expect(result.Accordion.elements).toHaveProperty('paragraph');
-    });
-  });
-
-  describe('buildCommands', () => {
-    let mockEditor: Partial<YooEditor>;
-
-    beforeEach(() => {
-      mockEditor = {
-        id: 'test-editor',
-      };
-    });
-
-    it('should build commands from plugins', () => {
-      const mockCommand1 = vi.fn();
-      const mockCommand2 = vi.fn();
-
-      const plugins: Plugin<any>[] = [
-        {
-          type: 'Paragraph',
-          elements: {},
-          commands: {
-            insertParagraph: mockCommand1,
-            updateParagraph: mockCommand2,
-          },
-        },
-      ];
-
-      const commands = buildCommands(mockEditor as YooEditor, plugins);
-
-      expect(commands).toHaveProperty('insertParagraph');
-      expect(commands).toHaveProperty('updateParagraph');
-    });
-
-    it('should bind editor to command functions', () => {
-      const mockCommand = vi.fn();
-
-      const plugins: Plugin<any>[] = [
-        {
-          type: 'Paragraph',
-          elements: {},
-          commands: {
-            insertParagraph: mockCommand,
-          },
-        },
-      ];
-
-      const commands = buildCommands(mockEditor as YooEditor, plugins);
-      const arg1 = 'test';
-      const arg2 = { value: 123 };
-
-      commands.insertParagraph(arg1, arg2);
-
-      expect(mockCommand).toHaveBeenCalledWith(mockEditor, arg1, arg2);
-    });
-
-    it('should handle plugins without commands', () => {
-      const plugins: Plugin<any>[] = [
-        {
-          type: 'Paragraph',
-          elements: {},
-        },
-      ];
-
-      const commands = buildCommands(mockEditor as YooEditor, plugins);
-
-      expect(Object.keys(commands)).toHaveLength(0);
-    });
-
-    it('should merge commands from multiple plugins', () => {
-      const mockCommand1 = vi.fn();
-      const mockCommand2 = vi.fn();
-
-      const plugins: Plugin<any>[] = [
-        {
-          type: 'Paragraph',
-          elements: {},
-          commands: {
-            insertParagraph: mockCommand1,
-          },
-        },
-        {
-          type: 'Heading',
-          elements: {},
-          commands: {
-            insertHeading: mockCommand2,
-          },
-        },
-      ];
-
-      const commands = buildCommands(mockEditor as YooEditor, plugins);
-
-      expect(commands).toHaveProperty('insertParagraph');
-      expect(commands).toHaveProperty('insertHeading');
-    });
-
-    it('should handle empty plugins array', () => {
-      const commands = buildCommands(mockEditor as YooEditor, []);
-
-      expect(Object.keys(commands)).toHaveLength(0);
     });
   });
 });

@@ -1,5 +1,7 @@
 import EventEmitter from 'eventemitter3';
 
+import type { YooptaMark } from '../marks';
+import type { YooptaPlugin } from '../plugins';
 import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import { deleteBlock } from './blocks/deleteBlock';
 import { duplicateBlock } from './blocks/duplicateBlock';
@@ -22,7 +24,7 @@ import { YooptaHistory } from './core/history';
 import { isFocused } from './core/isFocused';
 import { setEditorValue } from './core/setEditorValue';
 import { setPath } from './paths/setPath';
-import type { YooEditor, YooptaContentValue } from './types';
+import type { SlateElement, YooEditor, YooptaContentValue } from './types';
 import type { EmailTemplateOptions } from '../parsers/getEmail';
 import { getEmail } from '../parsers/getEmail';
 import { getHTML } from '../parsers/getHTML';
@@ -41,8 +43,29 @@ import { getParentElementPath } from './elements/getParentElementPath';
 import { insertElement } from './elements/insertElement';
 import { isElementEmpty } from './elements/isElementEmpty';
 import { updateElement } from './elements/updateElement';
+import type { Plugin } from '../plugins/types';
+import {
+  buildBlockSlateEditors,
+  buildMarks,
+  buildPlugins,
+} from '../utils/editor-builders';
+import { generateId } from '../utils/generateId';
+import { validateYooptaValue } from '../utils/validations';
 
-export function createYooptaEditor(): YooEditor {
+export type CreateYooptaEditorOptions = {
+  id?: string;
+  plugins: readonly YooptaPlugin<Record<string, SlateElement>>[];
+  marks?: YooptaMark<any>[];
+  value?: YooptaContentValue;
+  readOnly?: boolean;
+};
+
+export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
+  const { id, plugins: pluginsFromOptions, marks, value, readOnly } = opts;
+
+  const plugins = pluginsFromOptions
+    .filter((plugin) => !!plugin)
+    .map((plugin) => plugin.getPlugin as Plugin<Record<string, SlateElement>>);
   // Create a unique event emitter for each editor instance
   const eventEmitter = new EventEmitter();
 
@@ -52,12 +75,23 @@ export function createYooptaEditor(): YooEditor {
     off: (event, fn) => eventEmitter.off(event, fn),
     emit: (event, payload) => eventEmitter.emit(event, payload),
   };
+
+  const isValueValid = validateYooptaValue(value);
+  if (!isValueValid && typeof value !== 'undefined') {
+    console.error(
+      `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(value)}`,
+    );
+  }
+
+  const editorId = id ?? generateId();
+  const children = (isValueValid ? value : {}) as YooptaContentValue;
+
   const editor: YooEditor = {
-    id: '',
-    children: {},
+    id: editorId,
+    children,
     blockEditorsMap: {},
     path: { current: null },
-    readOnly: false,
+    readOnly: readOnly ?? false,
     isEmpty: () => isEmpty(editor),
     getEditorValue: () => getEditorValue(editor),
     setEditorValue: (...args) => setEditorValue(editor, ...args),
@@ -96,8 +130,8 @@ export function createYooptaEditor(): YooEditor {
     ),
 
     formats: {},
+    marks: marks ?? [],
     plugins: {},
-    commands: {},
 
     applyTransforms: (operations, ...args) => applyTransforms(editor, operations, ...args),
     batchOperations: (callback) => batchOperations(editor, callback),
@@ -133,6 +167,10 @@ export function createYooptaEditor(): YooEditor {
     withoutMergingHistory: (fn) => YooptaHistory.withoutMergingHistory(editor, fn),
     withMergingHistory: (fn) => YooptaHistory.withMergingHistory(editor, fn),
   };
+
+  editor.plugins = buildPlugins(plugins);
+  editor.formats = marks ? buildMarks(editor, marks) : {};
+  editor.blockEditorsMap = buildBlockSlateEditors(editor);
 
   return editor;
 }

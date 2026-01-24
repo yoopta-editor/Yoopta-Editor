@@ -119,7 +119,16 @@ export function buildBlockElementsStructure(
   blockType: string,
   elementsMapWithTextContent?: ElementsMapWithTextContent,
 ): SlateElement {
-  const block: Plugin<Record<string, SlateElement>> = getBlockPlugins(editor)[blockType];
+  const blockPlugins = getBlockPlugins(editor);
+  const block: Plugin<Record<string, SlateElement>> = blockPlugins[blockType];
+
+  if (!block) {
+    const availablePlugins = Object.keys(blockPlugins);
+    throw new Error(
+      `Plugin for block type "${blockType}" not found. Available plugins: ${availablePlugins.join(', ') || 'none'}`,
+    );
+  }
+
   const blockElements = block.elements;
 
   const rootBlockElementType = getRootBlockElementType(blockElements);

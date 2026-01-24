@@ -156,22 +156,3 @@ export function buildPlugins(
 
   return pluginsMap;
 }
-
-export function buildCommands(
-  editor: YooEditor,
-  plugins: Plugin<Record<string, SlateElement>>[],
-): Record<string, (...args: any[]) => any> {
-  const commands = {};
-
-  plugins.forEach((plugin) => {
-    if (plugin.commands) {
-      Object.keys(plugin.commands).forEach((command) => {
-        if (plugin.commands?.[command]) {
-          commands[command] = (...args) => plugin.commands?.[command](editor, ...args);
-        }
-      });
-    }
-  });
-
-  return commands;
-}
