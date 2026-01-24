@@ -9,16 +9,12 @@
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "6.0.0-beta.5",
+  "version": "6.0.0-beta.6",
   "command": {
     "publish": {
       "registry": "https://registry.npmjs.org/",
       "access": "public",
-      "ignoreChanges": [
-        "**/__tests__/**",
-        "**/*.test.ts",
-        "**/*.spec.ts"
-      ]
+      "ignoreChanges": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"]
     }
   }
 }
