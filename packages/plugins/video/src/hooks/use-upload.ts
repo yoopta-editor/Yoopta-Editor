@@ -5,6 +5,7 @@ import type {
   UseVideoPosterUploadReturn,
   UseVideoUploadReturn,
   VideoDeleteEndpointOptions,
+  VideoDeleteFn,
   VideoDeleteOptions,
   VideoElement,
   VideoPosterUploadEndpointOptions,
@@ -30,7 +31,7 @@ const isUploadFn = (
   typeof options === 'function';
 
 // Type guard to check if delete options is a custom function
-const isDeleteFn = (options: VideoDeleteOptions): options is (src: string) => Promise<void> =>
+const isDeleteFn = (options: VideoDeleteOptions): options is (element: VideoElement) => Promise<void> =>
   typeof options === 'function';
 
 // Type guard to check if poster upload options is a custom function
@@ -90,7 +91,7 @@ const validateDeleteOptions = (options: VideoDeleteOptions | undefined): void =>
       `Example:\n` +
       `Video.extend({\n` +
       `  options: {\n` +
-      `    delete: async (src) => {\n` +
+      `    delete: async (element) => {\n` +
       `      // Delete file from your storage\n` +
       `    },\n` +
       `  },\n` +
@@ -212,7 +213,7 @@ export const useVideoDelete = (options: VideoDeleteOptions | undefined): UseVide
       setCustomState((prev) => ({ ...prev, loading: true, error: null }));
 
       try {
-        await (validOptions as (src: string) => Promise<void>)(src);
+        await (validOptions as VideoDeleteFn)(element);
         const result: VideoUploadResult = { id: element.props?.id ?? '', url: src };
         setCustomState((prev) => ({ ...prev, loading: false, result }));
         return result;

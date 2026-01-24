@@ -8,6 +8,7 @@ import { Button } from '../../../ui/button';
 import { Input } from '../../../ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../ui/tabs';
 import { cn } from '../../../utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../../ui/tooltip';
 
 type ImagePlaceholderProps = {
   onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -243,23 +244,44 @@ const ImagePlaceholderTabs = ({
           <Upload className="h-3.5 w-3.5" />
           Upload
         </TabsTrigger>
-        <TabsTrigger value="link" className="gap-1.5">
-          <LinkIcon className="h-3.5 w-3.5" />
-          Link
-        </TabsTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <TabsTrigger value="link" disabled className="gap-1.5">
+              <LinkIcon className="h-3.5 w-3.5" />
+              Link
+            </TabsTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            Link is not available yet
+          </TooltipContent>
+        </Tooltip>
         {onInsertFromUnsplash && (
-          <TabsTrigger value="unsplash" className="gap-1.5">
-            <svg className="h-3.5 w-3.5" viewBox="0 0 32 32" fill="currentColor">
-              <path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z" />
-            </svg>
-            Unsplash
-          </TabsTrigger>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <TabsTrigger value="unsplash" disabled className="gap-1.5">
+                <svg className="h-3.5 w-3.5" viewBox="0 0 32 32" fill="currentColor">
+                  <path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z" />
+                </svg>
+                Unsplash
+              </TabsTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              Unsplash is not available yet
+            </TooltipContent>
+          </Tooltip>
         )}
         {onInsertFromAI && (
-          <TabsTrigger value="ai" className="gap-1.5">
-            <Sparkles className="h-3.5 w-3.5" />
-            AI
-          </TabsTrigger>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <TabsTrigger value="ai" disabled className="gap-1.5">
+                <Sparkles className="h-3.5 w-3.5" />
+                AI
+              </TabsTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              AI is not available yet
+            </TooltipContent>
+          </Tooltip>
         )}
       </TabsList>
 
@@ -267,7 +289,7 @@ const ImagePlaceholderTabs = ({
         <ImageUploadForm onUpload={onUpload} hasPreview={hasPreview} />
       </TabsContent>
 
-      <TabsContent value="link">
+      <TabsContent value="link" d>
         <ImageLinkForm onInsertUrl={onInsertUrl} />
       </TabsContent>
 
@@ -303,7 +325,7 @@ export const ImagePlaceholder = ({
   return (
     <div
       className={cn(
-        'relative rounded-lg border bg-background overflow-hidden',
+        'mt-2 relative rounded-lg border bg-background overflow-hidden',
         hasPreview && 'min-h-[300px]',
         className,
       )}

@@ -47,9 +47,9 @@ export const AddColumnButton = ({
         ref={buttonRef}
         className="fixed z-[9999] pointer-events-auto"
         style={{
-          left: `${position.left}px`,
+          left: `${position.left + 4}px`,
           top: `${position.top}px`,
-          width: '28px',
+          width: '18px',
           height: `${position.height}px`,
         }}
         onMouseEnter={onMouseEnter}
@@ -60,7 +60,7 @@ export const AddColumnButton = ({
           className="p-0 h-full w-full bg-background/95 hover:bg-accent border border-border/50 shadow-sm rounded-md transition-all hover:shadow-md flex items-center justify-center text-muted-foreground hover:text-foreground"
           onClick={handleAddColumn}
           onMouseDown={(e) => e.preventDefault()}>
-          <Plus className="h-4 w-4" />
+          <Plus className="h-3 w-3" />
         </Button>
       </div>
     </Portal>

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import type {
   ImageDeleteEndpointOptions,
+  ImageDeleteFn,
   ImageDeleteOptions,
   ImageElement,
   ImageElementProps,
@@ -27,7 +28,7 @@ const isUploadFn = (
   typeof options === 'function';
 
 // Type guard to check if delete options is a custom function
-const isDeleteFn = (options: ImageDeleteOptions): options is (src: string) => Promise<void> =>
+const isDeleteFn = (options: ImageDeleteOptions): options is (element: ImageElement) => Promise<void> =>
   typeof options === 'function';
 
 // Validation helpers
@@ -35,40 +36,40 @@ const validateUploadOptions = (options: ImageUploadOptions | undefined): void =>
   if (options === undefined || options === null) {
     throw new Error(
       `[Yoopta Image] Upload options are not configured. ` +
-        `Please provide 'upload' option when extending the Image plugin.\n\n` +
-        `Example:\n` +
-        `Image.extend({\n` +
-        `  options: {\n` +
-        `    upload: async (file) => {\n` +
-        `      // Upload file to your storage and return image props\n` +
-        `      return { id: '...', src: '...' };\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `Please provide 'upload' option when extending the Image plugin.\n\n` +
+      `Example:\n` +
+      `Image.extend({\n` +
+      `  options: {\n` +
+      `    upload: async (file) => {\n` +
+      `      // Upload file to your storage and return image props\n` +
+      `      return { id: '...', src: '...' };\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options !== 'function' && typeof options !== 'object') {
     throw new Error(
       `[Yoopta Image] Invalid upload options. Expected a function or endpoint configuration object.\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options === 'object' && !options.endpoint) {
     throw new Error(
       `[Yoopta Image] Missing 'endpoint' in upload options. ` +
-        `When using endpoint-based upload, you must provide an 'endpoint' URL.\n\n` +
-        `Example:\n` +
-        `Image.extend({\n` +
-        `  options: {\n` +
-        `    upload: {\n` +
-        `      endpoint: '/api/upload-image',\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `When using endpoint-based upload, you must provide an 'endpoint' URL.\n\n` +
+      `Example:\n` +
+      `Image.extend({\n` +
+      `  options: {\n` +
+      `    upload: {\n` +
+      `      endpoint: '/api/upload-image',\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 };
@@ -77,39 +78,39 @@ const validateDeleteOptions = (options: ImageDeleteOptions | undefined): void =>
   if (options === undefined || options === null) {
     throw new Error(
       `[Yoopta Image] Delete options are not configured. ` +
-        `Please provide 'delete' option when extending the Image plugin.\n\n` +
-        `Example:\n` +
-        `Image.extend({\n` +
-        `  options: {\n` +
-        `    delete: async (src) => {\n` +
-        `      // Delete file from your storage\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `Please provide 'delete' option when extending the Image plugin.\n\n` +
+      `Example:\n` +
+      `Image.extend({\n` +
+      `  options: {\n` +
+      `    delete: async (element) => {\n` +
+      `      // Delete file from your storage\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options !== 'function' && typeof options !== 'object') {
     throw new Error(
       `[Yoopta Image] Invalid delete options. Expected a function or endpoint configuration object.\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options === 'object' && !options.endpoint) {
     throw new Error(
       `[Yoopta Image] Missing 'endpoint' in delete options. ` +
-        `When using endpoint-based delete, you must provide an 'endpoint' URL.\n\n` +
-        `Example:\n` +
-        `Image.extend({\n` +
-        `  options: {\n` +
-        `    delete: {\n` +
-        `      endpoint: '/api/delete-image',\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `When using endpoint-based delete, you must provide an 'endpoint' URL.\n\n` +
+      `Example:\n` +
+      `Image.extend({\n` +
+      `  options: {\n` +
+      `    delete: {\n` +
+      `      endpoint: '/api/delete-image',\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 };
@@ -161,7 +162,7 @@ export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImag
       setCustomState((prev) => ({ ...prev, loading: true, error: null }));
 
       try {
-        await (validOptions as (src: string) => Promise<void>)(src);
+        await (validOptions as ImageDeleteFn)(element);
         const result: UploadResult = { id: element.props?.id ?? '', url: src };
         setCustomState((prev) => ({ ...prev, loading: false, result }));
         return result;
@@ -198,7 +199,7 @@ export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImag
     return {
       ...customState,
       deleteImage: customDeleteImage,
-      cancel: () => {},
+      cancel: () => { },
       reset: customReset,
     };
   }
@@ -314,7 +315,7 @@ export const useImageUpload = (options: ImageUploadOptions | undefined): UseImag
     return {
       ...customState,
       upload: customUpload,
-      cancel: () => {},
+      cancel: () => { },
       reset: customReset,
     };
   }

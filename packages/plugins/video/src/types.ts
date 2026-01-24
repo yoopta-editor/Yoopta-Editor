@@ -38,6 +38,7 @@ export type VideoElementProps = {
   srcSet?: string | null;
   bgColor?: string | null;
   settings?: VideoElementSettings;
+  alignment?: 'left' | 'center' | 'right' | null;
   sizes?: VideoSizes;
   provider?: VideoProvider;
   fit?: 'contain' | 'cover' | 'fill' | null;
@@ -111,7 +112,7 @@ export type VideoUploadFn = (
 ) => Promise<VideoUploadResponse>;
 
 // Custom function type for direct video deletes
-export type VideoDeleteFn = (src: string) => Promise<void>;
+export type VideoDeleteFn = (element: VideoElement) => Promise<any>;
 
 // Custom function type for poster upload
 export type VideoPosterUploadFn = (
@@ -184,7 +185,7 @@ export type UseVideoUploadReturn = {
 } & VideoUploadState;
 
 export type UseVideoDeleteReturn = {
-  deleteVideo: (element: VideoElement) => Promise<VideoUploadResult>;
+  deleteVideo: (element: VideoElement) => Promise<any>;
   cancel: () => void;
   reset: () => void;
 } & VideoUploadState;

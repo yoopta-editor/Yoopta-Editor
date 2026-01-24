@@ -210,7 +210,7 @@ export const VideoRender = ({
     left: 'justify-start',
     center: 'justify-center',
     right: 'justify-end',
-  }[(elementProps as any).alignment ?? 'center'];
+  }[elementProps.alignment ?? 'center'];
 
   return (
     <div
@@ -297,6 +297,7 @@ export const VideoRender = ({
               }}
             />
           ) : (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
               title="Video"
               src={videoSrc}
@@ -304,10 +305,10 @@ export const VideoRender = ({
               loop={settings.loop}
               muted={settings.muted}
               autoPlay={settings.autoPlay}
-              poster={elementProps.poster || undefined}
+              poster={elementProps.poster ?? undefined}
               className="w-full h-full transition-all duration-200"
               style={{
-                objectFit: elementProps.fit || 'contain',
+                objectFit: elementProps.fit ?? 'contain',
               }}
               draggable={false}
             />

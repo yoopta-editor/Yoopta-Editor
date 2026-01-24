@@ -7,11 +7,11 @@ const Table = forwardRef<HTMLTableElement, ComponentProps<'table'>>(
   ({ className, ...props }, ref) => (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto border-collapse border border-border rounded-md">
+      className="relative w-full overflow-x-auto rounded-md">
       <table
         ref={ref}
         data-slot="table"
-        className={cn('caption-bottom text-sm table-fixed', className)}
+        className={cn('caption-bottom text-sm table-fixed border-collapse', className)}
         {...props}
       />
     </div>
@@ -36,7 +36,7 @@ const TableBody = forwardRef<HTMLTableSectionElement, ComponentProps<'tbody'>>(
     <tbody
       ref={ref}
       data-slot="table-body"
-      className={cn('[&_tr:last-child]:border-0', className)}
+      className={cn('[&_tr:first-child]:border-t [&_tr]:border-b [&_tr]:border-border', className)}
       {...props}
     />
   ),

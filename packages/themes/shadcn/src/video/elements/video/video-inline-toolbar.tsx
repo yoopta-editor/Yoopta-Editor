@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { autoUpdate, inline, offset, shift, useFloating } from '@floating-ui/react';
 import copy from 'copy-to-clipboard';
-import { AlignCenter, AlignLeft, AlignRight, Copy, Download, RotateCw, Trash2 } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, Copy, Download, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 
 import { VideoInlineToolbarSettings } from './video-inline-toolbar-settings';
 import { Button } from '../../../ui/button';
@@ -74,6 +74,12 @@ export const VideoInlineToolbar = ({
       onCopy();
     } else if (elementProps.src) {
       copy(elementProps.src);
+    }
+  };
+
+  const handleOpenLink = () => {
+    if (elementProps.provider?.url) {
+      window.open(elementProps.provider.url, '_blank');
     }
   };
 
@@ -164,19 +170,32 @@ export const VideoInlineToolbar = ({
           </>
         )}
 
-        <Separator orientation="vertical" className="h-4" />
+        {isProviderVideo && elementProps.provider?.url && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleOpenLink}>
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Open in new tab</TooltipContent>
+          </Tooltip>
+        )}
 
-        <VideoInlineToolbarSettings
-          fit={elementProps.fit ?? 'contain'}
-          settings={elementProps.settings || {
-            controls: false,
-            loop: false,
-            muted: false,
-            autoPlay: false,
-          }}
-          onUpdate={onUpdate}
-        />
-
+        {!isProviderVideo && (
+          <>
+            <Separator orientation="vertical" className="h-4" />
+            <VideoInlineToolbarSettings
+              fit={elementProps.fit ?? 'contain'}
+              settings={elementProps.settings || {
+                controls: false,
+                loop: false,
+                muted: false,
+                autoPlay: false,
+              }}
+              onUpdate={onUpdate}
+            />
+          </>
+        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

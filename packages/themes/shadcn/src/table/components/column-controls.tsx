@@ -1,9 +1,9 @@
 import type React from 'react';
-import { useCallback, useRef } from 'react';
-import { useYooptaEditor } from '@yoopta/editor';
+import { useCallback, useMemo, useRef } from 'react';
+import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
-import { ArrowLeft, ArrowRight, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, MoreHorizontal, Trash2 } from 'lucide-react';
 import type { Path } from 'slate';
 
 import { Button } from '../../ui/button';
@@ -42,6 +42,11 @@ export const ColumnControls = ({
   const internalRef = useRef<HTMLDivElement | null>(null);
   const controlsRef = externalRef || internalRef;
 
+  const isHeaderColumn = useMemo(() => {
+    const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
+    return table?.props?.headerColumn || false;
+  }, [editor, blockId]);
+
   const handleInsertColumnLeft = useCallback(() => {
     TableCommands.insertTableColumn(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
@@ -65,6 +70,10 @@ export const ColumnControls = ({
     });
   }, [editor, blockId, path]);
 
+  const handleToggleHeaderColumn = useCallback(() => {
+    TableCommands.toggleHeaderColumn(editor, blockId);
+  }, [editor, blockId]);
+
   return (
     <Portal id={`table-column-controls-${blockId}-${colIndex}`}>
       <div
@@ -72,9 +81,9 @@ export const ColumnControls = ({
         className="fixed z-[9999] pointer-events-auto"
         style={{
           left: `${position.left}px`,
-          top: `${position.top}px`,
+          top: `${position.top + 4}px`,
           width: `${position.width}px`,
-          height: '28px',
+          height: '18px',
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}>
@@ -85,10 +94,23 @@ export const ColumnControls = ({
               size="sm"
               className="h-full w-full bg-background/95 hover:bg-accent border border-border/50 shadow-sm rounded-md p-0 transition-all hover:shadow-md"
               onMouseDown={(e) => e.preventDefault()}>
-              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+              <MoreHorizontal className="h-3 w-3 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center" side="top" className="w-48">
+            {colIndex === 0 && (
+              <>
+                <DropdownMenuItem onClick={handleToggleHeaderColumn}>
+                  {isHeaderColumn ? (
+                    <Check className="mr-2 h-4 w-4" />
+                  ) : (
+                    <span className="mr-2 h-4 w-4" />
+                  )}
+                  Header column
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem onClick={handleInsertColumnLeft}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Insert column left

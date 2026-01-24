@@ -7,9 +7,9 @@ import Divider from '@yoopta/divider';
 import { YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
-import Video from '@yoopta/video';
+import Video, { VideoElement } from '@yoopta/video';
 import Headings from '@yoopta/headings';
-import Image from '@yoopta/image';
+import Image, { ImageElement } from '@yoopta/image';
 import Link from '@yoopta/link';
 import Lists from '@yoopta/lists';
 import Table from '@yoopta/table';
@@ -41,9 +41,17 @@ const YImage = Image.extend({
         height: result.height,
       }
     },
-    delete: {
-      endpoint: '/api/image-kit-delete',
-      method: 'DELETE',
+    delete: (element: ImageElement) => {
+      console.log('Image.extend element', element);
+      return fetch(`/api/image-kit-delete`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileId: element.props?.id,
+        }),
+      });
     },
   },
 });
@@ -100,9 +108,20 @@ export const YOOPTA_PLUGINS = applyTheme([
           height: result.height,
         }
       },
-      delete: {
-        endpoint: '/api/video-kit-delete',
-        method: 'DELETE',
+      delete: (element: VideoElement) => {
+        if (!!element.props?.provider) {
+          return Promise.resolve();
+        }
+
+        return fetch(`/api/video-kit-delete`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fileId: element.props?.id,
+          }),
+        });
       },
     }
   }),

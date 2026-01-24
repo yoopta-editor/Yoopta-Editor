@@ -1,9 +1,9 @@
 import type React from 'react';
-import { useCallback, useRef } from 'react';
-import { useYooptaEditor } from '@yoopta/editor';
+import { useCallback, useMemo, useRef } from 'react';
+import { Elements, useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
-import { ArrowDown, ArrowUp, MoreVertical, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Check, MoreVertical, Trash2 } from 'lucide-react';
 import type { Path } from 'slate';
 
 import { Button } from '../../ui/button';
@@ -40,10 +40,15 @@ export const RowControls = ({
 }: RowControlsProps) => {
   const editor = useYooptaEditor();
   const internalRef = useRef<HTMLDivElement | null>(null);
-  const controlsRef = externalRef || internalRef;
+  const controlsRef = externalRef ?? internalRef;
   const rowPath = path.slice(0, -1);
 
-  const handleInsertRowAbove = useCallback(() => {
+  const isHeaderRow = useMemo(() => {
+    const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
+    return table?.props?.headerRow || false;
+  }, [editor, blockId]);
+
+  const insertRowAbove = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
       path: rowPath,
@@ -51,7 +56,7 @@ export const RowControls = ({
     });
   }, [editor, blockId, rowPath]);
 
-  const handleInsertRowBelow = useCallback(() => {
+  const insertRowBelow = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
       path: rowPath,
@@ -59,12 +64,16 @@ export const RowControls = ({
     });
   }, [editor, blockId, rowPath]);
 
-  const handleDeleteRow = useCallback(() => {
+  const deleteRow = useCallback(() => {
     TableCommands.deleteTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
       path: rowPath,
     });
   }, [editor, blockId, rowPath]);
+
+  const toggleHeaderRow = useCallback(() => {
+    TableCommands.toggleHeaderRow(editor, blockId);
+  }, [editor, blockId]);
 
   return (
     <Portal id={`table-row-controls-${blockId}-${rowIndex}`}>
@@ -86,21 +95,34 @@ export const RowControls = ({
               size="sm"
               className="h-full w-full bg-background/95 hover:bg-accent border border-border/50 shadow-sm rounded-md p-0 transition-all hover:shadow-md flex items-center justify-center"
               onMouseDown={(e) => e.preventDefault()}>
-              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+              <MoreVertical className="h-3 w-3 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="left" className="w-48">
-            <DropdownMenuItem onClick={handleInsertRowAbove}>
+            {rowIndex === 0 && (
+              <>
+                <DropdownMenuItem onClick={toggleHeaderRow}>
+                  {isHeaderRow ? (
+                    <Check className="mr-2 h-4 w-4" />
+                  ) : (
+                    <span className="mr-2 h-4 w-4" />
+                  )}
+                  Header row
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            <DropdownMenuItem onClick={insertRowAbove}>
               <ArrowUp className="mr-2 h-4 w-4" />
               Insert row above
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleInsertRowBelow}>
+            <DropdownMenuItem onClick={insertRowBelow}>
               <ArrowDown className="mr-2 h-4 w-4" />
               Insert row below
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleDeleteRow}
+              onClick={deleteRow}
               className="text-destructive focus:text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
               Delete row

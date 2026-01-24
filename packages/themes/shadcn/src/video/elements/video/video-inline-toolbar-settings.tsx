@@ -15,7 +15,7 @@ import {
 import { Separator } from '../../../ui/separator';
 import { Switch } from '../../../ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../../ui/tooltip';
-import type { VideoElementProps, ObjectFit } from '../../types';
+import type { ObjectFit, VideoElementProps } from '../../types';
 
 type VideoInlineToolbarSettingsProps = {
   fit: ObjectFit | null;

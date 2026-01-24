@@ -444,6 +444,7 @@ export const TableCommands: TableCommands = {
     Editor.withoutNormalizing(slate, () => {
       const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
       const headerRow = table?.props?.headerRow || false;
+      const headerColumn = table?.props?.headerColumn || false;
 
       const firstTableRowChildren = Editor.nodes<SlateElement>(slate, {
         at: [0, 0],
@@ -452,9 +453,14 @@ export const TableCommands: TableCommands = {
       });
 
       Array.from(firstTableRowChildren).forEach(([cell, path]) => {
+        const isIntersectionCell = path[path.length - 1] === 0; // First cell in first row
+        const shouldBeHeader = isIntersectionCell && headerColumn
+          ? true // Keep as header if header column is enabled
+          : !cell.props?.asHeader; // Otherwise toggle
+
         Transforms.setNodes(
           slate,
-          { ...cell, props: { ...cell.props, asHeader: !cell.props?.asHeader } },
+          { ...cell, props: { ...cell.props, asHeader: shouldBeHeader } },
           {
             at: path,
             match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
@@ -479,6 +485,7 @@ export const TableCommands: TableCommands = {
     Editor.withoutNormalizing(slate, () => {
       const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
       const headerColumn = table?.props?.headerColumn || false;
+      const headerRow = table?.props?.headerRow || false;
 
       const tableRows = Editor.nodes<SlateElement>(slate, {
         at: [0],
@@ -488,10 +495,14 @@ export const TableCommands: TableCommands = {
 
       Array.from(tableRows).forEach(([row, path]) => {
         const cell = row.children[0] as TableCellElement;
+        const isIntersectionCell = path[path.length - 1] === 0; // First cell of first row
+        const shouldBeHeader = isIntersectionCell && headerRow
+          ? true // Keep as header if header row is enabled
+          : !cell.props?.asHeader; // Otherwise toggle
 
         Transforms.setNodes(
           slate,
-          { ...cell, props: { ...cell.props, asHeader: !cell.props?.asHeader } },
+          { ...cell, props: { ...cell.props, asHeader: shouldBeHeader } },
           {
             at: path.concat(0),
             match: (n) => Element.isElement(n) && n.type === 'table-data-cell',

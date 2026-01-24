@@ -1,4 +1,4 @@
-import { Video } from './plugin';
+import { Video } from './plugin/video-plugin';
 import { VideoElement, VideoElementProps, VideoPluginOptions, VideoUploadResponse } from './types';
 
 export { VideoCommands } from './commands';

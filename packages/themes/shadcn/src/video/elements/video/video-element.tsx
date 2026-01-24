@@ -44,8 +44,8 @@ export const VideoElement = ({
     [editor, blockId, element.props],
   );
 
-  const deleteVideo = useCallback(() => {
-    deleteVideoFromStorage(element as VideoElementType);
+  const deleteVideo = useCallback(async () => {
+    await deleteVideoFromStorage(element as VideoElementType);
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 

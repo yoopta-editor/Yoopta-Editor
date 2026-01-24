@@ -23,7 +23,6 @@ type Props = {
 
 export const ImageRender = ({
   blockId,
-  elementId,
   attributes,
   children,
   elementProps,
@@ -42,18 +41,18 @@ export const ImageRender = ({
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
     const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
-    const maxSizes = pluginOptions?.maxSizes;
+    const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
-      maxWidth: maxSizes?.maxWidth
-        ? typeof maxSizes.maxWidth === 'number'
-          ? maxSizes.maxWidth
-          : parseInt(String(maxSizes.maxWidth).replace(/[^\d]/g, ''), 10)
+      maxWidth: maxSizesOptions?.maxWidth
+        ? typeof maxSizesOptions.maxWidth === 'number'
+          ? maxSizesOptions.maxWidth
+          : parseInt(String(maxSizesOptions.maxWidth).replace(/[^\d]/g, ''), 10)
         : editorWidth,
-      maxHeight: maxSizes?.maxHeight
-        ? typeof maxSizes.maxHeight === 'number'
-          ? maxSizes.maxHeight
-          : parseInt(String(maxSizes.maxHeight).replace(/[^\d]/g, ''), 10)
+      maxHeight: maxSizesOptions?.maxHeight
+        ? typeof maxSizesOptions.maxHeight === 'number'
+          ? maxSizesOptions.maxHeight
+          : parseInt(String(maxSizesOptions.maxHeight).replace(/[^\d]/g, ''), 10)
         : 550,
     };
   });
@@ -192,7 +191,7 @@ export const ImageRender = ({
   return (
     <div
       {...attributes}
-      className={cn('group/image relative transition-all w-full flex', alignmentClass)}>
+      className={cn('group/image mt-2 relative transition-all w-full flex', alignmentClass)}>
       <div className="relative" contentEditable={false}>
         <Rnd
           ref={(node) => {

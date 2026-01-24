@@ -48,9 +48,9 @@ export const AddRowButton = ({
         className="fixed z-[9999] pointer-events-auto"
         style={{
           left: `${position.left}px`,
-          top: `${position.top}px`,
+          top: `${position.top + 4}px`,
           width: `${position.width}px`,
-          height: '28px',
+          height: '18px',
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}>
@@ -60,8 +60,7 @@ export const AddRowButton = ({
           className="h-full w-full bg-background/95 hover:bg-accent border border-border/50 shadow-sm rounded-md transition-all hover:shadow-md flex items-center justify-center gap-1.5 text-muted-foreground hover:text-foreground"
           onClick={handleAddRow}
           onMouseDown={(e) => e.preventDefault()}>
-          <Plus className="h-4 w-4" />
-          <span className="text-xs font-medium">Add row</span>
+          <Plus className="h-3 w-3" />
         </Button>
       </div>
     </Portal>

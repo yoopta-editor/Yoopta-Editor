@@ -32,7 +32,7 @@ export type ImageUploadFn = (
 ) => Promise<ImageElementProps>;
 
 // Custom function type for direct deletes
-export type ImageDeleteFn = (src: string) => Promise<void>;
+export type ImageDeleteFn = (element: ImageElement) => Promise<any>;
 
 // Endpoint-based upload options (for backend API)
 export type ImageUploadEndpointOptions = {
@@ -128,7 +128,7 @@ export type UseImageUploadReturn = {
 } & UploadState;
 
 export type UseImageDeleteReturn = {
-  deleteImage: (element: ImageElement) => Promise<UploadResult>;
+  deleteImage: (element: ImageElement) => Promise<any>;
   cancel: () => void;
   reset: () => void;
 } & UploadState;

@@ -29,8 +29,8 @@ export const LinkEdit = ({
   cancelEdit,
   deleteLink,
 }: LinkEditProps) => (
-  <div className="p-3 space-y-3">
-    <div className="space-y-1.5">
+  <div className="p-2 space-y-2">
+    <div className="space-y-1">
       <Label htmlFor="link-text" className="text-xs">
         Link text
       </Label>
@@ -45,7 +45,7 @@ export const LinkEdit = ({
         onClick={(e) => e.stopPropagation()}
       />
     </div>
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       <Label htmlFor="link-url" className="text-xs">
         URL
       </Label>

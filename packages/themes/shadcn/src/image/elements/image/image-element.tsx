@@ -40,8 +40,8 @@ export const ImageElement = ({
     [editor, blockId, element.props],
   );
 
-  const deleteImage = useCallback(() => {
-    deleteImageFromStorage(element as ImageElementType);
+  const deleteImage = useCallback(async () => {
+    await deleteImageFromStorage(element as ImageElementType);
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 

@@ -29,6 +29,7 @@ type HoveredCell = {
 export const TableControls = ({ blockId }: TableControlsProps) => {
   const editor = useYooptaEditor();
   const slate = useMemo(() => Blocks.getBlockSlate(editor, { id: blockId }), [blockId, editor]);
+
   const [hoveredCell, setHoveredCell] = useState<HoveredCell | null>(null);
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
@@ -40,6 +41,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
   const [isOverColumnControls, setIsOverColumnControls] = useState(false);
   const [isOverAddRowButton, setIsOverAddRowButton] = useState(false);
   const [isOverAddColumnButton, setIsOverAddColumnButton] = useState(false);
+  const [isOverTable, setIsOverTable] = useState(false);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rowControlsRef = useRef<HTMLDivElement | null>(null);
@@ -101,6 +103,8 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
+
+      setIsOverTable(true);
 
       const mouseEvent = e as MouseEvent;
       const target = mouseEvent.target as HTMLElement;
@@ -394,6 +398,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     };
 
     const handleMouseLeave = () => {
+      setIsOverTable(false);
       timeoutRef.current = setTimeout(() => {
         if (
           !isOverRowControls &&
@@ -421,6 +426,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
   }, [
     blockId,
     slate,
+    isOverTable,
     isOverRowControls,
     isOverColumnControls,
     isOverAddRowButton,
@@ -497,13 +503,29 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     }, 150);
   }, []);
 
+  // Clear controls when mouse is outside table and all control areas
+  useEffect(() => {
+    const isOverAnyControl =
+      isOverTable || isOverRowControls || isOverColumnControls || isOverAddRowButton || isOverAddColumnButton;
+
+    if (!isOverAnyControl) {
+      setHoveredCell(null);
+      setHoveredColumn(null);
+      setHoveredRow(null);
+    }
+  }, [isOverTable, isOverRowControls, isOverColumnControls, isOverAddRowButton, isOverAddColumnButton]);
+
   if (!tableRect || !containerRect) return null;
 
+  // Only show controls when hovering over table or controls
+  const shouldShowControls =
+    isOverTable || isOverRowControls || isOverColumnControls || isOverAddRowButton || isOverAddColumnButton;
+
   // Show add buttons only on hover of last row/column
-  const showAddRowButton = hoveredCell
+  const showAddRowButton = hoveredCell && shouldShowControls
     ? hoveredCell.rowIndex === hoveredCell.totalRows - 1
     : false;
-  const showAddColumnButton = hoveredCell
+  const showAddColumnButton = hoveredCell && shouldShowControls
     ? hoveredCell.colIndex === hoveredCell.totalColumns - 1
     : false;
 
@@ -526,7 +548,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
   return (
     <>
       {/* Row controls - rendered in Portal */}
-      {hoveredCell && (
+      {hoveredCell && shouldShowControls && (
         <RowControls
           blockId={blockId}
           rowIndex={hoveredCell.rowIndex}
@@ -543,7 +565,7 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       )}
 
       {/* Column controls - rendered in Portal */}
-      {hoveredCell && (
+      {hoveredCell && shouldShowControls && (
         <ColumnControls
           blockId={blockId}
           colIndex={hoveredCell.colIndex}
