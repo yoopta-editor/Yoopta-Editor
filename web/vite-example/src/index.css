@@ -44,5 +44,5 @@ button:hover {
   padding: 80px;
   display: flex;
   justify-content: center;
-  min-width: 750px;
+  max-width: 750px;
 }

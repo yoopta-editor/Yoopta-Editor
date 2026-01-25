@@ -16,26 +16,19 @@ import { useRectangeSelectionBox } from '../SelectionBox/hooks';
 import { SelectionBox } from '../SelectionBox/SelectionBox';
 
 type Props = {
+  // move it to @yoopta/ui/selection-box
   selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   autoFocus?: boolean;
   className?: string;
   placeholder?: string;
-  width?: number | string;
   children: ReactNode;
   style?: CSSProperties;
 };
-
-const getEditorStyles = (styles: CSSProperties) => ({
-  ...styles,
-  width: styles.width ?? 400,
-  paddingBottom: typeof styles.paddingBottom === 'number' ? styles.paddingBottom : 100,
-});
 
 const Editor = ({
   placeholder,
   className,
   selectionBoxRoot,
-  width,
   style,
   children,
   autoFocus = true,
@@ -309,22 +302,22 @@ const Editor = ({
     }
   };
 
-  const editorStyles: CSSProperties = getEditorStyles({
-    ...style,
-    userSelect: selectionBox.selection ? 'none' : 'auto',
-    pointerEvents: selectionBox.selection ? 'none' : 'auto',
-    width: width || style?.width,
-    paddingBottom: style?.paddingBottom,
-    paddingLeft: '2.5rem',
-    paddingRight: '2.5rem',
-  });
+  // const editorStyles: CSSProperties = getEditorStyles({
+  //   ...style,
+  //   // userSelect: selectionBox.selection ? 'none' : 'auto',
+  //   // pointerEvents: selectionBox.selection ? 'none' : 'auto',
+  //   // width: width || style?.width,
+  //   // paddingBottom: style?.paddingBottom,
+  //   // paddingLeft: '2.5rem',
+  //   // paddingRight: '2.5rem',
+  // });
 
   return (
     <div
       // eslint-disable-next-line no-return-assign
       ref={(ref) => (editor.refElement = ref)}
       className={className ? `yoopta-editor ${className}` : 'yoopta-editor'}
-      style={editorStyles}
+      style={style}
       onMouseDown={onMouseDown}
       onBlur={onBlur}
       onCopy={onCopy}

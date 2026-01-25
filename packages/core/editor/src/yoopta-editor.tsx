@@ -19,7 +19,6 @@ export type YooptaEditorProps = {
   selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   children?: React.ReactNode;
   placeholder?: string;
-  width?: number | string;
   style?: CSSProperties;
 };
 
@@ -35,7 +34,6 @@ const YooptaEditor = ({
   selectionBoxRoot,
   children,
   placeholder,
-  width,
   style,
   onChange,
   onPathChange,
@@ -83,7 +81,6 @@ const YooptaEditor = ({
         autoFocus={autoFocus}
         className={className}
         selectionBoxRoot={selectionBoxRoot}
-        width={width}
         style={style}>
         {children}
       </Editor>
