@@ -1,317 +1,400 @@
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/darginec05)
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/darginec05)
 
 ![npm](https://img.shields.io/npm/v/@yoopta/editor)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Darginec05)
 
-# Welcome to Yoopta-Editor@v4🎉
+# Yoopta-Editor v6
 
 ![](/docs/public/yoopta_intro.gif)
 
 ## Introduction
 
-Yoopta-Editor is a free, open-source rich-text editor built for React apps. It’s packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.
+Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.
 
-With Yoopta-Editor, you can customize everything to fit exactly what you need. Want to tweak the look, add cool features, or craft a completely custom user interface? No problem. Yoopta-Editor gives you the flexibility to do it all, making it easy to create the perfect tool for your project.
-All of this is customizable, extensible, and easy to set up!
+Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything - tweak the look, add features, or craft a completely custom user interface.
 
 ## Features
 
-- Easy setup
-- Default list of powerful plugins
-- Many typical solved problems in UX behaviour.
-- Media plugins on steroids with optimization and lazy loadings
-- Code plugin on steroids with themes and languages
-- Each plugin can be easily customized and extensible
-- Drag and drop, nested dnd is supported also
-- Selection box for manipulating multiple blocks at once
-- You can create your own plugin
-- Automatic lazy loading for media components (eg. embeds)
-- Large documents
+- Easy setup with sensible defaults
+- 18 powerful plugins out of the box
+- Built on Slate.js for robust text editing
+- Drag and drop with nested support
+- Selection box for multi-block operations
 - Mobile friendly
-- Indent and outdent for every plugin by tabs and shift+tabs
-- Editor instance to programmatically control your content
-- Editor events for saving to DB in real-time
-- Exports in markdown, html, plain text
-- Shortcuts, hotkeys. And customization for this!
-- Super AI tools not for HYPE, but for real useful work with editor content - [in progress]
-- The soul invested in the development of this editor 💙
-- ... and other features that I forgot to write about in this list 😅. Just check it in examples!
+- Keyboard shortcuts and hotkeys (customizable)
+- Indent/outdent with Tab/Shift+Tab
+- Programmatic editor API for full control
+- Real-time change events for database sync
+- Export to HTML, Markdown, plain text
+- Create custom plugins
+- Media optimization with lazy loading
+- Large document support
+- Theming support (light/dark)
+
+## Installation
+
+```bash
+# Install peer dependencies and core packages
+yarn add slate slate-react slate-dom @yoopta/editor
+
+# Add plugins you need
+yarn add @yoopta/paragraph @yoopta/headings @yoopta/lists @yoopta/blockquote @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps
+
+# Add marks for text formatting
+yarn add @yoopta/marks
+
+# Add UI components
+yarn add @yoopta/ui
+```
+
+## Quick Start
+
+```tsx
+import YooptaEditor, { createYooptaEditor, YooptaContentValue } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
+import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/marks';
+import { useMemo, useState } from 'react';
+
+const PLUGINS = [Paragraph, HeadingOne, HeadingTwo, HeadingThree];
+const MARKS = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({
+    plugins: PLUGINS,
+    marks: MARKS,
+    // value: initialValue, // optional initial value
+  }), []);
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      placeholder="Type / to open menu"
+      style={{ width: 750 }}
+      onChange={(value) => console.log('onChange', value)}
+    />
+  );
+}
+```
+
+## Adding UI Components
+
+Yoopta provides ready-to-use UI components from `@yoopta/ui`:
+
+```tsx
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import {
+  YooptaToolbar,
+  YooptaActionMenuList,
+  YooptaFloatingBlockActions,
+  YooptaSlashCommandMenu
+} from '@yoopta/ui';
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({
+    plugins: PLUGINS,
+    marks: MARKS,
+  }), []);
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      autoFocus
+      placeholder="Type / to open menu"
+      style={{ width: 750 }}
+    >
+      {/* Floating toolbar for text formatting */}
+      <YooptaToolbar />
+
+      {/* Slash command menu (type / to open) */}
+      <YooptaSlashCommandMenu />
+
+      {/* Action menu for block operations */}
+      <YooptaActionMenuList />
+
+      {/* Drag handle and block options */}
+      <YooptaFloatingBlockActions />
+    </YooptaEditor>
+  );
+}
+```
 
 ## Packages
 
-- Core
+### Core
 
-  - [**@yoopta/editor**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/core/editor/README.md)
-  - [**@yoopta/exports**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/core/exports/README.md)
-  - [**@yoopta/email-builder**](https://github.com/yoopta-editor/Email-Builder)
+| Package | Description |
+|---------|-------------|
+| [@yoopta/editor](./packages/core/editor) | Core editor component and API |
+| [@yoopta/ui](./packages/core/ui) | UI components (Toolbar, ActionMenu, BlockOptions) |
+| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email |
+| [@yoopta/marks](./packages/marks) | Text formatting marks |
 
-- Plugins
+### Plugins
 
-  - [**@yoopta/paragraph**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/paragraph/README.md)
-  - [**@yoopta/blockquote**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/blockquote/README.md)
-  - [**@yoopta/accordion**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/accordion/README.md)
-  - [**@yoopta/divider**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/divider/README.md)
-  - [**@yoopta/table**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/table/README.md)
-  - [**@yoopta/code**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/code/README.md)
-  - [**@yoopta/embed**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/embed/README.md)
-  - [**@yoopta/image**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/image/README.md)
-  - [**@yoopta/link**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/link/README.md)
-  - [**@yoopta/file**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/file/README.md)
-  - [**@yoopta/callout**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/callout/README.md)
-  - [**@yoopta/video**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/video/README.md)
-  - [**@yoopta/lists**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/lists/README.md)
-  - [**@yoopta/headings**](https://github.com/Darginec05/Yoopta-Editor/blob/master/packages/plugins/headings/README.md)
+| Package | Description |
+|---------|-------------|
+| [@yoopta/paragraph](./packages/plugins/paragraph) | Basic text paragraph |
+| [@yoopta/headings](./packages/plugins/headings) | H1, H2, H3 headings |
+| [@yoopta/lists](./packages/plugins/lists) | Bulleted, numbered, and todo lists |
+| [@yoopta/blockquote](./packages/plugins/blockquote) | Block quotes |
+| [@yoopta/callout](./packages/plugins/callout) | Callout/alert boxes with themes |
+| [@yoopta/code](./packages/plugins/code) | Code blocks with syntax highlighting |
+| [@yoopta/image](./packages/plugins/image) | Images with optimization |
+| [@yoopta/video](./packages/plugins/video) | Video embeds (YouTube, Vimeo, etc.) |
+| [@yoopta/embed](./packages/plugins/embed) | Generic embeds (Figma, Twitter, etc.) |
+| [@yoopta/file](./packages/plugins/file) | File attachments |
+| [@yoopta/table](./packages/plugins/table) | Tables with headers |
+| [@yoopta/accordion](./packages/plugins/accordion) | Collapsible accordion sections |
+| [@yoopta/tabs](./packages/plugins/tabs) | Tabbed content panels |
+| [@yoopta/steps](./packages/plugins/steps) | Step-by-step instructions |
+| [@yoopta/divider](./packages/plugins/divider) | Visual dividers |
+| [@yoopta/link](./packages/plugins/link) | Inline links |
+| [@yoopta/mention](./packages/plugins/mention) | @mentions |
+| [@yoopta/carousel](./packages/plugins/carousel) | Image carousels |
 
-- Marks
-  - **@yoopta/marks** - _[Bold, Italic, CodeMark, Underline, Strike, Highlight]_
+### Marks (Text Formatting)
 
-## Getting Started
+All marks are available from `@yoopta/marks`:
 
-First, install the peer dependencies and the Yoopta core package with at least one plugin
+- **Bold** - `Cmd/Ctrl + B`
+- **Italic** - `Cmd/Ctrl + I`
+- **Underline** - `Cmd/Ctrl + U`
+- **Strike** - `Cmd/Ctrl + Shift + S`
+- **CodeMark** - `Cmd/Ctrl + E`
+- **Highlight** - Text highlighting with colors
 
-```bash
-## slate, slate-react, react, react-dom - peer dependencies
-## @yoopta/editor - core package
-yarn add slate slate-react @yoopta/editor @yoopta/paragraph
-# or
-npm install slate slate-react @yoopta/editor @yoopta/paragraph
+### Themes
+
+| Package | Description |
+|---------|-------------|
+| [@yoopta/theme-base](./packages/themes/base) | Base theme |
+| [@yoopta/theme-material](./packages/themes/material) | Material design theme |
+| [@yoopta/theme-shadcn](./packages/themes/shadcn) | shadcn/ui compatible theme |
+
+## Editor API
+
+### Editor Instance
+
+The editor instance provides programmatic control over content:
+
+```tsx
+const editor = useMemo(() => createYooptaEditor({
+  plugins: PLUGINS,
+  marks: MARKS,
+  value: initialValue,
+}), []);
+
+// Element builder - create complex nested structures
+const elements = editor.y('paragraph', {
+  children: [
+    editor.y.text('Hello '),
+    editor.y.text('world', { bold: true, italic: true }),
+  ],
+});
+
+// Inline elements (e.g., links)
+const linkElement = editor.y.inline('link', {
+  props: { url: 'https://example.com', target: '_blank' },
+  children: [editor.y.text('Click here', { bold: true })],
+});
+
+// Insert block with elements
+editor.insertBlock('Paragraph', { elements, at: 0, focus: true });
+
+// Toggle block type (preserves content)
+editor.toggleBlock('HeadingOne', { at: editor.path.current, focus: true });
+
+// Batch multiple operations
+editor.batchOperations(() => {
+  editor.insertBlock('HeadingOne', { at: 0 });
+  editor.insertBlock('Paragraph', { at: 1 });
+});
+
+// Export content
+const html = editor.getHTML();
+const markdown = editor.getMarkdown();
+const plainText = editor.getPlainText();
+
+// History
+editor.undo();
+editor.redo();
+
+// Events
+editor.on('change', (value) => console.log(value));
+editor.on('focus', () => console.log('focused'));
+editor.on('blur', () => console.log('blurred'));
 ```
 
-### Start from core package
+### Blocks API
 
-Import from core package **@yoopta/editor** Editor Component and function to create editor instance
+Namespace for block-level operations. Import: `import { Blocks } from '@yoopta/editor'`
 
-```jsx
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-
-const plugins = [...];
-
-export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-   const [value, setValue] = useState<YooptaContentValue>();
-
-  const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    setValue(value);
-  };
-
-  return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        plugins={plugins}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  );
-}
+```tsx
+Blocks.insertBlock(editor, { ... })    // Insert a new block
+Blocks.deleteBlock(editor, { ... })    // Delete a block
+Blocks.updateBlock(editor, { ... })    // Update block properties
+Blocks.moveBlock(editor, { ... })      // Move block to new position
+Blocks.duplicateBlock(editor, { ... }) // Duplicate a block
+Blocks.toggleBlock(editor, { ... })    // Change block type
+Blocks.focusBlock(editor, { ... })     // Focus a specific block
+Blocks.splitBlock(editor, { ... })     // Split block at cursor
+Blocks.mergeBlock(editor, { ... })     // Merge with adjacent block
+Blocks.increaseBlockDepth(editor, { ... }) // Indent block
+Blocks.decreaseBlockDepth(editor, { ... }) // Outdent block
+Blocks.getBlock(editor, { ... })       // Get block by ID
+Blocks.getBlockSlate(editor, { ... })  // Get Slate instance for block
+Blocks.buildBlockData(editor, { ... }) // Build block data structure
 ```
 
-Available props for YooptaEditor components
+### Elements API
+
+Namespace for element-level operations within blocks. Import: `import { Elements } from '@yoopta/editor'`
+
+```tsx
+Elements.insertElement(editor, { ... })   // Insert element in block
+Elements.updateElement(editor, { ... })   // Update element properties
+Elements.deleteElement(editor, { ... })   // Delete element
+Elements.getElement(editor, { ... })      // Get element by matcher
+Elements.getElements(editor, { ... })     // Get multiple elements
+Elements.getElementEntry(editor, { ... }) // Get element with path
+Elements.getElementPath(editor, { ... })  // Get path to element
+Elements.getParentElementPath(editor, { ... }) // Get parent path
+Elements.getElementChildren(editor, { ... })   // Get child elements
+Elements.isElementEmpty(editor, { ... })  // Check if element is empty
+```
+
+### Marks API
+
+Namespace for text formatting operations. Import: `import { Marks } from '@yoopta/editor'`
+
+```tsx
+// Apply marks to text at specific block positions
+Marks.update(editor, {
+  type: 'bold',
+  value: true,
+  at: [0, 1, 2], // block indices
+});
+
+// Apply highlight with custom styles
+Marks.update(editor, {
+  type: 'highlight',
+  value: { color: 'red', backgroundColor: '#ffff00' },
+  at: [0],
+});
+```
+
+### Creating Custom Marks
+
+```tsx
+import { createYooptaMark } from '@yoopta/editor';
+
+const CustomMark = createYooptaMark({
+  type: 'custom',
+  hotkey: 'mod+shift+c',
+  render: (props) => <span className="custom-mark">{props.children}</span>,
+});
+```
+
+## API Reference
+
+### createYooptaEditor Options
 
 ```typescript
-type YooptaEditor = {
-  /* editor instance */
-  editor: YooEditor;
-  /* list of plugins */
-  plugins: YooptaPlugin[];
-  /* list of marks */
-  marks?: YooptaMark<any>[];
-  /* Value. [Default] - undefined */
-  value?: YooptaContentValue;
-  /* Change handler  */
+const editor = createYooptaEditor({
+  plugins: YooptaPlugin[];        // List of plugins
+  marks?: YooptaMark[];           // List of marks for text formatting
+  value?: YooptaContentValue;     // Initial editor value
+});
+```
+
+### YooptaEditor Props
+
+```typescript
+type YooptaEditorProps = {
+  editor: YooEditor;              // Editor instance from createYooptaEditor()
   onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
-  /* Path change handler */
   onPathChange?: (path: YooptaPath) => void;
-  /* autoFocus. [Default] - true */
-  autoFocus?: boolean;
-  /* className - class name */
-  className?: string;
-  /* These props define the area for the selection box. 
-  Good practice - passing parent element.
-  [Default] - document */
-  selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
-  children?: React.ReactNode;
+  autoFocus?: boolean;            // Default: true
   placeholder?: string;
   readOnly?: boolean;
-  /* Width. [Default] - 400px. Will be DEPRECATED, use style object  */
-  width?: number | string;
-  /* Style CSS Object. [Default] - { width: '400px', paddingBottom: '100px' } */
-  style?: number | string;
-  /* Id for your editor instance. Can be useful for multiple editors */
-  id?: number | string;
+  className?: string;
+  style?: React.CSSProperties;
+  id?: string | number;           // Useful for multiple editors
+  selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
+  children?: React.ReactNode;     // UI components (Toolbar, ActionMenu, etc.)
 };
 ```
 
-### Plugins:
+## Examples
 
-Here is list of available plugins
+- [Basic Setup](https://yoopta.dev/examples/withBaseFullSetup)
+- [Custom Toolbar](https://yoopta.dev/examples/withCustomToolbar)
+- [Notion-style Action Menu](https://yoopta.dev/examples/withNotionActionMenu)
+- [Dark Theme](https://yoopta.dev/examples/withDarkTheme)
+- [Media Plugins](https://yoopta.dev/examples/withMedia)
+- [Extended Plugins](https://yoopta.dev/examples/withExtendedPlugin)
+- [Read Only Mode](https://yoopta.dev/examples/withReadOnly)
+- [Custom HTML Attributes](https://yoopta.dev/examples/withCustomHTMLAttributes)
+- [Custom Marks](https://yoopta.dev/examples/withCustomMark)
+- [Chat (Slack-style)](https://yoopta.dev/examples/withChatSlack)
 
-- @yoopta/paragraph
-- @yoopta/blockquote
-- @yoopta/table
-- @yoopta/divider
-- @yoopta/accordion
-- @yoopta/code
-- @yoopta/embed
-- @yoopta/image
-- @yoopta/link
-- @yoopta/file
-- @yoopta/callout
-- @yoopta/video
-- @yoopta/lists
-- @yoopta/headings
+## Project Structure
 
-### How to use
-
-```jsx
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import Paragraph from '@yoopta/paragraph';
-import Blockquote from '@yoopta/blockquote';
-
-const plugins = [Paragraph, Blockquote];
-
-export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState<YooptaContentValue>();
-  const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    setValue(value);
-  };
-
-  return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        placeholder="Type text.."
-        value={value}
-        onChange={onChange}
-        // here we go
-        plugins={plugins}
-      />
-    </div>
-  );
-}
+```
+packages/
+├── core/
+│   ├── editor/       # @yoopta/editor - Main editor
+│   ├── ui/           # @yoopta/ui - UI components
+│   └── exports/      # @yoopta/exports - Serializers
+├── plugins/          # Block plugins
+├── marks/            # Text formatting marks
+├── themes/           # Theme packages
+└── development/      # Dev playground
 ```
 
-**_[Check code with plugins](https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-example/src/components/examples/withBaseFullSetup/index.tsx#L27)_**
+## Development
 
-### Marks
+```bash
+# Install dependencies
+yarn install
 
-Marks are simple text formats
+# Build all packages
+yarn build
 
-Here is a list of available marks from **@yoopta/marks** package
+# Start dev server with watch mode
+yarn dev
 
-- Bold
-- Italic
-- CodeMark
-- Underline
-- Strike
-- Highlight
+# Run tests
+yarn test
 
-### How to use
-
-```jsx
-// IMPORT MARKS
-import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
-
-const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
-
-export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-   const [value, setValue] = useState<YooptaContentValue>();
-
-  const onChange = (value: YooptaContentValue, options: YooptaOnChangeOptions) => {
-    setValue(value);
-  };
-
-  return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        placeholder="Type text.."
-        plugins={plugins}
-        value={value}
-        onChange={onChange}
-        // here we go
-        marks={MARKS}
-      />
-    </div>
-  );
-}
+# Lint
+yarn lint
 ```
-
-**_[Check code with marks](https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-example/src/components/examples/withBaseFullSetup/index.tsx#L85)_**
-
-## Examples - DEMO's
-
-Find below useful examples of utilising the Yoopta-Editor in your projects. These examples will help you get started quickly and show you how easy it is to integrate and customize the editor to your needs.
-
-Okay, let's go!
-
-- [With basic example](https://yoopta.dev/examples/withBaseFullSetup)
-- [With custom toolbar (Notion and Medium example)](https://yoopta.dev/examples/withCustomToolbar)
-- [With Notion Action Menu](https://yoopta.dev/examples/withNotionActionMenu)
-- [With dark theme](https://yoopta.dev/examples/withDarkTheme)
-- [With media plugins](https://yoopta.dev/examples/withMedia)
-- [With extended plugins](https://yoopta.dev/examples/withExtendedPlugin)
-- [With readonly](https://yoopta.dev/examples/withReadOnly)
-- [With custom HTML attributes](https://yoopta.dev/examples/withCustomHTMLAttributes)
-- [With custom mark](https://yoopta.dev/examples/withCustomMark)
-- [With chat slack](https://yoopta.dev/examples/withChatSlack)
-- ...and check other examples in the sidebar list
-
-## Give us ⭐️ star
-
-If you find Yoopta-Editor useful and valuable for your projects, I kindly ask you to show your support by giving to this repo ⭐️ star on GitHub. Your appreciation means a lot to me and helps me grow and continue improving the editor for the community. 💙
 
 ## Roadmap
 
-- Develop other powerful plugins
-- AI tools
-- Simplify API for creating plugins
-- Collaborative mode
-- Plugin system
-- Optimizations for media components
-- Create package @yoopta/hotkeys to manage hotkeys
-- Rethink the approach for just rendering to increase SEO performance
-- Continue improving the project. [We are listening to you and your requests](https://github.com/Darginec05/Yoopta-Editor/discussions/new/choose) 💙
+- AI tools for content generation
+- Collaborative editing mode
+- Simplified plugin API
+- Additional plugins
+- SEO optimizations
 
 ## Support
 
-Hey there! If you find this project useful or it helps you in your work, consider supporting it to ensure continuous improvements and development. Your donations help keep the project alive and allow me to invest more time and resources into maintaining and enhancing it.
+If you find Yoopta-Editor useful, consider supporting the project:
 
-### How to Support
-
-You can support the project by:
-
-- ⭐ Star this repository to show your appreciation.
-- 🗣 Share the project with your friends, colleagues, and on social media.
-- 💸 Make a donation to help fund development efforts.
-
-### Donation Options
-
-- [Github Sponsors](https://github.com/sponsors/Darginec05)
-
-Any contribution, big or small, is highly appreciated and helps me maintain the project and add exciting new features. Thank you for your support! 🙏
-
-## Project structure
-
-```text
-packages/
-├── core - core components of the editor
-├── marks - text marks
-├── plugins - editor plugin extensions
-└── development - developer playground
-```
+- Star this repository
+- [Sponsor on GitHub](https://github.com/sponsors/Darginec05)
+- [Buy me a coffee](https://www.buymeacoffee.com/darginec05)
+- Share with others
 
 ## Contributing
 
-If you're ready to support Yoopta-Editor, here's how you can do it:
-
-- If you've spotted a bug or thinking of a feature [raise an issue](https://github.com/Darginec05/Yoopta-Editor/issues/new/choose)
-- If you want to collaborate on the project, find an issue you like to work on and suggest your changes. Checkout [contributing guidelines](./CONTRIBUTING.md).
-- If you want to discuss your idea feel free to create a [discussion](https://github.com/Darginec05/Yoopta-Editor/discussions/new/choose)
-- Or join our [Discord Community](https://discord.gg/Dt8rhSTjsn) and get in touch with us
+- [Report bugs or request features](https://github.com/Darginec05/Yoopta-Editor/issues/new/choose)
+- [Start a discussion](https://github.com/Darginec05/Yoopta-Editor/discussions/new/choose)
+- [Join Discord](https://discord.gg/Dt8rhSTjsn)
+- See [Contributing Guidelines](./CONTRIBUTING.md)
 
 <a href="https://github.com/Darginec05/Yoopta-Editor/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Darginec05/Yoopta-Editor" />
@@ -319,10 +402,10 @@ If you're ready to support Yoopta-Editor, here's how you can do it:
 
 ## License
 
-Yoopta-Editor is released under the [MIT License](https://github.com/Darginec05/Yopta-Editor/blob/master/LICENSE). Feel free to use and modify it for your projects.
+[MIT License](./LICENSE)
 
 ## Contacts
 
-- [Discord Community](https://discord.gg/Dt8rhSTjsn)
+- [Discord](https://discord.gg/Dt8rhSTjsn)
 - [Twitter](https://twitter.com/LebovskiYoo)
-- [Github](https://github.com/Darginec05)
+- [GitHub](https://github.com/Darginec05)

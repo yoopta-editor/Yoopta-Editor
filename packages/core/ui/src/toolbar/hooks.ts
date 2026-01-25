@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import {
   autoUpdate,
   flip,
-  inline,
   offset,
   shift,
   useFloating,
@@ -22,9 +21,9 @@ export const useToolbar = () => {
   const { state, frozen, open, close, setFrozen, toggle, reset } = useToolbarStore();
 
   const { refs, floatingStyles, context } = useFloating({
-    placement: 'top',
+    placement: 'top-start',
     open: state === 'open',
-    middleware: [inline(), flip(), shift(), offset(10)],
+    middleware: [flip(), shift(), offset(10)],
     whileElementsMounted: autoUpdate,
   });
 

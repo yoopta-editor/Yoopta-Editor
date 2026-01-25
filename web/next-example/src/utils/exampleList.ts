@@ -1,1 +1,0 @@
-import { readdirSync } from 'fs';
