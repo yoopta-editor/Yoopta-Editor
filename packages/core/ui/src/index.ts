@@ -18,3 +18,24 @@ export type {
   RectangeSelectionState,
   SelectionBoxProps,
 } from './selection-box';
+export {
+  ElementOptions,
+  useElementOptions,
+  useElementOptionsContext,
+  useUpdateElementProps,
+} from './element-options';
+export type {
+  ElementOptionsContextValue,
+  ElementOptionsRootProps,
+  ElementOptionsTriggerProps,
+  ElementOptionsContentProps,
+  ElementOptionsGroupProps,
+  ElementOptionsLabelProps,
+  ElementOptionsSeparatorProps,
+  ElementOptionsSelectProps,
+  ElementOptionsColorPickerProps,
+  ElementOptionsToggleProps,
+  ElementOptionsSliderProps,
+  ElementOptionsInputProps,
+  SelectOption,
+} from './element-options';

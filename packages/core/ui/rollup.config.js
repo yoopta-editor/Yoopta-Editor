@@ -23,6 +23,7 @@ const createMultiEntryConfig = () => {
       'block-options': './src/block-options/index.ts',
       'highlight-color-picker': './src/highlight-color-picker/index.ts',
       'selection-box': './src/selection-box/index.ts',
+      'element-options': './src/element-options/index.ts',
       portal: './src/portal/index.ts',
       overlay: './src/overlay/index.ts',
       theme: './src/theme/index.ts',

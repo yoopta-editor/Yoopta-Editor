@@ -427,13 +427,14 @@ export const TableCommands: TableCommands = {
 
       // Ensure we have widths for all columns
       const newWidths: number[] = [];
-      for (let i = 0; i < numColumns; i++) {
+      for (let i = 0; i < numColumns; i += 1) {
         if (i === columnIndex) {
           newWidths.push(clampedWidth);
         } else if (currentWidths[i] !== undefined) {
-          newWidths.push(typeof currentWidths[i] === 'number' ? currentWidths[i] : parseInt(String(currentWidths[i]), 10) || 200);
+          const w = typeof currentWidths[i] === 'number' ? currentWidths[i] : parseInt(String(currentWidths[i]), 10) ?? 200;
+          newWidths.push(w as number);
         } else {
-          newWidths.push(200); // Default width
+          newWidths.push(200);
         }
       }
 
@@ -546,7 +547,6 @@ export const TableCommands: TableCommands = {
     const { cells, color } = options;
 
     if (!cells || cells.length === 0) {
-      console.warn('No cells to update');
       return;
     }
 
@@ -575,10 +575,7 @@ export const TableCommands: TableCommands = {
   setCellTextColor: (editor: YooEditor, blockId: string, options: UpdateCellsOptions & { color: string }) => {
     const { cells, color } = options;
 
-    console.log('setCellTextColor cells', cells);
-
     if (!cells || cells.length === 0) {
-      console.warn('No cells to update');
       return;
     }
 
@@ -608,7 +605,6 @@ export const TableCommands: TableCommands = {
     const { cells, align } = options;
 
     if (!cells || cells.length === 0) {
-      console.warn('No cells to update');
       return;
     }
 
@@ -638,7 +634,6 @@ export const TableCommands: TableCommands = {
     const { cells, align } = options;
 
     if (!cells || cells.length === 0) {
-      console.warn('No cells to update');
       return;
     }
 

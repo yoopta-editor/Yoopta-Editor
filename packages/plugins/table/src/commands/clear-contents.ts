@@ -17,7 +17,6 @@ export const clearContents = (
   const { cells } = options;
 
   if (!cells || cells.length === 0) {
-    console.warn('No cells to clear');
     return;
   }
 
@@ -27,7 +26,7 @@ export const clearContents = (
   Editor.withoutNormalizing(slate, () => {
     cells.forEach(([cell, path]) => {
       // Remove all children
-      for (let i = cell.children.length - 1; i >= 0; i--) {
+      for (let i = cell.children.length - 1; i >= 0; i -= 1) {
         Transforms.removeNodes(slate, {
           at: [...path, i],
         });

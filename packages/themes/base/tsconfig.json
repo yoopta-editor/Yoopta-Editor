@@ -7,7 +7,7 @@
     "declarationMap": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../core/editor/src/slate.d.ts"],
   "exclude": [
     "node_modules",
     "dist",

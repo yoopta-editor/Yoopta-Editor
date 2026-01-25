@@ -1,5 +1,10 @@
 {
-  "extends": ["airbnb", "plugin:import/typescript", "plugin:react-hooks/recommended", "prettier"],
+  "extends": [
+    "airbnb",
+    "plugin:import/typescript",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
   "env": {
     "mocha": true,
     "jest": true,
@@ -24,12 +29,21 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2022,
-    "project": ["./config/tsconfig.base.json", "./packages/**/tsconfig.json"]
+    "project": [
+      "./config/tsconfig.base.json",
+      "./packages/**/tsconfig.json"
+    ]
   },
-  "plugins": ["prettier", "@typescript-eslint"],
+  "plugins": [
+    "prettier",
+    "@typescript-eslint"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
       "extends": [
         "airbnb",
         "airbnb-typescript",
@@ -40,27 +54,60 @@
       ]
     },
     {
-      "files": ["*.cjsx", "*.jsx", "*.tsx"],
-      "extends": ["plugin:react/jsx-runtime"]
+      "files": [
+        "*.cjsx",
+        "*.jsx",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:react/jsx-runtime"
+      ]
     },
     {
-      "files": ["*.{cjs,cjsx,js,jsx,ts,tsx}"],
+      "files": [
+        "*.{cjs,cjsx,js,jsx,ts,tsx}"
+      ],
       "rules": {
-        "no-cond-assign": ["error", "except-parens"],
-        "no-continue": ["off"],
-
-        "no-underscore-dangle": ["off"],
-        "one-var": ["off"],
-        "one-var-declaration-per-line": ["off"],
-        "global-require": ["off"],
-        "max-len": ["off"],
-        "func-names": ["off"],
-        "no-confusing-arrow": ["off"],
-        "no-invalid-this": ["error"],
-        "new-cap": ["error"],
-        "no-restricted-properties": ["off"],
-        "@typescript-eslint/no-unsafe-enum-comparison": ["off"],
-
+        "no-cond-assign": [
+          "error",
+          "except-parens"
+        ],
+        "no-continue": [
+          "off"
+        ],
+        "no-underscore-dangle": [
+          "off"
+        ],
+        "one-var": [
+          "off"
+        ],
+        "one-var-declaration-per-line": [
+          "off"
+        ],
+        "global-require": [
+          "off"
+        ],
+        "max-len": [
+          "off"
+        ],
+        "func-names": [
+          "off"
+        ],
+        "no-confusing-arrow": [
+          "off"
+        ],
+        "no-invalid-this": [
+          "error"
+        ],
+        "new-cap": [
+          "error"
+        ],
+        "no-restricted-properties": [
+          "off"
+        ],
+        "@typescript-eslint/no-unsafe-enum-comparison": [
+          "off"
+        ],
         "no-restricted-syntax": [
           "error",
           {
@@ -76,9 +123,16 @@
             "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
           }
         ],
-        "max-classes-per-file": ["off"],
-        "eqeqeq": ["error", "always"],
-        "no-console": ["error"],
+        "max-classes-per-file": [
+          "off"
+        ],
+        "eqeqeq": [
+          "error",
+          "always"
+        ],
+        "no-console": [
+          "error"
+        ],
         "no-multi-spaces": [
           "error",
           {
@@ -93,15 +147,24 @@
           }
         ],
         "class-methods-use-this": 0,
-        "prefer-destructuring": ["off"],
-        "no-extra-parens": ["off"],
+        "prefer-destructuring": [
+          "off"
+        ],
+        "no-extra-parens": [
+          "off"
+        ],
         "sort-imports": [
           "error",
           {
             "ignoreCase": false,
             "ignoreDeclarationSort": true, // don't want to sort import lines, use eslint-plugin-import instead
             "ignoreMemberSort": false,
-            "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+            "memberSyntaxSortOrder": [
+              "none",
+              "all",
+              "multiple",
+              "single"
+            ],
             "allowSeparatedGroups": true
           }
         ],
@@ -112,7 +175,16 @@
               "order": "asc",
               "caseInsensitive": true
             },
-            "groups": ["builtin", "external", "internal", ["sibling", "parent"], "index"],
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              [
+                "sibling",
+                "parent"
+              ],
+              "index"
+            ],
             "newlines-between": "always",
             "pathGroups": [
               {
@@ -121,7 +193,9 @@
                 "position": "before"
               }
             ],
-            "pathGroupsExcludedImportTypes": ["builtin"],
+            "pathGroupsExcludedImportTypes": [
+              "builtin"
+            ],
             "distinctGroup": false
           }
         ],
@@ -135,10 +209,16 @@
             "tsx": "never"
           }
         ],
-        "import/no-extraneous-dependencies": ["off"],
+        "import/no-extraneous-dependencies": [
+          "off"
+        ],
         "react/button-has-type": 0,
-        "react/prop-types": ["off"],
-        "react/destructuring-assignment": ["off"],
+        "react/prop-types": [
+          "off"
+        ],
+        "react/destructuring-assignment": [
+          "off"
+        ],
         "react/no-multi-comp": 0,
         "react/prefer-stateless-function": [
           "error",
@@ -150,7 +230,13 @@
         "react/jsx-filename-extension": [
           2,
           {
-            "extensions": [".js", ".cjsx", ".jsx", ".ts", ".tsx"]
+            "extensions": [
+              ".js",
+              ".cjsx",
+              ".jsx",
+              ".ts",
+              ".tsx"
+            ]
           }
         ],
         "react/no-unstable-nested-components": [
@@ -159,9 +245,7 @@
             "allowAsProps": true
           }
         ],
-
         "react/sort-comp": "off",
-
         "react/function-component-definition": [
           "error",
           {
@@ -169,106 +253,118 @@
             "unnamedComponents": "arrow-function"
           }
         ],
-
-        "react/jsx-boolean-value": ["error", "never", { "always": ["initialValue"] }],
-
+        "react/jsx-boolean-value": [
+          "error",
+          "never",
+          {
+            "always": [
+              "initialValue"
+            ]
+          }
+        ],
         "react-hooks/exhaustive-deps": "error",
-
         "import/prefer-default-export": "off",
-
         "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "jsx-a11y/no-static-element-interactions": "off",
-
         "jsx-a11y/label-has-associated-control": [
           "error",
           {
-            "controlComponents": ["Select", "DatePicker"]
+            "controlComponents": [
+              "Select",
+              "DatePicker"
+            ]
           }
         ],
         "jsx-a11y/anchor-is-valid": "off"
       }
     },
     {
-      "files": ["*.{js,cjs}"],
+      "files": [
+        "*.{js,cjs}"
+      ],
       "rules": {
-        "no-unused-vars": ["error"],
+        "no-unused-vars": [
+          "error"
+        ],
         "no-warning-comments": [
           "warn",
           {
             "location": "anywhere"
           }
         ],
-        "default-param-last": ["warn"],
-        "prefer-object-spread": ["warn"],
-        "prefer-exponentiation-operator": ["warn"],
-        "import/no-useless-path-segments": ["warn"],
-        "react/no-unused-class-component-methods": ["warn"],
-        "no-promise-executor-return": ["warn"],
-        "react/forbid-prop-types": ["warn"]
+        "default-param-last": [
+          "warn"
+        ],
+        "prefer-object-spread": [
+          "warn"
+        ],
+        "prefer-exponentiation-operator": [
+          "warn"
+        ],
+        "import/no-useless-path-segments": [
+          "warn"
+        ],
+        "react/no-unused-class-component-methods": [
+          "warn"
+        ],
+        "no-promise-executor-return": [
+          "warn"
+        ],
+        "react/forbid-prop-types": [
+          "warn"
+        ]
       }
     },
     {
-      "files": ["*.{ts,tsx}"],
+      "files": [
+        "*.{ts,tsx}"
+      ],
       "rules": {
         "@typescript-eslint/dot-notation": "off",
         "@typescript-eslint/no-implied-eval": "off",
         "@typescript-eslint/no-throw-literal": "off",
         "@typescript-eslint/return-await": "off",
-
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "off",
         "react/jsx-handler-names": "error",
         "no-nested-ternary": "off",
-
         "consistent-return": "off",
-
         "import/no-default-export": "off",
-
         "react/require-default-props": "off",
-
         "react/jsx-props-no-spreading": "off",
-
         "@typescript-eslint/no-empty-function": "off",
-
         "@typescript-eslint/no-unused-vars": [
           "error",
           {
             "argsIgnorePattern": "^_"
           }
         ],
-
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-
+        "@typescript-eslint/consistent-type-definitions": [
+          "error",
+          "type"
+        ],
         "@typescript-eslint/consistent-type-assertions": "error",
-
         "@typescript-eslint/no-unnecessary-condition": "off",
-
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
-
         "@typescript-eslint/prefer-reduce-type-parameter": "off",
-
         "@typescript-eslint/unbound-method": "off",
-
         "@typescript-eslint/no-floating-promises": "off",
-
         "@typescript-eslint/no-invalid-void-type": "off",
-
         "@typescript-eslint/lines-between-class-members": "off",
-
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/ban-types": "off",
-
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-
         "@typescript-eslint/no-dynamic-delete": "off",
-
         "@typescript-eslint/no-non-null-assertion": "off",
-
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/no-unused-expressions": [
           "warn",
-          { "allowTernary": true, "allowShortCircuit": true }
+          {
+            "allowTernary": true,
+            "allowShortCircuit": true
+          }
         ],
-
         "@typescript-eslint/consistent-type-imports": [
           "error",
           {
@@ -278,49 +374,64 @@
       }
     },
     {
-      "files": ["*.{spec,test}.{cjs,js,ts,tsx}"],
+      "files": [
+        "*.{spec,test}.{cjs,js,ts,tsx}"
+      ],
       "rules": {
         "no-console": "error",
         "no-new": "off",
         "no-unused-expressions": "off",
         "react/jsx-props-no-spreading": "off",
-
         "@typescript-eslint/no-unused-expressions": "off"
       }
     },
     {
-      "files": ["*.spec.{cjs,js,ts,tsx}"],
+      "files": [
+        "*.spec.{cjs,js,ts,tsx}"
+      ],
       "rules": {
         "import/order": "off"
       }
     },
     {
-      "files": ["*.stories.{cjsx,jsx,tsx}"],
+      "files": [
+        "*.stories.{cjsx,jsx,tsx}"
+      ],
       "rules": {
         "react/jsx-props-no-spreading": "off",
         "import/no-default-export": "off"
       }
     },
     {
-      "files": ["*.{spec,test,stories}.{cjs,cjsx,js,ts,jsx,tsx}"],
+      "files": [
+        "*.{spec,test,stories}.{cjs,cjsx,js,ts,jsx,tsx}"
+      ],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {
-      "files": ["rollup.config.js", "rollup.config.*.js"],
+      "files": [
+        "rollup.config.js",
+        "rollup.config.*.js"
+      ],
       "rules": {
         "import/no-relative-packages": "off"
       }
     },
     {
-      "files": ["*.{ts,tsx}"],
+      "files": [
+        "*.{ts,tsx}"
+      ],
       "rules": {
         "no-param-reassign": [
           "error",
           {
             "props": true,
-            "ignorePropertyModificationsFor": ["slate", "editor"]
+            "ignorePropertyModificationsFor": [
+              "slate",
+              "editor"
+            ]
           }
         ]
       }

@@ -4,7 +4,8 @@
     "react-svg.d.ts",
     "css-modules.d.ts",
     "src",
-    "../../core/editor/src/plugins/jsx.d.ts"
+    "../../core/editor/src/slate.d.ts",
+    "../../core/editor/src/jsx.d.ts"
   ],
   "exclude": ["dist", "src/**/*.test.tsx", "src/**/*.stories.tsx"],
   "compilerOptions": {

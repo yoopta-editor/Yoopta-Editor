@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import type { YooEditor } from '@yoopta/editor';
 import { Blocks } from '@yoopta/editor';
 import type { Path } from 'slate';
@@ -27,7 +26,6 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
   const { cells } = options;
 
   if (!cells || cells.length <= 1) {
-    console.warn('Need at least 2 cells to merge');
     return;
   }
 
@@ -61,7 +59,6 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
   const anchorCell = cellsMap.get(anchorKey);
 
   if (!anchorCell) {
-    console.warn('Anchor cell not found');
     return;
   }
 
@@ -110,7 +107,7 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
     // Add merged content if any
     if (allContent.length > 0) {
       // Remove existing children
-      for (let i = anchorCellElement.children.length - 1; i >= 0; i--) {
+      for (let i = anchorCellElement.children.length - 1; i >= 0; i -= 1) {
         Transforms.removeNodes(slate, {
           at: [...anchorPath, i],
         });
@@ -128,8 +125,8 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
     // We need to remove them from right to left, bottom to top to maintain paths
     const cellsToRemove: Path[] = [];
 
-    for (let row = maxRow; row >= minRow; row--) {
-      for (let col = maxCol; col >= minCol; col--) {
+    for (let row = maxRow; row >= minRow; row -= 1) {
+      for (let col = maxCol; col >= minCol; col -= 1) {
         // Skip anchor cell
         if (row === minRow && col === minCol) continue;
 
@@ -147,11 +144,8 @@ export const mergeCells = (editor: YooEditor, blockId: string, options: MergeCel
       try {
         Transforms.removeNodes(slate, { at: path });
       } catch (error) {
-        console.warn('Failed to remove cell at path:', path);
+        //
       }
     });
   });
-
-  // Update Yoopta editor state
-  // editor.emit('change', slate);
 };

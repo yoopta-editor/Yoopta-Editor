@@ -28,6 +28,7 @@
   },
   "include": [
     "packages/**/*",
+    "packages/core/editor/src/slate.d.ts",
     "packages/core/editor/src/plugins/jsx.d.ts",
     "packages/plugins/**/src/**/*"
   ],

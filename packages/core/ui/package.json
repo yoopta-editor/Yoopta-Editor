@@ -33,6 +33,9 @@
       "selection-box": [
         "./dist/selection-box/index.d.ts"
       ],
+      "element-options": [
+        "./dist/element-options/index.d.ts"
+      ],
       "portal": [
         "./dist/portal/index.d.ts"
       ],
@@ -79,6 +82,10 @@
     "./selection-box": {
       "types": "./dist/selection-box/index.d.ts",
       "import": "./dist/selection-box.js"
+    },
+    "./element-options": {
+      "types": "./dist/element-options/index.d.ts",
+      "import": "./dist/element-options.js"
     },
     "./portal": {
       "types": "./dist/portal/index.d.ts",
