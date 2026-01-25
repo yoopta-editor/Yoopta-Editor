@@ -1,10 +1,8 @@
-import type React from 'react';
-import { useCallback, useMemo, useRef } from 'react';
-import { Elements, useYooptaEditor } from '@yoopta/editor';
+import { useCallback, useMemo } from 'react';
+import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
-import { ArrowDown, ArrowUp, Check, MoreVertical, Trash2 } from 'lucide-react';
-import type { Path } from 'slate';
+import { ArrowDown, ArrowUp, MoreVertical, Table2Icon, Trash2 } from 'lucide-react';
 
 import { Button } from '../../ui/button';
 import {
@@ -18,7 +16,6 @@ import {
 type RowControlsProps = {
   blockId: string;
   rowIndex: number;
-  path: Path;
   position: {
     left: number;
     top: number;
@@ -26,50 +23,42 @@ type RowControlsProps = {
   };
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  controlsRef?: React.RefObject<HTMLDivElement>;
 };
 
 export const RowControls = ({
   blockId,
   rowIndex,
-  path,
   position,
   onMouseEnter,
   onMouseLeave,
-  controlsRef: externalRef,
 }: RowControlsProps) => {
   const editor = useYooptaEditor();
-  const internalRef = useRef<HTMLDivElement | null>(null);
-  const controlsRef = externalRef ?? internalRef;
-  const rowPath = path.slice(0, -1);
 
-  const isHeaderRow = useMemo(() => {
-    const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
-    return table?.props?.headerRow || false;
-  }, [editor, blockId]);
+  // Create a cell path for the target row: [table, row, firstCell, textNode]
+  const cellPath = useMemo(() => [0, rowIndex, 0, 0], [rowIndex]);
 
   const insertRowAbove = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
+      path: cellPath,
       insertMode: 'before',
     });
-  }, [editor, blockId, rowPath]);
+  }, [editor, blockId, cellPath]);
 
   const insertRowBelow = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
+      path: cellPath,
       insertMode: 'after',
     });
-  }, [editor, blockId, rowPath]);
+  }, [editor, blockId, cellPath]);
 
   const deleteRow = useCallback(() => {
     TableCommands.deleteTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path: rowPath,
+      path: cellPath,
     });
-  }, [editor, blockId, rowPath]);
+  }, [editor, blockId, cellPath]);
 
   const toggleHeaderRow = useCallback(() => {
     TableCommands.toggleHeaderRow(editor, blockId);
@@ -78,7 +67,6 @@ export const RowControls = ({
   return (
     <Portal id={`table-row-controls-${blockId}-${rowIndex}`}>
       <div
-        ref={controlsRef}
         className="fixed z-[9998] pointer-events-auto"
         style={{
           left: `${position.left + 20}px`,
@@ -102,11 +90,7 @@ export const RowControls = ({
             {rowIndex === 0 && (
               <>
                 <DropdownMenuItem onClick={toggleHeaderRow}>
-                  {isHeaderRow ? (
-                    <Check className="mr-2 h-4 w-4" />
-                  ) : (
-                    <span className="mr-2 h-4 w-4" />
-                  )}
+                  <Table2Icon className="mr-2 h-4 w-4" />
                   Header row
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -133,4 +117,3 @@ export const RowControls = ({
     </Portal>
   );
 };
-

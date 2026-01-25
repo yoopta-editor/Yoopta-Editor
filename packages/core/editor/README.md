@@ -63,7 +63,7 @@ type Props = {
   /**
    * Box for selection area to select by mouse several blocks. DEFAULT - [document]
    */
-  selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
+  selectionBoxElement?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   children?: React.ReactNode;
   placeholder?: string;
   readOnly?: boolean;

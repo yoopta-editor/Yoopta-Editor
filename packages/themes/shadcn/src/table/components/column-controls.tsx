@@ -1,10 +1,8 @@
-import type React from 'react';
-import { useCallback, useMemo, useRef } from 'react';
-import { Elements, useYooptaEditor } from '@yoopta/editor';
+import { useCallback, useMemo } from 'react';
+import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
-import { ArrowLeft, ArrowRight, Check, MoreHorizontal, Trash2 } from 'lucide-react';
-import type { Path } from 'slate';
+import { ArrowLeft, ArrowRight, MoreHorizontal, Table2Icon, Trash2 } from 'lucide-react';
 
 import { Button } from '../../ui/button';
 import {
@@ -18,7 +16,6 @@ import {
 type ColumnControlsProps = {
   blockId: string;
   colIndex: number;
-  path: Path;
   position: {
     left: number;
     top: number;
@@ -26,49 +23,42 @@ type ColumnControlsProps = {
   };
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  controlsRef?: React.RefObject<HTMLDivElement>;
 };
 
 export const ColumnControls = ({
   blockId,
   colIndex,
-  path,
   position,
   onMouseEnter,
   onMouseLeave,
-  controlsRef: externalRef,
 }: ColumnControlsProps) => {
   const editor = useYooptaEditor();
-  const internalRef = useRef<HTMLDivElement | null>(null);
-  const controlsRef = externalRef || internalRef;
 
-  const isHeaderColumn = useMemo(() => {
-    const table = Elements.getElement(editor, { blockId, type: 'table', path: [0] });
-    return table?.props?.headerColumn || false;
-  }, [editor, blockId]);
+  // Create a cell path for the target column: [table, firstRow, column, textNode]
+  const cellPath = useMemo(() => [0, 0, colIndex, 0], [colIndex]);
 
   const handleInsertColumnLeft = useCallback(() => {
     TableCommands.insertTableColumn(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path,
+      path: cellPath,
       insertMode: 'before',
     });
-  }, [editor, blockId, path]);
+  }, [editor, blockId, cellPath]);
 
   const handleInsertColumnRight = useCallback(() => {
     TableCommands.insertTableColumn(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path,
+      path: cellPath,
       insertMode: 'after',
     });
-  }, [editor, blockId, path]);
+  }, [editor, blockId, cellPath]);
 
   const handleDeleteColumn = useCallback(() => {
     TableCommands.deleteTableColumn(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path,
+      path: cellPath,
     });
-  }, [editor, blockId, path]);
+  }, [editor, blockId, cellPath]);
 
   const handleToggleHeaderColumn = useCallback(() => {
     TableCommands.toggleHeaderColumn(editor, blockId);
@@ -77,7 +67,6 @@ export const ColumnControls = ({
   return (
     <Portal id={`table-column-controls-${blockId}-${colIndex}`}>
       <div
-        ref={controlsRef}
         className="fixed z-[9999] pointer-events-auto"
         style={{
           left: `${position.left}px`,
@@ -97,15 +86,11 @@ export const ColumnControls = ({
               <MoreHorizontal className="h-3 w-3 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" side="top" className="w-48">
+          <DropdownMenuContent align="start" side="top" className="w-48">
             {colIndex === 0 && (
               <>
                 <DropdownMenuItem onClick={handleToggleHeaderColumn}>
-                  {isHeaderColumn ? (
-                    <Check className="mr-2 h-4 w-4" />
-                  ) : (
-                    <span className="mr-2 h-4 w-4" />
-                  )}
+                  <Table2Icon className="mr-2 h-4 w-4" />
                   Header column
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -132,4 +117,3 @@ export const ColumnControls = ({
     </Portal>
   );
 };
-

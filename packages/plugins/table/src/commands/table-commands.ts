@@ -127,11 +127,14 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { insertMode = 'after', select = true } = options || {};
+      const { insertMode = 'after', select = true, path: optionsPath } = options || {};
+
+      // Use provided path or fall back to current selection
+      const targetPath = optionsPath ? (optionsPath as unknown as Path) : slate.selection?.anchor.path;
 
       const currentRowElementEntryByPath = Elements.getElementEntry(editor, {
         blockId,
-        path: slate.selection?.anchor.path,
+        path: targetPath,
         type: 'table-row',
       });
 
@@ -143,7 +146,7 @@ export const TableCommands: TableCommands = {
       const newRow: SlateElement = {
         id: generateId(),
         type: 'table-row',
-        children: currentRowElement.children.map((cell) => ({
+        children: currentRowElement.children.map(() => ({
           id: generateId(),
           type: 'table-data-cell',
           children: [{ text: '' }],
@@ -159,14 +162,19 @@ export const TableCommands: TableCommands = {
       }
     });
   },
-  deleteTableRow: (editor: YooEditor, blockId: string, _options?: DeleteOptions) => {
+  deleteTableRow: (editor: YooEditor, blockId: string, options?: DeleteOptions) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
+      const { path: optionsPath } = options || {};
+
+      // Use provided path or fall back to current selection
+      const targetPath = optionsPath ? (optionsPath as unknown as Path) : slate.selection?.anchor.path;
+
       const currentRowElementEntryByPath = Elements.getElementEntry(editor, {
         blockId,
-        path: slate.selection?.anchor.path,
+        path: targetPath,
         type: 'table-row',
       });
 
@@ -226,11 +234,14 @@ export const TableCommands: TableCommands = {
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
-      const { insertMode = 'after', select = true } = options || {};
+      const { insertMode = 'after', select = true, path: optionsPath } = options || {};
+
+      // Use provided path or fall back to current selection
+      const targetPath = optionsPath ? (optionsPath as unknown as Path) : slate.selection?.anchor.path;
 
       const dataCellElementEntryByPath = Elements.getElementEntry(editor, {
         blockId,
-        path: slate.selection?.anchor.path,
+        path: targetPath,
         type: 'table-data-cell',
       });
 
@@ -292,11 +303,13 @@ export const TableCommands: TableCommands = {
       }
     });
   },
-  deleteTableColumn: (editor: YooEditor, blockId: string, _options?: DeleteOptions) => {
+  deleteTableColumn: (editor: YooEditor, blockId: string, options?: DeleteOptions) => {
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
     Editor.withoutNormalizing(slate, () => {
+      const { path: optionsPath } = options || {};
+
       const tableRowEntries = Editor.nodes<SlateElement>(slate, {
         at: [0],
         match: (n) => Element.isElement(n) && n.type === 'table-row',
@@ -306,15 +319,18 @@ export const TableCommands: TableCommands = {
       const rows = Array.from(tableRowEntries);
       if (rows[0][0].children.length <= 1) return;
 
+      // Use provided path or fall back to current selection
+      const targetPath = optionsPath ? (optionsPath as unknown as Path) : slate.selection?.anchor.path;
+
       const dataCellElementEntryByPath = Elements.getElementEntry(editor, {
         blockId,
-        path: slate.selection?.anchor.path,
+        path: targetPath,
         type: 'table-data-cell',
       });
 
       if (!dataCellElementEntryByPath) return;
 
-      const [_, dataCellPath] = dataCellElementEntryByPath;
+      const [, dataCellPath] = dataCellElementEntryByPath;
       const columnIndex = dataCellPath[dataCellPath.length - 1];
 
       const dataCellPaths = rows.map(([row, path]) =>

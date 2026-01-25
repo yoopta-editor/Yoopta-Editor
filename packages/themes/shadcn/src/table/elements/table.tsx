@@ -21,7 +21,7 @@ export const Table = (props: PluginElementRenderProps) => {
   const isSelecting = slate ? TABLE_SLATE_TO_SELECTION_SET.get(slate) : null;
 
   return (
-    <div className="p-4" data-yoopta-block-id={props.blockId} data-table-container>
+    <div className="p-4 overflow-x-auto" data-yoopta-block-id={props.blockId} data-table-container>
       <TableUI {...attributes} data-is-selecting={!!isSelecting}>
         <colgroup>
           {tableElement.props?.columnWidths?.map((width, i) => (

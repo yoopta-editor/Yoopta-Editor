@@ -12,3 +12,9 @@ export { Portal } from './portal';
 export { Overlay } from './overlay';
 export { HighlightColorPicker } from './highlight-color-picker';
 export type { HighlightColorPickerProps } from './highlight-color-picker';
+export { SelectionBox, useRectangeSelectionBox } from './selection-box';
+export type {
+  RectangeSelectionProps,
+  RectangeSelectionState,
+  SelectionBoxProps,
+} from './selection-box';

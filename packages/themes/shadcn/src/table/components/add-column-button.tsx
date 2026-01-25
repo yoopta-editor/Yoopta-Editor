@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
@@ -17,7 +16,6 @@ type AddColumnButtonProps = {
   };
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  buttonRef?: React.RefObject<HTMLDivElement>;
 };
 
 export const AddColumnButton = ({
@@ -26,14 +24,12 @@ export const AddColumnButton = ({
   position,
   onMouseEnter,
   onMouseLeave,
-  buttonRef: externalRef,
 }: AddColumnButtonProps) => {
   const editor = useYooptaEditor();
-  const internalRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = externalRef || internalRef;
 
   const handleAddColumn = useCallback(() => {
-    const lastColumnCellPath = [0, 0, totalColumns - 1];
+    // Path to the last cell in first row: [table, firstRow, lastCell, textNode]
+    const lastColumnCellPath = [0, 0, totalColumns - 1, 0];
     TableCommands.insertTableColumn(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
       path: lastColumnCellPath,
@@ -44,7 +40,6 @@ export const AddColumnButton = ({
   return (
     <Portal id={`table-add-column-button-${blockId}`}>
       <div
-        ref={buttonRef}
         className="fixed z-[9999] pointer-events-auto"
         style={{
           left: `${position.left + 4}px`,
@@ -66,4 +61,3 @@ export const AddColumnButton = ({
     </Portal>
   );
 };
-

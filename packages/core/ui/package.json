@@ -30,6 +30,9 @@
       "highlight-color-picker": [
         "./dist/highlight-color-picker/index.d.ts"
       ],
+      "selection-box": [
+        "./dist/selection-box/index.d.ts"
+      ],
       "portal": [
         "./dist/portal/index.d.ts"
       ],
@@ -72,6 +75,10 @@
     "./highlight-color-picker": {
       "types": "./dist/highlight-color-picker/index.d.ts",
       "import": "./dist/highlight-color-picker.js"
+    },
+    "./selection-box": {
+      "types": "./dist/selection-box/index.d.ts",
+      "import": "./dist/selection-box.js"
     },
     "./portal": {
       "types": "./dist/portal/index.d.ts",

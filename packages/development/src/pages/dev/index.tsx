@@ -1,6 +1,5 @@
-import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Blocks, Marks, Selection } from '@yoopta/editor';
-import { useEffect, useMemo } from 'react';
-// import '@yoopta/themes-shadcn/dist/index.css';
+import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Marks } from '@yoopta/editor';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -8,6 +7,7 @@ import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 
 const EDITOR_STYLE = {
   width: 750,
+  paddingBottom: 100,
 };
 
 import { YooptaToolbar } from '@/components/new-yoo-components/yoopta-toolbar';
@@ -16,7 +16,10 @@ import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-s
 import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
 import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
 
+import { SelectionBox } from '@yoopta/ui/selection-box';
+
 const YooptaUIPackageExample = () => {
+  const selectionBoxRef = useRef<HTMLDivElement>(null);
   const editor: YooEditor = useMemo(
     () =>
       createYooptaEditor({
@@ -351,7 +354,7 @@ const YooptaUIPackageExample = () => {
   // `);
 
   return (
-    <>
+    <div className="flex flex-col gap-2" ref={selectionBoxRef}>
       <div className="flex flex-wrap gap-2 px-[100px] max-w-[900px] mx-auto my-10">
         <button
           onClick={insertAccordion}
@@ -432,8 +435,9 @@ const YooptaUIPackageExample = () => {
         <YooptaFloatingBlockActions />
         <YooptaSlashCommandMenu />
         <YooptaActionMenuList />
+        <SelectionBox selectionBoxElement={selectionBoxRef} />
       </YooptaEditor>
-    </>
+    </div>
   );
 };
 

@@ -4560,7 +4560,7 @@
   integrity sha512-HA5fLkPqbxXi6ZSWxqD293GU02ourxXZn8gTyvGEIjnBDfth6hqRrEttOimsOiu9LWhzdfOxKEu3WJEB0l9Wng==
 
 "@yoopta/carousel@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
   dependencies:
     embla-carousel-react "^8.6.0"
 
@@ -4678,7 +4678,7 @@
   integrity sha512-0aY+u/t7GJ99B66/AbTq4G1X6PRY3OqMrdDWjcnCDvHUjXWtbw83ERB3XDRUdLx7livHjy50yQxFVX1bkx7TSA==
 
 "@yoopta/mention@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
 
 "@yoopta/paragraph@*":
   version "4.9.9"
@@ -4686,7 +4686,7 @@
   integrity sha512-0luS6xtRoi6NQ4ZavWwN3KAY/FxAwQqrvuJQ8g4yII1iPedFJxbgf8Q9fUFk+JMqbKcwM7/tkM1I+vn+soNBNQ==
 
 "@yoopta/steps@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
 
 "@yoopta/table@*":
   version "4.9.9"
@@ -4696,22 +4696,22 @@
     lucide-react "^0.436.0"
 
 "@yoopta/tabs@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
 
 "@yoopta/themes-material@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
     "@mui/icons-material" "^7.3.6"
     "@mui/material" "^5.16.0"
-    "@yoopta/code" "^6.0.0-beta.5"
-    "@yoopta/image" "^6.0.0-beta.5"
+    "@yoopta/code" "^6.0.0-beta.6"
+    "@yoopta/image" "^6.0.0-beta.6"
     copy-to-clipboard "^3.3.3"
     react-rnd "^10.5.2"
 
 "@yoopta/themes-shadcn@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
   dependencies:
     "@radix-ui/react-accordion" "^1.0.0"
     "@radix-ui/react-checkbox" "^1.1.1"
@@ -4747,10 +4747,8 @@
     use-debounce "^10.0.4"
 
 "@yoopta/ui@*":
-  version "6.0.0-beta.5"
+  version "6.0.0-beta.6"
   dependencies:
-    "@dnd-kit/core" "^6.1.0"
-    "@dnd-kit/sortable" "^8.0.0"
     "@floating-ui/react" "^0.26.9"
     class-variance-authority "^0.7.0"
     clsx "^2.0.0"

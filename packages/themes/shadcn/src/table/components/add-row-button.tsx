@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 import { TableCommands } from '@yoopta/table';
 import { Portal } from '@yoopta/ui/portal';
@@ -17,7 +16,6 @@ type AddRowButtonProps = {
   };
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  buttonRef?: React.RefObject<HTMLDivElement>;
 };
 
 export const AddRowButton = ({
@@ -26,17 +24,15 @@ export const AddRowButton = ({
   position,
   onMouseEnter,
   onMouseLeave,
-  buttonRef: externalRef,
 }: AddRowButtonProps) => {
   const editor = useYooptaEditor();
-  const internalRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = externalRef || internalRef;
 
   const handleAddRow = useCallback(() => {
-    const lastRowPath = [totalRows - 1];
+    // Path to any cell in the last row: [table, lastRow, firstCell, textNode]
+    const lastRowCellPath = [0, totalRows - 1, 0, 0];
     TableCommands.insertTableRow(editor, blockId, {
       // @ts-expect-error - Path type mismatch with Location
-      path: lastRowPath,
+      path: lastRowCellPath,
       insertMode: 'after',
     });
   }, [editor, blockId, totalRows]);
@@ -44,7 +40,6 @@ export const AddRowButton = ({
   return (
     <Portal id={`table-add-row-button-${blockId}`}>
       <div
-        ref={buttonRef}
         className="fixed z-[9999] pointer-events-auto"
         style={{
           left: `${position.left}px`,
@@ -66,4 +61,3 @@ export const AddRowButton = ({
     </Portal>
   );
 };
-

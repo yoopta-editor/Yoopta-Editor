@@ -48,7 +48,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
             ReactEditor.deselect(slate);
           }
         });
-      } catch (error) {}
+      } catch (error) { }
     }
   };
 

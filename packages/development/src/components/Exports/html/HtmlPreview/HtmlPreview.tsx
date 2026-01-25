@@ -105,7 +105,7 @@ const Editor = ({ editor, onChange, value }: EditorProps) => {
       editor={editor}
       plugins={YOOPTA_PLUGINS}
       marks={MARKS}
-      selectionBoxRoot={false}
+      selectionBoxElement={false}
       tools={TOOLS}
       value={value}
       onChange={handleChange}

@@ -12,12 +12,8 @@ import type { YooptaContentValue } from '../../editor/types';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
-import { useRectangeSelectionBox } from '../SelectionBox/hooks';
-import { SelectionBox } from '../SelectionBox/SelectionBox';
 
 type Props = {
-  // move it to @yoopta/ui/selection-box
-  selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   autoFocus?: boolean;
   className?: string;
   placeholder?: string;
@@ -28,7 +24,6 @@ type Props = {
 const Editor = ({
   placeholder,
   className,
-  selectionBoxRoot,
   style,
   children,
   autoFocus = true,
@@ -36,7 +31,6 @@ const Editor = ({
   const editor = useYooptaEditor();
   const { marks } = editor;
   const isReadOnly = useYooptaReadOnly();
-  const selectionBox = useRectangeSelectionBox({ editor, root: selectionBoxRoot });
   const multiSelection = useMultiSelection({ editor });
 
   useEffect(() => {
@@ -323,13 +317,6 @@ const Editor = ({
       onCopy={onCopy}
       onCut={onCopy}>
       <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
-      {selectionBoxRoot !== false && (
-        <SelectionBox
-          origin={selectionBox.origin}
-          coords={selectionBox.coords}
-          isOpen={selectionBox.selection && !isReadOnly}
-        />
-      )}
       {children}
     </div>
   );

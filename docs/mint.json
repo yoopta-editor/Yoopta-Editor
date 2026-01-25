@@ -134,6 +134,7 @@
         "ui/toolbar",
         "ui/action-menu-list",
         "ui/slash-action-menu-list",
+        "ui/selection-box",
         "ui/theme"
       ]
     },

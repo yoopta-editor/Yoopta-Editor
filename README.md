@@ -321,7 +321,7 @@ type YooptaEditorProps = {
   className?: string;
   style?: React.CSSProperties;
   id?: string | number;           // Useful for multiple editors
-  selectionBoxRoot?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
+  selectionBoxElement?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
   children?: React.ReactNode;     // UI components (Toolbar, ActionMenu, etc.)
 };
 ```

@@ -1,0 +1,312 @@
+---
+title: 'SelectionBox'
+description: 'Rectangle selection component for selecting multiple blocks at once'
+icon: 'object-group'
+---
+
+## Overview
+
+The `SelectionBox` component enables **rectangle selection** (also known as "marquee selection" or "lasso selection") for selecting multiple blocks at once. When the user clicks and drags outside the editor area, a selection rectangle appears, and all blocks that intersect with this rectangle become selected.
+
+<Frame>
+  <img src="/images/selection-box.png" alt="Yoopta SelectionBox screenshot" />
+</Frame>
+
+## Features
+
+- ✅ Rectangle selection for multiple blocks
+- ✅ Works outside the editor area
+- ✅ Automatic block selection based on intersection
+- ✅ Supports custom container element
+- ✅ Respects read-only mode
+- ✅ Lightweight and performant
+
+## Basic Usage
+
+```tsx
+// Subpath import (recommended)
+import { SelectionBox } from '@yoopta/ui/selection-box';
+// Or full import
+// import { SelectionBox } from '@yoopta/ui';
+
+import { useRef } from 'react';
+
+function App() {
+  const selectionBoxRef = useRef<HTMLDivElement>(null);
+  const editor = useMemo(() => createYooptaEditor(), []);
+
+  return (
+    <div ref={selectionBoxRef}>
+      <YooptaEditor editor={editor} plugins={plugins}>
+        <SelectionBox selectionBoxElement={selectionBoxRef} />
+      </YooptaEditor>
+    </div>
+  );
+}
+```
+
+<Warning>
+  The `selectionBoxElement` should be a **parent container** that wraps the editor. The selection box
+  will listen for mouse events on this element. It must NOT be a child of the editor itself.
+</Warning>
+
+## API Reference
+
+### `SelectionBox` Component
+
+The main component that renders the selection rectangle and handles mouse events.
+
+```tsx
+<SelectionBox selectionBoxElement={containerRef} />
+```
+
+#### Props
+
+| Prop                  | Type                                              | Description                                      |
+| --------------------- | ------------------------------------------------- | ------------------------------------------------ |
+| `selectionBoxElement` | `HTMLElement \| { current: HTMLElement \| null }` | Container element or ref for mouse event binding |
+
+### `useRectangeSelectionBox` Hook
+
+For advanced use cases, you can use the hook directly to build custom selection UI.
+
+```tsx
+import { useRectangeSelectionBox } from '@yoopta/ui/selection-box';
+
+function CustomSelectionBox() {
+  const editor = useYooptaEditor();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { origin, coords, selection, onClose } = useRectangeSelectionBox({
+    editor,
+    root: containerRef.current,
+  });
+
+  // Build your custom UI using the selection state
+  if (!selection) return null;
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        left: origin[0],
+        top: origin[1],
+        width: Math.abs(coords[0] - origin[0]),
+        height: Math.abs(coords[1] - origin[1]),
+        backgroundColor: 'rgba(0, 100, 255, 0.2)',
+        border: '1px solid blue',
+      }}
+    />
+  );
+}
+```
+
+#### Hook Parameters
+
+| Parameter | Type                                              | Description                         |
+| --------- | ------------------------------------------------- | ----------------------------------- |
+| `editor`  | `YooEditor`                                       | The Yoopta editor instance          |
+| `root`    | `HTMLElement \| { current: HTMLElement \| null }` | Container element for event binding |
+
+#### Hook Return Value
+
+| Property    | Type                 | Description                                 |
+| ----------- | -------------------- | ------------------------------------------- |
+| `origin`    | `[number, number]`   | Starting point coordinates `[x, y]`         |
+| `coords`    | `[number, number]`   | Current mouse coordinates `[x, y]`          |
+| `selection` | `boolean`            | Whether a selection is currently in progress |
+| `onClose`   | `() => void`         | Function to close/reset the selection       |
+
+### Types
+
+```tsx
+import type {
+  SelectionBoxProps,
+  SelectionBoxRoot,
+  RectangeSelectionProps,
+  RectangeSelectionState,
+} from '@yoopta/ui/selection-box';
+
+// Container element type
+type SelectionBoxRoot = HTMLElement | { current: HTMLElement | null };
+
+// Component props
+type SelectionBoxProps = {
+  selectionBoxElement?: SelectionBoxRoot | null;
+};
+
+// Hook props
+type RectangeSelectionProps = {
+  editor: YooEditor;
+  root?: SelectionBoxRoot;
+};
+
+// Selection state
+type RectangeSelectionState = {
+  origin: [number, number];
+  coords: [number, number];
+  selection: boolean;
+};
+```
+
+## Examples
+
+### Basic Setup with Container Ref
+
+```tsx
+import { useRef, useMemo } from 'react';
+import { createYooptaEditor, YooptaEditor } from '@yoopta/editor';
+import { SelectionBox } from '@yoopta/ui/selection-box';
+
+function EditorWithSelection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const editor = useMemo(() => createYooptaEditor(), []);
+
+  return (
+    <div ref={containerRef} className="min-h-screen">
+      <YooptaEditor editor={editor} plugins={plugins}>
+        <SelectionBox selectionBoxElement={containerRef} />
+      </YooptaEditor>
+    </div>
+  );
+}
+```
+
+### Full Page Selection
+
+For full-page selection support, pass a ref to the outermost container:
+
+```tsx
+function FullPageEditor() {
+  const pageRef = useRef<HTMLDivElement>(null);
+  const editor = useMemo(() => createYooptaEditor(), []);
+
+  return (
+    <div ref={pageRef} className="min-h-screen p-8">
+      <header className="mb-8">
+        <h1>My Document</h1>
+      </header>
+
+      <main>
+        <YooptaEditor editor={editor} plugins={plugins}>
+          <SelectionBox selectionBoxElement={pageRef} />
+        </YooptaEditor>
+      </main>
+    </div>
+  );
+}
+```
+
+### Without SelectionBox
+
+If you don't need rectangle selection, simply don't include the component:
+
+```tsx
+function SimpleEditor() {
+  const editor = useMemo(() => createYooptaEditor(), []);
+
+  return (
+    <YooptaEditor editor={editor} plugins={plugins}>
+      {/* No SelectionBox - users can still select text normally */}
+    </YooptaEditor>
+  );
+}
+```
+
+## How It Works
+
+1. **Mouse Down** - When the user clicks outside the editor (but inside the container), the selection starts
+2. **Mouse Move** - As the user drags, the selection rectangle grows/shrinks
+3. **Block Detection** - Blocks that intersect with the selection rectangle are marked as selected
+4. **Mouse Up** - Selection ends, selected blocks remain highlighted
+5. **Click Outside** - Clicking outside clears the selection
+
+The selected blocks can then be:
+- Copied (`Ctrl/Cmd + C`)
+- Cut (`Ctrl/Cmd + X`)
+- Deleted (`Backspace` or `Delete`)
+
+## Styling
+
+The default selection box has a semi-transparent blue background:
+
+```tsx
+// Default styles applied to the selection box
+const selectionBoxStyle = {
+  position: 'fixed',
+  backgroundColor: 'rgba(35, 131, 226, 0.14)',
+  zIndex: 10,
+  userSelect: 'none',
+};
+```
+
+To customize the appearance, use the `useRectangeSelectionBox` hook and build your own UI.
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use a wrapper container">
+    Always wrap your editor in a container element and pass that ref to SelectionBox.
+    This ensures selection works in the area outside the editor content.
+
+    ```tsx
+    <div ref={containerRef}>
+      <YooptaEditor>
+        <SelectionBox selectionBoxElement={containerRef} />
+      </YooptaEditor>
+    </div>
+    ```
+  </Accordion>
+
+  <Accordion title="Don't pass editor element as container">
+    The container should NOT be a child of the editor. The SelectionBox needs to capture
+    mouse events outside the editor content area.
+
+    ```tsx
+    // ❌ Wrong - won't work
+    <YooptaEditor>
+      <div ref={wrongRef}>
+        <SelectionBox selectionBoxElement={wrongRef} />
+      </div>
+    </YooptaEditor>
+
+    // ✅ Correct
+    <div ref={correctRef}>
+      <YooptaEditor>
+        <SelectionBox selectionBoxElement={correctRef} />
+      </YooptaEditor>
+    </div>
+    ```
+  </Accordion>
+
+  <Accordion title="Pass ref object, not ref.current">
+    Pass the ref object itself, not `ref.current`. This ensures the component can access
+    the element even if it's not mounted on the first render.
+
+    ```tsx
+    // ❌ May cause issues on first render
+    <SelectionBox selectionBoxElement={containerRef.current} />
+
+    // ✅ Correct
+    <SelectionBox selectionBoxElement={containerRef} />
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Accessibility
+
+- Selection box is purely visual and doesn't affect screen readers
+- Selected blocks are still accessible via keyboard navigation
+- Use keyboard shortcuts (`Ctrl/Cmd + A`) for full selection as an alternative
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Actions that appear when hovering over blocks
+  </Card>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Context menu for block operations
+  </Card>
+</CardGroup>
+
