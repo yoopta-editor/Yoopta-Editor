@@ -47,7 +47,7 @@ const HIDDEN_STYLES: CSSProperties = {
   opacity: 0,
   pointerEvents: 'none',
   transform: 'scale(0.95)',
-  transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+  transition: 'transform 150ms ease-out',
 };
 
 const getVisibleStyles = (top: number, left: number, width: number): CSSProperties => ({
@@ -57,7 +57,7 @@ const getVisibleStyles = (top: number, left: number, width: number): CSSProperti
   opacity: 1,
   pointerEvents: 'auto',
   transform: `scale(1) translateX(-${width + 2}px)`,
-  transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+  transition: 'transform 150ms ease-out',
 });
 
 const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: FloatingBlockActionsRootProps) => {
@@ -67,6 +67,8 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
   // Internal state
   const [blockId, setBlockId] = useState<string | null>(null);
   const [styles, setStyles] = useState<CSSProperties>(HIDDEN_STYLES);
+
+  console.log('styles', styles);
 
   // Derived state
   const blockData = blockId ? editor.children[blockId] ?? null : null;
