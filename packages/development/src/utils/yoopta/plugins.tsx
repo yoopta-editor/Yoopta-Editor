@@ -70,6 +70,7 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
 ];
 
 export const YOOPTA_PLUGINS = applyTheme([
+  Embed,
   Accordion.extend({
     injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
     lifecycle: {

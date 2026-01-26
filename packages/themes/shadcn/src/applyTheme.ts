@@ -7,6 +7,7 @@ import { CarouselUI } from './carousel';
 import { CodeUI } from './code';
 import { CodeGroupUI } from './code-group';
 import { DividerUI } from './divider';
+import { EmbedUI } from './embed';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -81,6 +82,7 @@ export function applyTheme(
     Steps: StepsUI,
     Carousel: CarouselUI,
     Divider: DividerUI,
+    Embed: EmbedUI,
   };
 
   return plugins.map((plugin) => {

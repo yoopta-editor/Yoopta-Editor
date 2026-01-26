@@ -41,11 +41,6 @@ function MyTurnIntoMenu() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
 
-  // Get current block ID
-  const currentBlockId = typeof editor.path.current === 'number'
-    ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
-    : null;
-
   return (
     <>
       <button ref={buttonRef} onClick={() => setOpen(true)}>
@@ -56,7 +51,6 @@ function MyTurnIntoMenu() {
         open={open}
         onOpenChange={setOpen}
         anchor={buttonRef.current}
-        blockId={currentBlockId}
         view="small"
         placement="bottom-start"
       >
@@ -78,7 +72,6 @@ Root component that manages state and context.
   open={isOpen}
   onOpenChange={setIsOpen}
   anchor={buttonElement}
-  blockId={currentBlockId}
   view="small"
   placement="bottom-start"
 >
@@ -94,7 +87,6 @@ Root component that manages state and context.
 | `onOpenChange` | `(open: boolean) => void` | Called when open state changes |
 | `defaultOpen` | `boolean` | Default open state (uncontrolled) |
 | `anchor` | `HTMLElement \| null` | Anchor element for positioning |
-| `blockId` | `string \| null` | Block ID to toggle (required for auto-selection) |
 | `view` | `'small' \| 'default'` | View mode (default: `'default'`) |
 | `placement` | `Placement` | Floating UI placement (default: `'bottom-start'`) |
 | `children` | `ReactNode \| ((api) => ReactNode)` | Content or render function |
@@ -179,10 +171,6 @@ function MyToolbar() {
   const turnIntoRef = useRef<HTMLButtonElement>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const currentBlockId = typeof editor.path.current === 'number'
-    ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
-    : null;
-
   return (
     <>
       <FloatingToolbar frozen={actionMenuOpen}>
@@ -207,7 +195,6 @@ function MyToolbar() {
         open={actionMenuOpen}
         onOpenChange={setActionMenuOpen}
         anchor={turnIntoRef.current}
-        blockId={currentBlockId}
         view="small"
         placement="bottom-start"
       >
@@ -260,7 +247,6 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
         open={actionMenuOpen}
         onOpenChange={onActionMenuClose}
         anchor={turnIntoRef.current}
-        blockId={blockId}
         view="small"
         placement="right-start"
       >
@@ -278,7 +264,6 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
   open={open}
   onOpenChange={setOpen}
   anchor={buttonRef.current}
-  blockId={currentBlockId}
 >
   {({ actions, selectedAction, onSelect }) => (
     <ActionMenuList.Content>
@@ -363,18 +348,6 @@ Use for slash command menus and larger dropdowns:
 ## Best Practices
 
 <AccordionGroup>
-  <Accordion title="Always provide blockId for toggle functionality">
-    ```tsx
-    const currentBlockId = typeof editor.path.current === 'number'
-      ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
-      : null;
-
-    <ActionMenuList blockId={currentBlockId}>
-      {/* ... */}
-    </ActionMenuList>
-    ```
-  </Accordion>
-
   <Accordion title="Use small view for toolbar/block options">
     ```tsx
     // From toolbar "Turn into" button

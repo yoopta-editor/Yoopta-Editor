@@ -19,10 +19,6 @@ import { Overlay } from '../overlay';
 import { Portal } from '../portal';
 import './block-options.css';
 
-// ============================================================================
-// BlockOptions Root
-// ============================================================================
-
 type Placement = 'top' | 'right' | 'bottom' | 'left';
 type Align = 'start' | 'center' | 'end';
 
@@ -81,10 +77,6 @@ const BlockOptionsRoot = ({
 
 BlockOptionsRoot.displayName = 'BlockOptions';
 
-// ============================================================================
-// BlockOptions Trigger
-// ============================================================================
-
 type BlockOptionsTriggerProps = {
   children: ReactNode;
   /** Merge props onto child element instead of wrapping */
@@ -128,10 +120,6 @@ const BlockOptionsTrigger = forwardRef<HTMLButtonElement, BlockOptionsTriggerPro
 
 BlockOptionsTrigger.displayName = 'BlockOptions.Trigger';
 
-// ============================================================================
-// BlockOptions Portal
-// ============================================================================
-
 type BlockOptionsPortalProps = {
   children: ReactNode;
 };
@@ -141,10 +129,6 @@ const BlockOptionsPortal = ({ children }: BlockOptionsPortalProps) => (
 );
 
 BlockOptionsPortal.displayName = 'BlockOptions.Portal';
-
-// ============================================================================
-// BlockOptions Content
-// ============================================================================
 
 type BlockOptionsContentProps = {
   children: ReactNode;
@@ -223,10 +207,6 @@ const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>
 
 BlockOptionsContent.displayName = 'BlockOptions.Content';
 
-// ============================================================================
-// BlockOptions Group
-// ============================================================================
-
 type BlockOptionsGroupProps = {
   children: ReactNode;
   className?: string;
@@ -241,10 +221,6 @@ const BlockOptionsGroup = forwardRef<HTMLDivElement, BlockOptionsGroupProps>(
 );
 
 BlockOptionsGroup.displayName = 'BlockOptions.Group';
-
-// ============================================================================
-// BlockOptions Item
-// ============================================================================
 
 type BlockOptionsItemProps = {
   children: ReactNode;
@@ -299,10 +275,6 @@ const BlockOptionsItem = forwardRef<HTMLButtonElement, BlockOptionsItemProps>(
 
 BlockOptionsItem.displayName = 'BlockOptions.Item';
 
-// ============================================================================
-// BlockOptions Separator
-// ============================================================================
-
 type BlockOptionsSeparatorProps = {
   className?: string;
 };
@@ -314,10 +286,6 @@ const BlockOptionsSeparator = forwardRef<HTMLDivElement, BlockOptionsSeparatorPr
 );
 
 BlockOptionsSeparator.displayName = 'BlockOptions.Separator';
-
-// ============================================================================
-// BlockOptions Label
-// ============================================================================
 
 type BlockOptionsLabelProps = {
   children: ReactNode;
@@ -333,10 +301,6 @@ const BlockOptionsLabel = forwardRef<HTMLDivElement, BlockOptionsLabelProps>(
 );
 
 BlockOptionsLabel.displayName = 'BlockOptions.Label';
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export const BlockOptions = Object.assign(BlockOptionsRoot, {
   Root: BlockOptionsRoot,

@@ -68,8 +68,6 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
   const [blockId, setBlockId] = useState<string | null>(null);
   const [styles, setStyles] = useState<CSSProperties>(HIDDEN_STYLES);
 
-  console.log('styles', styles);
-
   // Derived state
   const blockData = blockId ? editor.children[blockId] ?? null : null;
   const isVisible = blockId !== null && styles.opacity === 1;

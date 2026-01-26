@@ -165,10 +165,13 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
     const content =
       children ??
       (actions.length === 0 ? (
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         <ActionMenuListEmpty />
       ) : (
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         <ActionMenuListGroup>
           {actions.map((action) => (
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             <ActionMenuListItem
               key={action.type}
               action={action}
