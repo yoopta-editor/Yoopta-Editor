@@ -62,7 +62,7 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
           </BlockOptions.Group>
         </BlockOptions.Content>
       </BlockOptions>
-      <YooptaActionMenuList open={actionMenuOpen} onOpenChange={onActionMenuClose} anchor={turnIntoRef.current} blockId={blockId} />
+      <YooptaActionMenuList placement='right-start' open={actionMenuOpen} onOpenChange={onActionMenuClose} anchor={turnIntoRef.current} />
     </>
   );
 };

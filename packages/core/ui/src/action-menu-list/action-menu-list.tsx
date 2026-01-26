@@ -2,11 +2,12 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
 import { autoUpdate, flip, offset, shift, useFloating, useMergeRefs, useTransitionStyles } from '@floating-ui/react';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { useYooptaEditor } from '@yoopta/editor';
 
 import { ActionMenuListContext, useActionMenuListContext } from './context';
 import type { ActionMenuItem } from './types';
 import { filterToggleActions, mapActionMenuItems } from './utils';
+import { Overlay } from '../overlay';
 import { Portal } from '../portal';
 import './action-menu-list.css';
 
@@ -31,8 +32,6 @@ type ActionMenuListRootProps = {
   defaultOpen?: boolean;
   /** Anchor element for positioning */
   anchor?: HTMLElement | null;
-  /** Block ID to operate on (for toggle mode) */
-  blockId?: string | null;
   /** View mode - 'small' for compact, 'default' for full */
   view?: 'small' | 'default';
   /** Placement relative to anchor */
@@ -46,7 +45,6 @@ const ActionMenuListRoot = ({
   onOpenChange: controlledOnOpenChange,
   defaultOpen = false,
   anchor = null,
-  blockId = null,
   view = 'default',
   placement = 'bottom-start',
   className = '',
@@ -97,18 +95,21 @@ const ActionMenuListRoot = ({
     setSelectedAction(actions[0] ?? null);
   }, [isControlled, controlledOnOpenChange, actions]);
 
-  // Handle action selection (toggle block)
   const onSelect = useCallback(
     (type: string) => {
-      if (!blockId) return;
+      if (Array.isArray(editor.path.selected) && editor.path.selected.length > 0) {
+        editor.batchOperations(() => {
+          editor.path.selected!.forEach((selected) => {
+            editor.toggleBlock(type, { preserveContent: true, focus: true, at: selected });
+          });
+        });
+      } else {
+        editor.toggleBlock(type, { preserveContent: true, focus: true, at: editor.path.current });
+      }
 
-      const block = Blocks.getBlock(editor, { id: blockId });
-      if (!block) return;
-
-      editor.toggleBlock(type, { preserveContent: true, focus: true, at: block.meta.order });
       close();
     },
-    [editor, blockId, close],
+    [editor, close],
   );
 
   // Context value
@@ -154,7 +155,7 @@ type ActionMenuListContentProps = {
 
 const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentProps>(
   ({ children, className = '', ...props }, forwardedRef) => {
-    const { isOpen, floatingStyles, setFloatingRef, actions, selectedAction, setSelectedAction, onSelect, view } =
+    const { isOpen, floatingStyles, setFloatingRef, actions, selectedAction, setSelectedAction, onSelect, view, close } =
       useActionMenuListContext();
     const mergedRef = useMergeRefs([forwardedRef, setFloatingRef]);
 
@@ -181,18 +182,20 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
 
     return (
       <Portal id="yoopta-ui-action-menu-list-portal">
-        <div
-          ref={mergedRef}
-          role="listbox"
-          tabIndex={0}
-          className={`yoopta-ui-action-menu-list-content yoopta-ui-action-menu-list-${view} ${className}`}
-          style={floatingStyles}
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={(e) => e.stopPropagation()}
-          {...props}
-        >
-          {content}
-        </div>
+        <Overlay lockScroll={false} onClick={close} className="yoopta-ui-action-menu-list-overlay">
+          <div
+            ref={mergedRef}
+            role="listbox"
+            tabIndex={0}
+            className={`yoopta-ui-action-menu-list-content yoopta-ui-action-menu-list-${view} ${className}`}
+            style={floatingStyles}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            {...props}
+          >
+            {content}
+          </div>
+        </Overlay>
       </Portal>
     );
   },
@@ -213,13 +216,13 @@ const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>
 ActionMenuListGroup.displayName = 'ActionMenuList.Group';
 
 type ActionMenuListItemProps = HTMLAttributes<HTMLButtonElement> & {
-  action: ActionMenuItem;
+  action?: ActionMenuItem;
   selected?: boolean;
   icon?: string | ReactNode;
 };
 
 const ActionMenuListItem = forwardRef<HTMLButtonElement, ActionMenuListItemProps>(
-  ({ action, selected, icon: iconProp, className = '', ...props }, ref) => {
+  ({ action, selected, icon: iconProp, className = '', children, ...props }, ref) => {
     const renderIcon = (icon: unknown) => {
       if (!icon) return null;
 
@@ -235,23 +238,28 @@ const ActionMenuListItem = forwardRef<HTMLButtonElement, ActionMenuListItemProps
       return <IconComponent />;
     };
 
-    const iconToRender = iconProp ?? action.icon;
+    const iconToRender = iconProp ?? action?.icon;
 
     return (
       <button
         ref={ref}
         type="button"
         className={`yoopta-ui-action-menu-list-item ${selected ? 'selected' : ''} ${className}`}
-        data-action-menu-item-type={action.type}
-        aria-selected={selected}
+        data-action-menu-item-type={action?.type}
+        data-selected={selected}
         aria-pressed={selected}
         {...props}
       >
-        {iconToRender && <div className="yoopta-ui-action-menu-list-item-icon">{renderIcon(iconToRender)}</div>}
-        <div className="yoopta-ui-action-menu-list-item-content">
-          <div className="yoopta-ui-action-menu-list-item-title">{action.title}</div>
-          {action.description && <div className="yoopta-ui-action-menu-list-item-description">{action.description}</div>}
-        </div>
+        {action && (
+          <>
+            {iconToRender && <div className="yoopta-ui-action-menu-list-item-icon">{renderIcon(iconToRender)}</div>}
+            <div className="yoopta-ui-action-menu-list-item-content">
+              <div className="yoopta-ui-action-menu-list-item-title">{action?.title}</div>
+              {action?.description && <div className="yoopta-ui-action-menu-list-item-description">{action?.description}</div>}
+            </div>
+          </>
+        )}
+        {children}
       </button>
     );
   },

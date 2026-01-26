@@ -14,10 +14,6 @@ import { FloatingBlockActionsContext } from './context';
 import { throttle } from '../utils/throttle';
 import './floating-block-actions.css';
 
-// ============================================================================
-// Types
-// ============================================================================
-
 type FloatingBlockActionsApi = {
   /** Currently hovered block ID */
   blockId: string | null;
@@ -44,10 +40,6 @@ type FloatingBlockActionsButtonProps = {
   title?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-// ============================================================================
-// Styles
-// ============================================================================
-
 const HIDDEN_STYLES: CSSProperties = {
   position: 'fixed',
   top: 0,
@@ -67,10 +59,6 @@ const getVisibleStyles = (top: number, left: number, width: number): CSSProperti
   transform: `scale(1) translateX(-${width + 2}px)`,
   transition: 'opacity 150ms ease-out, transform 150ms ease-out',
 });
-
-// ============================================================================
-// FloatingBlockActions Root
-// ============================================================================
 
 const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: FloatingBlockActionsRootProps) => {
   const editor = useYooptaEditor();
@@ -239,10 +227,6 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
 
 FloatingBlockActionsRoot.displayName = 'FloatingBlockActions';
 
-// ============================================================================
-// FloatingBlockActions Button
-// ============================================================================
-
 const FloatingBlockActionsButton = forwardRef<HTMLButtonElement, FloatingBlockActionsButtonProps>(
   ({ children, onClick, className = '', disabled, title, ...props }, ref) => (
     <button
@@ -261,10 +245,6 @@ const FloatingBlockActionsButton = forwardRef<HTMLButtonElement, FloatingBlockAc
 );
 
 FloatingBlockActionsButton.displayName = 'FloatingBlockActions.Button';
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export const FloatingBlockActions = Object.assign(FloatingBlockActionsRoot, {
   Root: FloatingBlockActionsRoot,

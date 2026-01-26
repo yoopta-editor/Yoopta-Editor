@@ -1,23 +1,25 @@
 import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+import { Placement } from '@floating-ui/dom';
+import { HeadingIcon } from 'lucide-react';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   anchor: HTMLElement | null;
-  blockId: string | null;
+  placement: Placement;
 }
 
-export const YooptaActionMenuList = ({ open, onOpenChange, anchor, blockId }: Props) => {
+export const YooptaActionMenuList = ({ open, onOpenChange, anchor, placement }: Props) => {
   return (
     <ActionMenuList
       open={open}
-      onOpenChange={onOpenChange}
       anchor={anchor}
-      blockId={blockId}
+      onOpenChange={onOpenChange}
       view="small"
-      placement="right-start"
+      placement={placement}
     >
       <ActionMenuList.Content />
-    </ActionMenuList>
+    </ActionMenuList >
   )
 };

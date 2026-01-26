@@ -7,7 +7,7 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
 } from '@radix-ui/react-icons';
-import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import { Marks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
 import { HighlighterIcon } from 'lucide-react';
@@ -32,11 +32,6 @@ export const YooptaToolbar = () => {
   const onTurnIntoClick = () => {
     setActionMenuOpen(true);
   };
-
-  const currentBlockId =
-    typeof editor.path.current === 'number'
-      ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
-      : null;
 
   return (
     <>
@@ -144,7 +139,7 @@ export const YooptaToolbar = () => {
         open={actionMenuOpen}
         onOpenChange={setActionMenuOpen}
         anchor={turnIntoRef.current}
-        blockId={currentBlockId}
+        placement='bottom-start'
       />
     </>
   );

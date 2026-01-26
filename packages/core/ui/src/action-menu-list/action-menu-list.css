@@ -1,3 +1,9 @@
+/* ActionMenuList Overlay */
+.yoopta-ui-action-menu-list-overlay {
+  background: transparent;
+  z-index: var(--yoopta-ui-action-menu-z-index, 9999);
+}
+
 /* ActionMenuList Root */
 .yoopta-ui-action-menu-list {
   position: absolute;
@@ -60,7 +66,7 @@
   background: hsl(var(--yoopta-ui-accent));
 }
 
-.yoopta-ui-action-menu-list-item[aria-selected='true'] {
+.yoopta-ui-action-menu-list-item[data-selected='true'] {
   background: hsl(var(--yoopta-ui-accent));
 }
 
