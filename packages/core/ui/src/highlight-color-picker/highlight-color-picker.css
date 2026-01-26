@@ -41,9 +41,6 @@
   --hcp-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.5), 0 4px 16px -4px rgba(0, 0, 0, 0.3);
 }
 
-/* ============================================================================
-   MODE TOGGLE
-   ============================================================================ */
 .yoopta-highlight-color-picker__mode-toggle {
   display: flex;
   gap: 4px;
@@ -84,9 +81,6 @@
   outline-offset: 2px;
 }
 
-/* ============================================================================
-   REACT-COLORFUL (compact skin)
-   ============================================================================ */
 .yoopta-highlight-color-picker__react-colorful {
   width: 100% !important;
   height: var(--hcp-picker-height) !important;
@@ -115,9 +109,6 @@
   border: 2px solid var(--hcp-bg);
 }
 
-/* ============================================================================
-   PRESETS
-   ============================================================================ */
 .yoopta-highlight-color-picker__presets {
   display: flex;
   flex-direction: row;
@@ -169,9 +160,6 @@
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
 }
 
-/* ============================================================================
-   HEX INPUT
-   ============================================================================ */
 .yoopta-highlight-color-picker__hex-row {
   display: flex;
   align-items: center;

@@ -2,7 +2,7 @@ import { COMMAND_MENU_DEFAULT_ICONS_MAP } from '@/icons/icons';
 import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
 
 export const YooptaSlashCommandMenu = () => (
-  <SlashCommandMenu.Root>
+  <SlashCommandMenu>
     {(props) => {
       return (
         <SlashCommandMenu.Content>
@@ -26,5 +26,5 @@ export const YooptaSlashCommandMenu = () => (
         </SlashCommandMenu.Content>
       );
     }}
-  </SlashCommandMenu.Root>
+  </SlashCommandMenu>
 );

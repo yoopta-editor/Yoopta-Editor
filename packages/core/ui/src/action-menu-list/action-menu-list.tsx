@@ -10,10 +10,6 @@ import { filterToggleActions, mapActionMenuItems } from './utils';
 import { Portal } from '../portal';
 import './action-menu-list.css';
 
-// ============================================================================
-// Types
-// ============================================================================
-
 type ActionMenuListApi = {
   /** Available actions from editor plugins */
   actions: ActionMenuItem[];
@@ -43,10 +39,6 @@ type ActionMenuListRootProps = {
   placement?: Placement;
   className?: string;
 };
-
-// ============================================================================
-// ActionMenuList Root
-// ============================================================================
 
 const ActionMenuListRoot = ({
   children,
@@ -155,10 +147,6 @@ const ActionMenuListRoot = ({
 
 ActionMenuListRoot.displayName = 'ActionMenuList';
 
-// ============================================================================
-// ActionMenuList Content
-// ============================================================================
-
 type ActionMenuListContentProps = {
   children?: ReactNode;
   className?: string;
@@ -168,7 +156,6 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
   ({ children, className = '', ...props }, forwardedRef) => {
     const { isOpen, floatingStyles, setFloatingRef, actions, selectedAction, setSelectedAction, onSelect, view } =
       useActionMenuListContext();
-
     const mergedRef = useMergeRefs([forwardedRef, setFloatingRef]);
 
     if (!isOpen) return null;
@@ -213,10 +200,6 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
 
 ActionMenuListContent.displayName = 'ActionMenuList.Content';
 
-// ============================================================================
-// ActionMenuList Group
-// ============================================================================
-
 type ActionMenuListGroupProps = HTMLAttributes<HTMLDivElement>;
 
 const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>(
@@ -228,10 +211,6 @@ const ActionMenuListGroup = forwardRef<HTMLDivElement, ActionMenuListGroupProps>
 );
 
 ActionMenuListGroup.displayName = 'ActionMenuList.Group';
-
-// ============================================================================
-// ActionMenuList Item
-// ============================================================================
 
 type ActionMenuListItemProps = HTMLAttributes<HTMLButtonElement> & {
   action: ActionMenuItem;
@@ -280,10 +259,6 @@ const ActionMenuListItem = forwardRef<HTMLButtonElement, ActionMenuListItemProps
 
 ActionMenuListItem.displayName = 'ActionMenuList.Item';
 
-// ============================================================================
-// ActionMenuList Empty
-// ============================================================================
-
 type ActionMenuListEmptyProps = HTMLAttributes<HTMLDivElement>;
 
 const ActionMenuListEmpty = forwardRef<HTMLDivElement, ActionMenuListEmptyProps>(
@@ -295,10 +270,6 @@ const ActionMenuListEmpty = forwardRef<HTMLDivElement, ActionMenuListEmptyProps>
 );
 
 ActionMenuListEmpty.displayName = 'ActionMenuList.Empty';
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export const ActionMenuList = Object.assign(ActionMenuListRoot, {
   Root: ActionMenuListRoot,

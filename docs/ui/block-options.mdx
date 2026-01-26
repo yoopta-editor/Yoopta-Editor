@@ -6,7 +6,7 @@ icon: 'ellipsis'
 
 ## Overview
 
-`BlockOptions` is a **controlled** context menu that appears next to a block and exposes actions such as duplicate, copy link, delete, or custom actions like "Turn into". It uses **Floating UI** for smart positioning, a built-in **overlay + portal**, and the **compound component** pattern so you can structure the menu exactly the way you want.
+`BlockOptions` is compound component for block context menus. It supports controlled/uncontrolled modes, Floating UI positioning, and integrates seamlessly with other UI components.
 
 <Frame>
   <img src="/images/block-options.png" alt="Block options menu example" />
@@ -14,12 +14,11 @@ icon: 'ellipsis'
 
 ## Features
 
-- ✅ **Controlled API** — open/close the menu programmatically from anywhere
-- ✅ **Floating positioning** — automatically positions relative to a reference element
-- ✅ **Overlay + Portal** — handles focus trapping, scroll locking, dismiss on outside click
-- ✅ **Compound components** — compose groups, buttons, separators however you like
-- ✅ **Helper actions** — duplicate, copy block link, delete helpers included
-- ✅ **TypeScript-first** — full typings for components and hooks
+- **No stores** — pure React state, no Zustand
+- **API** — controlled/uncontrolled with `open`/`onOpenChange`
+- **Compound components** — Root, Content, Trigger, Item, Group, Separator
+- **Floating positioning** — automatic positioning via Floating UI
+- **Helper hook** — `useBlockActions` for common operations
 
 ## Installation
 
@@ -32,136 +31,137 @@ yarn add @yoopta/ui
 ## Basic Usage
 
 ```tsx
-// Full import
-import {
-  BlockOptions,
-  useBlockOptions,
-  useBlockOptionsActions,
-  useFloatingBlockActionsActions,
-} from '@yoopta/ui';
-// Or subpath imports (smaller bundle)
-// import { BlockOptions, useBlockOptions, useBlockOptionsActions } from '@yoopta/ui/block-options';
-// import { useFloatingBlockActionsActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
 
-import { CopyIcon, Trash2Icon } from 'lucide-react';
-
-function MyBlockOptions() {
-  const { isOpen, getRootProps, close, duplicateBlock, copyBlockLink, deleteBlock } =
-    useBlockOptions();
-  const { floatingBlockId, toggle: toggleFloating } = useFloatingBlockActionsActions();
-
-  if (!isOpen) return null;
-
-  const handleDuplicate = () => {
-    if (!floatingBlockId) return;
-    duplicateBlock(floatingBlockId);
-  };
-
-  const handleDelete = () => {
-    if (!floatingBlockId) return;
-    deleteBlock(floatingBlockId);
-    toggleFloating('hovering');
-  };
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
 
   return (
-    <BlockOptions.Root {...getRootProps()} onClose={close}>
-      <BlockOptions.Group>
-        <BlockOptions.Button onClick={handleDuplicate} icon={<CopyIcon size={16} />}>
-          Duplicate
-        </BlockOptions.Button>
-        <BlockOptions.Button
-          onClick={() => floatingBlockId && copyBlockLink(floatingBlockId)}
-          icon={<CopyIcon size={16} />}>
-          Copy link
-        </BlockOptions.Button>
-        <BlockOptions.Button
-          onClick={handleDelete}
-          icon={<Trash2Icon size={16} />}
-          variant="destructive">
-          Delete
-        </BlockOptions.Button>
-      </BlockOptions.Group>
-    </BlockOptions.Root>
+    <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+      <BlockOptions.Content side="right" align="start">
+        <BlockOptions.Group>
+          <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+            Duplicate
+          </BlockOptions.Item>
+          <BlockOptions.Item onSelect={() => copyBlockLink(blockId)}>
+            Copy link
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+            Delete
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions>
   );
 }
 ```
 
-## Controlled Architecture
-
-`BlockOptions` follows the **two-hook pattern**:
-
-| Hook                       | Purpose                                                                         | Use it when...                             |
-| -------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------ |
-| `useBlockOptions()`        | Full hook with Floating UI for the component that renders `<BlockOptions.Root>` | Rendering the menu                         |
-| `useBlockOptionsActions()` | Lightweight hook with only store actions + helpers                              | Opening/closing menu from other components |
-
-```tsx
-// Component that renders the menu
-const { isOpen, getRootProps } = useBlockOptions();
-
-// Anywhere else (e.g., floating actions, toolbar)
-const { open } = useBlockOptionsActions();
-
-open({ reference: element, blockId: 'block-123' });
-```
-
 ## API Reference
 
-### Components
+### `BlockOptions` (Root)
 
-#### `BlockOptions.Root`
-
-Root container rendered inside a portal + overlay.
+Root component that manages open state and context.
 
 ```tsx
-<BlockOptions.Root {...getRootProps()}>{/* … */}</BlockOptions.Root>
+<BlockOptions
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  anchor={anchorElement}
+  defaultOpen={false}
+>
+  {children}
+</BlockOptions>
 ```
 
-**Props**
+**Props:**
 
-- `children: ReactNode`
-- `className?: string`
-- `style?: CSSProperties`
-- `onClose?: () => void` — called when clicking outside/overlay
+| Prop | Type | Description |
+|------|------|-------------|
+| `open` | `boolean` | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | Called when open state changes |
+| `defaultOpen` | `boolean` | Default open state (uncontrolled) |
+| `anchor` | `HTMLElement \| null` | Anchor element for positioning |
+| `children` | `ReactNode` | Content and trigger components |
 
-#### `BlockOptions.Group`
+### `BlockOptions.Trigger`
 
-Groups buttons together (stacks vertically).
+Optional trigger button (for uncontrolled usage).
+
+```tsx
+<BlockOptions>
+  <BlockOptions.Trigger asChild>
+    <button>Open Menu</button>
+  </BlockOptions.Trigger>
+  <BlockOptions.Content>...</BlockOptions.Content>
+</BlockOptions>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `asChild` | `boolean` | Merge props onto child element |
+| `className` | `string` | Custom CSS classes |
+
+### `BlockOptions.Content`
+
+Floating content panel.
+
+```tsx
+<BlockOptions.Content side="right" align="start" sideOffset={5}>
+  {/* Items here */}
+</BlockOptions.Content>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | Placement side |
+| `align` | `'start' \| 'center' \| 'end'` | Alignment |
+| `sideOffset` | `number` | Offset from anchor (default: 5) |
+| `className` | `string` | Custom CSS classes |
+
+### `BlockOptions.Item`
+
+Menu item button.
+
+```tsx
+<BlockOptions.Item
+  onSelect={handleAction}
+  variant="default"
+  icon={<CopyIcon />}
+  keepOpen={false}
+>
+  Duplicate
+</BlockOptions.Item>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `onSelect` | `(event) => void` | Called when item is selected |
+| `variant` | `'default' \| 'destructive'` | Visual variant |
+| `icon` | `ReactNode` | Icon to display |
+| `keepOpen` | `boolean` | Keep menu open after selection |
+| `disabled` | `boolean` | Disable the item |
+
+### `BlockOptions.Group`
+
+Groups items together.
 
 ```tsx
 <BlockOptions.Group>
-  <BlockOptions.Button>Duplicate</BlockOptions.Button>
+  <BlockOptions.Item>Item 1</BlockOptions.Item>
+  <BlockOptions.Item>Item 2</BlockOptions.Item>
 </BlockOptions.Group>
 ```
 
-**Props:** `children`, `className?`
-
-#### `BlockOptions.Button`
-
-Action button.
-
-```tsx
-<BlockOptions.Button
-  onClick={handleAction}
-  icon={<PlusIcon size={14} />}
-  variant="default"
-  disabled={false}
-  title="Duplicate block">
-  Duplicate
-</BlockOptions.Button>
-```
-
-**Props**
-
-- `onClick?: (event) => void`
-- `icon?: ReactNode`
-- `variant?: 'default' | 'destructive'`
-- `disabled?: boolean`
-- `title?: string`
-- `className?: string`
-- Inherits all native `<button>` attributes (`type="button"` by default)
-
-#### `BlockOptions.Separator`
+### `BlockOptions.Separator`
 
 Visual separator between groups.
 
@@ -169,144 +169,90 @@ Visual separator between groups.
 <BlockOptions.Separator />
 ```
 
-**Props:** `className?`
+### `useBlockActions()`
 
-### Hooks
-
-#### `useBlockOptions()`
-
-Full hook for the component that renders the menu.
+Helper hook with common block operations.
 
 ```tsx
-const { isOpen, getRootProps, open, close, duplicateBlock, copyBlockLink, deleteBlock } =
-  useBlockOptions();
-```
+const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
 
-**Returns**
-
-| Property         | Type                               | Description                                                            |
-| ---------------- | ---------------------------------- | ---------------------------------------------------------------------- |
-| `isOpen`         | `boolean`                          | Whether the menu is currently mounted (with transitions)               |
-| `getRootProps`   | `() => RootProps`                  | Props for `<BlockOptions.Root>` (floating ref, styles, event handlers) |
-| `open`           | `({ reference, blockId }) => void` | Open the menu with reference element + block ID                        |
-| `close`          | `() => void`                       | Close the menu                                                         |
-| `duplicateBlock` | `(blockId: string) => void`        | Helper action                                                          |
-| `copyBlockLink`  | `(blockId: string) => void`        | Helper action                                                          |
-| `deleteBlock`    | `(blockId: string) => void`        | Helper action                                                          |
-
-#### `useBlockOptionsActions()`
-
-Lightweight hook with store actions (no Floating UI).
-
-```tsx
-const { open, close, state, blockId, reference, duplicateBlock, copyBlockLink, deleteBlock } =
-  useBlockOptionsActions();
-```
-
-**Open options**
-
-```ts
-open({
-  reference: HTMLElement;  // Required - element to anchor the menu
-  blockId?: string;        // Optional, but required for helper actions
-});
+// Usage
+duplicateBlock(blockId);
+copyBlockLink(blockId);
+deleteBlock(blockId);
 ```
 
 ## Examples
 
-### 1. Turn Into menu + ActionMenuList
+### With ActionMenuList (Turn Into)
 
 ```tsx
-const BlockOptionsComponent = () => {
-  const { isOpen, getRootProps, close } = useBlockOptions();
-  const { floatingBlockId, toggle: toggleFloating } = useFloatingBlockActionsActions();
-  const { open: openActionMenuList } = useActionMenuListActions();
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, deleteBlock } = useBlockActions();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const onTurnInto = (e: React.MouseEvent) => {
-    if (!floatingBlockId) return;
-
-    toggleFloating('frozen', floatingBlockId);
-    openActionMenuList({
-      reference: e.currentTarget as HTMLElement,
-      view: 'small',
-      placement: 'right',
-      blockId: floatingBlockId,
-    });
+  const onActionMenuClose = (menuOpen: boolean) => {
+    setActionMenuOpen(menuOpen);
+    if (!menuOpen) onOpenChange?.(false); // Close both
   };
 
-  if (!isOpen) return null;
-
   return (
-    <BlockOptions.Root {...getRootProps()} onClose={close}>
-      <BlockOptions.Group>
-        <BlockOptions.Button onClick={onTurnInto} icon={<SparklesIcon size={16} />}>
-          Turn into
-        </BlockOptions.Button>
-      </BlockOptions.Group>
-      <BlockOptions.Separator />
-      <BlockOptions.Group>
-        <BlockOptions.Button variant="destructive" icon={<Trash2Icon size={16} />}>
-          Delete
-        </BlockOptions.Button>
-      </BlockOptions.Group>
-    </BlockOptions.Root>
+    <>
+      <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+        <BlockOptions.Content side="right">
+          <BlockOptions.Group>
+            <BlockOptions.Item
+              ref={turnIntoRef}
+              onSelect={() => setActionMenuOpen(true)}
+              keepOpen
+            >
+              Turn into
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+          <BlockOptions.Separator />
+          <BlockOptions.Group>
+            <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+              Duplicate
+            </BlockOptions.Item>
+            <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+              Delete
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+        </BlockOptions.Content>
+      </BlockOptions>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={onActionMenuClose}
+        anchor={turnIntoRef.current}
+        blockId={blockId}
+        view="small"
+        placement="right-start"
+      >
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
   );
-};
+}
 ```
 
-### 2. Custom Actions Based on Block Type
+### Uncontrolled with Trigger
 
 ```tsx
-const { blockId } = useBlockOptionsActions();
-const block = blockId ? editor.blocks.getBlock(blockId) : null;
-const isImage = block?.type === 'Image';
-
-return (
-  <BlockOptions.Root {...getRootProps()}>
+<BlockOptions>
+  <BlockOptions.Trigger>
+    <button>Open Options</button>
+  </BlockOptions.Trigger>
+  <BlockOptions.Content>
     <BlockOptions.Group>
-      <BlockOptions.Button onClick={handleDuplicate}>Duplicate</BlockOptions.Button>
-      {isImage && (
-        <BlockOptions.Button onClick={handleReplaceImage}>Replace image</BlockOptions.Button>
-      )}
-    </BlockOptions.Group>
-    <BlockOptions.Separator />
-    <BlockOptions.Group>
-      <BlockOptions.Button variant="destructive" onClick={handleDelete}>
+      <BlockOptions.Item onSelect={handleDuplicate}>Duplicate</BlockOptions.Item>
+      <BlockOptions.Item variant="destructive" onSelect={handleDelete}>
         Delete
-      </BlockOptions.Button>
+      </BlockOptions.Item>
     </BlockOptions.Group>
-  </BlockOptions.Root>
-);
-```
-
-### 3. Integrating with FloatingBlockActions
-
-```tsx
-const { open: openBlockOptions } = useBlockOptionsActions();
-
-const onDragClick = (e: React.MouseEvent) => {
-  if (!floatingBlockId) return;
-  openBlockOptions({
-    reference: e.currentTarget as HTMLElement,
-    blockId: floatingBlockId,
-  });
-};
-
-<FloatingBlockActions.Button onClick={onDragClick}>
-  <GripVerticalIcon size={16} />
-</FloatingBlockActions.Button>;
-```
-
-### 4. With Icons + Shortcuts
-
-```tsx
-<BlockOptions.Button
-  onClick={handleDuplicate}
-  icon={<CopyIcon size={14} />}
-  title="Duplicate block (⌘D)">
-  Duplicate
-  <kbd className="shortcut">⌘D</kbd>
-</BlockOptions.Button>
+  </BlockOptions.Content>
+</BlockOptions>
 ```
 
 ## Styling
@@ -317,114 +263,34 @@ const onDragClick = (e: React.MouseEvent) => {
 :root {
   --yoopta-ui-block-options-bg: var(--yoopta-ui-background);
   --yoopta-ui-block-options-border: var(--yoopta-ui-border);
-  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 /
-          0.1);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --yoopta-ui-block-options-radius: 0.5rem;
-  --yoopta-ui-block-options-padding: 4px;
-  --yoopta-ui-block-options-button-radius: 0.375rem;
   --yoopta-ui-block-options-button-hover: var(--yoopta-ui-accent);
   --yoopta-ui-block-options-button-destructive-color: hsl(var(--yoopta-ui-destructive));
 }
 ```
 
-### Custom CSS Classes
-
-```tsx
-<BlockOptions.Root className="glass-panel">
-  <BlockOptions.Button className="ghost">Duplicate</BlockOptions.Button>
-</BlockOptions.Root>
-```
-
-```css
-.glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-}
-
-.ghost {
-  color: white;
-  transition: transform 0.2s ease;
-}
-
-.ghost:hover {
-  transform: translateX(4px);
-}
-```
-
-### Inline Styles / Tailwind
-
-```tsx
-<BlockOptions.Root className="bg-slate-900/90 border border-white/10 shadow-2xl">
-  <BlockOptions.Button className="text-white hover:bg-white/10">Duplicate</BlockOptions.Button>
-</BlockOptions.Root>
-```
-
-## Accessibility
-
-BlockOptions handles focus trapping via the overlay, but keep these in mind:
-
-- Use `title` or `aria-label` on buttons for screen readers
-- Ensure destructive actions are clearly indicated (variant + icon + tooltip)
-- Keyboard users can reach buttons via Tab because buttons use `type="button"`
-
-```tsx
-<BlockOptions.Button
-  onClick={handleDelete}
-  variant="destructive"
-  aria-label="Delete current block"
-  title="Delete block (Shift+⌘+Delete)">
-  Delete
-</BlockOptions.Button>
-```
-
 ## Best Practices
 
 <AccordionGroup>
-  <Accordion title="Always pass blockId when opening">
+  <Accordion title="Use keepOpen for submenu triggers">
     ```tsx
-    const { open } = useBlockOptionsActions();
-
-    open({
-      reference: e.currentTarget,
-      blockId: floatingBlockId, // required for helper actions
-    });
+    <BlockOptions.Item
+      onSelect={() => setActionMenuOpen(true)}
+      keepOpen // Prevents BlockOptions from closing
+    >
+      Turn into
+    </BlockOptions.Item>
     ```
-
   </Accordion>
 
-  <Accordion title="Freeze FloatingBlockActions while menu is open">
+  <Accordion title="Close both menus after action">
     ```tsx
-    const { toggle: toggleFloating } = useFloatingBlockActionsActions();
-
-    const onOpenBlockOptions = () => {
-      toggleFloating('frozen', floatingBlockId);
-      openBlockOptions({ reference: element, blockId: floatingBlockId });
-    };
-
-    const onClose = () => {
-      toggleFloating('hovering', floatingBlockId);
-      closeBlockOptions();
-    };
-    ```
-
-  </Accordion>
-
-{' '}
-
-<Accordion title="Use destructive variant for dangerous actions">
-  ```tsx
-  <BlockOptions.Button variant="destructive" onClick={handleDelete}>
-    Delete
-  </BlockOptions.Button>
-  ```
-</Accordion>
-
-  <Accordion title="Close menu after action completes">
-    ```tsx
-    const handleDuplicate = () => {
-      duplicateBlock(floatingBlockId!);
-      close(); // keep UI in sync
+    const onActionMenuClose = (menuOpen: boolean) => {
+      setActionMenuOpen(menuOpen);
+      if (!menuOpen) {
+        onOpenChange?.(false); // Also close BlockOptions
+      }
     };
     ```
   </Accordion>
@@ -434,9 +300,9 @@ BlockOptions handles focus trapping via the overlay, but keep these in mind:
 
 <CardGroup cols={2}>
   <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
-    Trigger BlockOptions when pressing the drag handle
+    Trigger BlockOptions from drag handle
   </Card>
   <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
-    Open from BlockOptions for \"Turn into\" menu
+    Open from BlockOptions for "Turn into"
   </Card>
 </CardGroup>

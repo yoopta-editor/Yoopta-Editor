@@ -29,7 +29,7 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 - Create custom plugins
 - Media optimization with lazy loading
 - Large document support
-- Theming support (light/dark)
+- Theming via CSS variables (light/dark)
 
 ## Installation
 
@@ -79,16 +79,78 @@ export default function Editor() {
 
 ## Adding UI Components
 
-Yoopta provides ready-to-use UI components from `@yoopta/ui`:
+Yoopta provides ready-to-use UI components from `@yoopta/ui` that follow compound component patterns:
 
 ```tsx
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import {
-  YooptaToolbar,
-  YooptaActionMenuList,
-  YooptaFloatingBlockActions,
-  YooptaSlashCommandMenu
-} from '@yoopta/ui';
+import { useMemo, useState, useRef } from 'react';
+import YooptaEditor, { createYooptaEditor, Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions } from '@yoopta/ui/block-options';
+import { SlashActionMenuList } from '@yoopta/ui/slash-action-menu-list';
+
+// Floating toolbar for text formatting
+function MyToolbar() {
+  const editor = useYooptaEditor();
+
+  return (
+    <FloatingToolbar>
+      <FloatingToolbar.Content>
+        <FloatingToolbar.Group>
+          {editor.formats.bold && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'bold' })}
+              active={Marks.isActive(editor, { type: 'bold' })}
+            >
+              B
+            </FloatingToolbar.Button>
+          )}
+        </FloatingToolbar.Group>
+      </FloatingToolbar.Content>
+    </FloatingToolbar>
+  );
+}
+
+// Floating block actions (plus button, drag handle)
+function MyFloatingBlockActions() {
+  const editor = useYooptaEditor();
+  const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <FloatingBlockActions frozen={blockOptionsOpen}>
+      {({ blockId }) => (
+        <>
+          <FloatingBlockActions.Button
+            onClick={() => {
+              if (!blockId) return;
+              const block = Blocks.getBlock(editor, { id: blockId });
+              if (block) editor.insertBlock('Paragraph', { at: block.meta.order + 1, focus: true });
+            }}
+          >
+            +
+          </FloatingBlockActions.Button>
+          <FloatingBlockActions.Button
+            ref={dragHandleRef}
+            onClick={() => setBlockOptionsOpen(true)}
+          >
+            ⋮⋮
+          </FloatingBlockActions.Button>
+
+          <BlockOptions
+            open={blockOptionsOpen}
+            onOpenChange={setBlockOptionsOpen}
+            anchor={dragHandleRef.current}
+          >
+            <BlockOptions.Content>
+              {/* Block options menu items */}
+            </BlockOptions.Content>
+          </BlockOptions>
+        </>
+      )}
+    </FloatingBlockActions>
+  );
+}
 
 export default function Editor() {
   const editor = useMemo(() => createYooptaEditor({
@@ -103,17 +165,9 @@ export default function Editor() {
       placeholder="Type / to open menu"
       style={{ width: 750 }}
     >
-      {/* Floating toolbar for text formatting */}
-      <YooptaToolbar />
-
-      {/* Slash command menu (type / to open) */}
-      <YooptaSlashCommandMenu />
-
-      {/* Action menu for block operations */}
-      <YooptaActionMenuList />
-
-      {/* Drag handle and block options */}
-      <YooptaFloatingBlockActions />
+      <MyToolbar />
+      <MyFloatingBlockActions />
+      <SlashActionMenuList />
     </YooptaEditor>
   );
 }
@@ -126,7 +180,7 @@ export default function Editor() {
 | Package | Description |
 |---------|-------------|
 | [@yoopta/editor](./packages/core/editor) | Core editor component and API |
-| [@yoopta/ui](./packages/core/ui) | UI components (Toolbar, ActionMenu, BlockOptions) |
+| [@yoopta/ui](./packages/core/ui) | UI components (ActionMenuList, BlockOptions, ElementOptions, FloatingBlockActions, HighlightColorPicker, Overlay, Portal, SelectionBox, SlashMenuCommandMenu, FloatingToolbar) |
 | [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email |
 | [@yoopta/marks](./packages/marks) | Text formatting marks |
 
@@ -164,13 +218,23 @@ All marks are available from `@yoopta/marks`:
 - **CodeMark** - `Cmd/Ctrl + E`
 - **Highlight** - Text highlighting with colors
 
-### Themes
+### Styling
 
-| Package | Description |
-|---------|-------------|
-| [@yoopta/theme-base](./packages/themes/base) | Base theme |
-| [@yoopta/theme-material](./packages/themes/material) | Material design theme |
-| [@yoopta/theme-shadcn](./packages/themes/shadcn) | shadcn/ui compatible theme |
+UI components use CSS variables for theming (shadcn/ui style):
+
+```css
+:root {
+  --yoopta-ui-background: 0 0% 100%;
+  --yoopta-ui-foreground: 222.2 84% 4.9%;
+  --yoopta-ui-border: 214.3 31.8% 91.4%;
+  --yoopta-ui-accent: 210 40% 96.1%;
+}
+
+.dark {
+  --yoopta-ui-background: 222.2 84% 4.9%;
+  --yoopta-ui-foreground: 210 40% 98%;
+}
+```
 
 ## Editor API
 

@@ -62,12 +62,11 @@ export const StepsPlugin = new YooptaPlugin<StepsElementMap>({
   parsers: {
     html: {
       deserialize: {
-        nodeNames: ['OL'],
+        nodeNames: ['DIV'],
         parse: (el) => {
-          // Check if this is our steps format
-          if (!el.querySelector('li') || el.style.listStyle !== 'none') return;
+          if (el.getAttribute('data-type') !== 'steps-container') return;
 
-          const items = el.querySelectorAll(':scope > li');
+          const items = el.querySelectorAll(':scope > div');
           if (items.length === 0) return;
 
           const stepItems: SlateElement[] = [];
@@ -127,17 +126,17 @@ export const StepsPlugin = new YooptaPlugin<StepsElementMap>({
             .map((item, index) => {
               if (item.type === 'step-list-item') {
                 const heading = item.children?.find(
-                  (c: SlateElement) => c.type === 'step-list-item-heading',
+                  (c) => Element.isElement(c) && c.type === 'step-list-item-heading',
                 );
                 const content = item.children?.find(
-                  (c: SlateElement) => c.type === 'step-list-item-content',
+                  (c) => Element.isElement(c) && c.type === 'step-list-item-content',
                 );
 
                 const headingText = heading ? serializeTextNodes(heading.children) : '';
                 const contentText = content ? serializeTextNodes(content.children) : '';
 
                 return `
-                  <li style="margin-bottom: 16px; padding-left: 8px;">
+                  <div style="margin-bottom: 16px; padding-left: 8px;">
                     <div style="display: flex; align-items: flex-start; gap: 12px;">
                       <span style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #e5e7eb; font-size: 12px; font-weight: 600; flex-shrink: 0;">${index + 1}</span>
                       <div>
@@ -145,13 +144,13 @@ export const StepsPlugin = new YooptaPlugin<StepsElementMap>({
                         <p style="margin: 0; color: #6b7280;">${contentText}</p>
                       </div>
                     </div>
-                  </li>`;
+                  </div>`;
               }
               return '';
             })
             .join('');
 
-          return `<ol data-meta-depth="${depth}" style="list-style: none; padding: 0; margin-left: ${depth * 20}px;">${stepsHtml}</ol>`;
+          return `<div data-type="steps-container" data-meta-depth="${depth}" style="list-style: none; padding: 0; margin-left: ${depth * 20}px;">${stepsHtml}</div>`;
         }
 
         return '';

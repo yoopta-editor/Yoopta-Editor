@@ -5,8 +5,6 @@ export { BlockOptions, useBlockActions, useBlockOptionsContext } from './block-o
 export { FloatingToolbar } from './floating-toolbar';
 export { ActionMenuList } from './action-menu-list';
 export { SlashCommandMenu } from './slash-command-menu';
-export { useTheme, ThemeProvider, ThemeToggle, useThemeContext } from './theme';
-export type { Theme } from './theme';
 export { Portal } from './portal';
 export { Overlay } from './overlay';
 export { HighlightColorPicker } from './highlight-color-picker';

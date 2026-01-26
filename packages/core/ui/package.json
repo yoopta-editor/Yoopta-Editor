@@ -12,9 +12,6 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "toolbar": [
-        "./dist/toolbar/index.d.ts"
-      ],
       "floating-toolbar": [
         "./dist/floating-toolbar/index.d.ts"
       ],
@@ -44,9 +41,6 @@
       ],
       "overlay": [
         "./dist/overlay/index.d.ts"
-      ],
-      "theme": [
-        "./dist/theme/index.d.ts"
       ]
     }
   },
@@ -57,10 +51,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./toolbar": {
-      "types": "./dist/toolbar/index.d.ts",
-      "import": "./dist/toolbar.js"
     },
     "./floating-toolbar": {
       "types": "./dist/floating-toolbar/index.d.ts",
@@ -101,10 +91,6 @@
     "./overlay": {
       "types": "./dist/overlay/index.d.ts",
       "import": "./dist/overlay.js"
-    },
-    "./theme": {
-      "types": "./dist/theme/index.d.ts",
-      "import": "./dist/theme.js"
     }
   },
   "files": [

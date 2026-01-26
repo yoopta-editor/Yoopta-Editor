@@ -16,12 +16,7 @@ import { Portal } from '../portal';
 import { throttle } from '../utils/throttle';
 import './floating-toolbar.css';
 
-// ============================================================================
-// Types
-// ============================================================================
-
 type FloatingToolbarApi = {
-  /** Whether toolbar is open/visible */
   isOpen: boolean;
 };
 
@@ -31,10 +26,6 @@ type FloatingToolbarRootProps = {
   frozen?: boolean;
   className?: string;
 };
-
-// ============================================================================
-// FloatingToolbar Root
-// ============================================================================
 
 const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: FloatingToolbarRootProps) => {
   const editor = useYooptaEditor();

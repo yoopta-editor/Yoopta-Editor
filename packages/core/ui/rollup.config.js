@@ -26,7 +26,6 @@ const createMultiEntryConfig = () => {
       'element-options': './src/element-options/index.ts',
       portal: './src/portal/index.ts',
       overlay: './src/overlay/index.ts',
-      theme: './src/theme/index.ts',
     },
     output: {
       format: 'es',

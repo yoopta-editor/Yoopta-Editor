@@ -119,6 +119,44 @@
   padding: var(--yoopta-ui-action-menu-empty-padding, 0.5rem);
 }
 
+/* Small view - compact for toolbar/block options "Turn into" */
+.yoopta-ui-action-menu-list-small {
+  min-width: 180px;
+  max-height: 280px;
+  padding: 0.375rem;
+}
+
+.yoopta-ui-action-menu-list-small .yoopta-ui-action-menu-list-item {
+  padding: 0.375rem 0.5rem;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+}
+
+.yoopta-ui-action-menu-list-small .yoopta-ui-action-menu-list-item-icon {
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+}
+
+.yoopta-ui-action-menu-list-small .yoopta-ui-action-menu-list-item-title {
+  font-size: 0.8125rem;
+}
+
+.yoopta-ui-action-menu-list-small .yoopta-ui-action-menu-list-item-description {
+  display: none;
+}
+
+/* Default view - full size for slash command */
+.yoopta-ui-action-menu-list-default {
+  min-width: 244px;
+}
+
+.yoopta-ui-action-menu-list-default .yoopta-ui-action-menu-list-item-icon {
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+}
+
 /* Scrollbar styles */
 .yoopta-ui-action-menu-list-content::-webkit-scrollbar {
   width: 8px;

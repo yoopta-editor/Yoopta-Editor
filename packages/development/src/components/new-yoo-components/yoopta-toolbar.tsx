@@ -9,9 +9,9 @@ import {
 } from '@radix-ui/react-icons';
 import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
-import { ActionMenuList } from '@yoopta/ui/action-menu-list';
 import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
 import { HighlighterIcon } from 'lucide-react';
+import { YooptaActionMenuList } from './yoopta-action-menu-list';
 
 export const YooptaToolbar = () => {
   const editor = useYooptaEditor();
@@ -33,7 +33,6 @@ export const YooptaToolbar = () => {
     setActionMenuOpen(true);
   };
 
-  // Get the current block ID for ActionMenuList
   const currentBlockId =
     typeof editor.path.current === 'number'
       ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
@@ -141,17 +140,12 @@ export const YooptaToolbar = () => {
         </FloatingToolbar.Content>
       </FloatingToolbar>
 
-      {/* ActionMenuList for "Turn into" */}
-      <ActionMenuList
+      <YooptaActionMenuList
         open={actionMenuOpen}
         onOpenChange={setActionMenuOpen}
         anchor={turnIntoRef.current}
         blockId={currentBlockId}
-        view="small"
-        placement="bottom-start"
-      >
-        <ActionMenuList.Content />
-      </ActionMenuList>
+      />
     </>
   );
 };

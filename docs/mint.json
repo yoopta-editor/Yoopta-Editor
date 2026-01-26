@@ -131,11 +131,10 @@
         "ui/overview",
         "ui/floating-block-actions",
         "ui/block-options",
-        "ui/toolbar",
+        "ui/floating-toolbar",
         "ui/action-menu-list",
         "ui/slash-action-menu-list",
-        "ui/selection-box",
-        "ui/theme"
+        "ui/selection-box"
       ]
     },
     {

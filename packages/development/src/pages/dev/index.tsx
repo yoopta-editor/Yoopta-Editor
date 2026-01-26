@@ -13,8 +13,6 @@ const EDITOR_STYLE = {
 import { YooptaToolbar } from '@/components/new-yoo-components/yoopta-toolbar';
 import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoopta-floating-block-actions';
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
-import { YooptaBlockOptions } from '@/components/new-yoo-components/yoopta-block-options';
-import { YooptaActionMenuList } from '@/components/new-yoo-components/yoopta-action-menu-list';
 
 import { SelectionBox } from '@yoopta/ui/selection-box';
 
@@ -434,7 +432,6 @@ const YooptaUIPackageExample = () => {
         <YooptaToolbar />
         <YooptaFloatingBlockActions />
         <YooptaSlashCommandMenu />
-        {/* <YooptaActionMenuList /> */}
         <SelectionBox selectionBoxElement={selectionBoxRef} />
       </YooptaEditor>
     </div>
