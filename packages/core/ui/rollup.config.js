@@ -17,7 +17,7 @@ const createMultiEntryConfig = () => {
 
       // Individual component entries (for tree-shaking)
       'floating-block-actions': './src/floating-block-actions/index.tsx',
-      toolbar: './src/toolbar/index.ts',
+      'floating-toolbar': './src/floating-toolbar/index.ts',
       'action-menu-list': './src/action-menu-list/index.ts',
       'slash-command-menu': './src/slash-command-menu/index.ts',
       'block-options': './src/block-options/index.ts',

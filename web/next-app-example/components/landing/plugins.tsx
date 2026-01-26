@@ -64,6 +64,7 @@ const pluginCategories = [
     plugins: [
       { name: "Table", icon: Table2, package: "@yoopta/table" },
       { name: "Code", icon: Code, package: "@yoopta/code" },
+      { name: "Code Group", icon: Code, package: "@yoopta/code-group" },
       { name: "Accordion", icon: ChevronDown, package: "@yoopta/accordion" },
       { name: "Tabs", icon: Columns, package: "@yoopta/tabs" },
       { name: "Steps", icon: ListTree, package: "@yoopta/steps" },
@@ -93,7 +94,7 @@ export function Plugins() {
           <Badge variant="info" className="mb-4">
             18+ Plugins
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-neutral-900 dark:text-white">
             Every block type you need
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
@@ -109,7 +110,7 @@ export function Plugins() {
               key={category.name}
               className="p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80"
             >
-              <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
+              <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-white">{category.name}</h3>
               <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
                 {category.description}
               </p>
@@ -123,7 +124,7 @@ export function Plugins() {
                       <plugin.icon className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium">{plugin.name}</p>
+                      <p className="text-sm font-medium text-neutral-900 dark:text-white">{plugin.name}</p>
                       <p className="text-xs text-neutral-500 dark:text-neutral-500 truncate font-mono">
                         {plugin.package}
                       </p>
@@ -139,7 +140,7 @@ export function Plugins() {
         <div className="mt-12 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <div>
-              <h3 className="text-xl font-semibold">Text Formatting (Marks)</h3>
+              <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">Text Formatting (Marks)</h3>
               <p className="text-sm text-neutral-500 dark:text-neutral-400">
                 Apply formatting to any text selection
               </p>

@@ -3,8 +3,9 @@ import { Hero } from "@/components/landing/hero";
 import { Features } from "@/components/landing/features";
 import { Plugins } from "@/components/landing/plugins";
 import { CodeExample } from "@/components/landing/code-example";
-import { Pricing } from "@/components/landing/pricing";
+import { Waitlist } from "@/components/landing/waitlist";
 import { FAQ } from "@/components/landing/faq";
+import { Supporters } from "@/components/landing/supporters";
 import { Footer } from "@/components/landing/footer";
 
 export default function Home() {
@@ -16,8 +17,9 @@ export default function Home() {
         <Features />
         <Plugins />
         <CodeExample />
-        <Pricing />
+        <Waitlist />
         <FAQ />
+        <Supporters />
       </main>
       <Footer />
     </div>

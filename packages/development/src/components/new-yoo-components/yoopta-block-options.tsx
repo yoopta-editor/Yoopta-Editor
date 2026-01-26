@@ -1,5 +1,6 @@
+import { useRef, useState } from 'react';
 import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
-import { useActionMenuListActions } from '@yoopta/ui/action-menu-list';
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
 
 type YooptaBlockOptionsProps = {
   /** Controlled open state */
@@ -14,17 +15,19 @@ type YooptaBlockOptionsProps = {
 
 export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: YooptaBlockOptionsProps) => {
   const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
-  const { open: openActionMenuList } = useActionMenuListActions();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const onTurnInto = (e: React.MouseEvent) => {
-    if (!blockId) return;
+  const onTurnInto = () => {
+    setActionMenuOpen(true);
+  };
 
-    openActionMenuList({
-      reference: e.currentTarget as HTMLElement,
-      view: 'small',
-      placement: 'right',
-      blockId,
-    });
+  const onActionMenuClose = (menuOpen: boolean) => {
+    setActionMenuOpen(menuOpen);
+    // When action menu closes after selection, also close block options
+    if (!menuOpen) {
+      onOpenChange?.(false);
+    }
   };
 
   const onDuplicate = () => {
@@ -46,23 +49,37 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
   };
 
   return (
-    <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
-      <BlockOptions.Content side="right" align="end">
-        <BlockOptions.Group>
-          <BlockOptions.Item onSelect={onTurnInto} keepOpen>
-            Turn into
-          </BlockOptions.Item>
-        </BlockOptions.Group>
-        <BlockOptions.Separator />
-        <BlockOptions.Group>
-          <BlockOptions.Item onSelect={onDuplicate}>Duplicate</BlockOptions.Item>
-          <BlockOptions.Item onSelect={onCopyLink}>Copy link to block</BlockOptions.Item>
-          <BlockOptions.Item variant="destructive" onSelect={onDelete}>
-            Delete
-          </BlockOptions.Item>
-        </BlockOptions.Group>
-      </BlockOptions.Content>
-    </BlockOptions>
+    <>
+      <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+        <BlockOptions.Content side="right" align="end">
+          <BlockOptions.Group>
+            <BlockOptions.Item ref={turnIntoRef} onSelect={onTurnInto} keepOpen>
+              Turn into
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+          <BlockOptions.Separator />
+          <BlockOptions.Group>
+            <BlockOptions.Item onSelect={onDuplicate}>Duplicate</BlockOptions.Item>
+            <BlockOptions.Item onSelect={onCopyLink}>Copy link to block</BlockOptions.Item>
+            <BlockOptions.Item variant="destructive" onSelect={onDelete}>
+              Delete
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+        </BlockOptions.Content>
+      </BlockOptions>
+
+      {/* ActionMenuList positioned next to "Turn into" button */}
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={onActionMenuClose}
+        anchor={turnIntoRef.current}
+        blockId={blockId}
+        view="small"
+        placement="right-start"
+      >
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
   );
 };
 

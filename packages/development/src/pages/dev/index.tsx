@@ -434,7 +434,7 @@ const YooptaUIPackageExample = () => {
         <YooptaToolbar />
         <YooptaFloatingBlockActions />
         <YooptaSlashCommandMenu />
-        <YooptaActionMenuList />
+        {/* <YooptaActionMenuList /> */}
         <SelectionBox selectionBoxElement={selectionBoxRef} />
       </YooptaEditor>
     </div>

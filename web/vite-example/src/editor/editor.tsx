@@ -6,7 +6,18 @@ import { marks } from './marks';
 import { SlashMenu } from './slash-menu';
 import { ToolbarComponent } from './toolbar';
 
-export const YooptaEditor = () => {
+import { SelectionBox } from '@yoopta/ui/selection-box';
+
+const EDITOR_STYLE = {
+  width: '100%',
+  paddingBottom: 100,
+};
+
+type YooptaEditorProps = {
+  containerRef: React.RefObject<HTMLDivElement>;
+};
+
+export const YooptaEditor = ({ containerRef }: YooptaEditorProps) => {
   const editor = useMemo(() => createYooptaEditor({
     plugins: plugins,
     marks: marks,
@@ -14,11 +25,12 @@ export const YooptaEditor = () => {
   }), []);
 
   return (
-    <YooptaEditorLib editor={editor} width="100%" autoFocus onChange={(value) => {
+    <YooptaEditorLib editor={editor} autoFocus onChange={(value) => {
       localStorage.setItem('value', JSON.stringify(value));
-    }}>
+    }} style={EDITOR_STYLE}>
       <SlashMenu />
       <ToolbarComponent />
+      <SelectionBox selectionBoxElement={containerRef} />
     </YooptaEditorLib>
   );
 };

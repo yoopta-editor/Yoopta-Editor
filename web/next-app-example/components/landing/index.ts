@@ -1,0 +1,9 @@
+export { Header } from "./header";
+export { Hero } from "./hero";
+export { Features } from "./features";
+export { Plugins } from "./plugins";
+export { CodeExample } from "./code-example";
+export { Waitlist } from "./waitlist";
+export { FAQ } from "./faq";
+export { Supporters } from "./supporters";
+export { Footer } from "./footer";

@@ -1,5 +1,5 @@
 import type { YooEditor } from '@yoopta/editor';
-import { Blocks, Elements, YooptaPlugin } from '@yoopta/editor';
+import { Blocks, Elements, generateId, YooptaPlugin } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
 
 import { MentionCommands } from '../commands/MentionCommands';
@@ -27,6 +27,41 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     char: '@',
   },
   commands: MentionCommands,
+  parsers: {
+    html: {
+      deserialize: {
+        nodeNames: ['SPAN'],
+        parse: (el) => {
+          if (el.nodeName === 'SPAN' && el.dataset.mentionId) {
+            return {
+              id: generateId(),
+              type: 'mention',
+              children: [{ text: '' }],
+              props: {
+                id: el.dataset.mentionId || '',
+                name: el.dataset.mentionName || el.textContent || '',
+                avatar: el.dataset.mentionAvatar || '',
+                nodeType: 'inlineVoid',
+              },
+            };
+          }
+        },
+      },
+      serialize: (element) => {
+        const { id, name, avatar } = element.props || {};
+        return `<span data-mention-id="${id}" data-mention-name="${name}" data-mention-avatar="${avatar || ''}" style="color: #2563eb; font-weight: 500;">@${name}</span>`;
+      },
+    },
+    markdown: {
+      serialize: (element) => `@${element.props?.name || ''}`,
+    },
+    email: {
+      serialize: (element) => {
+        const { name } = element.props || {};
+        return `<span style="color: #2563eb; font-weight: 500;">@${name}</span>`;
+      },
+    },
+  },
   extensions: (slate, editor) => {
     const { markableVoid, isInline } = slate;
 

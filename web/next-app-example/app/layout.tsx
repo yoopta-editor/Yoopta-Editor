@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Yoopta Editor - Build Notion-like editors in React",
+  title: "Yoopta Editor - Build really rich editors in React",
   description:
     "Free, open-source rich-text editor for React. 18+ plugins, drag & drop, keyboard shortcuts, and more. Built on Slate.js with a powerful plugin architecture.",
   keywords: [
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Yoopta" }],
   openGraph: {
-    title: "Yoopta Editor - Build Notion-like editors in React",
+    title: "Yoopta Editor - Build really rich editors in React",
     description:
       "Free, open-source rich-text editor for React. 18+ plugins, drag & drop, keyboard shortcuts, and more.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yoopta Editor - Build Notion-like editors in React",
+    title: "Yoopta Editor - Build really rich editors in React",
     description:
       "Free, open-source rich-text editor for React. 18+ plugins, drag & drop, keyboard shortcuts, and more.",
   },

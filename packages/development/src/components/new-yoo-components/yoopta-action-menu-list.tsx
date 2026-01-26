@@ -1,16 +1,12 @@
 import { COMMAND_MENU_DEFAULT_ICONS_MAP } from '@/icons/icons';
-import {
-  ActionMenuList,
-  useActionMenuList,
-} from '@yoopta/ui/action-menu-list';
-// import { useBlockOptions } from '@yoopta/ui/block-options';
-import { useFloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { ActionMenuList, useActionMenuList } from '@yoopta/ui/action-menu-list';
 
+/**
+ * Slash command menu - triggered by typing "/" in the editor.
+ * This is independent of FloatingBlockActions/BlockOptions.
+ */
 export const YooptaActionMenuList = () => {
-  // const { close: closeBlockOptions } = useBlockOptions();
-  const { toggle: toggleFloatingBlockActions } = useFloatingBlockActions();
-  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } =
-    useActionMenuList();
+  const { actions, selectedAction, empty, isOpen, getItemProps, getRootProps } = useActionMenuList();
 
   if (!isOpen) return null;
 
@@ -23,11 +19,6 @@ export const YooptaActionMenuList = () => {
           actions.map((action) => {
             const Icon = COMMAND_MENU_DEFAULT_ICONS_MAP[action.type];
             const itemProps = getItemProps(action.type);
-            const onClick = (e: React.MouseEvent) => {
-              itemProps.onClick(e);
-              // closeBlockOptions();
-              toggleFloatingBlockActions('hovering');
-            };
 
             return (
               <ActionMenuList.Item
@@ -36,7 +27,6 @@ export const YooptaActionMenuList = () => {
                 selected={action.type === selectedAction?.type}
                 icon={Icon ? <Icon width={20} height={20} /> : null}
                 {...itemProps}
-                onClick={onClick}
               />
             );
           })

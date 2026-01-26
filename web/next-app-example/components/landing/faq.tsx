@@ -70,7 +70,7 @@ export function FAQ() {
       <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-neutral-900 dark:text-white">
             Frequently asked questions
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-400">
@@ -92,7 +92,7 @@ export function FAQ() {
 
         {/* Still have questions */}
         <div className="mt-12 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 text-center">
-          <h3 className="text-lg font-semibold mb-2">Still have questions?</h3>
+          <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Still have questions?</h3>
           <p className="text-neutral-600 dark:text-neutral-400 mb-4">
             Can't find the answer you're looking for? Join our community.
           </p>

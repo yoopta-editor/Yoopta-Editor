@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const navigation = [
   { name: "Features", href: "#features" },
   { name: "Plugins", href: "#plugins" },
-  { name: "Pricing", href: "#pricing" },
+  { name: "Roadmap", href: "#waitlist" },
   { name: "Docs", href: "https://yoopta.dev/docs" },
 ];
 
@@ -45,7 +45,7 @@ export function Header() {
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
               <span className="text-white font-bold text-sm">Y</span>
             </div>
-            <span className="font-semibold text-lg">Yoopta</span>
+            <span className="font-semibold text-lg text-neutral-900 dark:text-white">Yoopta</span>
           </Link>
 
           {/* Desktop Navigation */}

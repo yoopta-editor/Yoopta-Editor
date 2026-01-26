@@ -20,7 +20,7 @@ export type BeautifyTabResult = {
   error?: string;
 };
 
-export type CodeGroupCommandsType = {
+export type CodeGroupCommands = {
   buildCodeElements: (editor: YooEditor) => CodeGroupContainerElement;
   addTabItem: (editor: YooEditor, blockId: string, options?: InsertTabOptions) => void;
   deleteTabItem: (editor: YooEditor, blockId: string, options: DeleteTabOptions) => void;
@@ -35,7 +35,7 @@ export type CodeGroupCommandsType = {
   isLanguageSupported: (language: string) => boolean;
 };
 
-export const CodeGroupCommands: CodeGroupCommandsType = {
+export const CodeGroupCommands: CodeGroupCommands = {
   buildCodeElements: (editor: YooEditor) => {
     const tabId = generateId();
     return editor.y('code-group-container', {

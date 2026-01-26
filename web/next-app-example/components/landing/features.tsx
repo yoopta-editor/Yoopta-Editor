@@ -100,7 +100,7 @@ export function Features() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-neutral-900 dark:text-white">
             Everything you need to build
             <br />
             <span className="gradient-text">modern editors</span>
@@ -127,7 +127,7 @@ export function Features() {
               </div>
 
               {/* Content */}
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">{feature.title}</h3>
               <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {feature.description}
               </p>

@@ -8,7 +8,7 @@ const navigation = {
   product: [
     { name: "Features", href: "#features" },
     { name: "Plugins", href: "#plugins" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "Roadmap", href: "#waitlist" },
     { name: "Playground", href: "/playground" },
   ],
   resources: [
@@ -41,10 +41,10 @@ export function Footer() {
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
                 <span className="text-white font-bold text-sm">Y</span>
               </div>
-              <span className="font-semibold text-lg">Yoopta Editor</span>
+              <span className="font-semibold text-lg text-neutral-900 dark:text-white">Yoopta Editor</span>
             </Link>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs mb-4">
-              Free, open-source rich-text editor for React. Build Notion-like
+              Free, open-source rich-text editor for React. Build really rich
               editors with ease.
             </p>
             <div className="flex items-center gap-4">
@@ -79,7 +79,7 @@ export function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Product</h3>
+            <h3 className="text-sm font-semibold mb-4 text-neutral-900 dark:text-white">Product</h3>
             <ul className="space-y-3">
               {navigation.product.map((item) => (
                 <li key={item.name}>
@@ -96,7 +96,7 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Resources</h3>
+            <h3 className="text-sm font-semibold mb-4 text-neutral-900 dark:text-white">Resources</h3>
             <ul className="space-y-3">
               {navigation.resources.map((item) => (
                 <li key={item.name}>
@@ -115,7 +115,7 @@ export function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Community</h3>
+            <h3 className="text-sm font-semibold mb-4 text-neutral-900 dark:text-white">Community</h3>
             <ul className="space-y-3">
               {navigation.community.map((item) => (
                 <li key={item.name}>

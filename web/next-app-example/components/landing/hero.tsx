@@ -55,11 +55,11 @@ export function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-neutral-900 dark:text-white">
             Build{" "}
-            <span className="gradient-text">Notion-like</span>
+            <span className="gradient-text">really rich</span>
             <br />
-            editors in React
+            editors with <span className="gradient-text">Yoopta</span>
           </h1>
 
           {/* Subheadline */}
@@ -111,7 +111,7 @@ export function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-600 dark:text-neutral-400">
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-600 dark:text-neutral-400 mb-8">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
               <span>MIT License</span>
@@ -129,6 +129,21 @@ export function Hero() {
               <span>React 18+</span>
             </div>
           </div>
+
+          {/* Waitlist teaser */}
+          <Link
+            href="#waitlist"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 transition-colors text-sm"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+            </span>
+            <span className="text-blue-600 dark:text-blue-400">
+              AI features & collaboration coming soon
+            </span>
+            <ArrowRight className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+          </Link>
         </div>
 
         {/* Scroll indicator */}
