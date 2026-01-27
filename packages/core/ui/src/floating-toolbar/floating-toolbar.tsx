@@ -202,10 +202,6 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
 
 FloatingToolbarRoot.displayName = 'FloatingToolbar';
 
-// ============================================================================
-// FloatingToolbar Content
-// ============================================================================
-
 type FloatingToolbarContentProps = {
   children: ReactNode;
   className?: string;
@@ -238,10 +234,6 @@ const FloatingToolbarContent = forwardRef<HTMLDivElement, FloatingToolbarContent
 
 FloatingToolbarContent.displayName = 'FloatingToolbar.Content';
 
-// ============================================================================
-// FloatingToolbar Group
-// ============================================================================
-
 type FloatingToolbarGroupProps = HTMLAttributes<HTMLDivElement>;
 
 const FloatingToolbarGroup = forwardRef<HTMLDivElement, FloatingToolbarGroupProps>(
@@ -254,10 +246,6 @@ const FloatingToolbarGroup = forwardRef<HTMLDivElement, FloatingToolbarGroupProp
 
 FloatingToolbarGroup.displayName = 'FloatingToolbar.Group';
 
-// ============================================================================
-// FloatingToolbar Separator
-// ============================================================================
-
 type FloatingToolbarSeparatorProps = HTMLAttributes<HTMLDivElement>;
 
 const FloatingToolbarSeparator = forwardRef<HTMLDivElement, FloatingToolbarSeparatorProps>(
@@ -267,10 +255,6 @@ const FloatingToolbarSeparator = forwardRef<HTMLDivElement, FloatingToolbarSepar
 );
 
 FloatingToolbarSeparator.displayName = 'FloatingToolbar.Separator';
-
-// ============================================================================
-// FloatingToolbar Button
-// ============================================================================
 
 type FloatingToolbarButtonProps = {
   active?: boolean;
@@ -294,10 +278,6 @@ const FloatingToolbarButton = forwardRef<HTMLButtonElement, FloatingToolbarButto
 );
 
 FloatingToolbarButton.displayName = 'FloatingToolbar.Button';
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export const FloatingToolbar = Object.assign(FloatingToolbarRoot, {
   Root: FloatingToolbarRoot,

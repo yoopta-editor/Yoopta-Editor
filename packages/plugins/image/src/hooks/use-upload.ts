@@ -74,21 +74,11 @@ const validateUploadOptions = (options: ImageUploadOptions | undefined): void =>
   }
 };
 
-const validateDeleteOptions = (options: ImageDeleteOptions | undefined): void => {
+// Validation helper for delete options (optional - only validates if provided)
+const validateDeleteOptions = (options: ImageDeleteOptions | undefined): boolean => {
+  // Delete is optional - return false if not configured
   if (options === undefined || options === null) {
-    throw new Error(
-      `[Yoopta Image] Delete options are not configured. ` +
-      `Please provide 'delete' option when extending the Image plugin.\n\n` +
-      `Example:\n` +
-      `Image.extend({\n` +
-      `  options: {\n` +
-      `    delete: async (element) => {\n` +
-      `      // Delete file from your storage\n` +
-      `    },\n` +
-      `  },\n` +
-      `})\n\n` +
-      `See documentation: ${DOCS_URL}`,
-    );
+    return false;
   }
 
   if (typeof options !== 'function' && typeof options !== 'object') {
@@ -113,15 +103,16 @@ const validateDeleteOptions = (options: ImageDeleteOptions | undefined): void =>
       `See documentation: ${DOCS_URL}`,
     );
   }
+
+  return true;
 };
 
 export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImageDeleteReturn => {
-  // Validate options - will throw descriptive error if invalid
-  validateDeleteOptions(options);
+  // Validate options - returns false if not configured (optional)
+  const isConfigured = validateDeleteOptions(options);
 
-  // After validation, options is guaranteed to be defined
-  const validOptions = options as ImageDeleteOptions;
-  const isCustomFn = isDeleteFn(validOptions);
+  const validOptions = isConfigured ? (options as ImageDeleteOptions) : null;
+  const isCustomFn = validOptions ? isDeleteFn(validOptions) : false;
 
   // State for custom function approach - always called
   const [customState, setCustomState] = useState<UploadState>({
@@ -131,10 +122,9 @@ export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImag
     result: null,
   });
 
-  // For endpoint-based approach - create endpoint options (use dummy if custom fn)
-  const endpointOpts: ImageDeleteEndpointOptions = isCustomFn
-    ? { endpoint: '' }
-    : (validOptions as ImageDeleteEndpointOptions);
+  // For endpoint-based approach - create endpoint options (use dummy if custom fn or not configured)
+  const endpointOpts: ImageDeleteEndpointOptions =
+    !validOptions || isCustomFn ? { endpoint: '' } : (validOptions as ImageDeleteEndpointOptions);
 
   // Always call useXHRRequest (with dummy options if using custom function)
   const xhrResult = useXHRRequest({
@@ -150,6 +140,12 @@ export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImag
   // Custom delete function - always defined with useCallback
   const customDeleteImage = useCallback(
     async (element: ImageElement): Promise<UploadResult> => {
+      // If delete is not configured, just return success without actually deleting from storage
+      if (!validOptions) {
+        const src = element.props?.src ?? '';
+        return { id: element.props?.id ?? '', url: src };
+      }
+
       if (!isCustomFn) {
         throw new Error('Custom delete called but options is not a function');
       }
@@ -195,6 +191,16 @@ export const useImageDelete = (options: ImageDeleteOptions | undefined): UseImag
   );
 
   // Return appropriate implementation based on options type
+  // If not configured, return no-op delete function
+  if (!isConfigured) {
+    return {
+      ...customState,
+      deleteImage: customDeleteImage,
+      cancel: () => { },
+      reset: customReset,
+    };
+  }
+
   if (isCustomFn) {
     return {
       ...customState,

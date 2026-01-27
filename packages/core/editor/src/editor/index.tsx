@@ -38,6 +38,7 @@ import { getElement } from './elements/getElement';
 import { getElementChildren } from './elements/getElementChildren';
 import { getElementEntry } from './elements/getElementEntry';
 import { getElementPath } from './elements/getElementPath';
+import { getElementRect } from './elements/getElementRect';
 import { getElements } from './elements/getElements';
 import { getParentElementPath } from './elements/getParentElementPath';
 import { insertElement } from './elements/insertElement';
@@ -78,6 +79,7 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
 
   const isValueValid = validateYooptaValue(value);
   if (!isValueValid && typeof value !== 'undefined') {
+    // eslint-disable-next-line no-console
     console.error(
       `Initial value is not valid. Should be an object with blocks. You passed: ${JSON.stringify(value)}`,
     );
@@ -117,6 +119,7 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     getElements: (options) => getElements(editor, options),
     getElementEntry: (options) => getElementEntry(editor, options),
     getElementPath: (options) => getElementPath(editor, options),
+    getElementRect: (options) => getElementRect(editor, options),
     getParentElementPath: (options) => getParentElementPath(editor, options),
     getElementChildren: (options) => getElementChildren(editor, options),
     isElementEmpty: (options) => isElementEmpty(editor, options),

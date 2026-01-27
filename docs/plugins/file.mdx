@@ -1,0 +1,607 @@
+---
+title: File
+description: Upload and attach files with download support and file type icons
+---
+
+## Overview
+
+The File plugin provides a complete solution for uploading and attaching files to your content. It supports file uploads, displays file information (name, size, type), and provides download functionality with automatic file type detection and icons.
+
+## Installation
+
+```bash
+npm install @yoopta/file
+```
+
+## Basic Usage
+
+```jsx
+import File from '@yoopta/file';
+
+const plugins = [
+  File,
+  // ... other plugins
+];
+
+<YooptaEditor editor={editor} plugins={plugins} />;
+```
+
+<Warning>
+  **Required Configuration**
+
+  You **must** configure the `upload` option. Without this option, you'll see an error when trying to use the File plugin.
+
+  ```jsx
+  const plugins = [
+    File.extend({
+      options: {
+        upload: async (file) => {
+          // Your upload logic here
+          return { src: '...', name: file.name, size: file.size };
+        },
+        // delete is optional
+      },
+    }),
+  ];
+  ```
+
+  See the [Configuration](#configuration) section below for detailed examples.
+</Warning>
+
+## Features
+
+- **File Upload**: Upload files from device
+- **Custom Upload Functions**: Direct uploads to S3, Firebase, Cloudinary, etc.
+- **File Type Detection**: Automatic detection of file types (PDF, Document, Spreadsheet, etc.)
+- **File Icons**: Different icons for different file types
+- **File Size Display**: Human-readable file size formatting
+- **Download Support**: One-click download functionality
+- **File Deletion**: Optional deletion handling with custom functions
+- **Accept Filter**: Restrict allowed file types
+
+## Configuration
+
+The File plugin supports two approaches for upload and delete operations:
+
+1. **Endpoint-based**: Configure an API endpoint and the plugin handles the request
+2. **Custom function**: Provide your own async function for complete control
+
+### Endpoint-based Upload (Backend API)
+
+```jsx
+import File from '@yoopta/file';
+
+const plugins = [
+  File.extend({
+    options: {
+      upload: {
+        endpoint: '/api/upload-file',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        onSuccess: (result) => {
+          console.log('Upload successful:', result);
+        },
+        onError: (error) => {
+          console.error('Upload failed:', error);
+        },
+      },
+      // delete is optional
+      delete: {
+        endpoint: '/api/delete-file',
+        method: 'DELETE',
+      },
+      accept: '.pdf,.doc,.docx,.xls,.xlsx',
+      maxFileSize: 10 * 1024 * 1024, // 10MB
+    },
+  }),
+];
+```
+
+### Custom Upload Function (Direct to Cloud)
+
+For direct uploads to third-party services like AWS S3, Firebase Storage, or Cloudinary:
+
+```jsx
+import File from '@yoopta/file';
+
+const plugins = [
+  File.extend({
+    options: {
+      // Custom upload function (required)
+      upload: async (file, onProgress) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+
+        // Return FileUploadResponse
+        return {
+          id: data.id,
+          src: data.url,
+          name: file.name,
+          size: file.size,
+          format: file.name.split('.').pop(),
+        };
+      },
+      // Custom delete function (optional)
+      delete: async (element) => {
+        await fetch(`/api/delete/${element.props.id}`, { method: 'DELETE' });
+      },
+      accept: '.pdf,.doc,.docx',
+    },
+  }),
+];
+```
+
+<Note>
+  The `delete` option is **optional**. If not provided, deleting a file block will only remove it from the editor without calling any storage deletion logic.
+</Note>
+
+## Options
+
+### upload (required)
+
+Can be either an **object** (endpoint-based) or a **function** (custom upload):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="upload" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for file upload
+        </ResponseField>
+        <ResponseField name="method" type="'POST' | 'PUT' | 'PATCH'" default="POST">
+          HTTP method for upload
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for upload request
+        </ResponseField>
+        <ResponseField name="fieldName" type="string" default="file">
+          Form field name for the file
+        </ResponseField>
+        <ResponseField name="maxSize" type="number">
+          Maximum file size in bytes
+        </ResponseField>
+        <ResponseField name="accept" type="string">
+          Accepted file types (e.g., ".pdf,.doc,.docx")
+        </ResponseField>
+        <ResponseField name="onProgress" type="function">
+          Callback for upload progress
+        </ResponseField>
+        <ResponseField name="onSuccess" type="function">
+          Callback when upload succeeds
+        </ResponseField>
+        <ResponseField name="onError" type="function">
+          Callback when upload fails
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="upload" type="function">
+      Custom async function for direct uploads to third-party services.
+
+      **Signature:**
+      ```typescript
+      (file: File, onProgress?: (progress: FileUploadProgress) => void) => Promise<FileUploadResponse>
+      ```
+
+      **Returns `FileUploadResponse`:**
+      - `id` - Unique identifier for the file (optional)
+      - `src` - URL of the uploaded file (required)
+      - `name` - File name (optional, defaults to original name)
+      - `size` - File size in bytes (optional)
+      - `format` - File extension (optional)
+    </ResponseField>
+  </Tab>
+</Tabs>
+
+### delete (optional)
+
+Can be either an **object** (endpoint-based) or a **function** (custom delete):
+
+<Tabs>
+  <Tab title="Endpoint Object">
+    <ResponseField name="delete" type="object">
+      <Expandable title="properties">
+        <ResponseField name="endpoint" type="string" required>
+          URL endpoint for file deletion
+        </ResponseField>
+        <ResponseField name="method" type="'DELETE' | 'PATCH'" default="DELETE">
+          HTTP method for deletion
+        </ResponseField>
+        <ResponseField name="headers" type="Record<string, string>">
+          Custom headers for delete request
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Tab>
+  <Tab title="Custom Function">
+    <ResponseField name="delete" type="function">
+      Custom async function for deleting files from third-party services.
+
+      **Signature:**
+      ```typescript
+      (element: FileElement) => Promise<void>
+      ```
+
+      **Parameters:**
+      - `element` - The file element containing props (id, src, name, etc.)
+    </ResponseField>
+  </Tab>
+</Tabs>
+
+<ResponseField name="accept" type="string">
+  Accepted file types. Can be file extensions (e.g., ".pdf,.doc") or MIME types (e.g., "application/pdf").
+</ResponseField>
+
+<ResponseField name="maxFileSize" type="number">
+  Maximum file size in bytes
+</ResponseField>
+
+<ResponseField name="onError" type="function">
+  Global error handler for upload/delete operations
+</ResponseField>
+
+## Element Props
+
+<ParamField path="id" type="string | null">
+  Unique identifier for the file (from your storage)
+</ParamField>
+
+<ParamField path="src" type="string | null">
+  URL of the uploaded file
+</ParamField>
+
+<ParamField path="name" type="string | null">
+  File name (without extension)
+</ParamField>
+
+<ParamField path="size" type="number | null">
+  File size in bytes
+</ParamField>
+
+<ParamField path="format" type="string | null">
+  File extension (e.g., "pdf", "docx")
+</ParamField>
+
+## Commands
+
+```typescript
+import { FileCommands } from '@yoopta/file';
+
+// Insert a file
+FileCommands.insertFile(editor, {
+  props: {
+    src: 'https://example.com/document.pdf',
+    name: 'document',
+    format: 'pdf',
+    size: 1024000,
+  },
+});
+
+// Update file properties
+FileCommands.updateFile(editor, blockId, {
+  name: 'renamed-document',
+});
+
+// Delete file
+FileCommands.deleteFile(editor, blockId);
+```
+
+## Utility Functions
+
+### File Type Detection
+
+```typescript
+import { getFileType, getFileTypeLabel, getFileExtension, isFileType } from '@yoopta/file';
+
+// Get file type from filename
+const fileType = getFileType('document.pdf');
+// 'pdf'
+
+// Get human-readable label
+const label = getFileTypeLabel('spreadsheet.xlsx');
+// 'Spreadsheet'
+
+// Get file extension
+const ext = getFileExtension('report.docx');
+// 'docx'
+
+// Check if file is a specific type
+const isPdf = isFileType('pdf', 'document.pdf');
+// true
+```
+
+### File Size Formatting
+
+```typescript
+import { formatFileSize, parseFileSize } from '@yoopta/file';
+
+// Format bytes to human-readable string
+formatFileSize(1024);        // '1 KB'
+formatFileSize(1536000);     // '1.46 MB'
+formatFileSize(1073741824);  // '1 GB'
+
+// Parse size string back to bytes
+parseFileSize('1.5 MB');     // 1572864
+```
+
+## Supported File Types
+
+The plugin automatically detects and displays appropriate icons for these file types:
+
+| Type | Extensions | Icon |
+|------|-----------|------|
+| PDF | `.pdf` | 📄 |
+| Document | `.doc`, `.docx`, `.odt`, `.rtf`, `.pages` | 📝 |
+| Spreadsheet | `.xls`, `.xlsx`, `.csv`, `.ods`, `.numbers` | 📊 |
+| Presentation | `.ppt`, `.pptx`, `.odp`, `.key` | 📽️ |
+| Image | `.jpg`, `.png`, `.gif`, `.webp`, `.svg` | 🖼️ |
+| Video | `.mp4`, `.webm`, `.mov`, `.avi` | 🎬 |
+| Audio | `.mp3`, `.wav`, `.ogg`, `.flac` | 🎵 |
+| Archive | `.zip`, `.rar`, `.7z`, `.tar`, `.gz` | 📦 |
+| Code | `.js`, `.ts`, `.py`, `.html`, `.css`, `.json` | 💻 |
+| Text | `.txt`, `.md`, `.log` | 📃 |
+
+## Custom Rendering
+
+```jsx
+import File from '@yoopta/file';
+import { getFileType, formatFileSize } from '@yoopta/file';
+
+const CustomFile = File.extend({
+  elements: {
+    file: {
+      render: (props) => {
+        const { src, name, format, size } = props.element.props;
+        const displayName = format ? `${name}.${format}` : name;
+        const fileType = getFileType(displayName);
+
+        return (
+          <div {...props.attributes} contentEditable={false}>
+            <a href={src} download={displayName} className="file-card">
+              <span className="file-icon">{fileType}</span>
+              <span className="file-name">{displayName}</span>
+              <span className="file-size">{formatFileSize(size)}</span>
+            </a>
+            {props.children}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## Shadcn Theme Integration
+
+When using `@yoopta/themes-shadcn`, the File plugin gets a beautiful UI automatically:
+
+```jsx
+import File from '@yoopta/file';
+import applyTheme from '@yoopta/themes-shadcn';
+
+const plugins = applyTheme([
+  File.extend({
+    options: {
+      upload: async (file) => {
+        // Your upload logic
+        return { src: '...', name: file.name, size: file.size };
+      },
+    },
+  }),
+]);
+```
+
+The Shadcn theme provides:
+- Upload placeholder with file picker
+- File card with type-specific icons and colors
+- Inline toolbar with actions (download, copy URL, replace, delete)
+- Upload progress indicator
+- Hover states and animations
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes `<a>` tags with `download` attribute:
+
+```html
+<a href="document.pdf" download="document.pdf" data-size="1024000">document.pdf (1 MB)</a>
+```
+
+### HTML Serialization
+
+```html
+<div style="display: flex; justify-content: flex-start;">
+  <a 
+    data-yoopta-file
+    href="https://example.com/document.pdf" 
+    download="document" 
+    data-size="1024000"
+    data-format="pdf"
+  >document.pdf (1 MB)</a>
+</div>
+```
+
+### Markdown Serialization
+
+```markdown
+[document.pdf](https://example.com/document.pdf)
+```
+
+## Hooks
+
+### useFileUpload
+
+```typescript
+import { useFileUpload } from '@yoopta/file';
+
+// With custom function
+const { upload, loading, progress, error } = useFileUpload(
+  async (file, onProgress) => {
+    const response = await uploadToStorage(file);
+    return { src: response.url, name: file.name, size: file.size };
+  }
+);
+
+// With endpoint
+const { upload, loading, progress, error } = useFileUpload({
+  endpoint: '/api/upload-file',
+});
+
+const handleUpload = async (file: File) => {
+  const result = await upload(file);
+  console.log('Uploaded:', result.url);
+};
+```
+
+### useFileDelete
+
+```typescript
+import { useFileDelete } from '@yoopta/file';
+
+// With custom function (optional)
+const { deleteFile, loading, error } = useFileDelete(
+  async (element) => {
+    await deleteFromStorage(element.props.id);
+  }
+);
+
+// Without delete function (no-op)
+const { deleteFile } = useFileDelete(undefined);
+// deleteFile will just return success without calling storage
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Document Sharing">Attach PDFs, Word docs, and spreadsheets</Card>
+  <Card title="Resource Downloads">Provide downloadable resources</Card>
+  <Card title="File Libraries">Build document libraries and archives</Card>
+  <Card title="Asset Management">Manage project assets and files</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Set File Size Limits">
+    Configure `maxFileSize` to prevent oversized uploads:
+    ```jsx
+    File.extend({
+      options: {
+        upload: async (file) => { ... },
+        maxFileSize: 10 * 1024 * 1024, // 10MB
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Filter Allowed File Types">
+    Use `accept` to restrict file types:
+    ```jsx
+    File.extend({
+      options: {
+        upload: async (file) => { ... },
+        accept: '.pdf,.doc,.docx,.xls,.xlsx',
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Handle Upload Errors">
+    Provide user feedback on errors:
+    ```jsx
+    File.extend({
+      options: {
+        upload: async (file) => { ... },
+        onError: (error) => {
+          toast.error(`Upload failed: ${error.message}`);
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Store File Metadata">
+    Always return complete metadata from upload:
+    ```jsx
+    return {
+      id: data.id,        // For deletion
+      src: data.url,      // For download
+      name: file.name,    // For display
+      size: file.size,    // For display
+      format: extension,  // For icon
+    };
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error: Upload options are not configured">
+    This error occurs when you haven't configured the `upload` option.
+
+    **Solution:** Add an `upload` configuration to your File plugin:
+
+    ```jsx
+    File.extend({
+      options: {
+        upload: async (file) => {
+          return { src: '...', name: file.name, size: file.size };
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Missing 'endpoint' in upload options">
+    This error occurs when using endpoint-based configuration without providing the `endpoint` URL.
+
+    **Solution:** Make sure to include the `endpoint` property:
+
+    ```jsx
+    File.extend({
+      options: {
+        upload: {
+          endpoint: '/api/upload-file', // Required!
+        },
+      },
+    })
+    ```
+  </Accordion>
+
+  <Accordion title="File type not detected correctly">
+    Ensure the filename includes the correct extension. The plugin uses file extension for type detection.
+
+    **Solution:** Return the format in your upload response:
+    ```jsx
+    return {
+      src: data.url,
+      name: 'document',
+      format: 'pdf', // Explicitly set the format
+      size: file.size,
+    };
+    ```
+  </Accordion>
+
+  <Accordion title="Download not working">
+    Make sure the `src` URL is accessible and has proper CORS headers for download.
+
+    **Solution:** Ensure your storage returns files with `Content-Disposition: attachment` header or use the `download` attribute on links.
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Image Plugin](/plugins/image) - For image content
+- [Video Plugin](/plugins/video) - For video content
+- [Embed Plugin](/plugins/embed) - For embedded content

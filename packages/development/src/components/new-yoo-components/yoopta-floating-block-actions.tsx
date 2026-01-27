@@ -9,7 +9,6 @@ export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
   const dragHandleRef = useRef<HTMLButtonElement>(null);
 
-  // State for controlling BlockOptions - parent manages coordination
   const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
 
   const onPlusClick = (blockId: string | null) => {
@@ -30,7 +29,6 @@ export const YooptaFloatingBlockActions = () => {
   };
 
   return (
-    // When BlockOptions is open, freeze hover tracking
     <FloatingBlockActions frozen={blockOptionsOpen}>
       {({ blockId }) => (
         <>

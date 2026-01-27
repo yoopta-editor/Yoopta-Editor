@@ -35,6 +35,7 @@ import type { getElement } from './elements/getElement';
 import type { getElementChildren } from './elements/getElementChildren';
 import type { getElementEntry } from './elements/getElementEntry';
 import type { getElementPath } from './elements/getElementPath';
+import type { getElementRect } from './elements/getElementRect';
 import type { getElements } from './elements/getElements';
 import type { getParentElementPath } from './elements/getParentElementPath';
 import type { insertElement } from './elements/insertElement';
@@ -135,6 +136,7 @@ export type BaseYooEditor = {
   getElements: WithoutFirstArg<typeof getElements>;
   getElementEntry: WithoutFirstArg<typeof getElementEntry>;
   getElementPath: WithoutFirstArg<typeof getElementPath>;
+  getElementRect: WithoutFirstArg<typeof getElementRect>;
   getParentElementPath: WithoutFirstArg<typeof getParentElementPath>;
   getElementChildren: WithoutFirstArg<typeof getElementChildren>;
   isElementEmpty: WithoutFirstArg<typeof isElementEmpty>;

@@ -3,7 +3,7 @@ import Blockquote from '@yoopta/blockquote';
 import Callout from '@yoopta/callout';
 import { Code, CodeGroup } from '@yoopta/code';
 import Divider from '@yoopta/divider';
-// import Mention from '@yoopta/mention';
+import Mention from '@yoopta/mention';
 import { YooEditor } from '@yoopta/editor';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
@@ -42,7 +42,6 @@ const YImage = Image.extend({
       }
     },
     delete: (element: ImageElement) => {
-      console.log('Image.extend element', element);
       return fetch(`/api/image-kit-delete`, {
         method: 'DELETE',
         headers: {
@@ -70,6 +69,7 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
 ];
 
 export const YOOPTA_PLUGINS = applyTheme([
+  Mention,
   Embed,
   Accordion.extend({
     injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
@@ -78,6 +78,19 @@ export const YOOPTA_PLUGINS = applyTheme([
         return AccordionCommands.buildAccordionElements(editor, { items: 2 });
       },
     },
+  }),
+  File.extend({
+    options: {
+      upload: async (file: File) => {
+        return {
+          id: file.name,
+          src: URL.createObjectURL(file),
+          name: file.name,
+          size: file.size,
+          format: file.name.split('.').pop(),
+        };
+      },
+    }
   }),
   Divider,
   CarouselPlugin.extend({

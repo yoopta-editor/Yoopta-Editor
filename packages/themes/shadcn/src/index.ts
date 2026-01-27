@@ -15,6 +15,7 @@ export { LinkUI } from './link';
 export { ImageUI } from './image';
 export { VideoUI } from './video';
 export { EmbedUI } from './embed';
+export { FileUI } from './file';
 export { CodeUI } from './code';
 export { TabsUI } from './tabs';
 export { StepsUI } from './steps';

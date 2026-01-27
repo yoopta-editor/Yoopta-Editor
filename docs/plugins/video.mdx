@@ -29,7 +29,7 @@ const plugins = [
 <Warning>
   **Required Configuration**
 
-  You **must** configure the `upload` and `delete` options. Without these options, you'll see an error when trying to use the Video plugin.
+  You **must** configure the `upload` option. Without this option, you'll see an error when trying to use the Video plugin.
 
   ```jsx
   // Required when using themes
@@ -40,9 +40,7 @@ const plugins = [
           // Your upload logic here
           return { id: '...', src: '...' };
         },
-        delete: async (src) => {
-          // Your delete logic here
-        },
+        // delete is optional
       },
     }),
   ];
@@ -62,7 +60,7 @@ const plugins = [
 - **Object Fit**: Control how videos fit their container
 - **Playback Settings**: Configure controls, loop, muted, and autoplay
 - **Poster Images**: Set custom poster/thumbnail images
-- **Video Deletion**: Optional deletion handling with custom functions
+- **Video Deletion**: Optional deletion handling with custom functions (if not configured, deletion only removes from editor)
 - **Responsive**: Automatically adapts to screen size
 
 ## Configuration
@@ -256,9 +254,9 @@ Can be either an **object** (endpoint-based) or a **function** (custom upload):
   </Tab>
 </Tabs>
 
-### delete
+### delete (optional)
 
-Can be either an **object** (endpoint-based) or a **function** (custom delete):
+Can be either an **object** (endpoint-based) or a **function** (custom delete). If not provided, deleting a video block will only remove it from the editor without calling any storage deletion logic.
 
 <Tabs>
   <Tab title="Endpoint Object">
@@ -721,20 +719,24 @@ const handlePosterUpload = async (file: File) => {
     ```
   </Accordion>
 
-  <Accordion title="Error: Delete options are not configured">
-    This error occurs when you're using a theme but haven't configured the `delete` option.
+  <Accordion title="Video not deleted from storage">
+    If you want to delete videos from your storage when removed from the editor, you need to configure the `delete` option.
 
     **Solution:** Add a `delete` configuration to your Video plugin:
 
     ```jsx
     Video.extend({
       options: {
-        delete: async (src) => {
+        upload: async (file) => { ... },
+        delete: async (element) => {
           // Your delete logic
+          await deleteFromStorage(element.props.id);
         },
       },
     })
     ```
+
+    Note: The `delete` option is optional. Without it, videos are only removed from the editor.
   </Accordion>
 
   <Accordion title="Error: Missing 'endpoint' in upload/delete options">

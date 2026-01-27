@@ -67,54 +67,25 @@
     {
       "group": "Plugins",
       "pages": [
-        "plugins/overview",
-        {
-          "group": "Text Plugins",
-          "pages": [
-            "plugins/paragraph",
-            "plugins/headings",
-            "plugins/blockquote"
-          ]
-        },
-        {
-          "group": "List Plugins",
-          "pages": [
-            "plugins/lists"
-          ]
-        },
-        {
-          "group": "Media Plugins",
-          "pages": [
-            "plugins/image",
-            "plugins/video",
-            "plugins/file",
-            "plugins/embed"
-          ]
-        },
-        {
-          "group": "Layout Plugins",
-          "pages": [
-            "plugins/table",
-            "plugins/tabs",
-            "plugins/steps",
-            "plugins/carousel",
-            "plugins/accordion",
-            "plugins/divider",
-            "plugins/callout"
-          ]
-        },
-        {
-          "group": "Code Plugins",
-          "pages": [
-            "plugins/code"
-          ]
-        },
-        {
-          "group": "Special Plugins",
-          "pages": [
-            "plugins/link"
-          ]
-        }
+        "plugins/accordion",
+        "plugins/blockquote",
+        "plugins/callout",
+        "plugins/carousel",
+        "plugins/code",
+        "plugins/code-group",
+        "plugins/divider",
+        "plugins/embed",
+        "plugins/file",
+        "plugins/headings",
+        "plugins/image",
+        "plugins/link",
+        "plugins/lists",
+        "plugins/mention",
+        "plugins/paragraph",
+        "plugins/steps",
+        "plugins/table",
+        "plugins/tabs",
+        "plugins/video"
       ]
     },
     {

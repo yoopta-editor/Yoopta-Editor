@@ -1,12 +1,9 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Blocks } from '../editor/blocks';
-import type { YooEditor, YooptaBlockData } from '../editor/types';
+import { clearDeserializeCache, deserializeHTML } from './deserializeHTML';
+import type { SlateElement, YooEditor } from '../editor/types';
 import type { Plugin } from '../plugins/types';
 import { getRootBlockElementType } from '../utils/block-elements';
-import { generateId } from '../utils/generateId';
-
-import { clearDeserializeCache, deserializeHTML } from './deserializeHTML';
 
 vi.mock('../editor/blocks', () => ({
   Blocks: {
@@ -30,8 +27,8 @@ function createHTML(html: string): HTMLElement {
 }
 
 // Helper to create a mock editor
-function createMockEditor(plugins: Record<string, Partial<Plugin<unknown>>> = {}): YooEditor {
-  const defaultPlugins: Record<string, Partial<Plugin<unknown>>> = {
+function createMockEditor(plugins: Record<string, Partial<Plugin<Record<string, SlateElement>>>> = {}): YooEditor {
+  const defaultPlugins: Record<string, Partial<Plugin<Record<string, SlateElement>>>> = {
     Paragraph: {
       type: 'Paragraph',
       elements: {
@@ -684,7 +681,7 @@ describe('deserializeHTML', () => {
               },
             },
           },
-        } as unknown as Partial<Plugin<unknown>>,
+        } as unknown as Partial<Plugin<Record<string, SlateElement>>>,
       });
 
       const html = createHTML('<special>Content</special>');

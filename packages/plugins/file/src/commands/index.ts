@@ -4,7 +4,7 @@ import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
 import type { FileElement, FileElementProps } from '../types';
 
 type FileElementOptions = {
-  props?: Omit<FileElementProps, 'nodeType'>;
+  props?: Partial<FileElementProps>;
 };
 
 type InsertFileOptions = FileElementOptions & {
@@ -12,21 +12,28 @@ type InsertFileOptions = FileElementOptions & {
   focus?: boolean;
 };
 
-export type FileCommands = {
+export type FileCommandsType = {
   buildFileElements: (editor: YooEditor, options?: Partial<FileElementOptions>) => FileElement;
   insertFile: (editor: YooEditor, options?: Partial<InsertFileOptions>) => void;
   deleteFile: (editor: YooEditor, blockId: string) => void;
   updateFile: (editor: YooEditor, blockId: string, props: Partial<FileElementProps>) => void;
 };
 
-export const FileCommands: FileCommands = {
-  buildFileElements: (editor: YooEditor, options = {}) => {
-    const fileProps = { ...options.props, nodeType: 'void' };
+export const FileCommands: FileCommandsType = {
+  buildFileElements: (_editor: YooEditor, options = {}) => {
+    const fileProps: FileElementProps = {
+      id: options.props?.id ?? null,
+      src: options.props?.src ?? null,
+      name: options.props?.name ?? null,
+      size: options.props?.size ?? null,
+      format: options.props?.format ?? null,
+    };
+
     return {
       id: generateId(),
       type: 'file',
       children: [{ text: '' }],
-      props: fileProps as FileElementProps,
+      props: fileProps,
     };
   },
   insertFile: (editor: YooEditor, options = {}) => {

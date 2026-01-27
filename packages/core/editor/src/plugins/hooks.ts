@@ -201,6 +201,8 @@ export const useEventHandlers = (
 
     // Merge block and inline plugin event handlers
     const allEventHandlers = { ...eventHandlers };
+
+    console.log('inlinePlugins', inlinePlugins);
     inlinePlugins.forEach((plugin) => {
       if (plugin.events) {
         Object.keys(plugin.events).forEach((eventType) => {

@@ -6,7 +6,7 @@ import type { PluginElementRenderProps } from './plugins/types';
  * Props for custom JSX plugin elements
  */
 type PluginElementJSXProps = {
-  render?: (props: PluginElementRenderProps) => ReactNode;
+  render: (props: PluginElementRenderProps) => ReactNode;
   props?: Record<string, unknown>;
   children?: ReactNode;
 };

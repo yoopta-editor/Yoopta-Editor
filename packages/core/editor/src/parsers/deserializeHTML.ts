@@ -275,6 +275,8 @@ export function clearDeserializeCache(editor: YooEditor): void {
  * Deserializes HTML into Yoopta blocks.
  */
 export function deserializeHTML(editor: YooEditor, html: HTMLElement): YooptaBlockData[] {
+  // eslint-disable-next-line no-console
+  console.log('pasted html', html);
   const PLUGINS_NODE_NAME_MATCHERS_MAP = getMappedPluginByNodeNames(editor);
 
   const result = deserialize(editor, PLUGINS_NODE_NAME_MATCHERS_MAP, html);

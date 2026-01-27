@@ -8,6 +8,7 @@ import { CodeUI } from './code';
 import { CodeGroupUI } from './code-group';
 import { DividerUI } from './divider';
 import { EmbedUI } from './embed';
+import { FileUI } from './file';
 import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
@@ -83,6 +84,7 @@ export function applyTheme(
     Carousel: CarouselUI,
     Divider: DividerUI,
     Embed: EmbedUI,
+    File: FileUI,
   };
 
   return plugins.map((plugin) => {

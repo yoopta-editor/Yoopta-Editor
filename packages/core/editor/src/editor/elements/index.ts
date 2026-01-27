@@ -3,6 +3,7 @@ import { getElement } from './getElement';
 import { getElementChildren } from './getElementChildren';
 import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
+import { getElementRect } from './getElementRect';
 import { getElements } from './getElements';
 import { getParentElementPath } from './getParentElementPath';
 import { insertElement } from './insertElement';
@@ -19,6 +20,7 @@ export const Elements = {
   getElements,
   getElementEntry,
   getElementPath,
+  getElementRect,
   getParentElementPath,
   getElementChildren,
   isElementEmpty,
@@ -31,6 +33,7 @@ export {
   getElementChildren,
   getElementEntry,
   getElementPath,
+  getElementRect,
   getElements,
   getParentElementPath,
   insertElement,
@@ -47,6 +50,7 @@ export type {
   GetElementEntryOptions,
   GetElementOptions,
   GetElementPathOptions,
+  GetElementRectOptions,
   GetElementsOptions,
   InsertElementOptions,
   IsElementEmptyOptions,
