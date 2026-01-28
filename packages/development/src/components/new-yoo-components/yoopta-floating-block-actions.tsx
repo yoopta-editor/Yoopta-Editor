@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { DragHandleDots2Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { DragHandle } from '@yoopta/ui/block-dnd';
 
 import { YooptaBlockOptions } from './yoopta-block-options';
 
@@ -35,9 +36,11 @@ export const YooptaFloatingBlockActions = () => {
           <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)} title="Add block">
             <PlusIcon />
           </FloatingBlockActions.Button>
-          <FloatingBlockActions.Button ref={dragHandleRef} onClick={onDragClick} title="Block options">
-            <DragHandleDots2Icon />
-          </FloatingBlockActions.Button>
+          <DragHandle blockId={blockId} ref={dragHandleRef} asChild>
+            <FloatingBlockActions.Button onClick={onDragClick} title="Drag to reorder">
+              <DragHandleDots2Icon />
+            </FloatingBlockActions.Button>
+          </DragHandle>
 
           <YooptaBlockOptions
             open={blockOptionsOpen}

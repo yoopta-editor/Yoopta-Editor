@@ -41,7 +41,7 @@ function MyEditor() {
   const editor = useMemo(() => createYooptaEditor({ ... }), []);
 
   const renderBlock = useCallback(({ block, children, blockId }: RenderBlockProps) => (
-    <SortableBlock id={blockId}>
+    <SortableBlock id={blockId} useDragHandle>
       <DragHandle blockId={blockId}>
         <GripVertical size={16} />
       </DragHandle>
@@ -67,10 +67,12 @@ function MyEditor() {
 The Block DnD system consists of three main parts:
 
 1. **BlockDndContext** — Wraps the editor, provides DnD context and handles block reordering
-2. **SortableBlock** — Wrapper for each block that makes it sortable
-3. **DragHandle** — The draggable trigger element
+2. **SortableBlock** — Wrapper for each block that makes it sortable. When using `DragHandle`, set `useDragHandle={true}` to prevent the entire block from being draggable
+3. **DragHandle** — The draggable trigger element. Must be used with `SortableBlock` that has `useDragHandle={true}`
 
 The `renderBlock` prop on `YooptaEditor` allows you to wrap each block with DnD components without modifying the core editor.
+
+**Important**: When using `DragHandle`, you must set `useDragHandle={true}` on `SortableBlock`. This ensures that drag listeners are only applied to the handle, not the entire block.
 
 ## API Reference
 
@@ -119,6 +121,7 @@ Wrapper component that makes a block sortable.
 | `children` | `ReactNode` | Block content |
 | `disabled` | `boolean` | Disable sorting for this block |
 | `className` | `string` | Custom CSS classes |
+| `useDragHandle` | `boolean` | If `true`, listeners won't be applied to the block (use `DragHandle` instead). Required when using `DragHandle` |
 
 ### `DragHandle`
 
@@ -137,10 +140,11 @@ The draggable trigger component. Users drag this to move blocks.
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `blockId` | `string` | Block ID this handle controls |
+| `blockId` | `string \| null` | Block ID this handle controls |
 | `children` | `ReactNode` | Handle content (usually an icon) |
 | `className` | `string` | Custom CSS classes |
-| `disabled` | `boolean` | Disable the handle |
+| `onClick` | `(e: MouseEvent) => void` | Called when handle is clicked (not dragged) |
+| `asChild` | `boolean` | If `true`, merges props and event handlers with the child element (useful for integrating with other button components) |
 
 ### `useBlockDnd`
 
@@ -201,7 +205,7 @@ function Editor() {
   }), []);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
-    <SortableBlock id={blockId}>
+    <SortableBlock id={blockId} useDragHandle>
       <div className="flex items-start gap-2">
         <DragHandle blockId={blockId} className="opacity-0 group-hover:opacity-100">
           <GripVertical size={16} className="text-gray-400" />
@@ -234,7 +238,7 @@ function Editor() {
   const editor = useMemo(() => createYooptaEditor({ ... }), []);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
-    <SortableBlock id={blockId}>
+    <SortableBlock id={blockId} useDragHandle>
       {children}
     </SortableBlock>
   ), []);
@@ -248,9 +252,9 @@ function Editor() {
               <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
                 <PlusIcon />
               </FloatingBlockActions.Button>
-              {/* Use DragHandle inside FloatingBlockActions */}
-              <DragHandle blockId={blockId!} asChild>
-                <FloatingBlockActions.Button>
+              {/* Use DragHandle with asChild to integrate with FloatingBlockActions.Button */}
+              <DragHandle blockId={blockId} asChild>
+                <FloatingBlockActions.Button title="Drag to reorder">
                   <GripVertical size={16} />
                 </FloatingBlockActions.Button>
               </DragHandle>
@@ -277,7 +281,7 @@ function Editor() {
     const isSelected = selectedPaths?.includes(block.meta.order);
 
     return (
-      <SortableBlock id={blockId}>
+      <SortableBlock id={blockId} useDragHandle>
         <div className={isSelected ? 'ring-2 ring-blue-500' : ''}>
           <DragHandle blockId={blockId}>
             <GripVertical size={16} />
@@ -307,9 +311,9 @@ function Editor({ readOnly }) {
   const editor = useMemo(() => createYooptaEditor({ ... }), []);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
-    <SortableBlock id={blockId} disabled={readOnly}>
+    <SortableBlock id={blockId} disabled={readOnly} useDragHandle={!readOnly}>
       {!readOnly && (
-        <DragHandle blockId={blockId} disabled={readOnly}>
+        <DragHandle blockId={blockId}>
           <GripVertical size={16} />
         </DragHandle>
       )}
@@ -332,24 +336,32 @@ function Editor({ readOnly }) {
 ```css
 :root {
   /* Drag handle */
-  --yoo-block-dnd-handle-opacity: 0;
-  --yoo-block-dnd-handle-hover-opacity: 1;
-  --yoo-block-dnd-handle-color: var(--yoopta-ui-muted-foreground);
+  --yoopta-block-dnd-handle-opacity: 0;
+  --yoopta-block-dnd-handle-hover-opacity: 1;
+  --yoopta-block-dnd-handle-color: var(--yoopta-ui-muted-foreground);
+  --yoopta-block-dnd-focus-ring: #3b82f6;
 
   /* Drop indicator */
-  --yoo-block-dnd-indicator-color: #3b82f6;
-  --yoo-block-dnd-indicator-height: 2px;
+  --yoopta-block-dnd-indicator-color: #3b82f6;
+  --yoopta-block-dnd-indicator-height: 2px;
 
   /* Dragging state */
-  --yoo-block-dnd-dragging-opacity: 0.5;
-  --yoo-block-dnd-dragging-bg: var(--yoopta-ui-accent);
+  --yoopta-block-dnd-dragging-opacity: 0.5;
+  --yoopta-block-dnd-dragging-bg: var(--yoopta-ui-accent);
+
+  /* Drag overlay */
+  --yoopta-block-dnd-overlay-bg: #ffffff;
+  --yoopta-block-dnd-overlay-border: #e5e7eb;
+  --yoopta-block-dnd-overlay-text: #374151;
+  --yoopta-block-dnd-overlay-text-accent: #1f2937;
+  --yoopta-block-dnd-overlay-icon-color: #6b7280;
 }
 ```
 
 ### Custom Styles
 
 ```tsx
-<SortableBlock id={blockId} className="group relative">
+<SortableBlock id={blockId} className="group relative" useDragHandle>
   <DragHandle
     blockId={blockId}
     className="absolute -left-8 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -400,7 +412,7 @@ This pattern allows you to:
 
     ```tsx
     const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
-      <SortableBlock id={blockId}>{children}</SortableBlock>
+      <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>
     ), []);
     ```
   </Accordion>
@@ -431,7 +443,7 @@ This pattern allows you to:
     ```tsx
     const isReadOnly = useYooptaReadOnly();
 
-    <SortableBlock id={blockId} disabled={isReadOnly}>
+    <SortableBlock id={blockId} disabled={isReadOnly} useDragHandle={!isReadOnly}>
       {!isReadOnly && <DragHandle blockId={blockId}>...</DragHandle>}
       {children}
     </SortableBlock>
@@ -447,6 +459,7 @@ Full type definitions are exported:
 import type {
   BlockDndContextProps,
   BlockDndContextValue,
+  SortableBlockData,
   SortableBlockProps,
   DragHandleProps,
   DropIndicatorProps,

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import type { DragEndEvent, DragStartEvent, Modifier, UniqueIdentifier } from '@dnd-kit/core';
 import {
   DndContext,
@@ -13,7 +13,7 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { Blocks } from '@yoopta/editor';
 import type { YooptaBlockData } from '@yoopta/editor';
 
-import type { BlockDndContextProps, BlockDndContextValue } from './types';
+import type { BlockDndContextProps, BlockDndContextValue, SortableBlockData } from './types';
 import './block-dnd.css';
 
 const BlockDndReactContext = createContext<BlockDndContextValue | null>(null);
@@ -42,6 +42,8 @@ export const BlockDndContext = ({
 }: BlockDndContextProps) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [draggedIds, setDraggedIds] = useState<UniqueIdentifier[]>([]);
+  // Store sortable data by blockId
+  const sortableDataRef = useRef<Map<string, SortableBlockData>>(new Map());
 
   // Get sorted block IDs for SortableContext
   const blockIds = useMemo(
@@ -171,6 +173,16 @@ export const BlockDndContext = ({
     [editor, draggedIds, onDragEnd],
   );
 
+  const registerSortable = useCallback((blockId: string, data: SortableBlockData) => {
+    sortableDataRef.current.set(blockId, data);
+  }, []);
+
+  const unregisterSortable = useCallback((blockId: string) => {
+    sortableDataRef.current.delete(blockId);
+  }, []);
+
+  const getSortable = useCallback((blockId: string): SortableBlockData | null => sortableDataRef.current.get(blockId) || null, []);
+
   const contextValue = useMemo<BlockDndContextValue>(
     () => ({
       activeId,
@@ -178,19 +190,42 @@ export const BlockDndContext = ({
       isDragging: activeId !== null,
       draggedIds,
       editor,
+      registerSortable,
+      unregisterSortable,
+      getSortable,
     }),
-    [activeId, activeBlock, draggedIds, editor],
+    [activeId, activeBlock, draggedIds, editor, registerSortable, unregisterSortable, getSortable],
   );
 
   // Default drag overlay
   const defaultDragOverlay = draggedBlocks.length > 0 && (
-    <div className="yoo-block-dnd-overlay">
-      <div className="yoo-block-dnd-overlay-content">
-        {draggedBlocks.length === 1 ? (
-          <span>Moving block</span>
-        ) : (
-          <span>Moving {draggedBlocks.length} blocks</span>
-        )}
+    <div className="yoopta-block-dnd-overlay">
+      <div className="yoopta-block-dnd-overlay-icon">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6 2h4M6 8h4M6 14h4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+      <div className="yoopta-block-dnd-overlay-content">
+        <span className="yoopta-block-dnd-overlay-text">
+          {draggedBlocks.length === 1 ? (
+            <>Moving block</>
+          ) : (
+            <>
+              Moving <strong>{draggedBlocks.length}</strong> blocks
+            </>
+          )}
+        </span>
       </div>
     </div>
   );

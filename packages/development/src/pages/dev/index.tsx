@@ -32,6 +32,10 @@ const YooptaUIPackageExample = () => {
     [],
   );
 
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
+    return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
+  }, []);
+
   console.log('YooptaUIPackageExample editor', editor);
 
   useEffect(() => {
@@ -476,7 +480,8 @@ const YooptaUIPackageExample = () => {
           placeholder="Type / to open menu"
           style={EDITOR_STYLE}
           onChange={(value) => console.log('value', value)}
-          className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
+          className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col"
+          renderBlock={renderBlock}>
           <YooptaToolbar />
           <YooptaFloatingBlockActions />
           <YooptaSlashCommandMenu />

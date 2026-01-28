@@ -1,6 +1,5 @@
 import { type HTMLAttributes, type ReactNode, forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  autoUpdate,
   flip,
   inline,
   offset,
@@ -36,7 +35,6 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     placement: 'top-start',
     open: isOpen,
     middleware: [inline(), flip(), shift(), offset(10)],
-    whileElementsMounted: autoUpdate,
   });
 
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {

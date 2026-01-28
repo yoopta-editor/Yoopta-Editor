@@ -2,6 +2,15 @@ import type { ReactNode } from 'react';
 import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import type { YooEditor, YooptaBlockData } from '@yoopta/editor';
 
+export type SortableBlockData = {
+  /** setActivatorNodeRef from useSortable */
+  setActivatorNodeRef: (node: HTMLElement | null) => void;
+  /** listeners from useSortable */
+  listeners: Record<string, (event: any) => void>;
+  /** attributes from useSortable */
+  attributes: Record<string, any>;
+};
+
 export type BlockDndContextValue = {
   /** Currently dragging block ID */
   activeId: UniqueIdentifier | null;
@@ -13,6 +22,12 @@ export type BlockDndContextValue = {
   draggedIds: UniqueIdentifier[];
   /** The editor instance */
   editor: YooEditor;
+  /** Register sortable data for a block */
+  registerSortable: (blockId: string, data: SortableBlockData) => void;
+  /** Unregister sortable data for a block */
+  unregisterSortable: (blockId: string) => void;
+  /** Get sortable data for a block */
+  getSortable: (blockId: string) => SortableBlockData | null;
 };
 
 export type BlockDndContextProps = {
@@ -41,6 +56,8 @@ export type SortableBlockProps = {
   className?: string;
   /** Whether this block is disabled for dragging */
   disabled?: boolean;
+  /** If true, listeners won't be applied to the block (use DragHandle instead) */
+  useDragHandle?: boolean;
 };
 
 export type DragHandleProps = {
@@ -52,6 +69,8 @@ export type DragHandleProps = {
   className?: string;
   /** Called when drag handle is clicked (not dragged) */
   onClick?: (e: MouseEvent) => void;
+  /** If true, merges props and event handlers with the child element */
+  asChild?: boolean;
 };
 
 export type DropIndicatorProps = {

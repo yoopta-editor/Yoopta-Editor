@@ -5,6 +5,7 @@ export { useBlockDnd, getOrderedBlockIds } from './use-block-dnd';
 export type {
   BlockDndContextProps,
   BlockDndContextValue,
+  SortableBlockData,
   SortableBlockProps,
   DragHandleProps,
   DropIndicatorProps,

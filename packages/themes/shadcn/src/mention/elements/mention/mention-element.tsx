@@ -110,31 +110,23 @@ export const MentionElement = (props: PluginElementRenderProps) => {
       </HoverCardTrigger>
 
       <HoverCardContent
-        className="w-80 p-0 overflow-hidden"
+        className="w-72 p-0"
         side="top"
         align="start"
         sideOffset={8}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}>
-        {/* Gradient header background */}
-        <div className="h-12 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent" />
-
-        {/* Profile section - overlapping the header */}
-        <div className="px-4 -mt-6">
-          <div className="flex items-end gap-3">
-            {/* Avatar with border */}
-            <div className="rounded-full bg-background p-0.5 shadow-sm">
-              <MentionAvatar name={name} avatar={avatar} size="lg" />
-            </div>
-
-            {/* Name and type badge */}
-            <div className="flex-1 min-w-0 pb-1">
+        {/* Header with avatar and name */}
+        <div className="p-2">
+          <div className="flex items-start gap-3">
+            <MentionAvatar name={name} avatar={avatar} size="md" />
+            <div className="flex-1 min-w-0 pt-0.5">
               <div className="flex items-center gap-2">
-                <h4 className="font-semibold text-base truncate">{name}</h4>
+                <h4 className="font-semibold text-sm truncate">{name}</h4>
                 {type && (
                   <span
                     className={cn(
-                      'inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-medium',
+                      'inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-md font-medium shrink-0',
                       typeColor,
                     )}>
                     <TypeIcon type={type} />
@@ -142,53 +134,55 @@ export const MentionElement = (props: PluginElementRenderProps) => {
                   </span>
                 )}
               </div>
+              {description && (
+                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                  {description}
+                </p>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Description and email */}
-          <div className="mt-3 space-y-2">
-            {description && (
-              <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
-            )}
-
+        {/* Contact info */}
+        {(meta?.email || mentionUrl) && (
+          <div className="px-3 pb-2 space-y-1">
             {meta?.email && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Mail className="w-3.5 h-3.5" />
+                <Mail className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate">{meta.email}</span>
               </div>
             )}
-
             {mentionUrl && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate">{mentionUrl}</span>
               </div>
             )}
           </div>
-        </div>
+        )}
 
         {/* Actions */}
-        <div className="flex items-center gap-1 p-2 mt-3 border-t bg-muted/30">
+        <div className="flex items-center gap-0.5 p-2 border-t">
           {mentionUrl && (
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 px-3 text-xs flex-1 hover:bg-background"
+              className="h-8 px-2 text-xs flex-1"
               onClick={handleOpenUrl}>
               <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-              Open link
+              Open
             </Button>
           )}
 
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-3 text-xs flex-1 hover:bg-background"
+            className="h-8 px-2 text-xs flex-1"
             onClick={handleCopy}>
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 mr-1.5 text-green-500" />
-                <span className="text-green-600">Copied!</span>
+                <Check className="w-3.5 h-3.5 mr-1.5 text-green-600 dark:text-green-400" />
+                <span className="text-green-600 dark:text-green-400">Copied</span>
               </>
             ) : (
               <>
@@ -202,7 +196,8 @@ export const MentionElement = (props: PluginElementRenderProps) => {
             variant="ghost"
             size="sm"
             className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-            onClick={handleDelete}>
+            onClick={handleDelete}
+            title="Delete mention">
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
         </div>

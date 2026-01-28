@@ -1,17 +1,19 @@
 import type { CSSProperties } from 'react';
+import { useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { useBlockDndContext } from './block-dnd-context';
 import type { SortableBlockProps } from './types';
 
-export const SortableBlock = ({ id, children, className, disabled = false }: SortableBlockProps) => {
-  const { draggedIds, isDragging } = useBlockDndContext();
+export const SortableBlock = ({ id, children, className, disabled = false, useDragHandle = false }: SortableBlockProps) => {
+  const { draggedIds, isDragging, registerSortable, unregisterSortable } = useBlockDndContext();
 
   const {
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging: isThisDragging,
@@ -20,6 +22,20 @@ export const SortableBlock = ({ id, children, className, disabled = false }: Sor
     id,
     disabled,
   });
+
+  // Register sortable data for DragHandle
+  useEffect(() => {
+    if (useDragHandle) {
+      registerSortable(id, {
+        setActivatorNodeRef,
+        listeners: listeners as Record<string, (event: any) => void>,
+        attributes,
+      });
+      return () => {
+        unregisterSortable(id);
+      };
+    }
+  }, [id, useDragHandle, setActivatorNodeRef, listeners, attributes, registerSortable, unregisterSortable]);
 
   // Check if this block is part of a multi-drag
   const isPartOfMultiDrag = draggedIds.includes(id) && draggedIds.length > 1;
@@ -33,29 +49,27 @@ export const SortableBlock = ({ id, children, className, disabled = false }: Sor
   };
 
   const combinedClassName = [
-    'yoo-block-dnd-sortable',
-    isThisDragging && 'yoo-block-dnd-sortable--dragging',
-    isOver && 'yoo-block-dnd-sortable--over',
-    isPartOfMultiDrag && 'yoo-block-dnd-sortable--multi',
+    'yoopta-block-dnd-sortable',
+    isThisDragging && 'yoopta-block-dnd-sortable--dragging',
+    isOver && 'yoopta-block-dnd-sortable--over',
+    isPartOfMultiDrag && 'yoopta-block-dnd-sortable--multi',
     className,
   ]
     .filter(Boolean)
     .join(' ');
-
 
   return (
     <div
       ref={setNodeRef}
       style={style}
       className={combinedClassName}
-      {...attributes}
-      {...listeners}
+      {...(!useDragHandle ? attributes : {})}
+      {...(!useDragHandle ? listeners : {})}
       data-block-dnd-id={id}
       data-block-dnd-dragging={isBeingDragged || undefined}
       data-block-dnd-over={isOver || undefined}>
       {children}
-
-      {isOver && !isThisDragging && <div className="yoo-block-dnd-drop-indicator" />}
+      {isOver && !isThisDragging && <div className="yoopta-block-dnd-drop-indicator" />}
     </div>
   );
 };
