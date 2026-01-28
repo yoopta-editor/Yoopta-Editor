@@ -16,8 +16,8 @@
   "peerDependencies": {
     "@yoopta/code": "^6.0.0-beta.4",
     "@yoopta/editor": "^6.0.0-beta.4",
-    "@yoopta/embed": "*",
-    "@yoopta/file": "*",
+    "@yoopta/embed": "^6.0.0-beta.4",
+    "@yoopta/file": "^6.0.0-beta.4",
     "@yoopta/image": "^6.0.0-beta.4",
     "@yoopta/lists": "^6.0.0-beta.4",
     "@yoopta/steps": "^6.0.0-beta.4",
