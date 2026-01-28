@@ -59,8 +59,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const slate = useSlateEditor(id, editor, block, elements, withExtensions);
   const eventHandlers = useEventHandlers(events, editor, block, slate);
 
-  console.log('eventHandlers', eventHandlers);
-
   const onChange = useCallback(
     (value) => {
       if (editor.readOnly) return;
@@ -132,6 +130,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (editor.readOnly) return;
 
       eventHandlers.onKeyDown?.(event);
+      if (event.isDefaultPrevented()) return;
       EDITOR_EVENT_HANDLERS.onKeyDown(editor)(event);
     },
     [eventHandlers.onKeyDown, editor.readOnly, editor.path.current, block.meta.order],
@@ -324,11 +323,6 @@ const SlateEditorInstance = memo<SlateEditorInstanceProps>(
         key={`editable-${id}`}
         renderElement={renderElement as any}
         renderLeaf={renderLeaf}
-        renderChunk={(props) => {
-          console.log('renderChunk', props.children);
-
-          return <span>{props.children}</span>;
-        }}
         className="yoopta-slate"
         spellCheck
         {...eventHandlers}

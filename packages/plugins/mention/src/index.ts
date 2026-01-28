@@ -1,8 +1,4 @@
-import { Mention, ensureMentionState } from './plugin/mention-plugin';
-
-// ============================================================================
-// TYPES
-// ============================================================================
+import { Mention } from './plugin/mention-plugin';
 
 export type {
   // Item types
@@ -38,22 +34,11 @@ export type {
 
 export { INITIAL_MENTION_STATE } from './types';
 
-// ============================================================================
-// COMMANDS
-// ============================================================================
-
 export { MentionCommands } from './commands';
 export type { MentionCommandsType } from './commands';
 
-// ============================================================================
-// HOOKS
-// ============================================================================
-
 export { useMentionDropdown, useMentionState, useMentionTriggerActive } from './hooks';
 
-// ============================================================================
-// PLUGIN
-// ============================================================================
+export { withMentions } from './extenstions/withMentions';
 
-export { ensureMentionState };
 export default Mention;

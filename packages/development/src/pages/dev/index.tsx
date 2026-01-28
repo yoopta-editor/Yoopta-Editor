@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
+import { withMentions } from '@yoopta/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -18,15 +20,17 @@ import { SelectionBox } from '@yoopta/ui/selection-box';
 
 const YooptaUIPackageExample = () => {
   const selectionBoxRef = useRef<HTMLDivElement>(null);
-  const editor: YooEditor = useMemo(
+  const editor = useMemo(
     () =>
-      createYooptaEditor({
+      withMentions(createYooptaEditor({
         plugins: YOOPTA_PLUGINS,
         marks: MARKS,
         value: DEFAULT_VALUE,
-      }),
+      })),
     [],
   );
+
+  console.log('YooptaUIPackageExample editor', editor);
 
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
@@ -327,6 +331,29 @@ const YooptaUIPackageExample = () => {
     });
   };
 
+  const insertMention = () => {
+    const elements = editor.y('paragraph', {
+      children: [
+        editor.y.text('Visit '),
+        editor.y.inline('mention', {
+          props: {
+            id: '123',
+            name: 'John Doe',
+            avatar: 'https://example.com/avatar.png',
+            type: 'user',
+          },
+          // Note: inlineVoid elements don't need children - they're void
+        }),
+        editor.y.text(' for more information.'),
+      ],
+    });
+    editor.insertBlock('Paragraph', {
+      elements,
+      at: 0,
+      focus: true,
+    });
+  };
+
   // editor.y.markdown(`
   //   # Hello World
   //   This is a test of the markdown plugin.
@@ -355,36 +382,43 @@ const YooptaUIPackageExample = () => {
     <div className="flex flex-col gap-2" ref={selectionBoxRef}>
       <div className="flex flex-wrap gap-2 px-[100px] max-w-[900px] mx-auto my-10">
         <button
+          type="button"
           onClick={insertAccordion}
           className="rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
           Add Accordion
         </button>
         <button
+          type="button"
           onClick={insertSteps}
           className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600">
           Add Steps
         </button>
         <button
+          type="button"
           onClick={insertCallout}
           className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600">
           Add Callout
         </button>
         <button
+          type="button"
           onClick={insertParagraphWithText}
           className="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
           Add Paragraph with Text & Marks
         </button>
         <button
+          type="button"
           onClick={insertParagraphWithLink}
           className="rounded-md bg-pink-500 px-4 py-2 text-sm font-medium text-white hover:bg-pink-600">
           Add Paragraph with Link
         </button>
         <button
+          type="button"
           onClick={insertBulletedList}
           className="rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600">
           Add Bulleted List
         </button>
         <button
+          type="button"
           onClick={() => {
             editor.toggleBlock('HeadingThree', {
               at: editor.path.current,
@@ -397,29 +431,40 @@ const YooptaUIPackageExample = () => {
           Toggle Block into HeadingThree for {editor.path.current}
         </button>
         <button
+          type="button"
           onClick={insertCodeJSBlock}
           className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
           Insert Code JS Block
         </button>
         <button
+          type="button"
           onClick={insertCodePythonBlock}
           className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
           Insert Code Python Block
         </button>
         <button
+          type="button"
           onClick={insertTable}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Insert Table
         </button>
         <button
+          type="button"
           onClick={insertTabs}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Insert Tabs
         </button>
         <button
+          type="button"
           onClick={() => markBlocksToBold()}
           className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
           Mark Blocks to Bold
+        </button>
+        <button
+          type="button"
+          onClick={insertMention}
+          className="rounded-md bg-[red] px-4 py-2 text-sm font-medium text-white hover:bg-gray-600">
+          Insert Mention
         </button>
       </div>
       <YooptaEditor
@@ -433,6 +478,7 @@ const YooptaUIPackageExample = () => {
         <YooptaFloatingBlockActions />
         <YooptaSlashCommandMenu />
         <SelectionBox selectionBoxElement={selectionBoxRef} />
+        <MentionDropdown showTypeBadge />
       </YooptaEditor>
     </div>
   );

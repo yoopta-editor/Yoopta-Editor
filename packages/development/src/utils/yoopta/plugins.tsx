@@ -1,10 +1,9 @@
-import Accordion, { AccordionCommands } from '@yoopta/accordion';
+import Accordion from '@yoopta/accordion';
 import Blockquote from '@yoopta/blockquote';
 import Callout from '@yoopta/callout';
 import { Code, CodeGroup } from '@yoopta/code';
 import Divider from '@yoopta/divider';
-import Mention from '@yoopta/mention';
-import { YooEditor } from '@yoopta/editor';
+import Mention, { MentionTrigger } from '@yoopta/mention';
 import Embed from '@yoopta/embed';
 import File from '@yoopta/file';
 import Video, { VideoElement } from '@yoopta/video';
@@ -69,15 +68,45 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
 ];
 
 export const YOOPTA_PLUGINS = applyTheme([
-  Mention,
+  Mention.extend({
+    options: {
+      triggers: [{ char: '@', type: 'user' }, { char: '#', type: 'page' }],
+      // fetch to placeholder json
+      onSearch: async (query: string, trigger: MentionTrigger) => {
+        console.log('onSearch', query, trigger);
+        if (trigger.type === 'page') {
+          const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+          const data = await response.json();
+          return data.map((post: any) => ({
+            id: post.id,
+            name: post.title,
+            avatar: 'https://media.licdn.com/dms/image/v2/C4D03AQHVZio6kLxs2A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1583328683293?e=1770854400&v=beta&t=TdF5ICElVP7SV8RhbM44pCt0hI8WXdhHdSAak-hGc-g',
+            meta: {
+              description: post.body,
+              url: 'https://www.google.com',
+              email: post.email,
+            },
+          })).filter((post: any) => post.name.toLowerCase().includes(query.toLowerCase()));
+        } else {
+          const response = await fetch('https://jsonplaceholder.typicode.com/users');
+          const data = await response.json();
+          return data.map((user: any) => ({
+            id: user.id,
+            name: user.name,
+            avatar: 'https://media.licdn.com/dms/image/v2/C4D03AQHVZio6kLxs2A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1583328683293?e=1770854400&v=beta&t=TdF5ICElVP7SV8RhbM44pCt0hI8WXdhHdSAak-hGc-g',
+            meta: {
+              description: user.email,
+              url: 'https://www.google.com',
+              email: user.email,
+            },
+          })).filter((user: any) => user.name.toLowerCase().includes(query.toLowerCase()));
+        }
+      },
+    }
+  }),
   Embed,
   Accordion.extend({
     injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
-    lifecycle: {
-      beforeCreate: (editor: YooEditor) => {
-        return AccordionCommands.buildAccordionElements(editor, { items: 2 });
-      },
-    },
   }),
   File.extend({
     options: {

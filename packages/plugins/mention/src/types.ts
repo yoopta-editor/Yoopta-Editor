@@ -1,8 +1,4 @@
-import type { SlateElement, YooEditor } from '@yoopta/editor';
-
-// ============================================================================
-// MENTION ITEM TYPES
-// ============================================================================
+import type { BaseYooEditor, SlateElement } from '@yoopta/editor';
 
 export type MentionType = 'user' | 'channel' | 'page' | 'custom' | string;
 
@@ -14,16 +10,7 @@ export type MentionItem<TMeta = Record<string, unknown>> = {
   meta?: TMeta;
 };
 
-// ============================================================================
-// MENTION ELEMENT TYPES
-// ============================================================================
-
-export type MentionElementProps<TMeta = Record<string, unknown>> = {
-  id: string;
-  type?: MentionType;
-  name: string;
-  avatar?: string;
-  meta?: TMeta;
+export type MentionElementProps<TMeta = Record<string, unknown>> = MentionItem<TMeta> & {
   nodeType: 'inlineVoid';
 };
 
@@ -37,10 +24,6 @@ export type MentionElementMap = {
   mention: MentionElement;
 };
 
-// ============================================================================
-// TRIGGER TYPES
-// ============================================================================
-
 export type MentionTrigger = {
   /** Character(s) that trigger the mention dropdown (e.g., '@', '#', '[[') */
   char: string;
@@ -51,10 +34,6 @@ export type MentionTrigger = {
   /** Pattern that must precede the trigger (default: /\s|^/ - whitespace or start) */
   allowedAfter?: RegExp;
 };
-
-// ============================================================================
-// MENTION STATE TYPES
-// ============================================================================
 
 export type MentionTargetRect = {
   domRect: DOMRect;
@@ -85,10 +64,6 @@ export const INITIAL_MENTION_STATE: MentionState = {
   targetRect: null,
   triggerRange: null,
 };
-
-// ============================================================================
-// PLUGIN OPTIONS
-// ============================================================================
 
 export type MentionPluginOptions<TMeta = Record<string, unknown>> = {
   /**
@@ -155,10 +130,6 @@ export type MentionPluginOptions<TMeta = Record<string, unknown>> = {
   closeOnEscape?: boolean;
 };
 
-// ============================================================================
-// EVENT TYPES
-// ============================================================================
-
 export type MentionOpenEvent = {
   trigger: MentionTrigger;
   query: string;
@@ -178,10 +149,6 @@ export type MentionSelectEvent<TMeta = Record<string, unknown>> = {
   item: MentionItem<TMeta>;
   trigger: MentionTrigger;
 };
-
-// ============================================================================
-// HOOK TYPES
-// ============================================================================
 
 export type UseMentionDropdownOptions = {
   /** Custom debounce override */
@@ -218,10 +185,6 @@ export type UseMentionDropdownReturn<TMeta = Record<string, unknown>> = {
   floatingStyles: React.CSSProperties;
 };
 
-// ============================================================================
-// RENDER PROPS TYPES (for custom rendering)
-// ============================================================================
-
 export type MentionRenderProps<TMeta = Record<string, unknown>> = {
   element: MentionElement<TMeta>;
   attributes: Record<string, unknown>;
@@ -240,11 +203,7 @@ export type MentionItemRenderProps<TMeta = Record<string, unknown>> = {
   onSelect: () => void;
 };
 
-// ============================================================================
-// EDITOR EXTENSION
-// ============================================================================
-
-export interface MentionEditor {
+export type MentionEditor = {
   mentions: {
     state: MentionState;
     setState: (state: Partial<MentionState>) => void;
@@ -258,6 +217,10 @@ export interface MentionEditor {
   };
 }
 
+// Extended editor type with mentions support
+export type MentionYooEditor = BaseYooEditor & MentionEditor;
+
 declare module '@yoopta/editor' {
-  interface YooEditor extends MentionEditor {}
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface YooEditor extends MentionEditor { }
 }

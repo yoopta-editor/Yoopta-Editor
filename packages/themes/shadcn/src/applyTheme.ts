@@ -13,6 +13,7 @@ import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
 import { ListsUI } from './lists';
+import { MentionUI } from './mention';
 import { ParagraphUI } from './paragraph';
 import { StepsUI } from './steps';
 import { TableUI } from './table';
@@ -85,6 +86,7 @@ export function applyTheme(
     Divider: DividerUI,
     Embed: EmbedUI,
     File: FileUI,
+    Mention: MentionUI,
   };
 
   return plugins.map((plugin) => {

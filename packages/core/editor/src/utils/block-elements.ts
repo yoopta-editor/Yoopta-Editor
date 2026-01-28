@@ -4,7 +4,8 @@ import { Editor, Element, Path } from 'slate';
 import { generateId } from './generateId';
 import { getBlockPlugins } from './get-block-plugins';
 import { buildBlockElement } from '../components/Editor/utils';
-import { Blocks } from '../editor/blocks';
+// import { Blocks } from '../editor/blocks';
+import { getBlock } from '../editor/blocks/getBlock';
 import type { SlateEditor, SlateElement, YooEditor } from '../editor/types';
 import type {
   Plugin,
@@ -100,10 +101,10 @@ function recursivelyCollectElementChildren(
         children:
           childElement.children && childElement.children.length > 0
             ? recursivelyCollectElementChildren(
-                childElement,
-                blockElements,
-                elementsMapWithTextContent,
-              )
+              childElement,
+              blockElements,
+              elementsMapWithTextContent,
+            )
             : [{ text: elementsMapWithTextContent?.[elementType] || '' }],
       });
 
@@ -144,10 +145,10 @@ export function buildBlockElementsStructure(
     children:
       rootBlockElement.children && rootBlockElement.children.length > 0
         ? recursivelyCollectElementChildren(
-            rootBlockElement,
-            blockElements,
-            elementsMapWithTextContent,
-          )
+          rootBlockElement,
+          blockElements,
+          elementsMapWithTextContent,
+        )
         : [{ text: '' }],
   };
 
@@ -180,7 +181,7 @@ export function getAllowedPluginsFromElement(
 ): string[] | null {
   if (!slate.selection) return null;
 
-  const block = Blocks.getBlock(editor, { at: editor.path.current });
+  const block = getBlock(editor, { at: editor.path.current });
   if (!block) return null;
 
   const blockPlugin = editor.plugins[block.type];
@@ -210,8 +211,7 @@ export function getAllowedPluginsFromElement(
 
           if (undefinedPlugins.length > 0) {
             throw new Error(
-              `Some "injectElementsFromPlugins" in ${block.type}->${
-                element.type
+              `Some "injectElementsFromPlugins" in ${block.type}->${element.type
               } are not defined in editor.plugins: ${undefinedPlugins.join(', ')}`,
             );
           }

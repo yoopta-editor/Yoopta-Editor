@@ -128,18 +128,25 @@ export function yInline(
 
   const { id: customId, props: customProps, children: customChildren } = options;
 
+  // Get nodeType from config (can be 'inline' or 'inlineVoid')
+  const configNodeType = elementConfig.props?.nodeType;
+  const isInlineVoid = configNodeType === 'inlineVoid';
+
   // Merge default props from config with custom props
-  // Ensure nodeType is set to 'inline'
+  // Preserve nodeType from config if it's inlineVoid, otherwise default to 'inline'
   const props = {
     ...elementConfig.props,
     ...customProps,
-    nodeType: 'inline' as const,
+    nodeType: (isInlineVoid ? 'inlineVoid' : 'inline') as 'inline' | 'inlineVoid',
   };
 
   // Determine children
   let children: Descendant[];
 
-  if (customChildren !== undefined) {
+  if (isInlineVoid) {
+    // For inlineVoid elements, always use empty text node (void elements don't contain editable text)
+    children = [{ text: '' }];
+  } else if (customChildren !== undefined) {
     // Use explicitly provided children (can be text nodes or other inline elements)
     children = customChildren.length > 0 ? customChildren : [{ text: '' }];
   } else {

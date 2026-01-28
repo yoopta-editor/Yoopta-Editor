@@ -1,38 +1,16 @@
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
-import type { BaseYooEditor, PluginElementRenderProps } from '@yoopta/editor';
-import { Blocks, YooptaPlugin, generateId } from '@yoopta/editor';
+import type { PluginElementRenderProps } from '@yoopta/editor';
+import { YooptaPlugin, generateId } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
 
 import { MentionCommands } from '../commands';
 import type {
-  MentionCloseEvent,
   MentionElementMap,
   MentionElementProps,
   MentionPluginOptions,
-  MentionState,
-  MentionTargetRect,
-  MentionTrigger,
+  MentionYooEditor,
 } from '../types';
-import { INITIAL_MENTION_STATE } from '../types';
-
-// Extended editor type with mentions support
-type MentionYooEditor = BaseYooEditor & {
-  mentions: {
-    state: MentionState;
-    setState: (state: Partial<MentionState>) => void;
-    open: (params: {
-      trigger: MentionTrigger;
-      targetRect: MentionTargetRect;
-      triggerRange: MentionState['triggerRange'];
-    }) => void;
-    close: (reason?: MentionCloseEvent['reason']) => void;
-    setQuery: (query: string) => void;
-  };
-};
-
-// ============================================================================
-// DEFAULT RENDER (headless - just renders inline)
-// ============================================================================
+import { getCaretRectFromSlate, getTriggers, shouldTriggerActivate } from '../utils';
 
 const DefaultMentionRender = (props: PluginElementRenderProps) => {
   const { element, attributes, children } = props;
@@ -46,162 +24,23 @@ const DefaultMentionRender = (props: PluginElementRenderProps) => {
   );
 };
 
-// ============================================================================
-// HELPER: Get triggers from options
-// ============================================================================
-
-function getTriggers(options: MentionPluginOptions | undefined): MentionTrigger[] {
-  if (!options) return [{ char: '@' }];
-
-  if (options.triggers && options.triggers.length > 0) {
-    return options.triggers;
-  }
-
-  return [{ char: options.char ?? '@' }];
-}
-
-// ============================================================================
-// HELPER: Check if trigger should activate
-// ============================================================================
-
-function shouldTriggerActivate(
-  trigger: MentionTrigger,
-  charBefore: string,
-  charAfter: string,
-): boolean {
-  const allowedAfter = trigger.allowedAfter ?? /^$|\s/;
-
-  // Check if character before trigger matches pattern (whitespace or start)
-  const isLeftClear = allowedAfter.test(charBefore);
-  // Check if character after is whitespace or end (for multi-char triggers like '[[')
-  const isRightClear = charAfter === '' || /\s/.test(charAfter);
-
-  return isLeftClear && isRightClear;
-}
-
-// ============================================================================
-// HELPER: Get caret position rect
-// ============================================================================
-
-function getCaretRect(): MentionTargetRect | null {
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) return null;
-
-  const range = selection.getRangeAt(0);
-  const rects = range.getClientRects();
-
-  // If no rects (e.g., empty line), use range bounding rect
-  if (rects.length === 0) {
-    const boundingRect = range.getBoundingClientRect();
-    // Create a minimal DOMRectList-like object
-    return {
-      domRect: boundingRect,
-      clientRects: range.getClientRects(),
-    };
-  }
-
-  return {
-    domRect: range.getBoundingClientRect(),
-    clientRects: rects,
-  };
-}
-
-// ============================================================================
-// LAZY INITIALIZATION (must be defined before plugin)
-// ============================================================================
-
-/**
- * Ensures editor has mention state initialized
- * Called lazily when needed
- */
-// Type-safe emit helper for mention events
-type MentionEmit = (event: string, payload: unknown) => void;
-
-function ensureMentionState(editor: BaseYooEditor): void {
-  const mentionEditor = editor as MentionYooEditor;
-
-  // Already initialized
-  if (mentionEditor.mentions) return;
-
-  let state: MentionState = { ...INITIAL_MENTION_STATE };
-
-  // Cast emit to allow custom mention events
-  const emit = editor.emit as MentionEmit;
-  const { plugins } = editor;
-
-  mentionEditor.mentions = {
-    get state() {
-      return state;
-    },
-    setState: (newState: Partial<MentionState>) => {
-      state = { ...state, ...newState };
-    },
-    open: (params: {
-      trigger: MentionTrigger;
-      targetRect: MentionTargetRect;
-      triggerRange: MentionState['triggerRange'];
-    }) => {
-      const pluginOptions = plugins.Mention?.options as MentionPluginOptions | undefined;
-
-      state = {
-        isOpen: true,
-        query: '',
-        trigger: params.trigger,
-        targetRect: params.targetRect,
-        triggerRange: params.triggerRange,
-      };
-
-      emit('mention:open', {
-        trigger: params.trigger,
-        query: '',
-        targetRect: params.targetRect,
-      });
-
-      if (pluginOptions?.onOpen) {
-        pluginOptions.onOpen(params.trigger);
-      }
-    },
-    close: (reason: MentionCloseEvent['reason'] = 'manual') => {
-      const pluginOptions = plugins.Mention?.options as MentionPluginOptions | undefined;
-
-      state = { ...INITIAL_MENTION_STATE };
-
-      emit('mention:close', { reason });
-
-      if (pluginOptions?.onClose) {
-        pluginOptions.onClose();
-      }
-    },
-    setQuery: (query: string) => {
-      state = { ...state, query };
-
-      emit('mention:query-change', {
-        query,
-        trigger: state.trigger,
-      });
-    },
-  };
-}
-
-// ============================================================================
-// PLUGIN DEFINITION
-// ============================================================================
+const defaultMentionProps = {
+  id: '',
+  name: '',
+  avatar: '',
+  type: undefined,
+  meta: undefined,
+};
 
 const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
   type: 'Mention',
-  elements: {
-    mention: {
-      render: DefaultMentionRender,
-      props: {
-        id: '',
-        name: '',
-        avatar: '',
-        type: undefined,
-        meta: undefined,
-        nodeType: 'inlineVoid',
-      },
-    },
-  },
+  elements: (
+    <mention
+      render={DefaultMentionRender}
+      props={defaultMentionProps}
+      nodeType="inlineVoid"
+    />
+  ),
   options: {
     display: {
       title: 'Mention',
@@ -255,9 +94,8 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
     return slate;
   },
   events: {
-    onKeyDown: (baseEditor, slate, _options) => (event: ReactKeyboardEvent) => {
-      // Ensure mention state is initialized
-      ensureMentionState(baseEditor);
+    onKeyDown: (baseEditor, slate, options) => (event: ReactKeyboardEvent) => {
+      console.log('mention onKeyDown', slate)
 
       // Cast to MentionYooEditor for full type support
       const editor = baseEditor as MentionYooEditor;
@@ -266,44 +104,51 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
       const triggers = getTriggers(pluginOptions);
       const mentionState = editor.mentions.state;
 
+      // Get current block from options (more reliable than editor.path.current)
+      const currentBlock = options.currentBlock;
+
       // Check if any trigger char was typed
       for (const trigger of triggers) {
-        if (event.key === trigger.char || (trigger.char.length > 1 && event.key === trigger.char[trigger.char.length - 1])) {
-          // For single char triggers
-          if (trigger.char.length === 1 && event.key === trigger.char) {
-            if (slate.selection && Range.isCollapsed(slate.selection)) {
-              const currentNode = Node.get(slate, slate.selection.anchor.path);
-              if (!Text.isText(currentNode)) return;
+        // Check for single char trigger match
+        if (trigger.char.length === 1 && event.key === trigger.char) {
+          // Only handle if selection is collapsed (cursor, not range)
+          if (slate.selection && Range.isCollapsed(slate.selection)) {
+            const currentNode = Node.get(slate, slate.selection.anchor.path);
+            if (!Text.isText(currentNode)) continue;
 
-              const text = currentNode.text;
-              const cursorOffset = slate.selection.anchor.offset;
+            const text = currentNode.text;
+            const cursorOffset = slate.selection.anchor.offset;
 
-              const charBefore = text[cursorOffset - 1] ?? '';
-              const charAfter = text[cursorOffset] ?? '';
+            const charBefore = text[cursorOffset - 1] ?? '';
+            const charAfter = text[cursorOffset] ?? '';
 
-              if (!shouldTriggerActivate(trigger, charBefore, charAfter)) return;
+            // Check if trigger should activate
+            if (!shouldTriggerActivate(trigger, charBefore, charAfter)) continue;
 
-              const block = Blocks.getBlock(baseEditor, { at: baseEditor.path.current });
-              if (!block) return;
+            if (!currentBlock) continue;
 
-              // Get caret position for dropdown positioning
-              const caretRect = getCaretRect();
-              if (!caretRect) return;
+            // Get caret position for dropdown positioning
+            // Get position BEFORE @ is inserted (current cursor position)
+            const caretRect = getCaretRectFromSlate(slate);
+            if (!caretRect) continue;
 
-              // Open dropdown
-              editor.mentions.open({
-                trigger,
-                targetRect: caretRect,
-                triggerRange: {
-                  blockId: block.id,
-                  path: slate.selection.anchor.path,
-                  startOffset: cursorOffset,
-                },
-              });
-            }
+            // Open dropdown immediately (before @ is inserted)
+            // The @ character will be inserted by Slate's default behavior
+            editor.mentions.open({
+              trigger,
+              targetRect: caretRect,
+              triggerRange: {
+                blockId: currentBlock.id,
+                path: slate.selection.anchor.path,
+                startOffset: cursorOffset, // Position where @ will be inserted
+              },
+            });
+
+            // Don't prevent default - let the @ character be inserted
+            return;
           }
-          // TODO: Handle multi-char triggers like '[['
         }
+        // TODO: Handle multi-char triggers like '[['
       }
 
       // Handle keys when dropdown is open
@@ -353,8 +198,4 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
   },
 });
 
-// ============================================================================
-// EXPORTS
-// ============================================================================
-
-export { Mention, ensureMentionState };
+export { Mention };

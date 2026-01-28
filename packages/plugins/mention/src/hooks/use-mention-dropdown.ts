@@ -10,7 +10,6 @@ import {
 import { useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
 
 import { MentionCommands } from '../commands';
-import { ensureMentionState } from '../plugin/mention-plugin';
 import type {
   MentionCloseEvent,
   MentionItem,
@@ -31,9 +30,6 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
   const editor = useYooptaEditor();
   const pluginOptions = useYooptaPluginOptions<MentionPluginOptions<TMeta>>('Mention');
 
-  // Ensure mention state is initialized
-  ensureMentionState(editor);
-
   // Local state for items/loading
   const [items, setItems] = useState<MentionItem<TMeta>[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,7 +48,7 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
   const minQueryLength = pluginOptions?.minQueryLength ?? 0;
 
   // Floating UI setup
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, floatingStyles } = useFloating({
     placement: 'bottom-start',
     open: mentionState.isOpen,
     middleware: [inline(), flip(), shift({ padding: 8 }), offset(4)],
@@ -130,7 +126,7 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
       setError(null);
 
       try {
-        const results = await pluginOptions.onSearch(query, trigger);
+        const results = await pluginOptions?.onSearch?.(query, trigger);
         setItems(results as MentionItem<TMeta>[]);
         setSelectedIndex(0);
       } catch (err) {
@@ -146,7 +142,7 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [mentionState.isOpen, mentionState.query, mentionState.trigger, pluginOptions, debounceMs, minQueryLength]);
+  }, [mentionState.isOpen, mentionState.query, mentionState.trigger, pluginOptions, debounceMs, minQueryLength, items.length]);
 
   // Select item action
   const selectItem = useCallback(
@@ -191,6 +187,9 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
         case 'Tab':
           // Close on tab
           close('escape');
+          break;
+
+        default:
           break;
       }
     };

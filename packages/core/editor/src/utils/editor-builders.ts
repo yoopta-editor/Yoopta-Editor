@@ -154,7 +154,5 @@ export function buildPlugins(
     }
   });
 
-  console.log('buildPlugins pluginsMap', pluginsMap);
-
   return pluginsMap;
 }

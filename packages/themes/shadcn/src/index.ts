@@ -12,6 +12,7 @@ export { ParagraphUI } from './paragraph';
 export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
 export { LinkUI } from './link';
+export { MentionUI, MentionDropdown } from './mention';
 export { ImageUI } from './image';
 export { VideoUI } from './video';
 export { EmbedUI } from './embed';

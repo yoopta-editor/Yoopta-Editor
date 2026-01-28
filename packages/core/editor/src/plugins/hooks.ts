@@ -12,6 +12,42 @@ import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
 
+
+const shouldSave = (op: Operation): boolean => {
+  if (op.type === 'set_selection') {
+    return false;
+  }
+
+  return true;
+};
+
+const shouldMerge = (op: Operation, prev: Operation | undefined): boolean => {
+  if (prev === op) return true;
+
+  if (
+    prev &&
+    op.type === 'insert_text' &&
+    prev.type === 'insert_text' &&
+    op.offset === prev.offset + prev.text.length &&
+    Path.equals(op.path, prev.path)
+  ) {
+    return true;
+  }
+
+  if (
+    prev &&
+    op.type === 'remove_text' &&
+    prev.type === 'remove_text' &&
+    op.offset + op.text.length === prev.offset &&
+    Path.equals(op.path, prev.path)
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+
 export const useSlateEditor = (
   id: string,
   editor: YooEditor,
@@ -172,7 +208,7 @@ export const useSlateEditor = (
     }
 
     return slate;
-  }, [id, block.type]);
+  }, [id, block.type, editor, elements, withExtensions]);
 
 export const useEventHandlers = (
   events: PluginDOMEvents | undefined,
@@ -181,8 +217,7 @@ export const useEventHandlers = (
   slate: SlateEditor,
 ) =>
   useMemo<EditorEventHandlers>(() => {
-    if (!events || editor.readOnly) return {};
-    const eventHandlers = events || {};
+    if (editor.readOnly) return {};
 
     const eventHandlersOptions: PluginEventHandlerOptions = {
       hotkeys: HOTKEYS,
@@ -194,15 +229,18 @@ export const useEventHandlers = (
     // Get inline plugin event handlers
     const inlinePlugins = Object.values(editor.plugins).filter((plugin) => {
       const rootElement = Object.values(plugin.elements)[0];
-      return (
-        rootElement?.props?.nodeType === 'inline' || rootElement?.props?.nodeType === 'inlineVoid'
-      );
+      // Check both top-level nodeType and props.nodeType for inline elements
+      const nodeType =
+        (rootElement as { nodeType?: string })?.nodeType ?? rootElement?.props?.nodeType;
+      return nodeType === 'inline' || nodeType === 'inlineVoid';
     });
+
+    // Start with block's event handlers (or empty if block has none)
+    const eventHandlers = events ?? {};
 
     // Merge block and inline plugin event handlers
     const allEventHandlers = { ...eventHandlers };
 
-    console.log('inlinePlugins', inlinePlugins);
     inlinePlugins.forEach((plugin) => {
       if (plugin.events) {
         Object.keys(plugin.events).forEach((eventType) => {
@@ -212,9 +250,10 @@ export const useEventHandlers = (
             const inlineHandler = plugin.events![eventType];
 
             allEventHandlers[eventType] = (yEditor, ySlate, options) => (event) => {
-              // Call the block's event handler
+              // Call the block's event handler first
               const result = existingHandler(yEditor, ySlate, options)(event);
-              // Call the inline plugin's handler
+              // IMPORTANT: Always call inline handler, even if block handler returned early
+              // This ensures inline plugins (like Mention) can handle events
               inlineHandler(yEditor, ySlate, options)(event);
               return result;
             };
@@ -238,38 +277,5 @@ export const useEventHandlers = (
     });
 
     return eventHandlersMap;
-  }, [events, editor, block, slate]);
-
-const shouldSave = (op: Operation): boolean => {
-  if (op.type === 'set_selection') {
-    return false;
-  }
-
-  return true;
-};
-
-const shouldMerge = (op: Operation, prev: Operation | undefined): boolean => {
-  if (prev === op) return true;
-
-  if (
-    prev &&
-    op.type === 'insert_text' &&
-    prev.type === 'insert_text' &&
-    op.offset === prev.offset + prev.text.length &&
-    Path.equals(op.path, prev.path)
-  ) {
-    return true;
-  }
-
-  if (
-    prev &&
-    op.type === 'remove_text' &&
-    prev.type === 'remove_text' &&
-    op.offset + op.text.length === prev.offset &&
-    Path.equals(op.path, prev.path)
-  ) {
-    return true;
-  }
-
-  return false;
-};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events, block, slate]);

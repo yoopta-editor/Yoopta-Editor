@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
 
-import { ensureMentionState } from '../plugin/mention-plugin';
 import type { MentionState } from '../types';
 import { INITIAL_MENTION_STATE } from '../types';
 
@@ -12,9 +11,6 @@ import { INITIAL_MENTION_STATE } from '../types';
 export function useMentionState() {
   const editor = useYooptaEditor();
   const [state, setState] = useState<MentionState>(INITIAL_MENTION_STATE);
-
-  // Ensure mention state is initialized
-  ensureMentionState(editor);
 
   useEffect(() => {
     const handleOpen = () => {
