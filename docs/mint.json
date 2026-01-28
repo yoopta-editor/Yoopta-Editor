@@ -105,7 +105,8 @@
         "ui/floating-toolbar",
         "ui/action-menu-list",
         "ui/slash-action-menu-list",
-        "ui/selection-box"
+        "ui/selection-box",
+        "ui/block-dnd"
       ]
     },
     {

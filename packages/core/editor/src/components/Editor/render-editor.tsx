@@ -12,6 +12,7 @@ import type { YooptaContentValue } from '../../editor/types';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import { HOTKEYS } from '../../utils/hotkeys';
+import type { RenderBlockProps } from '../../yoopta-editor';
 
 type Props = {
   autoFocus?: boolean;
@@ -19,6 +20,7 @@ type Props = {
   placeholder?: string;
   children: ReactNode;
   style?: CSSProperties;
+  renderBlock?: (props: RenderBlockProps) => ReactNode;
 };
 
 const Editor = ({
@@ -27,6 +29,7 @@ const Editor = ({
   style,
   children,
   autoFocus = true,
+  renderBlock,
 }: Props) => {
   const editor = useYooptaEditor();
   const { marks } = editor;
@@ -316,7 +319,7 @@ const Editor = ({
       onBlur={onBlur}
       onCopy={onCopy}
       onCut={onCopy}>
-      <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} />
+      <RenderBlocks editor={editor} marks={marks} placeholder={placeholder} renderBlock={renderBlock} />
       {children}
     </div>
   );

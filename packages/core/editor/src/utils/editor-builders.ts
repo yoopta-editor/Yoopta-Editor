@@ -48,6 +48,44 @@ export function buildBlockSlateEditors(editor: YooEditor) {
 
 // const DEFAULT_PLUGIN_OPTIONS: PluginOptions = {};
 
+/**
+ * Checks if an element is inline or inlineVoid
+ */
+function isInlineElement(element: PluginElementsMap<string, any>[string]): boolean {
+  const nodeType = element.props?.nodeType;
+  return nodeType === 'inline' || nodeType === 'inlineVoid';
+}
+
+/**
+ * Checks if a plugin is an inline/inlineVoid plugin (all its elements are inline/inlineVoid)
+ */
+function isInlinePlugin(plugin: Plugin<Record<string, SlateElement>>): boolean {
+  if (!plugin.elements) return false;
+  const elementKeys = Object.keys(plugin.elements);
+  if (elementKeys.length === 0) return false;
+
+  // Check if all elements are inline/inlineVoid
+  return elementKeys.every((key) => {
+    const element = plugin.elements[key];
+    return isInlineElement(element);
+  });
+}
+
+/**
+ * Checks if a plugin is a root element plugin (has at least one root element)
+ */
+function isRootElementPlugin(plugin: Plugin<Record<string, SlateElement>>): boolean {
+  if (!plugin.elements) return false;
+  const elementKeys = Object.keys(plugin.elements);
+
+  // Check if any element is marked as root or has nodeType 'void' or 'block'
+  return elementKeys.some((key) => {
+    const element = plugin.elements[key];
+    const nodeType = element.props?.nodeType;
+    return element.asRoot || nodeType === 'void' || nodeType === 'block';
+  });
+}
+
 export function buildPlugins(
   plugins: Plugin<Record<string, SlateElement>>[],
 ): Record<string, Plugin<Record<string, SlateElement>>> {
@@ -92,6 +130,8 @@ export function buildPlugins(
     const plugin = pluginsMap[pluginType];
     if (plugin.elements) {
       const extendedElements = { ...plugin.elements };
+      const isCurrentPluginInline = isInlinePlugin(plugin);
+      const isCurrentPluginRoot = isRootElementPlugin(plugin);
 
       // Find elements with injectElementsFromPlugins
       Object.keys(plugin.elements).forEach((elementKey) => {
@@ -108,6 +148,24 @@ export function buildPlugins(
               const allowedPlugin = plugins.find((p) => p.type === allowedPluginType);
 
               if (allowedPlugin?.elements) {
+                const isAllowedPluginInline = isInlinePlugin(allowedPlugin);
+                const isAllowedPluginRoot = isRootElementPlugin(allowedPlugin);
+
+                // Prevent inline/inlineVoid plugins from injecting into each other
+                if (isCurrentPluginInline && isAllowedPluginInline) {
+                  return;
+                }
+
+                // Prevent root elements from being injected into inline/inlineVoid plugins
+                if (isCurrentPluginInline && isAllowedPluginRoot) {
+                  return;
+                }
+
+                // Prevent inline/inlineVoid elements from being injected into root element plugins
+                if (isCurrentPluginRoot && isAllowedPluginInline) {
+                  return;
+                }
+
                 // Find root element of the allowed plugin
                 const rootElementType =
                   Object.keys(allowedPlugin.elements).find(
@@ -116,6 +174,12 @@ export function buildPlugins(
 
                 if (rootElementType) {
                   const rootElement = allowedPlugin.elements[rootElementType];
+                  const isRootElementInline = isInlineElement(rootElement);
+
+                  // Skip if trying to inject inline element into root plugin
+                  if (isCurrentPluginRoot && isRootElementInline) {
+                    return;
+                  }
 
                   // Add root element WITHOUT asRoot (it's now nested, not root)
                   if (!extendedElements[rootElementType]) {
@@ -132,8 +196,16 @@ export function buildPlugins(
                   if (rootElement?.children) {
                     rootElement.children.forEach((childType) => {
                       if (allowedPlugin.elements[childType] && !extendedElements[childType]) {
+                        const childElement = allowedPlugin.elements[childType];
+                        const isChildElementInline = isInlineElement(childElement);
+
+                        // Skip if trying to inject inline child element into root plugin
+                        if (isCurrentPluginRoot && isChildElementInline) {
+                          return;
+                        }
+
                         extendedElements[childType] = {
-                          ...allowedPlugin.elements[childType],
+                          ...childElement,
                           rootPlugin: allowedPluginType,
                         };
                       }
@@ -148,8 +220,10 @@ export function buildPlugins(
         }
       });
 
-      // Add inline elements to all plugins
-      const finalElements = { ...extendedElements, ...inlineTopLevelPlugins };
+      // Add inline elements only to root element plugins (not to inline/inlineVoid plugins)
+      const finalElements = isCurrentPluginInline
+        ? extendedElements
+        : ({ ...extendedElements, ...inlineTopLevelPlugins } as typeof extendedElements);
       pluginsMap[plugin.type] = { ...plugin, elements: finalElements };
     }
   });

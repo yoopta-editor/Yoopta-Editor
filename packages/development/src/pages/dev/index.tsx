@@ -1,5 +1,5 @@
-import YooptaEditor, { YooEditor, createYooptaEditor, generateId, Marks } from '@yoopta/editor';
-import { useEffect, useMemo, useRef } from 'react';
+import YooptaEditor, { createYooptaEditor, generateId, Marks, type RenderBlockProps } from '@yoopta/editor';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -7,16 +7,18 @@ import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 import { withMentions } from '@yoopta/mention';
 import { MentionDropdown } from '@yoopta/themes-shadcn';
 
-const EDITOR_STYLE = {
-  width: 750,
-  paddingBottom: 100,
-};
-
 import { YooptaToolbar } from '@/components/new-yoo-components/yoopta-toolbar';
 import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoopta-floating-block-actions';
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 
 import { SelectionBox } from '@yoopta/ui/selection-box';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+import { GripVertical } from 'lucide-react';
+
+const EDITOR_STYLE = {
+  width: 750,
+  paddingBottom: 100,
+};
 
 const YooptaUIPackageExample = () => {
   const selectionBoxRef = useRef<HTMLDivElement>(null);
@@ -467,19 +469,21 @@ const YooptaUIPackageExample = () => {
           Insert Mention
         </button>
       </div>
-      <YooptaEditor
-        editor={editor}
-        autoFocus
-        placeholder="Type / to open menu"
-        style={EDITOR_STYLE}
-        onChange={(value) => console.log('value', value)}
-        className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
-        <YooptaToolbar />
-        <YooptaFloatingBlockActions />
-        <YooptaSlashCommandMenu />
-        <SelectionBox selectionBoxElement={selectionBoxRef} />
-        <MentionDropdown showTypeBadge />
-      </YooptaEditor>
+      <BlockDndContext editor={editor}>
+        <YooptaEditor
+          editor={editor}
+          autoFocus
+          placeholder="Type / to open menu"
+          style={EDITOR_STYLE}
+          onChange={(value) => console.log('value', value)}
+          className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col">
+          <YooptaToolbar />
+          <YooptaFloatingBlockActions />
+          <YooptaSlashCommandMenu />
+          <SelectionBox selectionBoxElement={selectionBoxRef} />
+          <MentionDropdown />
+        </YooptaEditor>
+      </BlockDndContext>
     </div>
   );
 };

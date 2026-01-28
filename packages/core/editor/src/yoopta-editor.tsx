@@ -1,13 +1,20 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
 import { Editor } from './components/Editor/render-editor';
 import { YooptaContextProvider } from './contexts/YooptaContext/YooptaContext';
 import type { YooptaOperation } from './editor/core/applyTransforms';
-import type { YooEditor, YooptaContentValue, YooptaPath } from './editor/types';
+import type { YooEditor, YooptaBlockData, YooptaContentValue, YooptaPath } from './editor/types';
 
 export type YooptaOnChangeOptions = {
   operations: YooptaOperation[];
+};
+
+export type RenderBlockProps = {
+  block: YooptaBlockData;
+  children: ReactNode;
+  blockId: string;
+  index: number;
 };
 
 export type YooptaEditorProps = {
@@ -19,6 +26,8 @@ export type YooptaEditorProps = {
   children?: React.ReactNode;
   placeholder?: string;
   style?: CSSProperties;
+  /** Custom render wrapper for each block. Useful for drag-and-drop integration. */
+  renderBlock?: (props: RenderBlockProps) => ReactNode;
 };
 
 type EditorState = {
@@ -35,6 +44,7 @@ const YooptaEditor = ({
   style,
   onChange,
   onPathChange,
+  renderBlock,
 }: YooptaEditorProps) => {
   const [editorState, setEditorState] = useState<EditorState>({ editor, version: 0 });
   const [, setStatePath] = useState<YooptaPath | null>(null);
@@ -78,7 +88,8 @@ const YooptaEditor = ({
         placeholder={placeholder}
         autoFocus={autoFocus}
         className={className}
-        style={style}>
+        style={style}
+        renderBlock={renderBlock}>
         {children}
       </Editor>
     </YooptaContextProvider>

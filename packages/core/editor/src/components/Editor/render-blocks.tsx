@@ -1,20 +1,22 @@
-import type { ReactElement } from 'react';
-import { useMemo } from 'react';
+import type { ReactElement, ReactNode } from 'react';
+import React, { useMemo } from 'react';
 
 import type { YooEditor } from '../../editor/types';
 import type { YooptaMark } from '../../marks';
 import { SlateEditorComponent } from '../../plugins/slate-editor-component';
+import type { RenderBlockProps } from '../../yoopta-editor';
 import { Block } from '../Block/Block';
 
-const DEFAULT_EDITOR_KEYS = [];
+const DEFAULT_EDITOR_KEYS: string[] = [];
 
 type Props = {
   editor: YooEditor;
   marks?: YooptaMark<any>[];
   placeholder?: string;
+  renderBlock?: (props: RenderBlockProps) => ReactNode;
 };
 
-const RenderBlocks = ({ editor, marks, placeholder }: Props): ReactElement<any, any> => {
+const RenderBlocks = ({ editor, marks, placeholder, renderBlock }: Props): ReactElement<any, any> => {
   const childrenUnorderedKeys = Object.keys(editor.children);
   const childrenKeys = useMemo(() => {
     if (childrenUnorderedKeys.length === 0) return DEFAULT_EDITOR_KEYS;
@@ -42,7 +44,7 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props): ReactElement<any, 
       continue;
     }
 
-    blocks.push(
+    const blockContent = (
       <Block key={blockId} block={block} blockId={blockId}>
         <SlateEditorComponent
           key={blockId}
@@ -54,8 +56,24 @@ const RenderBlocks = ({ editor, marks, placeholder }: Props): ReactElement<any, 
           extensions={plugin.extensions}
           placeholder={placeholder}
         />
-      </Block>,
+      </Block>
     );
+
+    // If renderBlock is provided, wrap the block content
+    if (renderBlock) {
+      blocks.push(
+        <React.Fragment key={blockId}>
+          {renderBlock({
+            block,
+            children: blockContent,
+            blockId,
+            index: i,
+          })}
+        </React.Fragment>,
+      );
+    } else {
+      blocks.push(blockContent);
+    }
   }
 
   return blocks as ReactElement<any, any>[];

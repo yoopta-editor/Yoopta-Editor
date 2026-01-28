@@ -1,0 +1,467 @@
+---
+title: 'Block Drag & Drop'
+description: 'Drag and drop support for reordering blocks in the editor'
+icon: 'grip-vertical'
+---
+
+## Overview
+
+The Block DnD components provide drag-and-drop functionality for reordering blocks in your editor. Built on top of [@dnd-kit](https://dndkit.com/), it integrates seamlessly with the `renderBlock` API to keep DnD logic outside the core editor.
+
+<Frame>
+  <img src="/images/block-dnd.gif" alt="Block Drag and Drop in action" />
+</Frame>
+
+## Features
+
+- **@dnd-kit powered** — industry-standard drag and drop library
+- **Multi-block selection** — drag multiple selected blocks at once
+- **Visual feedback** — drop indicators and drag overlays
+- **Accessible** — keyboard support built-in
+- **Customizable** — style drag handles and drop indicators
+- **Non-invasive** — uses `renderBlock` API, no core editor changes
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+The `@yoopta/ui` package includes `@dnd-kit` as a dependency.
+
+## Quick Start
+
+```tsx
+import { YooptaEditor, useYooptaEditor, type RenderBlockProps } from '@yoopta/editor';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+
+function MyEditor() {
+  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+
+  const renderBlock = useCallback(({ block, children, blockId }: RenderBlockProps) => (
+    <SortableBlock id={blockId}>
+      <DragHandle blockId={blockId}>
+        <GripVertical size={16} />
+      </DragHandle>
+      {children}
+    </SortableBlock>
+  ), []);
+
+  return (
+    <BlockDndContext editor={editor}>
+      <YooptaEditor
+        editor={editor}
+        renderBlock={renderBlock}
+      >
+        {/* Other UI components */}
+      </YooptaEditor>
+    </BlockDndContext>
+  );
+}
+```
+
+## How It Works
+
+The Block DnD system consists of three main parts:
+
+1. **BlockDndContext** — Wraps the editor, provides DnD context and handles block reordering
+2. **SortableBlock** — Wrapper for each block that makes it sortable
+3. **DragHandle** — The draggable trigger element
+
+The `renderBlock` prop on `YooptaEditor` allows you to wrap each block with DnD components without modifying the core editor.
+
+## API Reference
+
+### `BlockDndContext`
+
+The root provider that wraps your editor and handles drag events.
+
+```tsx
+<BlockDndContext
+  editor={editor}
+  onDragStart={(event) => console.log('Drag started', event)}
+  onDragEnd={(event) => console.log('Drag ended', event)}
+>
+  <YooptaEditor ... />
+</BlockDndContext>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `editor` | `YooEditor` | The Yoopta editor instance |
+| `children` | `ReactNode` | Editor and other components |
+| `onDragStart` | `(event: DragStartEvent) => void` | Called when drag starts |
+| `onDragEnd` | `(event: DragEndEvent) => void` | Called when drag ends |
+
+### `SortableBlock`
+
+Wrapper component that makes a block sortable.
+
+```tsx
+<SortableBlock
+  id={blockId}
+  disabled={isReadOnly}
+  className="my-sortable-block"
+>
+  {children}
+</SortableBlock>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `id` | `string` | Block ID (required) |
+| `children` | `ReactNode` | Block content |
+| `disabled` | `boolean` | Disable sorting for this block |
+| `className` | `string` | Custom CSS classes |
+
+### `DragHandle`
+
+The draggable trigger component. Users drag this to move blocks.
+
+```tsx
+<DragHandle
+  blockId={blockId}
+  className="my-drag-handle"
+>
+  <GripVertical size={16} />
+</DragHandle>
+```
+
+**Props:**
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `blockId` | `string` | Block ID this handle controls |
+| `children` | `ReactNode` | Handle content (usually an icon) |
+| `className` | `string` | Custom CSS classes |
+| `disabled` | `boolean` | Disable the handle |
+
+### `useBlockDnd`
+
+Hook for accessing DnD state and utilities.
+
+```tsx
+const {
+  activeId,
+  activeBlock,
+  isDragging,
+  draggedIds,
+  getOrderedBlockIds,
+} = useBlockDnd({ editor });
+```
+
+**Returns:**
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `activeId` | `string \| null` | Currently dragged block ID |
+| `activeBlock` | `YooptaBlockData \| null` | Currently dragged block data |
+| `isDragging` | `boolean` | Whether a drag is in progress |
+| `draggedIds` | `string[]` | All block IDs being dragged (for multi-select) |
+
+### `useBlockDndContext`
+
+Hook to access the DnD context value directly.
+
+```tsx
+const { activeId, activeBlock, isDragging, draggedIds, editor } = useBlockDndContext();
+```
+
+### `getOrderedBlockIds`
+
+Utility function to get block IDs sorted by their order.
+
+```tsx
+import { getOrderedBlockIds } from '@yoopta/ui/block-dnd';
+
+const orderedIds = getOrderedBlockIds(editor);
+// ['block-1', 'block-2', 'block-3', ...]
+```
+
+## Examples
+
+### Basic Setup
+
+```tsx
+import { useMemo, useCallback } from 'react';
+import { createYooptaEditor, YooptaEditor, type RenderBlockProps } from '@yoopta/editor';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+import { GripVertical } from 'lucide-react';
+
+function Editor() {
+  const editor = useMemo(() => createYooptaEditor({
+    plugins: PLUGINS,
+    marks: MARKS,
+  }), []);
+
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
+    <SortableBlock id={blockId}>
+      <div className="flex items-start gap-2">
+        <DragHandle blockId={blockId} className="opacity-0 group-hover:opacity-100">
+          <GripVertical size={16} className="text-gray-400" />
+        </DragHandle>
+        <div className="flex-1">{children}</div>
+      </div>
+    </SortableBlock>
+  ), []);
+
+  return (
+    <BlockDndContext editor={editor}>
+      <YooptaEditor
+        editor={editor}
+        renderBlock={renderBlock}
+      />
+    </BlockDndContext>
+  );
+}
+```
+
+### With FloatingBlockActions
+
+Integrate DnD with the existing FloatingBlockActions component:
+
+```tsx
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+
+function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
+    <SortableBlock id={blockId}>
+      {children}
+    </SortableBlock>
+  ), []);
+
+  return (
+    <BlockDndContext editor={editor}>
+      <YooptaEditor editor={editor} renderBlock={renderBlock}>
+        <FloatingBlockActions>
+          {({ blockId }) => (
+            <>
+              <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
+                <PlusIcon />
+              </FloatingBlockActions.Button>
+              {/* Use DragHandle inside FloatingBlockActions */}
+              <DragHandle blockId={blockId!} asChild>
+                <FloatingBlockActions.Button>
+                  <GripVertical size={16} />
+                </FloatingBlockActions.Button>
+              </DragHandle>
+            </>
+          )}
+        </FloatingBlockActions>
+      </YooptaEditor>
+    </BlockDndContext>
+  );
+}
+```
+
+### Multi-Block Drag
+
+When blocks are selected (via Shift+Click or SelectionBox), dragging one will move all selected blocks:
+
+```tsx
+function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+
+  const renderBlock = useCallback(({ children, blockId, block }: RenderBlockProps) => {
+    // Check if this block is in the multi-selection
+    const selectedPaths = editor.path.selected;
+    const isSelected = selectedPaths?.includes(block.meta.order);
+
+    return (
+      <SortableBlock id={blockId}>
+        <div className={isSelected ? 'ring-2 ring-blue-500' : ''}>
+          <DragHandle blockId={blockId}>
+            <GripVertical size={16} />
+          </DragHandle>
+          {children}
+        </div>
+      </SortableBlock>
+    );
+  }, [editor]);
+
+  return (
+    <BlockDndContext editor={editor}>
+      <YooptaEditor editor={editor} renderBlock={renderBlock}>
+        <SelectionBox />
+      </YooptaEditor>
+    </BlockDndContext>
+  );
+}
+```
+
+### Read-Only Mode
+
+Disable DnD in read-only mode:
+
+```tsx
+function Editor({ readOnly }) {
+  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
+    <SortableBlock id={blockId} disabled={readOnly}>
+      {!readOnly && (
+        <DragHandle blockId={blockId} disabled={readOnly}>
+          <GripVertical size={16} />
+        </DragHandle>
+      )}
+      {children}
+    </SortableBlock>
+  ), [readOnly]);
+
+  return (
+    <BlockDndContext editor={editor}>
+      <YooptaEditor editor={editor} readOnly={readOnly} renderBlock={renderBlock} />
+    </BlockDndContext>
+  );
+}
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  /* Drag handle */
+  --yoo-block-dnd-handle-opacity: 0;
+  --yoo-block-dnd-handle-hover-opacity: 1;
+  --yoo-block-dnd-handle-color: var(--yoopta-ui-muted-foreground);
+
+  /* Drop indicator */
+  --yoo-block-dnd-indicator-color: #3b82f6;
+  --yoo-block-dnd-indicator-height: 2px;
+
+  /* Dragging state */
+  --yoo-block-dnd-dragging-opacity: 0.5;
+  --yoo-block-dnd-dragging-bg: var(--yoopta-ui-accent);
+}
+```
+
+### Custom Styles
+
+```tsx
+<SortableBlock id={blockId} className="group relative">
+  <DragHandle
+    blockId={blockId}
+    className="absolute -left-8 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
+  >
+    <GripVertical className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+  </DragHandle>
+  {children}
+</SortableBlock>
+```
+
+## The `renderBlock` API
+
+The `renderBlock` prop on `YooptaEditor` is the key to integrating DnD without modifying the core editor.
+
+```tsx
+export type RenderBlockProps = {
+  /** The block data */
+  block: YooptaBlockData;
+  /** The rendered block content */
+  children: ReactNode;
+  /** The block's unique ID */
+  blockId: string;
+  /** The block's order index */
+  index: number;
+};
+
+<YooptaEditor
+  editor={editor}
+  renderBlock={({ block, children, blockId, index }: RenderBlockProps) => (
+    // Wrap each block with your custom wrapper
+    <SortableBlock id={blockId}>
+      {children}
+    </SortableBlock>
+  )}
+/>
+```
+
+This pattern allows you to:
+- Add DnD support
+- Add custom block wrappers
+- Implement block-level features without forking the editor
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Memoize renderBlock">
+    Always wrap `renderBlock` in `useCallback` to prevent unnecessary re-renders:
+
+    ```tsx
+    const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
+      <SortableBlock id={blockId}>{children}</SortableBlock>
+    ), []);
+    ```
+  </Accordion>
+
+  <Accordion title="Place BlockDndContext outside YooptaEditor">
+    The context must wrap the entire editor:
+
+    ```tsx
+    // Correct
+    <BlockDndContext editor={editor}>
+      <YooptaEditor editor={editor} renderBlock={renderBlock}>
+        {/* UI components */}
+      </YooptaEditor>
+    </BlockDndContext>
+
+    // Wrong - context inside editor
+    <YooptaEditor editor={editor}>
+      <BlockDndContext editor={editor}>
+        {/* ... */}
+      </BlockDndContext>
+    </YooptaEditor>
+    ```
+  </Accordion>
+
+  <Accordion title="Handle read-only mode">
+    Disable drag handles and sorting in read-only mode:
+
+    ```tsx
+    const isReadOnly = useYooptaReadOnly();
+
+    <SortableBlock id={blockId} disabled={isReadOnly}>
+      {!isReadOnly && <DragHandle blockId={blockId}>...</DragHandle>}
+      {children}
+    </SortableBlock>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## TypeScript
+
+Full type definitions are exported:
+
+```tsx
+import type {
+  BlockDndContextProps,
+  BlockDndContextValue,
+  SortableBlockProps,
+  DragHandleProps,
+  DropIndicatorProps,
+  UseBlockDndOptions,
+  UseBlockDndReturn,
+} from '@yoopta/ui/block-dnd';
+```
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Combine with floating actions for a complete block UI
+  </Card>
+  <Card title="SelectionBox" icon="object-group" href="/ui/selection-box">
+    Multi-select blocks for batch operations
+  </Card>
+</CardGroup>

@@ -36,3 +36,20 @@ export type {
   ElementOptionsInputProps,
   SelectOption,
 } from './element-options';
+export {
+  BlockDndContext,
+  useBlockDndContext,
+  SortableBlock,
+  DragHandle,
+  useBlockDnd,
+  getOrderedBlockIds,
+} from './block-dnd';
+export type {
+  BlockDndContextProps,
+  BlockDndContextValue,
+  SortableBlockProps,
+  DragHandleProps,
+  DropIndicatorProps,
+  UseBlockDndOptions,
+  UseBlockDndReturn,
+} from './block-dnd';

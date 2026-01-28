@@ -75,6 +75,7 @@ import { SlashActionMenuList } from '@yoopta/ui/slash-action-menu-list';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
 import { SelectionBox } from '@yoopta/ui/selection-box';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
 import { Portal } from '@yoopta/ui/portal';
 import { Overlay } from '@yoopta/ui/overlay';
 ```
@@ -102,6 +103,7 @@ import { Overlay } from '@yoopta/ui/overlay';
 | `@yoopta/ui/floating-block-actions` | `FloatingBlockActions` |
 | `@yoopta/ui/block-options` | `BlockOptions`, `useBlockActions` |
 | `@yoopta/ui/selection-box` | `SelectionBox` |
+| `@yoopta/ui/block-dnd` | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd` |
 | `@yoopta/ui/portal` | `Portal` |
 | `@yoopta/ui/overlay` | `Overlay` |
 
@@ -127,6 +129,9 @@ import { Overlay } from '@yoopta/ui/overlay';
   </Card>
   <Card title="SelectionBox" icon="object-group" href="/ui/selection-box">
     Rectangle selection for selecting multiple blocks
+  </Card>
+  <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
+    Drag and drop support for reordering blocks
   </Card>
 </CardGroup>
 
@@ -456,7 +461,7 @@ import { SlashActionMenuList, FloatingToolbar } from '@yoopta/ui';
   <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
     Add block context menus
   </Card>
-  <Card title="Examples" icon="code" href="/examples/custom-toolbar">
-    See complete examples
+  <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
+    Add drag and drop for blocks
   </Card>
 </CardGroup>

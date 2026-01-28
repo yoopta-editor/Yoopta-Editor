@@ -2,7 +2,7 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
 import { autoUpdate, flip, offset, shift, useFloating, useMergeRefs, useTransitionStyles } from '@floating-ui/react';
-import { useYooptaEditor } from '@yoopta/editor';
+import { getRootBlockElement, useYooptaEditor } from '@yoopta/editor';
 
 import { ActionMenuListContext, useActionMenuListContext } from './context';
 import type { ActionMenuItem } from './types';
@@ -57,7 +57,11 @@ const ActionMenuListRoot = ({
 
   // Get available actions from editor plugins
   const actions = useMemo(
-    () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)),
+    () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)).filter(item => {
+      const plugin = editor.plugins[item.type];
+      const rootElement = getRootBlockElement(plugin.elements);
+      return rootElement?.props?.nodeType !== 'inline' && rootElement?.props?.nodeType !== 'inlineVoid' && rootElement?.props?.nodeType !== 'void';
+    }),
     [editor],
   );
 

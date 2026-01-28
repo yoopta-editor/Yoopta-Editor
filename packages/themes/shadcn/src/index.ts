@@ -22,3 +22,4 @@ export { TabsUI } from './tabs';
 export { StepsUI } from './steps';
 export { DividerUI } from './divider';
 export default applyTheme;
+export { applyTheme };

@@ -20,8 +20,7 @@ import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 
-import applyTheme from '@yoopta/themes-shadcn';
-// import applyTheme from '@yoopta/themes-material';
+import { applyTheme } from '@yoopta/themes-shadcn';
 
 const YImage = Image.extend({
   options: {
