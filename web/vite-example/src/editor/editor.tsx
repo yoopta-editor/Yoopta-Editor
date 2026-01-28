@@ -1,5 +1,5 @@
-import React from 'react';
-import YooptaEditorLib, { createYooptaEditor } from '@yoopta/editor';
+import React, { useCallback } from 'react';
+import YooptaEditorLib, { createYooptaEditor, RenderBlockProps } from '@yoopta/editor';
 import { useMemo } from 'react';
 import { plugins } from './plugins';
 import { marks } from './marks';
@@ -7,6 +7,9 @@ import { SlashMenu } from './components/slash-menu';
 import { FloatingToolbarComponent } from './components/floating-toolbar';
 import { SelectionBox } from '@yoopta/ui/selection-box';
 import { FloatingBlockActionsComponent } from './components/floating-block-actions';
+import { withMentions } from '@yoopta/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn';
+import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 
 const EDITOR_STYLE = {
   width: '100%',
@@ -18,20 +21,33 @@ type YooptaEditorProps = {
 };
 
 export const YooptaEditor = ({ containerRef }: YooptaEditorProps) => {
-  const editor = useMemo(() => createYooptaEditor({
+  const editor = useMemo(() => withMentions(createYooptaEditor({
     plugins: plugins,
     marks: marks,
     value: JSON.parse(localStorage.getItem('value') || '{}'),
-  }), []);
+  })), []);
+
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
+    return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
+  }, []);
 
   return (
-    <YooptaEditorLib editor={editor} autoFocus onChange={(value) => {
-      localStorage.setItem('value', JSON.stringify(value));
-    }} style={EDITOR_STYLE}>
-      <FloatingBlockActionsComponent />
-      <SlashMenu />
-      <FloatingToolbarComponent />
-      <SelectionBox selectionBoxElement={containerRef} />
-    </YooptaEditorLib>
+    <BlockDndContext editor={editor}>
+      <YooptaEditorLib
+        renderBlock={renderBlock}
+        editor={editor}
+        autoFocus
+        style={EDITOR_STYLE}
+        onChange={(value) => {
+          localStorage.setItem('value', JSON.stringify(value));
+        }}
+      >
+        <FloatingBlockActionsComponent />
+        <SlashMenu />
+        <FloatingToolbarComponent />
+        <SelectionBox selectionBoxElement={containerRef} />
+        <MentionDropdown />
+      </YooptaEditorLib>
+    </BlockDndContext>
   );
 };

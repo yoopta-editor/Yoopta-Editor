@@ -22,7 +22,7 @@ import type {
 } from '../types';
 import { useXHRRequest } from './use-xhr';
 
-const DOCS_URL = 'https://yoopta.dev/docs/plugins/video';
+const DOCS_URL = 'https://docs.yoopta.dev/plugins/video';
 
 // Type guard to check if options is a custom function
 const isUploadFn = (

@@ -19,7 +19,7 @@ import type {
 } from '../types';
 import { useXHRRequest } from './use-xhr';
 
-const DOCS_URL = 'https://yoopta.dev/docs/plugins/image';
+const DOCS_URL = 'https://docs.yoopta.dev/plugins/image';
 
 // Type guard to check if options is a custom function
 const isUploadFn = (

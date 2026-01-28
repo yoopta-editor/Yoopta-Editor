@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react';
 
 import type {
-  UseFileDeleteReturn,
-  UseFileUploadReturn,
   FileDeleteEndpointOptions,
   FileDeleteFn,
   FileDeleteOptions,
@@ -12,17 +10,20 @@ import type {
   FileUploadFn,
   FileUploadOptions,
   FileUploadProgress,
+  FileUploadResponse,
   FileUploadResult,
   FileUploadState,
+  UseFileDeleteReturn,
+  UseFileUploadReturn,
 } from '../types';
 import { useXHRRequest } from './use-xhr';
 
-const DOCS_URL = 'https://yoopta.dev/docs/plugins/file';
+const DOCS_URL = 'https://docs.yoopta.dev/plugins/file';
 
 // Type guard to check if options is a custom function
 const isUploadFn = (
   options: FileUploadOptions,
-): options is (file: File, onProgress?: (progress: FileUploadProgress) => void) => Promise<unknown> =>
+): options is (file: File, onProgress?: (progress: FileUploadProgress) => void) => Promise<FileUploadResponse> =>
   typeof options === 'function';
 
 // Type guard to check if delete options is a custom function
@@ -34,40 +35,40 @@ const validateUploadOptions = (options: FileUploadOptions | undefined): void => 
   if (options === undefined || options === null) {
     throw new Error(
       `[Yoopta File] Upload options are not configured. ` +
-        `Please provide 'upload' option when extending the File plugin.\n\n` +
-        `Example:\n` +
-        `File.extend({\n` +
-        `  options: {\n` +
-        `    upload: async (file) => {\n` +
-        `      // Upload file to your storage and return file props\n` +
-        `      return { src: '...', name: file.name, size: file.size };\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `Please provide 'upload' option when extending the File plugin.\n\n` +
+      `Example:\n` +
+      `File.extend({\n` +
+      `  options: {\n` +
+      `    upload: async (file) => {\n` +
+      `      // Upload file to your storage and return file props\n` +
+      `      return { src: '...', name: file.name, size: file.size };\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options !== 'function' && typeof options !== 'object') {
     throw new Error(
       `[Yoopta File] Invalid upload options. Expected a function or endpoint configuration object.\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options === 'object' && !options.endpoint) {
     throw new Error(
       `[Yoopta File] Missing 'endpoint' in upload options. ` +
-        `When using endpoint-based upload, you must provide an 'endpoint' URL.\n\n` +
-        `Example:\n` +
-        `File.extend({\n` +
-        `  options: {\n` +
-        `    upload: {\n` +
-        `      endpoint: '/api/upload-file',\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `When using endpoint-based upload, you must provide an 'endpoint' URL.\n\n` +
+      `Example:\n` +
+      `File.extend({\n` +
+      `  options: {\n` +
+      `    upload: {\n` +
+      `      endpoint: '/api/upload-file',\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 };
@@ -82,23 +83,23 @@ const validateDeleteOptions = (options: FileDeleteOptions | undefined): boolean 
   if (typeof options !== 'function' && typeof options !== 'object') {
     throw new Error(
       `[Yoopta File] Invalid delete options. Expected a function or endpoint configuration object.\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
   if (typeof options === 'object' && !options.endpoint) {
     throw new Error(
       `[Yoopta File] Missing 'endpoint' in delete options. ` +
-        `When using endpoint-based delete, you must provide an 'endpoint' URL.\n\n` +
-        `Example:\n` +
-        `File.extend({\n` +
-        `  options: {\n` +
-        `    delete: {\n` +
-        `      endpoint: '/api/delete-file',\n` +
-        `    },\n` +
-        `  },\n` +
-        `})\n\n` +
-        `See documentation: ${DOCS_URL}`,
+      `When using endpoint-based delete, you must provide an 'endpoint' URL.\n\n` +
+      `Example:\n` +
+      `File.extend({\n` +
+      `  options: {\n` +
+      `    delete: {\n` +
+      `      endpoint: '/api/delete-file',\n` +
+      `    },\n` +
+      `  },\n` +
+      `})\n\n` +
+      `See documentation: ${DOCS_URL}`,
     );
   }
 
@@ -194,7 +195,7 @@ export const useFileDelete = (options: FileDeleteOptions | undefined): UseFileDe
     return {
       ...customState,
       deleteFile: customDeleteFile,
-      cancel: () => {},
+      cancel: () => { },
       reset: customReset,
     };
   }
@@ -203,7 +204,7 @@ export const useFileDelete = (options: FileDeleteOptions | undefined): UseFileDe
     return {
       ...customState,
       deleteFile: customDeleteFile,
-      cancel: () => {},
+      cancel: () => { },
       reset: customReset,
     };
   }
@@ -320,7 +321,7 @@ export const useFileUpload = (options: FileUploadOptions | undefined): UseFileUp
     return {
       ...customState,
       upload: customUpload,
-      cancel: () => {},
+      cancel: () => { },
       reset: customReset,
     };
   }

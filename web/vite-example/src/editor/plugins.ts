@@ -15,28 +15,22 @@ import File from '@yoopta/file';
 import Tabs from '@yoopta/tabs';
 import Steps from '@yoopta/steps';
 import Carousel from '@yoopta/carousel';
+import Mention from '@yoopta/mention';
 
-import applyTheme from '@yoopta/themes-shadcn';
-
-import { uploadToCloudinary } from "../utils/cloudinary";
+import { applyTheme } from '@yoopta/themes-shadcn';
 
 const YImage = Image.extend({
   options: {
     upload: async (file) => {
-      const data = await uploadToCloudinary(file, 'image');
-
       return {
-        id: data.public_id,
-        src: data.secure_url,
+        id: file.name,
+        src: URL.createObjectURL(file),
         alt: 'cloudinary',
         sizes: {
-          width: data.width,
-          height: data.height,
+          width: file.size,
+          height: file.size,
         },
       };
-    },
-    delete: async (element) => {
-      // await deleteFromCloudinary(element);
     },
   },
 })
@@ -44,14 +38,13 @@ const YImage = Image.extend({
 export const plugins = applyTheme([
   File.extend({
     options: {
-      onUpload: async (file) => {
-        const data = await uploadToCloudinary(file, 'auto');
-
+      upload: async (file) => {
         return {
-          src: data.secure_url,
-          format: data.format,
-          name: data.name,
-          size: data.bytes,
+          id: file.name,
+          src: URL.createObjectURL(file),
+          name: file.name,
+          size: file.size,
+          format: file.name.split('.').pop(),
         };
       },
     },
@@ -76,14 +69,12 @@ export const plugins = applyTheme([
   Video.extend({
     options: {
       upload: async (file) => {
-        const data = await uploadToCloudinary(file, 'video');
         return {
-          src: data.secure_url,
-          alt: 'cloudinary',
-          sizes: {
-            width: data.width,
-            height: data.height,
-          },
+          id: file.name,
+          src: URL.createObjectURL(file),
+          name: file.name,
+          size: file.size,
+          format: file.name.split('.').pop(),
         };
       },
     },
@@ -93,4 +84,28 @@ export const plugins = applyTheme([
     injectElementsFromPlugins: [YImage]
   }),
   Tabs,
+  Mention.extend({
+    options: {
+      onSearch: async (query, trigger) => {
+        if (trigger.type === 'page') {
+          const response = await fetch(`https://jsonplaceholder.typicode.com/posts?q=${query}`);
+          const data = await response.json();
+          return data.map((post: any) => ({
+            id: post.id,
+            name: post.title,
+            avatar: post.body,
+          }));
+        }
+
+        const response = await fetch(`https://jsonplaceholder.typicode.com/users?q=${query}`);
+        const data = await response.json();
+        return data.map((user: any) => ({
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+        }));
+      },
+      triggers: [{ char: '@', type: 'user' }, { char: '#', type: 'page' }],
+    },
+  }),
 ]);

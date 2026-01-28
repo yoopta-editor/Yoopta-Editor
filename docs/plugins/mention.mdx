@@ -34,7 +34,7 @@ const editor = withMentions(
       }),
       // ... other plugins
     ],
-  })
+  }),
 );
 
 <YooptaEditor editor={editor} plugins={plugins} />;
@@ -43,25 +43,26 @@ const editor = withMentions(
 <Warning>
   **Required Configuration**
 
-  You **must** configure the `onSearch` option. Without this option, the mention dropdown won't work.
+You **must** configure the `onSearch` option. Without this option, the mention dropdown won't work.
 
-  ```jsx
-  const plugins = [
-    Mention.extend({
-      options: {
-        onSearch: async (query, trigger) => {
-          // Your search logic here
-          return [
-            { id: '1', name: 'John Doe', avatar: '...', type: 'user' },
-            // ... more results
-          ];
-        },
+```jsx
+const plugins = [
+  Mention.extend({
+    options: {
+      onSearch: async (query, trigger) => {
+        // Your search logic here
+        return [
+          { id: '1', name: 'John Doe', avatar: '...', type: 'user' },
+          // ... more results
+        ];
       },
-    }),
-  ];
-  ```
+    },
+  }),
+];
+```
 
-  See the [Configuration](#configuration) section below for detailed examples.
+See the [Configuration](#configuration) section below for detailed examples.
+
 </Warning>
 
 ## Features
@@ -90,7 +91,7 @@ const plugins = [
         // Search users
         const response = await fetch(`/api/users?q=${query}`);
         const users = await response.json();
-        
+
         return users.map((user) => ({
           id: user.id,
           name: user.name,
@@ -142,8 +143,8 @@ const plugins = [
   Mention.extend({
     options: {
       triggers: [
-        { 
-          char: '@', 
+        {
+          char: '@',
           type: 'user',
           allowSpaces: false, // Don't allow spaces in search query
           allowedAfter: /\s|^/, // Only trigger after whitespace or start
@@ -194,22 +195,26 @@ const plugins = [
 </ResponseField>
 
 <ResponseField name="char" type="string" default="'@'">
-  Simple single trigger character (shorthand for `triggers: [{ char }]`). Use this for a single trigger, or use `triggers` array for multiple triggers.
+  Simple single trigger character (shorthand for `triggers: [{char}]`). Use this for a single
+  trigger, or use `triggers` array for multiple triggers.
 </ResponseField>
 
 <ResponseField name="onSearch" type="function" required>
   Search function called when user types after trigger.
 
-  **Signature:**
-  ```typescript
-  (query: string, trigger: MentionTrigger) => Promise<MentionItem[]>
-  ```
+**Signature:**
 
-  **Parameters:**
-  - `query` - The search query (without trigger char)
-  - `trigger` - The trigger that opened the dropdown
+```typescript
+(query: string, trigger: MentionTrigger) => Promise<MentionItem[]>;
+```
 
-  **Returns:** Promise resolving to array of `MentionItem` objects
+**Parameters:**
+
+- `query` - The search query (without trigger char)
+- `trigger` - The trigger that opened the dropdown
+
+**Returns:** Promise resolving to array of `MentionItem` objects
+
 </ResponseField>
 
 <ResponseField name="debounceMs" type="number" default="300">
@@ -217,34 +222,41 @@ const plugins = [
 </ResponseField>
 
 <ResponseField name="minQueryLength" type="number" default="0">
-  Minimum query length before triggering search. Set to `1` or higher to avoid searching on empty query.
+  Minimum query length before triggering search. Set to `1` or higher to avoid searching on empty
+  query.
 </ResponseField>
 
 <ResponseField name="onSelect" type="function">
   Called when a mention is selected.
 
-  **Signature:**
-  ```typescript
-  (item: MentionItem, trigger: MentionTrigger) => void
-  ```
+**Signature:**
+
+```typescript
+(item: MentionItem, trigger: MentionTrigger) => void
+```
+
 </ResponseField>
 
 <ResponseField name="onOpen" type="function">
   Called when dropdown opens.
 
-  **Signature:**
-  ```typescript
-  (trigger: MentionTrigger) => void
-  ```
+**Signature:**
+
+```typescript
+(trigger: MentionTrigger) => void
+```
+
 </ResponseField>
 
 <ResponseField name="onClose" type="function">
   Called when dropdown closes.
 
-  **Signature:**
-  ```typescript
-  () => void
-  ```
+**Signature:**
+
+```typescript
+() => void
+```
+
 </ResponseField>
 
 <ResponseField name="closeOnSelect" type="boolean" default="true">
@@ -280,14 +292,15 @@ const plugins = [
 <ParamField path="meta" type="object">
   Additional metadata for the mention. Can contain any custom fields:
 
-  ```typescript
-  {
-    email?: string;
-    url?: string;
-    description?: string;
-    [key: string]: unknown;
-  }
-  ```
+```typescript
+{
+  email?: string;
+  url?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+```
+
 </ParamField>
 
 ## Commands
@@ -345,7 +358,7 @@ When using a theme (e.g., `@yoopta/themes-shadcn`), you need to:
 import { Mention } from '@yoopta/mention';
 import { withMentions } from '@yoopta/mention';
 import { withShadcnUI } from '@yoopta/themes-shadcn';
-import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn';
 
 const plugins = withShadcnUI([
   Mention.extend({
@@ -363,14 +376,14 @@ const editor = withMentions(
   createYooptaEditor({
     plugins,
     // ...
-  })
+  }),
 );
 
 <YooptaEditor editor={editor}>
   <YooptaToolbar />
   <MentionDropdown /> {/* Add this component */}
   {/* ... other UI components */}
-</YooptaEditor>
+</YooptaEditor>;
 ```
 
 ## Custom Rendering
@@ -406,7 +419,7 @@ You can create a custom dropdown using the `useMentionDropdown` hook:
 
 ```jsx
 import { useMentionDropdown } from '@yoopta/mention';
-import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn';
 
 function CustomMentionDropdown() {
   const {
@@ -424,10 +437,7 @@ function CustomMentionDropdown() {
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={refs.setFloating}
-      style={floatingStyles}
-      className="mention-dropdown">
+    <div ref={refs.setFloating} style={floatingStyles} className="mention-dropdown">
       {loading && <div>Loading...</div>}
       {items.map((item, index) => (
         <div
@@ -450,9 +460,9 @@ function CustomMentionDropdown() {
 The plugin automatically deserializes mention spans:
 
 ```html
-<span 
-  data-mention 
-  data-mention-id="123" 
+<span
+  data-mention
+  data-mention-id="123"
   data-mention-name="John Doe"
   data-mention-avatar="https://example.com/avatar.png"
   data-mention-type="user">
@@ -463,9 +473,9 @@ The plugin automatically deserializes mention spans:
 ### HTML Serialization
 
 ```html
-<span 
-  data-mention 
-  data-mention-id="123" 
+<span
+  data-mention
+  data-mention-id="123"
   data-mention-name="John Doe"
   data-mention-avatar="https://example.com/avatar.png"
   data-mention-type="user"
@@ -502,21 +512,29 @@ The plugin automatically deserializes mention spans:
     Use the `debounceMs` option to reduce API calls while users are typing. A value of 300ms is usually optimal.
   </Accordion>
 
-  <Accordion title="Set Minimum Query Length">
-    Use `minQueryLength: 1` or higher to avoid searching on empty queries, which can be expensive.
-  </Accordion>
+{' '}
 
-  <Accordion title="Handle Loading States">
-    Show loading indicators in your custom dropdown while search is in progress.
-  </Accordion>
+<Accordion title="Set Minimum Query Length">
+  Use `minQueryLength: 1` or higher to avoid searching on empty queries, which can be expensive.
+</Accordion>
 
-  <Accordion title="Provide Fallbacks">
-    Handle search errors gracefully and provide user feedback.
-  </Accordion>
+{' '}
 
-  <Accordion title="Limit Results">
-    Return a reasonable number of results (e.g., 10-20) to avoid overwhelming users.
-  </Accordion>
+<Accordion title="Handle Loading States">
+  Show loading indicators in your custom dropdown while search is in progress.
+</Accordion>
+
+{' '}
+
+<Accordion title="Provide Fallbacks">
+  Handle search errors gracefully and provide user feedback.
+</Accordion>
+
+{' '}
+
+<Accordion title="Limit Results">
+  Return a reasonable number of results (e.g., 10-20) to avoid overwhelming users.
+</Accordion>
 
   <Accordion title="Use Types for Organization">
     Use the `type` field to categorize mentions and enable different search logic per type.
@@ -537,20 +555,20 @@ const {
   isOpen,
   query,
   trigger,
-  
+
   // Results
   items,
   loading,
   error,
-  
+
   // Navigation
   selectedIndex,
   setSelectedIndex,
-  
+
   // Actions
   selectItem,
   close,
-  
+
   // Refs for floating-ui
   refs,
   floatingStyles,
@@ -571,11 +589,12 @@ const {
     **Solution:**
     ```jsx
     const editor = withMentions(createYooptaEditor({ ... }));
-    
+
     <YooptaEditor editor={editor}>
       <MentionDropdown />
     </YooptaEditor>
     ```
+
   </Accordion>
 
   <Accordion title="Search not working">
@@ -597,12 +616,14 @@ const {
       }));
     },
     ```
+
   </Accordion>
 
   <Accordion title="Mention not inserting">
     Make sure the mention is being inserted in a block that supports inline elements (e.g., Paragraph, Heading).
 
     **Solution:** Mentions are inline elements and can only be inserted in blocks that support inline content.
+
   </Accordion>
 
   <Accordion title="Multiple triggers not working">
@@ -618,6 +639,7 @@ const {
       // Don't use 'char' when using 'triggers'
     }
     ```
+
   </Accordion>
 </AccordionGroup>
 

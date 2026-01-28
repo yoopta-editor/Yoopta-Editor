@@ -11,7 +11,7 @@ const navigation = [
   { name: "Features", href: "#features" },
   { name: "Plugins", href: "#plugins" },
   { name: "Roadmap", href: "#waitlist" },
-  { name: "Docs", href: "https://yoopta.dev/docs" },
+  { name: "Docs", href: "https://docs.yoopta.dev" },
 ];
 
 export function Header() {

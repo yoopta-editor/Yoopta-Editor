@@ -12,9 +12,8 @@ const navigation = {
     { name: "Playground", href: "/playground" },
   ],
   resources: [
-    { name: "Documentation", href: "https://yoopta.dev/docs" },
-    { name: "Examples", href: "https://yoopta.dev/examples" },
-    { name: "API Reference", href: "https://yoopta.dev/docs/api" },
+    { name: "Documentation", href: "https://docs.yoopta.dev" },
+    { name: "API Reference", href: "https://docs.yoopta.dev/core/editor" },
     { name: "Changelog", href: "https://github.com/Darginec05/Yoopta-Editor/releases" },
   ],
   community: [
