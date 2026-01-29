@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/themes-shadcn",
-  "version": "6.0.0-beta.9",
+  "version": "6.0.0-beta.10",
   "description": "Shadcn UI theme for Yoopta Editor plugins",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -12,26 +12,66 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "accordion": ["./dist/types/accordion/index.d.ts"],
-      "blockquote": ["./dist/types/blockquote/index.d.ts"],
-      "callout": ["./dist/types/callout/index.d.ts"],
-      "carousel": ["./dist/types/carousel/index.d.ts"],
-      "code": ["./dist/types/code/index.d.ts"],
-      "code-group": ["./dist/types/code-group/index.d.ts"],
-      "divider": ["./dist/types/divider/index.d.ts"],
-      "embed": ["./dist/types/embed/index.d.ts"],
-      "file": ["./dist/types/file/index.d.ts"],
-      "headings": ["./dist/types/headings/index.d.ts"],
-      "image": ["./dist/types/image/index.d.ts"],
-      "link": ["./dist/types/link/index.d.ts"],
-      "lists": ["./dist/types/lists/index.d.ts"],
-      "mention": ["./dist/types/mention/index.d.ts"],
-      "paragraph": ["./dist/types/paragraph/index.d.ts"],
-      "steps": ["./dist/types/steps/index.d.ts"],
-      "table": ["./dist/types/table/index.d.ts"],
-      "table-of-contents": ["./dist/types/table-of-contents/index.d.ts"],
-      "tabs": ["./dist/types/tabs/index.d.ts"],
-      "video": ["./dist/types/video/index.d.ts"]
+      "accordion": [
+        "./dist/types/accordion/index.d.ts"
+      ],
+      "blockquote": [
+        "./dist/types/blockquote/index.d.ts"
+      ],
+      "callout": [
+        "./dist/types/callout/index.d.ts"
+      ],
+      "carousel": [
+        "./dist/types/carousel/index.d.ts"
+      ],
+      "code": [
+        "./dist/types/code/index.d.ts"
+      ],
+      "code-group": [
+        "./dist/types/code-group/index.d.ts"
+      ],
+      "divider": [
+        "./dist/types/divider/index.d.ts"
+      ],
+      "embed": [
+        "./dist/types/embed/index.d.ts"
+      ],
+      "file": [
+        "./dist/types/file/index.d.ts"
+      ],
+      "headings": [
+        "./dist/types/headings/index.d.ts"
+      ],
+      "image": [
+        "./dist/types/image/index.d.ts"
+      ],
+      "link": [
+        "./dist/types/link/index.d.ts"
+      ],
+      "lists": [
+        "./dist/types/lists/index.d.ts"
+      ],
+      "mention": [
+        "./dist/types/mention/index.d.ts"
+      ],
+      "paragraph": [
+        "./dist/types/paragraph/index.d.ts"
+      ],
+      "steps": [
+        "./dist/types/steps/index.d.ts"
+      ],
+      "table": [
+        "./dist/types/table/index.d.ts"
+      ],
+      "table-of-contents": [
+        "./dist/types/table-of-contents/index.d.ts"
+      ],
+      "tabs": [
+        "./dist/types/tabs/index.d.ts"
+      ],
+      "video": [
+        "./dist/types/video/index.d.ts"
+      ]
     }
   },
   "sideEffects": [
