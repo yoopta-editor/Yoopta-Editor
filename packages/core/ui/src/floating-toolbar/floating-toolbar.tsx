@@ -37,7 +37,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     middleware: [inline(), flip(), shift(), offset(10)],
   });
 
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+  const { styles: transitionStyles } = useTransitionStyles(context, {
     duration: 100,
   });
 
@@ -65,8 +65,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     if (frozen) return;
 
     const toolbarEl = refs.floating.current;
-    console.log('FloatingToolbarRoot selectionChange toolbarEl', toolbarEl);
-    if (toolbarEl && toolbarEl.contains(document.activeElement)) {
+    if (toolbarEl?.contains(document.activeElement)) {
       return;
     }
 
@@ -182,18 +181,19 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     return () => window.document.removeEventListener('selectionchange', throttledSelectionChange);
   }, [editor.path.selected, editor.path.selection, isOpen, throttledSelectionChange, close, onBlockSelectionChange]);
 
-  // Context value
+  // Context value: use isOpen (state) for rendering content so the floating div mounts and ref is set;
+  // useTransitionStyles' isMounted can lag and in prod refs.floating stayed null when content was gated by isMounted.
   const contextValue = useMemo(
     () => ({
-      isOpen: isMounted,
+      isOpen,
       floatingStyles: combinedStyles,
       setFloatingRef: refs.setFloating,
     }),
-    [isMounted, combinedStyles, refs.setFloating],
+    [isOpen, combinedStyles, refs.setFloating],
   );
 
-  // Render props or regular children
-  const content = typeof children === 'function' ? children({ isOpen: isMounted }) : children;
+  // Render props or regular children (use isOpen so ref is set as soon as toolbar opens)
+  const content = typeof children === 'function' ? children({ isOpen }) : children;
 
   return (
     <FloatingToolbarContext.Provider value={contextValue}>

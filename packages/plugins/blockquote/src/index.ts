@@ -1,4 +1,4 @@
-import { Blockquote } from './plugin/BlockquotePlugin';
+import { Blockquote } from './plugin/blockquote-plugin';
 import { BlockquoteElement } from './types';
 
 export { BlockquoteCommands } from './commands/BlockquoteCommands';

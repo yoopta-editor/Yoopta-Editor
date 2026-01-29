@@ -4,7 +4,7 @@ export const Blockquote = (props: PluginElementRenderProps) => {
   const { attributes, children } = props;
 
   return (
-    <blockquote {...attributes} className="mt-6 border-l-2 pl-6">
+    <blockquote {...attributes} className="mt-4 border-l-2 pl-6">
       {children}
     </blockquote>
   );

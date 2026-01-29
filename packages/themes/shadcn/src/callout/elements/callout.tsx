@@ -83,7 +83,7 @@ export const Callout = (props: PluginElementRenderProps) => {
     <div
       {...attributes}
       className={cn(
-        'group relative rounded-lg border-l-4 p-4 [&>p]:m-0 [&>p]:text-sm',
+        'mt-4 group relative rounded-lg border-l-4 p-4 [&>p]:m-0 [&>p]:text-sm',
         getThemeClasses(theme),
       )}>
       {children}

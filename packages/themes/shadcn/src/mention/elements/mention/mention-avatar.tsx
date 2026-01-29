@@ -74,7 +74,7 @@ export const MentionAvatar = ({ name, avatar, size = 'inline', className }: Ment
 
   return (
     <div
-      style={{ width: styles.width, height: styles.height, fontSize: styles.fontSize }}
+      style={{ width: styles.width, height: styles.height }}
       className={cn(
         'rounded-full flex items-center justify-center font-medium text-white flex-shrink-0',
         bgColor,

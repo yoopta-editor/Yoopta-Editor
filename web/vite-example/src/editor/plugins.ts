@@ -16,6 +16,7 @@ import Tabs from '@yoopta/tabs';
 import Steps from '@yoopta/steps';
 import Carousel from '@yoopta/carousel';
 import Mention from '@yoopta/mention';
+import TableOfContents from '@yoopta/table-of-contents';
 
 import { applyTheme } from '@yoopta/themes-shadcn';
 
@@ -36,6 +37,7 @@ const YImage = Image.extend({
 })
 
 export const plugins = applyTheme([
+  TableOfContents,
   File.extend({
     options: {
       upload: async (file) => {
