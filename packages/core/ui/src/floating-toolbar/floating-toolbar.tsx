@@ -1,4 +1,5 @@
 import {
+  type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
   forwardRef,
@@ -9,12 +10,12 @@ import {
   useState,
 } from 'react';
 import {
+  autoUpdate,
   flip,
   inline,
   offset,
   shift,
   useFloating,
-  useMergeRefs,
   useTransitionStyles,
 } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
@@ -39,37 +40,33 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
   const editor = useYooptaEditor();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Local ref to track floating element (persists even when conditionally rendered)
+  // Local ref to track floating element for checking if active element is inside
   const floatingElRef = useRef<HTMLElement | null>(null);
 
-  // Floating UI setup
+  // Floating UI setup with autoUpdate for proper positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: 'top-start',
     open: isOpen,
     middleware: [inline(), flip(), shift(), offset(10)],
+    whileElementsMounted: autoUpdate,
   });
 
-  console.log('FloatingToolbarRoot refs', refs);
-
-  const { styles: transitionStyles } = useTransitionStyles(context, {
+  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
     duration: 100,
   });
 
+  console.log('FloatingToolbarRoot refs', refs);
+  console.log('FloatingToolbarRoot open state', { isOpen, isMounted });
+
   // Combined styles
-  const combinedStyles = useMemo(
+  const combinedStyles: CSSProperties = useMemo(
     () => ({ ...floatingStyles, ...transitionStyles }),
     [floatingStyles, transitionStyles],
   );
 
-  // Combined ref setter that updates both floating-ui ref and local ref
-  const setFloatingRef = useCallback(
-    (node: HTMLElement | null) => {
-      console.log('setFloatingRef node', node);
-      floatingElRef.current = node;
-      refs.setFloating(node);
-    },
-    [refs],
-  );
+  // Keep setReference in a ref for stable callback
+  const setReferenceFnRef = useRef(refs.setReference);
+  setReferenceFnRef.current = refs.setReference;
 
   // Close toolbar
   const close = useCallback(() => {
@@ -85,6 +82,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
   const selectionChange = useCallback(() => {
     if (frozen) return;
 
+    // Check if active element is inside the toolbar
     const toolbarEl = floatingElRef.current;
     if (toolbarEl?.contains(document.activeElement)) {
       return;
@@ -125,13 +123,13 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
         getClientRects: () => domRange.getClientRects(),
       };
 
-      refs.setReference(reference);
+      setReferenceFnRef.current(reference);
 
       if (!isOpen) {
         open();
       }
     }
-  }, [frozen, refs, editor.refElement, close, open, isOpen]);
+  }, [frozen, editor.refElement, close, open, isOpen]);
 
   // Block selection change handler
   const onBlockSelectionChange = useCallback(() => {
@@ -167,12 +165,12 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
 
     if (!blockEl) return;
 
-    refs.setReference(blockEl);
+    setReferenceFnRef.current(blockEl);
 
     if (!isOpen) {
       open();
     }
-  }, [editor, refs, close, open, isOpen]);
+  }, [editor, close, open, isOpen]);
 
   // Throttled selection change
   const throttledSelectionChange = useMemo(
@@ -202,19 +200,28 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     return () => window.document.removeEventListener('selectionchange', throttledSelectionChange);
   }, [editor.path.selected, editor.path.selection, isOpen, throttledSelectionChange, close, onBlockSelectionChange]);
 
-  // Context value: use isOpen (state) for rendering content so the floating div mounts and ref is set;
-  // useTransitionStyles' isMounted can lag and in prod refs.floating stayed null when content was gated by isMounted.
-  const contextValue = useMemo(
-    () => ({
-      isOpen,
-      floatingStyles: combinedStyles,
-      setFloatingRef,
-    }),
-    [isOpen, combinedStyles, setFloatingRef],
+  // Ref callback that updates both local ref and floating ref
+  const handleFloatingRef = useCallback(
+    (node: HTMLElement | null) => {
+      floatingElRef.current = node;
+      refs.setFloating(node);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [refs.setFloating, refs.setReference],
   );
 
-  // Render props or regular children (use isOpen so ref is set as soon as toolbar opens)
-  const content = typeof children === 'function' ? children({ isOpen }) : children;
+  // Context value - use isMounted for visibility
+  const contextValue = useMemo(
+    () => ({
+      isOpen: isMounted,
+      floatingStyles: combinedStyles,
+      setFloatingRef: handleFloatingRef,
+    }),
+    [isMounted, combinedStyles, handleFloatingRef],
+  );
+
+  // Render props or regular children
+  const content = typeof children === 'function' ? children({ isOpen: isMounted }) : children;
 
   return (
     <FloatingToolbarContext.Provider value={contextValue}>
@@ -230,30 +237,26 @@ type FloatingToolbarContentProps = {
   className?: string;
 } & HTMLAttributes<HTMLDivElement>;
 
-const FloatingToolbarContent = forwardRef<HTMLDivElement, FloatingToolbarContentProps>(
-  ({ children, className = '', ...props }, forwardedRef) => {
-    const { isOpen, floatingStyles, setFloatingRef } = useFloatingToolbarContext();
+const FloatingToolbarContent = ({ children, className = '', ...props }: FloatingToolbarContentProps) => {
+  const { isOpen, floatingStyles, setFloatingRef } = useFloatingToolbarContext();
 
-    const mergedRef = useMergeRefs([forwardedRef, setFloatingRef]);
+  if (!isOpen) return null;
 
-    if (!isOpen) return null;
-
-    return (
-      <Portal id="yoopta-ui-floating-toolbar-portal">
-        <div
-          ref={mergedRef}
-          className={`yoopta-ui-floating-toolbar ${className}`}
-          style={floatingStyles}
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          {...props}
-        >
-          {children}
-        </div>
-      </Portal>
-    );
-  },
-);
+  return (
+    <Portal id="yoopta-ui-floating-toolbar-portal">
+      <div
+        ref={setFloatingRef}
+        className={`yoopta-ui-floating-toolbar ${className}`}
+        style={floatingStyles}
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        {...props}
+      >
+        {children}
+      </div>
+    </Portal>
+  );
+};
 
 FloatingToolbarContent.displayName = 'FloatingToolbar.Content';
 
