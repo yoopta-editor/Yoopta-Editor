@@ -110,6 +110,7 @@ const createMultiEntryConfig = () => {
       paragraph: './src/paragraph/index.ts',
       steps: './src/steps/index.ts',
       table: './src/table/index.ts',
+      'table-of-contents': './src/table-of-contents/index.ts',
       tabs: './src/tabs/index.ts',
       video: './src/video/index.ts',
     },

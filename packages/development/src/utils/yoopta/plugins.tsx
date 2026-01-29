@@ -15,6 +15,7 @@ import Table from '@yoopta/table';
 import Tabs from '@yoopta/tabs';
 import StepsPlugin from '@yoopta/steps';
 import CarouselPlugin from '@yoopta/carousel';
+import TableOfContents from '@yoopta/table-of-contents';
 
 import Paragraph from '@yoopta/paragraph';
 import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
@@ -67,6 +68,7 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
 ];
 
 export const YOOPTA_PLUGINS = applyTheme([
+  TableOfContents,
   Mention.extend({
     options: {
       triggers: [{ char: '@', type: 'user' }, { char: '#', type: 'page' }],

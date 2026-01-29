@@ -11,6 +11,8 @@ export const StepContainer = (props: PluginElementRenderProps) => {
   const { attributes, children } = props;
 
   const addStep = () => {
+    if (editor.readOnly) return;
+
     const slate = Blocks.getBlockSlate(editor, { id: props.blockId });
     if (!slate) return;
 
@@ -28,18 +30,20 @@ export const StepContainer = (props: PluginElementRenderProps) => {
           'opacity-0 group-hover/steps-node:opacity-100',
         )}
         style={{ bottom: '-4px' }}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            'w-7 h-7 shrink-0 rounded-lg',
-            'bg-muted hover:bg-muted/80',
-            'text-sm font-semibold',
-          )}
-          onClick={addStep}
-          aria-label="Add more Step">
-          <Plus className="w-4 h-4" />
-        </Button>
+        {!editor.readOnly && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              'w-7 h-7 shrink-0 rounded-lg',
+              'bg-muted hover:bg-muted/80',
+              'text-sm font-semibold',
+            )}
+            onClick={addStep}
+            aria-label="Add more Step">
+            <Plus className="w-4 h-4" />
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -107,6 +107,7 @@ export const CodeBlockElement = ({
   }, [element]);
 
   const deleteCodeElement = useCallback(() => {
+    if (editor.readOnly) return;
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
 
@@ -206,17 +207,19 @@ export const CodeBlockElement = ({
             }}>
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7"
-            onClick={deleteCodeElement}
-            title="Delete code block"
-            style={{
-              color: themeColors.buttonForeground || undefined,
-            }}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {!editor.readOnly && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={deleteCodeElement}
+              title="Delete code block"
+              style={{
+                color: themeColors.buttonForeground || undefined,
+              }}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </div>
 

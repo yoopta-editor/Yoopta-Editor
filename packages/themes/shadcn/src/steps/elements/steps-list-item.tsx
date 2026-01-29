@@ -87,35 +87,37 @@ export const StepListItem = (props: PluginElementRenderProps) => {
             'transition-opacity duration-300',
             'opacity-0 hover:opacity-100 group-hover/step:opacity-100',
           )}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  'size-8 shrink-0 rounded-lg',
-                  'border border-transparent',
-                  'hover:bg-muted',
-                )}
-                aria-label="Edit Step attributes">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={moveUp} className="cursor-pointer">
-                <ArrowUp className="h-4 w-4" /> Move up
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={moveDown} className="cursor-pointer">
-                <ArrowDown className="h-4 w-4" /> Move down
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={deleteStep}
-                className="text-destructive focus:text-destructive cursor-pointer">
-                <Trash2 className="h-4 w-4" /> Delete step
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {!editor.readOnly && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    'size-8 shrink-0 rounded-lg',
+                    'border border-transparent',
+                    'hover:bg-muted',
+                  )}
+                  aria-label="Edit Step attributes">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={moveUp} className="cursor-pointer">
+                  <ArrowUp className="h-4 w-4" /> Move up
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={moveDown} className="cursor-pointer">
+                  <ArrowDown className="h-4 w-4" /> Move down
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={deleteStep}
+                  className="text-destructive focus:text-destructive cursor-pointer">
+                  <Trash2 className="h-4 w-4" /> Delete step
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </div>

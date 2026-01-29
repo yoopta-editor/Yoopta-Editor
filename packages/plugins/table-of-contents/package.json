@@ -1,7 +1,7 @@
 {
-  "name": "@yoopta/table",
+  "name": "@yoopta/table-of-contents",
   "version": "6.0.0-beta.9",
-  "description": "Table plugin for Yoopta Editor",
+  "description": "Table of Contents plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
   },
   "scripts": {
-    "test": "node ./__tests__/yoopta-table.test.js",
+    "test": "node ./__tests__/yoopta-table-of-contents.test.js",
     "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
     "prepublishOnly": "yarn build",
     "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"

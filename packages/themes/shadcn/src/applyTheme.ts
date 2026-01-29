@@ -17,6 +17,7 @@ import { MentionUI } from './mention';
 import { ParagraphUI } from './paragraph';
 import { StepsUI } from './steps';
 import { TableUI } from './table';
+import { TableOfContentsUI } from './table-of-contents';
 import { TabsUI } from './tabs';
 import { VideoUI } from './video';
 
@@ -69,6 +70,7 @@ export function applyTheme(
     Blockquote: BlockquoteUI,
     Callout: CalloutUI,
     Table: TableUI,
+    TableOfContents: TableOfContentsUI,
     Link: LinkUI,
     HeadingOne: HeadingsUI.HeadingOne,
     HeadingTwo: HeadingsUI.HeadingTwo,

@@ -27,6 +27,7 @@ const YooptaUIPackageExample = () => {
         plugins: YOOPTA_PLUGINS,
         marks: MARKS,
         value: typeof window !== 'undefined' && localStorage.getItem('yoopta-editor-value') ? JSON.parse(localStorage.getItem('yoopta-editor-value') || '{}') : DEFAULT_VALUE,
+        readOnly: false,
       })),
     [],
   );

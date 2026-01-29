@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useYooptaReadOnly } from '@yoopta/editor';
 import { ChevronDown, Search } from 'lucide-react';
 
 import { Button } from '../../ui/button';
@@ -26,6 +27,7 @@ export const LanguageSelect = ({
 }: LanguageSelectProps) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const isReadOnly = useYooptaReadOnly();
 
   const filteredOptions = useMemo(() => {
     if (!search) return options;
@@ -50,6 +52,7 @@ export const LanguageSelect = ({
           variant="outline"
           size="sm"
           className="h-7 gap-1.5 text-xs font-mono"
+          disabled={isReadOnly}
           contentEditable={false}>
           {currentLabel}
           <ChevronDown className="h-3 w-3 opacity-50" />

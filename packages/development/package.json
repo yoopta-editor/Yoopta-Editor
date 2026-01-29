@@ -43,6 +43,7 @@
     "@yoopta/toolbar": "*",
     "@yoopta/ui": "*",
     "@yoopta/video": "*",
+    "@yoopta/table-of-contents": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",

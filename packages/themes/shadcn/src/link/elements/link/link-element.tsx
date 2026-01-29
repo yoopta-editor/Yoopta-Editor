@@ -64,31 +64,15 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   const openEdit = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
-
-    // const linkElementPath = Elements.getElementPath(editor, {
-    //   blockId,
-    //   element,
-    // });
-
-    // if (!linkElementPath) return;
-
-    // const slate = Blocks.getBlockSlate(editor, { id: blockId });
-    // if (!slate) return;
-
-    // const [linkEntry] = Editor.nodes(slate, {
-    //   match: (n) => Element.isElement(n) && n.type === 'link',
-    //   mode: 'lowest',
-    //   at: linkElementPath,
-    // });
-
-    // Transforms.select(slate, linkEntry?.[1]);
 
     setIsEditing(true);
   };
 
   const saveEdit = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -110,6 +94,7 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   const cancelEdit = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -119,6 +104,7 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   const deleteLink = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -186,7 +172,7 @@ const Link = (props: PluginElementRenderProps) => {
         className="w-80 p-0"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}>
-        {isEditing ? (
+        {!editor.readOnly && isEditing ? (
           <LinkEdit
             textInputRef={textInputRef}
             urlInputRef={urlInputRef}

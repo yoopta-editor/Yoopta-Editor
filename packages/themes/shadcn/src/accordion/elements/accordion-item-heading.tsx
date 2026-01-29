@@ -65,6 +65,7 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
 
   const deleteListItem = useCallback(
     (e: React.MouseEvent) => {
+      if (editor.readOnly) return;
       e.preventDefault();
       e.stopPropagation();
 
@@ -92,6 +93,7 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
 
   const addListItem = useCallback(
     (e: React.MouseEvent) => {
+      if (editor.readOnly) return;
       e.preventDefault();
       e.stopPropagation();
 
@@ -127,24 +129,26 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
       <div className="flex-1 min-w-0">{children}</div>
 
       <div className="flex shrink-0 items-center gap-1" contentEditable={false}>
-        <button
-          type="button"
-          contentEditable={false}
-          onClick={addListItem}
-          className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
-          title="Add accordion item">
-          <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
-        </button>
-
-        <button
-          type="button"
-          contentEditable={false}
-          onClick={deleteListItem}
-          className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
-          title="Delete accordion item">
-          <Trash2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-        </button>
-
+        {!editor.readOnly && (
+          <button
+            type="button"
+            contentEditable={false}
+            onClick={addListItem}
+            className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
+            title="Add accordion item">
+            <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
+          </button>
+        )}
+        {!editor.readOnly && (
+          <button
+            type="button"
+            contentEditable={false}
+            onClick={deleteListItem}
+            className="flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1"
+            title="Delete accordion item">
+            <Trash2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+          </button>
+        )}
         <AccordionTrigger
           type="button"
           contentEditable={false}
@@ -152,9 +156,8 @@ export const AccordionItemHeading = (props: PluginElementRenderProps) => {
           onClick={toggleListItem}
           className="flex shrink-0 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
           <ChevronDown
-            className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${
-              isExpanded ? 'rotate-180' : ''
-            }`}
+            className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''
+              }`}
           />
         </AccordionTrigger>
       </div>

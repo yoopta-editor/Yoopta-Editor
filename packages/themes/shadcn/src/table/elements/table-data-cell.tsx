@@ -19,6 +19,7 @@ export const TableDataCell = (props: PluginElementRenderProps) => {
   const CellTag = cellElement.props?.asHeader ? TableHead : TableCell;
 
   const onMouseDown = (e: React.MouseEvent<HTMLTableCellElement>) => {
+    if (editor.readOnly) return;
     e.stopPropagation();
 
     if (slate) {

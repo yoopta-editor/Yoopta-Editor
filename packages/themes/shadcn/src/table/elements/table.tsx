@@ -32,9 +32,13 @@ export const Table = (props: PluginElementRenderProps) => {
         <TableBody>{children}</TableBody>
       </TableUI>
 
-      <TableSelectionOverlay blockId={props.blockId} />
-      <TableControls blockId={props.blockId} />
-      <ColumnResizeHandles blockId={props.blockId} />
+      {!editor.readOnly && (
+        <>
+          <TableSelectionOverlay blockId={props.blockId} />
+          <TableControls blockId={props.blockId} />
+          <ColumnResizeHandles blockId={props.blockId} />
+        </>
+      )}
     </div>
   );
 };

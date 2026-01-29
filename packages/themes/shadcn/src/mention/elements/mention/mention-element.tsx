@@ -43,6 +43,7 @@ export const MentionElement = (props: PluginElementRenderProps) => {
   const description = meta?.description;
 
   const handleDelete = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -192,14 +193,16 @@ export const MentionElement = (props: PluginElementRenderProps) => {
             )}
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-            onClick={handleDelete}
-            title="Delete mention">
-            <Trash2 className="w-3.5 h-3.5" />
-          </Button>
+          {!editor.readOnly && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              onClick={handleDelete}
+              title="Delete mention">
+              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
+          )}
         </div>
       </HoverCardContent>
     </HoverCard>

@@ -90,10 +90,12 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
   };
 
   const deleteCodeElement = () => {
+    if (editor.readOnly) return;
     CodeGroupCommands.deleteTabItem(editor, blockId, { tabId: element.props?.referenceId });
   };
 
   const updateLanguage = (newLanguage: string) => {
+    if (editor.readOnly) return;
     const elementPath = Elements.getElementPath(editor, { blockId, element });
     if (!elementPath) return;
 
@@ -171,17 +173,19 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
             }}>
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7"
-            onClick={deleteCodeElement}
-            title="Delete code"
-            style={{
-              color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
-            }}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {!editor.readOnly && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={deleteCodeElement}
+              title="Delete code"
+              style={{
+                color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
+              }}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
         </div>
 
         <div

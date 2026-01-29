@@ -11,6 +11,7 @@ export const CodeGroupList = (props: PluginElementRenderProps) => {
   const editor = useYooptaEditor();
 
   const addTabItem = (e: React.MouseEvent) => {
+    if (editor.readOnly) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -27,17 +28,19 @@ export const CodeGroupList = (props: PluginElementRenderProps) => {
           borderBottomColor: 'var(--code-group-tab-border)',
         }}>
         {children}
-        <button
-          type="button"
-          contentEditable={false}
-          onClick={addTabItem}
-          className="ml-1 flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1.5 h-7"
-          style={{
-            color: 'var(--code-group-tab-inactive-fg)',
-          }}
-          title="Add tab">
-          <Plus className="h-3.5 w-3.5 shrink-0" />
-        </button>
+        {!editor.readOnly && (
+          <button
+            type="button"
+            contentEditable={false}
+            onClick={addTabItem}
+            className="ml-1 flex items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 p-1.5 h-7"
+            style={{
+              color: 'var(--code-group-tab-inactive-fg)',
+            }}
+            title="Add tab">
+            <Plus className="h-3.5 w-3.5 shrink-0" />
+          </button>
+        )}
       </TabsList>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
