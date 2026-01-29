@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { FloatingPortal } from '@floating-ui/react';
 import { useYooptaEditor } from '@yoopta/editor';
 
@@ -11,55 +11,67 @@ type Props = {
 // Global map to track portal container usage count per editor
 const portalContainerRefs = new WeakMap<HTMLElement, number>();
 
+// Get or create portal container synchronously
+const getOrCreatePortalContainer = (editorEl: HTMLElement): HTMLElement => {
+  let portalContainer = editorEl.querySelector('.yoopta-portal-container') as HTMLElement;
+
+  if (!portalContainer) {
+    portalContainer = document.createElement('div');
+    portalContainer.className = 'yoopta-portal-container';
+    editorEl.appendChild(portalContainer);
+    portalContainerRefs.set(portalContainer, 0);
+  }
+
+  return portalContainer;
+};
+
 const Portal = (props: Props) => {
-  const [isMounted, setIsMounted] = useState(false);
-  const rootEl = useRef<HTMLElement | null>(null);
   const editor = useYooptaEditor();
+  const rootElRef = useRef<HTMLElement | null>(null);
+  const [, forceUpdate] = useState(0);
 
-  useEffect(() => {
-    setIsMounted(true);
+  // Initialize portal container synchronously on first render
+  if (!rootElRef.current && editor.refElement) {
+    rootElRef.current = getOrCreatePortalContainer(editor.refElement);
+    // Increment usage count
+    const currentCount = portalContainerRefs.get(rootElRef.current) ?? 0;
+    portalContainerRefs.set(rootElRef.current, currentCount + 1);
+  }
+
+  // Handle cleanup and editor changes
+  useLayoutEffect(() => {
     const editorEl = editor.refElement;
-
     if (!editorEl) return;
 
-    // Try to find existing portal container
-    let portalContainer = editorEl.querySelector('.yoopta-portal-container') as HTMLElement;
-
-    if (!portalContainer) {
-      // Create new container if it doesn't exist
-      portalContainer = document.createElement('div');
-      portalContainer.className = 'yoopta-portal-container';
-      editorEl.appendChild(portalContainer);
-      portalContainerRefs.set(portalContainer, 0);
+    // If rootEl doesn't match current editor, update it
+    if (!rootElRef.current || !editorEl.contains(rootElRef.current)) {
+      rootElRef.current = getOrCreatePortalContainer(editorEl);
+      const currentCount = portalContainerRefs.get(rootElRef.current) ?? 0;
+      portalContainerRefs.set(rootElRef.current, currentCount + 1);
+      forceUpdate((n) => n + 1);
     }
 
-    // Increment usage count
-    const currentCount = portalContainerRefs.get(portalContainer) || 0;
-    portalContainerRefs.set(portalContainer, currentCount + 1);
-
-    // Store reference to the container
-    rootEl.current = portalContainer;
-
     return () => {
-      if (rootEl.current) {
+      if (rootElRef.current) {
         // Decrement usage count
-        const count = portalContainerRefs.get(rootEl.current) || 0;
+        const count = portalContainerRefs.get(rootElRef.current) ?? 0;
         const newCount = Math.max(0, count - 1);
-        portalContainerRefs.set(rootEl.current, newCount);
+        portalContainerRefs.set(rootElRef.current, newCount);
 
         // Only remove container if no portals are using it
-        if (newCount === 0 && rootEl.current.parentNode) {
-          rootEl.current.remove();
-          portalContainerRefs.delete(rootEl.current);
+        if (newCount === 0 && rootElRef.current.parentNode) {
+          rootElRef.current.remove();
+          portalContainerRefs.delete(rootElRef.current);
         }
+        rootElRef.current = null;
       }
     };
-  }, [editor]);
+  }, [editor.refElement]);
 
-  if (!isMounted || !rootEl.current) return null;
+  if (!rootElRef.current) return null;
 
   return (
-    <FloatingPortal id={`${props.id}-${editor.id}`} root={rootEl.current}>
+    <FloatingPortal id={`${props.id}-${editor.id}`} root={rootElRef.current}>
       {props.children}
     </FloatingPortal>
   );

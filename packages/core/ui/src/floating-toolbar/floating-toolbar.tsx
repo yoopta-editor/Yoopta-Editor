@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 import {
+  FloatingPortal,
   autoUpdate,
   flip,
   inline,
@@ -21,7 +22,6 @@ import {
 import { useYooptaEditor } from '@yoopta/editor';
 
 import { FloatingToolbarContext, useFloatingToolbarContext } from './context';
-import { Portal } from '../portal';
 import { throttle } from '../utils/throttle';
 import './floating-toolbar.css';
 
@@ -238,12 +238,13 @@ type FloatingToolbarContentProps = {
 } & HTMLAttributes<HTMLDivElement>;
 
 const FloatingToolbarContent = ({ children, className = '', ...props }: FloatingToolbarContentProps) => {
+  const editor = useYooptaEditor();
   const { isOpen, floatingStyles, setFloatingRef } = useFloatingToolbarContext();
 
   if (!isOpen) return null;
 
   return (
-    <Portal id="yoopta-ui-floating-toolbar-portal">
+    <FloatingPortal root={editor.refElement} id={`yoopta-ui-floating-toolbar-portal-${editor.id}`}>
       <div
         ref={setFloatingRef}
         className={`yoopta-ui-floating-toolbar ${className}`}
@@ -254,7 +255,7 @@ const FloatingToolbarContent = ({ children, className = '', ...props }: Floating
       >
         {children}
       </div>
-    </Portal>
+    </FloatingPortal>
   );
 };
 
