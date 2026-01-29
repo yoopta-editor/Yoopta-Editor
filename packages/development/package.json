@@ -37,7 +37,6 @@
     "@yoopta/paragraph": "*",
     "@yoopta/steps": "*",
     "@yoopta/table": "*",
-    "@yoopta/table-of-contents": "*",
     "@yoopta/tabs": "*",
     "@yoopta/themes-material": "*",
     "@yoopta/themes-shadcn": "*",
