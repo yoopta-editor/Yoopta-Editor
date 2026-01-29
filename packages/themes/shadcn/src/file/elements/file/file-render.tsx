@@ -4,11 +4,11 @@ import { useBlockSelected, useElementSelected } from '@yoopta/editor';
 import { formatFileSize, getFileType } from '@yoopta/file';
 import { Download } from 'lucide-react';
 
+import { FileIcon, getFileTypeStyles } from './file-icons';
+import { FileInlineToolbar } from './file-inline-toolbar';
 import { Button } from '../../../ui/button';
 import { cn } from '../../../utils';
 import type { FileElementProps } from '../../types';
-import { FileIcon, getFileTypeStyles } from './file-icons';
-import { FileInlineToolbar } from './file-inline-toolbar';
 
 type Props = {
   blockId: string;

@@ -90,23 +90,34 @@ export const MentionElement = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <HoverCard openDelay={300} closeDelay={150} open>
+    <HoverCard openDelay={300} closeDelay={150}>
       <HoverCardTrigger asChild>
-        <span
-          {...attributes}
-          contentEditable={false}
-          onClick={handleClick}
-          data-mention-id={id}
-          data-mention-type={type}
-          className={cn(
-            'inline-flex items-center gap-0.5 px-1.5 py-0.5 mx-0.5 rounded-md',
-            'bg-primary/10 text-primary font-medium',
-            'hover:bg-primary/15 transition-colors cursor-pointer',
-            'align-baseline',
-          )}>
-          <MentionAvatar name={name} avatar={avatar} size="inline" />
-          <span className="ml-0.5">{name}</span>
-          {children}
+        <span className={cn(
+          'bg-primary/10 text-primary font-medium',
+          'hover:bg-primary/15 transition-colors cursor-pointer',
+        )}
+          style={{
+            borderRadius: '0.25em',
+          }}>
+          <span
+            {...attributes}
+            contentEditable={false}
+            onClick={handleClick}
+            data-mention-id={id}
+            data-mention-type={type}
+            className="inline-flex items-center align-baseline"
+            style={{
+              padding: '0.25em',
+              margin: '0 0.15em',
+              gap: '0.25em',
+              fontSize: '0.85em',
+              lineHeight: 'inherit',
+              height: 0
+            }}>
+            <MentionAvatar name={name} avatar={avatar} size="inline" />
+            <span style={{ marginLeft: '0.15em' }}>{name}</span>
+            {children}
+          </span>
         </span>
       </HoverCardTrigger>
 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { autoUpdate, inline, offset, shift, useFloating } from '@floating-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
 import copy from 'copy-to-clipboard';
 import { Copy, Download, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 
@@ -24,12 +24,24 @@ export const FileInlineToolbar = ({
   onDownload,
 }: FileInlineToolbarProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const floatingRef = useRef<HTMLDivElement | null>(null);
 
-  const { refs, floatingStyles } = useFloating({
-    placement: 'top',
+  const { floatingStyles } = useFloating({
+    placement: 'top-end',
     strategy: 'fixed',
-    middleware: [offset(8), inline(), shift({ padding: 10 })],
+    middleware: [
+      offset(8),
+      flip({
+        fallbackPlacements: ['bottom', 'top'],
+        padding: 10,
+      }),
+      shift({ padding: 10 }),
+    ],
     whileElementsMounted: autoUpdate,
+    elements: {
+      reference: referenceRef.current,
+      floating: floatingRef.current,
+    }
   });
 
   useEffect(() => {
@@ -37,13 +49,6 @@ export const FileInlineToolbar = ({
       setIsVisible(true);
     });
   }, []);
-
-  useEffect(() => {
-    const element = referenceRef.current;
-    if (element) {
-      refs.setReference(element);
-    }
-  }, [referenceRef, refs]);
 
   const handleDownload = () => {
     if (onDownload) {
@@ -70,11 +75,11 @@ export const FileInlineToolbar = ({
 
   return (
     <div
-      ref={refs.setFloating}
+      ref={floatingRef}
       onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
       className={cn(
-        'pointer-events-auto',
+        'pointer-events-auto z-50',
         'flex items-center gap-1 rounded-lg border bg-background/95 backdrop-blur-sm p-1 shadow-lg',
         'transition-all duration-200 ease-out',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',

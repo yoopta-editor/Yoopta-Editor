@@ -13,7 +13,7 @@ type MentionAvatarProps = {
 
 const sizeStyles: Record<MentionAvatarSize, { width: string; height: string; fontSize: string }> = {
   // Inline size uses em units to match parent text line height
-  inline: { width: '1.2em', height: '1.2em', fontSize: '0.6em' },
+  inline: { width: '1em', height: '1em', fontSize: '0.6em' },
   sm: { width: '20px', height: '20px', fontSize: '10px' },
   md: { width: '28px', height: '28px', fontSize: '11px' },
   lg: { width: '36px', height: '36px', fontSize: '12px' },

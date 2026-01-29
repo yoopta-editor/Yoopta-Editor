@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Copy, Download, RotateCw, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
+import { AlignCenter, AlignLeft, AlignRight, Copy, Download, RotateCw, Trash2 } from 'lucide-react';
 
 import { ImageInlineToolbarSettings } from './image-inline-toolbar-settings';
 import { Button } from '../../../ui/button';

@@ -1,3 +1,4 @@
+import type { FileType } from '@yoopta/file';
 import {
   Archive,
   Code,
@@ -7,10 +8,9 @@ import {
   FileSpreadsheet,
   FileText,
   FileVideo,
-  Presentation,
   type LucideIcon,
+  Presentation,
 } from 'lucide-react';
-import type { FileType } from '@yoopta/file';
 
 // Map file types to icons and colors
 const FILE_TYPE_ICONS: Record<FileType, { icon: LucideIcon; color: string; bgColor: string }> = {
@@ -83,6 +83,4 @@ export const FileIcon = ({ fileType, className }: FileIconProps) => {
   return <Icon className={className} />;
 };
 
-export const getFileTypeStyles = (fileType: FileType) => {
-  return FILE_TYPE_ICONS[fileType] ?? FILE_TYPE_ICONS.unknown;
-};
+export const getFileTypeStyles = (fileType: FileType) => FILE_TYPE_ICONS[fileType] ?? FILE_TYPE_ICONS.unknown;
