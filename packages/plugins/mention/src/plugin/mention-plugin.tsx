@@ -95,8 +95,6 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
   },
   events: {
     onKeyDown: (baseEditor, slate, options) => (event: ReactKeyboardEvent) => {
-      console.log('mention onKeyDown', slate)
-
       // Cast to MentionYooEditor for full type support
       const editor = baseEditor as MentionYooEditor;
 

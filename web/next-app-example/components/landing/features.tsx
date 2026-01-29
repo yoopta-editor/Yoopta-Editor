@@ -27,7 +27,7 @@ const features = [
     icon: GripVertical,
     title: "Drag & Drop",
     description:
-      "Intuitive drag and drop to reorder blocks. Supports nested structures with indentation.",
+      "Intuitive drag and drop to reorder blocks. Supports nested structures with indentation and multi-block drag and drop.",
   },
   {
     icon: Keyboard,
@@ -45,13 +45,13 @@ const features = [
     icon: Code2,
     title: "Programmatic API",
     description:
-      "Full control with editor.insertBlock(), toggleBlock(), getHTML(), and 50+ methods.",
+      "Full control with Editor API, Blocks API, Elements API, Plugin Commands API, Marks API",
   },
   {
     icon: Palette,
     title: "Theming",
     description:
-      "Light and dark themes. Full CSS customization with shadcn/ui compatible styling.",
+      "Light and dark themes. Theme presets like Shadcn UI, Material UI (in progress) and other",
   },
   {
     icon: Smartphone,
@@ -63,7 +63,7 @@ const features = [
     icon: Zap,
     title: "Performant",
     description:
-      "Built on Slate.js for efficient rendering. Handles large documents smoothly.",
+      "Handles large documents smoothly.",
   },
   {
     icon: History,
