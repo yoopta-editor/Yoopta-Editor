@@ -98,7 +98,7 @@ export const TableOfContents = (props: PluginElementRenderProps) => {
         {showContent ? (
           <CardContent className={cn('pt-0', title || collapsible ? 'pb-4' : 'py-4')}>
             {items.length > 0 ? (
-              <ScrollArea className="max-h-[280px] pr-3">
+              <ScrollArea className="max-h-[280px] pr-3 overflow-y-auto">
                 <ol
                   className="space-y-1"
                   data-show-numbers={showNumbers}

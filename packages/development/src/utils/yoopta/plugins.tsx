@@ -74,7 +74,6 @@ export const YOOPTA_PLUGINS = applyTheme([
       triggers: [{ char: '@', type: 'user' }, { char: '#', type: 'page' }],
       // fetch to placeholder json
       onSearch: async (query: string, trigger: MentionTrigger) => {
-        console.log('onSearch', query, trigger);
         if (trigger.type === 'page') {
           const response = await fetch('https://jsonplaceholder.typicode.com/posts');
           const data = await response.json();

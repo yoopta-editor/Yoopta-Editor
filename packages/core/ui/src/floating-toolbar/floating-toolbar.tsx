@@ -1,4 +1,13 @@
-import { type HTMLAttributes, type ReactNode, forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  type HTMLAttributes,
+  type ReactNode,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   flip,
   inline,
@@ -30,12 +39,17 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
   const editor = useYooptaEditor();
   const [isOpen, setIsOpen] = useState(false);
 
+  // Local ref to track floating element (persists even when conditionally rendered)
+  const floatingElRef = useRef<HTMLElement | null>(null);
+
   // Floating UI setup
   const { refs, floatingStyles, context } = useFloating({
     placement: 'top-start',
     open: isOpen,
     middleware: [inline(), flip(), shift(), offset(10)],
   });
+
+  console.log('FloatingToolbarRoot refs', refs);
 
   const { styles: transitionStyles } = useTransitionStyles(context, {
     duration: 100,
@@ -47,8 +61,15 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     [floatingStyles, transitionStyles],
   );
 
-  console.log('FloatingToolbarRoot combinedStyles', combinedStyles);
-  console.log('FloatingToolbarRoot refs', refs);
+  // Combined ref setter that updates both floating-ui ref and local ref
+  const setFloatingRef = useCallback(
+    (node: HTMLElement | null) => {
+      console.log('setFloatingRef node', node);
+      floatingElRef.current = node;
+      refs.setFloating(node);
+    },
+    [refs],
+  );
 
   // Close toolbar
   const close = useCallback(() => {
@@ -64,7 +85,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
   const selectionChange = useCallback(() => {
     if (frozen) return;
 
-    const toolbarEl = refs.floating.current;
+    const toolbarEl = floatingElRef.current;
     if (toolbarEl?.contains(document.activeElement)) {
       return;
     }
@@ -187,9 +208,9 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     () => ({
       isOpen,
       floatingStyles: combinedStyles,
-      setFloatingRef: refs.setFloating,
+      setFloatingRef,
     }),
-    [isOpen, combinedStyles, refs.setFloating],
+    [isOpen, combinedStyles, setFloatingRef],
   );
 
   // Render props or regular children (use isOpen so ref is set as soon as toolbar opens)
