@@ -10,6 +10,114 @@
   "type": "module",
   "module": "dist/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "accordion": ["./dist/types/accordion/index.d.ts"],
+      "blockquote": ["./dist/types/blockquote/index.d.ts"],
+      "callout": ["./dist/types/callout/index.d.ts"],
+      "carousel": ["./dist/types/carousel/index.d.ts"],
+      "code": ["./dist/types/code/index.d.ts"],
+      "code-group": ["./dist/types/code-group/index.d.ts"],
+      "divider": ["./dist/types/divider/index.d.ts"],
+      "embed": ["./dist/types/embed/index.d.ts"],
+      "file": ["./dist/types/file/index.d.ts"],
+      "headings": ["./dist/types/headings/index.d.ts"],
+      "image": ["./dist/types/image/index.d.ts"],
+      "link": ["./dist/types/link/index.d.ts"],
+      "lists": ["./dist/types/lists/index.d.ts"],
+      "mention": ["./dist/types/mention/index.d.ts"],
+      "paragraph": ["./dist/types/paragraph/index.d.ts"],
+      "steps": ["./dist/types/steps/index.d.ts"],
+      "table": ["./dist/types/table/index.d.ts"],
+      "tabs": ["./dist/types/tabs/index.d.ts"],
+      "video": ["./dist/types/video/index.d.ts"]
+    }
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./accordion": {
+      "types": "./dist/types/accordion/index.d.ts",
+      "import": "./dist/accordion.js"
+    },
+    "./blockquote": {
+      "types": "./dist/types/blockquote/index.d.ts",
+      "import": "./dist/blockquote.js"
+    },
+    "./callout": {
+      "types": "./dist/types/callout/index.d.ts",
+      "import": "./dist/callout.js"
+    },
+    "./carousel": {
+      "types": "./dist/types/carousel/index.d.ts",
+      "import": "./dist/carousel.js"
+    },
+    "./code": {
+      "types": "./dist/types/code/index.d.ts",
+      "import": "./dist/code.js"
+    },
+    "./code-group": {
+      "types": "./dist/types/code-group/index.d.ts",
+      "import": "./dist/code-group.js"
+    },
+    "./divider": {
+      "types": "./dist/types/divider/index.d.ts",
+      "import": "./dist/divider.js"
+    },
+    "./embed": {
+      "types": "./dist/types/embed/index.d.ts",
+      "import": "./dist/embed.js"
+    },
+    "./file": {
+      "types": "./dist/types/file/index.d.ts",
+      "import": "./dist/file.js"
+    },
+    "./headings": {
+      "types": "./dist/types/headings/index.d.ts",
+      "import": "./dist/headings.js"
+    },
+    "./image": {
+      "types": "./dist/types/image/index.d.ts",
+      "import": "./dist/image.js"
+    },
+    "./link": {
+      "types": "./dist/types/link/index.d.ts",
+      "import": "./dist/link.js"
+    },
+    "./lists": {
+      "types": "./dist/types/lists/index.d.ts",
+      "import": "./dist/lists.js"
+    },
+    "./mention": {
+      "types": "./dist/types/mention/index.d.ts",
+      "import": "./dist/mention.js"
+    },
+    "./paragraph": {
+      "types": "./dist/types/paragraph/index.d.ts",
+      "import": "./dist/paragraph.js"
+    },
+    "./steps": {
+      "types": "./dist/types/steps/index.d.ts",
+      "import": "./dist/steps.js"
+    },
+    "./table": {
+      "types": "./dist/types/table/index.d.ts",
+      "import": "./dist/table.js"
+    },
+    "./tabs": {
+      "types": "./dist/types/tabs/index.d.ts",
+      "import": "./dist/tabs.js"
+    },
+    "./video": {
+      "types": "./dist/types/video/index.d.ts",
+      "import": "./dist/video.js"
+    }
+  },
   "files": [
     "dist/"
   ],

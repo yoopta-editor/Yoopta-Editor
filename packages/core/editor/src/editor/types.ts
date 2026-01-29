@@ -15,6 +15,7 @@ import type { EditorBlurOptions } from './core/blur';
 import type { HistoryStack, HistoryStackName, YooptaHistory } from './core/history';
 import type { getEmail } from '../parsers/getEmail';
 import type { getHTML } from '../parsers/getHTML';
+import type { getYooptaJSON } from '../parsers/getYooptaJSON';
 import type { WithoutFirstArg } from '../utils/types';
 import type { moveBlock } from './blocks/moveBlock';
 import type { SplitBlockOptions } from './blocks/splitBlock';
@@ -190,6 +191,7 @@ export type BaseYooEditor = {
   getMarkdown: WithoutFirstArg<typeof getMarkdown>;
   getPlainText: WithoutFirstArg<typeof getPlainText>;
   getEmail: WithoutFirstArg<typeof getEmail>;
+  getYooptaJSON: WithoutFirstArg<typeof getYooptaJSON>;
 
   // history
   historyStack: Record<HistoryStackName, HistoryStack[]>;

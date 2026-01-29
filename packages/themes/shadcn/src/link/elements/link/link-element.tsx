@@ -64,7 +64,6 @@ const Link = (props: PluginElementRenderProps) => {
   };
 
   const openEdit = (e: React.MouseEvent) => {
-    if (editedUrl.length === 0) return;
     e.preventDefault();
     e.stopPropagation();
 

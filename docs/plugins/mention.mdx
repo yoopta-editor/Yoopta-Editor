@@ -358,7 +358,7 @@ When using a theme (e.g., `@yoopta/themes-shadcn`), you need to:
 import { Mention } from '@yoopta/mention';
 import { withMentions } from '@yoopta/mention';
 import { withShadcnUI } from '@yoopta/themes-shadcn';
-import { MentionDropdown } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
 
 const plugins = withShadcnUI([
   Mention.extend({
@@ -419,7 +419,7 @@ You can create a custom dropdown using the `useMentionDropdown` hook:
 
 ```jsx
 import { useMentionDropdown } from '@yoopta/mention';
-import { MentionDropdown } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
 
 function CustomMentionDropdown() {
   const {

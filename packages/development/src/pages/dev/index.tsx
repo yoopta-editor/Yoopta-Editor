@@ -5,7 +5,7 @@ import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
 import { DEFAULT_VALUE } from '@/utils/yoopta/default-value';
 import { withMentions } from '@yoopta/mention';
-import { MentionDropdown } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
 
 import { YooptaToolbar } from '@/components/new-yoo-components/yoopta-toolbar';
 import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoopta-floating-block-actions';
@@ -13,7 +13,6 @@ import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-s
 
 import { SelectionBox } from '@yoopta/ui/selection-box';
 import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
-import { GripVertical } from 'lucide-react';
 
 const EDITOR_STYLE = {
   width: 750,
@@ -27,7 +26,7 @@ const YooptaUIPackageExample = () => {
       withMentions(createYooptaEditor({
         plugins: YOOPTA_PLUGINS,
         marks: MARKS,
-        value: DEFAULT_VALUE,
+        value: typeof window !== 'undefined' && localStorage.getItem('yoopta-editor-value') ? JSON.parse(localStorage.getItem('yoopta-editor-value') || '{}') : DEFAULT_VALUE,
       })),
     [],
   );
@@ -479,7 +478,10 @@ const YooptaUIPackageExample = () => {
           autoFocus
           placeholder="Type / to open menu"
           style={EDITOR_STYLE}
-          onChange={(value) => console.log('value', value)}
+          onChange={(value) => {
+            console.log('value', value);
+            localStorage.setItem('yoopta-editor-value', JSON.stringify(value));
+          }}
           className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col"
           renderBlock={renderBlock}>
           <YooptaToolbar />

@@ -8,7 +8,7 @@ import { FloatingToolbarComponent } from './components/floating-toolbar';
 import { SelectionBox } from '@yoopta/ui/selection-box';
 import { FloatingBlockActionsComponent } from './components/floating-block-actions';
 import { withMentions } from '@yoopta/mention';
-import { MentionDropdown } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
 import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 
 const EDITOR_STYLE = {

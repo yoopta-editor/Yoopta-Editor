@@ -10,7 +10,11 @@ export const DEFAULT_VALUE = {
         "type": "heading-one",
         "children": [
           {
-            "text": "About Railway"
+            "text": "About "
+          },
+          {
+            "text": "Railway",
+            "underline": true
           }
         ],
         "props": {
@@ -33,7 +37,30 @@ export const DEFAULT_VALUE = {
         "type": "paragraph",
         "children": [
           {
-            "text": "Railway is a deployment platform designed to streamline the software development life-cycle, starting with instant deployments and effortless scale, extending to CI/CD integrations and built-in observability."
+            "text": "Railway is a "
+          },
+          {
+            "text": "deployment platform",
+            "bold": true
+          },
+          {
+            "text": " designe"
+          },
+          {
+            "text": "d to streamline the software de",
+            "highlight": {
+              "color": "#e42e2e"
+            }
+          },
+          {
+            "text": "velopment life-cycle, starting with instant deployments and effortless scale, extending t"
+          },
+          {
+            "text": "o CI/CD integrations",
+            "underline": true
+          },
+          {
+            "text": " and built-in observability."
           }
         ],
         "props": {
@@ -56,10 +83,13 @@ export const DEFAULT_VALUE = {
         "type": "heading-two",
         "children": [
           {
+            "text": ""
+          },
+          {
             "id": "45038445-205a-41e5-b97f-eae09afcd0ee",
             "type": "link",
             "props": {
-              "url": "",
+              "url": "https://app.slack.com/client/T058RV5U3SR",
               "target": "_self",
               "rel": "noopener noreferrer",
               "title": "Deploying on Railway",
@@ -70,6 +100,9 @@ export const DEFAULT_VALUE = {
                 "text": "Deploying on Railway"
               }
             ]
+          },
+          {
+            "text": ""
           }
         ],
         "props": {
@@ -93,7 +126,16 @@ export const DEFAULT_VALUE = {
         "type": "paragraph",
         "children": [
           {
-            "text": "Point Railway to your deployment source and let the platform handle the rest."
+            "text": "Point Railway to your deploy"
+          },
+          {
+            "text": "ment source and let the platform hand",
+            "highlight": {
+              "backgroundColor": "#9e2a2a"
+            }
+          },
+          {
+            "text": "le the rest."
           }
         ],
         "props": {
@@ -140,22 +182,14 @@ export const DEFAULT_VALUE = {
         "type": "bulleted-list",
         "children": [
           {
-            "text": "Code Repositories"
+            "text": "Code Re"
           },
           {
-            "text": ": With or without Dockerfiles. Railway will build an"
+            "text": "positories: With or without Dockerfiles. Railw",
+            "underline": true
           },
           {
-            "text": " "
-          },
-          {
-            "text": "OCI compliant image"
-          },
-          {
-            "text": " "
-          },
-          {
-            "text": "based on what you provide."
+            "text": "ay will build an OCI compliant image based on what you provide."
           }
         ],
         "props": {
@@ -178,10 +212,30 @@ export const DEFAULT_VALUE = {
         "type": "bulleted-list",
         "children": [
           {
-            "text": "Docker Images"
+            "text": "Docker Images: Directly from Docker Hub, "
           },
           {
-            "text": ": Directly from Docker Hub, GitHub Container Registry, GitLab Container Registry, Microsoft Container Registry, or Quay.io. We support public and private image registries."
+            "id": "c0a49676-d0c7-4c02-8921-2416bfb5e0cf",
+            "type": "mention",
+            "children": [
+              {
+                "text": ""
+              }
+            ],
+            "props": {
+              "id": 4,
+              "name": "Patricia Lebsack",
+              "avatar": "https://media.licdn.com/dms/image/v2/C4D03AQHVZio6kLxs2A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1583328683293?e=1770854400&v=beta&t=TdF5ICElVP7SV8RhbM44pCt0hI8WXdhHdSAak-hGc-g",
+              "meta": {
+                "description": "Julianne.OConner@kory.org",
+                "url": "https://www.google.com",
+                "email": "Julianne.OConner@kory.org"
+              },
+              "nodeType": "inlineVoid"
+            }
+          },
+          {
+            "text": ""
           }
         ],
         "props": {
@@ -216,7 +270,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 7
+      "order": 9
     }
   },
   "5246bfc8-d8fc-4321-b9f7-cf094b9dc92a": {
@@ -242,7 +296,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 8
+      "order": 11
     }
   },
   "3bf2c5fc-e5c0-4b0e-bfa4-aa0ed17a80ce": {
@@ -268,7 +322,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 9
+      "order": 13
     }
   },
   "af1ee20c-4bf6-4d6c-a108-46f20e256c3f": {
@@ -280,10 +334,13 @@ export const DEFAULT_VALUE = {
         "type": "heading-two",
         "children": [
           {
+            "text": ""
+          },
+          {
             "id": "803ae941-6c2d-490d-8d86-98339f9a4b96",
             "type": "link",
             "props": {
-              "url": "",
+              "url": "https://www.linkedin.com/notifications/?filter=all",
               "target": "_self",
               "rel": "noopener noreferrer",
               "title": "Development Lifecycle",
@@ -294,6 +351,9 @@ export const DEFAULT_VALUE = {
                 "text": "Development Lifecycle"
               }
             ]
+          },
+          {
+            "text": ""
           }
         ],
         "props": {
@@ -305,7 +365,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 10
+      "order": 14
     }
   },
   "8ab9c980-7c6f-4a6c-a5a6-b6a33109f9e2": {
@@ -328,7 +388,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 11
+      "order": 15
     }
   },
   "b7a64f3c-297a-4e9c-b1f0-76d8298a339c": {
@@ -352,7 +412,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 12
+      "order": 17
     }
   },
   "9d30880c-cdb5-462e-9588-5b747bf35620": {
@@ -378,7 +438,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 13
+      "order": 18
     }
   },
   "c188b572-c80b-4dc3-a13b-06279532173b": {
@@ -402,7 +462,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 14
+      "order": 19
     }
   },
   "05b13ae5-3114-492d-85e1-b26294f44653": {
@@ -428,7 +488,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 15
+      "order": 21
     }
   },
   "e5c80052-08c6-4beb-a889-e59962c7de46": {
@@ -454,7 +514,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 16
+      "order": 22
     }
   },
   "ef27da01-52b0-44dc-b59d-7298e90e6687": {
@@ -478,7 +538,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 17
+      "order": 23
     }
   },
   "7112f40f-9689-429c-98c1-c81c7ff27cbc": {
@@ -490,10 +550,23 @@ export const DEFAULT_VALUE = {
         "type": "bulleted-list",
         "children": [
           {
-            "text": "Observability"
+            "text": "Observability: Keep a pulse on yo"
           },
           {
-            "text": ": Keep a pulse on your deployments with Railway's built-in observability tools."
+            "type": "link",
+            "children": [
+              {
+                "text": "ur deployments with Railway's built-in"
+              }
+            ],
+            "props": {
+              "url": "https://www.linkedin.com/jobs/search/?alertAction=viewjobs&currentJobId=4366720369&distance=25&f_TPR=a1769569745-&geoId=104508036&keywords=Senior%20Frontend%20Engineer%20(Remote)&origin=JOB_ALERT_IN_APP_NOTIFICATION&originToLandingJobPostings=4366720369%2C4366701763%2C4366755390&savedSearchId=8315884778&sortBy=R",
+              "target": "_self",
+              "rel": "noopener noreferrer"
+            }
+          },
+          {
+            "text": " observability tools."
           }
         ],
         "props": {
@@ -504,7 +577,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 18
+      "order": 24
     }
   },
   "b73885c4-2ac1-4b6b-9737-98fdbc1f7bfe": {
@@ -516,10 +589,13 @@ export const DEFAULT_VALUE = {
         "type": "heading-two",
         "children": [
           {
+            "text": ""
+          },
+          {
             "id": "5ad8ccb7-c9fd-4a8f-ac93-d04cac6c7f05",
             "type": "link",
             "props": {
-              "url": "",
+              "url": "https://www.linkedin.com/notifications/?filter=all",
               "target": "_self",
               "rel": "noopener noreferrer",
               "title": "Operational Model",
@@ -530,6 +606,9 @@ export const DEFAULT_VALUE = {
                 "text": "Operational Model"
               }
             ]
+          },
+          {
+            "text": ""
           }
         ],
         "props": {
@@ -541,7 +620,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 19
+      "order": 25
     }
   },
   "91380355-f69d-44c1-8823-91ead441db5f": {
@@ -586,7 +665,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 20
+      "order": 26
     }
   },
   "c9293226-f870-4f53-850e-57bc603d63d5": {
@@ -598,10 +677,13 @@ export const DEFAULT_VALUE = {
         "type": "heading-two",
         "children": [
           {
+            "text": ""
+          },
+          {
             "id": "8654dc02-8a68-4b10-9d89-279a3ea7d2cf",
             "type": "link",
             "props": {
-              "url": "",
+              "url": "https://www.linkedin.com/notifications/?filter=all",
               "target": "_self",
               "rel": "noopener noreferrer",
               "title": "Book a Demo",
@@ -612,6 +694,9 @@ export const DEFAULT_VALUE = {
                 "text": "Book a Demo"
               }
             ]
+          },
+          {
+            "text": ""
           }
         ],
         "props": {
@@ -623,7 +708,7 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 21
+      "order": 27
     }
   },
   "6b67294f-9cf2-4457-96d2-e1f75030b74e": {
@@ -668,7 +753,367 @@ export const DEFAULT_VALUE = {
     "meta": {
       "align": "left",
       "depth": 0,
-      "order": 22
+      "order": 28
+    }
+  },
+  "66ed3d11-875f-4f4a-9ff4-d8957eb6cf53": {
+    "id": "66ed3d11-875f-4f4a-9ff4-d8957eb6cf53",
+    "type": "Tabs",
+    "meta": {
+      "depth": 0,
+      "order": 10
+    },
+    "value": [
+      {
+        "id": "341ac88c-d56c-476c-964f-dc082782e42d",
+        "type": "tabs-container",
+        "children": [
+          {
+            "id": "aad4b4d9-15a2-410b-bf94-c7bbf6243fa1",
+            "type": "tabs-list",
+            "children": [
+              {
+                "id": "5bbfa072-a56e-4b45-88e0-784a35e14ab4",
+                "type": "tabs-item-heading",
+                "children": [
+                  {
+                    "text": "firsttab "
+                  }
+                ],
+                "props": {
+                  "nodeType": "block"
+                }
+              },
+              {
+                "id": "288d0432-2be3-4b96-a8d2-4bcead7add8e",
+                "type": "tabs-item-heading",
+                "children": [
+                  {
+                    "text": "nextta "
+                  }
+                ],
+                "props": {
+                  "nodeType": "block"
+                }
+              }
+            ],
+            "props": {
+              "nodeType": "block"
+            }
+          },
+          {
+            "id": "024b6cb5-7074-41b2-9d3e-819c932e662e",
+            "type": "tabs-item-content",
+            "children": [
+              {
+                "text": "Tab 1 content"
+              }
+            ],
+            "props": {
+              "referenceId": "5bbfa072-a56e-4b45-88e0-784a35e14ab4",
+              "nodeType": "block"
+            }
+          },
+          {
+            "id": "a5e1b4ed-f023-4810-815b-68b5677a2a1d",
+            "type": "tabs-item-content",
+            "children": [
+              {
+                "text": "tab 2 content"
+              }
+            ],
+            "props": {
+              "referenceId": "288d0432-2be3-4b96-a8d2-4bcead7add8e",
+              "nodeType": "block"
+            }
+          }
+        ],
+        "props": {
+          "activeTabId": "288d0432-2be3-4b96-a8d2-4bcead7add8e",
+          "nodeType": "block"
+        }
+      }
+    ]
+  },
+  "7b34a805-6980-4c73-8c2a-c1816935704f": {
+    "id": "7b34a805-6980-4c73-8c2a-c1816935704f",
+    "type": "Code",
+    "meta": {
+      "depth": 0,
+      "order": 12
+    },
+    "value": [
+      {
+        "id": "89154afa-99b6-4daa-9e7b-e31e2f17a044",
+        "type": "code",
+        "props": {
+          "language": "javascript",
+          "theme": "github-dark"
+        },
+        "children": [
+          {
+            "text": "export const LinkPreview = ({ element, openLink, copyUrl, openEdit, copied }: LinkPreviewProps) => (\n  <div className=\"px-2 py-1\">\n    <div className=\"flex items-center gap-1\">\n      <div className=\"flex-1 min-w-0\">\n        <div className=\"text-sm truncate text-foreground\">{element.props.url ?? 'No URL'}</div>\n      </div>\n      <div className=\"h-4 w-px bg-border\" />\n      <Button\n        size=\"sm\"\n        variant=\"ghost\"\n        className=\"h-7 w-7 p-0\"\n        onClick={openLink}\n        disabled={!element.props.url}\n        title=\"Open link\">\n        <ExternalLink className=\"h-3.5 w-3.5\" />\n      </Button>\n      <Button\n        size=\"sm\"\n        variant=\"ghost\"\n        className=\"h-7 w-7 p-0\"\n        onClick={copyUrl}\n        disabled={!element.props.url}\n        title={copied ? 'Copied!' : 'Copy URL'}>\n        {copied ? <Check className=\"h-3.5 w-3.5\" /> : <Copy className=\"h-3.5 w-3.5\" />}\n      </Button>\n      <Button size=\"sm\" variant=\"ghost\" className=\"h-7 w-7 p-0\" onClick={openEdit} title=\"Edit URL\">\n        <Edit2 className=\"h-3.5 w-3.5\" />\n      </Button>\n    </div>\n  </div>\n);"
+          }
+        ]
+      }
+    ]
+  },
+  "d911e373-a8b8-414c-9235-02611eea1c52": {
+    "id": "d911e373-a8b8-414c-9235-02611eea1c52",
+    "type": "CodeGroup",
+    "meta": {
+      "depth": 0,
+      "order": 16
+    },
+    "value": [
+      {
+        "id": "d5bb35ed-9dc4-4eef-8e53-dff9174bde60",
+        "type": "code-group-container",
+        "children": [
+          {
+            "id": "bda7576f-0bdf-4a8b-a266-9b9a40f3bd0d",
+            "type": "code-group-list",
+            "children": [
+              {
+                "id": "73f7b41f-17bd-41dd-b075-3de920aff627",
+                "type": "code-group-item-heading",
+                "children": [
+                  {
+                    "text": "hello-world.ts"
+                  }
+                ],
+                "props": {
+                  "nodeType": "block"
+                }
+              },
+              {
+                "id": "3ed142f6-e3ad-495c-bb74-d8e5d9064d2e",
+                "type": "code-group-item-heading",
+                "children": [
+                  {
+                    "text": "save-edit.tsx"
+                  }
+                ],
+                "props": {
+                  "nodeType": "block"
+                }
+              }
+            ],
+            "props": {
+              "nodeType": "block"
+            }
+          },
+          {
+            "id": "7b176ca6-1c5a-42ac-9527-be826475b033",
+            "type": "code-group-content",
+            "children": [
+              {
+                "text": "console.log(\"Hello World\");"
+              }
+            ],
+            "props": {
+              "referenceId": "73f7b41f-17bd-41dd-b075-3de920aff627",
+              "language": "typescript",
+              "nodeType": "block"
+            }
+          },
+          {
+            "id": "9b62bfac-0a49-4c9f-8fb7-30abe005191d",
+            "type": "code-group-content",
+            "children": [
+              {
+                "id": "5003d6cc-f994-4ba3-a2fa-551320a4580f",
+                "type": "code",
+                "props": {
+                  "language": "javascript",
+                  "theme": "github-dark"
+                },
+                "children": [
+                  {
+                    "text": "const saveEdit = (e: React.MouseEvent) => {\n  e.preventDefault();\n  e.stopPropagation();\n  const linkElementPath = Elements.getElementPath(editor, { blockId, element });\n  if (!linkElementPath) return;\n  Elements.updateElement(editor, {\n    blockId,\n    type: 'link',\n    text: editedText,\n    path: linkElementPath,\n    props: { url: editedUrl },\n  });\n  setIsEditing(false);\n};"
+                  }
+                ]
+              }
+            ],
+            "props": {
+              "referenceId": "3ed142f6-e3ad-495c-bb74-d8e5d9064d2e",
+              "language": "typescript",
+              "nodeType": "block"
+            }
+          }
+        ],
+        "props": {
+          "activeTabId": "3ed142f6-e3ad-495c-bb74-d8e5d9064d2e",
+          "theme": "github-dark",
+          "nodeType": "block"
+        }
+      }
+    ]
+  },
+  "3dc0d910-587a-45f6-b8f3-d5eef07b066c": {
+    "id": "3dc0d910-587a-45f6-b8f3-d5eef07b066c",
+    "type": "Steps",
+    "meta": {
+      "depth": 0,
+      "order": 20
+    },
+    "value": [
+      {
+        "id": "2902b1c7-68aa-4e6c-b855-3baecd5f3a93",
+        "type": "step-container",
+        "children": [
+          {
+            "id": "a7f5bceb-d464-4e36-a707-125ccf42bbfd",
+            "type": "step-list",
+            "children": [
+              {
+                "id": "9efa6765-2087-488f-ae63-aeda3d7f9d25",
+                "type": "step-list-item",
+                "children": [
+                  {
+                    "id": "e28921b7-8843-4adc-9d50-8a2d0d7fe7a3",
+                    "type": "step-list-item-heading",
+                    "children": [
+                      {
+                        "text": "Step 1"
+                      }
+                    ],
+                    "props": {
+                      "nodeType": "block"
+                    }
+                  },
+                  {
+                    "id": "2c20ccd9-5f0d-4f48-8aed-d05c211b0da9",
+                    "type": "step-list-item-content",
+                    "children": [
+                      {
+                        "text": "Step 1 content"
+                      }
+                    ],
+                    "props": {
+                      "nodeType": "block"
+                    }
+                  }
+                ],
+                "props": {
+                  "nodeType": "block",
+                  "order": 0
+                }
+              },
+              {
+                "id": "d0d53ae7-33a2-4266-a5e7-293ee8782159",
+                "type": "step-list-item",
+                "children": [
+                  {
+                    "id": "c328a868-edd7-46b1-822e-90e28170c235",
+                    "type": "step-list-item-heading",
+                    "children": [
+                      {
+                        "text": "Step 2"
+                      }
+                    ],
+                    "props": {
+                      "nodeType": "block"
+                    }
+                  },
+                  {
+                    "id": "d71f3cc6-41e4-4ad4-a2ab-643f7c1ff4b4",
+                    "type": "step-list-item-content",
+                    "children": [
+                      {
+                        "text": "Step 2 "
+                      },
+                      {
+                        "text": "content",
+                        "underline": true
+                      }
+                    ],
+                    "props": {
+                      "nodeType": "block"
+                    }
+                  }
+                ],
+                "props": {
+                  "nodeType": "block",
+                  "order": 1
+                }
+              }
+            ],
+            "props": {
+              "nodeType": "block"
+            }
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ]
+  },
+  "30860c57-dde7-4699-bfe8-7558ee4fcccf": {
+    "id": "30860c57-dde7-4699-bfe8-7558ee4fcccf",
+    "type": "BulletedList",
+    "meta": {
+      "order": 7,
+      "depth": 0,
+      "align": "left"
+    },
+    "value": [
+      {
+        "id": "e9fba251-eed4-475f-b4f8-ac09ca29c790",
+        "type": "bulleted-list",
+        "children": [
+          {
+            "text": " GitHub Container Registry, GitLab Container Registry, Microsoft Container Registry, or Quay.io. We support public and private image registries. "
+          },
+          {
+            "id": "04df76f3-3433-49e2-a59a-8cd110623ed2",
+            "type": "mention",
+            "children": [
+              {
+                "text": ""
+              }
+            ],
+            "props": {
+              "id": 7,
+              "name": "Kurtis Weissnat",
+              "avatar": "https://media.licdn.com/dms/image/v2/C4D03AQHVZio6kLxs2A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1583328683293?e=1770854400&v=beta&t=TdF5ICElVP7SV8RhbM44pCt0hI8WXdhHdSAak-hGc-g",
+              "meta": {
+                "description": "Telly.Hoeger@billy.biz",
+                "url": "https://www.google.com",
+                "email": "Telly.Hoeger@billy.biz"
+              },
+              "nodeType": "inlineVoid"
+            }
+          },
+          {
+            "text": ""
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ]
+  },
+  "c05ceb1e-b6ce-412f-9122-7a2ef5a8d1bb": {
+    "id": "c05ceb1e-b6ce-412f-9122-7a2ef5a8d1bb",
+    "type": "Paragraph",
+    "value": [
+      {
+        "id": "e38e6705-dce6-4570-9476-fc53ba8972a1",
+        "type": "paragraph",
+        "children": [
+          {
+            "text": ""
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "align": "left",
+      "depth": 0,
+      "order": 8
     }
   }
 } as unknown as YooptaContentValue;

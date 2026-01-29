@@ -30,6 +30,7 @@ import { getEmail } from '../parsers/getEmail';
 import { getHTML } from '../parsers/getHTML';
 import { getMarkdown } from '../parsers/getMarkdown';
 import { getPlainText } from '../parsers/getPlainText';
+import { getYooptaJSON } from '../parsers/getYooptaJSON';
 import { isEmpty } from './core/isEmpty';
 import { y, yInline, yText } from './elements/create-element-structure';
 import type { ElementStructureOptions } from './elements/create-element-structure';
@@ -153,6 +154,7 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     getPlainText: (content: YooptaContentValue) => getPlainText(editor, content),
     getEmail: (content: YooptaContentValue, options?: Partial<EmailTemplateOptions>) =>
       getEmail(editor, content, options),
+    getYooptaJSON: (content: YooptaContentValue) => getYooptaJSON(editor, content),
 
     refElement: null,
 

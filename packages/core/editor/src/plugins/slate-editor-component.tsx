@@ -12,6 +12,10 @@ import type { SlateElement } from '../editor/types';
 import { EDITOR_EVENT_HANDLERS } from '../handlers';
 import type { YooptaMark } from '../marks';
 import { deserializeHTML } from '../parsers/deserializeHTML';
+import {
+  deserializeYooptaJSON,
+  isYooptaClipboardData,
+} from '../parsers/deserializeYooptaJSON';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { IS_FOCUSED_EDITOR } from '../utils/weakMaps';
 
@@ -176,55 +180,74 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
       const data = event.clipboardData;
       const html = data.getData('text/html');
-
       const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
 
-      if (parsedHTML.body.childNodes.length > 0) {
-        const blocks = deserializeHTML(editor, parsedHTML.body);
+      // First, try to get Yoopta JSON format embedded in HTML (lossless copy/paste)
+      let blocks: ReturnType<typeof deserializeYooptaJSON> = null;
 
-        // If no blocks from HTML, then paste as plain text using default behavior from Slate
-        if (blocks.length > 0 && editor.path.current !== null) {
-          event.preventDefault();
+      // Check for embedded JSON data in the yoopta-clipboard body element
+      const yooptaBody = parsedHTML.getElementById('yoopta-clipboard');
+      const yooptaJson = yooptaBody?.getAttribute('data-yoopta-json');
 
-          let shouldInsertAfterSelection = false;
-          let shouldDeleteCurrentBlock = false;
-
-          if (slate && slate.selection) {
-            const parentPath = Path.parent(slate.selection.anchor.path);
-            const text = Editor.string(slate, parentPath).trim();
-            const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
-            shouldDeleteCurrentBlock = text === '' && isStart;
-            shouldInsertAfterSelection = !isStart || text.length > 0;
-
-            ReactEditor.blur(slate);
-          }
-
-          const insertPathIndex = editor.path.current;
-          if (insertPathIndex === null) return;
-
-          // [TEST]
-          editor.batchOperations(() => {
-            const newPaths: number[] = [];
-
-            if (shouldDeleteCurrentBlock) {
-              editor.deleteBlock({ at: insertPathIndex });
-            }
-
-            blocks.forEach((block, idx) => {
-              const insertBlockPath = shouldInsertAfterSelection
-                ? insertPathIndex + idx + 1
-                : insertPathIndex + idx;
-              newPaths.push(insertBlockPath);
-
-              const { type, ...blockData } = block;
-              editor.insertBlock(block.type, { at: insertBlockPath, focus: false, blockData });
-            });
-
-            // [TEST]
-            editor.setPath({ current: null, selected: newPaths, source: 'copy-paste' });
-          });
+      if (yooptaJson && isYooptaClipboardData(yooptaJson)) {
+        blocks = deserializeYooptaJSON(editor, yooptaJson);
+        if (blocks) {
+          // eslint-disable-next-line no-console
+          console.log('[Yoopta] Pasting from Yoopta JSON format (lossless)');
         }
       }
+
+      // Fall back to HTML deserialization if no Yoopta JSON
+      if (!blocks && parsedHTML.body.childNodes.length > 0) {
+        blocks = deserializeHTML(editor, parsedHTML.body);
+      }
+
+      // If no blocks from either format, let Slate handle plain text
+      if (!blocks || blocks.length === 0 || editor.path.current === null) {
+        return;
+      }
+
+      event.preventDefault();
+
+      let shouldInsertAfterSelection = false;
+      let shouldDeleteCurrentBlock = false;
+
+      if (slate && slate.selection) {
+        const parentPath = Path.parent(slate.selection.anchor.path);
+        const text = Editor.string(slate, parentPath).trim();
+        const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
+        shouldDeleteCurrentBlock = text === '' && isStart;
+        shouldInsertAfterSelection = !isStart || text.length > 0;
+
+        ReactEditor.blur(slate);
+      }
+
+      const insertPathIndex = editor.path.current;
+      if (insertPathIndex === null) return;
+
+      editor.batchOperations(() => {
+        const newPaths: number[] = [];
+
+        if (shouldDeleteCurrentBlock) {
+          editor.deleteBlock({ at: insertPathIndex });
+        }
+
+        blocks!.forEach((pastedBlock, idx) => {
+          const insertBlockPath = shouldInsertAfterSelection
+            ? insertPathIndex + idx + 1
+            : insertPathIndex + idx;
+          newPaths.push(insertBlockPath);
+
+          const { id, value, meta } = pastedBlock;
+          editor.insertBlock(pastedBlock.type, {
+            at: insertBlockPath,
+            focus: false,
+            blockData: { id, value, meta },
+          });
+        });
+
+        editor.setPath({ current: null, selected: newPaths, source: 'copy-paste' });
+      });
     },
     [eventHandlers.onPaste, editor.readOnly],
   );

@@ -1,6 +1,7 @@
 import { Paths } from '../editor/paths';
 import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
 import { getPluginByInlineElement } from '../utils/block-elements';
+import { getYooptaJSON } from './getYooptaJSON';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   underline: { type: 'underline', tag: 'u' },
@@ -75,5 +76,13 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
     return '';
   });
 
-  return `<body id="yoopta-clipboard" data-editor-id="${editor.id}">${html.join('')}</body>`;
+  // Embed JSON data in HTML for lossless copy/paste within Yoopta
+  const jsonData = getYooptaJSON(editor, content);
+  const escapedJson = jsonData
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return `<body id="yoopta-clipboard" data-editor-id="${editor.id}" data-yoopta-json="${escapedJson}">${html.join('')}</body>`;
 }

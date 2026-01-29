@@ -9,7 +9,7 @@ import type {
   CodeGroupElementMap,
   CodeGroupPluginBlockOptions,
 } from '../types';
-import { SHIKI_CODE_LANGUAGES, SHIKI_CODE_THEMES } from '../utils/shiki';
+import { SHIKI_CODE_THEMES } from '../utils/shiki';
 
 const CodeGroupContainer = ({ attributes, children }: PluginElementRenderProps) => (
   <div {...attributes}>{children}</div>

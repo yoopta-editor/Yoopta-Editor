@@ -150,8 +150,11 @@ const Editor = ({
       if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
         event.preventDefault();
 
-        const htmlString = editor.getHTML(editor.getEditorValue());
-        const textString = editor.getPlainText(editor.getEditorValue());
+        const editorValue = editor.getEditorValue();
+        // HTML now includes embedded JSON data for lossless copy/paste
+        const htmlString = editor.getHTML(editorValue);
+        const textString = editor.getPlainText(editorValue);
+
         const htmlBlob = new Blob([htmlString], { type: 'text/html' });
         const textBlob = new Blob([textString], { type: 'text/plain' });
 
@@ -161,9 +164,8 @@ const Editor = ({
         });
 
         navigator.clipboard.write([clipboardItem]).then(() => {
-          const html = new DOMParser().parseFromString(htmlString, 'text/html');
           // eslint-disable-next-line no-console
-          console.log('HTML copied\n', html.body);
+          console.log('[Yoopta] Content copied with embedded JSON for lossless paste');
         });
 
         if (HOTKEYS.isCut(event)) {
@@ -291,6 +293,7 @@ const Editor = ({
         return acc;
       }, {});
 
+      // HTML now includes embedded JSON data for lossless copy/paste
       const htmlString = editor.getHTML(content);
       const textString = editor.getPlainText(content);
 
