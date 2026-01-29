@@ -19,6 +19,7 @@ import {
   ListOrderedIcon,
   PanelLeftIcon,
   GridIcon,
+  LucideTableColumnsSplit,
 } from 'lucide-react';
 
 export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, any> = {
@@ -45,4 +46,5 @@ export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, any> = {
   Tabs: PanelLeftIcon,
   CodeGroup: CodeIcon,
   Carousel: GridIcon,
+  TableOfContents: LucideTableColumnsSplit
 };

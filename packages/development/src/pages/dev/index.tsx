@@ -26,7 +26,6 @@ const YooptaUIPackageExample = () => {
       withMentions(createYooptaEditor({
         plugins: YOOPTA_PLUGINS,
         marks: MARKS,
-        value: typeof window !== 'undefined' && localStorage.getItem('yoopta-editor-value') ? JSON.parse(localStorage.getItem('yoopta-editor-value') || '{}') : DEFAULT_VALUE,
         readOnly: false,
       })),
     [],
@@ -36,10 +35,12 @@ const YooptaUIPackageExample = () => {
     return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
   }, []);
 
-  console.log('YooptaUIPackageExample editor', editor);
-
   useEffect(() => {
     editor.applyTransforms([{ type: 'validate_block_paths' }]);
+
+    const localStorageValue = localStorage.getItem('yoopta-editor-value');
+    const data = localStorageValue ? JSON.parse(localStorageValue) : DEFAULT_VALUE;
+    editor.setEditorValue(data);
   }, []);
 
   const markBlocksToBold = () => {

@@ -90,7 +90,7 @@ export const MentionElement = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <HoverCard openDelay={300} closeDelay={150}>
+    <HoverCard openDelay={300} closeDelay={150} open>
       <HoverCardTrigger asChild>
         <span
           {...attributes}
@@ -146,7 +146,7 @@ export const MentionElement = (props: PluginElementRenderProps) => {
 
         {/* Contact info */}
         {(meta?.email || mentionUrl) && (
-          <div className="px-3 pb-2 space-y-1">
+          <div className="px-2 pb-2 space-y-1">
             {meta?.email && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Mail className="w-3.5 h-3.5 shrink-0" />
@@ -163,7 +163,7 @@ export const MentionElement = (props: PluginElementRenderProps) => {
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-0.5 p-2 border-t">
+        <div className="flex items-center gap-0.5 p-1 border-t">
           {mentionUrl && (
             <Button
               variant="ghost"

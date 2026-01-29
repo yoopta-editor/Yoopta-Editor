@@ -12,8 +12,8 @@ const defaultTocProps: TableOfContentsElementProps = {
   depth: 3,
   title: 'Table of Contents',
   headingTypes: [...DEFAULT_HEADING_TYPES],
-  showNumbers: true,
-  collapsible: true,
+  showNumbers: false,
+  collapsible: false,
 };
 
 /** Minimal fallback render; use a theme (e.g. @yoopta/themes-shadcn) for full UI. */

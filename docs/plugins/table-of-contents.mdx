@@ -1,0 +1,183 @@
+---
+title: Table of Contents
+description: Void block that renders a navigable list of document headings
+---
+
+## Overview
+
+The Table of Contents plugin inserts a block that automatically collects all heading blocks (H1, H2, H3) from the document and renders them as a list. Clicking an item focuses the corresponding heading block and scrolls it into view. The plugin does not ship UI by default—use a theme such as `@yoopta/themes-shadcn` for the full interface.
+
+## Installation
+
+```bash
+npm install @yoopta/table-of-contents
+```
+
+## Basic Usage
+
+```jsx
+import { createYooptaEditor } from '@yoopta/editor';
+import TableOfContents from '@yoopta/table-of-contents';
+import Headings from '@yoopta/headings';
+import Paragraph from '@yoopta/paragraph';
+import { applyTheme } from '@yoopta/themes-shadcn';
+
+const PLUGINS = applyTheme([
+  TableOfContents,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+  Paragraph,
+]);
+
+const editor = createYooptaEditor({
+  plugins: PLUGINS,
+  value: {},
+});
+
+<YooptaEditor editor={editor} onChange={handleChange}>
+  <YooptaToolbar />
+  <YooptaSlashCommandMenu />
+</YooptaEditor>
+```
+
+## Features
+
+- **Void block**: No editable text; content is derived from other blocks.
+- **Auto-generated list**: Collects blocks by type (e.g. `HeadingOne`, `HeadingTwo`, `HeadingThree`) and order.
+- **Depth control**: Show only H1, or H1+H2, or H1+H2+H3 via the `depth` prop.
+- **Click to navigate**: Focus and scroll to the heading block when an item is clicked.
+- **Theme-based UI**: Use `@yoopta/themes-shadcn` (or a custom theme) for styling; the plugin provides a minimal fallback render.
+- **Shortcuts**: Insert via slash command or shortcuts `toc`, `table of contents`, `contents`.
+
+## Element Props
+
+The TOC element supports these props (defaults are applied by the plugin):
+
+<ResponseField name="depth" type="1 | 2 | 3" default="3">
+  Maximum heading level to show: 1 = H1 only, 2 = H1 and H2, 3 = H1, H2, and H3.
+</ResponseField>
+
+<ResponseField name="title" type="string" default="'Table of Contents'">
+  Optional title displayed above the list (e.g. "Contents", "On this page").
+</ResponseField>
+
+<ResponseField name="headingTypes" type="string[]" default="['HeadingOne', 'HeadingTwo', 'HeadingThree']">
+  Block types to treat as headings. Must match plugin types registered in the editor (e.g. from `@yoopta/headings`).
+</ResponseField>
+
+<ResponseField name="showNumbers" type="boolean" default="false">
+  When true, render the list as a numbered list (1. 2. 3.).
+</ResponseField>
+
+<ResponseField name="collapsible" type="boolean" default="false">
+  When true, the theme can show a toggle to collapse/expand the list (e.g. in the shadcn theme).
+</ResponseField>
+
+## Commands
+
+Use the plugin commands to insert and update the TOC block:
+
+```typescript
+import TableOfContents, { TableOfContentsCommands } from '@yoopta/table-of-contents';
+
+// Insert a TOC block at the current position
+TableOfContentsCommands.insertTableOfContents(editor, { focus: true });
+
+// Insert with custom props
+TableOfContentsCommands.insertTableOfContents(editor, {
+  at: 0,
+  depth: 2,
+  title: 'On this page',
+  showNumbers: true,
+  collapsible: true,
+});
+
+// Update an existing TOC block
+TableOfContentsCommands.updateTableOfContents(editor, blockId, {
+  depth: 2,
+  title: 'Contents',
+});
+
+// Delete a TOC block
+TableOfContentsCommands.deleteTableOfContents(editor, blockId);
+
+// Build element only (e.g. for custom insert logic)
+const element = TableOfContentsCommands.buildTableOfContentsElements(editor, {
+  depth: 3,
+  title: 'Table of Contents',
+});
+```
+
+## Hook: useTableOfContentsItems
+
+The plugin exports a hook that returns the list of TOC items and subscribes to editor changes so the list stays up to date. Use it in your theme or custom render:
+
+```typescript
+import { useTableOfContentsItems } from '@yoopta/table-of-contents';
+
+function MyTOCRender(props) {
+  const editor = useYooptaEditor();
+  const { blockId, element } = props;
+  const { depth = 3, headingTypes = ['HeadingOne', 'HeadingTwo', 'HeadingThree'] } = element.props ?? {};
+
+  const items = useTableOfContentsItems(editor, blockId, { depth, headingTypes });
+
+  return (
+    <nav>
+      {items.map((item) => (
+        <a key={item.id} href="#" onClick={() => editor.focusBlock(item.id)}>
+          {item.text || '(Untitled)'} (level {item.level})
+        </a>
+      ))}
+    </nav>
+  );
+}
+```
+
+**Returned item shape:**
+
+- `id` — block id of the heading
+- `text` — plain text of the heading (no HTML)
+- `level` — 1, 2, or 3 for H1, H2, H3
+
+## Theme (Shadcn)
+
+Apply the shadcn theme so the TOC block uses Card, ScrollArea, and collapsible UI:
+
+```jsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+import TableOfContents from '@yoopta/table-of-contents';
+
+const plugins = applyTheme([
+  TableOfContents,
+  // ... Headings, Paragraph, etc.
+]);
+```
+
+With the theme you get:
+
+- Card layout with optional title
+- Scrollable list (max height) for long TOCs
+- Click-to-scroll: focuses the heading block and scrolls it into view
+- Collapsible list when `collapsible: true`
+
+## Parsers
+
+### HTML
+
+- **Deserialize**: Recognizes `<nav>` or `<div>` with `data-type="table-of-contents"` or class `yoopta-table-of-contents`. Reads `data-depth`, `data-title`, `data-show-numbers`, `data-collapsible`, `data-heading-types`.
+- **Serialize**: Outputs `<nav class="yoopta-table-of-contents" ...>` with the same data attributes.
+
+### Markdown
+
+- **Serialize**: Outputs `[TOC]\n` as a placeholder.
+
+### Email
+
+- **Serialize**: Outputs a title paragraph and a note that the table of contents is best viewed in a browser.
+
+## Related Plugins
+
+- [Headings Plugin](/plugins/headings) — Provides `HeadingOne`, `HeadingTwo`, `HeadingThree`; include these so the TOC has blocks to list.
+- [Paragraph Plugin](/plugins/paragraph) — Default block type; often used alongside TOC and headings.
