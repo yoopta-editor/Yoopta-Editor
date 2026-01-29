@@ -31,7 +31,7 @@ type Props = {
 const getEditorStyles = (styles: CSSProperties) => ({
   ...styles,
   width: styles.width || 400,
-  paddingBottom: typeof styles.paddingBottom === 'number' ? styles.paddingBottom : 100,
+  paddingBottom: styles.paddingBottom ?? 100,
 });
 
 const Editor = ({
@@ -60,6 +60,13 @@ const Editor = ({
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [editor.path, isReadOnly]);
+
+  useEffect(() => {
+    if (isReadOnly || Object.keys(editor.children).length) return;
+    // when editor is empty, add default empty block to display placeholder
+    const defaultBlock = buildBlockData({ id: generateId() });
+    editor.insertBlock(defaultBlock.type, { at: 0, focus: false });
+  }, []);
 
   const handleEmptyZoneClick = (e: React.MouseEvent) => {
     const editorEl = editor.refElement;
