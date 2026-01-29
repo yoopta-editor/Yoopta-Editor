@@ -1,6 +1,6 @@
 {
   "name": "development",
-  "version": "6.0.0-beta.10",
+  "version": "6.0.0-beta.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -37,13 +37,13 @@
     "@yoopta/paragraph": "*",
     "@yoopta/steps": "*",
     "@yoopta/table": "*",
+    "@yoopta/table-of-contents": "*",
     "@yoopta/tabs": "*",
     "@yoopta/themes-material": "*",
     "@yoopta/themes-shadcn": "*",
     "@yoopta/toolbar": "*",
     "@yoopta/ui": "*",
     "@yoopta/video": "*",
-    "@yoopta/table-of-contents": "*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
