@@ -47,6 +47,9 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     [floatingStyles, transitionStyles],
   );
 
+  console.log('FloatingToolbarRoot combinedStyles', combinedStyles);
+  console.log('FloatingToolbarRoot refs', refs);
+
   // Close toolbar
   const close = useCallback(() => {
     setIsOpen(false);
@@ -62,6 +65,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     if (frozen) return;
 
     const toolbarEl = refs.floating.current;
+    console.log('FloatingToolbarRoot selectionChange toolbarEl', toolbarEl);
     if (toolbarEl && toolbarEl.contains(document.activeElement)) {
       return;
     }
