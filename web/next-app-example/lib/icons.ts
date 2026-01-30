@@ -19,6 +19,7 @@ import {
   ListOrderedIcon,
   PanelLeftIcon,
   GridIcon,
+  TableOfContentsIcon,
 } from 'lucide-react';
 
 export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, React.ComponentType<{ width?: number; height?: number }>> = {
@@ -45,4 +46,5 @@ export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, React.ComponentType<
   Tabs: PanelLeftIcon,
   CodeGroup: CodeIcon,
   Carousel: GridIcon,
+  TableOfContents: TableOfContentsIcon,
 };

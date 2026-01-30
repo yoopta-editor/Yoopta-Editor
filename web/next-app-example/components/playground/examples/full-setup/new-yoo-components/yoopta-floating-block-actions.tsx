@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
-import { DragHandleDots2Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 import { DragHandle } from '@yoopta/ui/block-dnd';
 
 import { YooptaBlockOptions } from './yoopta-block-options';
+import { GripVertical, PlusIcon } from 'lucide-react';
 
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
@@ -37,7 +37,7 @@ export const YooptaFloatingBlockActions = () => {
           </FloatingBlockActions.Button>
           <DragHandle blockId={blockId} ref={dragHandleRef} asChild>
             <FloatingBlockActions.Button onClick={onDragClick} title="Drag to reorder">
-              <DragHandleDots2Icon />
+              <GripVertical />
             </FloatingBlockActions.Button>
           </DragHandle>
 

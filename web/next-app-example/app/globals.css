@@ -129,9 +129,12 @@ body {
 
 /* Animated gradient */
 @keyframes gradient-shift {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -148,6 +151,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -160,10 +164,13 @@ body {
 
 /* Scroll indicator */
 @keyframes scroll-indicator {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 1;
   }
+
   50% {
     transform: translateY(8px);
     opacity: 0.5;

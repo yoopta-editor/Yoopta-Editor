@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "Is Yoopta Editor free to use?",
     answer:
-      "Yes! Yoopta Editor is completely free and open-source under the MIT license. You can use it in personal and commercial projects without any restrictions. The core library and all 18+ plugins are free forever.",
+      "Yes! Yoopta Editor is completely free and open-source under the MIT license. You can use it in personal and commercial projects without any restrictions. The core library and all 20+ plugins are free forever.",
   },
   {
     question: "Can I use Yoopta Editor in commercial projects?",

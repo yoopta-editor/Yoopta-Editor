@@ -16,6 +16,7 @@ import Tabs from '@yoopta/tabs';
 import Steps from '@yoopta/steps';
 import Carousel from '@yoopta/carousel';
 import Mention from '@yoopta/mention';
+import TableOfContents from '@yoopta/table-of-contents';
 
 const YImage = Image.extend({
   options: {
@@ -34,6 +35,7 @@ const YImage = Image.extend({
 })
 
 export const YOOPTA_PLUGINS = [
+  TableOfContents,
   File.extend({
     options: {
       upload: async (file) => {

@@ -13,7 +13,7 @@ const plans = [
     price: "Free",
     priceDetail: "forever",
     features: [
-      "All 18+ plugins included",
+      "All 20+ plugins included",
       "Full editor API access",
       "MIT License",
       "TypeScript support",

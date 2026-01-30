@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import YooptaEditor, { createYooptaEditor, RenderBlockProps, SlateElement, YooptaContentValue, YooptaPlugin } from '@yoopta/editor'
 
-import { applyTheme, MentionDropdown } from '@yoopta/themes-shadcn';
 import { YOOPTA_PLUGINS } from './plugins';
 import { YOOPTA_MARKS } from './marks';
 import { SelectionBox } from '@yoopta/ui/selection-box';
@@ -12,6 +11,8 @@ import { YooptaSlashCommandMenu } from './new-yoo-components/yoopta-slash-comman
 import { YooptaFloatingBlockActions } from './new-yoo-components/yoopta-floating-block-actions';
 import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 import { withMentions } from '@yoopta/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+import { applyTheme } from '@yoopta/themes-shadcn';
 
 const EDITOR_STYLES = {
   width: '100%',
@@ -19,30 +20,32 @@ const EDITOR_STYLES = {
 }
 
 const FullSetupEditor = () => {
+  const containerBoxRef = useRef<HTMLDivElement>(null);
   const editor = useMemo(() => {
-    console.log('editor useMemo', localStorage);
-    const initialValue = {};
-    return withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS, value: initialValue }));
+    return withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS }));
   }, []);
 
-  const containerBoxRef = useRef<HTMLDivElement>(null);
+  const onChange = (value: YooptaContentValue) => {
+    localStorage.setItem('yoopta-editor-value', JSON.stringify(value));
+  }
+
+  useEffect(() => {
+    const localStorageValue = localStorage.getItem('yoopta-editor-value');
+    const data = localStorageValue ? JSON.parse(localStorageValue) : {};
+    editor.setEditorValue(data);
+  }, [editor]);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
     return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
   }, []);
 
-  const onChange = (value: YooptaContentValue) => {
-    console.log('onChange value', value);
-    localStorage.setItem('yoopta-editor-value', JSON.stringify(value));
-  }
-
   return (
     <div ref={containerBoxRef} className="w-full max-w-4xl mx-auto">
       <BlockDndContext editor={editor}>
-        <YooptaEditor 
-          editor={editor} 
-          style={EDITOR_STYLES} 
-          onChange={onChange} 
+        <YooptaEditor
+          editor={editor}
+          style={EDITOR_STYLES}
+          onChange={onChange}
           renderBlock={renderBlock}
           placeholder="Type / to open menu, or start typing..."
         >

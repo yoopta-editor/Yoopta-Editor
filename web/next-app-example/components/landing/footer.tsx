@@ -43,7 +43,7 @@ export function Footer() {
               <span className="font-semibold text-lg text-neutral-900 dark:text-white">Yoopta Editor</span>
             </Link>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs mb-4">
-              Free, open-source rich-text editor for React. Build really rich
+              Free, open-source rich-text editor. Build really rich
               editors with ease.
             </p>
             <div className="flex items-center gap-4">

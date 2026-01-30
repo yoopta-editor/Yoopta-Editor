@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -14,12 +14,12 @@ import {
 } from "lucide-react";
 
 export function Hero() {
-  const [copied, setCopied] = React.useState(false);
+  // const [copied, setCopied] = React.useState(false);
 
   const copyCommand = () => {
-    navigator.clipboard.writeText("npm install @yoopta/editor");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // navigator.clipboard.writeText("npm install @yoopta/editor");
+    // setCopied(true);
+    // setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -64,7 +64,7 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="mx-auto max-w-2xl text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 mb-10">
-            Free, open-source rich-text editor with 18+ plugins, drag & drop,
+            Free, open-source rich-text editor with 20+ plugins, drag & drop,
             keyboard shortcuts, and more. Built on Slate.js with a powerful
             plugin architecture.
           </p>
@@ -92,7 +92,7 @@ export function Hero() {
           {/* Install command */}
           <div className="flex justify-center mb-12">
             <div
-              onClick={copyCommand}
+              // onClick={copyCommand}
               className="group flex items-center gap-3 px-5 py-3 rounded-xl bg-neutral-900 dark:bg-neutral-800/50 border border-neutral-800 dark:border-neutral-700 cursor-pointer hover:border-neutral-700 dark:hover:border-neutral-600 transition-colors"
             >
               <span className="text-neutral-500 dark:text-neutral-500 font-mono text-sm">
@@ -102,11 +102,11 @@ export function Hero() {
                 npm install @yoopta/editor
               </code>
               <div className="w-px h-4 bg-neutral-700" />
-              {copied ? (
+              {/* {copied ? (
                 <Check className="w-4 h-4 text-emerald-500" />
               ) : (
                 <Copy className="w-4 h-4 text-neutral-500 group-hover:text-neutral-300 transition-colors" />
-              )}
+              )} */}
             </div>
           </div>
 
