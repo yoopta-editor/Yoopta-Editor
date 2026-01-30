@@ -55,9 +55,6 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
     duration: 100,
   });
 
-  console.log('FloatingToolbarRoot refs', refs);
-  console.log('FloatingToolbarRoot open state', { isOpen, isMounted });
-
   // Combined styles
   const combinedStyles: CSSProperties = useMemo(
     () => ({ ...floatingStyles, ...transitionStyles }),

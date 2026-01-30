@@ -3,6 +3,8 @@ import { cloneElement, forwardRef, useEffect, useState } from 'react';
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
 import { HexColorInput, HexColorPicker } from 'react-colorful';
 
+import './highlight-color-picker.css';
+
 export type HighlightColorPickerProps = {
   /** Current color values (hex format) */
   value?: {

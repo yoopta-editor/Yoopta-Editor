@@ -12,6 +12,7 @@ import { INITIAL_MENTION_STATE } from "../types";
 // Type-safe emit helper for mention events
 type MentionEmit = (event: string, payload: unknown) => void;
 
+// [TODO] - add throw error if this extenstion not applied to editor instance
 export function withMentions(editor: BaseYooEditor): MentionYooEditor {
   const mentionEditor = editor as MentionYooEditor;
 
