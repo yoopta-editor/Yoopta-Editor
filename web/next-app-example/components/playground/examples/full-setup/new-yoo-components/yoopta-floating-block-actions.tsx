@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
+import { GripVertical, PlusIcon } from 'lucide-react';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 import { DragHandle } from '@yoopta/ui/block-dnd';
 
 import { YooptaBlockOptions } from './yoopta-block-options';
-import { GripVertical, PlusIcon } from 'lucide-react';
 
 export const YooptaFloatingBlockActions = () => {
   const editor = useYooptaEditor();
