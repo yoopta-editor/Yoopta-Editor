@@ -191,10 +191,6 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
       if (yooptaJson && isYooptaClipboardData(yooptaJson)) {
         blocks = deserializeYooptaJSON(editor, yooptaJson);
-        if (blocks) {
-          // eslint-disable-next-line no-console
-          console.log('[Yoopta] Pasting from Yoopta JSON format (lossless)');
-        }
       }
 
       // Fall back to HTML deserialization if no Yoopta JSON
@@ -232,17 +228,18 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
           editor.deleteBlock({ at: insertPathIndex });
         }
 
+
         blocks!.forEach((pastedBlock, idx) => {
           const insertBlockPath = shouldInsertAfterSelection
             ? insertPathIndex + idx + 1
             : insertPathIndex + idx;
           newPaths.push(insertBlockPath);
 
-          const { id, value, meta } = pastedBlock;
+          const { id: pastedBlockId, value, meta } = pastedBlock;
           editor.insertBlock(pastedBlock.type, {
             at: insertBlockPath,
             focus: false,
-            blockData: { id, value, meta },
+            blockData: { id: pastedBlockId, value, meta },
           });
         });
 

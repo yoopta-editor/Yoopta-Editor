@@ -39,7 +39,6 @@ export const RowControls = ({
 
   const insertRowAbove = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
       path: cellPath,
       insertMode: 'before',
     });
@@ -47,7 +46,6 @@ export const RowControls = ({
 
   const insertRowBelow = useCallback(() => {
     TableCommands.insertTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
       path: cellPath,
       insertMode: 'after',
     });
@@ -55,7 +53,6 @@ export const RowControls = ({
 
   const deleteRow = useCallback(() => {
     TableCommands.deleteTableRow(editor, blockId, {
-      // @ts-expect-error - Path type mismatch with Location
       path: cellPath,
     });
   }, [editor, blockId, cellPath]);

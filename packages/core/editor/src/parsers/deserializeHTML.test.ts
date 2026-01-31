@@ -540,6 +540,112 @@ describe('deserializeHTML', () => {
       expect(parse1).toHaveBeenCalled();
       expect(parse2).toHaveBeenCalled();
     });
+
+    it('should fall through to children when all plugins return undefined', () => {
+      // Simulate multiple plugins (like Carousel, Steps, Tabs) that all register DIV
+      // but only match specific data attributes
+      const parse1 = vi.fn().mockReturnValue(undefined);
+      const parse2 = vi.fn().mockReturnValue(undefined);
+
+      // Create editor without DIV in Paragraph to isolate the test
+      const editor = createMockEditor();
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+      clearDeserializeCache(editor);
+
+      // Add two plugins that both handle SECTION but return undefined
+      editor.plugins.Plugin1 = {
+        type: 'Plugin1',
+        elements: {
+          element1: {
+            render: vi.fn(),
+            props: { nodeType: 'block' },
+          },
+        },
+        parsers: {
+          html: {
+            deserialize: {
+              nodeNames: ['SECTION'],
+              parse: parse1,
+            },
+          },
+        },
+      } as unknown as Plugin<Record<string, SlateElement>>;
+
+      editor.plugins.Plugin2 = {
+        type: 'Plugin2',
+        elements: {
+          element2: {
+            render: vi.fn(),
+            props: { nodeType: 'block' },
+          },
+        },
+        parsers: {
+          html: {
+            deserialize: {
+              nodeNames: ['SECTION'],
+              parse: parse2,
+            },
+          },
+        },
+      } as unknown as Plugin<Record<string, SlateElement>>;
+
+      clearDeserializeCache(editor);
+
+      // SECTION contains a P - when both plugins return undefined, should fall through to P
+      const html = createHTML('<section><p>Inner paragraph</p></section>');
+      const result = deserializeHTML(editor, html);
+
+      expect(parse1).toHaveBeenCalled();
+      expect(parse2).toHaveBeenCalled();
+      // Should fall through and return the inner paragraph block
+      expect(result).toHaveLength(1);
+      expect(result[0].type).toBe('Paragraph');
+      expect(result[0].value[0].children).toEqual([{ text: 'Inner paragraph' }]);
+    });
+
+    it('should preserve nested block elements when container plugins return undefined', () => {
+      // Create editor with proper heading support
+      const editor = createMockEditor();
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+
+      // Add a plugin for HEADER that returns undefined (like many wrapper elements)
+      editor.plugins.HeaderWrapper = {
+        type: 'HeaderWrapper',
+        elements: {
+          header: {
+            render: vi.fn(),
+            props: { nodeType: 'block' },
+          },
+        },
+        parsers: {
+          html: {
+            deserialize: {
+              nodeNames: ['HEADER'],
+              parse: () => undefined, // Always returns undefined
+            },
+          },
+        },
+      } as unknown as Plugin<Record<string, SlateElement>>;
+
+      clearDeserializeCache(editor);
+
+      // Mock different root element types for different plugins
+      (getRootBlockElementType as Mock).mockImplementation((elements) => {
+        if (elements?.['heading-one']) return 'heading-one';
+        if (elements?.['heading-two']) return 'heading-two';
+        return 'paragraph';
+      });
+
+      const container = document.createElement('div');
+      container.innerHTML = '<header><h1>Main Title</h1><p>Subtitle</p></header>';
+
+      const result = deserializeHTML(editor, container);
+
+      // Should get both H1 and P blocks, not wrapped in HEADER
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('HeadingOne');
+      expect(result[1].type).toBe('Paragraph');
+    });
   });
 
   describe('void elements', () => {
@@ -689,6 +795,175 @@ describe('deserializeHTML', () => {
 
       // Should not crash, just return empty
       expect(result).toHaveLength(0);
+    });
+
+    it('should preserve correct block types for mixed semantic elements', () => {
+      // Create editor without DIV as paragraph matcher
+      const editor = createMockEditor();
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+      clearDeserializeCache(editor);
+
+      // Mock different root element types for different plugins
+      (getRootBlockElementType as Mock).mockImplementation((elements) => {
+        if (elements?.['heading-one']) return 'heading-one';
+        if (elements?.['heading-two']) return 'heading-two';
+        if (elements?.blockquote) return 'blockquote';
+        return 'paragraph';
+      });
+
+      const container = document.createElement('article');
+      container.innerHTML = `
+        <h1>Main Heading</h1>
+        <p>First paragraph</p>
+        <h2>Subheading</h2>
+        <p>Second paragraph</p>
+        <blockquote>A quote</blockquote>
+      `;
+
+      const result = deserializeHTML(editor, container);
+
+      expect(result).toHaveLength(5);
+      expect(result[0].type).toBe('HeadingOne');
+      expect(result[1].type).toBe('Paragraph');
+      expect(result[2].type).toBe('HeadingTwo');
+      expect(result[3].type).toBe('Paragraph');
+      expect(result[4].type).toBe('Blockquote');
+    });
+
+    it('should handle semantic elements nested in unknown containers', () => {
+      // Create editor without DIV as paragraph matcher
+      const editor = createMockEditor();
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+      clearDeserializeCache(editor);
+
+      (getRootBlockElementType as Mock).mockImplementation((elements) => {
+        if (elements?.['heading-one']) return 'heading-one';
+        return 'paragraph';
+      });
+
+      // MAIN and ARTICLE are not registered - should fall through to children
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <main>
+          <article>
+            <h1>Title</h1>
+            <p>Content</p>
+          </article>
+        </main>
+      `;
+
+      const result = deserializeHTML(editor, container);
+
+      // Should extract the H1 and P from inside nested containers
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('HeadingOne');
+      expect(result[1].type).toBe('Paragraph');
+    });
+
+    it('should not create duplicate blocks when content is nested multiple levels', () => {
+      const editor = createMockEditor();
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+      clearDeserializeCache(editor);
+
+      const container = document.createElement('div');
+      container.innerHTML = '<section><div><p>Only one paragraph</p></div></section>';
+
+      const result = deserializeHTML(editor, container);
+
+      // Should only create one paragraph, not duplicates from each wrapper level
+      expect(result).toHaveLength(1);
+      expect(result[0].type).toBe('Paragraph');
+      expect(result[0].value[0].children).toEqual([{ text: 'Only one paragraph' }]);
+    });
+
+    it('should handle multiple DIV plugins that all return undefined for generic divs', () => {
+      const editor = createMockEditor();
+      // Remove DIV from Paragraph
+      (editor.plugins.Paragraph.parsers!.html!.deserialize!.nodeNames as string[]) = ['P'];
+
+      // Add plugins that handle DIV but only for specific attributes (like Carousel, Tabs, etc.)
+      editor.plugins.Carousel = {
+        type: 'Carousel',
+        elements: {
+          carousel: {
+            render: vi.fn(),
+            props: { nodeType: 'block' },
+          },
+        },
+        parsers: {
+          html: {
+            deserialize: {
+              nodeNames: ['DIV'],
+              parse: (el) => {
+                // Only match if it has data-carousel attribute
+                if (el.getAttribute('data-carousel')) {
+                  return {
+                    id: 'carousel-id',
+                    type: 'carousel',
+                    children: [{ text: '' }],
+                    props: { nodeType: 'void' },
+                  };
+                }
+                return undefined;
+              },
+            },
+          },
+        },
+      } as unknown as Plugin<Record<string, SlateElement>>;
+
+      editor.plugins.Tabs = {
+        type: 'Tabs',
+        elements: {
+          tabs: {
+            render: vi.fn(),
+            props: { nodeType: 'block' },
+          },
+        },
+        parsers: {
+          html: {
+            deserialize: {
+              nodeNames: ['DIV'],
+              parse: (el) => {
+                // Only match if it has data-tabs attribute
+                if (el.getAttribute('data-tabs')) {
+                  return {
+                    id: 'tabs-id',
+                    type: 'tabs',
+                    children: [{ text: '' }],
+                    props: { nodeType: 'void' },
+                  };
+                }
+                return undefined;
+              },
+            },
+          },
+        },
+      } as unknown as Plugin<Record<string, SlateElement>>;
+
+      clearDeserializeCache(editor);
+
+      (getRootBlockElementType as Mock).mockImplementation((elements) => {
+        if (elements?.['heading-one']) return 'heading-one';
+        return 'paragraph';
+      });
+
+      // Generic DIVs without special attributes should fall through to children
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div class="wrapper">
+          <h1>Title</h1>
+          <div class="content">
+            <p>Paragraph inside generic div</p>
+          </div>
+        </div>
+      `;
+
+      const result = deserializeHTML(editor, container);
+
+      // Should extract H1 and P, not create empty blocks for the wrapper divs
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('HeadingOne');
+      expect(result[1].type).toBe('Paragraph');
     });
   });
 });

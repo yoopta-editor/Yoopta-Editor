@@ -1,4 +1,4 @@
-import type { BaseYooEditor, SlateElement } from '@yoopta/editor';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
 
 export type MentionType = 'user' | 'channel' | 'page' | 'custom' | string;
 
@@ -218,9 +218,4 @@ export type MentionEditor = {
 }
 
 // Extended editor type with mentions support
-export type MentionYooEditor = BaseYooEditor & MentionEditor;
-
-declare module '@yoopta/editor' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface YooEditor extends MentionEditor { }
-}
+export type MentionYooEditor = YooEditor & MentionEditor;

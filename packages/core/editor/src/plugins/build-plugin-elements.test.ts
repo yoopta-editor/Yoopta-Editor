@@ -310,8 +310,8 @@ describe('buildPluginElements', () => {
         render: mockRender,
       });
 
-      expect(() => buildPluginElements(element as any)).toThrow(
-        '[buildPluginElements] Element type must be a string',
+      expect(() => buildPluginElements(element as any, 'TestPlugin')).toThrow(
+        '[Incorrect type of element in plugin TestPlugin] Element type must be a string',
       );
     });
 
@@ -323,8 +323,8 @@ describe('buildPluginElements', () => {
       // Remove render to test error
       delete (element.props as any).render;
 
-      expect(() => buildPluginElements(element)).toThrow(
-        '[buildPluginElements] Element "paragraph" must define a render function',
+      expect(() => buildPluginElements(element, 'TestPlugin')).toThrow(
+        'Missing render of element paragraph in TestPlugin plugin',
       );
     });
 
@@ -334,8 +334,8 @@ describe('buildPluginElements', () => {
         nodeType: 'block',
       });
 
-      expect(() => buildPluginElements(element)).toThrow(
-        '[buildPluginElements] Element "paragraph" must define a render function',
+      expect(() => buildPluginElements(element, 'TestPlugin')).toThrow(
+        'Missing render of element paragraph in TestPlugin plugin',
       );
     });
   });

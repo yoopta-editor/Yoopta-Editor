@@ -1,4 +1,4 @@
-import type { BaseYooEditor, YooptaPathIndex } from '@yoopta/editor';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
 import { Blocks, generateId } from '@yoopta/editor';
 import { Editor, Element, Transforms } from 'slate';
 
@@ -15,7 +15,7 @@ import type {
 import { INITIAL_MENTION_STATE } from '../types';
 
 // Extended editor type with mentions support (internal use only)
-type MentionYooEditor = BaseYooEditor & {
+type MentionYooEditor = YooEditor & {
   mentions: {
     state: MentionState;
     setState: (state: Partial<MentionState>) => void;
@@ -30,7 +30,7 @@ type MentionYooEditor = BaseYooEditor & {
 };
 
 // Helper to safely access mentions state
-function getMentionEditor(editor: BaseYooEditor): MentionYooEditor {
+function getMentionEditor(editor: YooEditor): MentionYooEditor {
   return editor as MentionYooEditor;
 }
 
@@ -64,64 +64,64 @@ type UpdateMentionOptions = {
 export type MentionCommandsType<TMeta = Record<string, unknown>> = {
   // Build
   buildMentionElement: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     options: MentionElementOptions<TMeta>,
   ) => MentionElement<TMeta>;
 
   // Insert
   insertMention: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     item: MentionItem<TMeta>,
     options?: InsertMentionOptions,
   ) => void;
 
   // Find
   findMention: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     mentionId: string,
     options?: FindMentionOptions,
   ) => MentionElement<TMeta> | null;
   findMentions: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     options?: FindMentionOptions,
   ) => MentionElement<TMeta>[];
   findMentionsByType: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     type: string,
     options?: FindMentionOptions,
   ) => MentionElement<TMeta>[];
 
   // Update
   updateMention: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     mentionId: string,
     props: Partial<Omit<MentionElementProps<TMeta>, 'nodeType'>>,
     options?: UpdateMentionOptions,
   ) => void;
 
   // Delete
-  deleteMention: (editor: BaseYooEditor, mentionId: string, options?: FindMentionOptions) => void;
+  deleteMention: (editor: YooEditor, mentionId: string, options?: FindMentionOptions) => void;
 
   // Dropdown control
   openDropdown: (
-    editor: BaseYooEditor,
+    editor: YooEditor,
     params: {
       trigger: MentionTrigger;
       targetRect: MentionTargetRect;
       triggerRange: MentionState['triggerRange'];
     },
   ) => void;
-  closeDropdown: (editor: BaseYooEditor, reason?: MentionCloseEvent['reason']) => void;
+  closeDropdown: (editor: YooEditor, reason?: MentionCloseEvent['reason']) => void;
 
   // State
-  getState: (editor: BaseYooEditor) => MentionState;
-  getQuery: (editor: BaseYooEditor) => string;
-  setQuery: (editor: BaseYooEditor, query: string) => void;
-  getTrigger: (editor: BaseYooEditor) => MentionTrigger | null;
+  getState: (editor: YooEditor) => MentionState;
+  getQuery: (editor: YooEditor) => string;
+  setQuery: (editor: YooEditor, query: string) => void;
+  getTrigger: (editor: YooEditor) => MentionTrigger | null;
 
   // Utilities
-  getTriggers: (editor: BaseYooEditor) => MentionTrigger[];
-  getTriggerByChar: (editor: BaseYooEditor, char: string) => MentionTrigger | undefined;
+  getTriggers: (editor: YooEditor) => MentionTrigger[];
+  getTriggerByChar: (editor: YooEditor, char: string) => MentionTrigger | undefined;
 };
 
 // ============================================================================

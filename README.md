@@ -60,16 +60,19 @@ const PLUGINS = [Paragraph, HeadingOne, HeadingTwo, HeadingThree];
 const MARKS = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
 
 export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor({
-    plugins: PLUGINS,
-    marks: MARKS,
-    // value: initialValue, // optional initial value
-  }), []);
+  const editor = useMemo(
+    () =>
+      createYooptaEditor({
+        plugins: PLUGINS,
+        marks: MARKS,
+        // value: initialValue, // optional initial value
+      }),
+    [],
+  );
 
   return (
     <YooptaEditor
       editor={editor}
-      placeholder="Type / to open menu"
       style={{ width: 750 }}
       onChange={(value) => console.log('onChange', value)}
     />
@@ -100,8 +103,7 @@ function MyToolbar() {
           {editor.formats.bold && (
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'bold' })}
-              active={Marks.isActive(editor, { type: 'bold' })}
-            >
+              active={Marks.isActive(editor, { type: 'bold' })}>
               B
             </FloatingToolbar.Button>
           )}
@@ -126,25 +128,20 @@ function MyFloatingBlockActions() {
               if (!blockId) return;
               const block = Blocks.getBlock(editor, { id: blockId });
               if (block) editor.insertBlock('Paragraph', { at: block.meta.order + 1, focus: true });
-            }}
-          >
+            }}>
             +
           </FloatingBlockActions.Button>
           <FloatingBlockActions.Button
             ref={dragHandleRef}
-            onClick={() => setBlockOptionsOpen(true)}
-          >
+            onClick={() => setBlockOptionsOpen(true)}>
             ⋮⋮
           </FloatingBlockActions.Button>
 
           <BlockOptions
             open={blockOptionsOpen}
             onOpenChange={setBlockOptionsOpen}
-            anchor={dragHandleRef.current}
-          >
-            <BlockOptions.Content>
-              {/* Block options menu items */}
-            </BlockOptions.Content>
+            anchor={dragHandleRef.current}>
+            <BlockOptions.Content>{/* Block options menu items */}</BlockOptions.Content>
           </BlockOptions>
         </>
       )}
@@ -153,18 +150,21 @@ function MyFloatingBlockActions() {
 }
 
 export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor({
-    plugins: PLUGINS,
-    marks: MARKS,
-  }), []);
+  const editor = useMemo(
+    () =>
+      createYooptaEditor({
+        plugins: PLUGINS,
+        marks: MARKS,
+      }),
+    [],
+  );
 
   return (
     <YooptaEditor
       editor={editor}
       autoFocus
       placeholder="Type / to open menu"
-      style={{ width: 750 }}
-    >
+      style={{ width: 750 }}>
       <MyToolbar />
       <MyFloatingBlockActions />
       <SlashActionMenuList />
@@ -177,35 +177,35 @@ export default function Editor() {
 
 ### Core
 
-| Package | Description |
-|---------|-------------|
-| [@yoopta/editor](./packages/core/editor) | Core editor component and API |
-| [@yoopta/ui](./packages/core/ui) | UI components (ActionMenuList, BlockOptions, ElementOptions, FloatingBlockActions, HighlightColorPicker, Overlay, Portal, SelectionBox, SlashMenuCommandMenu, FloatingToolbar) |
-| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email |
-| [@yoopta/marks](./packages/marks) | Text formatting marks |
+| Package                                    | Description                                                                                                                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [@yoopta/editor](./packages/core/editor)   | Core editor component and API                                                                                                                                                  |
+| [@yoopta/ui](./packages/core/ui)           | UI components (ActionMenuList, BlockOptions, ElementOptions, FloatingBlockActions, HighlightColorPicker, Overlay, Portal, SelectionBox, SlashMenuCommandMenu, FloatingToolbar) |
+| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                                                                               |
+| [@yoopta/marks](./packages/marks)          | Text formatting marks                                                                                                                                                          |
 
 ### Plugins
 
-| Package | Description |
-|---------|-------------|
-| [@yoopta/paragraph](./packages/plugins/paragraph) | Basic text paragraph |
-| [@yoopta/headings](./packages/plugins/headings) | H1, H2, H3 headings |
-| [@yoopta/lists](./packages/plugins/lists) | Bulleted, numbered, and todo lists |
-| [@yoopta/blockquote](./packages/plugins/blockquote) | Block quotes |
-| [@yoopta/callout](./packages/plugins/callout) | Callout/alert boxes with themes |
-| [@yoopta/code](./packages/plugins/code) | Code blocks with syntax highlighting |
-| [@yoopta/image](./packages/plugins/image) | Images with optimization |
-| [@yoopta/video](./packages/plugins/video) | Video embeds (YouTube, Vimeo, etc.) |
-| [@yoopta/embed](./packages/plugins/embed) | Generic embeds (Figma, Twitter, etc.) |
-| [@yoopta/file](./packages/plugins/file) | File attachments |
-| [@yoopta/table](./packages/plugins/table) | Tables with headers |
-| [@yoopta/accordion](./packages/plugins/accordion) | Collapsible accordion sections |
-| [@yoopta/tabs](./packages/plugins/tabs) | Tabbed content panels |
-| [@yoopta/steps](./packages/plugins/steps) | Step-by-step instructions |
-| [@yoopta/divider](./packages/plugins/divider) | Visual dividers |
-| [@yoopta/link](./packages/plugins/link) | Inline links |
-| [@yoopta/mention](./packages/plugins/mention) | @mentions |
-| [@yoopta/carousel](./packages/plugins/carousel) | Image carousels |
+| Package                                             | Description                           |
+| --------------------------------------------------- | ------------------------------------- |
+| [@yoopta/paragraph](./packages/plugins/paragraph)   | Basic text paragraph                  |
+| [@yoopta/headings](./packages/plugins/headings)     | H1, H2, H3 headings                   |
+| [@yoopta/lists](./packages/plugins/lists)           | Bulleted, numbered, and todo lists    |
+| [@yoopta/blockquote](./packages/plugins/blockquote) | Block quotes                          |
+| [@yoopta/callout](./packages/plugins/callout)       | Callout/alert boxes with themes       |
+| [@yoopta/code](./packages/plugins/code)             | Code blocks with syntax highlighting  |
+| [@yoopta/image](./packages/plugins/image)           | Images with optimization              |
+| [@yoopta/video](./packages/plugins/video)           | Video embeds (YouTube, Vimeo, etc.)   |
+| [@yoopta/embed](./packages/plugins/embed)           | Generic embeds (Figma, Twitter, etc.) |
+| [@yoopta/file](./packages/plugins/file)             | File attachments                      |
+| [@yoopta/table](./packages/plugins/table)           | Tables with headers                   |
+| [@yoopta/accordion](./packages/plugins/accordion)   | Collapsible accordion sections        |
+| [@yoopta/tabs](./packages/plugins/tabs)             | Tabbed content panels                 |
+| [@yoopta/steps](./packages/plugins/steps)           | Step-by-step instructions             |
+| [@yoopta/divider](./packages/plugins/divider)       | Visual dividers                       |
+| [@yoopta/link](./packages/plugins/link)             | Inline links                          |
+| [@yoopta/mention](./packages/plugins/mention)       | @mentions                             |
+| [@yoopta/carousel](./packages/plugins/carousel)     | Image carousels                       |
 
 ### Marks (Text Formatting)
 
@@ -243,18 +243,19 @@ UI components use CSS variables for theming (shadcn/ui style):
 The editor instance provides programmatic control over content:
 
 ```tsx
-const editor = useMemo(() => createYooptaEditor({
-  plugins: PLUGINS,
-  marks: MARKS,
-  value: initialValue,
-}), []);
+const editor = useMemo(
+  () =>
+    createYooptaEditor({
+      plugins: PLUGINS,
+      marks: MARKS,
+      value: initialValue,
+    }),
+  [],
+);
 
 // Element builder - create complex nested structures
 const elements = editor.y('paragraph', {
-  children: [
-    editor.y.text('Hello '),
-    editor.y.text('world', { bold: true, italic: true }),
-  ],
+  children: [editor.y.text('Hello '), editor.y.text('world', { bold: true, italic: true })],
 });
 
 // Inline elements (e.g., links)
@@ -376,17 +377,17 @@ const editor = createYooptaEditor({
 
 ```typescript
 type YooptaEditorProps = {
-  editor: YooEditor;              // Editor instance from createYooptaEditor()
+  editor: YooEditor; // Editor instance from createYooptaEditor()
   onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
   onPathChange?: (path: YooptaPath) => void;
-  autoFocus?: boolean;            // Default: true
+  autoFocus?: boolean; // Default: true
   placeholder?: string;
   readOnly?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  id?: string | number;           // Useful for multiple editors
+  id?: string | number; // Useful for multiple editors
   selectionBoxElement?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
-  children?: React.ReactNode;     // UI components (Toolbar, ActionMenu, etc.)
+  children?: React.ReactNode; // UI components (Toolbar, ActionMenu, etc.)
 };
 ```
 

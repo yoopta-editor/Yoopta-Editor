@@ -36,7 +36,6 @@ export { createYooptaEditor, CreateYooptaEditorOptions } from './editor';
 export { createYooptaMark, YooptaMarkParams, YooptaMark } from './marks';
 export {
   YooEditor,
-  BaseYooEditor,
   SlateElement,
   YooptaBlockData,
   YooptaBlock,

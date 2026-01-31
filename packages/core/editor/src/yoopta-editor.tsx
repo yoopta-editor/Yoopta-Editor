@@ -14,7 +14,6 @@ export type RenderBlockProps = {
   block: YooptaBlockData;
   children: ReactNode;
   blockId: string;
-  index: number;
 };
 
 export type YooptaEditorProps = {

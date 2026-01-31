@@ -4,7 +4,7 @@
  * Called lazily when needed
  */
 
-import type { BaseYooEditor } from "@yoopta/editor";
+import type { YooEditor } from "@yoopta/editor";
 
 import type { MentionCloseEvent, MentionPluginOptions, MentionState, MentionTargetRect, MentionTrigger, MentionYooEditor } from "../types";
 import { INITIAL_MENTION_STATE } from "../types";
@@ -13,7 +13,7 @@ import { INITIAL_MENTION_STATE } from "../types";
 type MentionEmit = (event: string, payload: unknown) => void;
 
 // [TODO] - add throw error if this extenstion not applied to editor instance
-export function withMentions(editor: BaseYooEditor): MentionYooEditor {
+export function withMentions(editor: YooEditor): MentionYooEditor {
   const mentionEditor = editor as MentionYooEditor;
 
   let state: MentionState = { ...INITIAL_MENTION_STATE };

@@ -32,6 +32,21 @@ function isInjectedElement(editor: YooEditor, element: SlateElement): boolean {
 }
 
 /**
+ * Checks if an element is an inline element
+ */
+function isInlineElement(editor: YooEditor, element: SlateElement): boolean {
+  const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
+  if (!currentBlock) return false;
+
+  const plugin = editor.plugins[currentBlock.type];
+  if (!plugin?.elements) return false;
+
+  const elementConfig = plugin.elements[element.type];
+
+  return elementConfig?.props?.nodeType === 'inline';
+}
+
+/**
  * Checks if an element is a leaf element in the plugin configuration
  */
 function isPluginLeafElement(editor: YooEditor, elementType: string): boolean {
@@ -200,6 +215,21 @@ function isElementEmpty(slate: Editor, path: Path): boolean {
 }
 
 /**
+ * Checks if a block type is mergeable (has nodeType 'block' or undefined, not 'void' or 'inline')
+ */
+function isMergeableBlockType(editor: YooEditor, blockType: string): boolean {
+  const plugin = editor.plugins[blockType];
+  if (!plugin) return false;
+
+  const rootElement = getRootBlockElement(plugin.elements);
+  const nodeType = rootElement?.props?.nodeType;
+
+  // nodeType 'block' is the default, so undefined also means 'block'
+  // Only void and inline elements are not mergeable
+  return nodeType !== 'void' && nodeType !== 'inline';
+}
+
+/**
  * Checks if the current block can be merged with the previous one
  */
 function canMergeWithPrevious(editor: YooEditor): boolean {
@@ -212,13 +242,7 @@ function canMergeWithPrevious(editor: YooEditor): boolean {
 
   if (!currentBlock || !prevBlock) return false;
 
-  const mergeableTypes = new Set<string>(Object.keys(editor.plugins).filter(type => {
-    const plugin = editor.plugins[type];
-    const rootElement = getRootBlockElement(plugin.elements);
-    return rootElement?.props?.nodeType === 'block';
-  }));
-
-  return mergeableTypes.has(currentBlock.type) && mergeableTypes.has(prevBlock.type);
+  return isMergeableBlockType(editor, currentBlock.type) && isMergeableBlockType(editor, prevBlock.type);
 }
 
 /**
@@ -259,6 +283,12 @@ export function getBackspaceAction(editor: YooEditor, slate: Editor): BackspaceR
   const injectedAncestor = findInjectedAncestor(editor, slate, anchor.path);
 
   if (injectedAncestor) {
+    // For inline elements (like links), let Slate handle backspace normally
+    // This allows proper deletion of characters before/inside inline elements
+    if (isInlineElement(editor, injectedAncestor.element)) {
+      return { action: 'default' };
+    }
+
     const isInjectedEmpty = isElementEmpty(slate, injectedAncestor.path);
 
     if (isInjectedEmpty) {

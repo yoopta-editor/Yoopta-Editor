@@ -2,13 +2,10 @@
 
 import { useCallback, useRef, useState } from "react";
 import {
-  BaseYooEditor,
+  YooEditor,
   Blocks,
   Elements,
   Marks,
-  Selection,
-  useYooptaEditor,
-  YooEditor,
 } from "@yoopta/editor";
 import {
   Bold,
@@ -137,7 +134,7 @@ const TEXT_COLORS = [
 interface WordToolbarProps {
   onExport: (format: "html" | "markdown" | "text" | "json") => void;
   onPrint: () => void;
-  editor: BaseYooEditor;
+  editor: YooEditor;
 }
 
 export const WordToolbar = ({ editor, onExport, onPrint }: WordToolbarProps) => {

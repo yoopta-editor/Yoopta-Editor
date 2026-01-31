@@ -158,18 +158,24 @@ function canSplitInjectedElement(editor: YooEditor, element: SlateElement): bool
 
 /**
  * Checks if the block type should be reset to Paragraph
+ * Only returns true for non-Paragraph block types (resetting Paragraph to Paragraph is redundant)
  */
 function shouldResetToParagraph(editor: YooEditor): boolean {
   const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
   if (!currentBlock) return false;
 
-  const resetTypes = new Set<string>(Object.keys(editor.plugins).filter(type => {
-    const plugin = editor.plugins[type];
-    const rootElement = getRootBlockElement(plugin.elements);
-    return rootElement?.props?.nodeType === 'block';
-  }));
+  // Don't reset if already a Paragraph
+  if (currentBlock.type === 'Paragraph') return false;
 
-  return resetTypes.has(currentBlock.type);
+  const plugin = editor.plugins[currentBlock.type];
+  if (!plugin?.elements) return false;
+
+  const rootElement = getRootBlockElement(plugin.elements);
+  const nodeType = rootElement?.props?.nodeType;
+
+  // Only reset block types that are 'block' (not 'void' or 'inline')
+  // nodeType defaults to 'block' if undefined
+  return nodeType !== 'void' && nodeType !== 'inline';
 }
 
 /**

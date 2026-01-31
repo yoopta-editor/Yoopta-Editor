@@ -336,6 +336,61 @@ describe('execute-backspace-action', () => {
 
         expect(result).toEqual({ action: 'move-to-previous-block' });
       });
+
+      it('should return merge-with-previous-block when nodeType is undefined (defaults to block)', () => {
+        // Test that plugins without explicit nodeType (which defaults to 'block') are mergeable
+        editor.plugins = {
+          Paragraph: {
+            type: 'Paragraph',
+            elements: {
+              paragraph: {
+                asRoot: true,
+                render: vi.fn(),
+                // No explicit nodeType - should default to 'block'
+              },
+            },
+          },
+          HeadingOne: {
+            type: 'HeadingOne',
+            elements: {
+              'heading-one': {
+                asRoot: true,
+                render: vi.fn(),
+                // No explicit nodeType - should default to 'block'
+              },
+            },
+          },
+        };
+
+        slate.selection = {
+          anchor: { path: [0, 0], offset: 0 },
+          focus: { path: [0, 0], offset: 0 },
+        };
+
+        (Paths.getPreviousBlockOrder as Mock).mockReturnValue(-1);
+        (Editor.isStart as Mock).mockReturnValue(true);
+        (Blocks.getBlock as Mock).mockImplementation((_editor, { at }) => {
+          if (at === 0)
+            return {
+              id: 'block-1',
+              type: 'Paragraph',
+              value: slate.children,
+              meta: { order: 0, depth: 0, align: 'left' },
+            };
+          if (at === -1)
+            return {
+              id: 'block-0',
+              type: 'HeadingOne',
+              value: [],
+              meta: { order: -1, depth: 0, align: 'left' },
+            };
+          return null;
+        });
+
+        const result = getBackspaceAction(editor as YooEditor, slate as SlateEditor);
+
+        expect(result).toEqual({ action: 'merge-with-previous-block' });
+      });
     });
 
     describe('Injected element', () => {
@@ -459,6 +514,107 @@ describe('execute-backspace-action', () => {
         if (result.action === 'delete-injected-element') {
           expect(result.path).toEqual([0, 0]);
         }
+      });
+
+      it('should return default for inline injected elements (like links)', () => {
+        editor.plugins = {
+          Paragraph: {
+            type: 'Paragraph',
+            elements: {
+              paragraph: {
+                asRoot: true,
+                render: vi.fn(),
+                props: { nodeType: 'block' },
+                injectElementsFromPlugins: ['Link'],
+              },
+              link: {
+                render: vi.fn(),
+                props: { nodeType: 'inline' },
+                rootPlugin: 'Link',
+              },
+            },
+          },
+          Link: {
+            type: 'Link',
+            elements: {
+              link: {
+                asRoot: true,
+                render: vi.fn(),
+                props: { nodeType: 'inline' },
+              },
+            },
+          },
+        };
+
+        slate.children = [
+          {
+            id: 'paragraph-1',
+            type: 'paragraph',
+            children: [
+              { text: 'Hello ' },
+              {
+                id: 'link-1',
+                type: 'link',
+                children: [{ text: 'world' }],
+                props: { nodeType: 'inline', url: 'https://example.com' },
+              } as SlateElement,
+              { text: ' text' },
+            ],
+          } as SlateElement,
+        ];
+
+        // Cursor at start of link text
+        slate.selection = {
+          anchor: { path: [0, 1, 0], offset: 0 },
+          focus: { path: [0, 1, 0], offset: 0 },
+        };
+
+        (Blocks.getBlock as Mock).mockReturnValue({
+          id: 'block-1',
+          type: 'Paragraph',
+          value: slate.children,
+          meta: { order: 0, depth: 0, align: 'left' },
+        });
+        (Editor.isStart as Mock).mockReturnValue(true);
+        (Editor.above as Mock).mockReturnValue([
+          {
+            id: 'link-1',
+            type: 'link',
+            children: [{ text: 'world' }],
+            props: { nodeType: 'inline' },
+          },
+          [0, 1],
+        ]);
+
+        // Mock Editor.node for findInjectedAncestor traversal
+        (Editor.node as Mock).mockImplementation((_slate, path) => {
+          // Path [0, 1, 0] - text node inside link
+          if (path.length === 3 && path[0] === 0 && path[1] === 1 && path[2] === 0) {
+            return [{ text: 'world' }, path];
+          }
+          // Path [0, 1] - link element (inline injected)
+          if (path.length === 2 && path[0] === 0 && path[1] === 1) {
+            return [
+              {
+                id: 'link-1',
+                type: 'link',
+                children: [{ text: 'world' }],
+                props: { nodeType: 'inline' },
+              },
+              path,
+            ];
+          }
+          // Path [0] - paragraph element
+          if (path.length === 1 && path[0] === 0) {
+            return [slate.children?.[0], path];
+          }
+          throw new Error(`Node not found at path ${JSON.stringify(path)}`);
+        });
+
+        const result = getBackspaceAction(editor as YooEditor, slate as SlateEditor);
+
+        // Inline elements should return 'default' to let Slate handle normally
+        expect(result.action).toBe('default');
       });
 
       it('should return move-cursor when injected element has previous sibling', () => {

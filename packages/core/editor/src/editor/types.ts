@@ -110,7 +110,7 @@ export type BaseCommands = Record<string, (...args: any[]) => any>;
 
 // [TODO] - Fix generic and default types
 // [TODO] - change with WithoutFirstArg
-export type BaseYooEditor = {
+export type YooEditor = {
   id: string;
   readOnly: boolean;
   isEmpty: () => boolean;
@@ -225,5 +225,3 @@ export type SlateElement<K extends string = string, T = any> = {
   children: Descendant[];
   props?: PluginElementProps<T>;
 };
-
-export type YooEditor = BaseYooEditor;

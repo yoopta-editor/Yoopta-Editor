@@ -67,7 +67,6 @@ const RenderBlocks = ({ editor, marks, placeholder, renderBlock }: Props): React
             block,
             children: blockContent,
             blockId,
-            index: i,
           })}
         </React.Fragment>,
       );

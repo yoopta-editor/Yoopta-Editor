@@ -253,11 +253,14 @@ function deserialize(
       const blocks = plugin
         .map((p) => buildBlock(editor, p, parent, children))
         .filter(Boolean) as (SlateElement | YooptaBlockData | YooptaBlockData[])[];
-      return blocks.flat();
+      // Only return blocks if at least one plugin matched, otherwise fall through to children
+      if (blocks.length > 0) {
+        return blocks.flat();
+      }
+    } else {
+      const result = buildBlock(editor, plugin, parent, children);
+      if (result) return result;
     }
-
-    const result = buildBlock(editor, plugin, parent, children);
-    if (result) return result;
   }
 
   return children;
@@ -282,5 +285,6 @@ export function deserializeHTML(editor: YooEditor, html: HTMLElement): YooptaBlo
   const result = deserialize(editor, PLUGINS_NODE_NAME_MATCHERS_MAP, html);
   const flatResult = Array.isArray(result) ? result.flat() : [result];
 
-  return flatResult.filter(isYooptaBlock) as YooptaBlockData[];
+  const blocks = flatResult.filter(isYooptaBlock) as YooptaBlockData[];
+  return blocks;
 }
