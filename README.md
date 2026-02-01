@@ -1,6 +1,7 @@
 [![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/darginec05)
 
 ![npm](https://img.shields.io/npm/v/@yoopta/editor)
+[![Beta](https://img.shields.io/badge/status-beta-orange?style=flat)](https://github.com/Darginec05/Yoopta-Editor)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Darginec05)
 
 # Yoopta-Editor v6
