@@ -16,7 +16,8 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 ## Features
 
 - Easy setup with sensible defaults
-- 18 powerful plugins out of the box
+- 20+ plugins out of the box (paragraph, headings, lists, code, image, video, table, callout, and more)
+- Headless core and plugins; optional themes (`@yoopta/themes-shadcn`, `@yoopta/themes-material`) for styled block UI
 - Built on Slate.js for robust text editing
 - Drag and drop with nested support
 - Selection box for multi-block operations
@@ -25,11 +26,11 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 - Indent/outdent with Tab/Shift+Tab
 - Programmatic editor API for full control
 - Real-time change events for database sync
-- Export to HTML, Markdown, plain text
+- Export to HTML, Markdown, plain text, email
 - Create custom plugins
 - Media optimization with lazy loading
 - Large document support
-- Theming via CSS variables (light/dark)
+- Theming via CSS variables (light/dark); theme packages for plugin element styling
 
 ## Installation
 
@@ -45,35 +46,39 @@ yarn add @yoopta/marks
 
 # Add UI components
 yarn add @yoopta/ui
+
+# Optional: theme for styled block UI (Shadcn or Material)
+yarn add @yoopta/themes-shadcn
 ```
 
 ## Quick Start
 
-```tsx
-import YooptaEditor, { createYooptaEditor, YooptaContentValue } from '@yoopta/editor';
-import Paragraph from '@yoopta/paragraph';
-import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
-import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/marks';
-import { useMemo, useState } from 'react';
+Plugins and marks are passed to `createYooptaEditor`. Use `editor.setEditorValue(data)` for initial content and `onChange` to persist changes.
 
-const PLUGINS = [Paragraph, HeadingOne, HeadingTwo, HeadingThree];
+```tsx
+import { useMemo, useEffect } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import Headings from '@yoopta/headings';
+import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/marks';
+
+const PLUGINS = [Paragraph, Headings.HeadingOne, Headings.HeadingTwo, Headings.HeadingThree];
 const MARKS = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
 
 export default function Editor() {
   const editor = useMemo(
-    () =>
-      createYooptaEditor({
-        plugins: PLUGINS,
-        marks: MARKS,
-        // value: initialValue, // optional initial value
-      }),
+    () => createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
     [],
   );
+
+  // Optional: set initial/loaded content
+  // useEffect(() => { editor.setEditorValue(initialValue); }, [editor]);
 
   return (
     <YooptaEditor
       editor={editor}
       style={{ width: 750 }}
+      placeholder="Type / to open menu"
       onChange={(value) => console.log('onChange', value)}
     />
   );
@@ -82,15 +87,12 @@ export default function Editor() {
 
 ## Adding UI Components
 
-Yoopta provides ready-to-use UI components from `@yoopta/ui` that follow compound component patterns:
+All UI (toolbar, slash menu, block actions) must be **children** of `<YooptaEditor>` so they can use `useYooptaEditor()`. Yoopta provides ready-to-use components from `@yoopta/ui`:
 
 ```tsx
 import { useMemo, useState, useRef } from 'react';
 import YooptaEditor, { createYooptaEditor, Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
-import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
-import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
-import { BlockOptions } from '@yoopta/ui/block-options';
-import { SlashActionMenuList } from '@yoopta/ui/slash-action-menu-list';
+import { FloatingToolbar, FloatingBlockActions, BlockOptions, SlashCommandMenu } from '@yoopta/ui';
 
 // Floating toolbar for text formatting
 function MyToolbar() {
@@ -167,22 +169,57 @@ export default function Editor() {
       style={{ width: 750 }}>
       <MyToolbar />
       <MyFloatingBlockActions />
-      <SlashActionMenuList />
+      <SlashCommandMenu />
     </YooptaEditor>
   );
 }
 ```
 
+## Themes
+
+The editor and plugins are **headless** by default. For styled block UI you can use a theme package:
+
+- **`@yoopta/themes-shadcn`** — Shadcn UI styled components (production ready)
+- **`@yoopta/themes-material`** — Material Design (in progress)
+
+**Option 1: Apply theme to all plugins**
+
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+
+const plugins = applyTheme([Paragraph, Callout, Headings.HeadingOne, Headings.HeadingTwo, Headings.HeadingThree]);
+const editor = createYooptaEditor({ plugins, marks: MARKS });
+```
+
+**Option 2: Apply theme UI to a single plugin**
+
+```tsx
+import Callout from '@yoopta/callout';
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
+
+const CalloutWithUI = Callout.extend({ elements: CalloutUI });
+// Use CalloutWithUI in your plugins array
+```
+
+See [docs/core/themes](https://docs.yoopta.dev/core/themes) for the full concept.
+
 ## Packages
 
 ### Core
 
-| Package                                    | Description                                                                                                                                                                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [@yoopta/editor](./packages/core/editor)   | Core editor component and API                                                                                                                                                  |
-| [@yoopta/ui](./packages/core/ui)           | UI components (ActionMenuList, BlockOptions, ElementOptions, FloatingBlockActions, HighlightColorPicker, Overlay, Portal, SelectionBox, SlashMenuCommandMenu, FloatingToolbar) |
-| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                                                                               |
-| [@yoopta/marks](./packages/marks)          | Text formatting marks                                                                                                                                                          |
+| Package                                    | Description                                                                                                      |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| [@yoopta/editor](./packages/core/editor)   | Core editor component and API (headless)                                                                        |
+| [@yoopta/ui](./packages/core/ui)           | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, SelectionBox, BlockDndContext, SortableBlock) |
+| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                 |
+| [@yoopta/marks](./packages/marks)          | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                        |
+
+### Themes
+
+| Package                                                | Description                                      |
+| ------------------------------------------------------ | ------------------------------------------------ |
+| [@yoopta/themes-shadcn](./packages/themes/shadcn)      | Shadcn UI styled block elements (production)     |
+| [@yoopta/themes-material](./packages/themes/material)  | Material Design styled block elements (in progress) |
 
 ### Plugins
 
@@ -206,6 +243,7 @@ export default function Editor() {
 | [@yoopta/link](./packages/plugins/link)             | Inline links                          |
 | [@yoopta/mention](./packages/plugins/mention)       | @mentions                             |
 | [@yoopta/carousel](./packages/plugins/carousel)     | Image carousels                       |
+| [@yoopta/table-of-contents](./packages/plugins/table-of-contents) | Table of contents block        |
 
 ### Marks (Text Formatting)
 
@@ -220,7 +258,9 @@ All marks are available from `@yoopta/marks`:
 
 ### Styling
 
-UI components use CSS variables for theming (shadcn/ui style):
+UI components from `@yoopta/ui` use CSS variables for theming. For styled **block** elements (callout, code, image, etc.), use a theme package: `@yoopta/themes-shadcn` or `@yoopta/themes-material` (see [Themes](#themes) above).
+
+CSS variables (shadcn/ui style):
 
 ```css
 :root {
@@ -240,7 +280,7 @@ UI components use CSS variables for theming (shadcn/ui style):
 
 ### Editor Instance
 
-The editor instance provides programmatic control over content:
+The editor instance provides programmatic control over content. Use `editor.setEditorValue(data)` for initial/loaded content and `editor.getEditorValue()` (or the value from `onChange`) to read content.
 
 ```tsx
 const editor = useMemo(
@@ -248,10 +288,15 @@ const editor = useMemo(
     createYooptaEditor({
       plugins: PLUGINS,
       marks: MARKS,
-      value: initialValue,
+      // value: initialValue,  // optional; or set later with setEditorValue()
     }),
   [],
 );
+
+// Set content after load
+useEffect(() => {
+  editor.setEditorValue(loadedValue);
+}, [editor]);
 
 // Element builder - create complex nested structures
 const elements = editor.y('paragraph', {
@@ -285,8 +330,11 @@ const plainText = editor.getPlainText();
 editor.undo();
 editor.redo();
 
+// Content getter (or use value from onChange)
+const value = editor.getEditorValue();
+
 // Events
-editor.on('change', (value) => console.log(value));
+editor.on('change', ({ value, operations }) => console.log(value));
 editor.on('focus', () => console.log('focused'));
 editor.on('blur', () => console.log('blurred'));
 ```
@@ -367,27 +415,29 @@ const CustomMark = createYooptaMark({
 
 ```typescript
 const editor = createYooptaEditor({
-  plugins: YooptaPlugin[];        // List of plugins
-  marks?: YooptaMark[];           // List of marks for text formatting
-  value?: YooptaContentValue;     // Initial editor value
+  plugins: YooptaPlugin[];         // Required. List of plugins
+  marks?: YooptaMark[];            // Optional. Text formatting marks
+  value?: YooptaContentValue;      // Optional. Initial content (or use setEditorValue later)
+  readOnly?: boolean;
+  id?: string;
 });
 ```
 
 ### YooptaEditor Props
 
+`plugins`, `marks`, and `value` are **not** props of `<YooptaEditor>`; they belong to `createYooptaEditor`. Use `editor.setEditorValue(data)` for initial content and `onChange` to persist.
+
 ```typescript
 type YooptaEditorProps = {
-  editor: YooEditor; // Editor instance from createYooptaEditor()
-  onChange?: (value: YooptaContentValue, options: YooptaOnChangeOptions) => void;
+  editor: YooEditor;               // Required. From createYooptaEditor()
+  onChange?: (value: YooptaContentValue, options: { operations }) => void;
   onPathChange?: (path: YooptaPath) => void;
-  autoFocus?: boolean; // Default: true
   placeholder?: string;
-  readOnly?: boolean;
+  autoFocus?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  id?: string | number; // Useful for multiple editors
-  selectionBoxElement?: HTMLElement | React.MutableRefObject<HTMLElement | null> | false;
-  children?: React.ReactNode; // UI components (Toolbar, ActionMenu, etc.)
+  renderBlock?: (props) => React.ReactNode;  // e.g. for SortableBlock
+  children?: React.ReactNode;       // UI components: FloatingToolbar, SlashCommandMenu, etc.
 };
 ```
 
