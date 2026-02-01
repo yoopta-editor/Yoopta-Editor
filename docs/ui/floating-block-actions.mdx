@@ -1,0 +1,247 @@
+---
+title: 'FloatingBlockActions'
+description: 'Floating action buttons that appear when hovering over blocks'
+icon: 'hand-pointer'
+---
+
+## Overview
+
+`FloatingBlockActions` is a self-contained component that displays floating action buttons when you hover over editor blocks. It handles hover tracking internally and exposes state via render props.
+
+<Frame>
+  <img src="/images/floating-block-actions.gif" alt="Floating Block Actions in action" />
+</Frame>
+
+## Features
+
+- **API** — compound components with render props
+- **Auto-positioning** — automatically positions itself next to blocks
+- **Hover detection** — shows on hover, hides on mouse leave
+- **`frozen` prop** — pause hover tracking when menus are open
+- **TypeScript** — full type safety
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+```tsx
+import { useState, useRef } from 'react';
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions } from '@yoopta/ui/block-options';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { PlusIcon, DragHandleDots2Icon } from '@radix-ui/react-icons';
+
+// Use as child of YooptaEditor so useYooptaEditor() works
+function MyFloatingBlockActions() {
+  const editor = useYooptaEditor();
+  const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
+
+  const onPlusClick = (blockId: string | null) => {
+    if (!blockId) return;
+    const block = Blocks.getBlock(editor, { id: blockId });
+    if (!block) return;
+    editor.insertBlock('Paragraph', { at: block.meta.order + 1, focus: true });
+  };
+
+  return (
+    <FloatingBlockActions frozen={blockOptionsOpen}>
+      {({ blockId }) => (
+        <>
+          <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)} title="Add block">
+            <PlusIcon />
+          </FloatingBlockActions.Button>
+          <FloatingBlockActions.Button
+            ref={dragHandleRef}
+            onClick={() => setBlockOptionsOpen(true)}
+            title="Block options">
+            <DragHandleDots2Icon />
+          </FloatingBlockActions.Button>
+
+          <BlockOptions
+            open={blockOptionsOpen}
+            onOpenChange={setBlockOptionsOpen}
+            blockId={blockId}
+            anchor={dragHandleRef.current}
+          />
+        </>
+      )}
+    </FloatingBlockActions>
+  );
+}
+```
+
+## API Reference
+
+### `FloatingBlockActions` (Root)
+
+Root component that handles hover tracking and positioning.
+
+```tsx
+<FloatingBlockActions frozen={blockOptionsOpen}>
+  {({ blockId, blockData, isVisible, hide }) => (
+    // Your buttons here
+  )}
+</FloatingBlockActions>
+```
+
+**Props:**
+
+| Prop        | Type                                | Description                         |
+| ----------- | ----------------------------------- | ----------------------------------- |
+| `children`  | `ReactNode \| ((api) => ReactNode)` | Buttons or render function          |
+| `frozen`    | `boolean`                           | When true, hover tracking is paused |
+| `className` | `string`                            | Custom CSS classes                  |
+
+**Render Props API:**
+
+| Property    | Type                      | Description                  |
+| ----------- | ------------------------- | ---------------------------- |
+| `blockId`   | `string \| null`          | Currently hovered block ID   |
+| `blockData` | `YooptaBlockData \| null` | Block data for hovered block |
+| `isVisible` | `boolean`                 | Whether actions are visible  |
+| `hide`      | `() => void`              | Manually hide the actions    |
+
+### `FloatingBlockActions.Button`
+
+Action button component.
+
+```tsx
+<FloatingBlockActions.Button onClick={handleClick} title="Add block">
+  <PlusIcon />
+</FloatingBlockActions.Button>
+```
+
+**Props:**
+
+| Prop        | Type                      | Description                      |
+| ----------- | ------------------------- | -------------------------------- |
+| `onClick`   | `(e: MouseEvent) => void` | Click handler                    |
+| `disabled`  | `boolean`                 | Disable the button               |
+| `title`     | `string`                  | Tooltip text                     |
+| `className` | `string`                  | Custom CSS classes               |
+| `children`  | `ReactNode`               | Button content (usually an icon) |
+
+## Examples
+
+### With BlockOptions
+
+```tsx
+function MyFloatingBlockActions() {
+  const editor = useYooptaEditor();
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
+  const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
+
+  return (
+    // frozen prevents hover changes while BlockOptions is open
+    <FloatingBlockActions frozen={blockOptionsOpen}>
+      {({ blockId }) => (
+        <>
+          <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
+            <PlusIcon />
+          </FloatingBlockActions.Button>
+
+          <FloatingBlockActions.Button
+            ref={dragHandleRef}
+            onClick={() => setBlockOptionsOpen(true)}>
+            <DragHandleDots2Icon />
+          </FloatingBlockActions.Button>
+
+          <BlockOptions
+            open={blockOptionsOpen}
+            onOpenChange={setBlockOptionsOpen}
+            blockId={blockId}
+            anchor={dragHandleRef.current}
+          />
+        </>
+      )}
+    </FloatingBlockActions>
+  );
+}
+```
+
+### Conditional Buttons Based on Block Type
+
+```tsx
+<FloatingBlockActions>
+  {({ blockId, blockData }) => {
+    const isCodeBlock = blockData?.type === 'Code';
+
+    return (
+      <>
+        <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
+          <PlusIcon />
+        </FloatingBlockActions.Button>
+
+        {isCodeBlock && (
+          <FloatingBlockActions.Button onClick={handleCopyCode}>
+            <CopyIcon />
+          </FloatingBlockActions.Button>
+        )}
+      </>
+    );
+  }}
+</FloatingBlockActions>
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-floating-bg: var(--yoopta-ui-background);
+  --yoopta-ui-floating-border: var(--yoopta-ui-border);
+  --yoopta-ui-floating-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --yoopta-ui-floating-radius: 0.5rem;
+  --yoopta-ui-floating-button-min-width: 24px;
+  --yoopta-ui-floating-button-min-height: 24px;
+  --yoopta-ui-floating-button-hover: var(--yoopta-ui-accent);
+}
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Always check if blockId exists">
+    ```tsx
+    <FloatingBlockActions>
+      {({ blockId }) => {
+        const handleClick = () => {
+          if (!blockId) return; // Important!
+          // Your logic here
+        };
+        return <FloatingBlockActions.Button onClick={handleClick} />;
+      }}
+    </FloatingBlockActions>
+    ```
+  </Accordion>
+
+  <Accordion title="Use frozen prop when opening menus">
+    ```tsx
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    <FloatingBlockActions frozen={menuOpen}>
+      {/* When frozen, hover tracking pauses */}
+    </FloatingBlockActions>
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Context menu opened from drag handle
+  </Card>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Block type selection menu
+  </Card>
+</CardGroup>

@@ -1,0 +1,36 @@
+.yoopta-editor::-moz-selection {
+  background: #c6ddf8;
+}
+
+.yoopta-editor::selection {
+  background: #c6ddf8;
+}
+
+.yoopta-slate {
+  outline: none;
+}
+
+.yoopta-block {
+  position: relative;
+  margin: 2px 0;
+}
+
+.yoopta-block::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background-color: #2383e224;
+  transition: opacity 200ms;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.yoopta-block[data-block-selected='true']::before {
+  content: '';
+  background-color: #2383e224;
+  opacity: 100;
+  transition: opacity 200ms;
+}

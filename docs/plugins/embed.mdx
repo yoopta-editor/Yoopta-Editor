@@ -1,0 +1,552 @@
+---
+title: Embed
+description: Embed content from YouTube, Vimeo, Twitter, Spotify, Figma, and more
+---
+
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
+## Overview
+
+The Embed plugin provides a universal solution for embedding external content from various platforms. It supports video providers, social media, code sandboxes, music services, and maps — all with automatic URL detection and proper aspect ratio handling.
+
+<PluginPlayground pluginSlug="embed" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/embed
+```
+
+## Basic Usage
+
+```jsx
+import Embed from '@yoopta/embed';
+
+const plugins = [
+  Embed,
+  // ... other plugins
+];
+
+<YooptaEditor editor={editor} plugins={plugins} />;
+```
+
+## Features
+
+- **Universal Embedding**: Embed content from 13+ platforms with a single plugin
+- **Auto URL Detection**: Automatically detects provider from pasted URLs
+- **Provider-specific Aspect Ratios**: Each provider uses its optimal aspect ratio
+- **Resizable**: Resize embeds while maintaining aspect ratio
+- **oEmbed Support**: Fetches metadata from providers that support oEmbed
+- **Responsive**: Automatically adapts to container width
+
+## Supported Providers
+
+<CardGroup cols={3}>
+  <Card title="YouTube" icon="youtube">
+    Videos, Shorts
+  </Card>
+  <Card title="Vimeo" icon="vimeo">
+    Videos
+  </Card>
+  <Card title="Twitter/X" icon="twitter">
+    Tweets, Posts
+  </Card>
+  <Card title="Instagram" icon="instagram">
+    Posts, Reels
+  </Card>
+  <Card title="Spotify" icon="spotify">
+    Tracks, Albums, Playlists
+  </Card>
+  <Card title="SoundCloud" icon="soundcloud">
+    Tracks, Sets
+  </Card>
+  <Card title="Figma" icon="figma">
+    Files, Prototypes
+  </Card>
+  <Card title="CodePen" icon="codepen">
+    Pens
+  </Card>
+  <Card title="CodeSandbox" icon="code">
+    Sandboxes
+  </Card>
+  <Card title="Loom" icon="video">
+    Videos
+  </Card>
+  <Card title="Dailymotion" icon="play">
+    Videos
+  </Card>
+  <Card title="Wistia" icon="circle-play">
+    Videos
+  </Card>
+  <Card title="Google Maps" icon="map">
+    Maps, Places
+  </Card>
+</CardGroup>
+
+## Configuration
+
+```jsx
+import Embed from '@yoopta/embed';
+
+const plugins = [
+  Embed.extend({
+    options: {
+      maxWidth: 800, // Maximum width in pixels
+      defaultSizes: {
+        width: 650,
+        height: 400,
+      },
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="maxWidth" type="number" default="650">
+  Maximum width for embedded content in pixels
+</ResponseField>
+
+<ResponseField name="defaultSizes" type="object">
+  Default dimensions for embeds when aspect ratio cannot be determined
+  <Expandable title="properties">
+    <ResponseField name="width" type="number" default="650">
+      Default width in pixels
+    </ResponseField>
+    <ResponseField name="height" type="number" default="400">
+      Default height in pixels
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Element Props
+
+<ParamField path="provider" type="object | null">
+  Provider information for the embedded content:
+  ```typescript
+  {
+    type: EmbedProviderType; // 'youtube' | 'vimeo' | 'twitter' | etc.
+    id: string;              // Provider-specific content ID
+    url: string;             // Original URL
+    embedUrl: string;        // URL used in iframe
+    meta?: {
+      title?: string;
+      description?: string;
+      thumbnailUrl?: string;
+      authorName?: string;
+      authorUrl?: string;
+    };
+  }
+  ```
+</ParamField>
+
+<ParamField path="sizes" type="object">
+  Embed dimensions: `{ width: number, height: number }`
+</ParamField>
+
+## Provider Types
+
+```typescript
+type EmbedProviderType =
+  | 'youtube'
+  | 'vimeo'
+  | 'dailymotion'
+  | 'wistia'
+  | 'loom'
+  | 'twitter'
+  | 'instagram'
+  | 'figma'
+  | 'codepen'
+  | 'codesandbox'
+  | 'spotify'
+  | 'soundcloud'
+  | 'google-maps'
+  | 'unknown';
+```
+
+## Commands
+
+```typescript
+import { EmbedCommands } from '@yoopta/embed';
+
+// Insert an embed from URL
+EmbedCommands.insertEmbed(editor, {
+  url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+});
+
+// Check if URL is supported
+const isSupported = EmbedCommands.isEmbedUrl('https://vimeo.com/123456789');
+```
+
+## Utility Functions
+
+The Embed plugin exports utility functions for working with embed URLs:
+
+```typescript
+import {
+  parseEmbedUrl,
+  isEmbedUrl,
+  detectProvider,
+  getProviderConfig,
+  getProviderAspectRatio,
+  calculateEmbedDimensions,
+  getSupportedProviders,
+  PROVIDER_CONFIGS,
+} from '@yoopta/embed';
+
+// Parse a URL and get provider info
+const provider = parseEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+// {
+//   type: 'youtube',
+//   id: 'dQw4w9WgXcQ',
+//   url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+//   embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+// }
+
+// Check if URL is embeddable
+const canEmbed = isEmbedUrl('https://open.spotify.com/track/...');
+// true
+
+// Detect provider type
+const providerType = detectProvider('https://codepen.io/user/pen/abc123');
+// 'codepen'
+
+// Get aspect ratio for provider
+const ratio = getProviderAspectRatio('youtube');
+// { width: 16, height: 9 }
+
+// Calculate dimensions based on max width
+const dimensions = calculateEmbedDimensions('youtube', 800);
+// { width: 800, height: 450 }
+
+// Get list of supported providers
+const providers = getSupportedProviders();
+// [{ type: 'youtube', name: 'YouTube' }, ...]
+```
+
+## URL Patterns
+
+Each provider supports specific URL patterns:
+
+### YouTube
+```
+youtube.com/watch?v=VIDEO_ID
+youtu.be/VIDEO_ID
+youtube.com/embed/VIDEO_ID
+youtube.com/shorts/VIDEO_ID
+```
+
+### Vimeo
+```
+vimeo.com/VIDEO_ID
+player.vimeo.com/video/VIDEO_ID
+```
+
+### Twitter/X
+```
+twitter.com/user/status/TWEET_ID
+x.com/user/status/TWEET_ID
+```
+
+### Instagram
+```
+instagram.com/p/POST_ID
+instagram.com/reel/REEL_ID
+instagram.com/tv/TV_ID
+```
+
+### Spotify
+```
+open.spotify.com/track/TRACK_ID
+open.spotify.com/album/ALBUM_ID
+open.spotify.com/playlist/PLAYLIST_ID
+open.spotify.com/episode/EPISODE_ID
+open.spotify.com/show/SHOW_ID
+```
+
+### Figma
+```
+figma.com/file/FILE_ID
+figma.com/proto/FILE_ID
+figma.com/design/FILE_ID
+```
+
+### CodePen
+```
+codepen.io/USER/pen/PEN_ID
+codepen.io/USER/full/PEN_ID
+```
+
+### CodeSandbox
+```
+codesandbox.io/s/SANDBOX_ID
+codesandbox.io/embed/SANDBOX_ID
+```
+
+## Hooks
+
+### useEmbedUrl
+
+Parse URLs and fetch oEmbed data:
+
+```typescript
+import { useEmbedUrl } from '@yoopta/embed';
+
+const MyComponent = () => {
+  const { provider, oEmbedData, loading, error, embedProps } = useEmbedUrl(
+    'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  );
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <p>Provider: {provider?.type}</p>
+      <p>Title: {oEmbedData?.title}</p>
+      <p>Dimensions: {embedProps.sizes?.width} x {embedProps.sizes?.height}</p>
+    </div>
+  );
+};
+```
+
+## Custom Rendering
+
+```jsx
+import Embed from '@yoopta/embed';
+
+const CustomEmbed = Embed.extend({
+  elements: {
+    embed: {
+      render: (props) => {
+        const { provider, sizes } = props.element.props;
+
+        if (!provider) {
+          return (
+            <div {...props.attributes} contentEditable={false}>
+              <div className="embed-placeholder">
+                Enter a URL to embed content
+              </div>
+              {props.children}
+            </div>
+          );
+        }
+
+        return (
+          <div {...props.attributes} contentEditable={false}>
+            <div className="embed-wrapper" style={{ maxWidth: sizes.width }}>
+              <iframe
+                src={provider.embedUrl}
+                width={sizes.width}
+                height={sizes.height}
+                frameBorder="0"
+                allowFullScreen
+                title={provider.meta?.title || provider.type}
+              />
+            </div>
+            {props.children}
+          </div>
+        );
+      },
+    },
+  },
+});
+```
+
+## With Shadcn Theme
+
+```jsx
+import Embed from '@yoopta/embed';
+import { EmbedUI } from '@yoopta/themes-shadcn';
+
+const plugins = [
+  Embed.extend({
+    elements: EmbedUI,
+    options: {
+      maxWidth: 800,
+    },
+  }),
+];
+```
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes `<iframe>` elements with supported URLs:
+
+```html
+<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="650" height="400"></iframe>
+```
+
+It also handles divs with the `data-yoopta-embed` attribute:
+
+```html
+<div data-yoopta-embed data-provider="youtube">
+  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="650" height="400"></iframe>
+</div>
+```
+
+### HTML Serialization
+
+```html
+<div data-yoopta-embed data-provider="youtube" style="display: flex; justify-content: center;">
+  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="650" height="366" frameborder="0" allowfullscreen></iframe>
+</div>
+```
+
+### Markdown Serialization
+
+Embeds are serialized as links in Markdown:
+
+```markdown
+[YouTube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+```
+
+### Email Serialization
+
+For email clients that don't support iframes, embeds are rendered as clickable thumbnails (when available) or placeholder links:
+
+```html
+<a href="https://www.youtube.com/watch?v=..." target="_blank">
+  <img src="thumbnail_url" alt="Video title" />
+</a>
+```
+
+## Aspect Ratios
+
+Each provider has its optimal aspect ratio:
+
+| Provider | Aspect Ratio |
+|----------|--------------|
+| YouTube | 16:9 |
+| Vimeo | 16:9 |
+| Dailymotion | 16:9 |
+| Loom | 16:9 |
+| Wistia | 16:9 |
+| Figma | 16:9 |
+| CodePen | 16:9 |
+| CodeSandbox | 16:9 |
+| Google Maps | 16:9 |
+| Twitter | 550:600 |
+| Instagram | 1:1 |
+| Spotify | 300:380 |
+| SoundCloud | 100:166 |
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Blog Posts">
+    Embed YouTube tutorials, Spotify playlists, or tweets
+  </Card>
+  <Card title="Documentation">
+    Include Figma designs, CodePen demos, or Loom walkthroughs
+  </Card>
+  <Card title="Portfolio">
+    Showcase Vimeo videos, Dribbble shots, or CodeSandbox projects
+  </Card>
+  <Card title="Social Content">
+    Embed Instagram posts, Twitter threads, or TikTok videos
+  </Card>
+  <Card title="Music & Audio">
+    Include Spotify tracks, SoundCloud sets, or podcast episodes
+  </Card>
+  <Card title="Development">
+    Share CodePen experiments, CodeSandbox demos, or GitHub gists
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use Appropriate Providers">
+    Choose the right provider for your content type. Use Video plugin for self-hosted videos, Embed plugin for third-party content.
+  </Accordion>
+
+  <Accordion title="Consider Loading Performance">
+    Embeds load external content which can affect page performance. Consider lazy loading for content-heavy pages.
+  </Accordion>
+
+  <Accordion title="Provide Fallbacks">
+    Some embeds may not load due to privacy settings or content restrictions. Consider providing fallback content or links.
+  </Accordion>
+
+  <Accordion title="Respect Content Policies">
+    Some platforms have embedding restrictions. Check provider policies for commercial use.
+  </Accordion>
+
+  <Accordion title="Set Reasonable Max Widths">
+    Configure appropriate maxWidth for your design to maintain consistency across embed types.
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="URL not detected">
+    If a URL is not being detected, check:
+    
+    1. The URL format matches supported patterns
+    2. The URL is from a supported provider
+    
+    **Solution:** Use the `parseEmbedUrl` utility to debug:
+    
+    ```typescript
+    import { parseEmbedUrl } from '@yoopta/embed';
+    const provider = parseEmbedUrl('your-url-here');
+    console.log(provider); // Check if provider is not null
+    ```
+  </Accordion>
+
+  <Accordion title="Embed not displaying">
+    Some content may be blocked due to:
+    
+    1. Content is private or restricted
+    2. Platform blocks embedding from your domain
+    3. CORS restrictions
+    
+    **Solution:** Check the provider's embedding policies and ensure content is publicly embeddable.
+  </Accordion>
+
+  <Accordion title="Wrong aspect ratio">
+    If the aspect ratio looks wrong:
+    
+    1. The provider may have changed their default dimensions
+    2. The content may have a non-standard aspect ratio
+    
+    **Solution:** Resize the embed manually using the resize handles.
+  </Accordion>
+
+  <Accordion title="oEmbed data not loading">
+    Not all providers support oEmbed. The plugin will still work but may not have:
+    
+    1. Thumbnail images
+    2. Title/description metadata
+    3. Author information
+    
+    **Solution:** This is expected behavior. The embed will still function correctly.
+  </Accordion>
+</AccordionGroup>
+
+## Embed vs Video Plugin
+
+| Feature | Embed Plugin | Video Plugin |
+|---------|-------------|--------------|
+| Self-hosted videos | ❌ | ✅ |
+| YouTube/Vimeo | ✅ | ✅ |
+| File upload | ❌ | ✅ |
+| Social media | ✅ | ❌ |
+| Code sandboxes | ✅ | ❌ |
+| Music services | ✅ | ❌ |
+| Maps | ✅ | ❌ |
+| Playback settings | ❌ | ✅ |
+| Poster images | ❌ | ✅ |
+
+**Recommendation:** Use the Video plugin for self-hosted videos or when you need playback controls. Use the Embed plugin for third-party content from social media, code sandboxes, music services, and maps.
+
+## Related Plugins
+
+- [Video Plugin](/plugins/video) - For self-hosted videos and video providers with playback controls
+- [Image Plugin](/plugins/image) - For image content
+- [File Plugin](/plugins/file) - For file attachments
+

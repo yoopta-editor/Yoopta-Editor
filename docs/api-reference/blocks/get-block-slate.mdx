@@ -1,0 +1,158 @@
+---
+title: getBlockSlate
+description: Get Slate editor instance for a block
+---
+
+## Overview
+
+The `getBlockSlate` method retrieves the underlying Slate editor instance for a specific block.
+
+## Signature
+
+```typescript
+Blocks.getBlockSlate(
+  editor: YooEditor,
+  options: GetBlockSlateOptions
+): SlateEditor | null
+```
+
+## Parameters
+
+<ParamField path="editor" type="YooEditor" required>
+  The editor instance
+</ParamField>
+
+<ParamField path="options" type="GetBlockSlateOptions" required>
+  Configuration object
+
+  <Expandable title="properties">
+    <ParamField path="at" type="number">
+      Position of the block
+    </ParamField>
+
+    <ParamField path="id" type="string">
+      ID of the block. Takes precedence over `at`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns the `SlateEditor` instance if found, or `null` if the block doesn't exist or doesn't have a Slate editor.
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+import { Editor } from 'slate';
+
+// Get Slate editor by block ID
+const slate = Blocks.getBlockSlate(editor, { id: 'block-123' });
+
+if (slate) {
+  // Use Slate API directly
+  const text = Editor.string(slate, []);
+  console.log('Block text:', text);
+}
+
+// Get Slate editor by path
+const slateAtPath = Blocks.getBlockSlate(editor, { at: 3 });
+```
+
+### Access Slate API Directly
+
+```typescript
+const getBlockText = (editor: YooEditor, blockId: string): string => {
+  const slate = Blocks.getBlockSlate(editor, { id: blockId });
+  
+  if (!slate) return '';
+  
+  return Editor.string(slate, []);
+};
+```
+
+### Check if Block is Empty
+
+```typescript
+import { Editor } from 'slate';
+
+const isBlockEmpty = (editor: YooEditor, blockId: string): boolean => {
+  const slate = Blocks.getBlockSlate(editor, { id: blockId });
+  
+  if (!slate) return true;
+  
+  const text = Editor.string(slate, []);
+  return text.trim().length === 0;
+};
+```
+
+## Use Cases
+
+### Direct Slate Operations
+
+```typescript
+import { Transforms, Editor } from 'slate';
+
+const insertTextAtStart = (editor: YooEditor, blockId: string, text: string) => {
+  const slate = Blocks.getBlockSlate(editor, { id: blockId });
+  
+  if (!slate) return;
+  
+  Transforms.insertText(slate, text, {
+    at: Editor.start(slate, []),
+  });
+};
+```
+
+### Get Selection in Block
+
+```typescript
+const getBlockSelection = (editor: YooEditor, blockId: string) => {
+  const slate = Blocks.getBlockSlate(editor, { id: blockId });
+  
+  if (!slate) return null;
+  
+  return slate.selection;
+};
+```
+
+## Notes
+
+<Note>
+  You must provide either `at` or `id`. If neither is provided, the method returns `null`.
+</Note>
+
+<Note>
+  The `id` parameter takes precedence over `at` if both are provided.
+</Note>
+
+<Warning>
+  Not all blocks may have Slate editors. Some void blocks might return `null`.
+</Warning>
+
+<Info>
+  This method is useful when you need to perform low-level Slate operations that aren't available through the Blocks or Elements API.
+</Info>
+
+## Type Definition
+
+```typescript
+type GetBlockSlateOptions = {
+  at?: number; // YooptaPathIndex
+  id?: string;
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getBlock" icon="search" href="/api-reference/blocks/get-block">
+    Get block data
+  </Card>
+  <Card title="focusBlock" icon="crosshairs" href="/api-reference/blocks/focus-block">
+    Focus block using Slate editor
+  </Card>
+</CardGroup>
+

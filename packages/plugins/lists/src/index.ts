@@ -5,13 +5,7 @@ import {
   TodoListElement,
   TodoListElementProps,
 } from './types';
-import './styles.css';
-
-declare module 'slate' {
-  type CustomTypes = {
-    Element: NumberedListElement | BulletedListElement | TodoListElement;
-  }
-}
+import { useNumberListCount } from './utils/use-number-list-count';
 
 export default LISTS;
 
@@ -25,9 +19,9 @@ export {
   NumberedListElement,
   BulletedListElement,
   TodoListElement,
-  // plugins
+  TodoListElementProps,
+  useNumberListCount,
   NumberedList,
   BulletedList,
   TodoList,
-  TodoListElementProps,
 };

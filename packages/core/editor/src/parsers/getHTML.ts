@@ -1,7 +1,7 @@
 import { Paths } from '../editor/paths';
 import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
-import { YooptaBlockBaseMeta } from '../editor/types';
-import { getPluginByInlineElement } from '../utils/blockElements';
+import { getPluginByInlineElement } from '../utils/block-elements';
+import { getYooptaJSON } from './getYooptaJSON';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   underline: { type: 'underline', tag: 'u' },
@@ -26,7 +26,8 @@ function serializeChildren(children, plugins, editor) {
         }, child.text);
 
         return innerHtml;
-      } if (child.type) {
+      }
+      if (child.type) {
         const childPlugin = getPluginByInlineElement(plugins, child.type);
 
         if (childPlugin && childPlugin.parsers?.html?.serialize) {
@@ -60,14 +61,14 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
     const plugin = editor.plugins[blockData.type];
 
     if (plugin && plugin.parsers?.html?.serialize) {
-      const content = serializeChildren(
+      const htmlContent = serializeChildren(
         (blockData.value[0] as SlateElement).children,
         editor.plugins,
         editor,
       );
       return plugin.parsers.html.serialize(
         blockData.value[0] as SlateElement,
-        content,
+        htmlContent,
         blockData.meta,
       );
     }
@@ -75,5 +76,13 @@ export function getHTML(editor: YooEditor, content: YooptaContentValue): string 
     return '';
   });
 
-  return `<body id="yoopta-clipboard" data-editor-id="${editor.id}">${html.join('')}</body>`;
+  // Embed JSON data in HTML for lossless copy/paste within Yoopta
+  const jsonData = getYooptaJSON(editor, content);
+  const escapedJson = jsonData
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return `<body id="yoopta-clipboard" data-editor-id="${editor.id}" data-yoopta-json="${escapedJson}">${html.join('')}</body>`;
 }

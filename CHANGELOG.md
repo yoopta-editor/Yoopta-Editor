@@ -1,5 +1,61 @@
 # Changelog
 
+All notable changes to Yoopta Editor are documented in this file (monorepo single changelog).
+
+---
+
+## [6.0.0] - 2026-01-28
+
+Major version with significant API and architectural changes compared to 4.9.x.
+
+### Summary
+
+- **Editor creation**: `plugins` and `marks` are passed to `createYooptaEditor({ plugins, marks })`, not to `<YooptaEditor>`.
+- **Content**: No `value`/`onChange` controlled pattern on the component; use `editor.setEditorValue()` / `editor.getEditorValue()` and `onChange` callback.
+- **UI**: All UI (toolbar, slash menu, block actions, etc.) are **children** of `<YooptaEditor>` and use `useYooptaEditor()` from context.
+- **Packages**: Headless core, separate `@yoopta/ui`, themes (`@yoopta/themes-shadcn`), namespace APIs (`Blocks`, `Elements`, `Marks`, `Selection`).
+- **Docs & examples**: Documentation and examples updated for the new API.
+
+### Breaking changes
+
+- **Editor creation**: `createYooptaEditor({ plugins, marks })` is required; `plugins` and `marks` must not be passed to `<YooptaEditor>`.
+- **Value**: `value` is not a prop of `<YooptaEditor>`. Use `editor.setEditorValue(data)` for initial/loaded content and `onChange` to react to changes. Read content via `editor.getEditorValue()` or the value passed to `onChange`.
+- **UI as children**: Toolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, SelectionBox, etc. must be rendered as **children** of `<YooptaEditor>` (from `@yoopta/ui`). For drag-and-drop: wrap with `BlockDndContext` and use `renderBlock` with `SortableBlock`.
+- **Deprecated/removed**: `@yoopta/tools` (use `@yoopta/ui`); `<YooptaEditor tools={[...]} />` (use children); `value` on `<YooptaEditor>` (use `setEditorValue` + `onChange`).
+
+### New or changed API
+
+- **createYooptaEditor(options)**: `plugins` (required), `marks` (optional), `value` (optional), `readOnly` (optional), `id` (optional).
+- **YooptaEditor props**: `editor` (required), `onChange`, `onPathChange`, `placeholder`, `autoFocus`, `className`, `style`, `renderBlock`, `children`. No `plugins`, `marks`, or `value`.
+- **Editor instance**: `getEditorValue()`, `setEditorValue(value)`, `applyTransforms([{ type: 'validate_block_paths' }])`, events (`on`/`off`), block operations, elements, parsers, history.
+- **Namespace APIs** (from `@yoopta/editor`): `Blocks.*`, `Elements.*`, `Marks.*`, `Selection.*`.
+
+### UI package (@yoopta/ui)
+
+- FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, SelectionBox, BlockDndContext, SortableBlock, DragHandle — all as children of `<YooptaEditor>`.
+
+### Themes
+
+- Editor and plugins are **headless**; theme packages provide optional UI for block elements. **`@yoopta/themes-shadcn`** (production), **`@yoopta/themes-material`** (in progress).
+- **Apply to all plugins**: `applyTheme(plugins)` — use with `createYooptaEditor({ plugins: applyTheme(plugins), marks })`.
+- **Apply to one plugin**: e.g. `import { CalloutUI } from '@yoopta/themes-shadcn/callout'; Callout.extend({ elements: CalloutUI })`.
+
+### Package structure
+
+- Core: `@yoopta/editor`, `@yoopta/ui`, `@yoopta/exports`. Plugins, marks, themes in separate packages. Examples: `web/next-app-example`, `web/vite-example`, `packages/development`.
+
+### Migration (4.9.x → v6)
+
+1. Create editor with `createYooptaEditor({ plugins, marks })`.
+2. Remove `plugins`, `marks`, and `value` from `<YooptaEditor>`.
+3. Set initial content with `editor.setEditorValue(data)` in `useEffect` or pass `value` into `createYooptaEditor`.
+4. Keep `onChange` and use it (and/or `editor.getEditorValue()`) for persistence.
+5. Move toolbar, block menu, slash menu, block actions inside `<YooptaEditor>` as children.
+6. Replace `@yoopta/tools` with `@yoopta/ui` components.
+7. Optionally use `applyTheme(plugins)` and add BlockDndContext / SortableBlock / SelectionBox as needed.
+
+---
+
 ## [4.9.9] - 2025-06-11
 
 ### [Possible] Breaking Changes

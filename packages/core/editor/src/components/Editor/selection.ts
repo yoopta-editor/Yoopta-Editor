@@ -1,13 +1,11 @@
 import { useRef } from 'react';
-import { Editor, Element, Path, Range, Transforms } from 'slate';
+import { Editor, Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../../editor/blocks';
 import { Paths } from '../../editor/paths';
-import { getPreviousPath } from '../../editor/paths/getPreviousPath';
-import type { YooEditor} from '../../editor/types';
-import { YooptaPath } from '../../editor/types';
-import { findPluginBlockByPath } from '../../utils/findPluginBlockByPath';
+import { getPreviousBlockOrder } from '../../editor/paths/getPreviousBlockOrder';
+import type { YooEditor } from '../../editor/types';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 
 type MultiSelectionOptions = {
@@ -39,13 +37,10 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
     if (typeof path === 'number') {
       const slate = Blocks.getBlockSlate(editor, { at: path });
-      const block = Blocks.getBlock(editor, { at: path });
-      const blockEntity = editor.blocks[block?.type || ''];
-      if (!slate || blockEntity?.hasCustomEditor) return;
+      if (!slate) return;
 
       try {
         Editor.withoutNormalizing(slate, () => {
-          // [TEST]
           Transforms.select(slate, [0]);
 
           if (slate.selection && Range.isExpanded(slate.selection)) {
@@ -53,14 +48,14 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
             ReactEditor.deselect(slate);
           }
         });
-      } catch (error) {}
+      } catch (error) { }
     }
   };
 
   const onShiftKeyDown = (blockOrder: number) => {
     blurSlateSelection();
 
-    const currentSelectionIndex = Paths.getPath(editor);
+    const currentSelectionIndex = Paths.getBlockOrder(editor);
     if (typeof currentSelectionIndex !== 'number') return;
 
     const indexesBetween = Array.from({ length: Math.abs(blockOrder - currentSelectionIndex) }).map(
@@ -214,7 +209,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       return;
     }
 
-    const block = findPluginBlockByPath(editor);
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
     const slate = findSlateBySelectionPath(editor);
 
     if (!slate || !slate.selection || !block) return;
@@ -224,10 +219,10 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
     const isStart = Editor.isStart(slate, slate.selection.focus, parentPath);
 
     if (Range.isExpanded(slate.selection) && isStart) {
-      const prevPath = getPreviousPath(editor);
+      const prevPath = getPreviousBlockOrder(editor);
       if (typeof prevPath !== 'number') return;
 
-      const prevBlock = findPluginBlockByPath(editor, { at: prevPath });
+      const prevBlock = Blocks.getBlock(editor, { at: prevPath });
 
       if (block && prevBlock) {
         event.preventDefault();
@@ -293,7 +288,7 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
       return;
     }
 
-    const block = findPluginBlockByPath(editor);
+    const block = Blocks.getBlock(editor, { at: editor.path.current });
     const slate = findSlateBySelectionPath(editor);
     if (!slate || !slate.selection || !block) return;
 
@@ -302,8 +297,8 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
     const isEnd = Editor.isEnd(slate, slate.selection.focus, parentPath);
 
     if (Range.isExpanded(slate.selection) && isEnd) {
-      const nextPath = Paths.getNextPath(editor);
-      const nextBlock = findPluginBlockByPath(editor, { at: nextPath });
+      const nextPath = Paths.getNextBlockOrder(editor);
+      const nextBlock = Blocks.getBlock(editor, { at: nextPath });
 
       if (block && nextBlock) {
         event.preventDefault();

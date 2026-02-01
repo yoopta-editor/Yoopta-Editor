@@ -24,7 +24,7 @@ type ExportType = {
 
 type ExportSelectorProps = {
   presets: ExportType[];
-} & PopoverProps
+} & PopoverProps;
 
 export const ExportSelector = ({ presets, ...props }: ExportSelectorProps) => {
   const [open, setOpen] = React.useState(false);
@@ -72,4 +72,4 @@ export const ExportSelector = ({ presets, ...props }: ExportSelectorProps) => {
       </PopoverContent>
     </Popover>
   );
-}
+};

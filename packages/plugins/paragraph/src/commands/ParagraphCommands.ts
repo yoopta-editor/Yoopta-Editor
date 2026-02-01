@@ -22,7 +22,11 @@ export type ParagraphCommands = {
 };
 
 export const ParagraphCommands: ParagraphCommands = {
-  buildParagraphElements: (editor, options = {}) => ({ id: generateId(), type: 'paragraph', children: [{ text: options?.text || '' }] }),
+  buildParagraphElements: (editor, options = {}) => ({
+    id: generateId(),
+    type: 'paragraph',
+    children: [{ text: options?.text || '' }],
+  }),
   insertParagraph: (editor, options = {}) => {
     const { at, focus, text } = options;
 

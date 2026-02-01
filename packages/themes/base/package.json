@@ -1,0 +1,40 @@
+{
+  "name": "@yoopta/themes-base",
+  "version": "6.0.0-beta.16",
+  "description": "Base theme (vanilla CSS) for Yoopta Editor plugins",
+  "author": "Darginec05 <devopsbanda@gmail.com>",
+  "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "peerDependencies": {
+    "@yoopta/accordion": ">=4.0.0",
+    "@yoopta/editor": "6.0.0-beta.4",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/yoopta-themes-base.test.js",
+    "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
+    "prepublishOnly": "yarn build",
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
+  },
+  "bugs": {
+    "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
+  },
+  "gitHead": "0c1eed956a263573e6aff9bdf58dcaf834deadf5"
+}

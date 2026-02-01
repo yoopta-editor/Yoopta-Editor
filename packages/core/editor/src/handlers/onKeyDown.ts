@@ -1,33 +1,16 @@
 import { isKeyHotkey } from 'is-hotkey';
-import type { Point} from 'slate';
-import { Editor, Node, Path, Range, Transforms } from 'slate';
+import { Path, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../editor/blocks';
 import { Paths } from '../editor/paths';
-import type { SlateEditor, YooEditor } from '../editor/types';
-import { findPluginBlockByPath } from '../utils/findPluginBlockByPath';
+import type { YooEditor } from '../editor/types';
+import { executeEnterAction, getEnterAction } from '../utils/enter-action';
+import { executeBackspaceAction, getBackspaceAction } from '../utils/execute-backspace-action';
 import { findSlateBySelectionPath } from '../utils/findSlateBySelectionPath';
-import { generateId } from '../utils/generateId';
-import { getLastNode } from '../utils/getLastNodePoint';
+import { getNextHierarchicalSelection } from '../utils/get-next-hierarchical-selection';
+import { getFirstNodePoint, getLastNodePoint } from '../utils/get-node-points';
 import { HOTKEYS } from '../utils/hotkeys';
-
-function getNextNodePoint(slate: SlateEditor, path: Path): Point {
-  try {
-    const [, firstNodePath] = Editor.first(slate, path);
-
-    return {
-      path: firstNodePath,
-      offset: 0,
-    };
-  } catch (error) {
-    return {
-      path: [0, 0],
-      offset: 0,
-    };
-  }
-}
-/** */
 
 export function onKeyDown(editor: YooEditor) {
   return (event: React.KeyboardEvent) => {
@@ -58,121 +41,90 @@ export function onKeyDown(editor: YooEditor) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      event.preventDefault();
+      const result = getEnterAction(editor, slate);
 
-      const first = Editor.first(slate, []);
-      const last = Editor.last(slate, []);
-      const isStart = Editor.isStart(slate, slate.selection.anchor, first[1]);
-      const isEnd = Editor.isEnd(slate, slate.selection.anchor, last[1]);
+      switch (result.action) {
+        case 'delegate-to-plugin':
+          return;
 
-      if (Range.isExpanded(slate.selection)) {
-        Transforms.delete(slate, { at: slate.selection });
+        case 'default':
+          return;
+
+        case 'prevent':
+          event.preventDefault();
+          return;
+
+        default:
+          event.preventDefault();
+          executeEnterAction(editor, slate, result);
+          return;
       }
-
-      // when the cursor is in the middle of the block
-      if (!isStart && !isEnd) {
-        // [TEST]
-        editor.splitBlock({ slate, focus: true });
-        return;
-      }
-
-      const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
-      const defaultBlock = Blocks.buildBlockData({ id: generateId() });
-
-      const string = Editor.string(slate, []);
-      const insertBefore = isStart && string.length > 0;
-
-      const nextPath = Paths.getNextPath(editor);
-
-      // [TEST]
-      editor.batchOperations(() => {
-        // [TEST]
-        editor.insertBlock(defaultBlock.type, {
-          at: insertBefore ? editor.path.current : nextPath,
-          focus: !insertBefore,
-        });
-
-        // [TEST]
-        if (insertBefore && currentBlock) {
-          editor.focusBlock(currentBlock.id);
-        }
-      });
-
-      return;
     }
 
     if (HOTKEYS.isBackspace(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      const parentPath = Path.parent(slate.selection.anchor.path);
-      const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
+      const result = getBackspaceAction(editor, slate);
 
-      // When the cursor is at the start of the block, delete the block
-      if (isStart) {
-        event.preventDefault();
-        const text = Editor.string(slate, parentPath);
-
-        // If current block is empty just delete block
-        if (text.trim().length === 0) {
-          // [TEST]
-          editor.deleteBlock({ at: editor.path.current, focus: true });
+      switch (result.action) {
+        case 'default':
+          // Allow Slate to handle it normally
           return;
-        }
-        // If current block is not empty merge text nodes with previous block
-        
-          if (Range.isExpanded(slate.selection)) {
-            return Transforms.delete(slate, { at: slate.selection });
-          }
 
-          const prevBlock = Blocks.getBlock(editor, { at: Paths.getPreviousPath(editor) });
-          const prevSlate = Blocks.getBlockSlate(editor, { id: prevBlock?.id });
-          if (prevBlock && prevSlate) {
-            const { node: lastSlateNode } = getLastNode(prevSlate);
-            const prevSlateText = Node.string(lastSlateNode);
+        case 'prevent':
+          // Block the action
+          event.preventDefault();
+          return;
 
-            if (prevSlateText.trim().length === 0) {
-              // [TEST]
-              editor.deleteBlock({ blockId: prevBlock.id, focus: false });
-              editor.setPath({ current: prevBlock.meta.order });
-              return;
-            }
-          }
-
-          // [TEST]
-          editor.mergeBlock();
-        
+        default:
+          // Execute custom action
+          event.preventDefault();
+          executeBackspaceAction(editor, slate, result);
+          return;
       }
-      return;
     }
 
     if (HOTKEYS.isSelect(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      const [, firstElementPath] = Editor.first(slate, [0]);
-      const [, lastElementPath] = Editor.last(slate, [slate.children.length - 1]);
+      const result = getNextHierarchicalSelection(editor, slate);
 
-      const fullRange = Editor.range(slate, firstElementPath, lastElementPath);
-      const isAllBlockElementsSelected = Range.equals(slate.selection, fullRange);
+      switch (result.action) {
+        case 'select-path':
+          event.preventDefault();
+          Transforms.select(slate, result.path);
+          break;
 
-      const string = Editor.string(slate, fullRange);
-      const isElementEmpty = string.trim().length === 0;
+        case 'select-range':
+          event.preventDefault();
+          Transforms.select(slate, result.range);
+          break;
 
-      // [TODO] - handle cases for void node elements
-      if ((Range.isExpanded(slate.selection) && isAllBlockElementsSelected) || isElementEmpty) {
-        event.preventDefault();
+        case 'select-block':
+          event.preventDefault();
+          ReactEditor.blur(slate);
+          ReactEditor.deselect(slate);
+          Transforms.deselect(slate);
+          editor.setPath({
+            current: null,
+            selected: [result.blockOrder],
+            source: 'keyboard',
+          });
+          break;
 
-        ReactEditor.blur(slate);
-        ReactEditor.deselect(slate);
-        Transforms.deselect(slate);
+        case 'select-all-blocks':
+          event.preventDefault();
+          editor.setPath({
+            current: null,
+            selected: result.blockOrders,
+            source: 'keyboard',
+          });
+          break;
 
-        const allBlockPaths = Array.from(
-          { length: Object.keys(editor.children).length },
-          (_, i) => i,
-        );
-        editor.setPath({ current: null, selected: allBlockPaths, source: 'keyboard' });
-        return;
+        default:
+          break;
       }
     }
 
@@ -198,75 +150,84 @@ export function onKeyDown(editor: YooEditor) {
       return;
     }
 
-    if (HOTKEYS.isTab(event)) {
-      if (event.isDefaultPrevented()) return;
-      event.preventDefault();
+    // if (HOTKEYS.isTab(event)) {
+    //   if (event.isDefaultPrevented()) return;
+    //   event.preventDefault();
 
-      const selectedPaths = editor.path.selected;
-      if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
-        editor.batchOperations(() => {
-          selectedPaths.forEach((index) => {
-            editor.increaseBlockDepth({ at: index });
-          });
-        });
+    //   const selectedPaths = editor.path.selected;
+    //   if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
+    //     editor.batchOperations(() => {
+    //       selectedPaths.forEach((index) => {
+    //         editor.increaseBlockDepth({ at: index });
+    //       });
+    //     });
 
-        return;
-      }
+    //     return;
+    //   }
 
-      editor.increaseBlockDepth();
-      return;
-    }
+    //   editor.increaseBlockDepth();
+    //   return;
+    // }
 
-    // [TODO] - default behavior for complex plugins
     if (HOTKEYS.isArrowUp(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      // If element with any paths has all paths at 0
-      const isAllPathsInStart = new Set(slate.selection.anchor.path).size === 1;
+      const prevPath = Paths.getPreviousBlockOrder(editor);
+      if (typeof prevPath !== 'number') return;
 
-      if (isAllPathsInStart) {
-        const prevPath = Paths.getPreviousPath(editor);
+      const prevBlock = Blocks.getBlock(editor, { at: prevPath });
+      if (!prevBlock) return;
+
+      const firstLeafPoint = getFirstNodePoint(slate);
+      const isAtFirstLeafStart =
+        Path.equals(slate.selection.anchor.path, firstLeafPoint.path) &&
+        slate.selection.anchor.offset === 0;
+
+      if (isAtFirstLeafStart) {
         const prevSlate = findSlateBySelectionPath(editor, { at: prevPath });
-        const prevBlock = findPluginBlockByPath(editor, { at: prevPath });
-        const prevBlockEntity = editor.blocks[prevBlock?.type || ''];
-        if (prevSlate && prevBlock && !prevBlockEntity?.hasCustomEditor) {
-          const [, prevLastPath] = Editor.last(prevSlate, [0]);
-          const prevLastNodeTextLength = Editor.string(prevSlate, prevLastPath).length;
-          const selection: Point = {
-            path: prevLastPath,
-            offset: prevLastNodeTextLength,
-          };
-          event.preventDefault();
-          editor.focusBlock(prevBlock.id, {
-            focusAt: selection,
-            waitExecution: false,
-            shouldUpdateBlockPath: true,
-          });
-          return;
-        }
+        if (!prevSlate) return;
+
+        const prevLastLeafPoint = getLastNodePoint(prevSlate);
+
+        event.preventDefault();
+        editor.focusBlock(prevBlock.id, {
+          focusAt: prevLastLeafPoint,
+          waitExecution: false,
+          shouldUpdateBlockPath: true,
+        });
+        return;
       }
     }
 
-    // [TODO] - default behavior for complex plugins
     if (HOTKEYS.isArrowDown(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;
 
-      const parentPath = Path.parent(slate.selection.anchor.path);
-      const isEnd = Editor.isEnd(slate, slate.selection.anchor, parentPath);
-      if (isEnd) {
-        const nextPath = Paths.getNextPath(editor);
+      const nextPath = Paths.getNextBlockOrder(editor);
+      if (typeof nextPath !== 'number') return;
+
+      const nextBlock = Blocks.getBlock(editor, { at: nextPath });
+      if (!nextBlock) return;
+
+      const lastLeafPoint = getLastNodePoint(slate);
+      const isAtLastLeafEnd =
+        Path.equals(slate.selection.anchor.path, lastLeafPoint.path) &&
+        slate.selection.anchor.offset === lastLeafPoint.offset;
+
+      if (isAtLastLeafEnd) {
         const nextSlate = findSlateBySelectionPath(editor, { at: nextPath });
-        const nextBlock = findPluginBlockByPath(editor, { at: nextPath });
-        const nextBlockEntity = editor.blocks[nextBlock?.type || ''];
-        if (nextSlate && nextBlock && !nextBlockEntity?.hasCustomEditor) {
-          // [TODO] - should parent path, but for next slate
-          const selection: Point = getNextNodePoint(nextSlate, parentPath);
-          event.preventDefault();
-          editor.focusBlock(nextBlock.id, { focusAt: selection, waitExecution: false });
-          return;
-        }
+        if (!nextSlate) return;
+
+        const nextFirstLeafPoint = getFirstNodePoint(nextSlate);
+
+        event.preventDefault();
+        editor.focusBlock(nextBlock.id, {
+          focusAt: nextFirstLeafPoint,
+          waitExecution: false,
+          shouldUpdateBlockPath: true,
+        });
+        return;
       }
     }
 

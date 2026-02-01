@@ -1,5 +1,5 @@
 import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
-import { Blocks, Elements, generateId } from '@yoopta/editor';
+import { Blocks, Elements } from '@yoopta/editor';
 
 import type {
   BulletedListElement,
@@ -28,7 +28,10 @@ export type BulletedListCommands = {
 };
 
 export const BulletedListCommands: BulletedListCommands = {
-  buildBulletedListElements: (editor, options) => ({ id: generateId(), type: 'bulleted-list', children: [{ text: options?.text || '' }] }),
+  buildBulletedListElements: (editor, options) =>
+    editor.y('bulleted-list', {
+      children: [editor.y.text(options?.text ?? '')],
+    }) as BulletedListElement,
   insertBulletedList: (editor, options = {}) => {
     const { at, focus, text } = options;
     const bulletList = BulletedListCommands.buildBulletedListElements(editor, { text });
@@ -51,7 +54,10 @@ export type NumberedListCommands = {
 };
 
 export const NumberedListCommands: NumberedListCommands = {
-  buildNumberedListElements: (editor, options) => ({ id: generateId(), type: 'numbered-list', children: [{ text: options?.text || '' }] }),
+  buildNumberedListElements: (editor, options) =>
+    editor.y('numbered-list', {
+      children: [editor.y.text(options?.text ?? '')],
+    }) as NumberedListElement,
   insertNumberedList: (editor, options = {}) => {
     const { at, focus, text } = options;
     const numberdedList = NumberedListCommands.buildNumberedListElements(editor, { text });
@@ -79,12 +85,11 @@ export type TodoListCommands = {
 };
 
 export const TodoListCommands: TodoListCommands = {
-  buildTodoListElements: (editor, options) => ({
-      id: generateId(),
-      type: 'todo-list',
-      children: [{ text: options?.text || '' }],
-      props: options?.props || { checked: false },
-    }),
+  buildTodoListElements: (editor, options) =>
+    editor.y('todo-list', {
+      props: { checked: options?.props?.checked ?? false },
+      children: [editor.y.text(options?.text ?? '')],
+    }) as TodoListElement,
   insertTodoList: (editor, options = {}) => {
     const { at, focus, text, props } = options;
     const todoList = TodoListCommands.buildTodoListElements(editor, { text, props });
@@ -96,7 +101,8 @@ export const TodoListCommands: TodoListCommands = {
   },
   updateTodoList: (editor, blockId, props) => {
     if (typeof props?.checked === 'boolean') {
-      Elements.updateElement(editor, blockId, {
+      Elements.updateElement(editor, {
+        blockId,
         type: 'todo-list',
         props: { checked: props?.checked },
       });

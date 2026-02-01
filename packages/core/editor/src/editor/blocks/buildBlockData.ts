@@ -1,15 +1,15 @@
 import { generateId } from '../../utils/generateId';
-import type { SlateElement, YooptaBlockBaseMeta, YooptaBlockData } from "../types";
+import type { SlateElement, YooptaBlockBaseMeta, YooptaBlockData } from '../types';
 
 export const buildBlockElement = (element?: Partial<SlateElement>): SlateElement => ({
-    id: generateId(),
-    type: element?.type || 'paragraph',
-    children: element?.children || [{ text: '' }],
-    props: {
-      nodeType: 'block',
-      ...element?.props,
-    },
-  });
+  id: generateId(),
+  type: element?.type || 'paragraph',
+  children: element?.children || [{ text: '' }],
+  props: {
+    nodeType: 'block',
+    ...element?.props,
+  },
+});
 
 type BuildBlockDataOptions = Partial<Omit<YooptaBlockData<SlateElement>, 'meta'>> & {
   value?: SlateElement[];

@@ -1,0 +1,323 @@
+---
+title: 'FloatingToolbar'
+description: 'Floating formatting toolbar that appears on text selection'
+icon: 'toolbox'
+---
+
+## Overview
+
+`FloatingToolbar` is a self-contained component that displays a formatting toolbar when text is selected. It handles selection tracking internally and exposes visibility state via context.
+
+<Frame>
+  <img src="/images/toolbar.png" alt="Floating toolbar screenshot" />
+</Frame>
+
+## Features
+
+- **API** — compound components with auto-visibility
+- **Selection tracking** — automatically shows/hides on text selection
+- **Block selection support** — also works when blocks are selected
+- **`frozen` prop** — pause selection tracking when popups are open
+- **TypeScript** — full type safety
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+```tsx
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+import { Marks, useYooptaEditor } from '@yoopta/editor';
+import { FontBoldIcon, FontItalicIcon, CodeIcon } from '@radix-ui/react-icons';
+
+function MyToolbar() {
+  const editor = useYooptaEditor();
+
+  return (
+    <FloatingToolbar>
+      <FloatingToolbar.Content>
+        <FloatingToolbar.Group>
+          {editor.formats.bold && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'bold' })}
+              active={Marks.isActive(editor, { type: 'bold' })}
+              title="Bold">
+              <FontBoldIcon />
+            </FloatingToolbar.Button>
+          )}
+          {editor.formats.italic && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'italic' })}
+              active={Marks.isActive(editor, { type: 'italic' })}
+              title="Italic">
+              <FontItalicIcon />
+            </FloatingToolbar.Button>
+          )}
+          {editor.formats.code && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'code' })}
+              active={Marks.isActive(editor, { type: 'code' })}
+              title="Code">
+              <CodeIcon />
+            </FloatingToolbar.Button>
+          )}
+        </FloatingToolbar.Group>
+      </FloatingToolbar.Content>
+    </FloatingToolbar>
+  );
+}
+
+// In your editor: create editor with createYooptaEditor({ plugins, marks });
+// UI components as children
+<YooptaEditor editor={editor} onChange={(value) => console.log(value)} placeholder="Type / to open menu...">
+  <MyToolbar />
+</YooptaEditor>
+```
+
+## API Reference
+
+### `FloatingToolbar` (Root)
+
+Root component that handles selection tracking.
+
+```tsx
+<FloatingToolbar frozen={popoverOpen}>
+  {/* or with render props */}
+  {({ isOpen }) => isOpen && <FloatingToolbar.Content>...</FloatingToolbar.Content>}
+</FloatingToolbar>
+```
+
+**Props:**
+
+| Prop        | Type                                | Description                             |
+| ----------- | ----------------------------------- | --------------------------------------- |
+| `children`  | `ReactNode \| ((api) => ReactNode)` | Content or render function              |
+| `frozen`    | `boolean`                           | When true, selection tracking is paused |
+| `className` | `string`                            | Custom CSS classes                      |
+
+**Render Props API:**
+
+| Property | Type      | Description                |
+| -------- | --------- | -------------------------- |
+| `isOpen` | `boolean` | Whether toolbar is visible |
+
+### `FloatingToolbar.Content`
+
+Floating content panel. Automatically hides when no selection.
+
+```tsx
+<FloatingToolbar.Content className="custom-class">
+  {/* Groups and buttons */}
+</FloatingToolbar.Content>
+```
+
+**Props:**
+
+| Prop        | Type        | Description                |
+| ----------- | ----------- | -------------------------- |
+| `className` | `string`    | Custom CSS classes         |
+| `children`  | `ReactNode` | Toolbar groups and buttons |
+
+### `FloatingToolbar.Group`
+
+Groups related buttons together.
+
+```tsx
+<FloatingToolbar.Group>
+  <FloatingToolbar.Button>Bold</FloatingToolbar.Button>
+  <FloatingToolbar.Button>Italic</FloatingToolbar.Button>
+</FloatingToolbar.Group>
+```
+
+### `FloatingToolbar.Button`
+
+Individual toolbar button.
+
+```tsx
+<FloatingToolbar.Button onClick={handleClick} active={isActive} disabled={false} title="Bold">
+  <BoldIcon />
+</FloatingToolbar.Button>
+```
+
+**Props:**
+
+| Prop        | Type              | Description                      |
+| ----------- | ----------------- | -------------------------------- |
+| `onClick`   | `(event) => void` | Click handler                    |
+| `active`    | `boolean`         | Whether button is active/pressed |
+| `disabled`  | `boolean`         | Disable the button               |
+| `title`     | `string`          | Tooltip text                     |
+| `className` | `string`          | Custom CSS classes               |
+
+### `FloatingToolbar.Separator`
+
+Visual separator between groups.
+
+```tsx
+<FloatingToolbar.Separator />
+```
+
+## Examples
+
+### With Turn Into Button
+
+```tsx
+import { useRef, useState } from 'react';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+
+function MyToolbar() {
+  const editor = useYooptaEditor();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
+
+  const currentBlockId =
+    typeof editor.path.current === 'number'
+      ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
+      : null;
+
+  return (
+    <>
+      <FloatingToolbar frozen={actionMenuOpen}>
+        <FloatingToolbar.Content>
+          <FloatingToolbar.Group>
+            <FloatingToolbar.Button ref={turnIntoRef} onClick={() => setActionMenuOpen(true)}>
+              Turn into
+              <ChevronDownIcon />
+            </FloatingToolbar.Button>
+          </FloatingToolbar.Group>
+          <FloatingToolbar.Separator />
+          <FloatingToolbar.Group>{/* Formatting buttons */}</FloatingToolbar.Group>
+        </FloatingToolbar.Content>
+      </FloatingToolbar>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={setActionMenuOpen}
+        anchor={turnIntoRef.current}
+        blockId={currentBlockId}
+        view="small"
+        placement="bottom-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+```
+
+### Rich Formatting Toolbar
+
+```tsx
+function FormattingToolbar() {
+  const editor = useYooptaEditor();
+
+  const buttons = [
+    { type: 'bold', icon: <BoldIcon />, label: 'Bold' },
+    { type: 'italic', icon: <ItalicIcon />, label: 'Italic' },
+    { type: 'underline', icon: <UnderlineIcon />, label: 'Underline' },
+    { type: 'strike', icon: <StrikethroughIcon />, label: 'Strikethrough' },
+    { type: 'code', icon: <CodeIcon />, label: 'Code' },
+  ];
+
+  return (
+    <FloatingToolbar>
+      <FloatingToolbar.Content>
+        <FloatingToolbar.Group>
+          {buttons.map((btn) => {
+            const isActive = Marks.isActive(editor, { type: btn.type });
+            if (!editor.formats[btn.type]) return null;
+
+            return (
+              <FloatingToolbar.Button
+                key={btn.type}
+                onClick={() => Marks.toggle(editor, { type: btn.type })}
+                active={isActive}
+                title={btn.label}>
+                {btn.icon}
+              </FloatingToolbar.Button>
+            );
+          })}
+        </FloatingToolbar.Group>
+      </FloatingToolbar.Content>
+    </FloatingToolbar>
+  );
+}
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-floating-toolbar-gap: 4px;
+  --yoopta-ui-floating-toolbar-padding: 6px;
+  --yoopta-ui-floating-toolbar-radius: 0.5rem;
+  --yoopta-ui-floating-toolbar-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --yoopta-ui-floating-toolbar-button-min-width: 32px;
+  --yoopta-ui-floating-toolbar-button-min-height: 32px;
+  --yoopta-ui-floating-toolbar-button-hover: var(--yoopta-ui-accent);
+}
+```
+
+### Custom Styles
+
+```tsx
+<FloatingToolbar>
+  <FloatingToolbar.Content className="bg-slate-900 border-white/10">
+    <FloatingToolbar.Group>
+      <FloatingToolbar.Button className="text-white hover:bg-white/10">Bold</FloatingToolbar.Button>
+    </FloatingToolbar.Group>
+  </FloatingToolbar.Content>
+</FloatingToolbar>
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use frozen prop when opening popovers">
+    ```tsx
+    const [popoverOpen, setPopoverOpen] = useState(false);
+
+    <FloatingToolbar frozen={popoverOpen}>
+      {/* Prevents toolbar from closing while popover is open */}
+    </FloatingToolbar>
+    ```
+
+  </Accordion>
+
+  <Accordion title="Check if format exists before rendering">
+  ```tsx
+  {editor.formats.bold && (
+    <FloatingToolbar.Button onClick={() => Marks.toggle(editor, { type: 'bold' })}>
+      Bold
+    </FloatingToolbar.Button>
+  )}
+  ```
+</Accordion>
+
+  <Accordion title="Use separators to group related actions">
+    ```tsx
+    <FloatingToolbar.Group>{/* text format buttons */}</FloatingToolbar.Group>
+    <FloatingToolbar.Separator />
+    <FloatingToolbar.Group>{/* alignment buttons */}</FloatingToolbar.Group>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Open from "Turn into" button
+  </Card>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Block-level action buttons
+  </Card>
+</CardGroup>

@@ -1,0 +1,288 @@
+---
+title: 'BlockOptions'
+description: 'Context menu for block-level actions (duplicate, delete, turn into, etc.)'
+icon: 'ellipsis'
+---
+
+## Overview
+
+`BlockOptions` is compound component for block context menus. It supports controlled/uncontrolled modes, Floating UI positioning, and integrates seamlessly with other UI components.
+
+<Frame>
+  <img src="/images/block-options.png" alt="Block options menu example" />
+</Frame>
+
+## Features
+
+- **API** — controlled/uncontrolled with `open`/`onOpenChange`
+- **Compound components** — Root, Content, Trigger, Item, Group, Separator
+- **Floating positioning** — automatic positioning via Floating UI
+- **Helper hook** — `useBlockActions` for common operations
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+```tsx
+import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
+
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
+
+  return (
+    <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+      <BlockOptions.Content side="right" align="start">
+        <BlockOptions.Group>
+          <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>Duplicate</BlockOptions.Item>
+          <BlockOptions.Item onSelect={() => copyBlockLink(blockId)}>Copy link</BlockOptions.Item>
+        </BlockOptions.Group>
+        <BlockOptions.Separator />
+        <BlockOptions.Group>
+          <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+            Delete
+          </BlockOptions.Item>
+        </BlockOptions.Group>
+      </BlockOptions.Content>
+    </BlockOptions>
+  );
+}
+```
+
+## API Reference
+
+### `BlockOptions` (Root)
+
+Root component that manages open state and context.
+
+```tsx
+<BlockOptions open={isOpen} onOpenChange={setIsOpen} anchor={anchorElement} defaultOpen={false}>
+  {children}
+</BlockOptions>
+```
+
+**Props:**
+
+| Prop           | Type                      | Description                       |
+| -------------- | ------------------------- | --------------------------------- |
+| `open`         | `boolean`                 | Controlled open state             |
+| `onOpenChange` | `(open: boolean) => void` | Called when open state changes    |
+| `defaultOpen`  | `boolean`                 | Default open state (uncontrolled) |
+| `anchor`       | `HTMLElement \| null`     | Anchor element for positioning    |
+| `children`     | `ReactNode`               | Content and trigger components    |
+
+### `BlockOptions.Trigger`
+
+Optional trigger button (for uncontrolled usage).
+
+```tsx
+<BlockOptions>
+  <BlockOptions.Trigger asChild>
+    <button>Open Menu</button>
+  </BlockOptions.Trigger>
+  <BlockOptions.Content>...</BlockOptions.Content>
+</BlockOptions>
+```
+
+**Props:**
+
+| Prop        | Type      | Description                    |
+| ----------- | --------- | ------------------------------ |
+| `asChild`   | `boolean` | Merge props onto child element |
+| `className` | `string`  | Custom CSS classes             |
+
+### `BlockOptions.Content`
+
+Floating content panel.
+
+```tsx
+<BlockOptions.Content side="right" align="start" sideOffset={5}>
+  {/* Items here */}
+</BlockOptions.Content>
+```
+
+**Props:**
+
+| Prop         | Type                                     | Description                     |
+| ------------ | ---------------------------------------- | ------------------------------- |
+| `side`       | `'top' \| 'right' \| 'bottom' \| 'left'` | Placement side                  |
+| `align`      | `'start' \| 'center' \| 'end'`           | Alignment                       |
+| `sideOffset` | `number`                                 | Offset from anchor (default: 5) |
+| `className`  | `string`                                 | Custom CSS classes              |
+
+### `BlockOptions.Item`
+
+Menu item button.
+
+```tsx
+<BlockOptions.Item onSelect={handleAction} variant="default" icon={<CopyIcon />} keepOpen={false}>
+  Duplicate
+</BlockOptions.Item>
+```
+
+**Props:**
+
+| Prop       | Type                         | Description                    |
+| ---------- | ---------------------------- | ------------------------------ |
+| `onSelect` | `(event) => void`            | Called when item is selected   |
+| `variant`  | `'default' \| 'destructive'` | Visual variant                 |
+| `icon`     | `ReactNode`                  | Icon to display                |
+| `keepOpen` | `boolean`                    | Keep menu open after selection |
+| `disabled` | `boolean`                    | Disable the item               |
+
+### `BlockOptions.Group`
+
+Groups items together.
+
+```tsx
+<BlockOptions.Group>
+  <BlockOptions.Item>Item 1</BlockOptions.Item>
+  <BlockOptions.Item>Item 2</BlockOptions.Item>
+</BlockOptions.Group>
+```
+
+### `BlockOptions.Separator`
+
+Visual separator between groups.
+
+```tsx
+<BlockOptions.Separator />
+```
+
+### `useBlockActions()`
+
+Helper hook with common block operations.
+
+```tsx
+const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
+
+// Usage
+duplicateBlock(blockId);
+copyBlockLink(blockId);
+deleteBlock(blockId);
+```
+
+## Examples
+
+### With ActionMenuList (Turn Into)
+
+```tsx
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, deleteBlock } = useBlockActions();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
+
+  const onActionMenuClose = (menuOpen: boolean) => {
+    setActionMenuOpen(menuOpen);
+    if (!menuOpen) onOpenChange?.(false); // Close both
+  };
+
+  return (
+    <>
+      <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+        <BlockOptions.Content side="right">
+          <BlockOptions.Group>
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
+              Turn into
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+          <BlockOptions.Separator />
+          <BlockOptions.Group>
+            <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+              Duplicate
+            </BlockOptions.Item>
+            <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+              Delete
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+        </BlockOptions.Content>
+      </BlockOptions>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={onActionMenuClose}
+        anchor={turnIntoRef.current}
+        blockId={blockId}
+        view="small"
+        placement="right-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+```
+
+### Uncontrolled with Trigger
+
+```tsx
+<BlockOptions>
+  <BlockOptions.Trigger>
+    <button>Open Options</button>
+  </BlockOptions.Trigger>
+  <BlockOptions.Content>
+    <BlockOptions.Group>
+      <BlockOptions.Item onSelect={handleDuplicate}>Duplicate</BlockOptions.Item>
+      <BlockOptions.Item variant="destructive" onSelect={handleDelete}>
+        Delete
+      </BlockOptions.Item>
+    </BlockOptions.Group>
+  </BlockOptions.Content>
+</BlockOptions>
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-block-options-bg: var(--yoopta-ui-background);
+  --yoopta-ui-block-options-border: var(--yoopta-ui-border);
+  --yoopta-ui-block-options-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --yoopta-ui-block-options-radius: 0.5rem;
+  --yoopta-ui-block-options-button-hover: var(--yoopta-ui-accent);
+  --yoopta-ui-block-options-button-destructive-color: hsl(var(--yoopta-ui-destructive));
+}
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use keepOpen for submenu triggers">
+    ```tsx
+    <BlockOptions.Item
+      onSelect={() => setActionMenuOpen(true)}
+      keepOpen // Prevents BlockOptions from closing
+    >
+      Turn into
+    </BlockOptions.Item>
+    ```
+  </Accordion>
+
+  <Accordion title="Close both menus after action">
+    ```tsx
+    const onActionMenuClose = (menuOpen: boolean) => {
+      setActionMenuOpen(menuOpen);
+      if (!menuOpen) {
+        onOpenChange?.(false); // Also close BlockOptions
+      }
+    };
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Trigger BlockOptions from drag handle
+  </Card>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Open from BlockOptions for "Turn into"
+  </Card>
+</CardGroup>

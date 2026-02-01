@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 import { insertBlock } from './insertBlock';
 import type { PluginElement } from '../../plugins/types';
-import { buildBlockElementsStructure } from '../../utils/blockElements';
+import { buildBlockElementsStructure } from '../../utils/block-elements';
 import type { SlateElement, YooEditor, YooptaBlockBaseMeta } from '../types';
 
-vi.mock('../../utils/blockElements', () => ({
+vi.mock('../../utils/block-elements', () => ({
   buildBlockElementsStructure: vi.fn(),
 }));
 
@@ -26,7 +26,7 @@ describe('insertBlock', () => {
       children: [{ text: '' }],
     };
 
-    (buildBlockElementsStructure as jest.Mock).mockReturnValue(mockSlateStructure);
+    (buildBlockElementsStructure as Mock).mockReturnValue(mockSlateStructure);
 
     // Setup editor mock
     editor = {
@@ -39,8 +39,8 @@ describe('insertBlock', () => {
               props: { nodeType: 'block' },
             } as PluginElement<string, any>,
           },
-          events: {
-            onBeforeCreate: vi.fn(),
+          lifecycle: {
+            beforeCreate: vi.fn(),
             onCreate: vi.fn(),
           },
         },
@@ -147,8 +147,8 @@ describe('insertBlock', () => {
     expect(editor.focusBlock).toHaveBeenCalledWith('test-id');
   });
 
-  it('should call onBeforeCreate and onCreate events', () => {
-    const onBeforeCreate = vi.fn().mockReturnValue(mockSlateStructure);
+  it('should call beforeCreate and onCreate lifecycle events', () => {
+    const beforeCreate = vi.fn().mockReturnValue(mockSlateStructure);
     const onCreate = vi.fn();
 
     editor.plugins = {
@@ -159,8 +159,8 @@ describe('insertBlock', () => {
             props: { nodeType: 'block' },
           } as PluginElement<string, unknown>,
         },
-        events: {
-          onBeforeCreate,
+        lifecycle: {
+          beforeCreate,
           onCreate,
         },
       },
@@ -168,7 +168,7 @@ describe('insertBlock', () => {
 
     const blockId = insertBlock(editor as YooEditor, 'TestBlock');
 
-    expect(onBeforeCreate).toHaveBeenCalledWith(editor);
+    expect(beforeCreate).toHaveBeenCalledWith(editor);
     expect(onCreate).toHaveBeenCalledWith(editor, blockId);
   });
 

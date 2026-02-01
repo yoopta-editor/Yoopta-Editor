@@ -1,0 +1,253 @@
+---
+title: Installation
+description: Install Yoopta Editor and its dependencies in your React project
+---
+
+## Prerequisites
+
+Before installing Yoopta Editor, make sure you have:
+
+- **Node.js** version 18 or higher
+- **React** version 18 or higher
+- **React DOM** version 18 or higher
+
+## Package Manager
+
+Yoopta Editor supports all major package managers:
+
+<Tabs>
+  <Tab title="npm">```bash npm install slate slate-react slate-dom @yoopta/editor ```</Tab>
+  <Tab title="yarn">```bash yarn add slate slate-react slate-dom @yoopta/editor ```</Tab>
+  <Tab title="pnpm">```bash pnpm add slate slate-react slate-dom @yoopta/editor ```</Tab>
+</Tabs>
+
+## Package Categories
+
+Yoopta Editor is organized into several package categories. Install only what you need:
+
+### Core Packages
+
+#### Required: Core Editor
+
+```bash
+npm install slate slate-react slate-dom @yoopta/editor
+```
+
+- **`slate`** & **`slate-react slate-dom`** - Peer dependencies (required)
+- **`@yoopta/editor`** - Core headless editor package
+
+#### Optional: UI Components
+
+```bash
+npm install @yoopta/ui
+```
+
+Provides unstyled UI components (used as children of `YooptaEditor`):
+
+- `FloatingToolbar`, `ActionMenuList`, `SlashCommandMenu`
+- `BlockOptions`, `FloatingBlockActions`
+- `SelectionBox`, `BlockDndContext`, `SortableBlock`
+- `HighlightColorPicker`, `Portal`, `Overlay`
+
+#### Optional: Themes
+
+```bash
+# Shadcn UI theme (production ready)
+npm install @yoopta/themes-shadcn
+
+# Material Design theme (in development)
+npm install @yoopta/themes-material
+```
+
+### Plugin Packages
+
+Install plugins based on the content types you need:
+
+#### Text Plugins
+
+```bash
+npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
+```
+
+#### List Plugins
+
+```bash
+npm install @yoopta/lists
+```
+
+#### Media Plugins
+
+```bash
+npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
+```
+
+#### Layout Plugins
+
+```bash
+npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/tabs @yoopta/steps @yoopta/carousel
+```
+
+#### Code Plugin
+
+```bash
+npm install @yoopta/code
+```
+
+#### Link Plugin
+
+```bash
+npm install @yoopta/link
+```
+
+### UI Components Package
+
+Install UI components for editor interactions:
+
+```bash
+npm install @yoopta/ui
+```
+
+**Available Components** (add as children of `YooptaEditor`):
+
+- `FloatingToolbar` - Text formatting toolbar
+- `ActionMenuList` - Block insertion / turn-into menu
+- `SlashCommandMenu` - Slash command menu
+- `BlockOptions` - Block action menu
+- `FloatingBlockActions` - Floating block actions
+- `SelectionBox` - Multi-block selection
+- `BlockDndContext`, `SortableBlock` - Drag-and-drop reordering
+- `HighlightColorPicker` - Color picker for highlight mark
+- `Portal` & `Overlay` - Utility components
+
+### Marks Package
+
+Install marks for text formatting:
+
+```bash
+npm install @yoopta/marks
+```
+
+**Available Marks:**
+
+- `Bold`, `Italic`, `Underline`, `Strike`
+- `Code` - Inline code
+- `Highlight` - Text highlighting with colors
+
+### Utility Packages
+
+#### Exports Package
+
+```bash
+npm install @yoopta/exports
+```
+
+Export content to Markdown, HTML, Plain Text, and Email formats.
+
+## All-in-One Installation
+
+Install everything at once:
+
+<CodeGroup>
+
+```bash npm
+npm install slate slate-react slate-dom \
+  @yoopta/editor \
+  @yoopta/ui \
+  @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
+  @yoopta/lists @yoopta/code @yoopta/table \
+  @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
+  @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
+  @yoopta/marks
+```
+
+```bash yarn
+yarn add slate slate-react slate-dom \
+  @yoopta/editor \
+  @yoopta/ui \
+  @yoopta/paragraph @yoopta/headings @yoopta/blockquote \
+  @yoopta/lists @yoopta/code @yoopta/table \
+  @yoopta/image @yoopta/video @yoopta/file @yoopta/embed \
+  @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/link \
+  @yoopta/marks
+```
+
+</CodeGroup>
+
+## Exports Package
+
+For exporting content to different formats:
+
+```bash
+npm install @yoopta/exports
+```
+
+This package provides functionality to export your editor content to:
+
+- Markdown
+- HTML
+- Plain text
+
+## TypeScript Support
+
+Yoopta Editor is written in TypeScript and includes type definitions out of the box. No additional `@types` packages are needed.
+
+## Verification
+
+Verify your installation by creating a simple editor. Plugins and marks are passed to `createYooptaEditor`; use `onChange` to react to changes and `editor.setEditorValue()` for initial content.
+
+```jsx
+import { useMemo, useEffect } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
+
+const plugins = [Paragraph];
+const marks = [Bold, Italic];
+
+function App() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type something..."
+    />
+  );
+}
+```
+
+If you see an empty editor with the placeholder text, you're all set! 🎉
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Getting Started" icon="rocket" href="/getting-started">
+    Build your first editor in 5 minutes
+  </Card>
+  <Card title="Core Concepts" icon="book" href="/core/editor">
+    Understand how Yoopta Editor works
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Module not found: slate">
+    Make sure you've installed both `slate` and `slate-react`:
+
+    ```bash
+    npm install slate slate-react slate-dom
+    ```
+
+  </Accordion>
+
+  <Accordion title="TypeScript errors">
+    Ensure you're using TypeScript 4.8 or higher and that `@yoopta/editor` is properly installed.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  For more help, join our [Discord community](https://discord.gg/Dt8rhSTjsn) or check [GitHub
+  Issues](https://github.com/Darginec05/Yoopta-Editor/issues).
+</Note>

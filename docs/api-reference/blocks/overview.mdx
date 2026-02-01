@@ -1,0 +1,258 @@
+---
+title: Blocks API
+description: High-level API for manipulating blocks in the editor
+---
+
+## Overview
+
+The Blocks API provides a comprehensive interface for working with blocks in Yoopta Editor. It handles all block-level operations including creation, deletion, movement, transformation, and navigation.
+
+<Info>
+  The Blocks API is the primary way to manipulate the structure of your editor content. It works at a higher level than the Elements API, operating on entire blocks rather than individual elements within blocks.
+</Info>
+
+## Accessing Blocks API
+
+Blocks API methods are available through the `Blocks` namespace:
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+// Use methods through Blocks namespace
+Blocks.insertBlock(editor, 'Paragraph', { at: 0 });
+Blocks.deleteBlock(editor, { at: 3 });
+Blocks.moveBlock(editor, 'block-id', 5);
+```
+
+<Note>
+  Unlike Elements API, Blocks API methods are not available directly on the editor instance. You must use the `Blocks` namespace.
+</Note>
+
+## Why Blocks API?
+
+- **Block-Level Operations**: Work with entire blocks, not just elements
+- **Structure Management**: Handle block ordering, depth, and relationships
+- **Type Safety**: Full TypeScript support with proper type inference
+- **Lifecycle Hooks**: Integrates with plugin lifecycle methods
+- **Focus Management**: Built-in focus handling for better UX
+
+## Core Methods
+
+The Blocks API consists of several categories:
+
+### CRUD Operations
+
+- [`insertBlock`](/api-reference/blocks/insert-block) - Create and insert new blocks
+- [`deleteBlock`](/api-reference/blocks/delete-block) - Remove blocks
+- [`updateBlock`](/api-reference/blocks/update-block) - Modify block properties and content
+- [`duplicateBlock`](/api-reference/blocks/duplicate-block) - Clone existing blocks
+
+### Navigation & Movement
+
+- [`moveBlock`](/api-reference/blocks/move-block) - Reorder blocks
+- [`focusBlock`](/api-reference/blocks/focus-block) - Focus a specific block
+- [`getBlock`](/api-reference/blocks/get-block) - Retrieve block data
+- [`getBlockSlate`](/api-reference/blocks/get-block-slate) - Get Slate editor instance for a block
+
+### Transformation
+
+- [`toggleBlock`](/api-reference/blocks/toggle-block) - Transform block type (e.g., Paragraph → Heading)
+- [`splitBlock`](/api-reference/blocks/split-block) - Split a block at selection
+- [`mergeBlock`](/api-reference/blocks/merge-block) - Merge two blocks together
+
+### Depth Management
+
+- [`increaseBlockDepth`](/api-reference/blocks/increase-block-depth) - Indent block (increase depth)
+- [`decreaseBlockDepth`](/api-reference/blocks/decrease-block-depth) - Outdent block (decrease depth)
+
+### Utilities
+
+- [`buildBlockData`](/api-reference/blocks/build-block-data) - Create block data structure
+
+## Quick Example
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+import { useYooptaEditor } from '@yoopta/editor';
+
+function MyComponent() {
+  const editor = useYooptaEditor();
+
+  const handleAddParagraph = () => {
+    // Insert new paragraph block
+    const blockId = Blocks.insertBlock(editor, 'Paragraph', {
+      at: editor.path.current,
+      focus: true,
+    });
+  };
+
+  const handleDeleteBlock = () => {
+    // Delete current block
+    Blocks.deleteBlock(editor, {
+      at: editor.path.current,
+      focusTarget: 'previous',
+    });
+  };
+
+  const handleToggleToHeading = () => {
+    // Transform current paragraph to heading
+    Blocks.toggleBlock(editor, 'Heading', {
+      preserveContent: true,
+      focus: true,
+    });
+  };
+
+  return (
+    // Your component JSX
+  );
+}
+```
+
+## Common Use Cases
+
+### Inserting Blocks
+
+```typescript
+// Insert paragraph at current position
+Blocks.insertBlock(editor, 'Paragraph', {
+  at: editor.path.current,
+  focus: true,
+});
+
+// Insert heading with custom content
+Blocks.insertBlock(editor, 'Heading', {
+  at: 0,
+  elements: editor.y('heading-one', {
+    children: [editor.y.text('New Heading')]
+  }),
+});
+```
+
+### Moving and Reordering
+
+```typescript
+// Move block to new position
+Blocks.moveBlock(editor, 'block-id-123', 5);
+
+// Increase block depth (indent)
+Blocks.increaseBlockDepth(editor, { blockId: 'block-id-123' });
+
+// Decrease block depth (outdent)
+Blocks.decreaseBlockDepth(editor, { at: 3 });
+```
+
+### Transforming Blocks
+
+```typescript
+// Toggle paragraph to heading
+Blocks.toggleBlock(editor, 'Heading', {
+  preserveContent: true,
+});
+
+// Split block at current selection
+const newBlockId = Blocks.splitBlock(editor, {
+  focusTarget: 'new',
+});
+
+// Merge current block into previous
+Blocks.mergeBlock(editor);
+```
+
+## Type Definitions
+
+### Common Types
+
+```typescript
+// Block path/index specification
+type YooptaPathIndex = number;
+
+// Block data structure
+type YooptaBlockData = {
+  id: string;
+  type: string;
+  value: SlateElement[];
+  meta: {
+    order: number;
+    depth: number;
+    align?: 'left' | 'center' | 'right';
+  };
+};
+```
+
+## Best Practices
+
+<Warning>
+  Always specify `at` or `blockId` when working with specific blocks. Using `editor.path.current` is convenient but can be unreliable if the path changes.
+</Warning>
+
+### 1. Use Block IDs When Possible
+
+```typescript
+// ✅ Good - using block ID
+Blocks.deleteBlock(editor, { blockId: 'block-123' });
+
+// ⚠️ Acceptable - using path
+Blocks.deleteBlock(editor, { at: 3 });
+```
+
+### 2. Handle Focus Appropriately
+
+```typescript
+// Focus after insertion for better UX
+Blocks.insertBlock(editor, 'Paragraph', {
+  at: editor.path.current,
+  focus: true, // User can immediately start typing
+});
+
+// Don't focus when doing batch operations
+for (let i = 0; i < 10; i++) {
+  Blocks.insertBlock(editor, 'Paragraph', {
+    at: i,
+    focus: false, // Don't focus each block
+  });
+}
+```
+
+### 3. Preserve Content When Transforming
+
+```typescript
+// ✅ Good - preserve user's content
+Blocks.toggleBlock(editor, 'Heading', {
+  preserveContent: true,
+});
+
+// ❌ Avoid - loses user content
+Blocks.toggleBlock(editor, 'Heading', {
+  preserveContent: false,
+});
+```
+
+### 4. Check Block Existence
+
+```typescript
+const block = Blocks.getBlock(editor, { at: 3 });
+
+if (block) {
+  Blocks.updateBlock(editor, block.id, {
+    meta: { align: 'center' },
+  });
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Insert Block" icon="plus" href="/api-reference/blocks/insert-block">
+    Learn how to create new blocks
+  </Card>
+  <Card title="Delete Block" icon="trash" href="/api-reference/blocks/delete-block">
+    Remove blocks from editor
+  </Card>
+  <Card title="Move Block" icon="arrows-alt" href="/api-reference/blocks/move-block">
+    Reorder blocks
+  </Card>
+  <Card title="Toggle Block" icon="exchange-alt" href="/api-reference/blocks/toggle-block">
+    Transform block types
+  </Card>
+</CardGroup>
+

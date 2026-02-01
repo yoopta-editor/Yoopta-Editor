@@ -9,9 +9,17 @@ export const getCodeElementText = (block: YooptaBlockData) => {
   let text = '';
 
   element.children.forEach((child) => {
-    // @ts-ignore - fixme
+    // @ts-expect-error - fixme
     text += `${child.text}`;
   });
 
   return text;
 };
+
+export const escapeHTML = (text: string) =>
+  text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');

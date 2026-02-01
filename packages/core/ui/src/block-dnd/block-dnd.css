@@ -1,0 +1,186 @@
+/* Block DnD Sortable */
+.yoopta-block-dnd-sortable {
+  position: relative;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.yoopta-block-dnd-sortable--dragging {
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+.yoopta-block-dnd-sortable--over {
+  /* Visual feedback when dragging over */
+}
+
+.yoopta-block-dnd-sortable--multi {
+  /* Style for multi-selected blocks during drag */
+}
+
+/* Drop Indicator */
+.yoopta-block-dnd-drop-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background-color: var(--yoopta-block-dnd-indicator-color, #3b82f6);
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.yoopta-block-dnd-drop-indicator::before,
+.yoopta-block-dnd-drop-indicator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--yoopta-block-dnd-indicator-color, #3b82f6);
+}
+
+.yoopta-block-dnd-drop-indicator::before {
+  left: -3px;
+}
+
+.yoopta-block-dnd-drop-indicator::after {
+  right: -3px;
+}
+
+/* Drag Handle */
+.yoopta-block-dnd-handle {
+  cursor: grab;
+  transition: opacity 150ms ease;
+}
+
+.yoopta-block-dnd-handle:hover {
+  opacity: 0.8;
+}
+
+.yoopta-block-dnd-handle:focus {
+  outline: none;
+}
+
+.yoopta-block-dnd-handle:focus-visible {
+  outline: 2px solid var(--yoopta-block-dnd-focus-ring, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.yoopta-block-dnd-handle--holding {
+  cursor: grabbing;
+  opacity: 0.7;
+}
+
+.yoopta-block-dnd-handle--dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}
+
+.yoopta-block-dnd-handle:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+/* Drag Overlay */
+.yoopta-block-dnd-overlay {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--yoopta-block-dnd-overlay-bg, #ffffff);
+  border: 1px solid var(--yoopta-block-dnd-overlay-border, #e5e7eb);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 10px 14px;
+  min-width: 140px;
+  pointer-events: none;
+  animation: yoopta-block-dnd-overlay-fade-in 150ms ease;
+}
+
+.yoopta-block-dnd-overlay-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--yoopta-block-dnd-overlay-icon-color, #6b7280);
+  flex-shrink: 0;
+}
+
+.yoopta-block-dnd-overlay-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.yoopta-block-dnd-overlay-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--yoopta-block-dnd-overlay-text, #374151);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yoopta-block-dnd-overlay-text strong {
+  font-weight: 600;
+  color: var(--yoopta-block-dnd-overlay-text-accent, #1f2937);
+}
+
+/* Multi-select visual feedback */
+[data-block-dnd-dragging='true'] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Keyboard drag focus styles */
+.yoopta-block-dnd-sortable:focus {
+  outline: none;
+}
+
+.yoopta-block-dnd-sortable:focus-visible {
+  outline: 2px solid var(--yoopta-block-dnd-focus-ring, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .yoopta-block-dnd-handle:hover {
+    opacity: 0.9;
+  }
+
+  .yoopta-block-dnd-overlay {
+    background-color: var(--yoopta-block-dnd-overlay-bg, #1f2937);
+    border-color: var(--yoopta-block-dnd-overlay-border, #374151);
+  }
+
+  .yoopta-block-dnd-overlay-icon {
+    color: var(--yoopta-block-dnd-overlay-icon-color, #9ca3af);
+  }
+
+  .yoopta-block-dnd-overlay-text {
+    color: var(--yoopta-block-dnd-overlay-text, #f3f4f6);
+  }
+
+  .yoopta-block-dnd-overlay-text strong {
+    color: var(--yoopta-block-dnd-overlay-text-accent, #ffffff);
+  }
+}
+
+/* Animation for smooth overlay appearance */
+@keyframes yoopta-block-dnd-overlay-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

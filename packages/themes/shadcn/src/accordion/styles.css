@@ -1,0 +1,7 @@
+[data-element-type='accordion-list-item-heading'] [data-slate-node='element'] {
+  margin: 0;
+}
+
+[data-element-type='accordion-list-item-content'] [data-slate-node='element'] {
+  margin: 0;
+}

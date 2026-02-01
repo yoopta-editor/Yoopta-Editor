@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/file",
-  "version": "4.9.9",
+  "version": "6.0.0-beta.16",
   "description": "File plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -14,12 +14,13 @@
     "dist/"
   ],
   "peerDependencies": {
-    "@yoopta/editor": ">=4.0.0",
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2"
+    "@yoopta/editor": "6.0.0-beta.4",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -34,9 +35,5 @@
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
   },
-  "dependencies": {
-    "@floating-ui/react": "^0.26.9",
-    "@radix-ui/react-icons": "^1.3.0"
-  },
-  "gitHead": "054fb22aef8ca890d17616d00928eb855e77ec29"
+  "gitHead": "0c1eed956a263573e6aff9bdf58dcaf834deadf5"
 }

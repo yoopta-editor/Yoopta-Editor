@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
-import type { RenderLeafProps, RenderElementProps as RenderSlateElementProps } from 'slate-react';
+import type { RenderElementProps, RenderLeafProps } from 'slate-react';
 
 import type {
   SlateEditor,
@@ -23,15 +23,15 @@ export type PluginOptions<T> = Partial<
     display?: {
       title?: string;
       description?: string;
-      icon?: string | ReactNode | ReactElement;
+      icon?: ReactNode;
     };
     shortcuts?: string[];
     HTMLAttributes?: HTMLAttributes<HTMLElement>;
   } & T
 >;
 
-export type PluginElementOptions = {
-  draggable?: boolean;
+export type RenderSlateElementProps = Omit<RenderElementProps, 'element'> & {
+  element: SlateElement;
 };
 
 export type PluginElementExtendRenderProps = RenderSlateElementProps & {
@@ -39,24 +39,28 @@ export type PluginElementExtendRenderProps = RenderSlateElementProps & {
   HTMLAttributes?: HTMLAttributes<HTMLElement>;
 };
 
-export type PluginElementRenderProps = PluginElementExtendRenderProps & {
-  extendRender?: (props: PluginElementExtendRenderProps) => JSX.Element;
-};
+export type PluginElementRenderProps = PluginElementExtendRenderProps;
 
 export type PluginCustomEditorRenderProps = {
   blockId: string;
 };
 
-export type PluginDefaultProps = { nodeType?: 'block' | 'inline' | 'void' | 'inlineVoid' };
+export type PluginElementNodeType = 'block' | 'inline' | 'void' | 'inlineVoid';
+export type PluginDefaultProps = { nodeType?: PluginElementNodeType };
 export type PluginElementProps<T> = PluginDefaultProps & T;
 
 export type PluginElement<TKeys, T> = {
-  render: (props: PluginElementRenderProps) => JSX.Element;
+  render?: (props: PluginElementRenderProps) => JSX.Element;
   props?: PluginElementProps<T>;
-  options?: PluginElementOptions;
   asRoot?: boolean;
   children?: TKeys[];
+  injectElementsFromPlugins?: string[];
   rootPlugin?: string;
+  /**
+   * Placeholder text for this element when it's empty
+   * Only applies to leaf elements (elements without children)
+   */
+  placeholder?: string;
 };
 
 export type PluginElementsMap<TKeys extends string = string, TProps = PluginDefaultProps> = {
@@ -79,24 +83,35 @@ export type PluginEventHandlerOptions = {
 
 export type ElementPropsMap = Record<string, Record<string, unknown>>;
 
-export type PluginEvents = {
-  onBeforeCreate?: (editor: YooEditor) => SlateElement;
+export type PluginDOMEvents = EventHandlers;
+
+export type PluginLifeCycleEvents = {
+  beforeCreate?: (editor: YooEditor) => SlateElement;
   onCreate?: (editor: YooEditor, blockId: string) => void;
   onDestroy?: (editor: YooEditor, blockId: string) => void;
-} & EventHandlers;
+};
+
+export type PluginInputElements<TElementMap extends Record<string, SlateElement>> =
+  | {
+      [K in keyof TElementMap]: PluginElement<
+        Exclude<keyof TElementMap, K>,
+        TElementMap[K]['props']
+      >;
+    }
+  | ReactElement<unknown, string>;
 
 export type Plugin<
   TElementMap extends Record<string, SlateElement>,
   TPluginOptions = Record<string, unknown>,
 > = {
   type: string;
-  customEditor?: (props: PluginCustomEditorRenderProps) => JSX.Element;
   extensions?: (slate: SlateEditor, editor: YooEditor, blockId: string) => SlateEditor;
   commands?: Record<string, (editor: YooEditor, ...args: any[]) => any>;
   elements: {
     [K in keyof TElementMap]: PluginElement<Exclude<keyof TElementMap, K>, TElementMap[K]['props']>;
   };
-  events?: PluginEvents;
+  events?: PluginDOMEvents;
+  lifecycle?: PluginLifeCycleEvents;
   options?: PluginOptions<TPluginOptions>;
   parsers?: Partial<Record<PluginParserTypes, PluginParsers>>;
 };
@@ -117,17 +132,19 @@ export type PluginSerializeParser = (
 
 export type PluginDeserializeParser = {
   nodeNames: string[];
-  parse?: (
-    el: HTMLElement,
-    editor: YooEditor,
-  ) => SlateElement<string, any> | YooptaBlockData[] | void;
+  parse?: (el: HTMLElement, editor: YooEditor) => SlateElement | YooptaBlockData[] | void;
 };
 
 export type LeafFormats<K extends string, V> = {
   [key in K]: V;
 };
 
-export type ExtendedLeaf<K extends string, V> = RenderLeafProps['leaf'] & LeafFormats<K, V>;
+export type ExtendedLeaf<K extends string, V> = RenderLeafProps['leaf'] &
+  LeafFormats<K, V> & {
+    withPlaceholder?: boolean;
+    elementPlaceholder?: string;
+  };
+
 export type YooptaMarkProps<K extends string, V> = {
   children: RenderLeafProps['children'];
   leaf: ExtendedLeaf<K, V>;

@@ -1,0 +1,653 @@
+---
+title: Mention
+description: Mention users, channels, pages, or any custom resources with autocomplete
+---
+
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
+## Overview
+
+The Mention plugin enables users to mention people, channels, pages, or any custom resources by typing a trigger character (default: `@`). It provides an autocomplete dropdown with search functionality and customizable rendering.
+
+<PluginPlayground pluginSlug="mention" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/mention
+```
+
+## Basic Usage
+
+```jsx
+import { Mention } from '@yoopta/mention';
+import { withMentions } from '@yoopta/mention';
+import { createYooptaEditor } from '@yoopta/editor';
+
+const editor = withMentions(
+  createYooptaEditor({
+    plugins: [
+      Mention.extend({
+        options: {
+          onSearch: async (query, trigger) => {
+            // Your search logic here
+            const results = await fetchUsers(query);
+            return results;
+          },
+        },
+      }),
+      // ... other plugins
+    ],
+  }),
+);
+
+<YooptaEditor editor={editor} plugins={plugins} />;
+```
+
+<Warning>
+  **Required Configuration**
+
+You **must** configure the `onSearch` option. Without this option, the mention dropdown won't work.
+
+```jsx
+const plugins = [
+  Mention.extend({
+    options: {
+      onSearch: async (query, trigger) => {
+        // Your search logic here
+        return [
+          { id: '1', name: 'John Doe', avatar: '...', type: 'user' },
+          // ... more results
+        ];
+      },
+    },
+  }),
+];
+```
+
+See the [Configuration](#configuration) section below for detailed examples.
+
+</Warning>
+
+## Features
+
+- **Multiple Triggers**: Support for multiple trigger characters (e.g., `@` for users, `#` for channels)
+- **Autocomplete Dropdown**: Searchable dropdown with keyboard navigation
+- **Custom Search**: Implement your own search logic (API calls, local filtering, etc.)
+- **Type Support**: Categorize mentions by type (user, channel, page, custom)
+- **Rich Metadata**: Store additional data with each mention (avatar, email, URL, etc.)
+- **Hover Cards**: Display mention details on hover (when using themes)
+- **Keyboard Navigation**: Arrow keys, Enter, Escape support
+- **Debounced Search**: Configurable debounce delay for search requests
+
+## Configuration
+
+### Basic Configuration
+
+```jsx
+import { Mention } from '@yoopta/mention';
+import { withMentions } from '@yoopta/mention';
+
+const plugins = [
+  Mention.extend({
+    options: {
+      onSearch: async (query, trigger) => {
+        // Search users
+        const response = await fetch(`/api/users?q=${query}`);
+        const users = await response.json();
+
+        return users.map((user) => ({
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+          type: 'user',
+          meta: {
+            email: user.email,
+            role: user.role,
+          },
+        }));
+      },
+    },
+  }),
+];
+```
+
+### Multiple Triggers
+
+You can configure multiple trigger characters for different types of mentions:
+
+```jsx
+const plugins = [
+  Mention.extend({
+    options: {
+      triggers: [
+        { char: '@', type: 'user' },
+        { char: '#', type: 'channel' },
+        { char: '[[', type: 'page' },
+      ],
+      onSearch: async (query, trigger) => {
+        if (trigger.type === 'user') {
+          return await searchUsers(query);
+        } else if (trigger.type === 'channel') {
+          return await searchChannels(query);
+        } else if (trigger.type === 'page') {
+          return await searchPages(query);
+        }
+        return [];
+      },
+    },
+  }),
+];
+```
+
+### Advanced Configuration
+
+```jsx
+const plugins = [
+  Mention.extend({
+    options: {
+      triggers: [
+        {
+          char: '@',
+          type: 'user',
+          allowSpaces: false, // Don't allow spaces in search query
+          allowedAfter: /\s|^/, // Only trigger after whitespace or start
+        },
+      ],
+      onSearch: async (query, trigger) => {
+        // Your search logic
+        return results;
+      },
+      debounceMs: 300, // Debounce search by 300ms
+      minQueryLength: 1, // Minimum query length before searching
+      closeOnSelect: true, // Close dropdown when item is selected
+      closeOnClickOutside: true, // Close on click outside
+      closeOnEscape: true, // Close on Escape key
+      onSelect: (item, trigger) => {
+        console.log('Selected:', item, trigger);
+      },
+      onOpen: (trigger) => {
+        console.log('Dropdown opened:', trigger);
+      },
+      onClose: () => {
+        console.log('Dropdown closed');
+      },
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="triggers" type="MentionTrigger[]">
+  Array of trigger configurations. Each trigger defines a character(s) that opens the mention dropdown.
+
+  <Expandable title="MentionTrigger properties">
+    <ResponseField name="char" type="string" required>
+      Character(s) that trigger the mention dropdown (e.g., `'@'`, `'#'`, `'[['`)
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Optional type to categorize this trigger (e.g., `'user'`, `'channel'`, `'page'`)
+    </ResponseField>
+    <ResponseField name="allowSpaces" type="boolean" default="false">
+      Allow spaces in search query (default: false)
+    </ResponseField>
+    <ResponseField name="allowedAfter" type="RegExp" default="/\s|^/">
+      Pattern that must precede the trigger (default: whitespace or start of line)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="char" type="string" default="'@'">
+  Simple single trigger character (shorthand for `triggers: [{char}]`). Use this for a single
+  trigger, or use `triggers` array for multiple triggers.
+</ResponseField>
+
+<ResponseField name="onSearch" type="function" required>
+  Search function called when user types after trigger.
+
+**Signature:**
+
+```typescript
+(query: string, trigger: MentionTrigger) => Promise<MentionItem[]>;
+```
+
+**Parameters:**
+
+- `query` - The search query (without trigger char)
+- `trigger` - The trigger that opened the dropdown
+
+**Returns:** Promise resolving to array of `MentionItem` objects
+
+</ResponseField>
+
+<ResponseField name="debounceMs" type="number" default="300">
+  Debounce delay for search in milliseconds. Reduces API calls while user is typing.
+</ResponseField>
+
+<ResponseField name="minQueryLength" type="number" default="0">
+  Minimum query length before triggering search. Set to `1` or higher to avoid searching on empty
+  query.
+</ResponseField>
+
+<ResponseField name="onSelect" type="function">
+  Called when a mention is selected.
+
+**Signature:**
+
+```typescript
+(item: MentionItem, trigger: MentionTrigger) => void
+```
+
+</ResponseField>
+
+<ResponseField name="onOpen" type="function">
+  Called when dropdown opens.
+
+**Signature:**
+
+```typescript
+(trigger: MentionTrigger) => void
+```
+
+</ResponseField>
+
+<ResponseField name="onClose" type="function">
+  Called when dropdown closes.
+
+**Signature:**
+
+```typescript
+() => void
+```
+
+</ResponseField>
+
+<ResponseField name="closeOnSelect" type="boolean" default="true">
+  Close dropdown when item is selected.
+</ResponseField>
+
+<ResponseField name="closeOnClickOutside" type="boolean" default="true">
+  Close dropdown on click outside.
+</ResponseField>
+
+<ResponseField name="closeOnEscape" type="boolean" default="true">
+  Close dropdown on Escape key.
+</ResponseField>
+
+## Element Props
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the mention
+</ParamField>
+
+<ParamField path="name" type="string" required>
+  Display name of the mention (e.g., "John Doe")
+</ParamField>
+
+<ParamField path="avatar" type="string">
+  URL to avatar image
+</ParamField>
+
+<ParamField path="type" type="string">
+  Type of mention (e.g., `'user'`, `'channel'`, `'page'`, `'custom'`)
+</ParamField>
+
+<ParamField path="meta" type="object">
+  Additional metadata for the mention. Can contain any custom fields:
+
+```typescript
+{
+  email?: string;
+  url?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+```
+
+</ParamField>
+
+## Commands
+
+```typescript
+import { MentionCommands } from '@yoopta/mention';
+
+// Insert a mention
+MentionCommands.insertMention(editor, {
+  id: '123',
+  name: 'John Doe',
+  avatar: 'https://example.com/avatar.png',
+  type: 'user',
+  meta: {
+    email: 'john@example.com',
+  },
+});
+
+// Find mentions
+const allMentions = MentionCommands.findMentions(editor);
+const userMentions = MentionCommands.findMentionsByType(editor, 'user');
+const specificMention = MentionCommands.findMention(editor, '123');
+
+// Update mention
+MentionCommands.updateMention(editor, '123', {
+  name: 'Jane Doe',
+  avatar: 'https://example.com/new-avatar.png',
+});
+
+// Delete mention
+MentionCommands.deleteMention(editor, '123');
+
+// Dropdown control
+MentionCommands.openDropdown(editor, {
+  trigger: { char: '@', type: 'user' },
+  targetRect: { domRect, clientRects },
+  triggerRange: { blockId, path, startOffset },
+});
+MentionCommands.closeDropdown(editor, 'manual');
+
+// State
+const state = MentionCommands.getState(editor);
+const query = MentionCommands.getQuery(editor);
+const trigger = MentionCommands.getTrigger(editor);
+```
+
+## Using with Themes
+
+When using a theme (e.g., `@yoopta/themes-shadcn`), you need to:
+
+1. **Apply the theme** to your plugins
+2. **Add the MentionDropdown component** to your editor
+
+```jsx
+import { Mention } from '@yoopta/mention';
+import { withMentions } from '@yoopta/mention';
+import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+
+const plugins = withShadcnUI([
+  Mention.extend({
+    options: {
+      onSearch: async (query, trigger) => {
+        // Your search logic
+        return results;
+      },
+    },
+  }),
+  // ... other plugins
+]);
+
+const editor = withMentions(
+  createYooptaEditor({
+    plugins,
+    // ...
+  }),
+);
+
+<YooptaEditor editor={editor}>
+  <YooptaToolbar />
+  <MentionDropdown /> {/* Add this component */}
+  {/* ... other UI components */}
+</YooptaEditor>;
+```
+
+## Custom Rendering
+
+You can customize how mentions are rendered:
+
+```jsx
+import { Mention } from '@yoopta/mention';
+
+const CustomMention = Mention.extend({
+  elements: {
+    mention: {
+      render: (props) => {
+        const { id, name, avatar, type } = props.element.props;
+
+        return (
+          <span {...props.attributes} contentEditable={false}>
+            {avatar && <img src={avatar} alt={name} />}
+            <span>@{name}</span>
+            {type && <span className="type-badge">{type}</span>}
+            {props.children}
+          </span>
+        );
+      },
+    },
+  },
+});
+```
+
+## Custom Dropdown
+
+You can create a custom dropdown using the `useMentionDropdown` hook:
+
+```jsx
+import { useMentionDropdown } from '@yoopta/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+
+function CustomMentionDropdown() {
+  const {
+    isOpen,
+    query,
+    trigger,
+    items,
+    loading,
+    selectedIndex,
+    selectItem,
+    refs,
+    floatingStyles,
+  } = useMentionDropdown();
+
+  if (!isOpen) return null;
+
+  return (
+    <div ref={refs.setFloating} style={floatingStyles} className="mention-dropdown">
+      {loading && <div>Loading...</div>}
+      {items.map((item, index) => (
+        <div
+          key={item.id}
+          className={selectedIndex === index ? 'selected' : ''}
+          onClick={() => selectItem(item)}>
+          {item.avatar && <img src={item.avatar} alt={item.name} />}
+          <span>{item.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Parsers
+
+### HTML Deserialization
+
+The plugin automatically deserializes mention spans:
+
+```html
+<span
+  data-mention
+  data-mention-id="123"
+  data-mention-name="John Doe"
+  data-mention-avatar="https://example.com/avatar.png"
+  data-mention-type="user">
+  @John Doe
+</span>
+```
+
+### HTML Serialization
+
+```html
+<span
+  data-mention
+  data-mention-id="123"
+  data-mention-name="John Doe"
+  data-mention-avatar="https://example.com/avatar.png"
+  data-mention-type="user"
+  style="color: #2563eb; font-weight: 500;">
+  @John Doe
+</span>
+```
+
+### Markdown Serialization
+
+```markdown
+@John Doe
+```
+
+### Email Serialization
+
+```html
+<span style="color: #2563eb; font-weight: 500;">@John Doe</span>
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="User Mentions">Mention team members in comments or posts</Card>
+  <Card title="Channel Mentions">Reference channels or topics with #</Card>
+  <Card title="Page Links">Link to pages or documents with [[</Card>
+  <Card title="Custom Resources">Mention any custom resource type</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Debounce Search Requests">
+    Use the `debounceMs` option to reduce API calls while users are typing. A value of 300ms is usually optimal.
+  </Accordion>
+
+{' '}
+
+<Accordion title="Set Minimum Query Length">
+  Use `minQueryLength: 1` or higher to avoid searching on empty queries, which can be expensive.
+</Accordion>
+
+{' '}
+
+<Accordion title="Handle Loading States">
+  Show loading indicators in your custom dropdown while search is in progress.
+</Accordion>
+
+{' '}
+
+<Accordion title="Provide Fallbacks">
+  Handle search errors gracefully and provide user feedback.
+</Accordion>
+
+{' '}
+
+<Accordion title="Limit Results">
+  Return a reasonable number of results (e.g., 10-20) to avoid overwhelming users.
+</Accordion>
+
+  <Accordion title="Use Types for Organization">
+    Use the `type` field to categorize mentions and enable different search logic per type.
+  </Accordion>
+</AccordionGroup>
+
+## Hooks
+
+### useMentionDropdown
+
+Hook for building custom mention dropdowns:
+
+```typescript
+import { useMentionDropdown } from '@yoopta/mention';
+
+const {
+  // State
+  isOpen,
+  query,
+  trigger,
+
+  // Results
+  items,
+  loading,
+  error,
+
+  // Navigation
+  selectedIndex,
+  setSelectedIndex,
+
+  // Actions
+  selectItem,
+  close,
+
+  // Refs for floating-ui
+  refs,
+  floatingStyles,
+} = useMentionDropdown({
+  debounceMs: 300, // Optional override
+});
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Dropdown not opening">
+    Make sure you've:
+    1. Wrapped your editor with `withMentions()`
+    2. Configured the `onSearch` option
+    3. Added the `MentionDropdown` component to your editor (when using themes)
+
+    **Solution:**
+    ```jsx
+    const editor = withMentions(createYooptaEditor({ ... }));
+
+    <YooptaEditor editor={editor}>
+      <MentionDropdown />
+    </YooptaEditor>
+    ```
+
+  </Accordion>
+
+  <Accordion title="Search not working">
+    Check that your `onSearch` function:
+    1. Returns a Promise
+    2. Returns an array of `MentionItem` objects
+    3. Each item has `id` and `name` properties
+
+    **Solution:**
+    ```jsx
+    onSearch: async (query, trigger) => {
+      const results = await fetchResults(query);
+      return results.map((item) => ({
+        id: item.id, // Required
+        name: item.name, // Required
+        avatar: item.avatar, // Optional
+        type: item.type, // Optional
+        meta: item.meta, // Optional
+      }));
+    },
+    ```
+
+  </Accordion>
+
+  <Accordion title="Mention not inserting">
+    Make sure the mention is being inserted in a block that supports inline elements (e.g., Paragraph, Heading).
+
+    **Solution:** Mentions are inline elements and can only be inserted in blocks that support inline content.
+
+  </Accordion>
+
+  <Accordion title="Multiple triggers not working">
+    When using multiple triggers, make sure you're using the `triggers` array instead of the `char` option.
+
+    **Solution:**
+    ```jsx
+    options: {
+      triggers: [
+        { char: '@', type: 'user' },
+        { char: '#', type: 'channel' },
+      ],
+      // Don't use 'char' when using 'triggers'
+    }
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Link Plugin](/plugins/link) - For hyperlinks
+- [Paragraph Plugin](/plugins/paragraph) - For text blocks that support mentions

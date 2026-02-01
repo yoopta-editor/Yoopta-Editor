@@ -1,8 +1,8 @@
 import type { PluginEventHandlerOptions, SlateEditor, YooEditor } from '@yoopta/editor';
 import { Editor, Element, Node, Path, Range, Text, Transforms } from 'slate';
 
-import { TableCommands } from '../commands';
-import { EDITOR_TO_SELECTION } from '../utils/weakMaps';
+import { TableCommands } from '../commands/table-commands';
+import { TABLE_CELLS_IN_SELECTION } from '../utils/weakMaps';
 
 export function onKeyDown(
   editor: YooEditor,
@@ -16,7 +16,7 @@ export function onKeyDown(
       const parentPath = Path.parent(slate.selection.anchor.path);
       const isStart = Editor.isStart(slate, slate.selection.anchor, parentPath);
 
-      const elementEntries = EDITOR_TO_SELECTION.get(slate);
+      const elementEntries = TABLE_CELLS_IN_SELECTION.get(slate);
       if (elementEntries) {
         event.preventDefault();
 
@@ -93,57 +93,60 @@ export function onKeyDown(
       return;
     }
 
-    if (hotkeys.isArrowUp(event)) {
-      event.preventDefault();
+    // if (hotkeys.isArrowUp(event)) {
+    //   event.preventDefault();
 
-      const dataCellEntry = Editor.above(slate, {
-        at: slate.selection.anchor,
-        match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
-      });
+    //   const dataCellEntry = Editor.above(slate, {
+    //     at: slate.selection.anchor,
+    //     match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
+    //   });
 
-      if (!dataCellEntry) return;
-      const [dataCellNode, dataCellpath] = dataCellEntry;
+    //   if (!dataCellEntry) return;
+    //   const [, dataCellpath] = dataCellEntry;
 
-      try {
-        const columnIndex = dataCellpath[dataCellpath.length - 1];
-        const prevRowPath = Path.previous(dataCellpath.slice(0, -1));
-        const prevDataCellPath = prevRowPath.concat(columnIndex);
+    //   try {
+    //     const columnIndex = dataCellpath[dataCellpath.length - 1];
+    //     const prevRowPath = Path.previous(dataCellpath.slice(0, -1));
+    //     const prevDataCellPath = prevRowPath.concat(columnIndex);
 
-        // throws error if no node found in the path
-        Editor.node(slate, prevDataCellPath);
-        Transforms.select(slate, prevDataCellPath);
-      } catch (error) {}
+    //     // throws error if no node found in the path
+    //     Editor.node(slate, prevDataCellPath);
+    //     Transforms.select(slate, prevDataCellPath);
+    //   } catch (error) {}
 
-      return;
-    }
+    //   return;
+    // }
 
-    if (hotkeys.isArrowDown(event)) {
-      event.preventDefault();
+    // if (hotkeys.isArrowDown(event)) {
+    //   event.preventDefault();
 
-      const dataCellEntry = Editor.above(slate, {
-        at: slate.selection.anchor,
-        match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
-      });
+    //   const dataCellEntry = Editor.above(slate, {
+    //     at: slate.selection.anchor,
+    //     match: (n) => Element.isElement(n) && n.type === 'table-data-cell',
+    //   });
 
-      if (!dataCellEntry) return;
-      const [dataCellNode, dataCellpath] = dataCellEntry;
+    //   if (!dataCellEntry) return;
+    //   const [, dataCellpath] = dataCellEntry;
 
-      try {
-        const columnIndex = dataCellpath[dataCellpath.length - 1];
-        const nextRowPath = Path.next(dataCellpath.slice(0, -1));
-        const nextDataCellPath = nextRowPath.concat(columnIndex);
+    //   try {
+    //     const columnIndex = dataCellpath[dataCellpath.length - 1];
+    //     const nextRowPath = Path.next(dataCellpath.slice(0, -1));
+    //     const nextDataCellPath = nextRowPath.concat(columnIndex);
 
-        // throws error if no node found in the path
-        Editor.node(slate, nextDataCellPath);
-        Transforms.select(slate, nextDataCellPath);
-      } catch (error) {}
+    //     // throws error if no node found in the path
+    //     Editor.node(slate, nextDataCellPath);
+    //     Transforms.select(slate, nextDataCellPath);
+    //   } catch {
+    //     // ignore
+    //   }
 
-      return;
-    }
+    //   return;
+    // }
 
     if (hotkeys.isEnter(event)) {
       event.preventDefault();
       Transforms.insertText(slate, '\n');
+      return;
     }
 
     // if first select then select the whole table
@@ -154,7 +157,7 @@ export function onKeyDown(
 
       if (tdElementEntry) {
         event.preventDefault();
-        const [tdElement, tdElementPath] = tdElementEntry;
+        const [, tdElementPath] = tdElementEntry;
         const string = Editor.string(slate, tdElementPath);
 
         if (Range.isExpanded(slate.selection) || string.length === 0) {

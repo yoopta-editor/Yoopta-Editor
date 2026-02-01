@@ -2,13 +2,9 @@ import type {
   PluginEventHandlerOptions,
   SlateEditor,
   YooEditor,
-  YooptaBlockData} from '@yoopta/editor';
-import {
-  Elements,
-  buildBlockData,
-  buildBlockElement,
-  findPluginBlockByPath
+  YooptaBlockData,
 } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, buildBlockElement } from '@yoopta/editor';
 import type { Path } from 'slate';
 import { Editor, Element } from 'slate';
 
@@ -23,7 +19,7 @@ export function onKeyDown(
 ) {
   return (event) => {
     Editor.withoutNormalizing(slate, () => {
-      const block = findPluginBlockByPath(editor);
+      const block = Blocks.getBlock(editor, { at: editor.path.current });
 
       if (!slate.selection || !block) return;
       const selection = slate.selection;
@@ -40,7 +36,8 @@ export function onKeyDown(
 
         const [todoListNode] = nodeEntry as [TodoListElement, Path];
         const checked = todoListNode.props?.checked || false;
-        Elements.updateElement(editor, block.id, {
+        Elements.updateElement(editor, {
+          blockId: block.id,
           type: 'todo-list',
           props: { checked: !checked },
         });
@@ -111,7 +108,7 @@ export function onKeyDown(
         }
 
         if (hasText && !isStartAtNode && !isEndAtNode) {
-          editor.splitBlock({ slate, focus: true });
+          editor.splitBlock({ focus: true });
           return;
         }
 
@@ -131,7 +128,6 @@ export function onKeyDown(
           focus: true,
           blockData: nextListBlock,
         });
-        
       }
     });
   };

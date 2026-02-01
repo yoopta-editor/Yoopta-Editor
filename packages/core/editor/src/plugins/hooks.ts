@@ -1,19 +1,52 @@
 import { useMemo } from 'react';
-import { Editor, Element, Node, Operation, Path, Range, Transforms } from 'slate';
+import { Element, Node, Operation, Path, Range, Transforms } from 'slate';
 
-import { withInlines } from './extenstions/withInlines';
-import type { PluginEventHandlerOptions, PluginEvents } from './types';
-import { buildBlockData } from '../components/Editor/utils';
+import { withInlines } from './extenstions/with-inlines';
+import type { PluginDOMEvents, PluginEventHandlerOptions } from './types';
 import { Blocks } from '../editor/blocks';
-import type { SetSlateOperation} from '../editor/core/applyTransforms';
-import { YooptaOperation } from '../editor/core/applyTransforms';
-import { YooptaHistory } from '../editor/core/history';
+import type { SetSlateOperation } from '../editor/core/applyTransforms';
 import { Paths } from '../editor/paths';
 import type { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
 import type { EditorEventHandlers } from '../types/eventHandlers';
-import { getRootBlockElementType } from '../utils/blockElements';
+import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
+
+
+const shouldSave = (op: Operation): boolean => {
+  if (op.type === 'set_selection') {
+    return false;
+  }
+
+  return true;
+};
+
+const shouldMerge = (op: Operation, prev: Operation | undefined): boolean => {
+  if (prev === op) return true;
+
+  if (
+    prev &&
+    op.type === 'insert_text' &&
+    prev.type === 'insert_text' &&
+    op.offset === prev.offset + prev.text.length &&
+    Path.equals(op.path, prev.path)
+  ) {
+    return true;
+  }
+
+  if (
+    prev &&
+    op.type === 'remove_text' &&
+    prev.type === 'remove_text' &&
+    op.offset + op.text.length === prev.offset &&
+    Path.equals(op.path, prev.path)
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 
 export const useSlateEditor = (
   id: string,
@@ -21,7 +54,8 @@ export const useSlateEditor = (
   block: YooptaBlockData,
   elements: any,
   withExtensions: any,
-) => useMemo(() => {
+) =>
+  useMemo(() => {
     let slate = editor.blockEditorsMap[id];
 
     const { normalizeNode, insertText, apply } = slate;
@@ -36,15 +70,16 @@ export const useSlateEditor = (
 
       const { markableVoid: prevMarkableVoid, isVoid: prevIsVoid, isInline: prevIsInline } = slate;
       if (isInlineVoid) {
-        slate.markableVoid = (element) => prevMarkableVoid(element) || element.type === elementType;
+        slate.markableVoid = (element) =>
+          element.type === elementType ? true : prevMarkableVoid(element);
       }
 
       if (isVoid || isInlineVoid) {
-        slate.isVoid = (element) => prevIsVoid(element) || element.type === elementType;
+        slate.isVoid = (element) => (element.type === elementType ? true : prevIsVoid(element));
       }
 
       if (isInline || isInlineVoid) {
-        slate.isInline = (element) => prevIsInline(element) || element.type === elementType;
+        slate.isInline = (element) => (element.type === elementType ? true : prevIsInline(element));
 
         // [TODO] - Move it to Link plugin extension
         slate = withInlines(editor, slate);
@@ -53,7 +88,7 @@ export const useSlateEditor = (
 
     slate.insertText = (text) => {
       const selectedPaths = Paths.getSelectedPaths(editor);
-      const path = Paths.getPath(editor);
+      const path = Paths.getBlockOrder(editor);
       if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
         editor.setPath({ current: path });
       }
@@ -64,7 +99,7 @@ export const useSlateEditor = (
     // This normalization is needed to validate the elements structure
     slate.normalizeNode = (entry) => {
       const [node, path] = entry;
-      const blockElements = editor.blocks[block.type].elements;
+      const blockElements = editor.plugins[block.type].elements;
 
       // Normalize only `simple` block elements.
       // Simple elements are elements that have only one defined block element type.
@@ -102,7 +137,7 @@ export const useSlateEditor = (
     slate.apply = (op) => {
       if (Operation.isSelectionOperation(op)) {
         const selectedPaths = Paths.getSelectedPaths(editor);
-        const path = Paths.getPath(editor);
+        const path = Paths.getBlockOrder(editor);
 
         if (Array.isArray(selectedPaths) && slate.selection && Range.isExpanded(slate.selection)) {
           editor.setPath({ current: path });
@@ -173,66 +208,74 @@ export const useSlateEditor = (
     }
 
     return slate;
-  }, []);
+  }, [id, block.type, editor, elements, withExtensions]);
 
 export const useEventHandlers = (
-  events: PluginEvents | undefined,
+  events: PluginDOMEvents | undefined,
   editor: YooEditor,
   block: YooptaBlockData,
   slate: SlateEditor,
-) => useMemo<EditorEventHandlers>(() => {
-    if (!events || editor.readOnly) return {};
-    const { onBeforeCreate, onDestroy, onCreate, ...eventHandlers } = events || {};
+) =>
+  useMemo<EditorEventHandlers>(() => {
+    if (editor.readOnly) return {};
 
     const eventHandlersOptions: PluginEventHandlerOptions = {
       hotkeys: HOTKEYS,
       currentBlock: block,
       defaultBlock: Blocks.buildBlockData({ id: generateId() }),
     };
-    const eventHandlersMap = {};
+    const eventHandlersMap: EditorEventHandlers = {};
 
-    Object.keys(eventHandlers).forEach((eventType) => {
-      eventHandlersMap[eventType] = function handler(event) {
-        if (eventHandlers[eventType]) {
-          const handler = eventHandlers[eventType](editor, slate, eventHandlersOptions);
-          handler(event);
-        }
-      };
+    // Get inline plugin event handlers
+    const inlinePlugins = Object.values(editor.plugins).filter((plugin) => {
+      const rootElement = Object.values(plugin.elements)[0];
+      // Check both top-level nodeType and props.nodeType for inline elements
+      const nodeType =
+        (rootElement as { nodeType?: string })?.nodeType ?? rootElement?.props?.nodeType;
+      return nodeType === 'inline' || nodeType === 'inlineVoid';
+    });
+
+    // Start with block's event handlers (or empty if block has none)
+    const eventHandlers = events ?? {};
+
+    // Merge block and inline plugin event handlers
+    const allEventHandlers = { ...eventHandlers };
+
+    inlinePlugins.forEach((plugin) => {
+      if (plugin.events) {
+        Object.keys(plugin.events).forEach((eventType) => {
+          if (allEventHandlers[eventType]) {
+            // If event handler already exists, wrap it to include inline plugin handler
+            const existingHandler = allEventHandlers[eventType];
+            const inlineHandler = plugin.events![eventType];
+
+            allEventHandlers[eventType] = (yEditor, ySlate, options) => (event) => {
+              // Call the block's event handler first
+              const result = existingHandler(yEditor, ySlate, options)(event);
+              // IMPORTANT: Always call inline handler, even if block handler returned early
+              // This ensures inline plugins (like Mention) can handle events
+              inlineHandler(yEditor, ySlate, options)(event);
+              return result;
+            };
+          } else {
+            // If no block handler exists, just use the inline handler
+            allEventHandlers[eventType] = plugin.events![eventType];
+          }
+        });
+      }
+    });
+
+    // Transform handlers to match EditorEventHandlers type
+    Object.keys(allEventHandlers).forEach((eventType) => {
+      const handler = allEventHandlers[eventType];
+      if (handler) {
+        eventHandlersMap[eventType] = (event) => {
+          const eventHandler = handler(editor, slate, eventHandlersOptions);
+          eventHandler(event);
+        };
+      }
     });
 
     return eventHandlersMap;
-  }, [events, editor, block]);
-
-const shouldSave = (op: Operation): boolean => {
-  if (op.type === 'set_selection') {
-    return false;
-  }
-
-  return true;
-};
-
-const shouldMerge = (op: Operation, prev: Operation | undefined): boolean => {
-  if (prev === op) return true;
-
-  if (
-    prev &&
-    op.type === 'insert_text' &&
-    prev.type === 'insert_text' &&
-    op.offset === prev.offset + prev.text.length &&
-    Path.equals(op.path, prev.path)
-  ) {
-    return true;
-  }
-
-  if (
-    prev &&
-    op.type === 'remove_text' &&
-    prev.type === 'remove_text' &&
-    op.offset + op.text.length === prev.offset &&
-    Path.equals(op.path, prev.path)
-  ) {
-    return true;
-  }
-
-  return false;
-};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events, block, slate]);

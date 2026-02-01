@@ -1,0 +1,83 @@
+---
+title: getElementEntry
+description: Get element with its Slate path
+---
+
+## Overview
+
+The `getElementEntry` method retrieves an element along with its Slate path as a tuple `[element, path]`.
+
+## Signature
+
+```typescript
+editor.getElementEntry(options: GetElementEntryOptions): [SlateElement, Path] | null
+```
+
+## Parameters
+
+<ParamField path="options" type="GetElementEntryOptions" required>
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string">
+      Type of element to retrieve
+    </ParamField>
+
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, defaults to current selection or `[0]`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns a tuple `[SlateElement, Path]` or `null` if not found.
+
+## Examples
+
+```typescript
+// Get entry by type and path
+const entry = editor.getElementEntry({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1]
+});
+
+if (entry) {
+  const [element, path] = entry;
+  console.log('Element:', element);
+  console.log('Path:', path);
+}
+```
+
+## Use Cases
+
+### Navigate to Parent
+
+```typescript
+const entry = editor.getElementEntry({
+  blockId: 'table-1',
+  type: 'table-data-cell',
+  path: [0, 1, 2]
+});
+
+if (entry) {
+  const [cell, cellPath] = entry;
+  const parentPath = cellPath.slice(0, -1);
+  // Now you can work with parent row
+}
+```
+
+## Type Definition
+
+```typescript
+type GetElementEntryOptions = {
+  blockId: string;
+  type?: string;
+  path?: number[];
+};
+```
+
+

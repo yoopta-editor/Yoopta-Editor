@@ -1,17 +1,17 @@
-import type { YooEditor, YooptaPathIndex } from '../types';
+import type { YooEditor, YooptaBlockData, YooptaPathIndex } from '../types';
 
 export type GetBlockOptions = {
   at?: YooptaPathIndex;
   id?: string;
 };
 
-export function getBlock(editor: YooEditor, options: GetBlockOptions) {
+export function getBlock(editor: YooEditor, options: GetBlockOptions): YooptaBlockData | null {
   if (!options?.id && typeof options?.at !== 'number') {
-    throw new Error('getBlock requires either an id or at');
+    return null;
   }
 
   if (options?.id) {
-    return editor.children[options?.id];
+    return editor.children[options?.id] ?? null;
   }
 
   const childrenKeys = Object.keys(editor.children);
@@ -22,5 +22,5 @@ export function getBlock(editor: YooEditor, options: GetBlockOptions) {
   });
 
   if (!blockId) return null;
-  return editor.children[blockId];
+  return editor.children[blockId] ?? null;
 }

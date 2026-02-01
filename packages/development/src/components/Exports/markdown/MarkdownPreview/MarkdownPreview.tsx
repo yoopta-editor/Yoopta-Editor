@@ -20,7 +20,6 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { TOOLS } from '@/utils/yoopta/tools';
 
-
 const LANGUAGES_MAP = {
   markdown: {
     type: 'markdown',
@@ -98,7 +97,7 @@ const Editor = ({ editor, onChange, value }: EditorProps) => {
       editor={editor}
       plugins={YOOPTA_PLUGINS}
       marks={MARKS}
-      selectionBoxRoot={false}
+      selectionBoxElement={false}
       tools={TOOLS}
       value={value}
       onChange={handleChange}

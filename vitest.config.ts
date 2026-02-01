@@ -28,35 +28,17 @@ export default defineConfig({
       'packages/development/**/*.{test,spec}.{ts,tsx}',
     ],
     pool: 'threads',
-    poolOptions: {
-      threads: {
-        minThreads: 2,
-        maxThreads: 4,
-      },
-    },
     testTimeout: 10000,
     hookTimeout: 10000,
     reporters: ['default', 'verbose'],
     outputFile: {
       verbose: './test-results/verbose.log',
     },
-    onConsoleLog(log, type) {
-      console.log(`[${type}] ${log}`);
-      return false;
-    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/**',
-        'dist/**',
-        '**/*.d.ts',
-        '**/*.test.ts',
-        '**/*.spec.ts',
-        '**/*.config.ts',
-        '**/types.ts',
-      ],
-      all: true,
+      include: ['packages/**/*.{ts,tsx}'],
+      exclude: ['node_modules/**', 'dist/**', '**/*.d.ts', 'packages/development/**/*.{ts,tsx}'],
       clean: true,
       cleanOnRerun: true,
     },

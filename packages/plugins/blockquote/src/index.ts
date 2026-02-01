@@ -1,12 +1,5 @@
-import { Blockquote } from './plugin/BlockquotePlugin';
+import { Blockquote } from './plugin/blockquote-plugin';
 import { BlockquoteElement } from './types';
-import './styles.css';
-
-declare module 'slate' {
-  type CustomTypes = {
-    Element: BlockquoteElement;
-  }
-}
 
 export { BlockquoteCommands } from './commands/BlockquoteCommands';
 

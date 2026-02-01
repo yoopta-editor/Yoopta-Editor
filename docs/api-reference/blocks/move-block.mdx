@@ -1,0 +1,140 @@
+---
+title: moveBlock
+description: Move a block to a new position
+---
+
+## Overview
+
+The `moveBlock` method reorders blocks by moving a block from its current position to a new position.
+
+## Signature
+
+```typescript
+Blocks.moveBlock(
+  editor: YooEditor,
+  draggedBlockId: string,
+  newPath: number
+): void
+```
+
+## Parameters
+
+<ParamField path="editor" type="YooEditor" required>
+  The editor instance
+</ParamField>
+
+<ParamField path="draggedBlockId" type="string" required>
+  ID of the block to move
+</ParamField>
+
+<ParamField path="newPath" type="number" required>
+  New position (order) for the block
+</ParamField>
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+// Move block to position 5
+Blocks.moveBlock(editor, 'block-123', 5);
+
+// Move block to beginning
+Blocks.moveBlock(editor, 'block-123', 0);
+
+// Move block to end
+const lastPosition = Object.keys(editor.children).length - 1;
+Blocks.moveBlock(editor, 'block-123', lastPosition);
+```
+
+### Move Block Up
+
+```typescript
+const moveBlockUp = (editor: YooEditor, blockId: string) => {
+  const block = Blocks.getBlock(editor, { id: blockId });
+  if (!block) return;
+
+  const newPosition = Math.max(0, block.meta.order - 1);
+  Blocks.moveBlock(editor, blockId, newPosition);
+};
+```
+
+### Move Block Down
+
+```typescript
+const moveBlockDown = (editor: YooEditor, blockId: string) => {
+  const block = Blocks.getBlock(editor, { id: blockId });
+  if (!block) return;
+
+  const maxPosition = Object.keys(editor.children).length - 1;
+  const newPosition = Math.min(maxPosition, block.meta.order + 1);
+  Blocks.moveBlock(editor, blockId, newPosition);
+};
+```
+
+## Use Cases
+
+### Drag and Drop Implementation
+
+```typescript
+const handleDragEnd = (
+  editor: YooEditor,
+  draggedBlockId: string,
+  targetIndex: number
+) => {
+  Blocks.moveBlock(editor, draggedBlockId, targetIndex);
+  
+  // Update editor path to new position
+  editor.setPath({ current: targetIndex });
+};
+```
+
+### Reorder Blocks
+
+```typescript
+const reorderBlocks = (editor: YooEditor, blockIds: string[]) => {
+  blockIds.forEach((blockId, index) => {
+    Blocks.moveBlock(editor, blockId, index);
+  });
+};
+```
+
+## Notes
+
+<Note>
+  The method automatically updates the editor's current path to the new position after moving.
+</Note>
+
+<Note>
+  If the block doesn't exist or the target position is invalid, the method will silently return without making changes.
+</Note>
+
+<Warning>
+  Moving a block will affect the order of other blocks. Make sure the new position is valid within the editor's block range.
+</Warning>
+
+<Info>
+  The method swaps the positions of the dragged block and the block currently at the target position.
+</Info>
+
+## Type Definition
+
+```typescript
+// No separate type, uses:
+// draggedBlockId: string
+// newPath: number (YooptaPathIndex)
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getBlock" icon="search" href="/api-reference/blocks/get-block">
+    Get block before moving
+  </Card>
+  <Card title="focusBlock" icon="crosshairs" href="/api-reference/blocks/focus-block">
+    Focus block after moving
+  </Card>
+</CardGroup>
+

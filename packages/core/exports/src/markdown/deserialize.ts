@@ -21,7 +21,6 @@ export function deserializeMarkdown(editor: YooEditor, markdown: string): Yoopta
           href: match[2],
         };
       }
-      
     },
     renderer(token: any) {
       return `<img alt="${token.alt}" src="${token.href}">`;

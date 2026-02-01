@@ -1,0 +1,118 @@
+---
+title: getElements
+description: Retrieve multiple elements from a block
+---
+
+## Overview
+
+The `getElements` method retrieves all elements of a specific type or matching a condition from a block.
+
+## Signature
+
+```typescript
+editor.getElements(options: GetElementsOptions): SlateElement[]
+```
+
+## Parameters
+
+<ParamField path="options" type="GetElementsOptions" required>
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the elements
+    </ParamField>
+
+    <ParamField path="type" type="string">
+      Type of elements to retrieve
+    </ParamField>
+
+    <ParamField path="match" type="(element: SlateElement) => boolean">
+      Custom matcher function
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns an array of `SlateElement[]`. Returns empty array if no elements found.
+
+## Examples
+
+```typescript
+// Get all accordion items
+const items = editor.getElements({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item'
+});
+
+// Get expanded items only
+const expandedItems = editor.getElements({
+  blockId: 'accordion-1',
+  match: (el) => el.type === 'accordion-list-item' && el.props?.isExpanded
+});
+
+// Get all table rows
+const rows = editor.getElements({
+  blockId: 'table-1',
+  type: 'table-row'
+});
+
+console.log(`Found ${rows.length} rows`);
+```
+
+## Use Cases
+
+### Batch Operations
+
+```typescript
+const expandAllItems = (blockId: string) => {
+  const items = editor.getElements({
+    blockId,
+    type: 'accordion-list-item'
+  });
+
+  items.forEach((item, index) => {
+    editor.updateElement({
+      blockId,
+      type: 'accordion-list-item',
+      props: { isExpanded: true },
+      path: [0, 0, index]
+    });
+  });
+};
+```
+
+### Count Elements
+
+```typescript
+const countTabs = (blockId: string): number => {
+  const tabs = editor.getElements({
+    blockId,
+    type: 'tabs-item-heading'
+  });
+
+  return tabs.length;
+};
+```
+
+## Type Definition
+
+```typescript
+type GetElementsOptions = {
+  blockId: string;
+  type?: string;
+  match?: (element: SlateElement) => boolean;
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getElement" icon="search" href="/api-reference/elements/get-element">
+    Get single element
+  </Card>
+  <Card title="updateElement" icon="pen" href="/api-reference/elements/update-element">
+    Update elements in batch
+  </Card>
+</CardGroup>
+
+

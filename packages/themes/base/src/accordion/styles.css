@@ -1,0 +1,55 @@
+/* Base theme - Vanilla CSS styles for Accordion */
+
+.yoopta-accordion-list {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.yoopta-accordion-list-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.yoopta-accordion-list-item[open] {
+  border-color: #3b82f6;
+}
+
+.yoopta-accordion-list-item-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.yoopta-accordion-list-item-heading:hover {
+  background: #f9fafb;
+}
+
+.yoopta-accordion-list-item-heading::marker {
+  display: none;
+  content: '';
+}
+
+.yoopta-accordion-list-item-heading::-webkit-details-marker {
+  display: none;
+}
+
+.yoopta-accordion-list-item-content {
+  padding: 0 1.25rem 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}

@@ -1,0 +1,376 @@
+---
+title: 'ActionMenuList'
+description: 'Block type selection menu for "Turn into" and similar actions'
+icon: 'list'
+---
+
+## Overview
+
+`ActionMenuList` is a compound component for selecting block types. It auto-generates items from editor plugins and handles block type toggling. Designed to be opened from toolbar "Turn into" buttons, block options menus, etc.
+
+<Frame>
+  <img src="/images/action-menu-list.png" alt="Action menu list screenshot" />
+</Frame>
+
+## Features
+
+- **API** — controlled/uncontrolled with `open`/`onOpenChange`
+- **Auto-generated items** — reads plugins from editor automatically
+- **Two view modes** — `small` for compact menus, `default` for full display
+- **Floating positioning** — automatic positioning via Floating UI
+- **TypeScript** — full type safety
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+```tsx
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { useState, useRef } from 'react';
+
+function MyTurnIntoMenu() {
+  const editor = useYooptaEditor();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button ref={buttonRef} onClick={() => setOpen(true)}>
+        Turn into
+      </button>
+
+      <ActionMenuList
+        open={open}
+        onOpenChange={setOpen}
+        anchor={buttonRef.current}
+        view="small"
+        placement="bottom-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+```
+
+## API Reference
+
+### `ActionMenuList` (Root)
+
+Root component that manages state and context.
+
+```tsx
+<ActionMenuList
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  anchor={buttonElement}
+  view="small"
+  placement="bottom-start">
+  {children}
+</ActionMenuList>
+```
+
+**Props:**
+
+| Prop           | Type                                | Description                                       |
+| -------------- | ----------------------------------- | ------------------------------------------------- |
+| `open`         | `boolean`                           | Controlled open state                             |
+| `onOpenChange` | `(open: boolean) => void`           | Called when open state changes                    |
+| `defaultOpen`  | `boolean`                           | Default open state (uncontrolled)                 |
+| `anchor`       | `HTMLElement \| null`               | Anchor element for positioning                    |
+| `view`         | `'small' \| 'default'`              | View mode (default: `'default'`)                  |
+| `placement`    | `Placement`                         | Floating UI placement (default: `'bottom-start'`) |
+| `children`     | `ReactNode \| ((api) => ReactNode)` | Content or render function                        |
+
+**Render Props API:**
+
+| Property         | Type                     | Description                        |
+| ---------------- | ------------------------ | ---------------------------------- |
+| `actions`        | `ActionMenuItem[]`       | Available block types from plugins |
+| `selectedAction` | `ActionMenuItem \| null` | Currently highlighted action       |
+| `onSelect`       | `(type: string) => void` | Execute action (toggle block)      |
+| `empty`          | `boolean`                | Whether actions list is empty      |
+
+### `ActionMenuList.Content`
+
+Floating content panel. Auto-generates items if no children provided.
+
+```tsx
+<ActionMenuList.Content className="custom-class">
+  {/* Auto-generates items, or provide custom children */}
+</ActionMenuList.Content>
+```
+
+**Props:**
+
+| Prop        | Type        | Description             |
+| ----------- | ----------- | ----------------------- |
+| `className` | `string`    | Custom CSS classes      |
+| `children`  | `ReactNode` | Optional custom content |
+
+### `ActionMenuList.Group`
+
+Groups related items together.
+
+```tsx
+<ActionMenuList.Group>
+  <ActionMenuList.Item action={action} />
+</ActionMenuList.Group>
+```
+
+### `ActionMenuList.Item`
+
+Individual menu item.
+
+```tsx
+<ActionMenuList.Item
+  action={{
+    type: 'HeadingOne',
+    title: 'Heading 1',
+    description: 'Large section heading',
+    icon: <HeadingIcon />,
+  }}
+  selected={isSelected}
+  onClick={handleClick}
+/>
+```
+
+**Props:**
+
+| Prop       | Type              | Description                                  |
+| ---------- | ----------------- | -------------------------------------------- |
+| `action`   | `ActionMenuItem`  | Action data (type, title, description, icon) |
+| `selected` | `boolean`         | Whether item is selected/highlighted         |
+| `icon`     | `ReactNode`       | Override action's icon                       |
+| `onClick`  | `(event) => void` | Click handler                                |
+
+### `ActionMenuList.Empty`
+
+Empty state when no actions are available.
+
+```tsx
+<ActionMenuList.Empty>No blocks found</ActionMenuList.Empty>
+```
+
+## Examples
+
+### With FloatingToolbar
+
+```tsx
+function MyToolbar() {
+  const editor = useYooptaEditor();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
+
+  return (
+    <>
+      <FloatingToolbar frozen={actionMenuOpen}>
+        <FloatingToolbar.Content>
+          <FloatingToolbar.Group>
+            <FloatingToolbar.Button ref={turnIntoRef} onClick={() => setActionMenuOpen(true)}>
+              Turn into
+              <ChevronDownIcon />
+            </FloatingToolbar.Button>
+          </FloatingToolbar.Group>
+          <FloatingToolbar.Separator />
+          <FloatingToolbar.Group>{/* Formatting buttons */}</FloatingToolbar.Group>
+        </FloatingToolbar.Content>
+      </FloatingToolbar>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={setActionMenuOpen}
+        anchor={turnIntoRef.current}
+        view="small"
+        placement="bottom-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+```
+
+### With BlockOptions
+
+```tsx
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, deleteBlock } = useBlockActions();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
+
+  const onActionMenuClose = (menuOpen: boolean) => {
+    setActionMenuOpen(menuOpen);
+    if (!menuOpen) onOpenChange?.(false); // Close both menus
+  };
+
+  return (
+    <>
+      <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+        <BlockOptions.Content side="right">
+          <BlockOptions.Group>
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
+              Turn into
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+          <BlockOptions.Separator />
+          <BlockOptions.Group>
+            <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+              Duplicate
+            </BlockOptions.Item>
+            <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+              Delete
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+        </BlockOptions.Content>
+      </BlockOptions>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={onActionMenuClose}
+        anchor={turnIntoRef.current}
+        view="small"
+        placement="right-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+```
+
+### Custom Items with Render Props
+
+```tsx
+<ActionMenuList open={open} onOpenChange={setOpen} anchor={buttonRef.current}>
+  {({ actions, selectedAction, onSelect }) => (
+    <ActionMenuList.Content>
+      <ActionMenuList.Group>
+        {actions.map((action) => (
+          <ActionMenuList.Item
+            key={action.type}
+            action={action}
+            selected={action.type === selectedAction?.type}
+            onClick={() => onSelect(action.type)}
+          />
+        ))}
+      </ActionMenuList.Group>
+    </ActionMenuList.Content>
+  )}
+</ActionMenuList>
+```
+
+## View Modes
+
+### Small View (Compact)
+
+Use for toolbar menus and block options:
+
+```tsx
+<ActionMenuList view="small" placement="bottom-start">
+  <ActionMenuList.Content />
+</ActionMenuList>
+```
+
+- Smaller icons (20x20)
+- No descriptions shown
+- Compact padding
+- Min width: 180px
+
+### Default View (Full)
+
+Use for slash command menus and larger dropdowns:
+
+```tsx
+<ActionMenuList view="default" placement="bottom-start">
+  <ActionMenuList.Content />
+</ActionMenuList>
+```
+
+- Larger icons (40x40)
+- Descriptions visible
+- Standard padding
+- Min width: 244px
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-action-menu-radius: 0.5rem;
+  --yoopta-ui-action-menu-padding: 0.5rem;
+  --yoopta-ui-action-menu-max-height: 330px;
+  --yoopta-ui-action-menu-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --yoopta-ui-action-menu-item-gap: 0.5rem;
+  --yoopta-ui-action-menu-item-padding: 0.5rem;
+  --yoopta-ui-action-menu-item-radius: 0.375rem;
+}
+```
+
+### Custom Styles
+
+```tsx
+<ActionMenuList>
+  <ActionMenuList.Content className="bg-slate-900 border-white/10">
+    <ActionMenuList.Group>
+      <ActionMenuList.Item action={action} className="text-white hover:bg-white/10" />
+    </ActionMenuList.Group>
+  </ActionMenuList.Content>
+</ActionMenuList>
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use small view for toolbar/block options">
+    ```tsx
+    // From toolbar "Turn into" button
+    <ActionMenuList view="small" placement="bottom-start">
+
+    // From block options menu
+    <ActionMenuList view="small" placement="right-start">
+    ```
+
+  </Accordion>
+
+  <Accordion title="Close parent menu when action completes">
+    ```tsx
+    const onActionMenuClose = (menuOpen: boolean) => {
+      setActionMenuOpen(menuOpen);
+      if (!menuOpen) {
+        onOpenChange?.(false); // Also close parent menu
+      }
+    };
+    ```
+  </Accordion>
+
+  <Accordion title="Use keepOpen on trigger items">
+    ```tsx
+    <BlockOptions.Item
+      onSelect={() => setActionMenuOpen(true)}
+      keepOpen // Prevents BlockOptions from closing
+    >
+      Turn into
+    </BlockOptions.Item>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingToolbar" icon="toolbox" href="/ui/floating-toolbar">
+    Trigger ActionMenuList from "Turn into" button
+  </Card>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Trigger ActionMenuList from block context menu
+  </Card>
+  <Card title="SlashCommandMenu" icon="slash" href="/ui/slash-action-menu-list">
+    Slash command menu (type / to insert blocks)
+  </Card>
+</CardGroup>

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import { createYooptaEditor } from '../packages/core/editor/src/editor';
 import { YooptaPlugin } from '../packages/core/editor/src/plugins';
-import { YooptaEditor, YooptaEditorProps } from '../packages/core/editor/src/YooptaEditor';
+import { YooptaEditor, YooptaEditorProps } from '../packages/core/editor/src/yoopta-editor';
 import { Editor, Element, Transforms, Node, Descendant } from 'slate';
 import {
   YooEditor,

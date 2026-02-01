@@ -16,7 +16,11 @@ export type HeadingOneCommands = {
 };
 
 export const HeadingOneCommands: HeadingOneCommands = {
-  buildHeadingOneElements: (editor, options) => ({ id: generateId(), type: 'heading-one', children: [{ text: options?.text || '' }] }),
+  buildHeadingOneElements: (editor, options) => ({
+    id: generateId(),
+    type: 'heading-one',
+    children: [{ text: options?.text || '' }],
+  }),
   insertHeadingOne: (editor, options = {}) => {
     const { at, focus, text } = options;
     const headingOne = HeadingOneCommands.buildHeadingOneElements(editor, { text });
@@ -38,7 +42,11 @@ export type HeadingTwoCommands = {
 };
 
 export const HeadingTwoCommands: HeadingTwoCommands = {
-  buildHeadingTwoElements: (editor, options) => ({ id: generateId(), type: 'heading-two', children: [{ text: options?.text || '' }] }),
+  buildHeadingTwoElements: (editor, options) => ({
+    id: generateId(),
+    type: 'heading-two',
+    children: [{ text: options?.text || '' }],
+  }),
   insertHeadingTwo: (editor, options = {}) => {
     const { at, focus, text } = options;
     const headingTwo = HeadingTwoCommands.buildHeadingTwoElements(editor, { text });
@@ -60,7 +68,11 @@ export type HeadingThreeCommands = {
 };
 
 export const HeadingThreeCommands: HeadingThreeCommands = {
-  buildHeadingThreeElements: (editor, options) => ({ id: generateId(), type: 'heading-three', children: [{ text: options?.text || '' }] }),
+  buildHeadingThreeElements: (editor, options) => ({
+    id: generateId(),
+    type: 'heading-three',
+    children: [{ text: options?.text || '' }],
+  }),
   insertHeadingThree: (editor, options = {}) => {
     const { at, focus, text } = options;
     const headingThree = HeadingThreeCommands.buildHeadingThreeElements(editor, { text });

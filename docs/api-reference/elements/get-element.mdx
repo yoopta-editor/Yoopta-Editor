@@ -1,0 +1,180 @@
+---
+title: getElement
+description: Retrieve a single element from a block
+---
+
+## Overview
+
+The `getElement` method retrieves a single element from a block based on type, path, or custom matcher.
+
+## Signature
+
+```typescript
+editor.getElement(options: GetElementOptions): SlateElement | null
+```
+
+## Parameters
+
+<ParamField path="options" type="GetElementOptions" required>
+  Configuration object for retrieving the element
+
+  <Expandable title="properties">
+    <ParamField path="blockId" type="string" required>
+      ID of the block containing the element
+    </ParamField>
+
+    <ParamField path="type" type="string">
+      Type of element to retrieve
+    </ParamField>
+
+    <ParamField path="path" type="number[]">
+      Direct Slate path to the element. If not provided, defaults to current selection or `[0]`.
+    </ParamField>
+
+    <ParamField path="match" type="(element: SlateElement) => boolean">
+      Custom matcher function to find the element
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns the matching `SlateElement` or `null` if not found.
+
+## Examples
+
+### Basic Usage
+
+```typescript
+// Get element by type and path
+const item = editor.getElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1]
+});
+
+if (item) {
+  console.log('Item props:', item.props);
+}
+```
+
+### Get with Matcher
+
+```typescript
+// Find active tab
+const activeTab = editor.getElement({
+  blockId: 'tabs-1',
+  match: (el) => el.type === 'tabs-item-heading' && el.props?.active === true
+});
+
+// Find expanded accordion item
+const expandedItem = editor.getElement({
+  blockId: 'accordion-1',
+  match: (el) => el.type === 'accordion-list-item' && el.props?.isExpanded
+});
+```
+
+### Get by Path
+
+```typescript
+// Get item at specific path
+const item = editor.getElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 0] // First item
+});
+
+// Get item at another path
+const lastItem = editor.getElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 2] // Third item
+});
+```
+
+## Use Cases
+
+### Toggle Element State
+
+```typescript
+const toggleAccordionItem = (blockId: string, itemPath: number[]) => {
+  const item = editor.getElement({
+    blockId,
+    type: 'accordion-list-item',
+    path: itemPath
+  });
+
+  if (item) {
+    editor.updateElement({
+      blockId,
+      type: 'accordion-list-item',
+      props: { isExpanded: !item.props?.isExpanded },
+      path: itemPath
+    });
+  }
+};
+```
+
+### Check Element Properties
+
+```typescript
+const isTabActive = (blockId: string, tabId: string): boolean => {
+  const tab = editor.getElement({
+    blockId,
+    match: (el) => el.type === 'tabs-item-heading' && el.id === tabId
+  });
+
+  return tab?.props?.active === true;
+};
+```
+
+### Get Cell Properties
+
+```typescript
+const getCellWidth = (blockId: string, cellPath: number[]): number | undefined => {
+  const cell = editor.getElement({
+    blockId,
+    type: 'table-data-cell',
+    path: cellPath
+  });
+
+  return cell?.props?.width as number | undefined;
+};
+```
+
+## Type Definition
+
+```typescript
+type GetElementOptions = {
+  blockId: string;
+  type?: string;
+  path?: number[];
+  match?: (element: SlateElement) => boolean;
+};
+
+type SlateElement = {
+  id?: string;
+  type: string;
+  props?: Record<string, unknown>;
+  children: (SlateElement | SlateElementTextNode)[];
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="getElements" icon="list" href="/api-reference/elements/get-elements">
+    Get multiple elements
+  </Card>
+  <Card title="getElementEntry" icon="map" href="/api-reference/elements/get-element-entry">
+    Get element with path
+  </Card>
+  <Card title="updateElement" icon="pen" href="/api-reference/elements/update-element">
+    Update retrieved element
+  </Card>
+  <Card title="deleteElement" icon="trash" href="/api-reference/elements/delete-element">
+    Delete retrieved element
+  </Card>
+</CardGroup>
+
+

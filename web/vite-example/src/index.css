@@ -39,14 +39,10 @@ button:hover {
   justify-content: center;
 }
 
-.yoopta-editor {
-  width: 750px;
-}
-
 .editor-container {
   width: 100%;
   padding: 80px;
   display: flex;
   justify-content: center;
-  max-width: 640px;
+  max-width: 750px;
 }

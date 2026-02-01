@@ -1,0 +1,175 @@
+---
+title: duplicateBlock
+description: Create a copy of an existing block
+---
+
+## Overview
+
+The `duplicateBlock` method creates an exact copy of a block and inserts it at a specified position.
+
+## Signature
+
+```typescript
+Blocks.duplicateBlock(
+  editor: YooEditor,
+  options?: DuplicateBlockOptions
+): string | undefined
+```
+
+## Parameters
+
+<ParamField path="editor" type="YooEditor" required>
+  The editor instance
+</ParamField>
+
+<ParamField path="options" type="DuplicateBlockOptions">
+  Configuration object for duplicating
+
+  <Expandable title="properties">
+    <ParamField path="at" type="number" default="editor.path.current">
+      Position of the block to duplicate
+    </ParamField>
+
+    <ParamField path="blockId" type="string">
+      ID of the block to duplicate. Takes precedence over `at`.
+    </ParamField>
+
+    <ParamField path="insertAt" type="number">
+      Position to insert the duplicate. If not provided, inserts after the original block.
+    </ParamField>
+
+    <ParamField path="focus" type="boolean" default="true">
+      Whether to focus the duplicated block after creation
+    </ParamField>
+
+    <ParamField path="elements" type="SlateElement">
+      Custom element structure for the duplicate. If provided, overrides the default duplication.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+Returns the ID of the newly created block, or `undefined` if duplication failed.
+
+## Examples
+
+### Basic Usage
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+// Duplicate current block
+const newBlockId = Blocks.duplicateBlock(editor);
+
+// Duplicate specific block by path
+const newBlockId = Blocks.duplicateBlock(editor, { at: 3 });
+
+// Duplicate specific block by ID
+const newBlockId = Blocks.duplicateBlock(editor, { blockId: 'block-123' });
+```
+
+### Duplicate and Insert at Specific Position
+
+```typescript
+// Duplicate and insert at beginning
+const newBlockId = Blocks.duplicateBlock(editor, {
+  at: 3,
+  insertAt: 0,
+});
+
+// Duplicate and insert at end
+const lastPosition = Object.keys(editor.children).length;
+const newBlockId = Blocks.duplicateBlock(editor, {
+  blockId: 'block-123',
+  insertAt: lastPosition,
+});
+```
+
+### Duplicate with Custom Content
+
+```typescript
+// Duplicate but with modified content
+const newBlockId = Blocks.duplicateBlock(editor, {
+  blockId: 'block-123',
+  elements: editor.y('paragraph', {
+    children: [editor.y.text('Modified duplicate')]
+  }),
+});
+```
+
+## Use Cases
+
+### Duplicate Current Block
+
+```typescript
+const duplicateCurrent = (editor: YooEditor) => {
+  return Blocks.duplicateBlock(editor, {
+    at: editor.path.current,
+    focus: true,
+  });
+};
+```
+
+### Duplicate Multiple Blocks
+
+```typescript
+const duplicateMultiple = (editor: YooEditor, blockIds: string[]) => {
+  const newBlockIds: string[] = [];
+  
+  blockIds.forEach((blockId) => {
+    const newId = Blocks.duplicateBlock(editor, {
+      blockId,
+      focus: false,
+    });
+    if (newId) newBlockIds.push(newId);
+  });
+  
+  return newBlockIds;
+};
+```
+
+## Notes
+
+<Note>
+  The duplicated block gets a new unique ID automatically. All other properties (type, value, meta) are copied from the original.
+</Note>
+
+<Note>
+  If `insertAt` is not provided, the duplicate is inserted right after the original block (at `original.meta.order + 1`).
+</Note>
+
+<Note>
+  The method performs a deep clone of the block data, so modifications to the duplicate won't affect the original.
+</Note>
+
+<Warning>
+  If the block doesn't exist, the method returns `undefined` without error.
+</Warning>
+
+## Type Definition
+
+```typescript
+type DuplicateBlockOptions = {
+  at?: number; // YooptaPathIndex
+  blockId?: string;
+  insertAt?: number; // YooptaPathIndex
+  focus?: boolean;
+  elements?: SlateElement;
+};
+```
+
+## Related Methods
+
+<CardGroup cols={2}>
+  <Card title="insertBlock" icon="plus" href="/api-reference/blocks/insert-block">
+    Create new block
+  </Card>
+  <Card title="getBlock" icon="search" href="/api-reference/blocks/get-block">
+    Get block before duplicating
+  </Card>
+  <Card title="deleteBlock" icon="trash" href="/api-reference/blocks/delete-block">
+    Remove duplicated block
+  </Card>
+</CardGroup>
+

@@ -1,30 +1,47 @@
 import type { Descendant, Path, Point, Selection } from 'slate';
+import type { ReactEditor } from 'slate-react';
 
-import { ReactEditor } from 'slate-react';
-import { applyTransforms, ApplyTransformsOptions, YooptaOperation } from './core/applyTransforms';
-import { insertBlock, InsertBlockOptions } from './blocks/insertBlock';
-import { increaseBlockDepth } from './blocks/increaseBlockDepth';
-import { SplitBlockOptions } from './blocks/splitBlock';
-import { HistoryStack, HistoryStackName, YooptaHistory } from './core/history';
-import { WithoutFirstArg } from '../utils/types';
-import { moveBlock } from './blocks/moveBlock';
-import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
-import { DeleteBlockOptions } from './blocks/deleteBlock';
-import type { deleteBlock} from './blocks/deleteBlock';
-import { DuplicateBlockOptions } from './blocks/duplicateBlock';
-import type { duplicateBlock} from './blocks/duplicateBlock';
+import type { YooptaMark } from '../marks';
+import type { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
+import type { deleteBlock } from './blocks/deleteBlock';
+import type { duplicateBlock } from './blocks/duplicateBlock';
 import type { focusBlock } from './blocks/focusBlock';
-import { GetBlockOptions } from './blocks/getBlock';
-import { ToggleBlockOptions } from './blocks/toggleBlock';
-import type { toggleBlock} from './blocks/toggleBlock';
-import type { updateBlock } from './blocks/updateBlock';
+import type { GetBlockOptions } from './blocks/getBlock';
+import type { increaseBlockDepth } from './blocks/increaseBlockDepth';
+import type { insertBlock } from './blocks/insertBlock';
+import type { mergeBlock } from './blocks/mergeBlock';
+import type { toggleBlock } from './blocks/toggleBlock';
 import type { EditorBlurOptions } from './core/blur';
-import type { setEditorValue } from './core/setEditorValue';
+import type { HistoryStack, HistoryStackName, YooptaHistory } from './core/history';
 import type { getEmail } from '../parsers/getEmail';
 import type { getHTML } from '../parsers/getHTML';
+import type { getYooptaJSON } from '../parsers/getYooptaJSON';
+import type { WithoutFirstArg } from '../utils/types';
+import type { moveBlock } from './blocks/moveBlock';
+import type { SplitBlockOptions } from './blocks/splitBlock';
+import type { updateBlock } from './blocks/updateBlock';
+import type { YooptaOperation, applyTransforms } from './core/applyTransforms';
+import type { setEditorValue } from './core/setEditorValue';
 import type { getMarkdown } from '../parsers/getMarkdown';
 import type { getPlainText } from '../parsers/getPlainText';
-import type { Plugin, PluginElementProps, PluginElementsMap, PluginOptions } from '../plugins/types';
+import type {
+  Plugin,
+  PluginElementProps,
+  PluginElementsMap,
+  PluginOptions,
+} from '../plugins/types';
+import type { ElementStructureOptions, TextNodeOptions } from './elements/create-element-structure';
+import type { deleteElement } from './elements/deleteElement';
+import type { getElement } from './elements/getElement';
+import type { getElementChildren } from './elements/getElementChildren';
+import type { getElementEntry } from './elements/getElementEntry';
+import type { getElementPath } from './elements/getElementPath';
+import type { getElementRect } from './elements/getElementRect';
+import type { getElements } from './elements/getElements';
+import type { getParentElementPath } from './elements/getParentElementPath';
+import type { insertElement } from './elements/insertElement';
+import type { isElementEmpty } from './elements/isElementEmpty';
+import type { updateElement } from './elements/updateElement';
 
 export type YooptaBlockData<T = Descendant | SlateElement> = {
   id: string;
@@ -68,8 +85,7 @@ export type TextFormat = {
 export type YooptaBlock = {
   type: string;
   options?: PluginOptions<any>;
-  elements: PluginElementsMap<string>;
-  hasCustomEditor?: boolean;
+  elements: PluginElementsMap;
   isActive: () => boolean;
 };
 
@@ -109,9 +125,28 @@ export type YooEditor = {
   decreaseBlockDepth: WithoutFirstArg<typeof decreaseBlockDepth>;
   moveBlock: WithoutFirstArg<typeof moveBlock>;
   focusBlock: WithoutFirstArg<typeof focusBlock>;
-  mergeBlock: () => void;
-  splitBlock: (options?: SplitBlockOptions) => void;
+  mergeBlock: WithoutFirstArg<typeof mergeBlock>;
+  splitBlock: (options?: SplitBlockOptions) => string | undefined;
   getBlock: (options: GetBlockOptions) => YooptaBlockData | null;
+
+  // element handlers
+  insertElement: WithoutFirstArg<typeof insertElement>;
+  updateElement: WithoutFirstArg<typeof updateElement>;
+  deleteElement: WithoutFirstArg<typeof deleteElement>;
+  getElement: WithoutFirstArg<typeof getElement>;
+  getElements: WithoutFirstArg<typeof getElements>;
+  getElementEntry: WithoutFirstArg<typeof getElementEntry>;
+  getElementPath: WithoutFirstArg<typeof getElementPath>;
+  getElementRect: WithoutFirstArg<typeof getElementRect>;
+  getParentElementPath: WithoutFirstArg<typeof getParentElementPath>;
+  getElementChildren: WithoutFirstArg<typeof getElementChildren>;
+  isElementEmpty: WithoutFirstArg<typeof isElementEmpty>;
+
+  // element structure builder
+  y: ((type: string, options?: ElementStructureOptions) => SlateElement) & {
+    text: (text: string, marks?: TextNodeOptions) => SlateElementTextNode;
+    inline: (type: string, options?: ElementStructureOptions) => SlateElement;
+  };
 
   // path handlers
   path: YooptaPath;
@@ -121,11 +156,11 @@ export type YooEditor = {
   getEditorValue: () => YooptaContentValue;
   setEditorValue: WithoutFirstArg<typeof setEditorValue>;
   blockEditorsMap: YooptaPluginsEditorMap;
-  blocks: YooptaBlocks;
+  // blocks: YooptaBlocks;
   formats: YooptaFormats;
-  shortcuts: Record<string, YooptaBlock>;
+  marks: YooptaMark<any>[];
+  // shortcuts: Record<string, YooptaBlock>;
   plugins: Record<string, Plugin<Record<string, SlateElement>, unknown>>;
-  commands: Record<string, (...args: any[]) => any>;
 
   // core handlers
   applyTransforms: WithoutFirstArg<typeof applyTransforms>;
@@ -156,6 +191,7 @@ export type YooEditor = {
   getMarkdown: WithoutFirstArg<typeof getMarkdown>;
   getPlainText: WithoutFirstArg<typeof getPlainText>;
   getEmail: WithoutFirstArg<typeof getEmail>;
+  getYooptaJSON: WithoutFirstArg<typeof getYooptaJSON>;
 
   // history
   historyStack: Record<HistoryStackName, HistoryStack[]>;

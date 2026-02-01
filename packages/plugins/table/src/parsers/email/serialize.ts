@@ -1,4 +1,4 @@
-import type { SlateElement, YooptaBlockData} from '@yoopta/editor';
+import type { SlateElement, YooptaBlockData } from '@yoopta/editor';
 import { serializeTextNodes } from '@yoopta/editor';
 
 export function serializeTableToEmail(
@@ -34,13 +34,14 @@ export function serializeTableToEmail(
         .join('')}
       </colgroup>
       <tbody>${element.children
-        .map((trElement) => 
-          // @ts-ignore - fixme
-           `<tr style="position: relative;">${trElement.children
-            .map((td) => {
-              const text = serializeTextNodes(td.children);
-              if (td.props?.asHeader) {
-                return `<th style="
+        .map(
+          (trElement) =>
+            // @ts-ignore - fixme
+            `<tr style="position: relative;">${trElement.children
+              .map((td) => {
+                const text = serializeTextNodes(td.children);
+                if (td.props?.asHeader) {
+                  return `<th style="
     border-width: 1px;
     border: 1px solid #e9e9e7;
     color: inherit;
@@ -55,9 +56,9 @@ export function serializeTableToEmail(
     padding: 7px 9px;
     white-space: pre-wrap;
     width: 100%;" data-width="${td.props?.width || 200}" rowspan="1" colspan="1">${text}</th>`;
-              }
+                }
 
-              return `<td style="
+                return `<td style="
     border-width: 1px;
     border: 1px solid #e9e9e7;
     color: inherit;
@@ -72,8 +73,8 @@ export function serializeTableToEmail(
     padding: 7px 9px;
     white-space: pre-wrap;
     width: 100%;" data-width="${td.props?.width || 200}" rowspan="1" colspan="1">${text}</td>`;
-            })
-            .join('')}</tr>`
+              })
+              .join('')}</tr>`,
         )
         .join('')}</tbody></table>`;
 

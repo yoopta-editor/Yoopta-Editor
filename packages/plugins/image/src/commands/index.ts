@@ -1,12 +1,5 @@
-import type {
-  YooEditor,
-  YooptaPathIndex} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  buildBlockData,
-  generateId
-} from '@yoopta/editor';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, generateId } from '@yoopta/editor';
 
 import type { ImageElement, ImageElementProps } from '../types';
 
@@ -55,6 +48,6 @@ export const ImageCommands: ImageCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateImage: (editor: YooEditor, blockId, props) => {
-    Elements.updateElement(editor, blockId, { props });
+    Elements.updateElement(editor, { blockId, type: 'image', props });
   },
 };

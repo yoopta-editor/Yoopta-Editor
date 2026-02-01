@@ -1,5 +1,5 @@
 import type { SetEditorValueOperation } from './applyTransforms';
-import { validateYooptaValue } from '../../utils/validateYooptaValue';
+import { validateYooptaValue } from '../../utils/validations';
 import { Blocks } from '../blocks';
 import type { YooEditor, YooptaContentValue } from '../types';
 

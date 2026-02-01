@@ -1,24 +1,40 @@
 // const json = require('rollup-plugin-json');
 const commonjs = require('@rollup/plugin-commonjs');
 const nodeResolve = require('@rollup/plugin-node-resolve');
-const sourceMaps = require('rollup-plugin-sourcemaps');
 const replace = require('@rollup/plugin-replace');
 const terser = require('@rollup/plugin-terser');
-const typescript = require('rollup-plugin-typescript2');
 const svgr = require('@svgr/rollup');
-const peerDepsExternal = require('rollup-plugin-peer-deps-external');
-const postcss = require('rollup-plugin-postcss');
-const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const postcssNesting = require('postcss-nesting');
+const peerDepsExternal = require('rollup-plugin-peer-deps-external');
+const postcss = require('rollup-plugin-postcss');
+const sourceMaps = require('rollup-plugin-sourcemaps');
+const typescript = require('rollup-plugin-typescript2');
+const tailwindcss = require('tailwindcss');
 
-// const tailwindConfig = require('./tailwind.config.js');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
-function getPlugins({ tailwindConfig }) {
+function getPlugins({ tailwindConfig, extractCSS }) {
+  const postcssPlugins = [postcssNesting(), autoprefixer()];
+
+  // Add Tailwind only if tailwindConfig is provided
+  if (tailwindConfig) {
+    const { content, theme, ...restConfig } = tailwindConfig;
+
+    postcssPlugins.unshift(
+      tailwindcss({
+        content: content || ['./src/**/*.{js,ts,jsx,tsx}'],
+        theme: theme || {
+          extend: {},
+        },
+        plugins: [],
+        ...restConfig,
+      }),
+    );
+  }
+
   return [
-    // json(),
     peerDepsExternal(),
     commonjs(),
     nodeResolve(),
@@ -26,32 +42,17 @@ function getPlugins({ tailwindConfig }) {
       typescript: true,
     }),
     postcss({
-      config: {
-        path: './postcss.config.js',
-      },
-      extract: false,
+      plugins: postcssPlugins,
+      extract: extractCSS !== undefined ? extractCSS : false,
+      ...(extractCSS && {
+        file: './dist/styles.css',
+      }),
       modules: {
         generateScopedName: isProd ? '[hash:base64:8]' : '[name]_[local]',
       },
       autoModules: true,
       minimize: true,
       use: ['sass'],
-      plugins: [
-        postcssNesting(),
-        tailwindcss({
-          theme: {
-            extend: {},
-          },
-          plugins: [],
-          /* SHOULD BE REMOVED */
-          // corePlugins: {
-          //   preflight: false,
-          // },
-          ...tailwindConfig,
-          content: tailwindConfig?.content || ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
-        }),
-        autoprefixer(),
-      ],
     }),
     typescript({
       clean: true,
@@ -78,7 +79,7 @@ function getPlugins({ tailwindConfig }) {
 /**
  * @type {import('rollup').RollupOptions}
  */
-export function createRollupConfig({ pkg, tailwindConfig }) {
+export function createRollupConfig({ pkg, tailwindConfig, outputOptions, extractCSS }) {
   return {
     input: `./src/index.ts`,
     output: [
@@ -88,16 +89,10 @@ export function createRollupConfig({ pkg, tailwindConfig }) {
         globals: { react: 'React' },
         file: `./${pkg.module}`,
         exports: 'named',
+        ...outputOptions,
       },
-      // {
-      //   file: `./${pkg.main}`,
-      //   format: 'cjs',
-      //   globals: { react: 'React' },
-      //   exports: 'named',
-      //   sourcemap: isDev,
-      // },
     ],
-    plugins: getPlugins({ tailwindConfig }),
+    plugins: getPlugins({ tailwindConfig, extractCSS }),
     cache: isDev,
     external: [...Object.keys(pkg.peerDependencies)],
   };

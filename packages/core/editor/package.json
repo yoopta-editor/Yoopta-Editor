@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/editor",
-  "version": "4.9.9",
+  "version": "6.0.0-beta.16",
   "license": "MIT",
   "private": false,
   "main": "dist/index.js",
@@ -11,11 +11,6 @@
     "dist/"
   ],
   "dependencies": {
-    "@dnd-kit/core": "^6.1.0",
-    "@dnd-kit/sortable": "^8.0.0",
-    "@floating-ui/react": "^0.26.9",
-    "@radix-ui/react-icons": "^1.3.0",
-    "copy-to-clipboard": "^3.3.3",
     "eventemitter3": "^5.0.1",
     "immer": "^10.0.3",
     "is-hotkey": "^0.2.0",
@@ -23,10 +18,11 @@
     "validator": "^13.12.0"
   },
   "peerDependencies": {
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2",
-    "slate": "^0.102.0",
-    "slate-react": "^0.102.0"
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
+    "slate": "^0.120.0",
+    "slate-dom": "^0.119.0",
+    "slate-react": "^0.120.0"
   },
   "scripts": {
     "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
@@ -68,5 +64,9 @@
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
   },
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
-  "gitHead": "016b0f92a45bfcc157e44a7f28820174d0cc5c7e"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "gitHead": "0c1eed956a263573e6aff9bdf58dcaf834deadf5"
 }

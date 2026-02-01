@@ -1,0 +1,198 @@
+.yoopta-highlight-color-picker {
+  /* Theme vars (light by default) */
+  --hcp-bg: #ffffff;
+  --hcp-fg: #18181b;
+  --hcp-muted: #71717a;
+  --hcp-border: #e4e4e7;
+  --hcp-ring: #3b82f6;
+  --hcp-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.18), 0 4px 16px -4px rgba(0, 0, 0, 0.1);
+
+  --hcp-radius: 10px;
+  --hcp-pad: 10px;
+  --hcp-gap: 10px;
+
+  /* Compact sizes */
+  --hcp-width: 224px;
+  --hcp-picker-height: 120px;
+  --hcp-preset-size: 24px;
+  --hcp-input-height: 26px;
+
+  z-index: 9999;
+  width: var(--hcp-width);
+  background: var(--hcp-bg);
+  color: var(--hcp-fg);
+  border: 1px solid var(--hcp-border);
+  border-radius: var(--hcp-radius);
+  box-shadow: var(--hcp-shadow);
+  padding: var(--hcp-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  outline: none;
+  user-select: none;
+}
+
+.yoopta-highlight-color-picker[data-theme="dark"],
+.dark .yoopta-highlight-color-picker {
+  --hcp-bg: #18181b;
+  --hcp-fg: #fafafa;
+  --hcp-muted: #a1a1aa;
+  --hcp-border: #3f3f46;
+  --hcp-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.5), 0 4px 16px -4px rgba(0, 0, 0, 0.3);
+}
+
+.yoopta-highlight-color-picker__mode-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--hcp-border);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.yoopta-highlight-color-picker__mode-btn {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--hcp-muted);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 120ms ease, color 120ms ease;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.yoopta-highlight-color-picker__mode-btn:hover {
+  color: var(--hcp-fg);
+}
+
+.yoopta-highlight-color-picker__mode-btn[data-active="true"] {
+  background: var(--hcp-bg);
+  color: var(--hcp-fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.yoopta-highlight-color-picker__mode-btn:focus-visible {
+  outline: 2px solid var(--hcp-ring);
+  outline-offset: 2px;
+}
+
+.yoopta-highlight-color-picker__react-colorful {
+  width: 100% !important;
+  height: var(--hcp-picker-height) !important;
+}
+
+/* Saturation */
+.yoopta-highlight-color-picker__react-colorful .react-colorful__saturation {
+  border-radius: 8px;
+  border: 1px solid var(--hcp-border);
+}
+
+/* Hue slider */
+.yoopta-highlight-color-picker__react-colorful .react-colorful__hue {
+  margin-top: 8px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--hcp-border);
+}
+
+/* Pointer */
+.yoopta-highlight-color-picker__react-colorful .react-colorful__pointer {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+  border: 2px solid var(--hcp-bg);
+}
+
+.yoopta-highlight-color-picker__presets {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hcp-border) transparent;
+}
+
+.yoopta-highlight-color-picker__presets::-webkit-scrollbar {
+  height: 6px;
+}
+
+.yoopta-highlight-color-picker__presets::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yoopta-highlight-color-picker__presets::-webkit-scrollbar-thumb {
+  background-color: var(--hcp-border);
+  border-radius: 999px;
+}
+
+.yoopta-highlight-color-picker__preset {
+  width: var(--hcp-preset-size);
+  height: var(--hcp-preset-size);
+  flex: 0 0 auto;
+  border-radius: 7px;
+  border: 2px solid var(--hcp-border);
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.yoopta-highlight-color-picker__preset:hover {
+  transform: scale(1.08);
+}
+
+.yoopta-highlight-color-picker__preset:focus-visible {
+  box-shadow: 0 0 0 2px var(--hcp-ring);
+  border-color: var(--hcp-ring);
+}
+
+.yoopta-highlight-color-picker__preset[data-selected="true"] {
+  border-color: var(--hcp-ring);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+}
+
+.yoopta-highlight-color-picker__hex-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yoopta-highlight-color-picker__swatch {
+  width: var(--hcp-input-height);
+  height: var(--hcp-input-height);
+  border-radius: 7px;
+  border: 1px solid var(--hcp-border);
+  flex: 0 0 auto;
+}
+
+.yoopta-highlight-color-picker__hex-input {
+  height: var(--hcp-input-height);
+  flex: 1;
+  min-width: 0;
+  border-radius: 9px;
+  border: 1px solid var(--hcp-border);
+  background: transparent;
+  color: var(--hcp-fg);
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 1;
+  outline: none;
+}
+
+.yoopta-highlight-color-picker__hex-input:focus {
+  border-color: var(--hcp-ring);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.yoopta-highlight-color-picker__hex-input::placeholder {
+  color: var(--hcp-muted);
+}

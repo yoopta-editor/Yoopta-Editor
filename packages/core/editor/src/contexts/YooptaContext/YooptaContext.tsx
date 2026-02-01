@@ -10,7 +10,7 @@ export type YooptaEditorContext = {
 };
 
 const DEFAULT_HANDLERS: YooptaEditorContext = {
-  editor: createYooptaEditor(),
+  editor: createYooptaEditor({ plugins: [] }),
 };
 
 export const YooptaContext = createContext<YooptaEditorContext>(DEFAULT_HANDLERS);

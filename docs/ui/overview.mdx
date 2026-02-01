@@ -1,0 +1,469 @@
+---
+title: 'UI Components Overview'
+description: 'Headless UI components for building custom editor interfaces'
+icon: 'palette'
+---
+
+## Introduction
+
+The `@yoopta/ui` package provides a collection of **headless UI components** that give you complete control over your editor's interface. These components follow modern design patterns, offering flexibility and customization while maintaining excellent developer experience.
+
+<Note>
+  Starting with **Yoopta Editor v6**, the core `@yoopta/editor` is completely **headless**. All UI
+  components use the compound component pattern with no shared global state.
+</Note>
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="No Stores" icon="database">
+    Pure React state management — no Zustand or global stores required
+  </Card>
+  <Card title="API" icon="layer-group">
+    Compound components with controlled/uncontrolled patterns
+  </Card>
+  <Card title="TypeScript Support" icon="code">
+    Full TypeScript support with exported types for every component
+  </Card>
+  <Card title="Accessibility" icon="universal-access">
+    Built with accessibility in mind, following ARIA best practices
+  </Card>
+</CardGroup>
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Import Styles
+
+Two ways to import the `@yoopta/ui` package:
+
+### 1. Full Package Import
+
+Import everything from the main entry point:
+
+```tsx
+import {
+  FloatingToolbar,
+  ActionMenuList,
+  SlashCommandMenu,
+  FloatingBlockActions,
+  BlockOptions,
+  SelectionBox,
+  BlockDndContext,
+  SortableBlock,
+} from '@yoopta/ui';
+```
+
+### 2. Subpath Imports (Recommended for Bundle Size)
+
+Import only what you need using subpath exports for better tree-shaking and smaller bundles:
+
+```tsx
+// Only import the floating toolbar
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+
+// Only import action menu list
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+
+// Only import slash command menu
+import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
+
+// Other available subpaths
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
+import { SelectionBox } from '@yoopta/ui/selection-box';
+import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+import { Portal } from '@yoopta/ui/portal';
+import { Overlay } from '@yoopta/ui/overlay';
+```
+
+<Tip>
+  **When to use subpath imports:**
+  - You only need 1-2 components
+  - Bundle size is critical (e.g., landing pages)
+  - You want explicit control over what's included
+
+**When to use full import:**
+
+- You use most components
+- Convenience over optimization
+- Your bundler has good tree-shaking
+
+</Tip>
+
+### Available Subpaths
+
+| Subpath                             | Exports                                                         |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `@yoopta/ui`                        | Everything (convenience)                                        |
+| `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                               |
+| `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                |
+| `@yoopta/ui/slash-command-menu`     | `SlashCommandMenu`                                              |
+| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                          |
+| `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`                               |
+| `@yoopta/ui/selection-box`          | `SelectionBox`                                                  |
+| `@yoopta/ui/block-dnd`              | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd` |
+| `@yoopta/ui/portal`                 | `Portal`                                                        |
+| `@yoopta/ui/overlay`                | `Overlay`                                                       |
+
+## Available Components
+
+### Core UI Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Floating buttons that appear when hovering over blocks
+  </Card>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Context menu for block actions (duplicate, delete, turn into)
+  </Card>
+  <Card title="FloatingToolbar" icon="toolbox" href="/ui/floating-toolbar">
+    Floating toolbar for text formatting on selection
+  </Card>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Block type menu for "Turn into" actions
+  </Card>
+  <Card title="SlashCommandMenu" icon="slash" href="/ui/slash-action-menu-list">
+    Slash command menu for quick block insertion
+  </Card>
+  <Card title="SelectionBox" icon="object-group" href="/ui/selection-box">
+    Rectangle selection for selecting multiple blocks
+  </Card>
+  <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
+    Drag and drop support for reordering blocks
+  </Card>
+</CardGroup>
+
+## Architecture
+
+### Compound Components
+
+All components follow the compound component pattern:
+
+```tsx
+<FloatingToolbar frozen={popoverOpen}>
+  <FloatingToolbar.Content>
+    <FloatingToolbar.Group>
+      <FloatingToolbar.Button onClick={handleBold}>
+        <BoldIcon />
+      </FloatingToolbar.Button>
+    </FloatingToolbar.Group>
+  </FloatingToolbar.Content>
+</FloatingToolbar>
+```
+
+### Controlled vs Self-Managed
+
+Components fall into two categories:
+
+#### 1. Self-Managed Components
+
+These handle their own visibility automatically:
+
+- **FloatingBlockActions** - Appears on block hover
+- **FloatingToolbar** - Appears on text selection
+- **SlashCommandMenu** - Appears on `/` command
+
+```tsx
+// Just render them - they handle visibility automatically
+<YooptaEditor editor={editor}>
+  <FloatingBlockActions>
+    {({ blockId }) => (
+      <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
+        <PlusIcon />
+      </FloatingBlockActions.Button>
+    )}
+  </FloatingBlockActions>
+</YooptaEditor>
+```
+
+#### 2. Controlled Components
+
+These require explicit open/close control:
+
+- **BlockOptions** - Controlled via `open`/`onOpenChange`
+- **ActionMenuList** - Controlled via `open`/`onOpenChange`
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<BlockOptions open={open} onOpenChange={setOpen} anchor={buttonRef.current}>
+  <BlockOptions.Content>{/* Items */}</BlockOptions.Content>
+</BlockOptions>;
+```
+
+### The `frozen` Prop Pattern
+
+When opening submenus, use the `frozen` prop to pause the parent's tracking:
+
+```tsx
+const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
+
+<FloatingBlockActions frozen={blockOptionsOpen}>
+  {({ blockId }) => (
+    <>
+      <FloatingBlockActions.Button onClick={() => setBlockOptionsOpen(true)}>
+        <DragHandleIcon />
+      </FloatingBlockActions.Button>
+
+      <BlockOptions open={blockOptionsOpen} onOpenChange={setBlockOptionsOpen} blockId={blockId} />
+    </>
+  )}
+</FloatingBlockActions>;
+```
+
+## Quick Start
+
+Here's a complete example using the UI components:
+
+```tsx
+import { useMemo, useState, useRef } from 'react';
+import { createYooptaEditor, YooptaEditor, Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
+import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
+
+const plugins = [Paragraph];
+const marks = [Bold, Italic];
+
+// FloatingBlockActions with BlockOptions
+function MyFloatingBlockActions() {
+  const editor = useYooptaEditor();
+  const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
+
+  const onPlusClick = (blockId: string | null) => {
+    if (!blockId) return;
+    const block = Blocks.getBlock(editor, { id: blockId });
+    if (!block) return;
+    editor.insertBlock('Paragraph', { at: block.meta.order + 1, focus: true });
+  };
+
+  return (
+    <FloatingBlockActions frozen={blockOptionsOpen}>
+      {({ blockId }) => (
+        <>
+          <FloatingBlockActions.Button onClick={() => onPlusClick(blockId)}>
+            <PlusIcon />
+          </FloatingBlockActions.Button>
+          <FloatingBlockActions.Button
+            ref={dragHandleRef}
+            onClick={() => setBlockOptionsOpen(true)}>
+            <DragHandleIcon />
+          </FloatingBlockActions.Button>
+
+          <MyBlockOptions
+            open={blockOptionsOpen}
+            onOpenChange={setBlockOptionsOpen}
+            blockId={blockId}
+            anchor={dragHandleRef.current}
+          />
+        </>
+      )}
+    </FloatingBlockActions>
+  );
+}
+
+// BlockOptions with ActionMenuList
+function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
+  const { duplicateBlock, deleteBlock } = useBlockActions();
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
+
+  const onActionMenuClose = (menuOpen: boolean) => {
+    setActionMenuOpen(menuOpen);
+    if (!menuOpen) onOpenChange?.(false);
+  };
+
+  return (
+    <>
+      <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
+        <BlockOptions.Content side="right">
+          <BlockOptions.Group>
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
+              Turn into
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+          <BlockOptions.Separator />
+          <BlockOptions.Group>
+            <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
+              Duplicate
+            </BlockOptions.Item>
+            <BlockOptions.Item variant="destructive" onSelect={() => deleteBlock(blockId)}>
+              Delete
+            </BlockOptions.Item>
+          </BlockOptions.Group>
+        </BlockOptions.Content>
+      </BlockOptions>
+
+      <ActionMenuList
+        open={actionMenuOpen}
+        onOpenChange={onActionMenuClose}
+        anchor={turnIntoRef.current}
+        blockId={blockId}
+        view="small"
+        placement="right-start">
+        <ActionMenuList.Content />
+      </ActionMenuList>
+    </>
+  );
+}
+
+// FloatingToolbar
+function MyFloatingToolbar() {
+  const editor = useYooptaEditor();
+
+  return (
+    <FloatingToolbar>
+      <FloatingToolbar.Content>
+        <FloatingToolbar.Group>
+          {editor.formats.bold && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'bold' })}
+              active={Marks.isActive(editor, { type: 'bold' })}>
+              <BoldIcon />
+            </FloatingToolbar.Button>
+          )}
+          {editor.formats.italic && (
+            <FloatingToolbar.Button
+              onClick={() => Marks.toggle(editor, { type: 'italic' })}
+              active={Marks.isActive(editor, { type: 'italic' })}>
+              <ItalicIcon />
+            </FloatingToolbar.Button>
+          )}
+        </FloatingToolbar.Group>
+      </FloatingToolbar.Content>
+    </FloatingToolbar>
+  );
+}
+
+// Main Editor: create editor with plugins/marks; UI components as children
+function App() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type / to open menu...">
+      <MyFloatingBlockActions />
+      <MyFloatingToolbar />
+      <SlashCommandMenu />
+    </YooptaEditor>
+  );
+}
+```
+
+<Note>
+  Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. UI components must be
+  **children** of `YooptaEditor` so they can use `useYooptaEditor()` for the editor instance.
+</Note>
+
+## Styling
+
+### CSS Variables
+
+All components use CSS variables (shadcn/ui style) for theming:
+
+```css
+:root {
+  --yoopta-ui-background: 0 0% 100%;
+  --yoopta-ui-foreground: 222.2 84% 4.9%;
+  --yoopta-ui-border: 214.3 31.8% 91.4%;
+  --yoopta-ui-accent: 210 40% 96.1%;
+  --yoopta-ui-muted-foreground: 215.4 16.3% 46.9%;
+  --yoopta-ui-ring: 215 20.2% 65.1%;
+}
+
+.dark {
+  --yoopta-ui-background: 222.2 84% 4.9%;
+  --yoopta-ui-foreground: 210 40% 98%;
+  --yoopta-ui-border: 217.2 32.6% 17.5%;
+  --yoopta-ui-accent: 217.2 32.6% 17.5%;
+}
+```
+
+### Custom Styles
+
+Override styles using:
+
+1. **CSS Variables** - Change theme globally
+2. **CSS Classes** - Target specific elements
+3. **Inline Styles** - Component-level customization
+4. **Tailwind** - Use utility classes directly
+
+```tsx
+<FloatingToolbar.Content className="bg-slate-800 shadow-xl">
+  <FloatingToolbar.Button className="text-white hover:bg-white/10">Bold</FloatingToolbar.Button>
+</FloatingToolbar.Content>
+```
+
+## TypeScript Support
+
+Full TypeScript support with exported types:
+
+```tsx
+import type {
+  FloatingBlockActionsProps,
+  BlockOptionsProps,
+  ActionMenuListProps,
+  ActionMenuItem,
+} from '@yoopta/ui';
+```
+
+## Migration from v4.9
+
+If you're migrating from the old built-in UI:
+
+<Warning>
+  The old `ActionMenuTool`, `Toolbar`, and `LinkTool` from `@yoopta/tools` are deprecated. Use the
+  new components from `@yoopta/ui` instead.
+</Warning>
+
+**Before (v4.9):**
+
+```tsx
+import ActionMenuList from '@yoopta/action-menu';
+import Toolbar from '@yoopta/toolbar';
+
+<YooptaEditor tools={[ActionMenuList, Toolbar]} />;
+```
+
+**After (v6):**
+
+```tsx
+import { SlashCommandMenu, FloatingToolbar } from '@yoopta/ui';
+
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
+
+<YooptaEditor editor={editor} onChange={onChange} placeholder="Type / to open menu...">
+  <SlashCommandMenu />
+  <MyFloatingToolbar />
+</YooptaEditor>;
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Learn about the floating block actions component
+  </Card>
+  <Card title="FloatingToolbar" icon="toolbox" href="/ui/floating-toolbar">
+    Build a custom formatting toolbar
+  </Card>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Add block context menus
+  </Card>
+  <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
+    Add drag and drop for blocks
+  </Card>
+</CardGroup>

@@ -1,0 +1,246 @@
+---
+title: 'SlashCommandMenu'
+description: 'Slash command menu triggered by typing / for quick block insertion'
+icon: 'slash'
+---
+
+## Overview
+
+`SlashCommandMenu` provides the `/` command experience: when a user types `/` at the start of a block, a menu appears near the caret with available block types. The component is **self-managed** — it handles the trigger, keyboard listeners, filtering, and floating positioning. Use it as a **child** of `YooptaEditor` so it can read the editor's plugins via `useYooptaEditor()`.
+
+<Frame>
+  <img src="/images/slash-action-menu-list.gif" alt="Slash command menu demo" />
+</Frame>
+
+## Features
+
+- **Self-managed** — Opens on `/`, filters as you type, keyboard navigation (↑ ↓ Enter Esc)
+- **Auto-generated items** — Reads block types from editor plugins (or pass custom `items`)
+- **Compound components** — Root, Content, List, Group, Item, Empty, Separator, Footer
+- **Floating positioning** — Inline positioning via Floating UI
+- **TypeScript** — Full type safety
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+Use `SlashCommandMenu` as a **child** of `YooptaEditor`. The editor must be created with `createYooptaEditor({ plugins, marks })`; plugins and marks are not passed to `YooptaEditor`.
+
+```tsx
+import { useMemo } from 'react';
+import { createYooptaEditor, YooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
+import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
+
+const plugins = [Paragraph];
+const marks = [Bold, Italic];
+
+function App() {
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type / to open menu..."
+    >
+      <SlashCommandMenu>
+        {({ items }) => (
+          <SlashCommandMenu.Content>
+            <SlashCommandMenu.List>
+              <SlashCommandMenu.Empty>No blocks found</SlashCommandMenu.Empty>
+              {items.map((item) => (
+                <SlashCommandMenu.Item
+                  key={item.id}
+                  value={item.id}
+                  title={item.title}
+                  description={item.description}
+                  icon={item.icon}
+                />
+              ))}
+            </SlashCommandMenu.List>
+            <SlashCommandMenu.Footer />
+          </SlashCommandMenu.Content>
+        )}
+      </SlashCommandMenu>
+    </YooptaEditor>
+  );
+}
+```
+
+## API Reference
+
+### `SlashCommandMenu` (Root)
+
+Root component. Renders nothing by itself; use the children render function to build the UI.
+
+```tsx
+<SlashCommandMenu trigger="/" items={customItems} onSelect={handleSelect}>
+  {({ items, groupedItems }) => (
+    <SlashCommandMenu.Content>
+      {/* ... */}
+    </SlashCommandMenu.Content>
+  )}
+</SlashCommandMenu>
+```
+
+**Props:**
+
+| Prop        | Type                              | Description                                      |
+| ----------- | --------------------------------- | ------------------------------------------------ |
+| `children`  | `ReactNode \| ((props) => ReactNode)` | Content or render function receiving `items` and `groupedItems` |
+| `trigger`   | `string`                          | Trigger character (default: `'/'`)               |
+| `items`     | `SlashCommandItem[]`              | Optional custom items (otherwise from plugins)   |
+| `onSelect`  | `(item: SlashCommandItem) => void` | Called when an item is selected                  |
+| `className` | `string`                          | Custom CSS classes                                |
+
+**Children render props:**
+
+| Property      | Type                         | Description                    |
+| ------------- | ---------------------------- | ------------------------------ |
+| `items`       | `SlashCommandItem[]`         | Flat list of block actions     |
+| `groupedItems`| `Map<string, SlashCommandItem[]>` | Items grouped by category |
+
+### `SlashCommandMenu.Content`
+
+Floating content panel. Positions the menu near the caret.
+
+```tsx
+<SlashCommandMenu.Content className="custom-class">
+  {/* List, Input, etc. */}
+</SlashCommandMenu.Content>
+```
+
+### `SlashCommandMenu.List`
+
+Scrollable list container.
+
+```tsx
+<SlashCommandMenu.List>
+  <SlashCommandMenu.Empty>No results</SlashCommandMenu.Empty>
+  {items.map((item) => (
+    <SlashCommandMenu.Item key={item.id} value={item.id} title={item.title} description={item.description} icon={item.icon} />
+  ))}
+</SlashCommandMenu.List>
+```
+
+### `SlashCommandMenu.Item`
+
+Menu item. Selecting it inserts or toggles to that block type.
+
+```tsx
+<SlashCommandMenu.Item
+  value={item.id}
+  title={item.title}
+  description={item.description}
+  icon={<Icon />}
+/>
+```
+
+**Props:** `value`, `title`, `description?`, `icon?`, `className?`
+
+### `SlashCommandMenu.Empty`
+
+Shown when there are no matching items.
+
+```tsx
+<SlashCommandMenu.Empty>No blocks found</SlashCommandMenu.Empty>
+```
+
+### `SlashCommandMenu.Footer`
+
+Optional footer (e.g. keyboard hints).
+
+```tsx
+<SlashCommandMenu.Footer />
+```
+
+### `SlashCommandMenu.Group` / `SlashCommandMenu.Separator`
+
+Group items or add a separator between groups.
+
+## Behavior
+
+- Typing `/` at the start of a block opens the menu
+- Typing more characters filters items (e.g. `/hea` → headings)
+- **Arrow Up/Down** — Navigate items
+- **Enter** — Confirm selection (insert or toggle block)
+- **Escape** — Close the menu
+
+## Examples
+
+### Custom items
+
+Pass a custom list instead of using plugin-derived items:
+
+```tsx
+const customItems = [
+  { id: 'Paragraph', title: 'Paragraph', description: 'Plain text' },
+  { id: 'HeadingOne', title: 'Heading 1', description: 'Big heading' },
+  { id: 'HeadingTwo', title: 'Heading 2', description: 'Medium heading' },
+];
+
+<SlashCommandMenu items={customItems}>
+  {({ items }) => (
+    <SlashCommandMenu.Content>
+      <SlashCommandMenu.List>
+        {items.map((item) => (
+          <SlashCommandMenu.Item key={item.id} value={item.id} title={item.title} description={item.description} />
+        ))}
+      </SlashCommandMenu.List>
+    </SlashCommandMenu.Content>
+  )}
+</SlashCommandMenu>
+```
+
+### Custom trigger
+
+Use a different trigger character:
+
+```tsx
+<SlashCommandMenu trigger="!">
+  {({ items }) => (
+    // ...
+  )}
+</SlashCommandMenu>
+```
+
+## Styling
+
+Uses the same base CSS variables as other UI components. Override with `className` or CSS variables:
+
+```css
+:root {
+  --yoopta-ui-slash-action-menu-bg: hsl(var(--yoopta-ui-background));
+  --yoopta-ui-slash-action-menu-border: hsl(var(--yoopta-ui-border));
+  --yoopta-ui-slash-action-menu-radius: 0.5rem;
+  --yoopta-ui-slash-action-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+```
+
+## Best Practices
+
+- Use `SlashCommandMenu` as a **child** of `YooptaEditor` so it has access to the editor context.
+- Create the editor with `createYooptaEditor({ plugins, marks })`; do not pass `plugins` or `marks` to `YooptaEditor`.
+- Provide clear `title` and `description` for each item (from plugin `options.display` or custom `items`).
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Add block from hover actions
+  </Card>
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    "Turn into" menu from toolbar or block options
+  </Card>
+</CardGroup>

@@ -1,12 +1,5 @@
-import type {
-  YooEditor,
-  YooptaPathIndex} from '@yoopta/editor';
-import {
-  Blocks,
-  Elements,
-  buildBlockData,
-  generateId
-} from '@yoopta/editor';
+import type { YooEditor, YooptaPathIndex } from '@yoopta/editor';
+import { Blocks, Elements, buildBlockData, generateId } from '@yoopta/editor';
 
 import type { DividerElement, DividerElementProps } from '../types';
 
@@ -27,15 +20,15 @@ export type DividerCommands = {
 
 export const DividerCommands: DividerCommands = {
   buildDividerElements: (editor, options = {}) => ({
-      id: generateId(),
-      type: 'divider',
-      children: [{ text: '' }],
-      props: {
-        color: options.color || '#EFEFEE',
-        theme: options.theme || 'solid',
-        nodeType: 'void',
-      },
-    }),
+    id: generateId(),
+    type: 'divider',
+    children: [{ text: '' }],
+    props: {
+      color: options.color || '#EFEFEE',
+      theme: options.theme || 'solid',
+      nodeType: 'void',
+    },
+  }),
   insertDivider: (editor, options = {}) => {
     const { at, focus } = options;
 
@@ -47,11 +40,10 @@ export const DividerCommands: DividerCommands = {
     Blocks.deleteBlock(editor, { blockId });
   },
   updateDivider: (editor: YooEditor, blockId: string, props) => {
-    Elements.updateElement(editor, blockId, {
+    Elements.updateElement(editor, {
+      blockId,
       type: 'divider',
-      props: {
-        ...props,
-      },
+      props,
     });
   },
 };

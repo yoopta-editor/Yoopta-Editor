@@ -1,25 +1,13 @@
-import { Accordion } from './plugin/AccordionPlugin';
-import type {
+import { Accordion } from './plugin/accordion-plugin';
+
+export {
   AccordionListElement,
   AccordionListItemContentElement,
-  AccordionListItemHeadingElement} from './types';
-import {
+  AccordionListItemHeadingElement,
   AccordionItemElement,
   AccordionListItemProps,
 } from './types';
-import './styles.css';
 
-declare module 'slate' {
-  type CustomTypes = {
-    Element:
-      | AccordionListElement
-      | AccordionItemElement
-      | AccordionListItemHeadingElement
-      | AccordionListItemContentElement;
-  }
-}
-
-export { AccordionCommands } from './commands/AccordionCommands';
+export { AccordionCommands } from './commands/accordion-commands';
 
 export default Accordion;
-export { AccordionItemElement, AccordionListItemProps };

@@ -3,13 +3,24 @@ import type { SlateElement } from '@yoopta/editor';
 export type TablePluginElementKeys = 'table' | 'table-row' | 'table-data-cell';
 
 export type TableDataCellElementProps = {
-  width: number;
-  asHeader: boolean;
+  asHeader?: boolean;
+  align?: 'left' | 'center' | 'right' | 'justify';
+  colSpan?: number;
+  rowSpan?: number;
+  backgroundColor?: string;
+  color?: string;
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  minWidth?: number;
+  maxWidth?: number;
 };
 
 export type TableElementProps = {
   headerRow?: boolean;
   headerColumn?: boolean;
+  columnWidths?: (number | string)[];
+  bordered?: boolean;
+  striped?: boolean;
+  compact?: boolean;
 };
 
 export type TableElement = SlateElement<'table', TableElementProps>;

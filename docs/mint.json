@@ -1,0 +1,193 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Yoopta Editor",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#007AFF",
+    "light": "#FFFFFF",
+    "dark": "#000000",
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#000000"
+    },
+    "anchors": {
+      "from": "#A1A1AA",
+      "to": "#FFFFFF"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/Darginec05/Yoopta-Editor"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://yoopta.dev"
+  },
+  "anchors": [
+    {
+      "name": "Examples",
+      "icon": "code",
+      "url": "https://yoopta.dev/playground"
+    },
+    {
+      "name": "Discord Community",
+      "icon": "discord",
+      "url": "https://discord.gg/Dt8rhSTjsn"
+    },
+    {
+      "name": "Twitter",
+      "icon": "twitter",
+      "url": "https://twitter.com/LebovskiYoo"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "installation"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "core/editor",
+        "core/plugins",
+        "core/themes",
+        "core/marks"
+      ]
+    },
+    {
+      "group": "Plugins",
+      "pages": [
+        "plugins/accordion",
+        "plugins/blockquote",
+        "plugins/callout",
+        "plugins/carousel",
+        "plugins/code",
+        "plugins/code-group",
+        "plugins/divider",
+        "plugins/embed",
+        "plugins/file",
+        "plugins/headings",
+        "plugins/image",
+        "plugins/link",
+        "plugins/lists",
+        "plugins/mention",
+        "plugins/paragraph",
+        "plugins/steps",
+        "plugins/table",
+        "plugins/table-of-contents",
+        "plugins/tabs",
+        "plugins/video"
+      ]
+    },
+    {
+      "group": "Marks",
+      "pages": [
+        "marks/overview",
+        "marks/built-in",
+        "marks/custom-marks"
+      ]
+    },
+    {
+      "group": "UI Components",
+      "pages": [
+        "ui/overview",
+        "ui/floating-block-actions",
+        "ui/block-options",
+        "ui/floating-toolbar",
+        "ui/action-menu-list",
+        "ui/slash-action-menu-list",
+        "ui/selection-box",
+        "ui/block-dnd"
+      ]
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "advanced/editor-instance",
+        "advanced/events",
+        "advanced/exports",
+        "advanced/customization",
+        "advanced/custom-plugins",
+        "advanced/shortcuts",
+        "advanced/readonly"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/editor-props",
+        "api-reference/plugin-api",
+        "api-reference/editor-methods",
+        {
+          "group": "Elements API",
+          "pages": [
+            "api-reference/elements/overview",
+            "api-reference/elements/insert-element",
+            "api-reference/elements/update-element",
+            "api-reference/elements/delete-element",
+            "api-reference/elements/get-element",
+            "api-reference/elements/get-elements",
+            "api-reference/elements/get-element-entry",
+            "api-reference/elements/get-element-path",
+            "api-reference/elements/get-parent-element-path",
+            "api-reference/elements/get-element-children",
+            "api-reference/elements/is-element-empty"
+          ]
+        },
+        {
+          "group": "Blocks API",
+          "pages": [
+            "api-reference/blocks/overview",
+            "api-reference/blocks/insert-block",
+            "api-reference/blocks/delete-block",
+            "api-reference/blocks/update-block",
+            "api-reference/blocks/get-block",
+            "api-reference/blocks/move-block",
+            "api-reference/blocks/focus-block",
+            "api-reference/blocks/duplicate-block",
+            "api-reference/blocks/split-block",
+            "api-reference/blocks/merge-block",
+            "api-reference/blocks/toggle-block",
+            "api-reference/blocks/increase-block-depth",
+            "api-reference/blocks/decrease-block-depth",
+            "api-reference/blocks/get-block-slate",
+            "api-reference/blocks/build-block-data"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Examples",
+      "pages": [
+        "examples/basic-setup",
+        "examples/custom-toolbar",
+        "examples/dark-theme",
+        "examples/media-plugins",
+        "examples/readonly-mode"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/Darginec05/Yoopta-Editor",
+    "twitter": "https://twitter.com/LebovskiYoo",
+    "discord": "https://discord.gg/Dt8rhSTjsn"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search documentation..."
+  }
+}

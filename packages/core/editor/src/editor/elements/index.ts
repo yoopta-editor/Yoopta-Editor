@@ -1,25 +1,58 @@
-import { createElement } from './createElement';
 import { deleteElement } from './deleteElement';
 import { getElement } from './getElement';
 import { getElementChildren } from './getElementChildren';
 import { getElementEntry } from './getElementEntry';
 import { getElementPath } from './getElementPath';
+import { getElementRect } from './getElementRect';
+import { getElements } from './getElements';
 import { getParentElementPath } from './getParentElementPath';
-import { insertElementText } from './insertElementText';
+import { insertElement } from './insertElement';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
 
+// Namespace export for backwards compatibility
 export const Elements = {
-  createElement,
-  deleteElement,
+  // New API methods
+  insertElement,
   updateElement,
-  insertElementText,
+  deleteElement,
+  getElement,
+  getElements,
+  getElementEntry,
+  getElementPath,
+  getElementRect,
+  getParentElementPath,
+  getElementChildren,
+  isElementEmpty,
+};
+
+// Export new methods individually
+export {
+  deleteElement,
   getElement,
   getElementChildren,
   getElementEntry,
-  isElementEmpty,
   getElementPath,
+  getElementRect,
+  getElements,
   getParentElementPath,
+  insertElement,
+  isElementEmpty,
+  updateElement,
 };
 
-export type Elements = typeof Elements;
+// Export types
+export type {
+  DeleteElementOptions,
+  ElementMatcher,
+  ElementPath,
+  GetElementChildrenOptions,
+  GetElementEntryOptions,
+  GetElementOptions,
+  GetElementPathOptions,
+  GetElementRectOptions,
+  GetElementsOptions,
+  InsertElementOptions,
+  IsElementEmptyOptions,
+  UpdateElementOptions,
+} from './types';
