@@ -21,10 +21,10 @@ const EDITOR_STYLES = {
 
 type FullSetupEditorProps = {
   initialValue: YooptaContentValue;
+  containerBoxRef: React.RefObject<HTMLDivElement>;
 };
 
-const FullSetupEditor = ({ initialValue }: FullSetupEditorProps) => {
-  const containerBoxRef = useRef<HTMLDivElement>(null);
+const FullSetupEditor = ({ initialValue, containerBoxRef }: FullSetupEditorProps) => {
   const editor = useMemo(() => {
     return withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS }));
   }, []);

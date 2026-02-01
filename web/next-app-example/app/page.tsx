@@ -2,7 +2,7 @@ import { Header } from "@/components/landing/header";
 import { Hero } from "@/components/landing/hero";
 import { Features } from "@/components/landing/features";
 import { Plugins } from "@/components/landing/plugins";
-import { CodeExample } from "@/components/landing/code-example";
+// import { CodeExample } from "@/components/landing/code-example";
 import { Waitlist } from "@/components/landing/waitlist";
 import { FAQ } from "@/components/landing/faq";
 import { Supporters } from "@/components/landing/supporters";
@@ -16,7 +16,7 @@ export default function Home() {
         <Hero />
         <Features />
         <Plugins />
-        <CodeExample />
+        {/* <CodeExample /> */}
         <Waitlist />
         <FAQ />
         <Supporters />

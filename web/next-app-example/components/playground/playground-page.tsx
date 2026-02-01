@@ -11,8 +11,11 @@ import {
 import { Header } from "@/components/landing/header";
 import { FullSetupEditor } from "./examples/full-setup/editor";
 import { playgroundInitialValue } from "./playground-initial-value";
+import { useRef } from "react";
 
 export function PlaygroundPage() {
+  const containerBoxRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
       <Header />
@@ -31,7 +34,7 @@ export function PlaygroundPage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12" ref={containerBoxRef}>
         <div className="max-w-5xl mx-auto">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-violet-500/5 dark:from-blue-500/10 dark:via-transparent dark:to-violet-500/10 rounded-3xl blur-3xl" />
@@ -58,7 +61,7 @@ export function PlaygroundPage() {
 
               <div className="relative min-h-[600px] max-h-[calc(100vh-400px)] overflow-auto bg-white dark:bg-neutral-900">
                 <div className="pt-4 pb-8 px-4 sm:px-8 lg:px-12">
-                  <FullSetupEditor initialValue={playgroundInitialValue} />
+                  <FullSetupEditor initialValue={playgroundInitialValue} containerBoxRef={containerBoxRef as React.RefObject<HTMLDivElement>} />
                 </div>
               </div>
             </div>

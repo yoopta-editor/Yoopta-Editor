@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import {
-  Moon,
-  Sun,
   Menu,
   Heart,
   FileText,
@@ -24,6 +22,7 @@ import {
   ExternalLink,
   ChevronDown,
   Github,
+  Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +32,12 @@ const mainNavigation = [
 ];
 
 const exampleNavigation = [
+  {
+    name: "Full Setup Example",
+    href: "/playground",
+    description: "Full setup example with all features",
+    icon: Code2,
+  },
   {
     name: "MS Word Example",
     href: "/playground/word-example",
@@ -53,14 +58,25 @@ const exampleNavigation = [
   },
 ];
 
+const MOBILE_BREAKPOINT_PX = 768;
+
 export function Header() {
   const pathname = usePathname();
-  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  // Avoid SSR/media-query flash: default to desktop, then sync with viewport in useLayoutEffect
+  const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
+  }, []);
+
+  React.useLayoutEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`);
+    const update = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT_PX);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
   }, []);
 
   const isActive = (href: string) => {
@@ -71,7 +87,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-950/60">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
       <div className="container flex h-14 max-w-screen-2xl items-center px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -81,8 +97,8 @@ export function Header() {
           <span className="font-semibold text-foreground">Yoopta</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* Desktop Navigation — visibility by JS to avoid SSR/media-query flash */}
+        <nav className={cn("items-center gap-1", isMobile ? "hidden" : "flex")}>
           {mainNavigation.map((item) => (
             <Link
               key={item.name}
@@ -101,7 +117,6 @@ export function Header() {
             </Link>
           ))}
 
-          {/* Examples Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -186,10 +201,9 @@ export function Header() {
             </a>
           </Button>
 
-          <Separator orientation="vertical" className="h-6 hidden md:block" />
+          <Separator orientation="vertical" className={cn("h-6", isMobile ? "hidden" : "block")} />
 
-          {/* Theme Toggle */}
-          {mounted && (
+          {/* {mounted && (
             <Button
               variant="ghost"
               size="icon"
@@ -205,13 +219,12 @@ export function Header() {
                 <Moon className="h-4 w-4" />
               )}
             </Button>
-          )}
+          )} */}
 
-          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 md:hidden"
+            className={cn("h-8 w-8", isMobile ? "" : "hidden")}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <Menu className="h-4 w-4" />
@@ -220,8 +233,8 @@ export function Header() {
       </div>
 
       {/* Mobile Navigation */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+      {mobileMenuOpen && isMobile && (
+        <div className="border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
           <nav className="container px-4 py-4 space-y-1">
             {mainNavigation.map((item) => (
               <Link
