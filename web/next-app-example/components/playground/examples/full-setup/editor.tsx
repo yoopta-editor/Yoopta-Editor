@@ -37,7 +37,11 @@ const FullSetupEditor = ({ initialValue, containerBoxRef }: FullSetupEditorProps
   useEffect(() => {
     const localStorageValue = localStorage.getItem('yoopta-full-setup-editor-value');
     const data = localStorageValue ? JSON.parse(localStorageValue) : initialValue;
-    editor.setEditorValue(data);
+
+    editor.withoutSavingHistory(() => {
+      editor.setEditorValue(data);
+      editor.focus();
+    });
   }, [editor, initialValue]);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {

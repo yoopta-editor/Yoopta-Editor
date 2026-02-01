@@ -72,10 +72,14 @@ export function Hero() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Button variant="primary" size="xl" asChild>
-              <Link href="#get-started">
+              <a
+                href="https://docs.yoopta.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Get Started
                 <ArrowRight className="w-5 h-5" />
-              </Link>
+              </a>
             </Button>
             <Button variant="outline" size="xl" asChild>
               <a

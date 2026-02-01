@@ -59,7 +59,7 @@ export function PlaygroundPage() {
                 </div>
               </div>
 
-              <div className="relative min-h-[600px] max-h-[calc(100vh-400px)] overflow-auto bg-white dark:bg-neutral-900">
+              <div className="relative min-h-[800px] max-h-[calc(100vh-400px)] overflow-auto bg-white dark:bg-neutral-900">
                 <div className="pt-4 pb-8 px-4 sm:px-8 lg:px-12">
                   <FullSetupEditor initialValue={playgroundInitialValue} containerBoxRef={containerBoxRef as React.RefObject<HTMLDivElement>} />
                 </div>
