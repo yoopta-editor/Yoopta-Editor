@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
-import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating, useMergeRefs, useTransitionStyles } from '@floating-ui/react';
+import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating, useMergeRefs } from '@floating-ui/react';
 import { getRootBlockElement, useYooptaEditor } from '@yoopta/editor';
 
 import { ActionMenuListContext, useActionMenuListContext } from './context';
@@ -65,7 +65,7 @@ const ActionMenuListRoot = ({
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(actions[0] ?? null);
 
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, floatingStyles } = useFloating({
     elements: { reference: anchor },
     placement,
     open: isOpen,
@@ -73,17 +73,12 @@ const ActionMenuListRoot = ({
     whileElementsMounted: autoUpdate,
   });
 
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: 100,
-  });
-
   const combinedStyles: CSSProperties = useMemo(
     () => ({
       ...floatingStyles,
-      ...transitionStyles,
       minWidth: view === 'small' ? 200 : 244,
     }),
-    [floatingStyles, transitionStyles, view],
+    [floatingStyles, view],
   );
 
   const close = useCallback(() => {
@@ -114,7 +109,7 @@ const ActionMenuListRoot = ({
   // Context value
   const contextValue = useMemo(
     () => ({
-      isOpen: isMounted,
+      isOpen,
       view,
       actions,
       selectedAction,
@@ -124,7 +119,7 @@ const ActionMenuListRoot = ({
       floatingStyles: combinedStyles,
       setFloatingRef: refs.setFloating,
     }),
-    [isMounted, view, actions, selectedAction, onSelect, close, combinedStyles, refs.setFloating],
+    [isOpen, view, actions, selectedAction, onSelect, close, combinedStyles, refs.setFloating],
   );
 
   // API for render props

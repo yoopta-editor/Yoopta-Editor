@@ -50,10 +50,12 @@ Import everything from the main entry point:
 import {
   FloatingToolbar,
   ActionMenuList,
-  SlashActionMenuList,
+  SlashCommandMenu,
   FloatingBlockActions,
   BlockOptions,
   SelectionBox,
+  BlockDndContext,
+  SortableBlock,
 } from '@yoopta/ui';
 ```
 
@@ -68,8 +70,8 @@ import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 // Only import action menu list
 import { ActionMenuList } from '@yoopta/ui/action-menu-list';
 
-// Only import slash action menu list
-import { SlashActionMenuList } from '@yoopta/ui/slash-action-menu-list';
+// Only import slash command menu
+import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
 
 // Other available subpaths
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
@@ -100,7 +102,7 @@ import { Overlay } from '@yoopta/ui/overlay';
 | `@yoopta/ui`                        | Everything (convenience)                                        |
 | `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                               |
 | `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                |
-| `@yoopta/ui/slash-action-menu-list` | `SlashActionMenuList`                                           |
+| `@yoopta/ui/slash-command-menu`    | `SlashCommandMenu`                                              |
 | `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                          |
 | `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`                               |
 | `@yoopta/ui/selection-box`          | `SelectionBox`                                                  |
@@ -125,7 +127,7 @@ import { Overlay } from '@yoopta/ui/overlay';
   <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
     Block type menu for "Turn into" actions
   </Card>
-  <Card title="SlashActionMenuList" icon="slash" href="/ui/slash-action-menu-list">
+  <Card title="SlashCommandMenu" icon="slash" href="/ui/slash-action-menu-list">
     Slash command menu for quick block insertion
   </Card>
   <Card title="SelectionBox" icon="object-group" href="/ui/selection-box">
@@ -164,7 +166,7 @@ These handle their own visibility automatically:
 
 - **FloatingBlockActions** - Appears on block hover
 - **FloatingToolbar** - Appears on text selection
-- **SlashActionMenuList** - Appears on `/` command
+- **SlashCommandMenu** - Appears on `/` command
 
 ```tsx
 // Just render them - they handle visibility automatically
@@ -219,11 +221,18 @@ const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
 Here's a complete example using the UI components:
 
 ```tsx
-import { createYooptaEditor, YooptaEditor, Blocks, Marks } from '@yoopta/editor';
+import { useMemo, useState, useRef } from 'react';
+import { createYooptaEditor, YooptaEditor, Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
+
+const plugins = [Paragraph];
+const marks = [Bold, Italic];
 
 // FloatingBlockActions with BlockOptions
 function MyFloatingBlockActions() {
@@ -336,18 +345,26 @@ function MyFloatingToolbar() {
   );
 }
 
-// Main Editor
+// Main Editor: create editor with plugins/marks; UI components as children
 function App() {
-  const editor = useMemo(() => createYooptaEditor(), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   return (
-    <YooptaEditor editor={editor} plugins={plugins} marks={marks}>
+    <YooptaEditor editor={editor} onChange={(value) => console.log(value)} placeholder="Type / to open menu...">
       <MyFloatingBlockActions />
       <MyFloatingToolbar />
+      <SlashCommandMenu />
     </YooptaEditor>
   );
 }
 ```
+
+<Note>
+  Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. UI components must be **children** of `YooptaEditor` so they can use `useYooptaEditor()` for the editor instance.
+</Note>
 
 ## Styling
 
@@ -422,10 +439,15 @@ import Toolbar from '@yoopta/toolbar';
 **After (v6):**
 
 ```tsx
-import { SlashActionMenuList, FloatingToolbar } from '@yoopta/ui';
+import { SlashCommandMenu, FloatingToolbar } from '@yoopta/ui';
 
-<YooptaEditor editor={editor}>
-  <MySlashActionMenuList />
+const editor = useMemo(
+  () => createYooptaEditor({ plugins, marks }),
+  [],
+);
+
+<YooptaEditor editor={editor} onChange={onChange} placeholder="Type / to open menu...">
+  <SlashCommandMenu />
   <MyFloatingToolbar />
 </YooptaEditor>;
 ```
