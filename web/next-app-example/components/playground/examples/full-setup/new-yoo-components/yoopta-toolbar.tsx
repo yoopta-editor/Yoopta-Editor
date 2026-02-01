@@ -2,11 +2,11 @@ import { useRef, useState } from 'react';
 import {
   ChevronDownIcon,
   CodeIcon,
-  FontBoldIcon,
-  FontItalicIcon,
+  BoldIcon,
+  ItalicIcon,
   StrikethroughIcon,
   UnderlineIcon,
-} from '@radix-ui/react-icons';
+} from 'lucide-react';
 import { Marks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
@@ -44,7 +44,7 @@ export const YooptaToolbar = () => {
                 active={Marks.isActive(editor, { type: 'bold' })}
                 title="Bold"
               >
-                <FontBoldIcon />
+                <BoldIcon />
               </FloatingToolbar.Button>
             )}
             {editor.formats.italic && (
@@ -53,7 +53,7 @@ export const YooptaToolbar = () => {
                 active={Marks.isActive(editor, { type: 'italic' })}
                 title="Italic"
               >
-                <FontItalicIcon />
+                <ItalicIcon />
               </FloatingToolbar.Button>
             )}
             {editor.formats.underline && (
