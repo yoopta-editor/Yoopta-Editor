@@ -42,9 +42,6 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
     onOpenChange?.(false);
   };
 
-  console.log('actionMenuOpen', actionMenuOpen);
-  console.log('blockId', blockId);
-
   return (
     <>
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
