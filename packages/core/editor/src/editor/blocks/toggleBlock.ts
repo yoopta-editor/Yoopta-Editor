@@ -2,6 +2,7 @@ import type { Descendant } from 'slate';
 import { Editor, Element, Text, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
+import { getBlock } from './getBlock';
 import {
   buildBlockElementsStructure,
   getAllowedPluginsFromElement,
@@ -9,6 +10,7 @@ import {
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import { generateId } from '../../utils/generateId';
 import type { YooptaOperation } from '../core/applyTransforms';
+import { y } from '../elements/create-element-structure';
 import type {
   SlateEditor,
   SlateElement,
@@ -16,8 +18,6 @@ import type {
   YooptaBlockData,
   YooptaPathIndex,
 } from '../types';
-import { getBlock } from './getBlock';
-import { y } from '../elements/create-element-structure';
 
 export type ToggleBlockOptions = {
   /**

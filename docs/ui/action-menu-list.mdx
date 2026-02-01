@@ -14,7 +14,6 @@ icon: 'list'
 
 ## Features
 
-- **No stores** — pure React state, no Zustand
 - **API** — controlled/uncontrolled with `open`/`onOpenChange`
 - **Auto-generated items** — reads plugins from editor automatically
 - **Two view modes** — `small` for compact menus, `default` for full display
@@ -52,8 +51,7 @@ function MyTurnIntoMenu() {
         onOpenChange={setOpen}
         anchor={buttonRef.current}
         view="small"
-        placement="bottom-start"
-      >
+        placement="bottom-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>
@@ -73,32 +71,31 @@ Root component that manages state and context.
   onOpenChange={setIsOpen}
   anchor={buttonElement}
   view="small"
-  placement="bottom-start"
->
+  placement="bottom-start">
   {children}
 </ActionMenuList>
 ```
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `open` | `boolean` | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | Called when open state changes |
-| `defaultOpen` | `boolean` | Default open state (uncontrolled) |
-| `anchor` | `HTMLElement \| null` | Anchor element for positioning |
-| `view` | `'small' \| 'default'` | View mode (default: `'default'`) |
-| `placement` | `Placement` | Floating UI placement (default: `'bottom-start'`) |
-| `children` | `ReactNode \| ((api) => ReactNode)` | Content or render function |
+| Prop           | Type                                | Description                                       |
+| -------------- | ----------------------------------- | ------------------------------------------------- |
+| `open`         | `boolean`                           | Controlled open state                             |
+| `onOpenChange` | `(open: boolean) => void`           | Called when open state changes                    |
+| `defaultOpen`  | `boolean`                           | Default open state (uncontrolled)                 |
+| `anchor`       | `HTMLElement \| null`               | Anchor element for positioning                    |
+| `view`         | `'small' \| 'default'`              | View mode (default: `'default'`)                  |
+| `placement`    | `Placement`                         | Floating UI placement (default: `'bottom-start'`) |
+| `children`     | `ReactNode \| ((api) => ReactNode)` | Content or render function                        |
 
 **Render Props API:**
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `actions` | `ActionMenuItem[]` | Available block types from plugins |
-| `selectedAction` | `ActionMenuItem \| null` | Currently highlighted action |
-| `onSelect` | `(type: string) => void` | Execute action (toggle block) |
-| `empty` | `boolean` | Whether actions list is empty |
+| Property         | Type                     | Description                        |
+| ---------------- | ------------------------ | ---------------------------------- |
+| `actions`        | `ActionMenuItem[]`       | Available block types from plugins |
+| `selectedAction` | `ActionMenuItem \| null` | Currently highlighted action       |
+| `onSelect`       | `(type: string) => void` | Execute action (toggle block)      |
+| `empty`          | `boolean`                | Whether actions list is empty      |
 
 ### `ActionMenuList.Content`
 
@@ -112,10 +109,10 @@ Floating content panel. Auto-generates items if no children provided.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `className` | `string` | Custom CSS classes |
-| `children` | `ReactNode` | Optional custom content |
+| Prop        | Type        | Description             |
+| ----------- | ----------- | ----------------------- |
+| `className` | `string`    | Custom CSS classes      |
+| `children`  | `ReactNode` | Optional custom content |
 
 ### `ActionMenuList.Group`
 
@@ -146,12 +143,12 @@ Individual menu item.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `action` | `ActionMenuItem` | Action data (type, title, description, icon) |
-| `selected` | `boolean` | Whether item is selected/highlighted |
-| `icon` | `ReactNode` | Override action's icon |
-| `onClick` | `(event) => void` | Click handler |
+| Prop       | Type              | Description                                  |
+| ---------- | ----------------- | -------------------------------------------- |
+| `action`   | `ActionMenuItem`  | Action data (type, title, description, icon) |
+| `selected` | `boolean`         | Whether item is selected/highlighted         |
+| `icon`     | `ReactNode`       | Override action's icon                       |
+| `onClick`  | `(event) => void` | Click handler                                |
 
 ### `ActionMenuList.Empty`
 
@@ -176,18 +173,13 @@ function MyToolbar() {
       <FloatingToolbar frozen={actionMenuOpen}>
         <FloatingToolbar.Content>
           <FloatingToolbar.Group>
-            <FloatingToolbar.Button
-              ref={turnIntoRef}
-              onClick={() => setActionMenuOpen(true)}
-            >
+            <FloatingToolbar.Button ref={turnIntoRef} onClick={() => setActionMenuOpen(true)}>
               Turn into
               <ChevronDownIcon />
             </FloatingToolbar.Button>
           </FloatingToolbar.Group>
           <FloatingToolbar.Separator />
-          <FloatingToolbar.Group>
-            {/* Formatting buttons */}
-          </FloatingToolbar.Group>
+          <FloatingToolbar.Group>{/* Formatting buttons */}</FloatingToolbar.Group>
         </FloatingToolbar.Content>
       </FloatingToolbar>
 
@@ -196,8 +188,7 @@ function MyToolbar() {
         onOpenChange={setActionMenuOpen}
         anchor={turnIntoRef.current}
         view="small"
-        placement="bottom-start"
-      >
+        placement="bottom-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>
@@ -223,11 +214,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
         <BlockOptions.Content side="right">
           <BlockOptions.Group>
-            <BlockOptions.Item
-              ref={turnIntoRef}
-              onSelect={() => setActionMenuOpen(true)}
-              keepOpen
-            >
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
               Turn into
             </BlockOptions.Item>
           </BlockOptions.Group>
@@ -248,8 +235,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
         onOpenChange={onActionMenuClose}
         anchor={turnIntoRef.current}
         view="small"
-        placement="right-start"
-      >
+        placement="right-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>
@@ -260,11 +246,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
 ### Custom Items with Render Props
 
 ```tsx
-<ActionMenuList
-  open={open}
-  onOpenChange={setOpen}
-  anchor={buttonRef.current}
->
+<ActionMenuList open={open} onOpenChange={setOpen} anchor={buttonRef.current}>
   {({ actions, selectedAction, onSelect }) => (
     <ActionMenuList.Content>
       <ActionMenuList.Group>
@@ -336,10 +318,7 @@ Use for slash command menus and larger dropdowns:
 <ActionMenuList>
   <ActionMenuList.Content className="bg-slate-900 border-white/10">
     <ActionMenuList.Group>
-      <ActionMenuList.Item
-        action={action}
-        className="text-white hover:bg-white/10"
-      />
+      <ActionMenuList.Item action={action} className="text-white hover:bg-white/10" />
     </ActionMenuList.Group>
   </ActionMenuList.Content>
 </ActionMenuList>
@@ -356,6 +335,7 @@ Use for slash command menus and larger dropdowns:
     // From block options menu
     <ActionMenuList view="small" placement="right-start">
     ```
+
   </Accordion>
 
   <Accordion title="Close parent menu when action completes">

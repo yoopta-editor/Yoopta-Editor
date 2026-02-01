@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  autoUpdate,
+  FloatingPortal,
   type Placement,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
 } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 
-import { Portal } from '../../portal';
 import { useElementOptionsContext } from '../context/element-options-context';
 import type { ElementOptionsContentProps } from '../types';
 
@@ -23,6 +24,7 @@ export const ElementOptionsContent = ({
 }: ElementOptionsContentProps) => {
   const { isOpen, setIsOpen, triggerRef, contentRef } = useElementOptionsContext();
   const internalContentRef = useRef<HTMLDivElement>(null);
+  const editor = useYooptaEditor();
 
   // Build placement string for floating-ui
   const placement: Placement = align === 'center' ? side : `${side}-${align}`;
@@ -82,11 +84,11 @@ export const ElementOptionsContent = ({
   if (!isOpen) return null;
 
   return (
-    <Portal id="element-options-portal">
+    <FloatingPortal root={editor.refElement} id={`yoopta-ui-element-options-portal-${editor.id}`}>
       <div
         ref={(node) => {
           refs.setFloating(node);
-          internalContentRef.current = node;
+          (internalContentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           if (contentRef) {
             (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           }
@@ -101,7 +103,7 @@ export const ElementOptionsContent = ({
         aria-modal="true">
         {children}
       </div>
-    </Portal>
+    </FloatingPortal>
   );
 };
 

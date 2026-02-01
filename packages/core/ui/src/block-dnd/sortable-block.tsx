@@ -6,7 +6,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useBlockDndContext } from './block-dnd-context';
 import type { SortableBlockProps } from './types';
 
-export const SortableBlock = ({ id, children, className, disabled = false, useDragHandle = false }: SortableBlockProps) => {
+export const SortableBlock = ({ id, children, className, disabled = false, useDragHandle = true }: SortableBlockProps) => {
   const { draggedIds, isDragging, registerSortable, unregisterSortable } = useBlockDndContext();
 
   const {
@@ -37,7 +37,6 @@ export const SortableBlock = ({ id, children, className, disabled = false, useDr
     }
   }, [id, useDragHandle, setActivatorNodeRef, listeners, attributes, registerSortable, unregisterSortable]);
 
-  // Check if this block is part of a multi-drag
   const isPartOfMultiDrag = draggedIds.includes(id) && draggedIds.length > 1;
   const isBeingDragged = isThisDragging || (isDragging && draggedIds.includes(id));
 

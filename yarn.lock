@@ -4560,9 +4560,7 @@
   integrity sha512-HA5fLkPqbxXi6ZSWxqD293GU02ourxXZn8gTyvGEIjnBDfth6hqRrEttOimsOiu9LWhzdfOxKEu3WJEB0l9Wng==
 
 "@yoopta/carousel@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/carousel/-/carousel-6.0.0-beta.14.tgz#75e3047b811dae74934190a7a9fce4df125125e7"
-  integrity sha512-ik6NKsUFjFdLICsWuJE8jwZT+mif7zsmOxczBD6gvvQjuN3c65l0xJSJsvyDic2bAfAwNWY9sb+AsBOSSa0CNQ==
+  version "6.0.0-beta.15"
   dependencies:
     embla-carousel-react "^8.6.0"
 
@@ -4680,9 +4678,7 @@
   integrity sha512-0aY+u/t7GJ99B66/AbTq4G1X6PRY3OqMrdDWjcnCDvHUjXWtbw83ERB3XDRUdLx7livHjy50yQxFVX1bkx7TSA==
 
 "@yoopta/mention@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/mention/-/mention-6.0.0-beta.14.tgz#51eeb132b09da065f4ef4a51f35628f9b3849340"
-  integrity sha512-YNa9zmrNvlH5fEnPXi3hsdQ/Y0BDItzEkiW1Gbp7vpGnh1YCoacDCHSV3Yp9gQ3/c3ineZk4PeSteGN9Wp/4UQ==
+  version "6.0.0-beta.15"
 
 "@yoopta/paragraph@*":
   version "4.9.9"
@@ -4690,14 +4686,10 @@
   integrity sha512-0luS6xtRoi6NQ4ZavWwN3KAY/FxAwQqrvuJQ8g4yII1iPedFJxbgf8Q9fUFk+JMqbKcwM7/tkM1I+vn+soNBNQ==
 
 "@yoopta/steps@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/steps/-/steps-6.0.0-beta.14.tgz#5d980a0132fe030f36f7a9d3d2dac681f12fd738"
-  integrity sha512-ipNyW7dAy+XvfIIGZxkwtmpBjKzKAT0EmESOInDKTU2x5zICCet2BHhzVE1vN0Y1BYWrv3Tly6r4lRBNSWY/Cw==
+  version "6.0.0-beta.15"
 
 "@yoopta/table-of-contents@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/table-of-contents/-/table-of-contents-6.0.0-beta.14.tgz#4b3af30dafe7b4e438d6a3730f72834a141c130c"
-  integrity sha512-ZwQFOv5VkgO7+lnLYZdT5IqLN4BrwJ3WwceTInoQuhHT6H5BaeYYgaFXUk+jJ2CrYxmZgeAOAJYjWqDh6ZGCdg==
+  version "6.0.0-beta.15"
 
 "@yoopta/table@*":
   version "4.9.9"
@@ -4707,28 +4699,22 @@
     lucide-react "^0.436.0"
 
 "@yoopta/tabs@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/tabs/-/tabs-6.0.0-beta.14.tgz#c212a51c15ad4aabc133877f24a21a4b9a9d6aa4"
-  integrity sha512-VnEFctitPq817jb+66y8nQx0rLNaWIIt0iAON8lUyNztbgJccZcWJkmTfZNuynHfnJgFdMGyO/5LaSMi5/jMUw==
+  version "6.0.0-beta.15"
 
 "@yoopta/themes-material@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/themes-material/-/themes-material-6.0.0-beta.14.tgz#5a954b694a77e3c86760cbb46caaf7580f67259d"
-  integrity sha512-GQITJ+NITXWB23ywfKmHLhbfbt/YheGYvilpK6vjQ/vjiXqm+8q3fpT1uvU4B+R6CANIq/ABhFlKGSVWfaNDtA==
+  version "6.0.0-beta.15"
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
     "@mui/icons-material" "^7.3.6"
     "@mui/material" "^5.16.0"
-    "@yoopta/code" "^6.0.0-beta.14"
-    "@yoopta/image" "^6.0.0-beta.14"
+    "@yoopta/code" "^6.0.0-beta.15"
+    "@yoopta/image" "^6.0.0-beta.15"
     copy-to-clipboard "^3.3.3"
     react-rnd "^10.5.2"
 
 "@yoopta/themes-shadcn@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/themes-shadcn/-/themes-shadcn-6.0.0-beta.14.tgz#dc10c472b5388e66aea63124a7e5a24a913733bb"
-  integrity sha512-6gTKJ6q3LwEV0nJ1ovRdRJYIHWtNqJki/PSu1h9eh9mXpTxub0fUPD+wKVHEkMhx3Ou/pmZA81vt/fOS2cIvEg==
+  version "6.0.0-beta.15"
   dependencies:
     "@radix-ui/react-accordion" "^1.0.0"
     "@radix-ui/react-checkbox" "^1.1.1"
@@ -4764,9 +4750,7 @@
     use-debounce "^10.0.4"
 
 "@yoopta/ui@*":
-  version "6.0.0-beta.14"
-  resolved "https://registry.npmjs.org/@yoopta/ui/-/ui-6.0.0-beta.14.tgz#d6fb63771b59c5d35a56a6ad4a10f958db1eab50"
-  integrity sha512-yyNXaW1LZJpHzCfJ1ZeBdos1JV4Sz1nsKbb6LdPCxPaouUNdDz/Xp80eGiJwkZ9sceNAqEbMxYfQFxzUKtYi9Q==
+  version "6.0.0-beta.15"
   dependencies:
     "@dnd-kit/core" "^6.1.0"
     "@dnd-kit/sortable" "^8.0.0"
@@ -4778,7 +4762,6 @@
     react-colorful "^5.6.1"
     tailwind-merge "^2.0.0"
     use-debounce "^10.0.0"
-    zustand "^4.5.0"
 
 "@yoopta/video@*":
   version "4.9.9"
@@ -13974,11 +13957,6 @@ use-sync-external-store@1.2.0:
   resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
-use-sync-external-store@^1.2.2:
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz#b174bfa65cb2b526732d9f2ac0a408027876f32d"
-  integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
-
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -14457,13 +14435,6 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zustand@^4.5.0:
-  version "4.5.7"
-  resolved "https://registry.npmjs.org/zustand/-/zustand-4.5.7.tgz#7d6bb2026a142415dd8be8891d7870e6dbe65f55"
-  integrity sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==
-  dependencies:
-    use-sync-external-store "^1.2.2"
 
 zwitch@^2.0.4:
   version "2.0.4"

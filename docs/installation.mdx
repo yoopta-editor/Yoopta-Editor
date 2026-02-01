@@ -7,9 +7,9 @@ description: Install Yoopta Editor and its dependencies in your React project
 
 Before installing Yoopta Editor, make sure you have:
 
-- **Node.js** version 14 or higher
-- **React** version 17.0.2 or higher
-- **React DOM** version 17.0.2 or higher
+- **Node.js** version 18 or higher
+- **React** version 18 or higher
+- **React DOM** version 18 or higher
 
 ## Package Manager
 
@@ -28,6 +28,7 @@ Yoopta Editor is organized into several package categories. Install only what yo
 ### Core Packages
 
 #### Required: Core Editor
+
 ```bash
 npm install slate slate-react slate-dom @yoopta/editor
 ```
@@ -36,16 +37,20 @@ npm install slate slate-react slate-dom @yoopta/editor
 - **`@yoopta/editor`** - Core headless editor package
 
 #### Optional: UI Components
+
 ```bash
 npm install @yoopta/ui
 ```
 
-Provides unstyled UI components:
-- `Toolbar`, `ActionMenuList`, `SlashCommandMenu`
+Provides unstyled UI components (used as children of `YooptaEditor`):
+
+- `FloatingToolbar`, `ActionMenuList`, `SlashCommandMenu`
 - `BlockOptions`, `FloatingBlockActions`
+- `SelectionBox`, `BlockDndContext`, `SortableBlock`
 - `HighlightColorPicker`, `Portal`, `Overlay`
 
 #### Optional: Themes
+
 ```bash
 # Shadcn UI theme (production ready)
 npm install @yoopta/themes-shadcn
@@ -59,31 +64,37 @@ npm install @yoopta/themes-material
 Install plugins based on the content types you need:
 
 #### Text Plugins
+
 ```bash
 npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
 ```
 
 #### List Plugins
+
 ```bash
 npm install @yoopta/lists
 ```
 
 #### Media Plugins
+
 ```bash
 npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
 ```
 
 #### Layout Plugins
+
 ```bash
 npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/tabs @yoopta/steps @yoopta/carousel
 ```
 
 #### Code Plugin
+
 ```bash
 npm install @yoopta/code
 ```
 
 #### Link Plugin
+
 ```bash
 npm install @yoopta/link
 ```
@@ -96,13 +107,16 @@ Install UI components for editor interactions:
 npm install @yoopta/ui
 ```
 
-**Available Components:**
-- `Toolbar` - Text formatting toolbar
-- `ActionMenuList` - Block insertion menu
-- `SlashCommandMenu` - Inline slash command menu
+**Available Components** (add as children of `YooptaEditor`):
+
+- `FloatingToolbar` - Text formatting toolbar
+- `ActionMenuList` - Block insertion / turn-into menu
+- `SlashCommandMenu` - Slash command menu
 - `BlockOptions` - Block action menu
-- `FloatingBlockActions` - Floating action buttons
-- `HighlightColorPicker` - Color picker component
+- `FloatingBlockActions` - Floating block actions
+- `SelectionBox` - Multi-block selection
+- `BlockDndContext`, `SortableBlock` - Drag-and-drop reordering
+- `HighlightColorPicker` - Color picker for highlight mark
 - `Portal` & `Overlay` - Utility components
 
 ### Marks Package
@@ -114,6 +128,7 @@ npm install @yoopta/marks
 ```
 
 **Available Marks:**
+
 - `Bold`, `Italic`, `Underline`, `Strike`
 - `Code` - Inline code
 - `Highlight` - Text highlighting with colors
@@ -121,6 +136,7 @@ npm install @yoopta/marks
 ### Utility Packages
 
 #### Exports Package
+
 ```bash
 npm install @yoopta/exports
 ```
@@ -177,18 +193,27 @@ Yoopta Editor is written in TypeScript and includes type definitions out of the 
 
 ## Verification
 
-Verify your installation by creating a simple editor:
+Verify your installation by creating a simple editor. Plugins and marks are passed to `createYooptaEditor`; use `onChange` to react to changes and `editor.setEditorValue()` for initial content.
 
 ```jsx
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
+
+const plugins = [Paragraph];
+const marks = [Bold, Italic];
 
 function App() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const plugins = [Paragraph];
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
-  return <YooptaEditor editor={editor} plugins={plugins} placeholder="Type something..." />;
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type something..."
+    />
+  );
 }
 ```
 
@@ -214,6 +239,7 @@ If you see an empty editor with the placeholder text, you're all set! 🎉
     ```bash
     npm install slate slate-react slate-dom
     ```
+
   </Accordion>
 
   <Accordion title="TypeScript errors">

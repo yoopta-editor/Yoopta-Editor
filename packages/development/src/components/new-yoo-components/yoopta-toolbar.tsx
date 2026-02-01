@@ -18,11 +18,6 @@ export const YooptaToolbar = () => {
   const turnIntoRef = useRef<HTMLButtonElement>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const isBoldActive = Marks.isActive(editor, { type: 'bold' });
-  const isItalicActive = Marks.isActive(editor, { type: 'italic' });
-  const isUnderlineActive = Marks.isActive(editor, { type: 'underline' });
-  const isStrikeActive = Marks.isActive(editor, { type: 'strike' });
-  const isCodeActive = Marks.isActive(editor, { type: 'code' });
   const isHighlightActive = Marks.isActive(editor, { type: 'highlight' });
 
   const highlightValue = Marks.getValue(editor, { type: 'highlight' }) as
@@ -48,7 +43,7 @@ export const YooptaToolbar = () => {
             {editor.formats.bold && (
               <FloatingToolbar.Button
                 onClick={() => Marks.toggle(editor, { type: 'bold' })}
-                active={isBoldActive}
+                active={Marks.isActive(editor, { type: 'bold' })}
                 title="Bold"
               >
                 <FontBoldIcon />
@@ -57,7 +52,7 @@ export const YooptaToolbar = () => {
             {editor.formats.italic && (
               <FloatingToolbar.Button
                 onClick={() => Marks.toggle(editor, { type: 'italic' })}
-                active={isItalicActive}
+                active={Marks.isActive(editor, { type: 'italic' })}
                 title="Italic"
               >
                 <FontItalicIcon />
@@ -66,7 +61,7 @@ export const YooptaToolbar = () => {
             {editor.formats.underline && (
               <FloatingToolbar.Button
                 onClick={() => Marks.toggle(editor, { type: 'underline' })}
-                active={isUnderlineActive}
+                active={Marks.isActive(editor, { type: 'underline' })}
                 title="Underline"
               >
                 <UnderlineIcon />
@@ -75,7 +70,7 @@ export const YooptaToolbar = () => {
             {editor.formats.strike && (
               <FloatingToolbar.Button
                 onClick={() => Marks.toggle(editor, { type: 'strike' })}
-                active={isStrikeActive}
+                active={Marks.isActive(editor, { type: 'strike' })}
                 title="Strikethrough"
               >
                 <StrikethroughIcon />
@@ -84,7 +79,7 @@ export const YooptaToolbar = () => {
             {editor.formats.code && (
               <FloatingToolbar.Button
                 onClick={() => Marks.toggle(editor, { type: 'code' })}
-                active={isCodeActive}
+                active={Marks.isActive(editor, { type: 'code' })}
                 title="Code"
               >
                 <CodeIcon />
@@ -114,7 +109,7 @@ export const YooptaToolbar = () => {
                 }}
               >
                 <FloatingToolbar.Button
-                  active={isHighlightActive}
+                  active={Marks.isActive(editor, { type: 'highlight' })}
                   title="Highlight"
                   onContextMenu={(e) => {
                     e.preventDefault();

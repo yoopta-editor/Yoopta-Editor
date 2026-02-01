@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  FloatingPortal,
   autoUpdate,
   flip,
   offset,
   shift,
   useFloating,
 } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 import { HexColorPicker } from 'react-colorful';
 
-import { Portal } from '../../portal';
 import type { ElementOptionsColorPickerProps } from '../types';
 
 const DEFAULT_PRESET_COLORS = [
@@ -30,6 +31,7 @@ export const ElementOptionsColorPicker = ({
   style,
 }: ElementOptionsColorPickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const editor = useYooptaEditor();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const { refs, floatingStyles } = useFloating({
@@ -113,7 +115,7 @@ export const ElementOptionsColorPicker = ({
       </button>
 
       {isOpen && (
-        <Portal id="element-options-color-picker-portal">
+        <FloatingPortal root={editor.refElement} id={`yoopta-ui-element-options-color-picker-portal-${editor.id}`}>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
@@ -138,7 +140,7 @@ export const ElementOptionsColorPicker = ({
               </div>
             )}
           </div>
-        </Portal>
+        </FloatingPortal>
       )}
     </>
   );

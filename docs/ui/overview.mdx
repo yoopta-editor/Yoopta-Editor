@@ -9,8 +9,8 @@ icon: 'palette'
 The `@yoopta/ui` package provides a collection of **headless UI components** that give you complete control over your editor's interface. These components follow modern design patterns, offering flexibility and customization while maintaining excellent developer experience.
 
 <Note>
-  Starting with **Yoopta Editor v6**, the core `@yoopta/editor` is completely **headless**. All
-  UI components use the compound component pattern with no shared global state.
+  Starting with **Yoopta Editor v6**, the core `@yoopta/editor` is completely **headless**. All UI
+  components use the compound component pattern with no shared global state.
 </Note>
 
 ## Key Features
@@ -86,26 +86,27 @@ import { Overlay } from '@yoopta/ui/overlay';
   - Bundle size is critical (e.g., landing pages)
   - You want explicit control over what's included
 
-  **When to use full import:**
-  - You use most components
-  - Convenience over optimization
-  - Your bundler has good tree-shaking
-</Tip>
+**When to use full import:**
+
+- You use most components
+- Convenience over optimization
+- Your bundler has good tree-shaking
+  </Tip>
 
 ### Available Subpaths
 
-| Subpath | Exports |
-|---------|---------|
-| `@yoopta/ui` | Everything (convenience) |
-| `@yoopta/ui/floating-toolbar` | `FloatingToolbar` |
-| `@yoopta/ui/action-menu-list` | `ActionMenuList` |
-| `@yoopta/ui/slash-action-menu-list` | `SlashActionMenuList` |
-| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions` |
-| `@yoopta/ui/block-options` | `BlockOptions`, `useBlockActions` |
-| `@yoopta/ui/selection-box` | `SelectionBox` |
-| `@yoopta/ui/block-dnd` | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd` |
-| `@yoopta/ui/portal` | `Portal` |
-| `@yoopta/ui/overlay` | `Overlay` |
+| Subpath                             | Exports                                                         |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `@yoopta/ui`                        | Everything (convenience)                                        |
+| `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                               |
+| `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                |
+| `@yoopta/ui/slash-action-menu-list` | `SlashActionMenuList`                                           |
+| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                          |
+| `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`                               |
+| `@yoopta/ui/selection-box`          | `SelectionBox`                                                  |
+| `@yoopta/ui/block-dnd`              | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd` |
+| `@yoopta/ui/portal`                 | `Portal`                                                        |
+| `@yoopta/ui/overlay`                | `Overlay`                                                       |
 
 ## Available Components
 
@@ -188,15 +189,9 @@ These require explicit open/close control:
 ```tsx
 const [open, setOpen] = useState(false);
 
-<BlockOptions
-  open={open}
-  onOpenChange={setOpen}
-  anchor={buttonRef.current}
->
-  <BlockOptions.Content>
-    {/* Items */}
-  </BlockOptions.Content>
-</BlockOptions>
+<BlockOptions open={open} onOpenChange={setOpen} anchor={buttonRef.current}>
+  <BlockOptions.Content>{/* Items */}</BlockOptions.Content>
+</BlockOptions>;
 ```
 
 ### The `frozen` Prop Pattern
@@ -213,14 +208,10 @@ const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);
         <DragHandleIcon />
       </FloatingBlockActions.Button>
 
-      <BlockOptions
-        open={blockOptionsOpen}
-        onOpenChange={setBlockOptionsOpen}
-        blockId={blockId}
-      />
+      <BlockOptions open={blockOptionsOpen} onOpenChange={setBlockOptionsOpen} blockId={blockId} />
     </>
   )}
-</FloatingBlockActions>
+</FloatingBlockActions>;
 ```
 
 ## Quick Start
@@ -256,8 +247,7 @@ function MyFloatingBlockActions() {
           </FloatingBlockActions.Button>
           <FloatingBlockActions.Button
             ref={dragHandleRef}
-            onClick={() => setBlockOptionsOpen(true)}
-          >
+            onClick={() => setBlockOptionsOpen(true)}>
             <DragHandleIcon />
           </FloatingBlockActions.Button>
 
@@ -289,11 +279,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
         <BlockOptions.Content side="right">
           <BlockOptions.Group>
-            <BlockOptions.Item
-              ref={turnIntoRef}
-              onSelect={() => setActionMenuOpen(true)}
-              keepOpen
-            >
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
               Turn into
             </BlockOptions.Item>
           </BlockOptions.Group>
@@ -315,8 +301,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
         anchor={turnIntoRef.current}
         blockId={blockId}
         view="small"
-        placement="right-start"
-      >
+        placement="right-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>
@@ -334,16 +319,14 @@ function MyFloatingToolbar() {
           {editor.formats.bold && (
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'bold' })}
-              active={Marks.isActive(editor, { type: 'bold' })}
-            >
+              active={Marks.isActive(editor, { type: 'bold' })}>
               <BoldIcon />
             </FloatingToolbar.Button>
           )}
           {editor.formats.italic && (
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'italic' })}
-              active={Marks.isActive(editor, { type: 'italic' })}
-            >
+              active={Marks.isActive(editor, { type: 'italic' })}>
               <ItalicIcon />
             </FloatingToolbar.Button>
           )}
@@ -401,9 +384,7 @@ Override styles using:
 
 ```tsx
 <FloatingToolbar.Content className="bg-slate-800 shadow-xl">
-  <FloatingToolbar.Button className="text-white hover:bg-white/10">
-    Bold
-  </FloatingToolbar.Button>
+  <FloatingToolbar.Button className="text-white hover:bg-white/10">Bold</FloatingToolbar.Button>
 </FloatingToolbar.Content>
 ```
 

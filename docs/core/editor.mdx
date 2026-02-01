@@ -5,7 +5,7 @@ description: Understanding the Yoopta Editor core component
 
 ## Overview
 
-The Yoopta Editor is the main component that orchestrates all plugins, tools, and marks. It provides a flexible and powerful API for building rich-text editing experiences.
+The Yoopta Editor is the main component that orchestrates all plugins, marks and ui components. It provides a flexible and powerful API for building rich-text editing experiences.
 
 ## Creating an Editor Instance
 
@@ -49,10 +49,6 @@ The `YooptaEditor` component accepts the following props:
 
 <ParamField path="onPathChange" type="(path: YooptaPath) => void">
   Callback fired when the selection path changes
-</ParamField>
-
-<ParamField path="tools" type="Partial<Tools>">
-  Object containing tool configurations
 </ParamField>
 
 <ParamField path="marks" type="YooptaMark[]">

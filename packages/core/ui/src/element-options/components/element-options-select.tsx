@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  FloatingPortal,
   autoUpdate,
   flip,
   offset,
   shift,
   useFloating,
 } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 import { Check, ChevronDown } from 'lucide-react';
 
-import { Portal } from '../../portal';
 import type { ElementOptionsSelectProps, SelectOption } from '../types';
 
 export const ElementOptionsSelect = <T extends string = string>({
@@ -23,6 +24,7 @@ export const ElementOptionsSelect = <T extends string = string>({
 }: ElementOptionsSelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const editor = useYooptaEditor();
 
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -134,7 +136,7 @@ export const ElementOptionsSelect = <T extends string = string>({
       </button>
 
       {isOpen && (
-        <Portal id="element-options-select-portal">
+        <FloatingPortal root={editor.refElement} id={`yoopta-ui-element-options-select-portal-${editor.id}`}>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
@@ -161,7 +163,7 @@ export const ElementOptionsSelect = <T extends string = string>({
               </button>
             ))}
           </div>
-        </Portal>
+        </FloatingPortal>
       )}
     </>
   );

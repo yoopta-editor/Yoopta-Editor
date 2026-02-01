@@ -14,7 +14,6 @@ icon: 'toolbox'
 
 ## Features
 
-- **No stores** — pure React state, no Zustand
 - **API** — compound components with auto-visibility
 - **Selection tracking** — automatically shows/hides on text selection
 - **Block selection support** — also works when blocks are selected
@@ -47,8 +46,7 @@ function MyToolbar() {
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'bold' })}
               active={Marks.isActive(editor, { type: 'bold' })}
-              title="Bold"
-            >
+              title="Bold">
               <FontBoldIcon />
             </FloatingToolbar.Button>
           )}
@@ -56,8 +54,7 @@ function MyToolbar() {
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'italic' })}
               active={Marks.isActive(editor, { type: 'italic' })}
-              title="Italic"
-            >
+              title="Italic">
               <FontItalicIcon />
             </FloatingToolbar.Button>
           )}
@@ -65,8 +62,7 @@ function MyToolbar() {
             <FloatingToolbar.Button
               onClick={() => Marks.toggle(editor, { type: 'code' })}
               active={Marks.isActive(editor, { type: 'code' })}
-              title="Code"
-            >
+              title="Code">
               <CodeIcon />
             </FloatingToolbar.Button>
           )}
@@ -79,7 +75,7 @@ function MyToolbar() {
 // In your editor
 <YooptaEditor editor={editor}>
   <MyToolbar />
-</YooptaEditor>
+</YooptaEditor>;
 ```
 
 ## API Reference
@@ -97,16 +93,16 @@ Root component that handles selection tracking.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `children` | `ReactNode \| ((api) => ReactNode)` | Content or render function |
-| `frozen` | `boolean` | When true, selection tracking is paused |
-| `className` | `string` | Custom CSS classes |
+| Prop        | Type                                | Description                             |
+| ----------- | ----------------------------------- | --------------------------------------- |
+| `children`  | `ReactNode \| ((api) => ReactNode)` | Content or render function              |
+| `frozen`    | `boolean`                           | When true, selection tracking is paused |
+| `className` | `string`                            | Custom CSS classes                      |
 
 **Render Props API:**
 
-| Property | Type | Description |
-|----------|------|-------------|
+| Property | Type      | Description                |
+| -------- | --------- | -------------------------- |
 | `isOpen` | `boolean` | Whether toolbar is visible |
 
 ### `FloatingToolbar.Content`
@@ -121,10 +117,10 @@ Floating content panel. Automatically hides when no selection.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `className` | `string` | Custom CSS classes |
-| `children` | `ReactNode` | Toolbar groups and buttons |
+| Prop        | Type        | Description                |
+| ----------- | ----------- | -------------------------- |
+| `className` | `string`    | Custom CSS classes         |
+| `children`  | `ReactNode` | Toolbar groups and buttons |
 
 ### `FloatingToolbar.Group`
 
@@ -142,25 +138,20 @@ Groups related buttons together.
 Individual toolbar button.
 
 ```tsx
-<FloatingToolbar.Button
-  onClick={handleClick}
-  active={isActive}
-  disabled={false}
-  title="Bold"
->
+<FloatingToolbar.Button onClick={handleClick} active={isActive} disabled={false} title="Bold">
   <BoldIcon />
 </FloatingToolbar.Button>
 ```
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `onClick` | `(event) => void` | Click handler |
-| `active` | `boolean` | Whether button is active/pressed |
-| `disabled` | `boolean` | Disable the button |
-| `title` | `string` | Tooltip text |
-| `className` | `string` | Custom CSS classes |
+| Prop        | Type              | Description                      |
+| ----------- | ----------------- | -------------------------------- |
+| `onClick`   | `(event) => void` | Click handler                    |
+| `active`    | `boolean`         | Whether button is active/pressed |
+| `disabled`  | `boolean`         | Disable the button               |
+| `title`     | `string`          | Tooltip text                     |
+| `className` | `string`          | Custom CSS classes               |
 
 ### `FloatingToolbar.Separator`
 
@@ -180,27 +171,23 @@ function MyToolbar() {
   const turnIntoRef = useRef<HTMLButtonElement>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const currentBlockId = typeof editor.path.current === 'number'
-    ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
-    : null;
+  const currentBlockId =
+    typeof editor.path.current === 'number'
+      ? Blocks.getBlock(editor, { at: editor.path.current })?.id ?? null
+      : null;
 
   return (
     <>
       <FloatingToolbar frozen={actionMenuOpen}>
         <FloatingToolbar.Content>
           <FloatingToolbar.Group>
-            <FloatingToolbar.Button
-              ref={turnIntoRef}
-              onClick={() => setActionMenuOpen(true)}
-            >
+            <FloatingToolbar.Button ref={turnIntoRef} onClick={() => setActionMenuOpen(true)}>
               Turn into
               <ChevronDownIcon />
             </FloatingToolbar.Button>
           </FloatingToolbar.Group>
           <FloatingToolbar.Separator />
-          <FloatingToolbar.Group>
-            {/* Formatting buttons */}
-          </FloatingToolbar.Group>
+          <FloatingToolbar.Group>{/* Formatting buttons */}</FloatingToolbar.Group>
         </FloatingToolbar.Content>
       </FloatingToolbar>
 
@@ -210,8 +197,7 @@ function MyToolbar() {
         anchor={turnIntoRef.current}
         blockId={currentBlockId}
         view="small"
-        placement="bottom-start"
-      >
+        placement="bottom-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>
@@ -246,8 +232,7 @@ function FormattingToolbar() {
                 key={btn.type}
                 onClick={() => Marks.toggle(editor, { type: btn.type })}
                 active={isActive}
-                title={btn.label}
-              >
+                title={btn.label}>
                 {btn.icon}
               </FloatingToolbar.Button>
             );
@@ -281,9 +266,7 @@ function FormattingToolbar() {
 <FloatingToolbar>
   <FloatingToolbar.Content className="bg-slate-900 border-white/10">
     <FloatingToolbar.Group>
-      <FloatingToolbar.Button className="text-white hover:bg-white/10">
-        Bold
-      </FloatingToolbar.Button>
+      <FloatingToolbar.Button className="text-white hover:bg-white/10">Bold</FloatingToolbar.Button>
     </FloatingToolbar.Group>
   </FloatingToolbar.Content>
 </FloatingToolbar>
@@ -300,17 +283,19 @@ function FormattingToolbar() {
       {/* Prevents toolbar from closing while popover is open */}
     </FloatingToolbar>
     ```
+
   </Accordion>
 
-  <Accordion title="Check if format exists before rendering">
-    ```tsx
-    {editor.formats.bold && (
-      <FloatingToolbar.Button onClick={() => Marks.toggle(editor, { type: 'bold' })}>
-        Bold
-      </FloatingToolbar.Button>
-    )}
-    ```
-  </Accordion>
+{' '}
+<Accordion title="Check if format exists before rendering">
+  ```tsx
+  {editor.formats.bold && (
+    <FloatingToolbar.Button onClick={() => Marks.toggle(editor, { type: 'bold' })}>
+      Bold
+    </FloatingToolbar.Button>
+  )}
+  ```
+</Accordion>
 
   <Accordion title="Use separators to group related actions">
     ```tsx

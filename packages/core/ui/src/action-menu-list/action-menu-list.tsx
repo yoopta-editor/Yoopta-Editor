@@ -1,14 +1,13 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
-import { autoUpdate, flip, offset, shift, useFloating, useMergeRefs, useTransitionStyles } from '@floating-ui/react';
+import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating, useMergeRefs, useTransitionStyles } from '@floating-ui/react';
 import { getRootBlockElement, useYooptaEditor } from '@yoopta/editor';
 
 import { ActionMenuListContext, useActionMenuListContext } from './context';
 import type { ActionMenuItem } from './types';
 import { filterToggleActions, mapActionMenuItems } from './utils';
 import { Overlay } from '../overlay';
-import { Portal } from '../portal';
 import './action-menu-list.css';
 
 type ActionMenuListApi = {
@@ -55,7 +54,6 @@ const ActionMenuListRoot = ({
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
 
-  // Get available actions from editor plugins
   const actions = useMemo(
     () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)).filter(item => {
       const plugin = editor.plugins[item.type];
@@ -67,7 +65,6 @@ const ActionMenuListRoot = ({
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(actions[0] ?? null);
 
-  // Floating UI setup
   const { refs, floatingStyles, context } = useFloating({
     elements: { reference: anchor },
     placement,
@@ -80,7 +77,6 @@ const ActionMenuListRoot = ({
     duration: 100,
   });
 
-  // Combined styles with view-specific width
   const combinedStyles: CSSProperties = useMemo(
     () => ({
       ...floatingStyles,
@@ -90,7 +86,6 @@ const ActionMenuListRoot = ({
     [floatingStyles, transitionStyles, view],
   );
 
-  // Close menu
   const close = useCallback(() => {
     if (!isControlled) {
       setUncontrolledOpen(false);
@@ -162,6 +157,7 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
     const { isOpen, floatingStyles, setFloatingRef, actions, selectedAction, setSelectedAction, onSelect, view, close } =
       useActionMenuListContext();
     const mergedRef = useMergeRefs([forwardedRef, setFloatingRef]);
+    const editor = useYooptaEditor();
 
     if (!isOpen) return null;
 
@@ -188,7 +184,7 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
       ));
 
     return (
-      <Portal id="yoopta-ui-action-menu-list-portal">
+      <FloatingPortal root={editor.refElement} id={`yoopta-ui-action-menu-list-portal-${editor.id}`}>
         <Overlay lockScroll={false} onClick={close} className="yoopta-ui-action-menu-list-overlay">
           <div
             ref={mergedRef}
@@ -196,14 +192,17 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
             tabIndex={0}
             className={`yoopta-ui-action-menu-list-content yoopta-ui-action-menu-list-${view} ${className}`}
             style={floatingStyles}
-            onMouseDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             onClick={(e) => e.stopPropagation()}
             {...props}
           >
             {content}
           </div>
         </Overlay>
-      </Portal>
+      </FloatingPortal>
     );
   },
 );

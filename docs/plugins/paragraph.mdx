@@ -3,9 +3,13 @@ title: Paragraph
 description: Basic text blocks for content creation
 ---
 
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
 ## Overview
 
 The Paragraph plugin is the fundamental building block of any document. It provides basic text formatting and should always be included in your editor configuration.
+
+<PluginPlayground pluginSlug="paragraph" height={280} />
 
 ## Installation
 
@@ -23,10 +27,7 @@ const plugins = [
   // ... other plugins
 ];
 
-<YooptaEditor
-  editor={editor}
-  plugins={plugins}
-/>
+<YooptaEditor editor={editor} plugins={plugins} />;
 ```
 
 ## Features
@@ -92,10 +93,7 @@ const CustomParagraph = Paragraph.extend({
     paragraph: {
       render: (props) => {
         return (
-          <p
-            className="custom-paragraph"
-            {...props.attributes}
-          >
+          <p className="custom-paragraph" {...props.attributes}>
             {props.children}
           </p>
         );
@@ -113,13 +111,9 @@ const StyledParagraph = Paragraph.extend({
     paragraph: {
       render: (props) => {
         const align = props.blockData?.meta?.align || 'left';
-        
+
         return (
-          <p
-            className={`paragraph-${align}`}
-            style={{ textAlign: align }}
-            {...props.attributes}
-          >
+          <p className={`paragraph-${align}`} style={{ textAlign: align }} {...props.attributes}>
             {props.children}
           </p>
         );
@@ -142,9 +136,7 @@ The plugin automatically deserializes `<p>` tags:
 ### HTML Serialization
 
 ```html
-<p data-meta-align="left" data-meta-depth="0">
-  Your paragraph content
-</p>
+<p data-meta-align="left" data-meta-depth="0">Your paragraph content</p>
 ```
 
 ### Markdown Serialization
@@ -162,9 +154,7 @@ The plugin provides email-compatible HTML with inline styles:
   <tbody>
     <tr>
       <td>
-        <p style="font-size: 16px; line-height: 1.75rem; margin: .5rem 0">
-          Your paragraph content
-        </p>
+        <p style="font-size: 16px; line-height: 1.75rem; margin: .5rem 0">Your paragraph content</p>
       </td>
     </tr>
   </tbody>
@@ -196,18 +186,10 @@ Each paragraph block can have metadata:
 ## Use Cases
 
 <CardGroup cols={2}>
-  <Card title="Blog Posts">
-    Main body text for articles and posts
-  </Card>
-  <Card title="Documentation">
-    Descriptive text in technical docs
-  </Card>
-  <Card title="Landing Pages">
-    Marketing copy and descriptions
-  </Card>
-  <Card title="Notes">
-    Quick notes and text entries
-  </Card>
+  <Card title="Blog Posts">Main body text for articles and posts</Card>
+  <Card title="Documentation">Descriptive text in technical docs</Card>
+  <Card title="Landing Pages">Marketing copy and descriptions</Card>
+  <Card title="Notes">Quick notes and text entries</Card>
 </CardGroup>
 
 ## Best Practices
@@ -216,15 +198,15 @@ Each paragraph block can have metadata:
   <Accordion title="Always Include Paragraph">
     The Paragraph plugin should always be included as it's typically the default block type
   </Accordion>
-  
+
   <Accordion title="Use as Default">
     Configure Paragraph as the default block type for new content
   </Accordion>
-  
+
   <Accordion title="Keep It Simple">
     The Paragraph plugin should remain simple - use other plugins for complex formatting
   </Accordion>
-  
+
   <Accordion title="Combine with Marks">
     Use text marks (bold, italic) for inline formatting within paragraphs
   </Accordion>
@@ -244,6 +226,7 @@ const slate = withParagraph(createEditor());
 ```
 
 This extension handles:
+
 - Text normalization
 - Empty paragraph handling
 - Consistent whitespace behavior
@@ -258,12 +241,9 @@ const DropCapParagraph = Paragraph.extend({
     paragraph: {
       render: (props) => {
         const hasDropCap = props.element.props?.dropCap;
-        
+
         return (
-          <p
-            className={hasDropCap ? 'drop-cap' : ''}
-            {...props.attributes}
-          >
+          <p className={hasDropCap ? 'drop-cap' : ''} {...props.attributes}>
             {props.children}
           </p>
         );
@@ -289,16 +269,12 @@ const CountedParagraph = Paragraph.extend({
   elements: {
     paragraph: {
       render: (props) => {
-        const text = props.element.children
-          .map(n => n.text)
-          .join('');
+        const text = props.element.children.map((n) => n.text).join('');
         const count = text.length;
-        
+
         return (
           <div className="paragraph-wrapper">
-            <p {...props.attributes}>
-              {props.children}
-            </p>
+            <p {...props.attributes}>{props.children}</p>
             <span className="char-count">{count} characters</span>
           </div>
         );
@@ -313,4 +289,3 @@ const CountedParagraph = Paragraph.extend({
 - [Headings Plugin](/plugins/headings) - For titles and headings
 - [Blockquote Plugin](/plugins/blockquote) - For quoted text
 - [Code Plugin](/plugins/code) - For code blocks
-

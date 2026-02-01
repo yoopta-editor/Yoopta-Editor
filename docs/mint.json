@@ -33,7 +33,7 @@
     {
       "name": "Examples",
       "icon": "code",
-      "url": "https://yoopta.dev/examples"
+      "url": "https://yoopta.dev/playground"
     },
     {
       "name": "Discord Community",
@@ -60,7 +60,6 @@
       "pages": [
         "core/editor",
         "core/plugins",
-        "core/tools",
         "core/marks"
       ]
     },

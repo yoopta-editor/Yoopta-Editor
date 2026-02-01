@@ -14,7 +14,6 @@ icon: 'ellipsis'
 
 ## Features
 
-- **No stores** — pure React state, no Zustand
 - **API** — controlled/uncontrolled with `open`/`onOpenChange`
 - **Compound components** — Root, Content, Trigger, Item, Group, Separator
 - **Floating positioning** — automatic positioning via Floating UI
@@ -40,12 +39,8 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
     <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
       <BlockOptions.Content side="right" align="start">
         <BlockOptions.Group>
-          <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>
-            Duplicate
-          </BlockOptions.Item>
-          <BlockOptions.Item onSelect={() => copyBlockLink(blockId)}>
-            Copy link
-          </BlockOptions.Item>
+          <BlockOptions.Item onSelect={() => duplicateBlock(blockId)}>Duplicate</BlockOptions.Item>
+          <BlockOptions.Item onSelect={() => copyBlockLink(blockId)}>Copy link</BlockOptions.Item>
         </BlockOptions.Group>
         <BlockOptions.Separator />
         <BlockOptions.Group>
@@ -66,25 +61,20 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
 Root component that manages open state and context.
 
 ```tsx
-<BlockOptions
-  open={isOpen}
-  onOpenChange={setIsOpen}
-  anchor={anchorElement}
-  defaultOpen={false}
->
+<BlockOptions open={isOpen} onOpenChange={setIsOpen} anchor={anchorElement} defaultOpen={false}>
   {children}
 </BlockOptions>
 ```
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `open` | `boolean` | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | Called when open state changes |
-| `defaultOpen` | `boolean` | Default open state (uncontrolled) |
-| `anchor` | `HTMLElement \| null` | Anchor element for positioning |
-| `children` | `ReactNode` | Content and trigger components |
+| Prop           | Type                      | Description                       |
+| -------------- | ------------------------- | --------------------------------- |
+| `open`         | `boolean`                 | Controlled open state             |
+| `onOpenChange` | `(open: boolean) => void` | Called when open state changes    |
+| `defaultOpen`  | `boolean`                 | Default open state (uncontrolled) |
+| `anchor`       | `HTMLElement \| null`     | Anchor element for positioning    |
+| `children`     | `ReactNode`               | Content and trigger components    |
 
 ### `BlockOptions.Trigger`
 
@@ -101,10 +91,10 @@ Optional trigger button (for uncontrolled usage).
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `asChild` | `boolean` | Merge props onto child element |
-| `className` | `string` | Custom CSS classes |
+| Prop        | Type      | Description                    |
+| ----------- | --------- | ------------------------------ |
+| `asChild`   | `boolean` | Merge props onto child element |
+| `className` | `string`  | Custom CSS classes             |
 
 ### `BlockOptions.Content`
 
@@ -118,37 +108,32 @@ Floating content panel.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | Placement side |
-| `align` | `'start' \| 'center' \| 'end'` | Alignment |
-| `sideOffset` | `number` | Offset from anchor (default: 5) |
-| `className` | `string` | Custom CSS classes |
+| Prop         | Type                                     | Description                     |
+| ------------ | ---------------------------------------- | ------------------------------- |
+| `side`       | `'top' \| 'right' \| 'bottom' \| 'left'` | Placement side                  |
+| `align`      | `'start' \| 'center' \| 'end'`           | Alignment                       |
+| `sideOffset` | `number`                                 | Offset from anchor (default: 5) |
+| `className`  | `string`                                 | Custom CSS classes              |
 
 ### `BlockOptions.Item`
 
 Menu item button.
 
 ```tsx
-<BlockOptions.Item
-  onSelect={handleAction}
-  variant="default"
-  icon={<CopyIcon />}
-  keepOpen={false}
->
+<BlockOptions.Item onSelect={handleAction} variant="default" icon={<CopyIcon />} keepOpen={false}>
   Duplicate
 </BlockOptions.Item>
 ```
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `onSelect` | `(event) => void` | Called when item is selected |
-| `variant` | `'default' \| 'destructive'` | Visual variant |
-| `icon` | `ReactNode` | Icon to display |
-| `keepOpen` | `boolean` | Keep menu open after selection |
-| `disabled` | `boolean` | Disable the item |
+| Prop       | Type                         | Description                    |
+| ---------- | ---------------------------- | ------------------------------ |
+| `onSelect` | `(event) => void`            | Called when item is selected   |
+| `variant`  | `'default' \| 'destructive'` | Visual variant                 |
+| `icon`     | `ReactNode`                  | Icon to display                |
+| `keepOpen` | `boolean`                    | Keep menu open after selection |
+| `disabled` | `boolean`                    | Disable the item               |
 
 ### `BlockOptions.Group`
 
@@ -202,11 +187,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
         <BlockOptions.Content side="right">
           <BlockOptions.Group>
-            <BlockOptions.Item
-              ref={turnIntoRef}
-              onSelect={() => setActionMenuOpen(true)}
-              keepOpen
-            >
+            <BlockOptions.Item ref={turnIntoRef} onSelect={() => setActionMenuOpen(true)} keepOpen>
               Turn into
             </BlockOptions.Item>
           </BlockOptions.Group>
@@ -228,8 +209,7 @@ function MyBlockOptions({ open, onOpenChange, blockId, anchor }) {
         anchor={turnIntoRef.current}
         blockId={blockId}
         view="small"
-        placement="right-start"
-      >
+        placement="right-start">
         <ActionMenuList.Content />
       </ActionMenuList>
     </>

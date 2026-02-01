@@ -3,9 +3,13 @@ title: Table of Contents
 description: Void block that renders a navigable list of document headings
 ---
 
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
 ## Overview
 
 The Table of Contents plugin inserts a block that automatically collects all heading blocks (H1, H2, H3) from the document and renders them as a list. Clicking an item focuses the corresponding heading block and scrolls it into view. The plugin does not ship UI by default—use a theme such as `@yoopta/themes-shadcn` for the full interface.
+
+<PluginPlayground pluginSlug="table-of-contents" height={320} />
 
 ## Installation
 

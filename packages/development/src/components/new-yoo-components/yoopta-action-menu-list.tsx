@@ -1,7 +1,5 @@
 import { ActionMenuList } from '@yoopta/ui/action-menu-list';
 import { Placement } from '@floating-ui/dom';
-import { HeadingIcon } from 'lucide-react';
-import { Blocks, useYooptaEditor } from '@yoopta/editor';
 
 type Props = {
   open: boolean;

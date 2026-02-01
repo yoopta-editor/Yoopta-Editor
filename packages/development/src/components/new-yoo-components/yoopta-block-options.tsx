@@ -19,10 +19,9 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
   };
 
   const onActionMenuClose = (menuOpen: boolean) => {
-    setActionMenuOpen(menuOpen);
-    if (!menuOpen) {
-      onOpenChange?.(false);
-    }
+    console.log('menuOpen', menuOpen)
+    setActionMenuOpen(false);
+    onOpenChange?.(false);
   };
 
   const onDuplicate = () => {
@@ -43,10 +42,13 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
     onOpenChange?.(false);
   };
 
+  console.log('actionMenuOpen', actionMenuOpen);
+  console.log('blockId', blockId);
+
   return (
     <>
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
-        <BlockOptions.Content side="right" align="end">
+        <BlockOptions.Content side="right" align="center">
           <BlockOptions.Group>
             <BlockOptions.Item ref={turnIntoRef} onSelect={onTurnInto} keepOpen>
               Turn into

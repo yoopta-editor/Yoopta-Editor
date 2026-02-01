@@ -14,7 +14,6 @@ icon: 'hand-pointer'
 
 ## Features
 
-- **No stores** — pure React state, no Zustand
 - **API** — compound components with render props
 - **Auto-positioning** — automatically positions itself next to blocks
 - **Hover detection** — shows on hover, hides on mouse leave
@@ -58,8 +57,7 @@ function MyFloatingBlockActions() {
           <FloatingBlockActions.Button
             ref={dragHandleRef}
             onClick={() => setBlockOptionsOpen(true)}
-            title="Block options"
-          >
+            title="Block options">
             <DragHandleDots2Icon />
           </FloatingBlockActions.Button>
 
@@ -92,20 +90,20 @@ Root component that handles hover tracking and positioning.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `children` | `ReactNode \| ((api) => ReactNode)` | Buttons or render function |
-| `frozen` | `boolean` | When true, hover tracking is paused |
-| `className` | `string` | Custom CSS classes |
+| Prop        | Type                                | Description                         |
+| ----------- | ----------------------------------- | ----------------------------------- |
+| `children`  | `ReactNode \| ((api) => ReactNode)` | Buttons or render function          |
+| `frozen`    | `boolean`                           | When true, hover tracking is paused |
+| `className` | `string`                            | Custom CSS classes                  |
 
 **Render Props API:**
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `blockId` | `string \| null` | Currently hovered block ID |
+| Property    | Type                      | Description                  |
+| ----------- | ------------------------- | ---------------------------- |
+| `blockId`   | `string \| null`          | Currently hovered block ID   |
 | `blockData` | `YooptaBlockData \| null` | Block data for hovered block |
-| `isVisible` | `boolean` | Whether actions are visible |
-| `hide` | `() => void` | Manually hide the actions |
+| `isVisible` | `boolean`                 | Whether actions are visible  |
+| `hide`      | `() => void`              | Manually hide the actions    |
 
 ### `FloatingBlockActions.Button`
 
@@ -119,13 +117,13 @@ Action button component.
 
 **Props:**
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `onClick` | `(e: MouseEvent) => void` | Click handler |
-| `disabled` | `boolean` | Disable the button |
-| `title` | `string` | Tooltip text |
-| `className` | `string` | Custom CSS classes |
-| `children` | `ReactNode` | Button content (usually an icon) |
+| Prop        | Type                      | Description                      |
+| ----------- | ------------------------- | -------------------------------- |
+| `onClick`   | `(e: MouseEvent) => void` | Click handler                    |
+| `disabled`  | `boolean`                 | Disable the button               |
+| `title`     | `string`                  | Tooltip text                     |
+| `className` | `string`                  | Custom CSS classes               |
+| `children`  | `ReactNode`               | Button content (usually an icon) |
 
 ## Examples
 
@@ -148,8 +146,7 @@ function MyFloatingBlockActions() {
 
           <FloatingBlockActions.Button
             ref={dragHandleRef}
-            onClick={() => setBlockOptionsOpen(true)}
-          >
+            onClick={() => setBlockOptionsOpen(true)}>
             <DragHandleDots2Icon />
           </FloatingBlockActions.Button>
 
@@ -231,6 +228,7 @@ function MyFloatingBlockActions() {
       {/* When frozen, hover tracking pauses */}
     </FloatingBlockActions>
     ```
+
   </Accordion>
 </AccordionGroup>
 

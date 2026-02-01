@@ -2,6 +2,7 @@ import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useStat
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 import {
   FloatingFocusManager,
+  FloatingPortal,
   autoUpdate,
   flip,
   offset,
@@ -13,10 +14,10 @@ import {
   useMergeRefs,
   useTransitionStyles,
 } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 
-import { BlockOptionsContext, useBlockOptionsContext } from './context';
 import { Overlay } from '../overlay';
-import { Portal } from '../portal';
+import { BlockOptionsContext, useBlockOptionsContext } from './context';
 import './block-options.css';
 
 type Placement = 'top' | 'right' | 'bottom' | 'left';
@@ -120,16 +121,6 @@ const BlockOptionsTrigger = forwardRef<HTMLButtonElement, BlockOptionsTriggerPro
 
 BlockOptionsTrigger.displayName = 'BlockOptions.Trigger';
 
-type BlockOptionsPortalProps = {
-  children: ReactNode;
-};
-
-const BlockOptionsPortal = ({ children }: BlockOptionsPortalProps) => (
-  <Portal id="yoopta-ui-block-options-portal">{children}</Portal>
-);
-
-BlockOptionsPortal.displayName = 'BlockOptions.Portal';
-
 type BlockOptionsContentProps = {
   children: ReactNode;
   className?: string;
@@ -145,6 +136,7 @@ type BlockOptionsContentProps = {
 const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>(
   ({ children, className = '', style, side = 'right', align = 'start', sideOffset = 5 }, forwardedRef) => {
     const { open, onOpenChange, triggerRef, contentId } = useBlockOptionsContext();
+    const editor = useYooptaEditor();
 
     const placement = align === 'center' ? side : (`${side}-${align}` as const);
 
@@ -180,7 +172,7 @@ const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>
     if (!isMounted) return null;
 
     return (
-      <BlockOptionsPortal>
+      <FloatingPortal root={editor.refElement} id={`yoopta-ui-block-options-portal-${editor.id}`}>
         <Overlay lockScroll={false} onClick={() => onOpenChange(false)}>
           <FloatingFocusManager context={context} modal={false}>
             <div
@@ -200,7 +192,7 @@ const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>
             </div>
           </FloatingFocusManager>
         </Overlay>
-      </BlockOptionsPortal>
+      </FloatingPortal>
     );
   },
 );
@@ -305,7 +297,6 @@ BlockOptionsLabel.displayName = 'BlockOptions.Label';
 export const BlockOptions = Object.assign(BlockOptionsRoot, {
   Root: BlockOptionsRoot,
   Trigger: BlockOptionsTrigger,
-  Portal: BlockOptionsPortal,
   Content: BlockOptionsContent,
   Group: BlockOptionsGroup,
   Item: BlockOptionsItem,

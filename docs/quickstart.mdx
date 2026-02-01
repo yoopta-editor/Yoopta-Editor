@@ -1,6 +1,6 @@
 ---
-title: "Quickstart"
-description: "Get started with Yoopta Editor in 5 minutes"
+title: 'Quickstart'
+description: 'Get started with Yoopta Editor in 5 minutes'
 ---
 
 ## Installation
@@ -13,11 +13,9 @@ First, install the required dependencies:
 npm install slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 ```
 
-
 ```bash yarn
 yarn add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 ```
-
 
 ```bash pnpm
 pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
@@ -25,36 +23,29 @@ pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 
 </CodeGroup>
 
-<Note>
-  `slate` `slate-react` `slate-dom` are peer dependencies required by Yoopta Editor.
-</Note>
+<Note>`slate` `slate-react` `slate-dom` are peer dependencies required by Yoopta Editor.</Note>
 
 ## Basic Setup
 
-Create a simple editor component:
+Create a simple editor component. Plugins and marks are passed to `createYooptaEditor`; use `editor.setEditorValue()` for initial content and `onChange` to persist changes.
 
 ```jsx
-import { useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
 
 const plugins = [Paragraph];
+const marks = [Bold, Italic];
 
 export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
-
-  const onChange = (newValue) => {
-    setValue(newValue);
-  };
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
     <div>
       <YooptaEditor
         editor={editor}
-        plugins={plugins}
-        value={value}
-        onChange={onChange}
+        onChange={(value) => console.log(value)}
         placeholder="Type something..."
       />
     </div>
@@ -72,41 +63,39 @@ Install additional plugins for richer content:
 npm install @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
 ```
 
-
 ```bash yarn
 yarn add @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
 ```
 
 </CodeGroup>
 
-Update your editor:
+Pass the plugins to `createYooptaEditor`:
 
 ```jsx
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
-import Headings from '@yoopta/headings';
-import Lists from '@yoopta/lists';
+import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
+import { BulletedList, NumberedList, TodoList } from '@yoopta/lists';
 import Code from '@yoopta/code';
 
 const plugins = [
   Paragraph,
-  Headings.HeadingOne,
-  Headings.HeadingTwo,
-  Headings.HeadingThree,
+  HeadingOne,
+  HeadingTwo,
+  HeadingThree,
   Blockquote,
-  Lists.BulletedList,
-  Lists.NumberedList,
+  BulletedList,
+  NumberedList,
+  TodoList,
   Code,
 ];
 
-export default function MyEditor() {
-  // ... rest of the code
-}
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
 
 ## Adding UI Components
 
-UI components enhance the editor with toolbars and action menus. All components are available from `@yoopta/ui`:
+Add toolbar and slash menu as **children** of `YooptaEditor`. Install `@yoopta/ui`:
 
 <CodeGroup>
 
@@ -121,115 +110,92 @@ yarn add @yoopta/ui
 </CodeGroup>
 
 ```jsx
-import { Toolbar, useToolbar } from '@yoopta/ui';
-import { ActionMenuList, useActionMenuList } from '@yoopta/ui';
+import { FloatingToolbar, FloatingBlockActions, SlashCommandMenu } from '@yoopta/ui';
 
-// Use hooks to integrate UI components
 export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
-  const { isOpen: isToolbarOpen, getRootProps: getToolbarProps } = useToolbar();
-  const { isOpen: isActionMenuOpen, getRootProps: getActionMenuProps } = useActionMenuList();
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
     <div>
-      {isToolbarOpen && (
-        <Toolbar {...getToolbarProps()} />
-      )}
-      {isActionMenuOpen && (
-        <ActionMenuList {...getActionMenuProps()} />
-      )}
       <YooptaEditor
         editor={editor}
-        plugins={plugins}
-        value={value}
-        onChange={setValue}
-      />
+        onChange={(value) => console.log(value)}
+        placeholder="Type / to open menu...">
+        <FloatingToolbar />
+        <FloatingBlockActions />
+        <SlashCommandMenu />
+      </YooptaEditor>
     </div>
   );
 }
 ```
 
+See [UI overview](/ui/overview) for the compound component structure (e.g. `FloatingToolbar.Content`).
+
 ## Adding Marks
 
-<u>Marks provide text formatting options:</u>
+Marks provide text formatting (bold, italic, etc.). Pass them to `createYooptaEditor`:
 
-```
+```jsx
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
 
-const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
+const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
-export default function MyEditor() {
-  // ... rest of the code
-
-  return (
-    <YooptaEditor
-      editor={editor}
-      plugins={plugins}
-      value={value}
-      onChange={setValue}
-      marks={MARKS}
-    />
-  );
-}
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
 
 ## Full Example
 
 ```jsx
-import { useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
-import Headings from '@yoopta/headings';
-import Lists from '@yoopta/lists';
+import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
+import { BulletedList, NumberedList } from '@yoopta/lists';
 import Code from '@yoopta/code';
-import { Toolbar, useToolbar, ActionMenuList, useActionMenuList } from '@yoopta/ui';
+import { FloatingToolbar, FloatingBlockActions, SlashCommandMenu } from '@yoopta/ui';
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
+import { applyTheme } from '@yoopta/themes-shadcn';
 
-const plugins = [
+const plugins = applyTheme([
   Paragraph,
-  Headings.HeadingOne,
-  Headings.HeadingTwo,
-  Headings.HeadingThree,
+  HeadingOne,
+  HeadingTwo,
+  HeadingThree,
   Blockquote,
-  Lists.BulletedList,
-  Lists.NumberedList,
+  BulletedList,
+  NumberedList,
   Code,
-];
+]);
 
-const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
+const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
-  const { isOpen: isToolbarOpen, getRootProps: getToolbarProps } = useToolbar();
-  const { isOpen: isActionMenuOpen, getRootProps: getActionMenuProps } = useActionMenuList();
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
-  const onChange = (newValue) => {
-    setValue(newValue);
+  const onChange = (value) => {
     // Save to database, localStorage, etc.
+    console.log(value);
   };
 
   return (
     <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      {isToolbarOpen && <Toolbar {...getToolbarProps()} />}
-      {isActionMenuOpen && <ActionMenuList {...getActionMenuProps()} />}
       <YooptaEditor
         editor={editor}
-        plugins={plugins}
-        marks={MARKS}
-        value={value}
         onChange={onChange}
-        placeholder="Start typing..."
-        autoFocus
-      />
+        placeholder="Type / to open menu..."
+        autoFocus>
+        <FloatingToolbar />
+        <FloatingBlockActions />
+        <SlashCommandMenu />
+      </YooptaEditor>
     </div>
   );
 }
 ```
 
-Here's a complete editor with all the features:
+Here's a complete editor with plugins, marks, theme, and UI:
 
 ## Next Steps
 
@@ -246,5 +212,6 @@ Here's a complete editor with all the features:
 </CardGroup>
 
 <Tip>
-  Check out our [live examples](https://yoopta.dev/examples) to see what's possible with Yoopta Editor!
+  Check out our [live examples](https://yoopta.dev/playground) to see what's possible with Yoopta
+  Editor!
 </Tip>

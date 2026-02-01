@@ -1,0 +1,234 @@
+---
+title: Accordion
+description: Collapsible accordion sections
+---
+
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
+## Overview
+
+The Accordion plugin creates collapsible content sections. Each item has a heading (click to expand/collapse) and content area. It uses native `<details>` / `<summary>` in the default render and supports HTML serialization from those elements.
+
+<PluginPlayground pluginSlug="accordion" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/accordion
+```
+
+## Basic Usage
+
+```jsx
+import Accordion from '@yoopta/accordion';
+
+const plugins = [
+  Accordion,
+  // ... other plugins
+];
+
+<YooptaEditor editor={editor} plugins={plugins} />
+```
+
+## Features
+
+- **Expand/Collapse**: Each item can be expanded or collapsed via `isExpanded` prop
+- **Keyboard**: Enter toggles expansion when in heading, or inserts a new item; Backspace removes empty items or the block
+- **HTML**: Deserializes from `<details>` / `<summary>` / `<p>`; serializes to the same
+- **Email**: Serializes to table-based layout for email clients
+- **Shortcuts**: Type `accordion` to insert
+
+## Structure
+
+The Accordion block consists of nested elements:
+
+```
+accordion-list
+└── accordion-list-item (multiple)
+    ├── accordion-list-item-heading
+    └── accordion-list-item-content
+```
+
+## Configuration
+
+```jsx
+import Accordion from '@yoopta/accordion';
+
+const plugins = [Accordion];
+```
+
+## Options
+
+<ResponseField name="display" type="object">
+  <Expandable title="properties">
+    <ResponseField name="title" type="string" default="Accordion">
+      Display title in UI menus
+    </ResponseField>
+    <ResponseField name="description" type="string" default="Create collapses">
+      Description shown in menus
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="shortcuts" type="string[]" default="['accordion']">
+  Keyboard shortcuts to trigger the plugin in slash menu
+</ResponseField>
+
+## Element props
+
+<ResponseField name="accordion-list-item.props" type="object">
+  <Expandable title="properties">
+    <ResponseField name="isExpanded" type="boolean" default="true">
+      Whether the accordion item is expanded (open) or collapsed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Commands
+
+Accordion commands are available via the plugin's `commands` and through the editor. Use `editor.blocks` for block-level operations and the Accordion commands for structure.
+
+### insertAccordion
+
+Insert a new Accordion block.
+
+```typescript
+import Accordion, { AccordionCommands } from '@yoopta/accordion';
+
+AccordionCommands.insertAccordion(editor, {
+  items: 2,
+  props: { isExpanded: false },
+  at: 0,
+  focus: true,
+});
+```
+
+<ParamField path="items" type="number" default="1">
+  Number of accordion items to create initially
+</ParamField>
+
+<ParamField path="props.isExpanded" type="boolean" default="false">
+  Initial expanded state for each item
+</ParamField>
+
+<ParamField path="at" type="YooptaPathIndex">
+  Index or path where to insert the block
+</ParamField>
+
+<ParamField path="focus" type="boolean">
+  Whether to focus the new block after insert
+</ParamField>
+
+### buildAccordionElements
+
+Build the accordion element structure (used internally by `insertAccordion`).
+
+```typescript
+import { AccordionCommands } from '@yoopta/accordion';
+
+const accordionList = AccordionCommands.buildAccordionElements(editor, {
+  items: 3,
+  props: { isExpanded: true },
+});
+```
+
+### deleteAccordion
+
+Remove an Accordion block by id.
+
+```typescript
+import { AccordionCommands } from '@yoopta/accordion';
+
+AccordionCommands.deleteAccordion(editor, blockId);
+```
+
+## Block operations
+
+You can also use the generic Blocks API:
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+// Insert (use AccordionCommands.insertAccordion for correct initial structure)
+Blocks.insertBlock(editor, 'Accordion', { blockData: { ... } });
+
+// Delete
+Blocks.deleteBlock(editor, { blockId });
+
+// Update block meta (e.g. align, depth)
+Blocks.updateBlock(editor, { blockId, meta: { align: 'center' } });
+```
+
+## Element operations
+
+To toggle an item's expanded state or add/remove items, use the Elements API:
+
+```typescript
+import { Elements } from '@yoopta/editor';
+
+// Toggle expanded state of an accordion item
+Elements.updateElement(editor, {
+  blockId,
+  type: 'accordion-list-item',
+  props: { isExpanded: !currentExpanded },
+  path: listItemPath,
+});
+
+// Insert new accordion item
+Elements.insertElement(editor, {
+  blockId,
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  at: 'next',
+  focus: true,
+});
+
+// Delete accordion item
+Elements.deleteElement(editor, {
+  blockId,
+  type: 'accordion-list-item',
+  path: listItemPath,
+});
+```
+
+## Keyboard behavior
+
+- **Enter** in heading: toggles the item's expanded state
+- **Enter** in content: inserts a new accordion item after the current one
+- **Backspace** in empty heading: removes the item (or deletes the block if it's the only item)
+- **Backspace** in empty content (when focus is in content): prevented so structure is preserved
+
+## Theme (Shadcn)
+
+The `@yoopta/themes-shadcn` package provides styled accordion elements. Apply the theme so the Accordion block uses Shadcn UI:
+
+```jsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+import Accordion from '@yoopta/accordion';
+
+const plugins = applyTheme([Accordion]);
+```
+
+The Shadcn accordion theme maps:
+
+- `accordion-list` → `AccordionList`
+- `accordion-list-item` → `AccordionListItem` (uses `element.props.isExpanded` for `data-state`)
+- `accordion-list-item-heading` → `AccordionItemHeading`
+- `accordion-list-item-content` → `AccordionItemContent`
+
+## Parsers
+
+### HTML
+
+- **Deserialize**: `<details>` with `<summary>` and `<p>` children
+- **Serialize**: Accordion block → `<div>` containing `<details>` / `<summary>` / `<p>`; block meta `align` and `depth` are stored in `data-meta-align` and `data-meta-depth` on each `<details>`
+
+### Email
+
+- **Serialize**: Table-based layout for compatibility with email clients; headings and content in table rows with inline styles.
+
+## Related
+
+- [Tabs](/plugins/tabs) — Tabbed content
+- [Steps](/plugins/steps) — Step-by-step instructions
+- [Blockquote](/plugins/blockquote) — Quote blocks

@@ -58,7 +58,9 @@ Yoopta Editor is organized into several package categories:
 ### Core Packages
 
 #### `@yoopta/editor`
+
 The core headless editor package. Contains all the logic for:
+
 - Block management
 - Element tree structures
 - Slate.js integration (one Slate editor per block)
@@ -67,19 +69,23 @@ The core headless editor package. Contains all the logic for:
 - Parsers (HTML, Markdown, Email, Plain Text)
 
 **Installation:**
+
 ```bash
 npm install @yoopta/editor slate slate-react slate-dom
 ```
 
 #### `@yoopta/ui`
+
 Reusable UI components for editor tools. These are unstyled and can be customized.
 
 **Installation:**
+
 ```bash
 npm install @yoopta/ui
 ```
 
 **Available Components:**
+
 - `Toolbar` - Text formatting toolbar
 - `ActionMenuList` - Block insertion menu
 - `SlashCommandMenu` - Inline slash command menu
@@ -93,6 +99,7 @@ npm install @yoopta/ui
 Plugins define block types and their behavior. Each plugin represents a type of content block.
 
 #### Text Plugins
+
 ```bash
 npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
 ```
@@ -102,6 +109,7 @@ npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote
 - **`@yoopta/blockquote`** - Blockquote block
 
 #### List Plugins
+
 ```bash
 npm install @yoopta/lists
 ```
@@ -109,6 +117,7 @@ npm install @yoopta/lists
 - **`@yoopta/lists`** - Bulleted lists, numbered lists, todo lists
 
 #### Media Plugins
+
 ```bash
 npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
 ```
@@ -119,6 +128,7 @@ npm install @yoopta/image @yoopta/video @yoopta/file @yoopta/embed
 - **`@yoopta/embed`** - Generic embed block (YouTube, Twitter, etc.)
 
 #### Layout Plugins
+
 ```bash
 npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout @yoopta/tabs @yoopta/steps @yoopta/carousel
 ```
@@ -132,6 +142,7 @@ npm install @yoopta/table @yoopta/accordion @yoopta/divider @yoopta/callout @yoo
 - **`@yoopta/carousel`** - Image carousel block
 
 #### Code Plugin
+
 ```bash
 npm install @yoopta/code
 ```
@@ -139,6 +150,7 @@ npm install @yoopta/code
 - **`@yoopta/code`** - Code block with syntax highlighting
 
 #### Link Plugin
+
 ```bash
 npm install @yoopta/link
 ```
@@ -150,11 +162,13 @@ npm install @yoopta/link
 The `@yoopta/ui` package provides all UI components for editor interactions. No separate tool packages needed.
 
 **Installation:**
+
 ```bash
 npm install @yoopta/ui
 ```
 
 **Available Components:**
+
 - **`Toolbar`** - Text formatting toolbar
 - **`ActionMenuList`** - Block insertion menu (slash command menu)
 - **`SlashCommandMenu`** - Inline slash command menu
@@ -172,6 +186,7 @@ npm install @yoopta/marks
 ```
 
 **Available Marks:**
+
 - `Bold`, `Italic`, `Underline`, `Strike`
 - `Code` - Inline code formatting
 - `Highlight` - Text highlighting with colors and gradients
@@ -179,6 +194,7 @@ npm install @yoopta/marks
 ### Theme Packages
 
 #### `@yoopta/themes-shadcn`
+
 Pre-styled components using Shadcn UI design system. Production ready.
 
 ```bash
@@ -186,6 +202,7 @@ npm install @yoopta/themes-shadcn
 ```
 
 **Usage:**
+
 ```jsx
 import { applyTheme } from '@yoopta/themes-shadcn';
 import Paragraph from '@yoopta/paragraph';
@@ -200,6 +217,7 @@ const plugins = applyTheme([
 ```
 
 #### `@yoopta/themes-material`
+
 Material Design styled components (in development, coming soon).
 
 ```bash
@@ -209,6 +227,7 @@ npm install @yoopta/themes-material
 ### Utility Packages
 
 #### `@yoopta/exports`
+
 Export editor content to various formats:
 
 ```bash
@@ -216,6 +235,7 @@ npm install @yoopta/exports
 ```
 
 **Supported Formats:**
+
 - Markdown
 - HTML
 - Plain Text
@@ -252,12 +272,12 @@ A block in Yoopta Editor consists of:
 
 ```typescript
 type YooptaBlockData = {
-  id: string;              // Unique block identifier
-  type: string;            // Plugin type (e.g., 'Paragraph', 'Heading')
-  value: SlateElement[];  // Slate document structure
+  id: string; // Unique block identifier
+  type: string; // Plugin type (e.g., 'Paragraph', 'Heading')
+  value: SlateElement[]; // Slate document structure
   meta: {
-    order: number;        // Display order
-    depth: number;        // Nesting depth
+    order: number; // Display order
+    depth: number; // Nesting depth
     align?: 'left' | 'center' | 'right';
   };
 };
@@ -272,6 +292,7 @@ Each block contains a tree of elements. Elements can be:
 - **Leaf Elements** - Elements that contain only text nodes
 
 **Example - Table Block Structure:**
+
 ```
 table (root)
   └── table-row
@@ -281,6 +302,7 @@ table (root)
 ```
 
 **Example - Steps Block Structure:**
+
 ```
 step-container (root)
   ├── step-list
@@ -340,12 +362,13 @@ type YooptaContentValue = Record<string, YooptaBlockData>;
 The `injectElementsFromPlugins` property allows elements from one plugin to be inserted inside elements of another plugin. This enables nested content structures.
 
 **Example - Callout with nested content:**
+
 ```jsx
 const Callout = new YooptaPlugin({
   type: 'Callout',
   elements: (
     <callout render={CalloutRender}>
-      <callout-content 
+      <callout-content
         render={CalloutContentRender}
         injectElementsFromPlugins={['Paragraph', 'Heading', 'List']}
       />
@@ -357,12 +380,14 @@ const Callout = new YooptaPlugin({
 When a user is inside a `callout-content` element, the slash command menu will only show blocks from the allowed plugins (`Paragraph`, `Heading`, `List`).
 
 **Use Cases:**
+
 - **Callout blocks** - Allow paragraphs, lists, and headings inside
 - **Table cells** - Allow any block type inside cells
 - **Steps content** - Allow nested content in step items
 - **Accordion items** - Allow nested blocks inside accordion content
 
 **How it works:**
+
 1. When the cursor is inside an element with `injectElementsFromPlugins`
 2. The slash command menu filters available blocks to only those specified
 3. Inserted blocks become children of that element
@@ -373,6 +398,7 @@ When a user is inside a `callout-content` element, the slash command menu will o
 ### Plugin Structure
 
 A plugin defines:
+
 - **Type** - Unique identifier (e.g., 'Paragraph', 'Table')
 - **Elements** - Element tree structure with render functions
 - **Commands** - Custom operations for the plugin
@@ -382,12 +408,11 @@ A plugin defines:
 - **Extensions** - Slate.js editor extensions
 
 **Example Plugin:**
+
 ```typescript
 const Paragraph = new YooptaPlugin({
   type: 'Paragraph',
-  elements: (
-    <paragraph render={ParagraphRender} />
-  ),
+  elements: <paragraph render={ParagraphRender} />,
   commands: ParagraphCommands,
   options: {
     display: {
@@ -404,12 +429,12 @@ Elements define the structure and rendering:
 
 ```typescript
 <element-type
-  render={Component}              // React component to render
-  props={defaultProps}            // Default element properties
-  asRoot={true}                   // Mark as root element
-  children={['child-type']}        // Allowed child element types
-  injectElementsFromPlugins={[]}  // Allowed plugins for nested content
-  placeholder="Type something..."  // Placeholder text
+  render={Component} // React component to render
+  props={defaultProps} // Default element properties
+  asRoot={true} // Mark as root element
+  children={['child-type']} // Allowed child element types
+  injectElementsFromPlugins={[]} // Allowed plugins for nested content
+  placeholder="Type something..." // Placeholder text
 />
 ```
 
@@ -417,7 +442,8 @@ Elements define the structure and rendering:
 
 <CardGroup cols={2}>
   <Card title="Headless Architecture" icon="puzzle-piece">
-    Complete separation of logic and UI. Use the core editor with your own components or choose from pre-built themes.
+    Complete separation of logic and UI. Use the core editor with your own components or choose from
+    pre-built themes.
   </Card>
   <Card title="Slate Per Block" icon="layers">
     Each block has its own Slate.js editor instance for better performance and isolation.
@@ -451,19 +477,22 @@ Elements define the structure and rendering:
     or apply ready-made themes.
   </Accordion>
 
-  <Accordion title="🚀 Production Ready">
-    Handles large documents efficiently with automatic lazy loading for media components and
-    optimized performance. Each block is isolated with its own Slate editor.
-  </Accordion>
+{' '}
+<Accordion title="🚀 Production Ready">
+  Handles large documents efficiently with automatic lazy loading for media components and optimized
+  performance. Each block is isolated with its own Slate editor.
+</Accordion>
 
-  <Accordion title="💪 Developer Experience">
-    Built with TypeScript, providing excellent type safety and IDE support. Clear API and
-    comprehensive documentation. Headless architecture gives you full control.
-  </Accordion>
+{' '}
+<Accordion title="💪 Developer Experience">
+  Built with TypeScript, providing excellent type safety and IDE support. Clear API and
+  comprehensive documentation. Headless architecture gives you full control.
+</Accordion>
 
-  <Accordion title="🌐 Open Source">
-    Free and open source with MIT license. Active community and regular updates.
-  </Accordion>
+{' '}
+<Accordion title="🌐 Open Source">
+  Free and open source with MIT license. Active community and regular updates.
+</Accordion>
 
   <Accordion title="📦 Modular Architecture">
     Install only what you need. Core editor, UI components, plugins, and themes are separate packages.
@@ -474,23 +503,22 @@ Elements define the structure and rendering:
 ## Quick Example
 
 ```jsx
-import { useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
+import { Bold, Italic } from '@yoopta/marks';
 import { applyTheme } from '@yoopta/themes-shadcn';
 
 const plugins = applyTheme([Paragraph]);
+const marks = [Bold, Italic];
 
 export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
     <YooptaEditor
       editor={editor}
-      plugins={plugins}
-      value={value}
-      onChange={setValue}
+      onChange={(value) => console.log(value)}
       placeholder="Type something..."
     />
   );
