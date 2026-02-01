@@ -2,10 +2,6 @@ export type SlashCommandSeparatorProps = {
   className?: string;
 };
 
-// ============================================================================
-// COMPONENT
-// ============================================================================
-
 export const SlashCommandSeparator = ({ className }: SlashCommandSeparatorProps) => (
   <div
     role="separator"

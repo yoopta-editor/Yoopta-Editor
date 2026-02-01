@@ -34,10 +34,6 @@ function getMentionEditor(editor: YooEditor): MentionYooEditor {
   return editor as MentionYooEditor;
 }
 
-// ============================================================================
-// OPTION TYPES
-// ============================================================================
-
 type MentionElementOptions<TMeta = Record<string, unknown>> = {
   props: Omit<MentionElementProps<TMeta>, 'nodeType'>;
 };
@@ -56,10 +52,6 @@ type UpdateMentionOptions = {
   blockId?: string;
   at?: YooptaPathIndex;
 };
-
-// ============================================================================
-// COMMANDS TYPE
-// ============================================================================
 
 export type MentionCommandsType<TMeta = Record<string, unknown>> = {
   // Build
@@ -123,10 +115,6 @@ export type MentionCommandsType<TMeta = Record<string, unknown>> = {
   getTriggers: (editor: YooEditor) => MentionTrigger[];
   getTriggerByChar: (editor: YooEditor, char: string) => MentionTrigger | undefined;
 };
-
-// ============================================================================
-// COMMANDS IMPLEMENTATION
-// ============================================================================
 
 export const MentionCommands: MentionCommandsType = {
   buildMentionElement: (_editor, options) => {

@@ -1,9 +1,5 @@
 import type { EmbedAspectRatio, EmbedProvider, EmbedProviderType, ProviderConfig } from '../types';
 
-// ============================================================================
-// Provider Configurations
-// ============================================================================
-
 export const PROVIDER_CONFIGS: ProviderConfig[] = [
   // YouTube
   {
@@ -228,13 +224,6 @@ export const PROVIDER_CONFIGS: ProviderConfig[] = [
   },
 ];
 
-// ============================================================================
-// Provider Detection & Parsing
-// ============================================================================
-
-/**
- * Get provider config by type
- */
 export function getProviderConfig(type: EmbedProviderType): ProviderConfig | undefined {
   return PROVIDER_CONFIGS.find((config) => config.type === type);
 }
@@ -343,11 +332,6 @@ export function getSupportedProviders(): { type: EmbedProviderType; name: string
     name: config.name,
   }));
 }
-
-// ============================================================================
-// Legacy exports (for backward compatibility)
-// ============================================================================
-
 export const getProvider = detectProvider;
 
 export const ProviderGetters: Record<EmbedProviderType, (url: string) => string | null> =

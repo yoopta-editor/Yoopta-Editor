@@ -1,9 +1,5 @@
 import { type SlateElement } from '@yoopta/editor';
 
-// ============================================================================
-// VIDEO ELEMENT TYPES
-// ============================================================================
-
 export type VideoSizes = {
   width: number | string;
   height: number | string;
@@ -52,10 +48,6 @@ export type VideoElementMap = {
   video: VideoElement;
 };
 
-// ============================================================================
-// UPLOAD/DELETE TYPES
-// ============================================================================
-
 // Upload response from server/custom function
 export type VideoUploadResponse = {
   id?: string;
@@ -101,10 +93,6 @@ export type VideoUploadState = {
   result: VideoUploadResult | null;
 };
 
-// ============================================================================
-// CUSTOM FUNCTION TYPES
-// ============================================================================
-
 // Custom function type for direct video uploads (Cloudinary, S3, Firebase, Mux, etc.)
 export type VideoUploadFn = (
   file: File,
@@ -119,10 +107,6 @@ export type VideoPosterUploadFn = (
   file: File,
   onProgress?: (progress: VideoUploadProgress) => void,
 ) => Promise<string>;
-
-// ============================================================================
-// ENDPOINT-BASED TYPES
-// ============================================================================
 
 // Endpoint-based upload options (for backend API)
 export type VideoUploadEndpointOptions = {
@@ -161,10 +145,6 @@ export type VideoPosterUploadEndpointOptions = {
   onError?: (error: VideoUploadError) => void;
 };
 
-// ============================================================================
-// UNION TYPES FOR OPTIONS
-// ============================================================================
-
 // Upload options: endpoint-based OR custom function
 export type VideoUploadOptions = VideoUploadEndpointOptions | VideoUploadFn;
 
@@ -173,10 +153,6 @@ export type VideoDeleteOptions = VideoDeleteEndpointOptions | VideoDeleteFn;
 
 // Poster upload options: endpoint-based OR custom function
 export type VideoPosterUploadOptions = VideoPosterUploadEndpointOptions | VideoPosterUploadFn;
-
-// ============================================================================
-// HOOK RETURN TYPES
-// ============================================================================
 
 export type UseVideoUploadReturn = {
   upload: (file: File) => Promise<VideoUploadResult>;
@@ -196,20 +172,12 @@ export type UseVideoPosterUploadReturn = {
   reset: () => void;
 } & VideoUploadState;
 
-// ============================================================================
-// PREVIEW TYPES
-// ============================================================================
-
 export type VideoUploadPreview = {
   url: string;
   width?: number;
   height?: number;
   duration?: number;
 };
-
-// ============================================================================
-// PROVIDER TYPES
-// ============================================================================
 
 export type ParsedVideoUrl = {
   provider: VideoProviderTypes;
@@ -228,10 +196,6 @@ export type VideoProviderConfig = {
   getThumbnailUrl?: (id: string) => string;
 };
 
-// ============================================================================
-// PLUGIN OPTIONS
-// ============================================================================
-
 export type VideoPluginOptions = {
   upload?: VideoUploadOptions;
   delete?: VideoDeleteOptions;
@@ -248,10 +212,6 @@ export type VideoPluginOptions = {
   // Allowed providers (if not set, all providers are allowed)
   allowedProviders?: VideoProviderTypes[];
 };
-
-// ============================================================================
-// XHR REQUEST OPTIONS (internal)
-// ============================================================================
 
 export type XHRRequestOptions = {
   endpoint: string;

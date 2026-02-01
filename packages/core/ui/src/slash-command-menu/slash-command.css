@@ -104,10 +104,6 @@
   user-select: none;
 }
 
-/* ============================================================================
-   LIST
-   ============================================================================ */
-
 .slash-command-list {
   flex: 1;
   overflow-y: auto;
@@ -136,10 +132,6 @@
   background-color: var(--slash-command-text-muted);
 }
 
-/* ============================================================================
-   GROUP
-   ============================================================================ */
-
 .slash-command-group {
   margin-bottom: 8px;
 }
@@ -157,10 +149,6 @@
   letter-spacing: 0.05em;
   user-select: none;
 }
-
-/* ============================================================================
-   ITEM
-   ============================================================================ */
 
 .slash-command-item {
   display: flex;
@@ -194,7 +182,6 @@
   pointer-events: none;
 }
 
-/* Item Icon */
 .slash-command-item-icon {
   display: flex;
   align-items: center;
@@ -219,7 +206,6 @@
   height: 20px;
 }
 
-/* Item Content */
 .slash-command-item-content {
   flex: 1;
   min-width: 0;
@@ -245,17 +231,12 @@
   margin-top: 1px;
 }
 
-/* Item Shortcut */
 .slash-command-item-shortcut {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
 }
-
-/* ============================================================================
-   EMPTY STATE
-   ============================================================================ */
 
 .slash-command-empty {
   display: flex;
@@ -273,19 +254,11 @@
   opacity: 0.5;
 }
 
-/* ============================================================================
-   SEPARATOR
-   ============================================================================ */
-
 .slash-command-separator {
   height: 1px;
   margin: 8px 12px;
   background-color: var(--slash-command-border);
 }
-
-/* ============================================================================
-   FOOTER
-   ============================================================================ */
 
 .slash-command-footer {
   display: flex;
@@ -304,10 +277,6 @@
   font-size: 11px;
   color: var(--slash-command-text-muted);
 }
-
-/* ============================================================================
-   LOADING STATE
-   ============================================================================ */
 
 .slash-command-loading {
   display: flex;

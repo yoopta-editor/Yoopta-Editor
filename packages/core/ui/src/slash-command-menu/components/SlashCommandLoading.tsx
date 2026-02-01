@@ -5,10 +5,6 @@ export type SlashCommandLoadingProps = {
   className?: string;
 };
 
-// ============================================================================
-// COMPONENT
-// ============================================================================
-
 export const SlashCommandLoading = ({ children, className }: SlashCommandLoadingProps) => (
   <div className={`slash-command-loading ${className || ''}`}>
     {children || <div className="slash-command-spinner" />}

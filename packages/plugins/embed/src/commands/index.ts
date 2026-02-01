@@ -8,16 +8,12 @@ import type {
   EmbedProviderMeta,
   EmbedSizes,
 } from '../types';
+import { extractProviderMeta, fetchOEmbed } from '../utils/oembed';
 import {
   calculateEmbedDimensions,
   isEmbedUrl,
   parseEmbedUrl,
 } from '../utils/providers';
-import { extractProviderMeta, fetchOEmbed } from '../utils/oembed';
-
-// ============================================================================
-// Types
-// ============================================================================
 
 type EmbedElementOptions = {
   props?: Partial<EmbedElementProps>;
@@ -43,10 +39,6 @@ type UpdateEmbedUrlOptions = {
   maxWidth?: number;
 };
 
-// ============================================================================
-// Commands Type
-// ============================================================================
-
 export type EmbedCommandsType = {
   buildEmbedElements: (editor: YooEditor, options?: Partial<EmbedElementOptions>) => EmbedElement;
   insertEmbed: (editor: YooEditor, options?: Partial<InsertEmbedOptions>) => void;
@@ -59,14 +51,7 @@ export type EmbedCommandsType = {
   parseUrl: (editor: YooEditor, url: string) => EmbedProvider | null;
 };
 
-// ============================================================================
-// Commands Implementation
-// ============================================================================
-
 export const EmbedCommands: EmbedCommandsType = {
-  /**
-   * Build embed element with default or custom props
-   */
   buildEmbedElements: (editor: YooEditor, options = {}): EmbedElement => {
     const defaultSizes = { width: 650, height: 400 };
 
@@ -84,9 +69,6 @@ export const EmbedCommands: EmbedCommandsType = {
     };
   },
 
-  /**
-   * Insert embed block with optional props
-   */
   insertEmbed: (editor: YooEditor, options = {}): void => {
     const { at, focus, props } = options;
     const embed = EmbedCommands.buildEmbedElements(editor, { props });
@@ -100,26 +82,20 @@ export const EmbedCommands: EmbedCommandsType = {
     Blocks.insertBlock(editor, block.type, { focus, at, blockData: block });
   },
 
-  /**
-   * Insert embed from URL with automatic provider detection
-   */
   insertEmbedFromUrl: async (
     editor: YooEditor,
     options: InsertEmbedFromUrlOptions,
   ): Promise<string | null> => {
     const { url, at, focus, fetchMeta = false, maxWidth = 650 } = options;
 
-    // Parse the URL
     const provider = parseEmbedUrl(url);
     if (!provider) {
       console.warn('[Embed] Could not parse URL:', url);
       return null;
     }
 
-    // Calculate dimensions based on provider aspect ratio
     const sizes = calculateEmbedDimensions(provider.type, maxWidth);
 
-    // Optionally fetch oEmbed metadata
     let meta: EmbedProviderMeta | undefined;
     if (fetchMeta) {
       try {
@@ -213,14 +189,10 @@ export const EmbedCommands: EmbedCommandsType = {
   /**
    * Check if URL is a valid embed URL
    */
-  isValidEmbedUrl: (_editor: YooEditor, url: string): boolean => {
-    return isEmbedUrl(url);
-  },
+  isValidEmbedUrl: (_editor: YooEditor, url: string): boolean => isEmbedUrl(url),
 
   /**
    * Parse URL and return provider info (utility)
    */
-  parseUrl: (_editor: YooEditor, url: string): EmbedProvider | null => {
-    return parseEmbedUrl(url);
-  },
+  parseUrl: (_editor: YooEditor, url: string): EmbedProvider | null => parseEmbedUrl(url),
 };

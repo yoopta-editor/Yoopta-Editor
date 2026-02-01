@@ -2,20 +2,12 @@ import { forwardRef } from 'react';
 
 import { useSlashCommandContext } from '../context/SlashCommandContext';
 
-// ============================================================================
-// TYPES
-// ============================================================================
-
 export type SlashCommandInputProps = {
   placeholder?: string;
   className?: string;
   showTrigger?: boolean;
   showEscHint?: boolean;
 };
-
-// ============================================================================
-// COMPONENT
-// ============================================================================
 
 export const SlashCommandInput = forwardRef<HTMLInputElement, SlashCommandInputProps>(
   (

@@ -1,9 +1,5 @@
 import { type SlateElement } from '@yoopta/editor';
 
-// ============================================================================
-// FILE ELEMENT TYPES
-// ============================================================================
-
 export type FileElementProps = {
   id?: string | null;
   src: string | null;
@@ -18,10 +14,6 @@ export type FileElement = SlateElement<'file', FileElementProps>;
 export type FileElementMap = {
   file: FileElement;
 };
-
-// ============================================================================
-// UPLOAD/DELETE TYPES
-// ============================================================================
 
 // Upload response from server/custom function
 export type FileUploadResponse = {
@@ -64,10 +56,6 @@ export type FileUploadState = {
   result: FileUploadResult | null;
 };
 
-// ============================================================================
-// CUSTOM FUNCTION TYPES
-// ============================================================================
-
 // Custom function type for direct file uploads (S3, Firebase, Cloudinary, etc.)
 export type FileUploadFn = (
   file: File,
@@ -76,10 +64,6 @@ export type FileUploadFn = (
 
 // Custom function type for direct file deletes
 export type FileDeleteFn = (element: FileElement) => Promise<unknown>;
-
-// ============================================================================
-// ENDPOINT-BASED TYPES
-// ============================================================================
 
 // Endpoint-based upload options (for backend API)
 export type FileUploadEndpointOptions = {
@@ -105,19 +89,11 @@ export type FileDeleteEndpointOptions = {
   onError?: (error: FileUploadError) => void;
 };
 
-// ============================================================================
-// UNION TYPES FOR OPTIONS
-// ============================================================================
-
 // Upload options: endpoint-based OR custom function
 export type FileUploadOptions = FileUploadEndpointOptions | FileUploadFn;
 
 // Delete options: endpoint-based OR custom function
 export type FileDeleteOptions = FileDeleteEndpointOptions | FileDeleteFn;
-
-// ============================================================================
-// HOOK RETURN TYPES
-// ============================================================================
 
 export type UseFileUploadReturn = {
   upload: (file: File) => Promise<FileUploadResult>;
@@ -130,10 +106,6 @@ export type UseFileDeleteReturn = {
   cancel: () => void;
   reset: () => void;
 } & FileUploadState;
-
-// ============================================================================
-// FILE TYPE/ICON TYPES
-// ============================================================================
 
 export type FileType =
   | 'pdf'
@@ -155,10 +127,6 @@ export type FileTypeConfig = {
   label: string;
 };
 
-// ============================================================================
-// PLUGIN OPTIONS
-// ============================================================================
-
 export type FilePluginOptions = {
   upload?: FileUploadOptions;
   delete?: FileDeleteOptions;
@@ -166,10 +134,6 @@ export type FilePluginOptions = {
   accept?: string;
   maxFileSize?: number;
 };
-
-// ============================================================================
-// XHR REQUEST OPTIONS (internal)
-// ============================================================================
 
 export type XHRRequestOptions = {
   endpoint: string;

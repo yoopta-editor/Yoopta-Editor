@@ -1,9 +1,5 @@
 import type { ParsedVideoUrl, VideoProvider, VideoProviderConfig, VideoProviderTypes } from '../types';
 
-// ============================================================================
-// PROVIDER ID EXTRACTORS
-// ============================================================================
-
 export const getYoutubeId = (url: string): string | null => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
   const match = url.match(regExp);
@@ -72,10 +68,6 @@ export const getLoomId = (url: string): string | null => {
   }
 };
 
-// ============================================================================
-// PROVIDER DETECTION
-// ============================================================================
-
 export function getProvider(url: string): VideoProviderTypes | null {
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     return 'youtube';
@@ -104,10 +96,6 @@ export const ProviderGetters: Record<string, (url: string) => string | null> = {
   wistia: getWistiaId,
 };
 
-// ============================================================================
-// EMBED URL GENERATORS
-// ============================================================================
-
 export const getYoutubeEmbedUrl = (id: string): string => `https://www.youtube.com/embed/${id}`;
 
 export const getVimeoEmbedUrl = (id: string): string => `https://player.vimeo.com/video/${id}`;
@@ -131,10 +119,6 @@ export const getEmbedUrl = (provider: VideoProviderTypes, id: string): string | 
   const getter = ProviderEmbedUrlGetters[provider];
   return getter ? getter(id) : null;
 };
-
-// ============================================================================
-// THUMBNAIL URL GENERATORS
-// ============================================================================
 
 export const getYoutubeThumbnailUrl = (id: string, quality: 'default' | 'hq' | 'mq' | 'sd' | 'maxres' = 'hq'): string => {
   const qualityMap = {
@@ -175,10 +159,6 @@ export const getThumbnailUrl = (provider: VideoProviderTypes, id: string): strin
   const getter = ProviderThumbnailGetters[provider];
   return getter ? getter(id) : null;
 };
-
-// ============================================================================
-// PROVIDER CONFIGURATIONS
-// ============================================================================
 
 export const VIDEO_PROVIDERS: Record<string, VideoProviderConfig> = {
   youtube: {
@@ -234,10 +214,6 @@ export const VIDEO_PROVIDERS: Record<string, VideoProviderConfig> = {
     getThumbnailUrl: getWistiaThumbnailUrl,
   },
 };
-
-// ============================================================================
-// UNIFIED VIDEO URL PARSER
-// ============================================================================
 
 /**
  * Parse a video URL and extract provider information, video ID, embed URL, and thumbnail URL.

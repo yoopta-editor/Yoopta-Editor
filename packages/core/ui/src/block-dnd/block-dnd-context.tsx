@@ -12,6 +12,7 @@ import {
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Blocks } from '@yoopta/editor';
 import type { YooptaBlockData } from '@yoopta/editor';
+import { GripVertical } from 'lucide-react';
 
 import type { BlockDndContextProps, BlockDndContextValue, SortableBlockData } from './types';
 import './block-dnd.css';
@@ -197,24 +198,10 @@ export const BlockDndContext = ({
     [activeId, activeBlock, draggedIds, editor, registerSortable, unregisterSortable, getSortable],
   );
 
-  // Default drag overlay
   const defaultDragOverlay = draggedBlocks.length > 0 && (
     <div className="yoopta-block-dnd-overlay">
       <div className="yoopta-block-dnd-overlay-icon">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M6 2h4M6 8h4M6 14h4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <GripVertical size={16} />
       </div>
       <div className="yoopta-block-dnd-overlay-content">
         <span className="yoopta-block-dnd-overlay-text">

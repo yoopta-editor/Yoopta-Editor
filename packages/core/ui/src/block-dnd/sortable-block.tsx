@@ -2,12 +2,14 @@ import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useYooptaEditor } from '@yoopta/editor';
 
 import { useBlockDndContext } from './block-dnd-context';
 import type { SortableBlockProps } from './types';
 
 export const SortableBlock = ({ id, children, className, disabled = false, useDragHandle = true }: SortableBlockProps) => {
   const { draggedIds, isDragging, registerSortable, unregisterSortable } = useBlockDndContext();
+  const editor = useYooptaEditor();
 
   const {
     attributes,
@@ -20,7 +22,7 @@ export const SortableBlock = ({ id, children, className, disabled = false, useDr
     isOver,
   } = useSortable({
     id,
-    disabled,
+    disabled: disabled || editor.readOnly,
   });
 
   // Register sortable data for DragHandle
