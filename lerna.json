@@ -9,7 +9,7 @@
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "6.0.0-beta.15",
+  "version": "6.0.0-beta.16",
   "command": {
     "publish": {
       "registry": "https://registry.npmjs.org/",
