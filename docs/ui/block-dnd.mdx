@@ -34,13 +34,17 @@ The `@yoopta/ui` package includes `@dnd-kit` as a dependency.
 ## Quick Start
 
 ```tsx
-import { YooptaEditor, useYooptaEditor, type RenderBlockProps } from '@yoopta/editor';
+import { useMemo, useCallback } from 'react';
+import { createYooptaEditor, YooptaEditor, type RenderBlockProps } from '@yoopta/editor';
 import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
 
 function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
-  const renderBlock = useCallback(({ block, children, blockId }: RenderBlockProps) => (
+  const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
     <SortableBlock id={blockId} useDragHandle>
       <DragHandle blockId={blockId}>
         <GripVertical size={16} />
@@ -53,6 +57,8 @@ function MyEditor() {
     <BlockDndContext editor={editor}>
       <YooptaEditor
         editor={editor}
+        onChange={(value) => console.log(value)}
+        placeholder="Type / to open menu..."
         renderBlock={renderBlock}
       >
         {/* Other UI components */}
@@ -219,6 +225,8 @@ function Editor() {
     <BlockDndContext editor={editor}>
       <YooptaEditor
         editor={editor}
+        onChange={(value) => console.log(value)}
+        placeholder="Type / to open menu..."
         renderBlock={renderBlock}
       />
     </BlockDndContext>
@@ -235,7 +243,10 @@ import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
 import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
 
 function Editor() {
-  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
     <SortableBlock id={blockId} useDragHandle>
@@ -245,7 +256,7 @@ function Editor() {
 
   return (
     <BlockDndContext editor={editor}>
-      <YooptaEditor editor={editor} renderBlock={renderBlock}>
+      <YooptaEditor editor={editor} onChange={onChange} placeholder="Type / to open menu..." renderBlock={renderBlock}>
         <FloatingBlockActions>
           {({ blockId }) => (
             <>
@@ -273,7 +284,10 @@ When blocks are selected (via Shift+Click or SelectionBox), dragging one will mo
 
 ```tsx
 function Editor() {
-  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   const renderBlock = useCallback(({ children, blockId, block }: RenderBlockProps) => {
     // Check if this block is in the multi-selection
@@ -294,7 +308,7 @@ function Editor() {
 
   return (
     <BlockDndContext editor={editor}>
-      <YooptaEditor editor={editor} renderBlock={renderBlock}>
+      <YooptaEditor editor={editor} onChange={onChange} renderBlock={renderBlock}>
         <SelectionBox />
       </YooptaEditor>
     </BlockDndContext>
@@ -308,7 +322,10 @@ Disable DnD in read-only mode:
 
 ```tsx
 function Editor({ readOnly }) {
-  const editor = useMemo(() => createYooptaEditor({ ... }), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks, readOnly }),
+    [readOnly],
+  );
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => (
     <SortableBlock id={blockId} disabled={readOnly} useDragHandle={!readOnly}>
@@ -323,7 +340,7 @@ function Editor({ readOnly }) {
 
   return (
     <BlockDndContext editor={editor}>
-      <YooptaEditor editor={editor} readOnly={readOnly} renderBlock={renderBlock} />
+      <YooptaEditor editor={editor} onChange={onChange} renderBlock={renderBlock} />
     </BlockDndContext>
   );
 }
@@ -390,8 +407,9 @@ export type RenderBlockProps = {
 
 <YooptaEditor
   editor={editor}
-  renderBlock={({ block, children, blockId, index }: RenderBlockProps) => (
-    // Wrap each block with your custom wrapper
+  onChange={onChange}
+  placeholder="Type / to open menu..."
+  renderBlock={({ children, blockId }: RenderBlockProps) => (
     <SortableBlock id={blockId}>
       {children}
     </SortableBlock>

@@ -31,10 +31,13 @@ yarn add @yoopta/ui
 ## Basic Usage
 
 ```tsx
+import { useState, useRef } from 'react';
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
+import { BlockOptions } from '@yoopta/ui/block-options';
 import { Blocks, useYooptaEditor } from '@yoopta/editor';
 import { PlusIcon, DragHandleDots2Icon } from '@radix-ui/react-icons';
 
+// Use as child of YooptaEditor so useYooptaEditor() works
 function MyFloatingBlockActions() {
   const editor = useYooptaEditor();
   const [blockOptionsOpen, setBlockOptionsOpen] = useState(false);

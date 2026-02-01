@@ -20,7 +20,11 @@ export const YooptaFloatingBlockActions = () => {
     editor.insertBlock('Paragraph', { at: nextOrder, focus: true });
   };
 
-  const onDragClick = () => {
+  const onDragClick = (blockId: string | null) => {
+    if (!blockId) return;
+    const block = Blocks.getBlock(editor, { id: blockId });
+    if (!block) return;
+    editor.setPath({ current: block.meta.order });
     setBlockOptionsOpen(true);
   };
 
@@ -36,7 +40,7 @@ export const YooptaFloatingBlockActions = () => {
             <PlusIcon />
           </FloatingBlockActions.Button>
           <DragHandle blockId={blockId} ref={dragHandleRef} asChild>
-            <FloatingBlockActions.Button onClick={onDragClick} title="Drag to reorder">
+            <FloatingBlockActions.Button onClick={() => onDragClick(blockId)} title="Drag to reorder">
               <GripVertical />
             </FloatingBlockActions.Button>
           </DragHandle>

@@ -29,15 +29,22 @@ import { SelectionBox } from '@yoopta/ui/selection-box';
 // Or full import
 // import { SelectionBox } from '@yoopta/ui';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 
 function App() {
   const selectionBoxRef = useRef<HTMLDivElement>(null);
-  const editor = useMemo(() => createYooptaEditor(), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   return (
     <div ref={selectionBoxRef}>
-      <YooptaEditor editor={editor} plugins={plugins}>
+      <YooptaEditor
+        editor={editor}
+        onChange={(value) => console.log(value)}
+        placeholder="Type / to open menu..."
+      >
         <SelectionBox selectionBoxElement={selectionBoxRef} />
       </YooptaEditor>
     </div>
@@ -160,11 +167,18 @@ import { SelectionBox } from '@yoopta/ui/selection-box';
 
 function EditorWithSelection() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const editor = useMemo(() => createYooptaEditor(), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   return (
     <div ref={containerRef} className="min-h-screen">
-      <YooptaEditor editor={editor} plugins={plugins}>
+      <YooptaEditor
+        editor={editor}
+        onChange={(value) => console.log(value)}
+        placeholder="Type / to open menu..."
+      >
         <SelectionBox selectionBoxElement={containerRef} />
       </YooptaEditor>
     </div>
@@ -179,7 +193,10 @@ For full-page selection support, pass a ref to the outermost container:
 ```tsx
 function FullPageEditor() {
   const pageRef = useRef<HTMLDivElement>(null);
-  const editor = useMemo(() => createYooptaEditor(), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   return (
     <div ref={pageRef} className="min-h-screen p-8">
@@ -188,7 +205,11 @@ function FullPageEditor() {
       </header>
 
       <main>
-        <YooptaEditor editor={editor} plugins={plugins}>
+        <YooptaEditor
+          editor={editor}
+          onChange={(value) => console.log(value)}
+          placeholder="Type / to open menu..."
+        >
           <SelectionBox selectionBoxElement={pageRef} />
         </YooptaEditor>
       </main>
@@ -203,10 +224,17 @@ If you don't need rectangle selection, simply don't include the component:
 
 ```tsx
 function SimpleEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks }),
+    [],
+  );
 
   return (
-    <YooptaEditor editor={editor} plugins={plugins}>
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type / to open menu..."
+    >
       {/* No SelectionBox - users can still select text normally */}
     </YooptaEditor>
   );
@@ -251,7 +279,7 @@ To customize the appearance, use the `useRectangeSelectionBox` hook and build yo
 
     ```tsx
     <div ref={containerRef}>
-      <YooptaEditor>
+      <YooptaEditor editor={editor} onChange={onChange} placeholder="...">
         <SelectionBox selectionBoxElement={containerRef} />
       </YooptaEditor>
     </div>

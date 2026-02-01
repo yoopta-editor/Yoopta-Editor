@@ -72,10 +72,11 @@ function MyToolbar() {
   );
 }
 
-// In your editor
-<YooptaEditor editor={editor}>
+// In your editor: create editor with createYooptaEditor({ plugins, marks });
+// UI components as children
+<YooptaEditor editor={editor} onChange={(value) => console.log(value)} placeholder="Type / to open menu...">
   <MyToolbar />
-</YooptaEditor>;
+</YooptaEditor>
 ```
 
 ## API Reference
@@ -166,6 +167,11 @@ Visual separator between groups.
 ### With Turn Into Button
 
 ```tsx
+import { useRef, useState } from 'react';
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
+import { ActionMenuList } from '@yoopta/ui/action-menu-list';
+
 function MyToolbar() {
   const editor = useYooptaEditor();
   const turnIntoRef = useRef<HTMLButtonElement>(null);
@@ -286,8 +292,7 @@ function FormattingToolbar() {
 
   </Accordion>
 
-{' '}
-<Accordion title="Check if format exists before rendering">
+  <Accordion title="Check if format exists before rendering">
   ```tsx
   {editor.formats.bold && (
     <FloatingToolbar.Button onClick={() => Marks.toggle(editor, { type: 'bold' })}>
