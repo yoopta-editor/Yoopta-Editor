@@ -62,7 +62,15 @@ const CarouselWithImage = Carousel.extend({
 
 const MentionStub = Mention.extend({
   options: {
-    onSearch: async () => [],
+    onSearch: async (query) => {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/users?q=${query}`);
+      const data = await response.json();
+      return data.map((user: { id: string; name: string; avatar: string }) => ({
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar,
+      }));
+    },
     triggers: [{ char: '@', type: 'user' }],
   },
 });

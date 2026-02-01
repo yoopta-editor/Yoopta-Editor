@@ -10,5 +10,5 @@ type PluginPlaygroundClientProps = {
 export const PluginPlaygroundClient = ({ slug }: PluginPlaygroundClientProps) => {
   const plugins = PLUGIN_SLUG_TO_PLUGINS[slug];
   if (!plugins) return null;
-  return <PluginDemoEditor plugins={plugins} />;
+  return <PluginDemoEditor plugins={plugins} slug={slug} />;
 };

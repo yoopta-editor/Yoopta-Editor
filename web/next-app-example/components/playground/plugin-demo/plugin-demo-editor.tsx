@@ -4,9 +4,10 @@ import { useMemo } from 'react';
 import YooptaEditor, {
   createYooptaEditor,
   SlateElement,
-  YooptaPlugin,
 } from '@yoopta/editor';
 import { applyTheme } from '@yoopta/themes-shadcn';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+import { withMentions } from '@yoopta/mention';
 import { YooptaToolbar } from '@/components/playground/examples/full-setup/new-yoo-components/yoopta-toolbar';
 import { YooptaSlashCommandMenu } from '@/components/playground/examples/full-setup/new-yoo-components/yoopta-slash-command-menu';
 import { YOOPTA_MARKS } from '@/components/playground/examples/full-setup/marks';
@@ -19,16 +20,19 @@ const EDITOR_STYLES = {
 
 type PluginDemoEditorProps = {
   plugins: YooptaPluginType<Record<string, SlateElement>, unknown>[];
+  slug: string;
 };
 
-export const PluginDemoEditor = ({ plugins }: PluginDemoEditorProps) => {
-  const themedPlugins = useMemo(
-    () => applyTheme(plugins) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[],
-    [plugins],
-  );
+export const PluginDemoEditor = ({ plugins, slug }: PluginDemoEditorProps) => {
   const editor = useMemo(
-    () => createYooptaEditor({ plugins: themedPlugins, marks: YOOPTA_MARKS }),
-    [themedPlugins],
+    () => {
+      const baseEditor = createYooptaEditor({ plugins: applyTheme(plugins), marks: YOOPTA_MARKS });
+      if (slug === 'mention') {
+        return withMentions(baseEditor);
+      }
+      return baseEditor;
+    },
+    [plugins, slug],
   );
 
   const onChange = () => { };
@@ -43,6 +47,7 @@ export const PluginDemoEditor = ({ plugins }: PluginDemoEditorProps) => {
       >
         <YooptaToolbar />
         <YooptaSlashCommandMenu />
+        {slug === 'mention' && <MentionDropdown />}
       </YooptaEditor>
     </div>
   );
