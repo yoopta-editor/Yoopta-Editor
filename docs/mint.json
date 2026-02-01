@@ -60,6 +60,7 @@
       "pages": [
         "core/editor",
         "core/plugins",
+        "core/themes",
         "core/marks"
       ]
     },

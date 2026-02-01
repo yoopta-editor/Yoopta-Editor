@@ -6,7 +6,7 @@ import { Heart, Github, Coffee } from "lucide-react";
 
 export function Supporters() {
   return (
-    <section id="supporters" className="relative py-24 sm:py-32">
+    <section id="supporters" className="relative py-12 sm:py-16">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">

@@ -63,7 +63,7 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="relative py-24 sm:py-32">
+    <section id="faq" className="relative py-12 sm:py-16">
       {/* Background */}
       <div className="absolute inset-0 bg-neutral-50 dark:bg-neutral-900/50" />
 

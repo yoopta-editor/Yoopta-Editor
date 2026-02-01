@@ -1,0 +1,147 @@
+---
+title: Themes
+description: Headless plugins and theme packages for styled block UI
+---
+
+## Overview
+
+The editor and all plugins are **headless** by default: they define structure and behavior but do not ship UI for how block elements look. You can keep them headless (e.g. for custom design) or attach styled UI from a **theme package**.
+
+Available themes:
+
+- **`@yoopta/themes-shadcn`** — Shadcn UI styled components (production ready)
+- **`@yoopta/themes-material`** — Material Design styled components (in progress)
+
+Themes provide UI components for plugin elements (e.g. Callout, Code, Image). You can either apply a theme to **all** plugins at once with `applyTheme()`, or attach theme UI to **individual** plugins via `plugin.extend({ elements: ThemeUI })`.
+
+---
+
+## Concept: headless + optional UI
+
+Plugins define their block type, elements, and behavior; they do not require any specific look. Theme packages export:
+
+1. **Per-plugin UI objects** — e.g. `CalloutUI` from `@yoopta/themes-shadcn/callout`, which you pass into `Callout.extend({ elements: CalloutUI })`.
+2. **`applyTheme(plugins)`** — a helper that applies the theme’s UI to every supported plugin in the array in one go.
+
+So you can:
+
+- Use plugins as-is (headless) and render elements yourself.
+- Use theme UI for a single plugin: `Callout.extend({ elements: CalloutUI })`.
+- Use theme UI for all plugins: `applyTheme([Paragraph, Callout, ...])`.
+
+---
+
+## Apply theme to all plugins
+
+Use `applyTheme()` from a theme package to wrap your plugin list; the theme will attach its styled elements to every plugin it supports.
+
+```bash
+npm install @yoopta/themes-shadcn
+```
+
+```tsx
+import { createYooptaEditor } from '@yoopta/editor';
+import { applyTheme } from '@yoopta/themes-shadcn';
+import Paragraph from '@yoopta/paragraph';
+import Callout from '@yoopta/callout';
+import Headings from '@yoopta/headings';
+
+const plugins = applyTheme([
+  Paragraph,
+  Callout,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+]);
+
+const editor = createYooptaEditor({ plugins, marks: [] });
+```
+
+Then pass `plugins` (the result of `applyTheme`) into `createYooptaEditor`. The theme’s CSS is applied by the package; you don’t pass plugins or marks to `<YooptaEditor>`.
+
+---
+
+## Apply theme UI to a single plugin
+
+If you only want themed UI for specific plugins, import the theme’s UI object for that plugin and extend the plugin with `elements`.
+
+**Example: Callout with Shadcn UI**
+
+```tsx
+import Callout from '@yoopta/callout';
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
+
+const CalloutWithUI = Callout.extend({
+  elements: CalloutUI,
+});
+```
+
+Use `CalloutWithUI` in your plugins array; other plugins can stay headless or use other themes.
+
+Subpaths are available per plugin, for example:
+
+- `@yoopta/themes-shadcn/callout` → `CalloutUI`
+- `@yoopta/themes-shadcn/paragraph` → `ParagraphUI`
+- `@yoopta/themes-shadcn/embed` → `EmbedUI`
+- …and other plugins supported by the theme
+
+---
+
+## @yoopta/themes-shadcn
+
+Production-ready theme based on [Shadcn UI](https://ui.shadcn.com/). It provides styled elements for paragraph, headings, lists, blockquote, callout, code, image, video, embed, file, table, tabs, steps, accordion, carousel, divider, link, mention, and table-of-contents.
+
+**Install**
+
+```bash
+npm install @yoopta/themes-shadcn
+```
+
+**Apply to all plugins**
+
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+
+const plugins = applyTheme([
+  Paragraph,
+  Headings.HeadingOne,
+  Callout,
+  // ...
+]);
+```
+
+**Apply to one plugin**
+
+```tsx
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
+
+Callout.extend({ elements: CalloutUI });
+```
+
+CSS is included with the package; no extra theme setup is required.
+
+---
+
+## @yoopta/themes-material
+
+Material Design styled components for Yoopta plugins. **In progress** — not all plugins may be covered yet.
+
+**Install**
+
+```bash
+npm install @yoopta/themes-material
+```
+
+**Usage** (same idea as Shadcn: `applyTheme(plugins)` or `plugin.extend({ elements: MaterialUI })` per plugin when the package exposes it).
+
+---
+
+## Summary
+
+| Approach                               | Use case                                        |
+| -------------------------------------- | ----------------------------------------------- |
+| Headless                               | Custom design; you implement all element UI.    |
+| `plugin.extend({ elements: ThemeUI })` | Use theme UI only for specific plugins.         |
+| `applyTheme(plugins)`                  | Use theme UI for all supported plugins at once. |
+
+The editor and plugins stay headless; themes only provide optional UI for their elements.

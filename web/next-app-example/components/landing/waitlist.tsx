@@ -83,7 +83,7 @@ export function Waitlist() {
   };
 
   return (
-    <section id="waitlist" className="relative py-24 sm:py-32">
+    <section id="waitlist" className="relative py-12 sm:py-16">
       {/* Background */}
       <div className="absolute inset-0 glow-center" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent dark:via-blue-500/10" />
@@ -180,10 +180,6 @@ export function Waitlist() {
                 </Button>
               </form>
             )}
-
-            <p className="text-xs text-neutral-500 dark:text-neutral-500 text-center mt-4">
-              Join 500+ developers already on the waitlist
-            </p>
           </div>
         </div>
       </div>

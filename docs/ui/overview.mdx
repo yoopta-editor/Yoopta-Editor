@@ -93,7 +93,8 @@ import { Overlay } from '@yoopta/ui/overlay';
 - You use most components
 - Convenience over optimization
 - Your bundler has good tree-shaking
-  </Tip>
+
+</Tip>
 
 ### Available Subpaths
 
@@ -102,7 +103,7 @@ import { Overlay } from '@yoopta/ui/overlay';
 | `@yoopta/ui`                        | Everything (convenience)                                        |
 | `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                               |
 | `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                |
-| `@yoopta/ui/slash-command-menu`    | `SlashCommandMenu`                                              |
+| `@yoopta/ui/slash-command-menu`     | `SlashCommandMenu`                                              |
 | `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                          |
 | `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`                               |
 | `@yoopta/ui/selection-box`          | `SelectionBox`                                                  |
@@ -347,13 +348,13 @@ function MyFloatingToolbar() {
 
 // Main Editor: create editor with plugins/marks; UI components as children
 function App() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
-    <YooptaEditor editor={editor} onChange={(value) => console.log(value)} placeholder="Type / to open menu...">
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type / to open menu...">
       <MyFloatingBlockActions />
       <MyFloatingToolbar />
       <SlashCommandMenu />
@@ -363,7 +364,8 @@ function App() {
 ```
 
 <Note>
-  Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. UI components must be **children** of `YooptaEditor` so they can use `useYooptaEditor()` for the editor instance.
+  Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. UI components must be
+  **children** of `YooptaEditor` so they can use `useYooptaEditor()` for the editor instance.
 </Note>
 
 ## Styling
@@ -441,10 +443,7 @@ import Toolbar from '@yoopta/toolbar';
 ```tsx
 import { SlashCommandMenu, FloatingToolbar } from '@yoopta/ui';
 
-const editor = useMemo(
-  () => createYooptaEditor({ plugins, marks }),
-  [],
-);
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
 <YooptaEditor editor={editor} onChange={onChange} placeholder="Type / to open menu...">
   <SlashCommandMenu />

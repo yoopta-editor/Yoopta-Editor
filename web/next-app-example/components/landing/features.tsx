@@ -19,7 +19,7 @@ import {
 const features = [
   {
     icon: Blocks,
-    title: "18+ Block Plugins",
+    title: "20+ Block Plugins",
     description:
       "Paragraph, headings, lists, code, images, videos, tables, accordions, and more out of the box.",
   },
@@ -93,7 +93,7 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="relative py-24 sm:py-32">
+    <section id="features" className="relative py-12 sm:py-16">
       {/* Background */}
       <div className="absolute inset-0 glow-center" />
 

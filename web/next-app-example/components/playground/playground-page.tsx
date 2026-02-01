@@ -54,8 +54,8 @@ export function PlaygroundPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-        <div className="text-center max-w-3xl mx-auto mb-8">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+        <div className="text-center max-w-3xl mx-auto mb-0">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 mb-4">
             <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
@@ -65,34 +65,6 @@ export function PlaygroundPage() {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
             Interactive Playground
           </h1>
-          <p className="text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 mb-6">
-            Experience the full power of Yoopta Editor. All plugins, drag & drop, keyboard shortcuts, and more.
-          </p>
-
-          {/* Features Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mt-8">
-            {features.map((feature) => {
-              const Icon = feature.icon;
-              return (
-                <div
-                  key={feature.label}
-                  className="flex flex-col items-center gap-2 p-3 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md"
-                >
-                  <div className="p-2 rounded-lg bg-blue-500/10 dark:bg-blue-500/20">
-                    <Icon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs font-medium text-neutral-900 dark:text-white">
-                      {feature.label}
-                    </div>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {feature.description}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </section>
 

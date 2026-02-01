@@ -66,7 +66,7 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="relative py-24 sm:py-32">
+    <section id="pricing" className="relative py-12 sm:py-16">
       {/* Background */}
       <div className="absolute inset-0 glow-center" />
 

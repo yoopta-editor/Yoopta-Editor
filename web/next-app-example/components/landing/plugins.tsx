@@ -84,7 +84,7 @@ const pluginCategories = [
 
 export function Plugins() {
   return (
-    <section id="plugins" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="plugins" className="relative py-12 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-neutral-50 dark:bg-neutral-900/50" />
 
