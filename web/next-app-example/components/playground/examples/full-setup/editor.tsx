@@ -19,21 +19,26 @@ const EDITOR_STYLES = {
   paddingBottom: 100,
 }
 
-const FullSetupEditor = () => {
+type FullSetupEditorProps = {
+  initialValue: YooptaContentValue;
+};
+
+const FullSetupEditor = ({ initialValue }: FullSetupEditorProps) => {
   const containerBoxRef = useRef<HTMLDivElement>(null);
   const editor = useMemo(() => {
     return withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS }));
   }, []);
 
   const onChange = (value: YooptaContentValue) => {
-    localStorage.setItem('yoopta-editor-value', JSON.stringify(value));
+    console.log('yoopta-full-setup-editor-value', value)
+    // localStorage.setItem('yoopta-full-setup-editor-value', JSON.stringify(value));
   }
 
   useEffect(() => {
-    const localStorageValue = localStorage.getItem('yoopta-editor-value');
-    const data = localStorageValue ? JSON.parse(localStorageValue) : {};
+    const localStorageValue = localStorage.getItem('yoopta-full-setup-editor-value');
+    const data = localStorageValue ? JSON.parse(localStorageValue) : initialValue;
     editor.setEditorValue(data);
-  }, [editor]);
+  }, [editor, initialValue]);
 
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
     return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;

@@ -7,53 +7,16 @@ import {
   Sparkles,
   Zap,
   Code2,
-  Palette,
-  MousePointerClick,
-  Keyboard,
-  Layers,
 } from "lucide-react";
 import { Header } from "@/components/landing/header";
 import { FullSetupEditor } from "./examples/full-setup/editor";
-
-const features = [
-  {
-    icon: Zap,
-    label: "Lightning Fast",
-    description: "Built for performance",
-  },
-  {
-    icon: Code2,
-    label: "TypeScript",
-    description: "Fully typed",
-  },
-  {
-    icon: Palette,
-    label: "Customizable",
-    description: "Theme & style",
-  },
-  {
-    icon: MousePointerClick,
-    label: "Drag & Drop",
-    description: "Reorder blocks",
-  },
-  {
-    icon: Keyboard,
-    label: "Shortcuts",
-    description: "Keyboard first",
-  },
-  {
-    icon: Layers,
-    label: "18+ Plugins",
-    description: "Rich blocks",
-  },
-];
+import { playgroundInitialValue } from "./playground-initial-value";
 
 export function PlaygroundPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
       <Header />
 
-      {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
         <div className="text-center max-w-3xl mx-auto mb-0">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 mb-4">
@@ -68,16 +31,12 @@ export function PlaygroundPage() {
         </div>
       </section>
 
-      {/* Editor Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-5xl mx-auto">
           <div className="relative">
-            {/* Gradient Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-violet-500/5 dark:from-blue-500/10 dark:via-transparent dark:to-violet-500/10 rounded-3xl blur-3xl" />
 
-            {/* Editor Container */}
             <div className="relative rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-neutral-900 shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50 overflow-hidden">
-              {/* Editor Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
@@ -97,10 +56,9 @@ export function PlaygroundPage() {
                 </div>
               </div>
 
-              {/* Editor Content */}
               <div className="relative min-h-[600px] max-h-[calc(100vh-400px)] overflow-auto bg-white dark:bg-neutral-900">
-                <div className="py-12 px-4 sm:px-8 lg:px-12">
-                  <FullSetupEditor />
+                <div className="pt-4 pb-8 px-4 sm:px-8 lg:px-12">
+                  <FullSetupEditor initialValue={playgroundInitialValue} />
                 </div>
               </div>
             </div>

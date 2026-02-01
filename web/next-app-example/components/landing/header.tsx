@@ -34,7 +34,7 @@ const mainNavigation = [
 
 const exampleNavigation = [
   {
-    name: "Word Example",
+    name: "MS Word Example",
     href: "/playground/word-example",
     description: "Microsoft Word-like interface",
     icon: FileText,
