@@ -4,7 +4,7 @@
 [![Beta](https://img.shields.io/badge/status-beta-orange?style=flat)](https://github.com/Darginec05/Yoopta-Editor)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Darginec05)
 
-# Yoopta-Editor v6
+# Yoopta-Editor v6 (beta)
 
 ![](/docs/public/yoopta_intro.gif)
 
@@ -19,7 +19,7 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 - Easy setup with sensible defaults
 - 20+ plugins out of the box (paragraph, headings, lists, code, image, video, table, callout, and more)
 - Headless core and plugins; optional themes (`@yoopta/themes-shadcn`, `@yoopta/themes-material`) for styled block UI
-- Built on Slate.js for robust text editing
+- Built with love for robust text editing
 - Drag and drop with nested support
 - Selection box for multi-block operations
 - Mobile friendly
@@ -67,10 +67,7 @@ const PLUGINS = [Paragraph, Headings.HeadingOne, Headings.HeadingTwo, Headings.H
 const MARKS = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
 
 export default function Editor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), []);
 
   // Optional: set initial/loaded content
   // useEffect(() => { editor.setEditorValue(initialValue); }, [editor]);
@@ -188,7 +185,13 @@ The editor and plugins are **headless** by default. For styled block UI you can 
 ```tsx
 import { applyTheme } from '@yoopta/themes-shadcn';
 
-const plugins = applyTheme([Paragraph, Callout, Headings.HeadingOne, Headings.HeadingTwo, Headings.HeadingThree]);
+const plugins = applyTheme([
+  Paragraph,
+  Callout,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+]);
 const editor = createYooptaEditor({ plugins, marks: MARKS });
 ```
 
@@ -208,43 +211,43 @@ See [docs/core/themes](https://docs.yoopta.dev/core/themes) for the full concept
 
 ### Core
 
-| Package                                    | Description                                                                                                      |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| [@yoopta/editor](./packages/core/editor)   | Core editor component and API (headless)                                                                        |
+| Package                                    | Description                                                                                                                                         |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@yoopta/editor](./packages/core/editor)   | Core editor component and API (headless)                                                                                                            |
 | [@yoopta/ui](./packages/core/ui)           | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, SelectionBox, BlockDndContext, SortableBlock) |
-| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                 |
-| [@yoopta/marks](./packages/marks)          | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                        |
+| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                                                    |
+| [@yoopta/marks](./packages/marks)          | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                                                            |
 
 ### Themes
 
-| Package                                                | Description                                      |
-| ------------------------------------------------------ | ------------------------------------------------ |
-| [@yoopta/themes-shadcn](./packages/themes/shadcn)      | Shadcn UI styled block elements (production)     |
-| [@yoopta/themes-material](./packages/themes/material)  | Material Design styled block elements (in progress) |
+| Package                                               | Description                                         |
+| ----------------------------------------------------- | --------------------------------------------------- |
+| [@yoopta/themes-shadcn](./packages/themes/shadcn)     | Shadcn UI styled block elements (production)        |
+| [@yoopta/themes-material](./packages/themes/material) | Material Design styled block elements (in progress) |
 
 ### Plugins
 
-| Package                                             | Description                           |
-| --------------------------------------------------- | ------------------------------------- |
-| [@yoopta/paragraph](./packages/plugins/paragraph)   | Basic text paragraph                  |
-| [@yoopta/headings](./packages/plugins/headings)     | H1, H2, H3 headings                   |
-| [@yoopta/lists](./packages/plugins/lists)           | Bulleted, numbered, and todo lists    |
-| [@yoopta/blockquote](./packages/plugins/blockquote) | Block quotes                          |
-| [@yoopta/callout](./packages/plugins/callout)       | Callout/alert boxes with themes       |
-| [@yoopta/code](./packages/plugins/code)             | Code blocks with syntax highlighting  |
-| [@yoopta/image](./packages/plugins/image)           | Images with optimization              |
-| [@yoopta/video](./packages/plugins/video)           | Video embeds (YouTube, Vimeo, etc.)   |
-| [@yoopta/embed](./packages/plugins/embed)           | Generic embeds (Figma, Twitter, etc.) |
-| [@yoopta/file](./packages/plugins/file)             | File attachments                      |
-| [@yoopta/table](./packages/plugins/table)           | Tables with headers                   |
-| [@yoopta/accordion](./packages/plugins/accordion)   | Collapsible accordion sections        |
-| [@yoopta/tabs](./packages/plugins/tabs)             | Tabbed content panels                 |
-| [@yoopta/steps](./packages/plugins/steps)           | Step-by-step instructions             |
-| [@yoopta/divider](./packages/plugins/divider)       | Visual dividers                       |
-| [@yoopta/link](./packages/plugins/link)             | Inline links                          |
-| [@yoopta/mention](./packages/plugins/mention)       | @mentions                             |
-| [@yoopta/carousel](./packages/plugins/carousel)     | Image carousels                       |
-| [@yoopta/table-of-contents](./packages/plugins/table-of-contents) | Table of contents block        |
+| Package                                                           | Description                           |
+| ----------------------------------------------------------------- | ------------------------------------- |
+| [@yoopta/paragraph](./packages/plugins/paragraph)                 | Basic text paragraph                  |
+| [@yoopta/headings](./packages/plugins/headings)                   | H1, H2, H3 headings                   |
+| [@yoopta/lists](./packages/plugins/lists)                         | Bulleted, numbered, and todo lists    |
+| [@yoopta/blockquote](./packages/plugins/blockquote)               | Block quotes                          |
+| [@yoopta/callout](./packages/plugins/callout)                     | Callout/alert boxes with themes       |
+| [@yoopta/code](./packages/plugins/code)                           | Code blocks with syntax highlighting  |
+| [@yoopta/image](./packages/plugins/image)                         | Images with optimization              |
+| [@yoopta/video](./packages/plugins/video)                         | Video embeds (YouTube, Vimeo, etc.)   |
+| [@yoopta/embed](./packages/plugins/embed)                         | Generic embeds (Figma, Twitter, etc.) |
+| [@yoopta/file](./packages/plugins/file)                           | File attachments                      |
+| [@yoopta/table](./packages/plugins/table)                         | Tables with headers                   |
+| [@yoopta/accordion](./packages/plugins/accordion)                 | Collapsible accordion sections        |
+| [@yoopta/tabs](./packages/plugins/tabs)                           | Tabbed content panels                 |
+| [@yoopta/steps](./packages/plugins/steps)                         | Step-by-step instructions             |
+| [@yoopta/divider](./packages/plugins/divider)                     | Visual dividers                       |
+| [@yoopta/link](./packages/plugins/link)                           | Inline links                          |
+| [@yoopta/mention](./packages/plugins/mention)                     | @mentions                             |
+| [@yoopta/carousel](./packages/plugins/carousel)                   | Image carousels                       |
+| [@yoopta/table-of-contents](./packages/plugins/table-of-contents) | Table of contents block               |
 
 ### Marks (Text Formatting)
 
@@ -430,15 +433,15 @@ const editor = createYooptaEditor({
 
 ```typescript
 type YooptaEditorProps = {
-  editor: YooEditor;               // Required. From createYooptaEditor()
+  editor: YooEditor; // Required. From createYooptaEditor()
   onChange?: (value: YooptaContentValue, options: { operations }) => void;
   onPathChange?: (path: YooptaPath) => void;
   placeholder?: string;
   autoFocus?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  renderBlock?: (props) => React.ReactNode;  // e.g. for SortableBlock
-  children?: React.ReactNode;       // UI components: FloatingToolbar, SlashCommandMenu, etc.
+  renderBlock?: (props) => React.ReactNode; // e.g. for SortableBlock
+  children?: React.ReactNode; // UI components: FloatingToolbar, SlashCommandMenu, etc.
 };
 ```
 

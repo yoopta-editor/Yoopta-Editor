@@ -29,7 +29,7 @@ export function PlaygroundPage() {
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
-            Interactive Playground
+            Interactive Playground v6 (beta)
           </h1>
         </div>
       </section>

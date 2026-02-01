@@ -1,5 +1,5 @@
 export const PluginPlayground = ({ pluginSlug, height = 420 }) => {
-  const baseUrl = 'http://localhost:3000';
+  const baseUrl = 'https://yoopta.dev';
   return (
     <div className="not-prose my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
       <iframe

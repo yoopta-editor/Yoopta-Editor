@@ -65,7 +65,7 @@ export function Hero() {
           {/* Subheadline */}
           <p className="mx-auto max-w-2xl text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 mb-10">
             Free, open-source rich-text editor with 20+ plugins, drag & drop,
-            keyboard shortcuts, and more. Built on Slate.js with a powerful
+            keyboard shortcuts, and more. Built with love with a powerful
             plugin architecture.
           </p>
 

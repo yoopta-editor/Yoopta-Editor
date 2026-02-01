@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import { useTheme } from "next-themes";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -95,6 +96,9 @@ export function Header() {
             <span className="text-sm font-bold">Y</span>
           </div>
           <span className="font-semibold text-foreground">Yoopta</span>
+          <Badge variant="warning" className="ml-0.5 text-[10px] font-medium px-1.5 py-0">
+            Beta
+          </Badge>
         </Link>
 
         {/* Desktop Navigation — visibility by JS to avoid SSR/media-query flash */}
