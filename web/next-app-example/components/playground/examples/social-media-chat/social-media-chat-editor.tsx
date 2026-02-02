@@ -396,7 +396,7 @@ export function SocialMediaChatEditor() {
 
       {/* Message composer - Fixed to bottom */}
       <div className="fixed max-w-2xl mx-auto bottom-0 left-0 right-0 p-3 border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
-        <div className="flex items-end gap-2">
+        <div className="relative flex items-end gap-2">
           {/* Input area */}
           <div
             ref={inputRef}
@@ -519,7 +519,7 @@ export function SocialMediaChatEditor() {
 
           <Button
             size="icon"
-            className="h-9 w-9 mb-0.5 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
+            className="absolute bottom-1.5 right-1.5 h-9 w-9 mb-0.5 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
             onClick={sendMessage}
           >
             <Send className="w-4 h-4" />
