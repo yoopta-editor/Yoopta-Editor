@@ -40,6 +40,12 @@ const exampleNavigation = [
     icon: Code2,
   },
   {
+    name: "Rich Chat",
+    href: "/playground/ai-chat",
+    description: "WhatsApp/Telegram-like messaging",
+    icon: MessageSquare,
+  },
+  {
     name: "MS Word Example",
     href: "/playground/word-example",
     description: "Microsoft Word-like interface",

@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Check, FileText, Zap, Keyboard, MousePointerClick, Code2 } from "lucide-react";
+import { Copy, Check, Code2 } from "lucide-react";
 import { YooptaSlashCommandMenu } from "../full-setup/new-yoo-components/yoopta-slash-command-menu";
 
 const EDITOR_STYLES = {

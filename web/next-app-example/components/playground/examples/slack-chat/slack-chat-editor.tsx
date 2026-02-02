@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import YooptaEditor, {
   createYooptaEditor,
   SlateElement,
-  YooptaContentValue,
   YooptaPlugin,
   Blocks,
   Marks,
@@ -13,213 +12,29 @@ import YooptaEditor, {
 import { SLACK_PLUGINS } from "./plugins";
 import { SLACK_MARKS } from "./marks";
 import { applyTheme } from "@yoopta/themes-shadcn";
+import { MentionDropdown } from "@yoopta/themes-shadcn/mention";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Hash,
   Plus,
   Send,
   Bold,
   Italic,
   Strikethrough,
   Code,
-  Link,
   ListOrdered,
   List,
   AtSign,
   Smile,
   Paperclip,
-  ChevronDown,
   MessageSquare,
-  Headphones,
-  Settings,
-  Search,
-  Bell,
   MoreHorizontal,
+  Underline,
+  Quote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Message {
-  id: string;
-  author: {
-    name: string;
-    avatar: string;
-    isOnline: boolean;
-  };
-  content: YooptaContentValue;
-  timestamp: Date;
-  reactions?: { emoji: string; count: number; users: string[] }[];
-  threadCount?: number;
-}
-
-interface Channel {
-  id: string;
-  name: string;
-  isPrivate: boolean;
-  unread?: number;
-}
-
-const CHANNELS: Channel[] = [
-  { id: "general", name: "general", isPrivate: false },
-  { id: "random", name: "random", isPrivate: false, unread: 3 },
-  { id: "engineering", name: "engineering", isPrivate: false },
-  { id: "design", name: "design", isPrivate: false },
-  { id: "announcements", name: "announcements", isPrivate: true },
-  { id: "yoopta-editor", name: "yoopta-editor", isPrivate: false, unread: 12 },
-];
-
-const DIRECT_MESSAGES = [
-  { id: "dm1", name: "John Doe", isOnline: true, avatar: "JD" },
-  { id: "dm2", name: "Jane Smith", isOnline: true, avatar: "JS" },
-  { id: "dm3", name: "Mike Johnson", isOnline: false, avatar: "MJ" },
-];
-
-const INITIAL_MESSAGES: Message[] = [
-  {
-    id: "1",
-    author: { name: "Sarah Chen", avatar: "SC", isOnline: true },
-    content: {
-      "block-1": {
-        id: "block-1",
-        type: "Paragraph",
-        value: [
-          {
-            id: "el-1",
-            type: "paragraph",
-            children: [
-              { text: "Hey team! " },
-              { text: "Yoopta Editor v6", bold: true },
-              { text: " is looking amazing! The new API is so much cleaner." },
-            ],
-            props: { nodeType: "block" },
-          },
-        ],
-        meta: { order: 0, depth: 0 },
-      },
-    },
-    timestamp: new Date(Date.now() - 3600000 * 2),
-    reactions: [
-      { emoji: "🎉", count: 5, users: ["John", "Jane", "Mike", "Alex", "Chris"] },
-      { emoji: "👍", count: 3, users: ["John", "Jane", "Mike"] },
-    ],
-    threadCount: 4,
-  },
-  {
-    id: "2",
-    author: { name: "Alex Rivera", avatar: "AR", isOnline: true },
-    content: {
-      "block-1": {
-        id: "block-1",
-        type: "Paragraph",
-        value: [
-          {
-            id: "el-1",
-            type: "paragraph",
-            children: [
-              { text: "Totally agree! The " },
-              { text: "Blocks", code: true },
-              { text: " and " },
-              { text: "Marks", code: true },
-              { text: " APIs make everything so intuitive." },
-            ],
-            props: { nodeType: "block" },
-          },
-        ],
-        meta: { order: 0, depth: 0 },
-      },
-    },
-    timestamp: new Date(Date.now() - 3600000),
-    reactions: [{ emoji: "💯", count: 2, users: ["Sarah", "Mike"] }],
-  },
-  {
-    id: "3",
-    author: { name: "Mike Johnson", avatar: "MJ", isOnline: false },
-    content: {
-      "block-1": {
-        id: "block-1",
-        type: "Paragraph",
-        value: [
-          {
-            id: "el-1",
-            type: "paragraph",
-            children: [
-              {
-                text: "Has anyone tried the new export features? I'm working on integrating it with our email system.",
-              },
-            ],
-            props: { nodeType: "block" },
-          },
-        ],
-        meta: { order: 0, depth: 0 },
-      },
-    },
-    timestamp: new Date(Date.now() - 1800000),
-  },
-  {
-    id: "4",
-    author: { name: "Sarah Chen", avatar: "SC", isOnline: true },
-    content: {
-      "block-1": {
-        id: "block-1",
-        type: "Paragraph",
-        value: [
-          {
-            id: "el-1",
-            type: "paragraph",
-            children: [
-              { text: "Yes! Check out " },
-              { text: "editor.getHTML()", code: true },
-              { text: " and " },
-              { text: "editor.getMarkdown()", code: true },
-              { text: " - they work great!" },
-            ],
-            props: { nodeType: "block" },
-          },
-        ],
-        meta: { order: 0, depth: 0 },
-      },
-      "block-2": {
-        id: "block-2",
-        type: "Code",
-        value: [
-          {
-            id: "el-2",
-            type: "code",
-            children: [
-              {
-                text: `const html = editor.getHTML(editor.getEditorValue());
-const markdown = editor.getMarkdown(editor.getEditorValue());`,
-              },
-            ],
-            props: { nodeType: "void", language: "typescript" },
-          },
-        ],
-        meta: { order: 1, depth: 0 },
-      },
-    },
-    timestamp: new Date(Date.now() - 900000),
-    reactions: [
-      { emoji: "🙏", count: 1, users: ["Mike"] },
-      { emoji: "❤️", count: 2, users: ["Alex", "John"] },
-    ],
-  },
-];
-
-const SLATE_EDITOR_INITIAL_VALUE: YooptaContentValue = {
-  "block-1": {
-    id: "block-1",
-    type: "Paragraph",
-    value: [
-      {
-        id: "element-1",
-        type: "paragraph",
-        children: [{ text: "" }],
-        props: { nodeType: "block" },
-      },
-    ],
-    meta: { order: 0, depth: 0 },
-  },
-};
+import { INITIAL_MESSAGES, Message, SLATE_EDITOR_INITIAL_VALUE } from "./initialValue";
+import { withMentions } from "@yoopta/mention";
 
 function formatTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
@@ -231,14 +46,14 @@ function formatTime(date: Date): string {
 
 function MessageBubble({ message }: { message: Message }) {
   const previewEditor = useMemo(() => {
-    return createYooptaEditor({
+    return withMentions(createYooptaEditor({
       plugins: applyTheme(SLACK_PLUGINS) as unknown as YooptaPlugin<
         Record<string, SlateElement>,
         unknown
       >[],
       marks: SLACK_MARKS,
       readOnly: true,
-    });
+    }));
   }, []);
 
   useEffect(() => {
@@ -323,30 +138,31 @@ function MessageBubble({ message }: { message: Message }) {
   );
 }
 
+const EDITOR_STYLES = {
+  width: "100%",
+  paddingBottom: 50,
+};
+
 export function SlackChatEditor() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
-  const [activeChannel, setActiveChannel] = useState("yoopta-editor");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const editor = useMemo(() => {
-    return createYooptaEditor({
+    return withMentions(createYooptaEditor({
       plugins: applyTheme(SLACK_PLUGINS) as unknown as YooptaPlugin<
         Record<string, SlateElement>,
         unknown
       >[],
       marks: SLACK_MARKS,
-    });
+      value: SLATE_EDITOR_INITIAL_VALUE
+    }));
   }, []);
-
-  useEffect(() => {
-    editor.setEditorValue(SLATE_EDITOR_INITIAL_VALUE);
-  }, [editor]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = useCallback(() => {
+  const sendMessage = () => {
     const content = editor.getEditorValue();
     const plainText = editor.getPlainText(content);
 
@@ -360,163 +176,46 @@ export function SlackChatEditor() {
     };
 
     setMessages((prev) => [...prev, newMessage]);
-    editor.setEditorValue(SLATE_EDITOR_INITIAL_VALUE);
-  }, [editor]);
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSendMessage();
-      }
-    },
-    [handleSendMessage]
-  );
+    editor.setEditorValue(null);
+  }
 
   useEffect(() => {
+    const handleKeyDown =
+      (e: KeyboardEvent) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      }
+
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+  }, []);
 
   // Formatting toolbar actions
   const toggleBold = () => Marks.toggle(editor, { type: "bold" });
   const toggleItalic = () => Marks.toggle(editor, { type: "italic" });
+  const toggleUnderline = () => Marks.toggle(editor, { type: "underline" });
   const toggleStrike = () => Marks.toggle(editor, { type: "strike" });
   const toggleCode = () => Marks.toggle(editor, { type: "code" });
 
-  const insertBulletedList = () => {
-    Blocks.insertBlock(editor, "BulletedList", { focus: true });
+  const toggleToBulletedList = () => {
+    Blocks.toggleBlock(editor, "BulletedList", { focus: true });
   };
 
-  const insertNumberedList = () => {
-    Blocks.insertBlock(editor, "NumberedList", { focus: true });
+  const toggleToNumberedList = () => {
+    Blocks.toggleBlock(editor, "NumberedList", { focus: true });
   };
 
-  const insertCodeBlock = () => {
-    Blocks.insertBlock(editor, "Code", { focus: true });
+  const toggleToCodeBlock = () => {
+    Blocks.toggleBlock(editor, "Code", { focus: true });
   };
+
+  const toggleBlockquote = () => Blocks.toggleBlock(editor, "Blockquote", { focus: true });
 
   return (
-    <div className="flex flex-1 bg-white dark:bg-neutral-950">
-      {/* Sidebar */}
-      <div className="w-64 flex-shrink-0 bg-[#3F0E40] dark:bg-[#1a1d21] flex flex-col">
-        {/* Workspace header */}
-        <div className="h-14 flex items-center justify-between px-4 border-b border-white/10">
-          <button className="flex items-center gap-1 text-white font-semibold text-lg hover:bg-white/10 rounded px-2 py-1 transition-colors">
-            Yoopta Workspace
-            <ChevronDown className="w-4 h-4" />
-          </button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10"
-          >
-            <Settings className="w-4 h-4" />
-          </Button>
-        </div>
-
-        {/* Navigation */}
-        <ScrollArea className="flex-1">
-          <div className="py-3">
-            {/* Quick links */}
-            <div className="px-3 space-y-0.5">
-              <button className="w-full flex items-center gap-2 px-2 py-1.5 text-white/80 hover:bg-white/10 rounded text-sm transition-colors">
-                <MessageSquare className="w-4 h-4" />
-                Threads
-              </button>
-              <button className="w-full flex items-center gap-2 px-2 py-1.5 text-white/80 hover:bg-white/10 rounded text-sm transition-colors">
-                <Headphones className="w-4 h-4" />
-                Huddles
-              </button>
-            </div>
-
-            {/* Channels */}
-            <div className="mt-4">
-              <button className="w-full flex items-center justify-between px-3 py-1 text-white/60 hover:text-white/80 text-sm transition-colors">
-                <div className="flex items-center gap-1">
-                  <ChevronDown className="w-3 h-3" />
-                  <span>Channels</span>
-                </div>
-                <Plus className="w-4 h-4" />
-              </button>
-              <div className="mt-1 space-y-0.5 px-2">
-                {CHANNELS.map((channel) => (
-                  <button
-                    key={channel.id}
-                    onClick={() => setActiveChannel(channel.id)}
-                    className={cn(
-                      "w-full flex items-center justify-between px-2 py-1 rounded text-sm transition-colors",
-                      activeChannel === channel.id
-                        ? "bg-[#1264A3] text-white"
-                        : "text-white/80 hover:bg-white/10"
-                    )}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <Hash className="w-4 h-4" />
-                      <span>{channel.name}</span>
-                    </div>
-                    {channel.unread && (
-                      <span className="px-1.5 py-0.5 rounded bg-red-500 text-white text-xs font-medium">
-                        {channel.unread}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Direct Messages */}
-            <div className="mt-4">
-              <button className="w-full flex items-center justify-between px-3 py-1 text-white/60 hover:text-white/80 text-sm transition-colors">
-                <div className="flex items-center gap-1">
-                  <ChevronDown className="w-3 h-3" />
-                  <span>Direct messages</span>
-                </div>
-                <Plus className="w-4 h-4" />
-              </button>
-              <div className="mt-1 space-y-0.5 px-2">
-                {DIRECT_MESSAGES.map((dm) => (
-                  <button
-                    key={dm.id}
-                    className="w-full flex items-center gap-2 px-2 py-1 text-white/80 hover:bg-white/10 rounded text-sm transition-colors"
-                  >
-                    <div className="relative">
-                      <div className="w-5 h-5 rounded bg-neutral-500 flex items-center justify-center text-[10px] text-white">
-                        {dm.avatar}
-                      </div>
-                      {dm.isOnline && (
-                        <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green-500 border border-[#3F0E40] dark:border-[#1a1d21]" />
-                      )}
-                    </div>
-                    <span>{dm.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </ScrollArea>
-      </div>
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Channel header */}
-        <div className="h-14 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-800">
-          <div className="flex items-center gap-2">
-            <Hash className="w-5 h-5 text-neutral-500" />
-            <span className="font-semibold text-lg text-neutral-900 dark:text-white">
-              {activeChannel}
-            </span>
-            <ChevronDown className="w-4 h-4 text-neutral-500" />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Search className="w-4 h-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Bell className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
+    <div className="flex flex-1 bg-white dark:bg-neutral-950 justify-center">
+      <div className="flex-1 flex flex-col w-full max-w-2xl items-center">
 
         {/* Messages area */}
         <ScrollArea className="flex-1">
@@ -529,7 +228,7 @@ export function SlackChatEditor() {
         </ScrollArea>
 
         {/* Message composer */}
-        <div className="p-4 border-t border-neutral-200 dark:border-neutral-800">
+        <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 w-full">
           <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
             {/* Formatting toolbar */}
             <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-neutral-200 dark:border-neutral-800">
@@ -555,6 +254,15 @@ export function SlackChatEditor() {
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7"
+                onClick={toggleUnderline}
+                title="Underline (Ctrl+U)"
+              >
+                <Underline className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
                 onClick={toggleStrike}
                 title="Strikethrough"
               >
@@ -565,7 +273,7 @@ export function SlackChatEditor() {
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7"
-                onClick={insertBulletedList}
+                onClick={toggleToBulletedList}
                 title="Bulleted list"
               >
                 <List className="w-4 h-4" />
@@ -574,12 +282,21 @@ export function SlackChatEditor() {
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7"
-                onClick={insertNumberedList}
+                onClick={toggleToNumberedList}
                 title="Numbered list"
               >
                 <ListOrdered className="w-4 h-4" />
               </Button>
               <div className="w-px h-5 bg-neutral-200 dark:bg-neutral-700 mx-1" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={toggleBlockquote}
+                title="Blockquote"
+              >
+                <Quote className="w-4 h-4" />
+              </Button>
               <Button
                 variant="ghost"
                 size="icon"
@@ -593,23 +310,23 @@ export function SlackChatEditor() {
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7"
-                onClick={insertCodeBlock}
+                onClick={toggleToCodeBlock}
                 title="Code block"
               >
                 <span className="text-xs font-mono">{"{}"}</span>
               </Button>
             </div>
 
-            {/* Editor area */}
             <div className="min-h-[80px] max-h-[200px] overflow-auto px-3 py-2">
               <YooptaEditor
                 editor={editor}
-                style={{ width: "100%" }}
-                placeholder={`Message #${activeChannel}`}
-              />
+                style={EDITOR_STYLES}
+                placeholder={`Message #yoopta-editor`}
+              >
+                <MentionDropdown />
+              </YooptaEditor>
             </div>
 
-            {/* Bottom toolbar */}
             <div className="flex items-center justify-between px-2 py-1.5 border-t border-neutral-200 dark:border-neutral-800">
               <div className="flex items-center gap-0.5">
                 <Button variant="ghost" size="icon" className="h-7 w-7">
@@ -627,7 +344,7 @@ export function SlackChatEditor() {
               </div>
               <Button
                 size="sm"
-                onClick={handleSendMessage}
+                onClick={sendMessage}
                 className="bg-[#007A5A] hover:bg-[#148567] text-white"
               >
                 <Send className="w-4 h-4" />

@@ -8,15 +8,21 @@
 
 ![](/docs/public/yoopta_intro.gif)
 
+## Motivation. Why Yoopta?
+
+Yoopta is fully open source and built with all my heart and love. It was born from real pain
+
+I've integrated rich-text editors into products more times than I'd like to admit. Every time it was the same story: wrestling with complex APIs, fighting against opinionated UI that doesn't fit your product, hacking around limitations, and writing glue code that makes you mass text your wife and check hair transplant prices (I'm currently accepting donations for the procedure — every star on GitHub brings me one follicle closer).
+
+Yoopta was built to end that cycle. The idea is simple: give developers a **headless core** when they need full control, but also ship **20+ ready-made plugins**, **pre-built UI components** (toolbars, slash menus, block actions), and **theme presets** (shadcn, Material) — so you can launch a polished editing experience without thinking about implementing a rich-text editor in your project and engage in other business tasks
+
+If Yoopta saves you time (and a few remaining hairs), consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring the project](https://github.com/sponsors/Darginec05). It keeps the project alive — and my hairline hopeful.
+
 ## Introduction
 
 Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.
 
 Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything—tweak the look, add features, or craft a completely custom user interface. The core is headless by default; Yoopta also provides pre-built theme presets so you can get a full editing experience and start quickly (shadcn theme `@yoopta/themes-shadcn` is available now; Material theme is in progress). Pre-built UI components via `@yoopta/ui` (toolbars, menus, block actions) let you improve the editing experience without building everything from scratch.
-
-## My motivation. Why I created Yoopta?
-
-Yoopta is fully open source and built with care. Integrating rich text editors into apps is often painful—heavy APIs, poor DX, or one-size-fits-all UIs that don’t fit your product. Yoopta was born from that frustration. We wanted an editor that stays headless when you need full control, but ships with **20+ plugins**, **ready-made UI** (toolbars, slash menu, block actions), and **ready-made themes** (shadcn, Material) for quick start—so you can ship a great editing experience without reinventing the wheel. If Yoopta saves you time (and a few gray hairs), consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring](https://github.com/sponsors/Darginec05)—it helps keep the project alive.
 
 ## Features
 
@@ -444,6 +450,7 @@ type YooptaEditorProps = {
 Live demos and source code from the [next-app-example](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example) app:
 
 - [Playground](https://yoopta.dev/playground) — Full setup: toolbar, slash menu, block actions, drag & drop, mentions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup))
+- [Rich Chat](https://yoopta.dev/playground/ai-chat) — WhatsApp/Telegram-like messaging with rich text, code blocks, reactions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/ai-chat))
 - [Word Example](https://yoopta.dev/playground/word-example) — Word-like editor with fixed toolbar, tables, images ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/word-example))
 - [Slack Chat](https://yoopta.dev/playground/slack-chat) — Slack-style channel list and message composer ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/slack-chat))
 - [README Editor](https://yoopta.dev/playground/readme-editor) — Split view with live Markdown preview ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/readme-editor))
