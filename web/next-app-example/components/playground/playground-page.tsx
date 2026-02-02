@@ -7,6 +7,7 @@ import {
   Sparkles,
   Zap,
   Code2,
+  ExternalLink,
 } from "lucide-react";
 import { Header } from "@/components/landing/header";
 import { FullSetupEditor } from "./examples/full-setup/editor";
@@ -52,9 +53,34 @@ export function PlaygroundPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="default" className="text-xs">
                     <Zap className="w-3 h-3 mr-1" />
                     Live
+                  </Badge>
+                  <Badge variant="warning" className="text-xs">
+                    v6 (beta)
+                  </Badge>
+                  <Badge variant="outline">
+                    <a
+                      href="https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Source Code
+                    </a>
+                  </Badge>
+                  <Badge variant="outline">
+                    <a
+                      href="https://github.com/Darginec05/Yoopta-Editor"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
+                      <Github className="w-3 h-3 mr-1" />
+                      Star Repository
+                    </a>
                   </Badge>
                 </div>
               </div>
@@ -81,26 +107,6 @@ export function PlaygroundPage() {
                 >
                   <Code2 className="w-4 h-4 mr-2" />
                   View Documentation
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Code2 className="w-4 h-4 mr-2" />
-                  View source
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://github.com/Darginec05/Yoopta-Editor"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="w-4 h-4 mr-2" />
-                  Star on GitHub
                 </a>
               </Button>
             </div>
