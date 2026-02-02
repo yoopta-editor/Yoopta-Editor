@@ -28,6 +28,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Check, FileText, Zap, Keyboard, MousePointerClick, Code2 } from "lucide-react";
+import { YooptaSlashCommandMenu } from "../full-setup/new-yoo-components/yoopta-slash-command-menu";
 
 const EDITOR_STYLES = {
   width: "100%",
@@ -395,6 +396,7 @@ export const WordEditor = () => {
                   placeholder="Type / to open menu, or start typing..."
                 >
                   <SelectionBox selectionBoxElement={containerBoxRef} />
+                  <YooptaSlashCommandMenu />
                   <MentionDropdown />
                 </YooptaEditor>
               </BlockDndContext>

@@ -12,26 +12,29 @@
 
 Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.
 
-Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything - tweak the look, add features, or craft a completely custom user interface.
+Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything—tweak the look, add features, or craft a completely custom user interface. The core is headless by default; Yoopta also provides pre-built theme presets so you can get a full editing experience and start quickly (shadcn theme `@yoopta/themes-shadcn` is available now; Material theme is in progress). Pre-built UI components via `@yoopta/ui` (toolbars, menus, block actions) let you improve the editing experience without building everything from scratch.
 
 ## Features
 
-- Easy setup with sensible defaults
-- 20+ plugins out of the box (paragraph, headings, lists, code, image, video, table, callout, and more)
-- Headless core and plugins; optional themes (`@yoopta/themes-shadcn`, `@yoopta/themes-material`) for styled block UI
-- Built with love for robust text editing
-- Drag and drop with nested support
-- Selection box for multi-block operations
-- Mobile friendly
-- Keyboard shortcuts and hotkeys (customizable)
-- Indent/outdent with Tab/Shift+Tab
-- Programmatic editor API for full control
-- Real-time change events for database sync
-- Export to HTML, Markdown, plain text, email
-- Create custom plugins
-- Media optimization with lazy loading
-- Large document support
-- Theming via CSS variables (light/dark); theme packages for plugin element styling
+- **Easy setup** — Sensible defaults; plugins and marks passed to `createYooptaEditor`, then render `<YooptaEditor />`
+- **20+ plugins** — Paragraph, headings, lists, code, image, video, table, callout, accordion, tabs, steps, divider, embed, file, link, mention, carousel, table-of-contents, and more
+- **Headless core** — Full control over UI; optional pre-built theme presets (`@yoopta/themes-shadcn` available, `@yoopta/themes-material` in progress) for styled block UI
+- **Pre-built UI components** (`@yoopta/ui`) — FloatingToolbar, SlashCommandMenu, ActionMenuList, BlockOptions, FloatingBlockActions, SelectionBox, BlockDndContext so you don’t have to build everything from scratch
+- **Blocks, Elements, Marks APIs** — Programmatic control: insert/update/delete blocks and elements, apply text formatting (Bold, Italic, Highlight, etc.), custom marks supported
+- **Undo/redo** — Built-in history with `editor.undo()` / `editor.redo()`; batch operations for single undo step
+- **Drag and drop** — Reorder blocks with nested depth support; optional `SortableBlock` for custom DnD
+- **Selection box** — Multi-block selection for copy, delete, or bulk operations
+- **Slash command & action menu** — Type `/` for block insertion; floating block actions (+, drag handle, block options)
+- **Inline elements** — Links, @mentions, and custom inline nodes within text
+- **Export** — HTML, Markdown, plain text, email template; get/set content as Yoopta JSON
+- **Events** — `editor.on('change' | 'focus' | 'blur' | 'path-change' | 'block:copy')` for sync, analytics, or custom logic
+- **Keyboard shortcuts** — Customizable hotkeys; Tab/Shift+Tab for indent/outdent; shortcuts per plugin and mark
+- **Read-only mode** — Use the same editor instance for viewing or editing
+- **TypeScript** — Full type definitions for editor, blocks, elements, and plugins
+- **Mobile friendly** — Touch support; works in responsive layouts
+- **Custom plugins & marks** — Define new block types or text formats and plug them in
+- **Media & large docs** — Image/video optimization, lazy loading; performant with many blocks
+- **Theming** — CSS variables (light/dark); theme packages for plugin element styling
 
 ## Installation
 

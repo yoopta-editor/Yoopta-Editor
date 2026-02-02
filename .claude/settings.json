@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "claude-mem@thedotmack": true,
+    "frontend-design@claude-code-plugins": true
+  }
+}

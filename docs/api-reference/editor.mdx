@@ -1,0 +1,211 @@
+---
+title: Editor API
+description: createYooptaEditor and YooEditor instance API
+---
+
+# Editor API
+
+The Editor API is the entry point for Yoopta: `createYooptaEditor` creates an editor instance (`YooEditor`) that holds content, block/element methods, events, parsers, and history. Use it together with the [Blocks](/api-reference/blocks), [Elements](/api-reference/elements), and [Marks](/api-reference/marks) APIs.
+
+## createYooptaEditor
+
+Creates a Yoopta editor instance.
+
+```typescript
+createYooptaEditor(options: CreateYooptaEditorOptions): YooEditor
+```
+
+**Parameters:**
+- `options.plugins` — Array of block plugins (required).
+- `options.marks` — Optional array of mark definitions (e.g. from `createYooptaMark`).
+- `options.value` — Optional initial content (`YooptaContentValue`). If invalid or omitted, one empty paragraph block is used.
+- `options.id` — Optional editor ID; a unique ID is generated if omitted.
+- `options.readOnly` — Optional; default: `false`.
+
+**Returns:** `YooEditor` instance.
+
+```typescript
+import { createYooptaEditor } from '@yoopta/editor';
+import { ParagraphPlugin } from '@yoopta/paragraph';
+
+const editor = createYooptaEditor({
+  plugins: [ParagraphPlugin],
+  marks: [],
+  value: undefined,
+  readOnly: false,
+});
+```
+
+---
+
+## Type Definitions
+
+```typescript
+type YooptaContentValue = Record<string, YooptaBlockData>;
+
+type YooptaPath = {
+  current: number | null;
+  selected?: number[] | null;
+  selection?: Selection | null;
+  source?: 'selection-box' | 'native-selection' | 'mousemove' | 'keyboard' | 'copy-paste' | null;
+};
+
+type CreateYooptaEditorOptions = {
+  id?: string;
+  plugins: readonly YooptaPlugin[];
+  marks?: YooptaMark[];
+  value?: YooptaContentValue;
+  readOnly?: boolean;
+};
+```
+
+---
+
+## YooEditor instance
+
+The object returned by `createYooptaEditor` exposes the following. Block and element methods are documented in [Blocks API](/api-reference/blocks) and [Elements API](/api-reference/elements).
+
+### Content
+
+- **`editor.children`** — Current content: `YooptaContentValue` (record of block id → block data).
+- **`editor.isEmpty()`** — Returns whether the editor has no meaningful content.
+- **`editor.getEditorValue()`** — Returns `editor.children` (current content).
+- **`editor.setEditorValue(value)`** — Replaces editor content with `value`; if `value` is `null` or invalid, resets to one empty paragraph block.
+
+**Parameters for setEditorValue:**
+- `value` — `YooptaContentValue | null`; use `null` or invalid value to reset.
+
+---
+
+### Block methods (on editor)
+
+Available on the instance; see [Blocks API](/api-reference/blocks) for full signatures and options.
+
+- `insertBlock`, `deleteBlock`, `updateBlock`, `getBlock`
+- `moveBlock`, `focusBlock`, `duplicateBlock`
+- `toggleBlock`, `splitBlock`, `mergeBlock`
+- `increaseBlockDepth`, `decreaseBlockDepth`
+- `setPath(path)` — Sets `editor.path` (e.g. current block index). `path: YooptaPath`.
+
+---
+
+### Element methods (on editor)
+
+Available on the instance; see [Elements API](/api-reference/elements) for full signatures and options.
+
+- `insertElement`, `updateElement`, `deleteElement`
+- `getElement`, `getElements`, `getElementEntry`
+- `getElementPath`, `getParentElementPath`, `getElementRect`
+- `getElementChildren`, `isElementEmpty`
+
+---
+
+### Element builder: editor.y
+
+Build Slate elements for use in block/element APIs.
+
+```typescript
+editor.y(type: string, options?: ElementStructureOptions): SlateElement
+editor.y.text(text: string, marks?: TextNodeOptions): SlateElementTextNode
+editor.y.inline(type: string, options?: ElementStructureOptions): SlateElement
+```
+
+- **`editor.y(type, options)`** — Block element: `type` (e.g. `'paragraph'`, `'heading-one'`), optional `options.props`, `options.children`.
+- **`editor.y.text(text, marks)`** — Text node with optional marks (e.g. `{ bold: true }`).
+- **`editor.y.inline(type, options)`** — Inline element (e.g. `'link'` with `props.url`).
+
+---
+
+### Path
+
+- **`editor.path`** — Current path state: `{ current, selected?, selection?, source? }`.
+- **`editor.setPath(path)`** — Updates path; e.g. `editor.setPath({ current: 2 })`.
+
+---
+
+### Focus
+
+- **`editor.focus()`** — Focuses the editor.
+- **`editor.blur(options?)`** — Removes focus.
+- **`editor.isFocused()`** — Returns whether the editor is focused.
+
+---
+
+### Events
+
+- **`editor.on(event, callback)`** — Subscribe to event.
+- **`editor.off(event, callback)`** — Unsubscribe.
+- **`editor.once(event, callback)`** — Subscribe once.
+- **`editor.emit(event, payload)`** — Emit event.
+
+**Events:** `'change'` (payload: `{ operations, value }`), `'focus'`, `'blur'`, `'block:copy'`, `'path-change'`.
+
+---
+
+### Parsers (serialization)
+
+Convert content to different formats. Each parser takes the content to serialize (usually `editor.children` or the value from `onChange`).
+
+```typescript
+editor.getHTML(content: YooptaContentValue): string
+editor.getMarkdown(content: YooptaContentValue): string
+editor.getPlainText(content: YooptaContentValue): string
+editor.getEmail(content: YooptaContentValue, options?: Partial<EmailTemplateOptions>): string
+editor.getYooptaJSON(content: YooptaContentValue): string
+```
+
+**Parameters:**
+- `content` — `YooptaContentValue` to serialize (required).
+- `getEmail` only: `options` — Optional email template options.
+
+**Returns:** String in the requested format.
+
+```typescript
+const html = editor.getHTML(editor.children);
+const md = editor.getMarkdown(editor.children);
+const json = editor.getYooptaJSON(editor.children);
+```
+
+---
+
+### History (undo/redo)
+
+- **`editor.undo(options?)`** — Undo last batch. `options.scroll` — scroll to block; default: `true`.
+- **`editor.redo(options?)`** — Redo last undone batch. Same `options`.
+- **`editor.historyStack`** — `{ undos: HistoryStack[], redos: HistoryStack[] }` (internal).
+- **`editor.isSavingHistory()`** — Whether history is currently being saved.
+- **`editor.isMergingHistory()`** — Whether history is being merged.
+- **`editor.withoutSavingHistory(fn)`** — Run `fn` without pushing to history.
+- **`editor.withSavingHistory(fn)`** — Run `fn` with history saving enabled.
+- **`editor.withoutMergingHistory(fn)`** — Run `fn` without merging with previous batch.
+- **`editor.withMergingHistory(fn)`** — Run `fn` with history merging enabled.
+
+---
+
+### Batch operations and transforms
+
+- **`editor.batchOperations(callback)`** — Run `callback`; all operations performed inside are collected and applied in a single transform. Use for multiple block/element changes that should be one undo step.
+
+**Parameters:**
+- `callback` — Function with no args; call block/element/transform methods inside it.
+
+```typescript
+editor.batchOperations(() => {
+  editor.insertBlock('Paragraph', { at: 0 });
+  editor.insertBlock('Paragraph', { at: 1 });
+});
+```
+
+- **`editor.applyTransforms(operations, options?)`** — Low-level: apply an array of Yoopta operations. Prefer block/element APIs and `batchOperations` in app code.
+
+---
+
+### Instance properties (read-only / internal)
+
+- **`editor.id`** — Editor ID.
+- **`editor.readOnly`** — Whether the editor is read-only.
+- **`editor.formats`** — Built mark format helpers (from `marks`).
+- **`editor.marks`** — Array of mark definitions passed to `createYooptaEditor`.
+- **`editor.plugins`** — Resolved plugin map.
+- **`editor.blockEditorsMap`** — Map of block ID to Slate editor (internal).
+- **`editor.refElement`** — DOM element ref when used with the editor component.

@@ -1,0 +1,299 @@
+---
+title: Marks API
+description: Text formatting (marks) API for Yoopta Editor
+---
+
+# Marks API
+
+The Marks API lets you apply, update, remove, and query text formatting (bold, italic, color, highlight, etc.) in the editor. Marks are applied to the current selection or to specific blocks. Use the `Marks` namespace or `createYooptaMark` to define custom marks.
+
+## Accessing the API
+
+Import the `Marks` namespace and `createYooptaMark` from `@yoopta/editor`:
+
+```typescript
+import { Marks, createYooptaMark } from '@yoopta/editor';
+
+// Apply/toggle/query marks
+Marks.toggle(editor, { type: 'bold' });
+Marks.add(editor, { type: 'color', value: '#ff0000' });
+const isBold = Marks.isActive(editor, { type: 'bold' });
+
+// Define custom mark (passed to createYooptaEditor)
+const highlightMark = createYooptaMark({
+  type: 'highlight',
+  hotkey: 'mod+shift+h',
+  render: (props) => <span {...props.attributes} style={{ backgroundColor: props.value }}>{props.children}</span>,
+});
+```
+
+<Note>
+  Marks API methods are not on the editor instance — use the `Marks` namespace. Marks must be registered via `createYooptaEditor({ marks: [...] })`.
+</Note>
+
+## Type Definitions
+
+```typescript
+import type { Range } from 'slate';
+
+type YooptaPathIndex = number;
+
+// Options for methods that target selection or blocks
+type MarkTargetOptions = {
+  at?: YooptaPathIndex | YooptaPathIndex[];
+  blockId?: string | string[];
+  selection?: Range; // Slate Range; when set, at/blockId are ignored
+};
+
+// Custom mark definition (for createYooptaEditor)
+type YooptaMark<TProps = unknown> = {
+  type: string;
+  hotkey?: string;
+  render: (props: TProps) => JSX.Element;
+};
+```
+
+---
+
+## Methods
+
+### update
+
+Sets the value of a mark in the current selection or in specified blocks.
+
+```typescript
+Marks.update(editor: YooEditor, options: UpdateMarkOptions): void
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type, e.g. `'color'`, `'fontSize'` (required).
+- `options.value` — Value to set (required); e.g. `'#ff0000'`, `16`.
+- `options.at` — Block index or array of indices; default: current selection path or selected blocks.
+- `options.blockId` — Block ID or array of IDs.
+- `options.selection` — Slate `Range`; when set, applies to this range instead of blocks.
+
+```typescript
+Marks.update(editor, {
+  type: 'color',
+  value: '#ff0000',
+});
+
+Marks.update(editor, {
+  type: 'fontSize',
+  value: 16,
+  at: 0,
+});
+```
+
+---
+
+### add
+
+Adds a mark (or sets its value) in the current selection or in specified blocks. Alias: `Marks.add` (same as `addMark`).
+
+```typescript
+Marks.add(editor: YooEditor, options: AddMarkOptions): void
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type (required).
+- `options.value` — Value to set (required); e.g. `true` for bold, `'#ff0000'` for color.
+- `options.at` — Block index or array of indices.
+- `options.blockId` — Block ID or array of IDs.
+- `options.selection` — Slate `Range` to apply to.
+
+```typescript
+Marks.add(editor, { type: 'bold', value: true });
+
+Marks.add(editor, {
+  type: 'color',
+  value: '#ff0000',
+  selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 5 } },
+});
+```
+
+---
+
+### remove
+
+Removes a mark from the current selection or from specified blocks. Alias: `Marks.remove` (same as `removeMark`).
+
+```typescript
+Marks.remove(editor: YooEditor, options: RemoveMarkOptions): void
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type to remove (required).
+- `options.at` — Block index or array of indices.
+- `options.blockId` — Block ID or array of IDs.
+- `options.selection` — Slate `Range` to remove from.
+
+```typescript
+Marks.remove(editor, { type: 'bold' });
+
+Marks.remove(editor, { type: 'color', at: 0 });
+```
+
+---
+
+### toggle
+
+Toggles a mark in the current selection or in specified blocks (adds if absent, removes if present).
+
+```typescript
+Marks.toggle(editor: YooEditor, options: ToggleMarkOptions): void
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type to toggle (required).
+- `options.at` — Block index or array of indices.
+- `options.blockId` — Block ID or array of IDs.
+- `options.selection` — Slate `Range` to toggle in.
+
+```typescript
+Marks.toggle(editor, { type: 'bold' });
+
+Marks.toggle(editor, { type: 'italic', at: 0 });
+
+Marks.toggle(editor, { type: 'underline', at: [0, 1, 2] });
+```
+
+---
+
+### isActive
+
+Returns whether a mark is active in the current selection or in a given block.
+
+```typescript
+Marks.isActive(editor: YooEditor, options: IsMarkActiveOptions): boolean
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type to check (required).
+- `options.at` — Block index; default: current selection path.
+- `options.blockId` — Block ID.
+
+**Returns:** `true` if the mark is active, `false` otherwise.
+
+```typescript
+const isBold = Marks.isActive(editor, { type: 'bold' });
+
+const isItalic = Marks.isActive(editor, { type: 'italic', at: 0 });
+```
+
+---
+
+### getValue
+
+Returns the value of a mark in the current selection or in a given block.
+
+```typescript
+Marks.getValue(editor: YooEditor, options: GetMarkValueOptions): unknown | null
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.type` — Mark type (required).
+- `options.at` — Block index; default: current selection path.
+- `options.blockId` — Block ID.
+
+**Returns:** Mark value or `null` if not set.
+
+```typescript
+const boldValue = Marks.getValue(editor, { type: 'bold' });
+
+const color = Marks.getValue(editor, { type: 'color', at: 0 });
+```
+
+---
+
+### getAll
+
+Returns all marks in the current selection or in a given block. Alias: `Marks.getAll` (same as `getMarks`).
+
+```typescript
+Marks.getAll(editor: YooEditor, options?: GetMarksOptions): Record<string, unknown> | null
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.at` — Block index; default: current selection path.
+- `options.blockId` — Block ID.
+
+**Returns:** Object of mark type → value, or `null` if no Slate context.
+
+```typescript
+const marks = Marks.getAll(editor);
+
+const marksInBlock = Marks.getAll(editor, { at: 0 });
+```
+
+---
+
+### clear
+
+Removes all marks from the current selection or from specified blocks.
+
+```typescript
+Marks.clear(editor: YooEditor, options?: ClearMarksOptions): void
+```
+
+**Parameters:**
+- `editor` — Editor instance (required).
+- `options.at` — Block index or array of indices; when omitted and no `selection`, uses current selection or selected blocks.
+- `options.blockId` — Block ID or array of IDs.
+- `options.selection` — Slate `Range` to clear.
+
+```typescript
+Marks.clear(editor);
+
+Marks.clear(editor, { at: 0 });
+
+Marks.clear(editor, { at: [0, 1, 2] });
+
+Marks.clear(editor, {
+  selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 5 } },
+});
+```
+
+---
+
+## Defining custom marks: createYooptaMark
+
+Use `createYooptaMark` to define a mark that you then pass to `createYooptaEditor({ marks: [...] })`. The mark has a `type`, optional `hotkey`, and a `render` function.
+
+```typescript
+createYooptaMark<TProps>(params: YooptaMarkParams<TProps>): YooptaMark<TProps>
+```
+
+**Parameters:**
+- `params.type` — Unique mark type string (required).
+- `params.hotkey` — Optional keyboard shortcut, e.g. `'mod+b'` for bold.
+- `params.render` — React component that receives Slate render props and renders the marked text (required).
+
+**Returns:** A `YooptaMark` object to add to the `marks` array when creating the editor.
+
+```typescript
+import { createYooptaMark } from '@yoopta/editor';
+
+const highlightMark = createYooptaMark({
+  type: 'highlight',
+  hotkey: 'mod+shift+h',
+  render: (props) => (
+    <span {...props.attributes} style={{ backgroundColor: props.value ?? 'yellow' }}>
+      {props.children}
+    </span>
+  ),
+});
+
+// In createYooptaEditor
+const editor = createYooptaEditor({
+  plugins: [...],
+  marks: [highlightMark, ...defaultMarks],
+});
+```

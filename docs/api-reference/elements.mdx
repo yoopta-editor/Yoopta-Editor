@@ -1,0 +1,313 @@
+---
+title: Elements API
+description: Element-level operations within blocks for Yoopta Editor
+---
+
+# Elements API
+
+The Elements API provides a high-level interface for working with elements inside blocks: insert, update, delete, and query. It abstracts Slate.js details so you can work with block content without low-level paths.
+
+## Accessing the API
+
+Methods are available on the editor instance (recommended) or via the `Elements` namespace:
+
+```typescript
+import { useYooptaEditor } from '@yoopta/editor';
+
+function MyComponent() {
+  const editor = useYooptaEditor();
+
+  // On editor instance (recommended)
+  editor.insertElement({ blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
+  editor.getElement({ blockId: 'accordion-1', type: 'accordion-list-item', path: [0, 1] });
+}
+```
+
+```typescript
+import { Elements } from '@yoopta/editor';
+
+// Via namespace (backwards compatibility)
+Elements.insertElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
+```
+
+<Note>
+  Prefer using methods on the editor instance for better TypeScript support and clearer code.
+</Note>
+
+## Type Definitions
+
+```typescript
+// Path: direct Slate path or semantic position
+type ElementPath = number[] | 'selection' | 'first' | 'last';
+
+// Insert position
+type InsertAt = 'next' | 'prev' | 'start' | 'end' | number[];
+
+type SlateElement = {
+  id?: string;
+  type: string;
+  props?: Record<string, unknown>;
+  children: (SlateElement | SlateElementTextNode)[];
+};
+
+type ElementMatcher = (element: SlateElement) => boolean;
+```
+
+---
+
+## Methods
+
+### insertElement
+
+Creates and inserts a new element into a block.
+
+```typescript
+editor.insertElement(options: InsertElementOptions): void
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type, e.g. `'accordion-list-item'`, `'link'` (required).
+- `options.props` — Properties for the new element; merged with plugin defaults.
+- `options.children` — Child elements; if omitted, plugin defaults are used.
+- `options.at` — Where to insert: `'next'` | `'prev'` | `'start'` | `'end'` or `number[]`; default: selection or `[0]`.
+- `options.focus` — Focus editor after insert; default: `false`.
+- `options.select` — Select the inserted element; default: `false`.
+- `options.text` — Text for inline elements (e.g. link); use `children` for block elements.
+- `options.match` — Custom matcher when using `at: 'next'` or `'prev'`.
+
+```typescript
+editor.insertElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  at: 'end',
+  focus: true,
+});
+```
+
+---
+
+### updateElement
+
+Updates properties (and optionally text) of an existing element.
+
+```typescript
+editor.updateElement(options: UpdateElementOptions): void
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type to update (required).
+- `options.props` — Props to set; merged with existing.
+- `options.text` — New text for inline elements (link, mention); ignored for block elements.
+- `options.path` — Direct Slate path; if omitted, uses selection (inline) or root (block).
+- `options.match` — Custom matcher to find the element.
+
+```typescript
+editor.updateElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  props: { isExpanded: true },
+  path: [0, 1],
+});
+```
+
+---
+
+### deleteElement
+
+Removes an element or unwraps it (inline).
+
+```typescript
+editor.deleteElement(options: DeleteElementOptions): void
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type to delete (required).
+- `options.path` — Direct Slate path; if omitted, uses selection (inline) or root (block).
+- `options.match` — Custom matcher to find the element.
+- `options.mode` — For inline only: `'unwrap'` (keep text, remove wrapper; default) or `'remove'` (remove element and content). Block elements are always fully removed.
+
+```typescript
+editor.deleteElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+```
+
+---
+
+### getElement
+
+Returns a single element by type, path, or matcher.
+
+```typescript
+editor.getElement(options: GetElementOptions): SlateElement | null
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type to find.
+- `options.path` — Path: `number[]` or `'selection'` | `'first'` | `'last'`; default: selection or `[0]`.
+- `options.match` — Custom matcher; overrides type-based search.
+
+**Returns:** Matching element or `null`.
+
+```typescript
+const item = editor.getElement({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+```
+
+---
+
+### getElements
+
+Returns all elements of a type or matching a condition.
+
+```typescript
+editor.getElements(options: GetElementsOptions): SlateElement[]
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type to find.
+- `options.match` — Custom matcher; use instead of or with type.
+
+**Returns:** Array of elements; empty array if none found.
+
+```typescript
+const items = editor.getElements({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+});
+```
+
+---
+
+### getElementEntry
+
+Returns element and its Slate path as a tuple.
+
+```typescript
+editor.getElementEntry(options: GetElementEntryOptions): [SlateElement, Path] | null
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type.
+- `options.path` — Path to the element; default: selection or `[0]`.
+
+**Returns:** `[element, path]` or `null`.
+
+```typescript
+const entry = editor.getElementEntry({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+if (entry) {
+  const [element, path] = entry;
+}
+```
+
+---
+
+### getElementPath
+
+Returns the Slate path of an element instance.
+
+```typescript
+editor.getElementPath(options: GetElementPathOptions): Path | null
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.element` — The element instance to get the path for (required).
+
+**Returns:** Path (number array) or `null`.
+
+```typescript
+const item = editor.getElement({ blockId: 'accordion-1', type: 'accordion-list-item', path: 'first' });
+if (item) {
+  const path = editor.getElementPath({ blockId: 'accordion-1', element: item });
+}
+```
+
+---
+
+### getParentElementPath
+
+Returns the Slate path of an element's parent.
+
+```typescript
+editor.getParentElementPath(options: GetElementPathOptions): Path | null
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.element` — The element instance (required).
+
+**Returns:** Parent path or `null`.
+
+```typescript
+const parentPath = editor.getParentElementPath({
+  blockId: 'accordion-1',
+  element: contentElement,
+});
+```
+
+---
+
+### getElementChildren
+
+Returns the children array of an element.
+
+```typescript
+editor.getElementChildren(options: GetElementChildrenOptions): SlateElement['children'] | null
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type (required).
+- `options.path` — Path to the element; default: selection or `[0]`.
+
+**Returns:** Children array or `null`.
+
+```typescript
+const children = editor.getElementChildren({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item',
+  path: [0, 1],
+});
+```
+
+---
+
+### isElementEmpty
+
+Checks whether an element has no text content.
+
+```typescript
+editor.isElementEmpty(options: IsElementEmptyOptions): boolean
+```
+
+**Parameters:**
+- `options.blockId` — ID of the block (required).
+- `options.type` — Element type (required).
+- `options.path` — Path to the element.
+
+**Returns:** `true` if empty, `false` otherwise.
+
+```typescript
+const isEmpty = editor.isElementEmpty({
+  blockId: 'accordion-1',
+  type: 'accordion-list-item-content',
+  path: [0, 1, 1],
+});
+```

@@ -5,115 +5,111 @@ description: Understanding the Yoopta Editor core component
 
 ## Overview
 
-The Yoopta Editor is the main component that orchestrates all plugins, marks and ui components. It provides a flexible and powerful API for building rich-text editing experiences.
+The Yoopta Editor is the main component that orchestrates all plugins, marks, and UI components. You create an editor instance with `createYooptaEditor()` (passing plugins and optional marks/value there), then render `<YooptaEditor editor={editor} onChange={...} />`. Content is stored on the editor instance and synced via `onChange`.
 
 ## Creating an Editor Instance
 
-Use `createYooptaEditor()` to create an editor instance:
+Use `createYooptaEditor()` with an options object. **Plugins are required**; marks and initial value are optional:
 
 ```jsx
 import { createYooptaEditor } from '@yoopta/editor';
+import { ParagraphPlugin } from '@yoopta/paragraph';
 
-const editor = useMemo(() => createYooptaEditor(), []);
+const editor = useMemo(
+  () =>
+    createYooptaEditor({
+      plugins: [ParagraphPlugin],
+      marks: [], // optional, e.g. from @yoopta/marks
+      value: undefined, // optional initial content
+      id: undefined, // optional editor ID
+      readOnly: false,
+    }),
+  [],
+);
 ```
 
 <Warning>
-  Always wrap `createYooptaEditor()` in `useMemo` to prevent recreating the editor on every render.
+  Always wrap `createYooptaEditor()` in `useMemo` (with stable `plugins`/`marks`) to prevent recreating the editor on every render.
 </Warning>
 
-## Editor Component Props
+<Note>
+  Plugins and marks are configured at creation time, not on the `<YooptaEditor>` component. Value is managed via the editor instance and `onChange`.
+</Note>
 
-The `YooptaEditor` component accepts the following props:
+## YooptaEditor Component Props
 
-### Required Props
+The `<YooptaEditor>` component accepts:
+
+### Required
 
 <ParamField path="editor" type="YooEditor" required>
-  The editor instance created with `createYooptaEditor()`
+  The editor instance from `createYooptaEditor()`
 </ParamField>
 
-<ParamField path="plugins" type="YooptaPlugin[]" required>
-  Array of plugin instances
-</ParamField>
+### Optional
 
-### Optional Props
-
-<ParamField path="value" type="YooptaContentValue" default="undefined">
-  The editor content value
-</ParamField>
-
-<ParamField
-  path="onChange"
-  type="(value: YooptaContentValue, options: YooptaOnChangeOptions) => void">
-  Callback fired when content changes
+<ParamField path="onChange" type="(value: YooptaContentValue, options: YooptaOnChangeOptions) => void">
+  Called when content changes. Use it to sync `value` to your state (e.g. for saving or controlled usage).
 </ParamField>
 
 <ParamField path="onPathChange" type="(path: YooptaPath) => void">
-  Callback fired when the selection path changes
+  Called when the selection path changes (current block, selected blocks, etc.).
 </ParamField>
 
-<ParamField path="marks" type="YooptaMark[]">
-  Array of mark instances for text formatting
+<ParamField path="autoFocus" type="boolean">
+  Whether to focus the editor on mount.
 </ParamField>
 
-<ParamField path="placeholder" type="string" default="''">
-  Placeholder text shown when editor is empty
-</ParamField>
-
-<ParamField path="autoFocus" type="boolean" default="true">
-  Whether to focus the editor on mount
-</ParamField>
-
-<ParamField path="readOnly" type="boolean" default="false">
-  Whether the editor is in read-only mode
+<ParamField path="placeholder" type="string">
+  Placeholder text when the editor is empty.
 </ParamField>
 
 <ParamField path="className" type="string">
-  CSS class name for the editor wrapper
+  CSS class for the editor wrapper.
 </ParamField>
 
 <ParamField path="style" type="CSSProperties">
-  Inline styles for the editor wrapper
+  Inline styles for the editor wrapper.
 </ParamField>
 
-<ParamField path="width" type="number | string" default="400px">
-  Editor width (deprecated, use style object)
+<ParamField path="children" type="ReactNode">
+  UI components to render inside the editor (e.g. toolbar, slash menu, block actions).
 </ParamField>
 
-<ParamField
-  path="selectionBoxElement"
-  type="HTMLElement | React.MutableRefObject<HTMLElement | null> | false"
-  default="document">
-  Root element for the selection box
-</ParamField>
-
-<ParamField path="id" type="number | string">
-  Unique identifier for the editor instance
+<ParamField path="renderBlock" type="(props: RenderBlockProps) => ReactNode">
+  Custom wrapper for each block (e.g. for drag-and-drop).
 </ParamField>
 
 ## Basic Example
 
 ```jsx
 import { useMemo, useState } from 'react';
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import Paragraph from '@yoopta/paragraph';
+import { YooptaEditor, createYooptaEditor } from '@yoopta/editor';
+import { ParagraphPlugin } from '@yoopta/paragraph';
 
-const plugins = [Paragraph];
+const plugins = [ParagraphPlugin];
 
 export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor(), []);
-  const [value, setValue] = useState();
+  const editor = useMemo(
+    () =>
+      createYooptaEditor({
+        plugins,
+        value: undefined,
+      }),
+    [],
+  );
 
-  const onChange = (newValue, options) => {
+  const [value, setValue] = useState(editor.children);
+
+  const handleChange = (newValue, options) => {
     setValue(newValue);
-    console.log('Editor changed:', options);
+    console.log('Operations:', options.operations);
   };
 
   return (
     <YooptaEditor
       editor={editor}
-      plugins={plugins}
-      value={value}
-      onChange={onChange}
+      onChange={handleChange}
       placeholder="Start typing..."
       autoFocus
     />
@@ -123,38 +119,34 @@ export default function MyEditor() {
 
 ## Content Value Structure
 
-The `YooptaContentValue` is an object where keys are block IDs and values are block data:
+Content is a record of block ID → block data. Type names use PascalCase for block types (e.g. `Paragraph`), and kebab-case for element types inside `value`.
 
 ```typescript
-type YooptaContentValue = {
-  [blockId: string]: YooptaBlock;
-};
+type YooptaContentValue = Record<string, YooptaBlockData>;
 
-type YooptaBlock = {
+type YooptaBlockData = {
   id: string;
-  type: string;
+  type: string; // e.g. 'Paragraph', 'HeadingOne'
   meta: {
     order: number;
     depth: number;
+    align?: 'left' | 'center' | 'right';
   };
-  value: any[];
+  value: SlateElement[]; // Slate nodes (paragraph, heading-one, etc.)
 };
 ```
 
-### Example Content Value
+### Example
 
 ```json
 {
   "block-1": {
     "id": "block-1",
     "type": "Paragraph",
-    "meta": {
-      "order": 0,
-      "depth": 0
-    },
+    "meta": { "order": 0, "depth": 0 },
     "value": [
       {
-        "id": "text-1",
+        "id": "el-1",
         "type": "paragraph",
         "children": [{ "text": "Hello World!" }]
       }
@@ -165,31 +157,26 @@ type YooptaBlock = {
 
 ## onChange Options
 
-The `onChange` callback receives options with useful information:
+The `onChange` callback receives the new content and an options object:
 
 ```typescript
 type YooptaOnChangeOptions = {
-  // The operation that triggered the change
-  operation?: 'insert' | 'update' | 'delete' | 'move';
-
-  // The block that was changed
-  blockId?: string;
-
-  // Whether the change was from undo/redo
-  historyChange?: boolean;
+  operations: YooptaOperation[]; // List of operations that caused the change
 };
 ```
+
+Use `options.operations` to know what changed (insert, update, delete, move, etc.) without diffing the whole value.
 
 ## Styling the Editor
 
 ### Using className
 
 ```jsx
-<YooptaEditor editor={editor} plugins={plugins} className="my-custom-editor" />
+<YooptaEditor editor={editor} onChange={onChange} className="my-editor" />
 ```
 
 ```css
-.my-custom-editor {
+.my-editor {
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -197,12 +184,12 @@ type YooptaOnChangeOptions = {
 }
 ```
 
-### Using style object
+### Using style
 
 ```jsx
 <YooptaEditor
   editor={editor}
-  plugins={plugins}
+  onChange={onChange}
   style={{
     maxWidth: '800px',
     margin: '0 auto',
@@ -214,33 +201,20 @@ type YooptaOnChangeOptions = {
 
 ## Multiple Editors
 
-You can have multiple editor instances on the same page:
+Each editor instance is independent. Create separate instances with `createYooptaEditor()` and separate state for each:
 
 ```jsx
 function MultipleEditors() {
-  const editor1 = useMemo(() => createYooptaEditor(), []);
-  const editor2 = useMemo(() => createYooptaEditor(), []);
+  const editor1 = useMemo(() => createYooptaEditor({ plugins }), []);
+  const editor2 = useMemo(() => createYooptaEditor({ plugins }), []);
 
-  const [value1, setValue1] = useState();
-  const [value2, setValue2] = useState();
+  const [value1, setValue1] = useState(editor1.children);
+  const [value2, setValue2] = useState(editor2.children);
 
   return (
     <>
-      <YooptaEditor
-        editor={editor1}
-        plugins={plugins}
-        value={value1}
-        onChange={setValue1}
-        id="editor-1"
-      />
-
-      <YooptaEditor
-        editor={editor2}
-        plugins={plugins}
-        value={value2}
-        onChange={setValue2}
-        id="editor-2"
-      />
+      <YooptaEditor editor={editor1} onChange={setValue1} />
+      <YooptaEditor editor={editor2} onChange={setValue2} />
     </>
   );
 }
@@ -252,10 +226,10 @@ function MultipleEditors() {
   <Card title="Plugins" icon="puzzle-piece" href="/core/plugins">
     Learn about plugins and how to use them
   </Card>
-  <Card title="Editor Methods" icon="code" href="/api-reference/editor-methods">
-    Control the editor programmatically
+  <Card title="Editor API" icon="code" href="/api-reference/editor">
+    createYooptaEditor options and YooEditor instance API
   </Card>
   <Card title="Events" icon="bolt" href="/advanced/events">
-    Handle editor events
+    Handle editor events (on, off, emit)
   </Card>
 </CardGroup>

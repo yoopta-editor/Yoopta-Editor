@@ -1,5 +1,5 @@
 ---
-title: Welcome to Yoopta Editor@v6
+title: Introduction
 description: Learn about Yoopta Editor architecture, concepts, and packages
 ---
 
@@ -41,6 +41,17 @@ Yoopta Editor is **headless** by design. The core package (`@yoopta/editor`) pro
 - You have complete control over the visual appearance
 - You can build custom UI components that fit your design system
 - The editor logic is framework-agnostic (though currently React-only)
+- But (!!!) Yoopta also provides pre-built theme presets for each plugin so you can get a full editing experience and start quickly (shadcn theme is available now; Material theme is in progress)
+- Yoopta also provides pre-built UI components via `@yoopta/ui` (toolbars, menus, block actions etc.) so you can improve the editing experience without building everything from scratch
+
+### Themes
+
+Themes provide pre-styled element components that make it easy to get started:
+
+- **`@yoopta/themes-shadcn`** - Shadcn UI styled components (production ready)
+- **`@yoopta/themes-material`** - Material Design styled components (in development)
+
+Themes use helper functions like `applyTheme()` to automatically apply styled components to your plugins.
 
 ### UI Components Package
 
@@ -55,15 +66,6 @@ The `@yoopta/ui` package provides ready-to-use React components for common edito
 - **Portal** & **Overlay** - Utility components for rendering outside DOM
 
 These components are unstyled and can be customized to match your design.
-
-### Themes
-
-Themes provide pre-styled element components that make it easy to get started:
-
-- **`@yoopta/themes-shadcn`** - Shadcn UI styled components (production ready)
-- **`@yoopta/themes-material`** - Material Design styled components (in development)
-
-Themes use helper functions like `applyTheme()` to automatically apply styled components to your plugins.
 
 ## Package Structure
 
@@ -90,7 +92,7 @@ npm install @yoopta/editor slate slate-react slate-dom
 
 #### `@yoopta/ui`
 
-Reusable UI components for editor tools. These are unstyled and can be customized.
+Reusable UI components (toolbars, menus, block actions) that improve the editing experience
 
 **Installation:**
 

@@ -1,0 +1,407 @@
+---
+title: Blocks API
+description: Block-level operations for Yoopta Editor
+---
+
+# Blocks API
+
+The Blocks API provides block-level operations: creation, deletion, movement, transformation, and navigation. It works above the Elements API, operating on entire blocks rather than elements within blocks.
+
+## Accessing the API
+
+Import the `Blocks` namespace from `@yoopta/editor`:
+
+```typescript
+import { Blocks } from '@yoopta/editor';
+
+Blocks.insertBlock(editor, 'Paragraph', { at: 0 });
+Blocks.deleteBlock(editor, { at: 3 });
+Blocks.moveBlock(editor, 'block-id', 5);
+```
+
+<Note>Blocks API methods are not on the editor instance — use the `Blocks` namespace.</Note>
+
+## Type Definitions
+
+```typescript
+type YooptaPathIndex = number;
+
+type YooptaBlockData = {
+  id: string;
+  type: string;
+  value: SlateElement[];
+  meta: {
+    order: number;
+    depth: number;
+    align?: 'left' | 'center' | 'right';
+  };
+};
+```
+
+---
+
+## Methods
+
+### insertBlock
+
+Creates and inserts a new block of the given type.
+
+```typescript
+Blocks.insertBlock(
+  editor: YooEditor,
+  type: string,
+  options?: InsertBlockOptions
+): string
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `type` — Block type, e.g. `'Paragraph'`, `'Heading'` (required).
+- `options.at` — Position to insert; default: `editor.path.current`.
+- `options.focus` — Whether to focus the block after insertion.
+- `options.blockData` — Custom block data (id, meta, value).
+- `options.elements` — Custom element structure via `editor.y()`.
+
+**Returns:** ID of the new block.
+
+```typescript
+const blockId = Blocks.insertBlock(editor, 'Paragraph', {
+  at: editor.path.current,
+  focus: true,
+});
+```
+
+---
+
+### deleteBlock
+
+Removes a block and optionally focuses another.
+
+```typescript
+Blocks.deleteBlock(editor: YooEditor, options?: DeleteBlockOptions): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block to delete.
+- `options.blockId` — ID of the block to delete (overrides `at` if both set).
+- `options.focus` — Whether to focus a block after deletion; default: `true`.
+- `options.focusTarget` — Which block to focus: `'previous'` | `'next'` | `'none'`; default: `'previous'`.
+
+```typescript
+Blocks.deleteBlock(editor, { at: 3, focusTarget: 'next' });
+```
+
+---
+
+### updateBlock
+
+Updates a block's metadata and/or content.
+
+```typescript
+Blocks.updateBlock(
+  editor: YooEditor,
+  blockId: string,
+  newData: Omit<Partial<YooptaBlockData>, 'id' | 'type'>
+): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `blockId` — ID of the block to update (required).
+- `newData.meta` — Metadata to update: `order`, `depth`, `align`.
+- `newData.value` — New block content (array of Slate elements).
+
+```typescript
+Blocks.updateBlock(editor, 'block-123', {
+  meta: { align: 'center' },
+});
+```
+
+---
+
+### getBlock
+
+Retrieves block data by ID or path.
+
+```typescript
+Blocks.getBlock(editor: YooEditor, options: GetBlockOptions): YooptaBlockData | null
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position index of the block.
+- `options.id` — ID of the block (overrides `at` if both set). One of `at` or `id` is required.
+
+**Returns:** Block data or `null`.
+
+```typescript
+const block = Blocks.getBlock(editor, { id: 'block-123' });
+```
+
+---
+
+### moveBlock
+
+Moves a block to a new position.
+
+```typescript
+Blocks.moveBlock(
+  editor: YooEditor,
+  draggedBlockId: string,
+  newPath: number
+): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `draggedBlockId` — ID of the block to move (required).
+- `newPath` — New position (order index) for the block (required).
+
+```typescript
+Blocks.moveBlock(editor, 'block-123', 5);
+```
+
+---
+
+### focusBlock
+
+Focuses a block and optionally sets cursor position.
+
+```typescript
+Blocks.focusBlock(
+  editor: YooEditor,
+  blockId: string,
+  options?: FocusBlockOptions
+): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `blockId` — ID of the block to focus (required).
+- `options.waitExecution` — Delay focus (e.g. until DOM is ready).
+- `options.waitExecutionMs` — Delay in milliseconds.
+- `options.shouldUpdateBlockPath` — Update `editor.path.current`; default: `true`.
+- `options.focusAt` — Cursor position: `Point` or `Path`; default: first node.
+- `options.slate` — Slate editor instance to use (optional).
+
+```typescript
+Blocks.focusBlock(editor, 'block-123', { focusAt: { path: [0, 0], offset: 5 } });
+```
+
+---
+
+### duplicateBlock
+
+Creates a copy of a block at a given position.
+
+```typescript
+Blocks.duplicateBlock(
+  editor: YooEditor,
+  options?: DuplicateBlockOptions
+): string | undefined
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block to duplicate; default: `editor.path.current`.
+- `options.blockId` — ID of the block to duplicate (overrides `at`).
+- `options.insertAt` — Position to insert the duplicate; default: after original.
+- `options.focus` — Focus the new block after creation; default: `true`.
+- `options.elements` — Custom element structure for the duplicate.
+
+**Returns:** New block ID or `undefined`.
+
+```typescript
+const newId = Blocks.duplicateBlock(editor, { at: 2, insertAt: 4 });
+```
+
+---
+
+### splitBlock
+
+Splits a block at the selection (or given position).
+
+```typescript
+Blocks.splitBlock(
+  editor: YooEditor,
+  options?: SplitBlockOptions
+): string | undefined
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block to split; default: `editor.path.current`.
+- `options.blockId` — ID of the block to split.
+- `options.splitAt` — Location to split at; default: current selection.
+- `options.focus` — Focus after split; default: `true`.
+- `options.focusTarget` — Which block to focus: `'new'` | `'original'` | `'none'`; default: `'new'`.
+- `options.preserveContent` — Keep content in both blocks; default: `true`.
+
+**Returns:** New block ID or `undefined`.
+
+```typescript
+const newBlockId = Blocks.splitBlock(editor, { focusTarget: 'new' });
+```
+
+---
+
+### mergeBlock
+
+Merges a block into another (default: into previous).
+
+```typescript
+Blocks.mergeBlock(editor: YooEditor, options?: MergeBlockOptions): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the source block (the one merged into target).
+- `options.blockId` — ID of the source block.
+- `options.targetAt` — Position of the target block (receives content); default: previous block.
+- `options.targetBlockId` — ID of the target block.
+- `options.focus` — Focus the target block after merge; default: `true`.
+- `options.preserveContent` — Keep content from source block; default: `true`.
+
+```typescript
+Blocks.mergeBlock(editor, { at: 5, targetAt: 3 });
+```
+
+---
+
+### toggleBlock
+
+Transforms block type (e.g. Paragraph → Heading) or inserts element in leaf.
+
+```typescript
+Blocks.toggleBlock(
+  editor: YooEditor,
+  type: string,
+  options?: ToggleBlockOptions
+): string
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `type` — Target block/element type, e.g. `'Heading'`, `'Paragraph'` (required).
+- `options.at` — Position of the block; default: `editor.path.current`.
+- `options.scope` — `'auto'` (default) | `'block'` (transform block) | `'element'` (insert in leaf).
+- `options.preserveContent` — Transfer text to new block/element; default: `true`.
+- `options.focus` — Focus after toggle; default: `false`.
+- `options.elements` — Custom element structure via `editor.y()`.
+
+**Returns:** Toggled block ID.
+
+```typescript
+Blocks.toggleBlock(editor, 'Heading', { preserveContent: true });
+```
+
+---
+
+### increaseBlockDepth
+
+Increases block depth (indent).
+
+```typescript
+Blocks.increaseBlockDepth(
+  editor: YooEditor,
+  options?: BlockDepthOptions
+): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block; default: `editor.path.current`.
+- `options.blockId` — ID of the block (overrides `at`).
+
+```typescript
+Blocks.increaseBlockDepth(editor, { at: editor.path.current });
+```
+
+---
+
+### decreaseBlockDepth
+
+Decreases block depth (outdent).
+
+```typescript
+Blocks.decreaseBlockDepth(
+  editor: YooEditor,
+  options?: BlockDepthOptions
+): void
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block; default: `editor.path.current`.
+- `options.blockId` — ID of the block (overrides `at`).
+
+```typescript
+Blocks.decreaseBlockDepth(editor, { blockId: 'block-123' });
+```
+
+---
+
+### getBlockSlate
+
+Returns the Slate editor instance for a block.
+
+```typescript
+Blocks.getBlockSlate(
+  editor: YooEditor,
+  options: GetBlockSlateOptions
+): SlateEditor | null
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.at` — Position of the block.
+- `options.id` — ID of the block (overrides `at`). One of `at` or `id` is required.
+
+**Returns:** Slate editor or `null`.
+
+```typescript
+const slate = Blocks.getBlockSlate(editor, { id: 'block-123' });
+if (slate) {
+  const text = Editor.string(slate, []);
+}
+```
+
+---
+
+### buildBlockData
+
+Builds a `YooptaBlockData` structure (does not insert into editor).
+
+```typescript
+Blocks.buildBlockData(block?: BuildBlockDataOptions): YooptaBlockData
+```
+
+**Parameters:**
+
+- `block.id` — Block ID; if omitted, a unique ID is generated.
+- `block.type` — Block type (plugin name); default: `'Paragraph'`.
+- `block.value` — Block content (array of Slate elements).
+- `block.meta` — Metadata: `order`, `depth`, `align`.
+
+**Returns:** Complete `YooptaBlockData` object.
+
+```typescript
+const blockData = Blocks.buildBlockData({
+  type: 'Heading',
+  meta: { order: 0, depth: 0, align: 'center' },
+});
+```
