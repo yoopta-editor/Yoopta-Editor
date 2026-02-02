@@ -19,11 +19,10 @@ const faqs = [
     answer:
       "Absolutely. The MIT license allows you to use Yoopta Editor in any commercial application. You can modify, distribute, and sell products built with it. No attribution required, though we'd appreciate a mention!",
   },
-  {
-    question: "How does Yoopta compare to other editors like TipTap, Lexical, or Quill?",
-    answer:
-      "Yoopta is built specifically for React with a focus on the Notion-style block editing experience. Unlike Quill (which uses its own data model) or Lexical (Meta's editor), Yoopta is built on Slate.js which provides a familiar React-like experience. We offer more out-of-the-box plugins than most alternatives, including tables, accordions, and tabs.",
-  },
+  // [TODO] - write about this!!!!
+  // {
+  //   question: "How does Yoopta compare to other editors like TipTap, Lexical, or Quill?",
+  // },
   {
     question: "Is Yoopta Editor production-ready?",
     answer:
@@ -48,11 +47,6 @@ const faqs = [
     question: "How do I export content to HTML or Markdown?",
     answer:
       "Yoopta includes the @yoopta/exports package with built-in serializers for HTML, Markdown, plain text, and email-compatible HTML. You can also create custom serializers for your specific format needs.",
-  },
-  {
-    question: "What browsers are supported?",
-    answer:
-      "Yoopta Editor supports all modern browsers including Chrome, Firefox, Safari, and Edge. It also works on mobile browsers with touch-optimized interactions.",
   },
   {
     question: "How do I get support?",

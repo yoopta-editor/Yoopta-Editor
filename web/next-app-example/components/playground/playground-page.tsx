@@ -85,6 +85,16 @@ export function PlaygroundPage() {
               </Button>
               <Button variant="outline" asChild>
                 <a
+                  href="https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Code2 className="w-4 h-4 mr-2" />
+                  View source
+                </a>
+              </Button>
+              <Button variant="outline" asChild>
+                <a
                   href="https://github.com/Darginec05/Yoopta-Editor"
                   target="_blank"
                   rel="noopener noreferrer"

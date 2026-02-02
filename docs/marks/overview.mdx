@@ -1,0 +1,104 @@
+---
+title: Marks Overview
+description: Text formatting (marks) in Yoopta Editor
+icon: 'font'
+---
+
+## Introduction
+
+**Marks** in Yoopta Editor are text formatting options: bold, italic, underline, strike, code, highlight, and custom marks (e.g. color, font size). They are applied to the current selection or to specific blocks. Marks are registered when you create the editor and controlled via the `Marks` namespace.
+
+<Note>
+  Marks are not on the editor instance—use the `Marks` namespace from `@yoopta/editor`. Register marks in `createYooptaEditor({ marks: [...] })`.
+</Note>
+
+## Built-in marks
+
+The `@yoopta/marks` package provides ready-to-use marks:
+
+- **Bold** — `Cmd/Ctrl + B`
+- **Italic** — `Cmd/Ctrl + I`
+- **Underline** — `Cmd/Ctrl + U`
+- **Strike** — `Cmd/Ctrl + Shift + S`
+- **CodeMark** — `Cmd/Ctrl + E`
+- **Highlight** — Text highlighting with colors
+
+Install and pass them to `createYooptaEditor`:
+
+```bash
+yarn add @yoopta/marks
+```
+
+```tsx
+import { createYooptaEditor } from '@yoopta/editor';
+import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/marks';
+
+const marks = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
+
+const editor = createYooptaEditor({
+  plugins: PLUGINS,
+  marks,
+});
+```
+
+## Using the Marks API
+
+Apply, toggle, or query marks with the `Marks` namespace:
+
+```tsx
+import { Marks } from '@yoopta/editor';
+
+// Toggle bold on current selection
+Marks.toggle(editor, { type: 'bold' });
+
+// Add color to selection
+Marks.add(editor, { type: 'color', value: '#ff0000' });
+
+// Check if bold is active
+const isBold = Marks.isActive(editor, { type: 'bold' });
+
+// Get current mark value
+const color = Marks.getValue(editor, { type: 'color' });
+
+// Remove a mark
+Marks.remove(editor, { type: 'bold' });
+
+// Clear all marks
+Marks.clear(editor);
+```
+
+You can target specific blocks with `at` or `blockId`, or a Slate `selection` range. See [Marks API](/api-reference/marks) for all methods and options.
+
+## Custom marks
+
+Define your own marks with `createYooptaMark`: give them a `type`, optional `hotkey`, and a `render` function. Pass the result into `createYooptaEditor({ marks: [...] })`.
+
+```tsx
+import { createYooptaMark } from '@yoopta/editor';
+
+const HighlightMark = createYooptaMark({
+  type: 'highlight',
+  hotkey: 'mod+shift+h',
+  render: (props) => (
+    <span {...props.attributes} style={{ backgroundColor: props.value ?? 'yellow' }}>
+      {props.children}
+    </span>
+  ),
+});
+
+const editor = createYooptaEditor({
+  plugins: PLUGINS,
+  marks: [Bold, Italic, HighlightMark],
+});
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Marks API" icon="code" href="/api-reference/marks">
+    Full API: update, add, remove, toggle, isActive, getValue, getAll, clear
+  </Card>
+  <Card title="Editor API" icon="cog" href="/api-reference/editor">
+    createYooptaEditor options and YooEditor instance
+  </Card>
+</CardGroup>

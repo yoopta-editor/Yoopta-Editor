@@ -60,8 +60,7 @@
       "pages": [
         "core/editor",
         "core/plugins",
-        "core/themes",
-        "core/marks"
+        "core/themes"
       ]
     },
     {
@@ -92,9 +91,7 @@
     {
       "group": "Marks",
       "pages": [
-        "marks/overview",
-        "marks/built-in",
-        "marks/custom-marks"
+        "marks/overview"
       ]
     },
     {

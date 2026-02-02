@@ -76,10 +76,6 @@ export const metadata: Metadata = {
   },
   category: "technology",
   applicationName: "Yoopta Editor",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#030712" },
-  ],
 };
 
 export default function RootLayout({

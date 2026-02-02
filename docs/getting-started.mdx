@@ -1,6 +1,7 @@
 ---
 title: Getting Started
 description: Build your first Yoopta Editor in 5 minutes
+icon: 'play'
 ---
 
 This guide will walk you through creating your first Yoopta Editor with a few plugins and tools.
@@ -37,7 +38,7 @@ pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
 
 ## Step 2: Basic Editor
 
-Create a simple editor component. The editor is created with `createYooptaEditor({ plugins, marks })`; plugins and marks are passed at creation time, not as props to `YooptaEditor`. Use `editor.setEditorValue(data)` to set initial or loaded content, and `onChange` to persist changes.
+Create a simple editor component. The editor is created with `createYooptaEditor({ plugins, marks })`;
 
 ```jsx
 import { useMemo, useEffect } from 'react';
@@ -49,10 +50,7 @@ const plugins = [Paragraph];
 const marks = [Bold, Italic, Underline];
 
 export default function MyEditor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   useEffect(() => {
     // Set initial content (or load from API/localStorage)
@@ -66,18 +64,16 @@ export default function MyEditor() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      <YooptaEditor
-        editor={editor}
-        onChange={onChange}
-        placeholder="Type something..."
-      />
+      <YooptaEditor editor={editor} onChange={onChange} placeholder="Type something..." />
     </div>
   );
 }
 ```
 
 <Note>
-  The editor instance should be created with `useMemo` so it is not recreated on every render. Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. Use `editor.setEditorValue()` for initial or loaded content and `onChange` to react to changes.
+  The editor instance should be created with `useMemo` so it is not recreated on every render.
+  Plugins and marks are passed to `createYooptaEditor`, not to `YooptaEditor`. Use
+  `editor.setEditorValue()` for initial or loaded content and `onChange` to react to changes.
 </Note>
 
 ## Step 3: Add More Plugins
@@ -118,10 +114,7 @@ const plugins = [
 ];
 
 export default function MyEditor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
   // ...
 }
 ```
@@ -146,18 +139,14 @@ yarn add @yoopta/ui
 import { FloatingToolbar, FloatingBlockActions, SlashCommandMenu } from '@yoopta/ui';
 
 export default function MyEditor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
     <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <YooptaEditor
         editor={editor}
         onChange={(value) => console.log(value)}
-        placeholder="Type / to open menu..."
-      >
+        placeholder="Type / to open menu...">
         <FloatingToolbar />
         <FloatingBlockActions />
         <SlashCommandMenu />
@@ -190,10 +179,7 @@ import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/ma
 
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
-const editor = useMemo(
-  () => createYooptaEditor({ plugins, marks }),
-  [],
-);
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
 
 The toolbar (e.g. `FloatingToolbar`) uses these marks for formatting. No need to pass `marks` to `YooptaEditor`.
@@ -272,10 +258,7 @@ const plugins = applyTheme([
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 export default function MyEditor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   useEffect(() => {
     // Load initial content (or leave empty)
@@ -293,8 +276,7 @@ export default function MyEditor() {
         editor={editor}
         onChange={onChange}
         placeholder="Type / to open menu..."
-        autoFocus
-      >
+        autoFocus>
         <FloatingToolbar />
         <FloatingBlockActions />
         <SlashCommandMenu />

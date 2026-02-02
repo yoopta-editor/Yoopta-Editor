@@ -1,6 +1,7 @@
 ---
 title: 'Quickstart'
 description: 'Get started with Yoopta Editor in 5 minutes'
+icon: 'rocket'
 ---
 
 ## Installation
@@ -55,21 +56,25 @@ export default function MyEditor() {
 
 ## Adding More Plugins
 
-Install additional plugins for richer content:
+Install additional plugins for richer content. All available plugins:
 
 <CodeGroup>
 
 ```bash npm
-npm install @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
+npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/carousel @yoopta/table-of-contents
 ```
 
 ```bash yarn
-yarn add @yoopta/blockquote @yoopta/headings @yoopta/lists @yoopta/code
+yarn add @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/carousel @yoopta/table-of-contents
+```
+
+```bash pnpm
+pnpm add @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/carousel @yoopta/table-of-contents
 ```
 
 </CodeGroup>
 
-Pass the plugins to `createYooptaEditor`:
+Pass the plugins you need to `createYooptaEditor`:
 
 ```jsx
 import Paragraph from '@yoopta/paragraph';
@@ -77,6 +82,7 @@ import Blockquote from '@yoopta/blockquote';
 import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
 import { BulletedList, NumberedList, TodoList } from '@yoopta/lists';
 import Code from '@yoopta/code';
+// Add more: Image, Video, Embed, File, Callout, Divider, Accordion, Table, Tabs, Steps, Link, Mention, Carousel, TableOfContents
 
 const plugins = [
   Paragraph,
@@ -92,6 +98,55 @@ const plugins = [
 
 const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
+
+See [Plugins](/core/plugins) and the plugin pages for each block type's API and usage.
+
+## Adding Themes
+
+Plugins are headless by default. To get styled block UI (Callout, Code, Image, etc.), use a theme package. **`@yoopta/themes-shadcn`** is production ready; **`@yoopta/themes-material`** is in progress.
+
+<CodeGroup>
+
+```bash npm
+npm install @yoopta/themes-shadcn
+```
+
+```bash yarn
+yarn add @yoopta/themes-shadcn
+```
+
+```bash pnpm
+pnpm add @yoopta/themes-shadcn
+```
+
+</CodeGroup>
+
+**Option 1: Apply theme to all plugins** — Wrap your plugin array with `applyTheme()` so every supported plugin gets the theme's styled elements:
+
+```jsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+import Paragraph from '@yoopta/paragraph';
+import Blockquote from '@yoopta/blockquote';
+import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
+import Code from '@yoopta/code';
+
+const plugins = applyTheme([Paragraph, HeadingOne, HeadingTwo, HeadingThree, Blockquote, Code]);
+
+const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
+```
+
+**Option 2: Apply theme to a single plugin** — Use the theme's UI for one plugin and keep the rest headless:
+
+```jsx
+import Callout from '@yoopta/callout';
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
+
+const CalloutWithUI = Callout.extend({ elements: CalloutUI });
+
+const plugins = [Paragraph, CalloutWithUI /* ... */];
+```
+
+See [Themes](/core/themes) for the full concept and per-plugin UI exports.
 
 ## Adding UI Components
 

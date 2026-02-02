@@ -14,6 +14,10 @@ Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's
 
 Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything—tweak the look, add features, or craft a completely custom user interface. The core is headless by default; Yoopta also provides pre-built theme presets so you can get a full editing experience and start quickly (shadcn theme `@yoopta/themes-shadcn` is available now; Material theme is in progress). Pre-built UI components via `@yoopta/ui` (toolbars, menus, block actions) let you improve the editing experience without building everything from scratch.
 
+## My motivation. Why I created Yoopta?
+
+Yoopta is fully open source and built with care. Integrating rich text editors into apps is often painful—heavy APIs, poor DX, or one-size-fits-all UIs that don’t fit your product. Yoopta was born from that frustration. We wanted an editor that stays headless when you need full control, but ships with **20+ plugins**, **ready-made UI** (toolbars, slash menu, block actions), and **ready-made themes** (shadcn, Material) for quick start—so you can ship a great editing experience without reinventing the wheel. If Yoopta saves you time (and a few gray hairs), consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring](https://github.com/sponsors/Darginec05)—it helps keep the project alive.
+
 ## Features
 
 - **Easy setup** — Sensible defaults; plugins and marks passed to `createYooptaEditor`, then render `<YooptaEditor />`
@@ -43,7 +47,7 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 yarn add slate slate-react slate-dom @yoopta/editor
 
 # Add plugins you need
-yarn add @yoopta/paragraph @yoopta/headings @yoopta/lists @yoopta/blockquote @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps
+yarn add @yoopta/paragraph @yoopta/headings @yoopta/lists @yoopta/blockquote @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/mention @yoopta/links
 
 # Add marks for text formatting
 yarn add @yoopta/marks
@@ -57,11 +61,11 @@ yarn add @yoopta/themes-shadcn
 
 ## Quick Start
 
-Plugins and marks are passed to `createYooptaEditor`. Use `editor.setEditorValue(data)` for initial content and `onChange` to persist changes.
+Plugins, initial value and marks are passed to `createYooptaEditor`
 
 ```tsx
 import { useMemo, useEffect } from 'react';
-import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import YooptaEditor, { createYooptaEditor, type YooptaContentValue } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import Headings from '@yoopta/headings';
 import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/marks';
@@ -69,22 +73,64 @@ import { Bold, Italic, Underline, Strike, CodeMark, Highlight } from '@yoopta/ma
 const PLUGINS = [Paragraph, Headings.HeadingOne, Headings.HeadingTwo, Headings.HeadingThree];
 const MARKS = [Bold, Italic, Underline, Strike, CodeMark, Highlight];
 
-export default function Editor() {
-  const editor = useMemo(() => createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), []);
+const initialValue = {} as YooptaContentValue;
 
-  // Optional: set initial/loaded content
-  // useEffect(() => { editor.setEditorValue(initialValue); }, [editor]);
+const EDITOR_STYLES = {
+  width: 750,
+  // useful when you want to create default block by clicking on empty are
+  paddingBottom: 150,
+};
+
+export default function Editor() {
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins: PLUGINS, marks: MARKS, value: initialValue }),
+    [],
+  );
 
   return (
     <YooptaEditor
       editor={editor}
-      style={{ width: 750 }}
+      style={EDITOR_STYLES}
       placeholder="Type / to open menu"
       onChange={(value) => console.log('onChange', value)}
     />
   );
 }
 ```
+
+## Themes
+
+The editor and plugins are **headless** by default. For styled block UI you can use a theme package:
+
+- **`@yoopta/themes-shadcn`** — Shadcn UI styled components (production ready)
+- **`@yoopta/themes-material`** — Material Design (in progress)
+
+**Option 1: Apply theme to all plugins**
+
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+
+const plugins = applyTheme([
+  Paragraph,
+  Callout,
+  Headings.HeadingOne,
+  Headings.HeadingTwo,
+  Headings.HeadingThree,
+]);
+const editor = createYooptaEditor({ plugins, marks: MARKS });
+```
+
+**Option 2: Apply theme UI to a single plugin**
+
+```tsx
+import Callout from '@yoopta/callout';
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
+
+const CalloutWithUI = Callout.extend({ elements: CalloutUI });
+// Use CalloutWithUI in your plugins array
+```
+
+See [docs/core/themes](https://docs.yoopta.dev/core/themes) for the full concept.
 
 ## Adding UI Components
 
@@ -176,40 +222,6 @@ export default function Editor() {
 }
 ```
 
-## Themes
-
-The editor and plugins are **headless** by default. For styled block UI you can use a theme package:
-
-- **`@yoopta/themes-shadcn`** — Shadcn UI styled components (production ready)
-- **`@yoopta/themes-material`** — Material Design (in progress)
-
-**Option 1: Apply theme to all plugins**
-
-```tsx
-import { applyTheme } from '@yoopta/themes-shadcn';
-
-const plugins = applyTheme([
-  Paragraph,
-  Callout,
-  Headings.HeadingOne,
-  Headings.HeadingTwo,
-  Headings.HeadingThree,
-]);
-const editor = createYooptaEditor({ plugins, marks: MARKS });
-```
-
-**Option 2: Apply theme UI to a single plugin**
-
-```tsx
-import Callout from '@yoopta/callout';
-import { CalloutUI } from '@yoopta/themes-shadcn/callout';
-
-const CalloutWithUI = Callout.extend({ elements: CalloutUI });
-// Use CalloutWithUI in your plugins array
-```
-
-See [docs/core/themes](https://docs.yoopta.dev/core/themes) for the full concept.
-
 ## Packages
 
 ### Core
@@ -267,27 +279,11 @@ All marks are available from `@yoopta/marks`:
 
 UI components from `@yoopta/ui` use CSS variables for theming. For styled **block** elements (callout, code, image, etc.), use a theme package: `@yoopta/themes-shadcn` or `@yoopta/themes-material` (see [Themes](#themes) above).
 
-CSS variables (shadcn/ui style):
-
-```css
-:root {
-  --yoopta-ui-background: 0 0% 100%;
-  --yoopta-ui-foreground: 222.2 84% 4.9%;
-  --yoopta-ui-border: 214.3 31.8% 91.4%;
-  --yoopta-ui-accent: 210 40% 96.1%;
-}
-
-.dark {
-  --yoopta-ui-background: 222.2 84% 4.9%;
-  --yoopta-ui-foreground: 210 40% 98%;
-}
-```
-
 ## Editor API
 
 ### Editor Instance
 
-The editor instance provides programmatic control over content. Use `editor.setEditorValue(data)` for initial/loaded content and `editor.getEditorValue()` (or the value from `onChange`) to read content.
+The editor instance provides programmatic control over content
 
 ```tsx
 const editor = useMemo(
@@ -299,11 +295,6 @@ const editor = useMemo(
     }),
   [],
 );
-
-// Set content after load
-useEffect(() => {
-  editor.setEditorValue(loadedValue);
-}, [editor]);
 
 // Element builder - create complex nested structures
 const elements = editor.y('paragraph', {
@@ -432,7 +423,7 @@ const editor = createYooptaEditor({
 
 ### YooptaEditor Props
 
-`plugins`, `marks`, and `value` are **not** props of `<YooptaEditor>`; they belong to `createYooptaEditor`. Use `editor.setEditorValue(data)` for initial content and `onChange` to persist.
+`plugins`, `marks`, and `value` are **not** props of `<YooptaEditor>`; they belong to `createYooptaEditor`
 
 ```typescript
 type YooptaEditorProps = {
@@ -450,16 +441,14 @@ type YooptaEditorProps = {
 
 ## Examples
 
-- [Basic Setup](https://yoopta.dev/examples/withBaseFullSetup)
-- [Custom Toolbar](https://yoopta.dev/examples/withCustomToolbar)
-- [Notion-style Action Menu](https://yoopta.dev/examples/withNotionActionMenu)
-- [Dark Theme](https://yoopta.dev/examples/withDarkTheme)
-- [Media Plugins](https://yoopta.dev/examples/withMedia)
-- [Extended Plugins](https://yoopta.dev/examples/withExtendedPlugin)
-- [Read Only Mode](https://yoopta.dev/examples/withReadOnly)
-- [Custom HTML Attributes](https://yoopta.dev/examples/withCustomHTMLAttributes)
-- [Custom Marks](https://yoopta.dev/examples/withCustomMark)
-- [Chat (Slack-style)](https://yoopta.dev/examples/withChatSlack)
+Live demos and source code from the [next-app-example](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example) app:
+
+- [Playground](https://yoopta.dev/playground) — Full setup: toolbar, slash menu, block actions, drag & drop, mentions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup))
+- [Word Example](https://yoopta.dev/playground/word-example) — Word-like editor with fixed toolbar, tables, images ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/word-example))
+- [Slack Chat](https://yoopta.dev/playground/slack-chat) — Slack-style channel list and message composer ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/slack-chat))
+- [README Editor](https://yoopta.dev/playground/readme-editor) — Split view with live Markdown preview ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/readme-editor))
+- [Email Builder](https://yoopta.dev/playground/email-builder) — Email composition with blocks and export ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/email-builder))
+- [Plugin demos](https://yoopta.dev/playground/plugin/paragraph) — Per-plugin live demos (e.g. [paragraph](https://yoopta.dev/playground/plugin/paragraph), [callout](https://yoopta.dev/playground/plugin/callout)) ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/plugin-demo))
 
 ## Project Structure
 
@@ -500,7 +489,6 @@ yarn lint
 - Collaborative editing mode
 - Simplified plugin API
 - Additional plugins
-- SEO optimizations
 
 ## Support
 
