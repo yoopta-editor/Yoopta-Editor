@@ -379,17 +379,21 @@ The `injectElementsFromPlugins` property allows elements from one plugin to be i
 **Example - Callout with nested content:**
 
 ```jsx
-const Callout = new YooptaPlugin({
-  type: 'Callout',
-  elements: (
-    <callout render={CalloutRender}>
-      <callout-content
-        render={CalloutContentRender}
-        injectElementsFromPlugins={['Paragraph', 'Heading', 'List']}
-      />
-    </callout>
-  ),
-});
+import Callout from '@yoopta/callout';
+
+const plugins = [
+  Callout.extend({
+    injectElementsFromPlugins: [
+      Lists.BulletedList,
+      Lists.NumberedList,
+      Lists.TodoList,
+      Blockquote,
+      Callout,
+      YImage,
+      Code,
+    ],
+  }),
+];
 ```
 
 When a user is inside a `callout-content` element, the slash command menu will only show blocks from the allowed plugins (`Paragraph`, `Heading`, `List`).
