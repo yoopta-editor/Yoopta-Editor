@@ -83,7 +83,7 @@ export const ElementOptionsTrigger = ({
       data-state={isOpen ? 'open' : 'closed'}
       aria-expanded={isOpen}
       aria-haspopup="dialog">
-      {children ?? <MoreHorizontal className="yoo-element-options-trigger-icon" />}
+      {children ?? <MoreHorizontal className="yoopta-ui-element-options-trigger-icon" />}
     </button>
   );
 };

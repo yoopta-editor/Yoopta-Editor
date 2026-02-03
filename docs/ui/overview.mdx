@@ -16,9 +16,6 @@ The `@yoopta/ui` package provides a collection of **headless UI components** tha
 ## Key Features
 
 <CardGroup cols={2}>
-  <Card title="No Stores" icon="database">
-    Pure React state management — no Zustand or global stores required
-  </Card>
   <Card title="API" icon="layer-group">
     Compound components with controlled/uncontrolled patterns
   </Card>
@@ -48,14 +45,19 @@ Import everything from the main entry point:
 
 ```tsx
 import {
+  FloatingBlockActions,
+  BlockOptions,
   FloatingToolbar,
   ActionMenuList,
   SlashCommandMenu,
-  FloatingBlockActions,
-  BlockOptions,
   SelectionBox,
   BlockDndContext,
   SortableBlock,
+  DragHandle,
+  HighlightColorPicker,
+  ElementOptions,
+  Portal,
+  Overlay,
 } from '@yoopta/ui';
 ```
 
@@ -75,9 +77,21 @@ import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
 
 // Other available subpaths
 import { FloatingBlockActions } from '@yoopta/ui/floating-block-actions';
-import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
-import { SelectionBox } from '@yoopta/ui/selection-box';
-import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+import { BlockOptions, useBlockActions, useBlockOptionsContext } from '@yoopta/ui/block-options';
+import { SelectionBox, useRectangeSelectionBox } from '@yoopta/ui/selection-box';
+import {
+  BlockDndContext,
+  SortableBlock,
+  DragHandle,
+  useBlockDnd,
+  getOrderedBlockIds,
+} from '@yoopta/ui/block-dnd';
+import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
+import {
+  ElementOptions,
+  useElementOptions,
+  useUpdateElementProps,
+} from '@yoopta/ui/element-options';
 import { Portal } from '@yoopta/ui/portal';
 import { Overlay } from '@yoopta/ui/overlay';
 ```
@@ -98,20 +112,24 @@ import { Overlay } from '@yoopta/ui/overlay';
 
 ### Available Subpaths
 
-| Subpath                             | Exports                                                         |
-| ----------------------------------- | --------------------------------------------------------------- |
-| `@yoopta/ui`                        | Everything (convenience)                                        |
-| `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                               |
-| `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                |
-| `@yoopta/ui/slash-command-menu`     | `SlashCommandMenu`                                              |
-| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                          |
-| `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`                               |
-| `@yoopta/ui/selection-box`          | `SelectionBox`                                                  |
-| `@yoopta/ui/block-dnd`              | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd` |
-| `@yoopta/ui/portal`                 | `Portal`                                                        |
-| `@yoopta/ui/overlay`                | `Overlay`                                                       |
+| Subpath                             | Exports                                                                                            |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `@yoopta/ui`                        | Everything (convenience)                                                                           |
+| `@yoopta/ui/floating-block-actions` | `FloatingBlockActions`                                                                             |
+| `@yoopta/ui/block-options`          | `BlockOptions`, `useBlockActions`, `useBlockOptionsContext`                                        |
+| `@yoopta/ui/floating-toolbar`       | `FloatingToolbar`                                                                                  |
+| `@yoopta/ui/action-menu-list`       | `ActionMenuList`                                                                                   |
+| `@yoopta/ui/slash-command-menu`     | `SlashCommandMenu`                                                                                 |
+| `@yoopta/ui/selection-box`          | `SelectionBox`, `useRectangeSelectionBox`                                                          |
+| `@yoopta/ui/block-dnd`              | `BlockDndContext`, `SortableBlock`, `DragHandle`, `useBlockDnd`, `getOrderedBlockIds`              |
+| `@yoopta/ui/highlight-color-picker` | `HighlightColorPicker`                                                                             |
+| `@yoopta/ui/element-options`        | `ElementOptions`, `useElementOptions`, `useElementOptionsContext`, `useUpdateElementProps` + types |
+| `@yoopta/ui/portal`                 | `Portal`                                                                                           |
+| `@yoopta/ui/overlay`                | `Overlay`                                                                                          |
 
 ## Available Components
+
+All components from `@yoopta/ui` are listed below. Dedicated doc pages exist for: **FloatingBlockActions**, **BlockOptions**, **FloatingToolbar**, **ActionMenuList**, **SlashCommandMenu**, **SelectionBox**, and **Block DnD**. **HighlightColorPicker** and **ElementOptions** are exported and usable but do not have dedicated pages yet.
 
 ### Core UI Components
 
@@ -137,7 +155,17 @@ import { Overlay } from '@yoopta/ui/overlay';
   <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
     Drag and drop support for reordering blocks
   </Card>
+  <Card title="HighlightColorPicker" icon="palette">
+    Color picker for highlight and text color (subpath:{' '}
+    <code>@yoopta/ui/highlight-color-picker</code>)
+  </Card>
+  <Card title="ElementOptions" icon="sliders">
+    Options panel for element props (links, images, etc.) (subpath:{' '}
+    <code>@yoopta/ui/element-options</code>)
+  </Card>
 </CardGroup>
+
+**Utilities:** `Portal` and `Overlay` are also exported for rendering outside the editor tree (subpaths: `@yoopta/ui/portal`, `@yoopta/ui/overlay`).
 
 ## Architecture
 
@@ -370,21 +398,32 @@ function App() {
 
 ## Styling
 
-### CSS Variables
+### How styles work
 
-All components use CSS variables (shadcn/ui style) for theming:
+- Each UI component ships with its own CSS. Component styles use a **shared set of design tokens** (CSS variables) defined in the package (`packages/core/ui/src/styles/variables.css`).
+- Each component's CSS file imports this variables file via `@import '../styles/variables.css'`. At **build time**, `postcss-import` inlines the variables into the component CSS, so default styling works without any extra imports in your app.
+- You do **not** need to import `variables.css` yourself for the components to look correct. Import a component from `@yoopta/ui` (or a subpath), and its styles (including the inlined variables) are applied.
+
+### Theming with CSS variables
+
+All components use the same token names (shadcn/ui-style HSL values). Override them in your app to theme:
 
 ```css
+/* In your app's global CSS */
 :root {
   --yoopta-ui-background: 0 0% 100%;
   --yoopta-ui-foreground: 222.2 84% 4.9%;
   --yoopta-ui-border: 214.3 31.8% 91.4%;
   --yoopta-ui-accent: 210 40% 96.1%;
   --yoopta-ui-muted-foreground: 215.4 16.3% 46.9%;
-  --yoopta-ui-ring: 215 20.2% 65.1%;
+  --yoopta-ui-ring: 222.2 84% 4.9%;
+  --yoopta-ui-primary: 221.2 83.2% 53.3%;
+  --yoopta-ui-radius: 0.5rem;
 }
 
-.dark {
+.dark,
+[data-theme='dark'],
+[data-yoopta-theme='dark'] {
   --yoopta-ui-background: 222.2 84% 4.9%;
   --yoopta-ui-foreground: 210 40% 98%;
   --yoopta-ui-border: 217.2 32.6% 17.5%;
@@ -392,14 +431,16 @@ All components use CSS variables (shadcn/ui style) for theming:
 }
 ```
 
-### Custom Styles
+Values are HSL **without** the `hsl()` wrapper; components use them as `hsl(var(--yoopta-ui-background))`.
 
-Override styles using:
+### Custom styles
 
-1. **CSS Variables** - Change theme globally
-2. **CSS Classes** - Target specific elements
-3. **Inline Styles** - Component-level customization
-4. **Tailwind** - Use utility classes directly
+You can still override appearance with:
+
+1. **CSS variables** — Override the tokens above in `:root` or `.dark` for global theme.
+2. **ClassName** — Pass `className` to component parts to target specific elements.
+3. **Inline styles** — For one-off overrides.
+4. **Tailwind** — Use utility classes on the same elements.
 
 ```tsx
 <FloatingToolbar.Content className="bg-slate-800 shadow-xl">
@@ -457,11 +498,20 @@ const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
   <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
     Learn about the floating block actions component
   </Card>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Add block context menus
+  </Card>
   <Card title="FloatingToolbar" icon="toolbox" href="/ui/floating-toolbar">
     Build a custom formatting toolbar
   </Card>
-  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
-    Add block context menus
+  <Card title="ActionMenuList" icon="list" href="/ui/action-menu-list">
+    Block type menu for "Turn into"
+  </Card>
+  <Card title="SlashCommandMenu" icon="slash" href="/ui/slash-action-menu-list">
+    Slash command for block insertion
+  </Card>
+  <Card title="SelectionBox" icon="object-group" href="/ui/selection-box">
+    Rectangle selection for multiple blocks
   </Card>
   <Card title="Block DnD" icon="grip-vertical" href="/ui/block-dnd">
     Add drag and drop for blocks

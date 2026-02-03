@@ -5,6 +5,7 @@ const replace = require('@rollup/plugin-replace');
 const terser = require('@rollup/plugin-terser');
 const svgr = require('@svgr/rollup');
 const autoprefixer = require('autoprefixer');
+const postcssImport = require('postcss-import');
 const postcssNesting = require('postcss-nesting');
 const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 const postcss = require('rollup-plugin-postcss');
@@ -16,7 +17,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
 function getPlugins({ tailwindConfig, extractCSS }) {
-  const postcssPlugins = [postcssNesting(), autoprefixer()];
+  const postcssPlugins = [postcssImport(), postcssNesting(), autoprefixer()];
 
   // Add Tailwind only if tailwindConfig is provided
   if (tailwindConfig) {

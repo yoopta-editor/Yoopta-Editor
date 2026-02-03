@@ -6,7 +6,7 @@ export const SlashCommandSeparator = ({ className }: SlashCommandSeparatorProps)
   <div
     role="separator"
     aria-orientation="horizontal"
-    className={`slash-command-separator ${className || ''}`}
+    className={`yoopta-ui-slash-command-separator ${className || ''}`}
   />
 );
 

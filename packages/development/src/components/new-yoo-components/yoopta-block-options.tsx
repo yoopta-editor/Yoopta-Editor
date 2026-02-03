@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { BlockOptions, useBlockActions } from '@yoopta/ui/block-options';
 import { YooptaActionMenuList } from './yoopta-action-menu-list';
+import { Copy, Link, List, Trash } from 'lucide-react';
 
 type YooptaBlockOptionsProps = {
   open?: boolean;
@@ -47,15 +48,15 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
       <BlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
         <BlockOptions.Content side="right" align="center">
           <BlockOptions.Group>
-            <BlockOptions.Item ref={turnIntoRef} onSelect={onTurnInto} keepOpen>
+            <BlockOptions.Item ref={turnIntoRef} icon={<List />} onSelect={onTurnInto} keepOpen>
               Turn into
             </BlockOptions.Item>
           </BlockOptions.Group>
           <BlockOptions.Separator />
           <BlockOptions.Group>
-            <BlockOptions.Item onSelect={onDuplicate}>Duplicate</BlockOptions.Item>
-            <BlockOptions.Item onSelect={onCopyLink}>Copy link to block</BlockOptions.Item>
-            <BlockOptions.Item variant="destructive" onSelect={onDelete}>
+            <BlockOptions.Item icon={<Copy />} onSelect={onDuplicate}>Duplicate</BlockOptions.Item>
+            <BlockOptions.Item icon={<Link />} onSelect={onCopyLink}>Copy link to block</BlockOptions.Item>
+            <BlockOptions.Item icon={<Trash />} variant="destructive" onSelect={onDelete}>
               Delete
             </BlockOptions.Item>
           </BlockOptions.Group>

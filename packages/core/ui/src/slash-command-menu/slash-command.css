@@ -1,51 +1,56 @@
-.slash-command-root {
-  --slash-command-bg: #ffffff;
-  --slash-command-bg-hover: #f4f4f5;
-  --slash-command-bg-selected: #f4f4f5;
-  --slash-command-border: #e4e4e7;
-  --slash-command-border-radius: .375rem;
-  --slash-command-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.18),
-    0 4px 16px -4px rgba(0, 0, 0, 0.1);
-  --slash-command-text: #18181b;
-  --slash-command-text-muted: #71717a;
-  --slash-command-text-disabled: #a1a1aa;
-  --slash-command-accent: #3b82f6;
-  --slash-command-item-radius: 8px;
-  --slash-command-icon-bg: #ffffff;
-  --slash-command-icon-border: #e4e4e7;
-  --slash-command-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --slash-command-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+@import '../styles/variables.css';
+
+:root {
+  /* SlashCommand - Base */
+  --yoopta-ui-slash-command-bg: var(--yoopta-ui-background);
+  --yoopta-ui-slash-command-fg: var(--yoopta-ui-foreground);
+  --yoopta-ui-slash-command-border: var(--yoopta-ui-border);
+  --yoopta-ui-slash-command-ring: var(--yoopta-ui-ring);
+  --yoopta-ui-slash-command-muted: var(--yoopta-ui-muted-foreground);
+  --yoopta-ui-slash-command-accent: var(--yoopta-ui-accent);
+  --yoopta-ui-slash-command-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.1);
+
+  /* SlashCommand - Layout */
+  --yoopta-ui-slash-command-radius: 0.5rem;
+  --yoopta-ui-slash-command-item-radius: 0.5rem;
+  --yoopta-ui-slash-command-width: 300px;
+  --yoopta-ui-slash-command-max-height: 400px;
+  --yoopta-ui-slash-command-z-index: 9999;
+
+  /* SlashCommand - Typography */
+  --yoopta-ui-slash-command-font-size: 0.875rem;
+  --yoopta-ui-slash-command-font-size-sm: 0.75rem;
+  --yoopta-ui-slash-command-font-size-xs: 0.6875rem;
+
+  /* SlashCommand - Icon */
+  --yoopta-ui-slash-command-icon-size: 40px;
+  --yoopta-ui-slash-command-icon-radius: 0.5rem;
+
+  /* Transitions */
+  --yoopta-ui-slash-command-transition: background-color 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
 }
 
-.slash-command-root[data-theme="dark"],
-.dark .slash-command-root {
-  --slash-command-bg: #18181b;
-  --slash-command-bg-hover: #27272a;
-  --slash-command-bg-selected: #27272a;
-  --slash-command-border: #3f3f46;
-  --slash-command-text: #fafafa;
-  --slash-command-text-muted: #a1a1aa;
-  --slash-command-text-disabled: #52525b;
-  --slash-command-icon-bg: #27272a;
-  --slash-command-icon-border: #3f3f46;
+/* SlashCommand Root */
+.yoopta-ui-slash-command-root {
+  z-index: var(--yoopta-ui-slash-command-z-index);
 }
 
-.slash-command-content {
-  z-index: 9999;
-  width: 300px;
-  max-height: 400px;
+/* SlashCommand Content */
+.yoopta-ui-slash-command-content {
+  z-index: var(--yoopta-ui-slash-command-z-index);
+  width: var(--yoopta-ui-slash-command-width);
+  max-height: var(--yoopta-ui-slash-command-max-height);
   overflow: hidden;
-  background-color: var(--slash-command-bg);
-  border: 1px solid var(--slash-command-border);
-  border-radius: var(--slash-command-border-radius);
-  box-shadow: var(--slash-command-shadow);
-  font-family: var(--slash-command-font-family);
-  animation: slash-command-in 150ms ease-out;
+  background-color: hsl(var(--yoopta-ui-slash-command-bg));
+  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  border-radius: var(--yoopta-ui-slash-command-radius);
+  box-shadow: var(--yoopta-ui-slash-command-shadow);
+  animation: yoopta-ui-slash-command-in 150ms ease-out;
   display: flex;
   flex-direction: column;
 }
 
-@keyframes slash-command-in {
+@keyframes yoopta-ui-slash-command-in {
   from {
     opacity: 0;
     transform: translateY(-8px) scale(0.96);
@@ -57,173 +62,183 @@
   }
 }
 
-.slash-command-input-wrapper {
+/* SlashCommand Input Wrapper */
+.yoopta-ui-slash-command-input-wrapper {
   display: flex;
   align-items: center;
   padding: 12px 14px;
-  border-bottom: 1px solid var(--slash-command-border);
+  border-bottom: 1px solid hsl(var(--yoopta-ui-slash-command-border));
   gap: 8px;
   flex-shrink: 0;
 }
 
-.slash-command-input-trigger {
-  color: var(--slash-command-text-muted);
-  font-size: 14px;
-  font-family: var(--slash-command-font-mono);
+/* SlashCommand Input Trigger */
+.yoopta-ui-slash-command-input-trigger {
+  color: hsl(var(--yoopta-ui-slash-command-muted));
+  font-size: var(--yoopta-ui-slash-command-font-size);
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
   font-weight: 500;
   user-select: none;
 }
 
-.slash-command-input {
+/* SlashCommand Input */
+.yoopta-ui-slash-command-input {
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
-  color: var(--slash-command-text);
+  font-size: var(--yoopta-ui-slash-command-font-size);
+  color: hsl(var(--yoopta-ui-slash-command-fg));
   background-color: transparent;
-  font-family: var(--slash-command-font-family);
   min-width: 0;
 }
 
-.slash-command-input::placeholder {
-  color: var(--slash-command-text-muted);
+.yoopta-ui-slash-command-input::placeholder {
+  color: hsl(var(--yoopta-ui-slash-command-muted));
 }
 
-.slash-command-kbd {
+/* SlashCommand Kbd */
+.yoopta-ui-slash-command-kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 2px 6px;
   font-size: 10px;
   font-weight: 500;
-  color: var(--slash-command-text-muted);
-  background-color: var(--slash-command-bg-hover);
-  border: 1px solid var(--slash-command-border);
+  color: hsl(var(--yoopta-ui-slash-command-muted));
+  background-color: hsl(var(--yoopta-ui-slash-command-accent));
+  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
   border-radius: 4px;
-  font-family: var(--slash-command-font-family);
   user-select: none;
 }
 
-.slash-command-list {
+/* SlashCommand List */
+.yoopta-ui-slash-command-list {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding: .5rem .25rem;
+  padding: 0.5rem 0.25rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.slash-command-list::-webkit-scrollbar {
+.yoopta-ui-slash-command-list::-webkit-scrollbar {
   width: 6px;
 }
 
-.slash-command-list::-webkit-scrollbar-track {
+.yoopta-ui-slash-command-list::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.slash-command-list::-webkit-scrollbar-thumb {
-  background-color: var(--slash-command-border);
+.yoopta-ui-slash-command-list::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--yoopta-ui-slash-command-border));
   border-radius: 3px;
 }
 
-.slash-command-list::-webkit-scrollbar-thumb:hover {
-  background-color: var(--slash-command-text-muted);
+.yoopta-ui-slash-command-list::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--yoopta-ui-slash-command-muted));
 }
 
-.slash-command-group {
+/* SlashCommand Group */
+.yoopta-ui-slash-command-group {
   margin-bottom: 8px;
 }
 
-.slash-command-group:last-child {
+.yoopta-ui-slash-command-group:last-child {
   margin-bottom: 0;
 }
 
-.slash-command-group-heading {
+/* SlashCommand Group Heading */
+.yoopta-ui-slash-command-group-heading {
   padding: 8px 12px 6px;
-  font-size: 11px;
+  font-size: var(--yoopta-ui-slash-command-font-size-xs);
   font-weight: 600;
-  color: var(--slash-command-text-muted);
+  color: hsl(var(--yoopta-ui-slash-command-muted));
   text-transform: uppercase;
   letter-spacing: 0.05em;
   user-select: none;
 }
 
-.slash-command-item {
+/* SlashCommand Item */
+.yoopta-ui-slash-command-item {
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
   padding: 4px 6px;
   border: none;
-  border-radius: var(--slash-command-item-radius);
+  border-radius: var(--yoopta-ui-slash-command-item-radius);
   background-color: transparent;
   cursor: pointer;
   text-align: left;
   outline: none;
-  transition: background-color 100ms ease;
-  font-family: var(--slash-command-font-family);
+  transition: var(--yoopta-ui-slash-command-transition);
+  color: hsl(var(--yoopta-ui-slash-command-fg));
 }
 
-.slash-command-item:hover,
-.slash-command-item[data-selected="true"] {
-  background-color: var(--slash-command-bg-selected);
+.yoopta-ui-slash-command-item:hover,
+.yoopta-ui-slash-command-item[data-selected='true'] {
+  background-color: hsl(var(--yoopta-ui-slash-command-accent));
 }
 
-.slash-command-item:focus-visible {
-  outline: 2px solid var(--slash-command-accent);
+.yoopta-ui-slash-command-item:focus-visible {
+  outline: 2px solid hsl(var(--yoopta-ui-slash-command-ring));
   outline-offset: -2px;
 }
 
-.slash-command-item[data-disabled="true"] {
+.yoopta-ui-slash-command-item[data-disabled='true'] {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.slash-command-item-icon {
+/* SlashCommand Item Icon */
+.yoopta-ui-slash-command-item-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: var(--slash-command-icon-bg);
-  border: 1px solid var(--slash-command-icon-border);
+  width: var(--yoopta-ui-slash-command-icon-size);
+  height: var(--yoopta-ui-slash-command-icon-size);
+  border-radius: var(--yoopta-ui-slash-command-icon-radius);
+  background-color: hsl(var(--yoopta-ui-slash-command-bg));
+  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
   flex-shrink: 0;
-  transition: border-color 100ms ease, box-shadow 100ms ease;
-  color: var(--slash-command-text-muted);
+  transition: var(--yoopta-ui-slash-command-transition);
+  color: hsl(var(--yoopta-ui-slash-command-muted));
 }
 
-.slash-command-item[data-selected="true"] .slash-command-item-icon {
-  border-color: var(--slash-command-text-muted);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+.yoopta-ui-slash-command-item[data-selected='true'] .yoopta-ui-slash-command-item-icon {
+  border-color: hsl(var(--yoopta-ui-slash-command-muted));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
 }
 
-.slash-command-item-icon svg {
+.yoopta-ui-slash-command-item-icon svg {
   width: 20px;
   height: 20px;
 }
 
-.slash-command-item-content {
+/* SlashCommand Item Content */
+.yoopta-ui-slash-command-item-content {
   flex: 1;
   min-width: 0;
 }
 
-.slash-command-item-title {
-  font-size: 14px;
+/* SlashCommand Item Title */
+.yoopta-ui-slash-command-item-title {
+  font-size: var(--yoopta-ui-slash-command-font-size);
   font-weight: 500;
-  color: var(--slash-command-text);
+  color: hsl(var(--yoopta-ui-slash-command-fg));
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.slash-command-item-description {
-  font-size: 12px;
-  color: var(--slash-command-text-muted);
+/* SlashCommand Item Description */
+.yoopta-ui-slash-command-item-description {
+  font-size: var(--yoopta-ui-slash-command-font-size-sm);
+  color: hsl(var(--yoopta-ui-slash-command-muted));
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -231,70 +246,77 @@
   margin-top: 1px;
 }
 
-.slash-command-item-shortcut {
+/* SlashCommand Item Shortcut */
+.yoopta-ui-slash-command-item-shortcut {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
 }
 
-.slash-command-empty {
+/* SlashCommand Empty */
+.yoopta-ui-slash-command-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 32px 16px;
-  color: var(--slash-command-text-muted);
-  font-size: 14px;
+  color: hsl(var(--yoopta-ui-slash-command-muted));
+  font-size: var(--yoopta-ui-slash-command-font-size);
   text-align: center;
 }
 
-.slash-command-empty-icon {
+.yoopta-ui-slash-command-empty-icon {
   margin-bottom: 8px;
   opacity: 0.5;
 }
 
-.slash-command-separator {
+/* SlashCommand Separator */
+.yoopta-ui-slash-command-separator {
   height: 1px;
   margin: 8px 12px;
-  background-color: var(--slash-command-border);
+  background-color: hsl(var(--yoopta-ui-slash-command-border));
 }
 
-.slash-command-footer {
+/* SlashCommand Footer */
+.yoopta-ui-slash-command-footer {
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 8px 14px;
-  border-top: 1px solid var(--slash-command-border);
-  background-color: var(--slash-command-bg-hover);
+  border-top: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  background-color: hsl(var(--yoopta-ui-slash-command-accent));
   flex-shrink: 0;
 }
 
-.slash-command-footer-hint {
+/* SlashCommand Footer Hint */
+.yoopta-ui-slash-command-footer-hint {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  color: var(--slash-command-text-muted);
+  font-size: var(--yoopta-ui-slash-command-font-size-xs);
+  color: hsl(var(--yoopta-ui-slash-command-muted));
 }
 
-.slash-command-loading {
+/* SlashCommand Loading */
+.yoopta-ui-slash-command-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
 }
 
-.slash-command-spinner {
+/* SlashCommand Spinner */
+.yoopta-ui-slash-command-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--slash-command-border);
-  border-top-color: var(--slash-command-accent);
+  border: 2px solid hsl(var(--yoopta-ui-slash-command-border));
+  border-top-color: hsl(var(--yoopta-ui-primary));
   border-radius: 50%;
-  animation: slash-command-spin 600ms linear infinite;
+  animation: yoopta-ui-slash-command-spin 600ms linear infinite;
 }
 
-@keyframes slash-command-spin {
+@keyframes yoopta-ui-slash-command-spin {
   to {
     transform: rotate(360deg);
   }

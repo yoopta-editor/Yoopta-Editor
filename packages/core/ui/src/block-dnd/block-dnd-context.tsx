@@ -199,12 +199,12 @@ export const BlockDndContext = ({
   );
 
   const defaultDragOverlay = draggedBlocks.length > 0 && (
-    <div className="yoopta-block-dnd-overlay">
-      <div className="yoopta-block-dnd-overlay-icon">
+    <div className="yoopta-ui-block-dnd-overlay">
+      <div className="yoopta-ui-block-dnd-overlay-icon">
         <GripVertical size={16} />
       </div>
-      <div className="yoopta-block-dnd-overlay-content">
-        <span className="yoopta-block-dnd-overlay-text">
+      <div className="yoopta-ui-block-dnd-overlay-content">
+        <span className="yoopta-ui-block-dnd-overlay-text">
           {draggedBlocks.length === 1 ? (
             <>Moving block</>
           ) : (

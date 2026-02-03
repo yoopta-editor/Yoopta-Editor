@@ -15,7 +15,7 @@ import { SelectionBox } from '@yoopta/ui/selection-box';
 import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
 
 const EDITOR_STYLE = {
-  width: 750,
+  width: 700,
   paddingBottom: 100,
 };
 
@@ -43,7 +43,7 @@ const YooptaUIPackageExample = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 mt-10" ref={selectionBoxRef}>
+    <div className="flex flex-col gap-2" style={{ paddingTop: '80px' }} ref={selectionBoxRef}>
       <BlockDndContext editor={editor}>
         <YooptaEditor
           editor={editor}

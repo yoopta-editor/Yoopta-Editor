@@ -94,7 +94,7 @@ export const SlashCommandRoot = ({
 
   return (
     <SlashCommandContext.Provider value={contextValue}>
-      <div ref={refs.setFloating} style={style} className={`slash-command-root ${className ?? ''}`}>
+      <div ref={refs.setFloating} style={style} className={`yoopta-ui-slash-command-root ${className ?? ''}`}>
         {isMounted ? childrenRender : null}
       </div>
     </SlashCommandContext.Provider>

@@ -6,8 +6,8 @@ export type SlashCommandLoadingProps = {
 };
 
 export const SlashCommandLoading = ({ children, className }: SlashCommandLoadingProps) => (
-  <div className={`slash-command-loading ${className || ''}`}>
-    {children || <div className="slash-command-spinner" />}
+  <div className={`yoopta-ui-slash-command-loading ${className || ''}`}>
+    {children || <div className="yoopta-ui-slash-command-spinner" />}
   </div>
 );
 

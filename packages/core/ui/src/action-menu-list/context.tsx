@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, HTMLProps } from 'react';
 import type { ActionMenuItem } from './types';
 
 export type ActionMenuListContextValue = {
@@ -21,6 +21,8 @@ export type ActionMenuListContextValue = {
   floatingStyles: CSSProperties;
   /** Ref setter for floating element */
   setFloatingRef: (node: HTMLElement | null) => void;
+  /** Props from useInteractions for dismiss handling */
+  getFloatingProps: (userProps?: HTMLProps<HTMLElement>) => Record<string, unknown>;
 };
 
 export const ActionMenuListContext = createContext<ActionMenuListContextValue | null>(null);

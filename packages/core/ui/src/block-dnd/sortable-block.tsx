@@ -50,10 +50,10 @@ export const SortableBlock = ({ id, children, className, disabled = false, useDr
   };
 
   const combinedClassName = [
-    'yoopta-block-dnd-sortable',
-    isThisDragging && 'yoopta-block-dnd-sortable--dragging',
-    isOver && 'yoopta-block-dnd-sortable--over',
-    isPartOfMultiDrag && 'yoopta-block-dnd-sortable--multi',
+    'yoopta-ui-block-dnd-sortable',
+    isThisDragging && 'yoopta-ui-block-dnd-sortable--dragging',
+    isOver && 'yoopta-ui-block-dnd-sortable--over',
+    isPartOfMultiDrag && 'yoopta-ui-block-dnd-sortable--multi',
     className,
   ]
     .filter(Boolean)
@@ -70,7 +70,7 @@ export const SortableBlock = ({ id, children, className, disabled = false, useDr
       data-block-dnd-dragging={isBeingDragged || undefined}
       data-block-dnd-over={isOver || undefined}>
       {children}
-      {isOver && !isThisDragging && <div className="yoopta-block-dnd-drop-indicator" />}
+      {isOver && !isThisDragging && <div className="yoopta-ui-block-dnd-drop-indicator" />}
     </div>
   );
 };

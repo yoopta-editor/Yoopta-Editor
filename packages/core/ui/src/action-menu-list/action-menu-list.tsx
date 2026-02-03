@@ -1,7 +1,17 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { cloneElement, forwardRef, isValidElement, useCallback, useMemo, useState } from 'react';
+import { cloneElement, forwardRef, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
-import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating, useMergeRefs } from '@floating-ui/react';
+import {
+  FloatingPortal,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useMergeRefs,
+} from '@floating-ui/react';
 import { getRootBlockElement, useYooptaEditor } from '@yoopta/editor';
 
 import { ActionMenuListContext, useActionMenuListContext } from './context';
@@ -65,13 +75,32 @@ const ActionMenuListRoot = ({
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(actions[0] ?? null);
 
-  const { refs, floatingStyles } = useFloating({
+  const onOpenChange = useCallback(
+    (newOpen: boolean) => {
+      if (!isControlled) {
+        setUncontrolledOpen(newOpen);
+      }
+      controlledOnOpenChange?.(newOpen);
+    },
+    [isControlled, controlledOnOpenChange],
+  );
+
+  const { refs, floatingStyles, context } = useFloating({
     elements: { reference: anchor },
     placement,
     open: isOpen,
+    onOpenChange,
     middleware: [flip(), shift(), offset(10)],
     whileElementsMounted: autoUpdate,
   });
+
+  // Handle dismiss (escape key, outside press handled by Overlay)
+  const dismiss = useDismiss(context, {
+    escapeKey: true,
+    outsidePress: false, // Overlay handles this
+  });
+
+  const { getFloatingProps } = useInteractions([dismiss]);
 
   const combinedStyles: CSSProperties = useMemo(
     () => ({
@@ -82,12 +111,9 @@ const ActionMenuListRoot = ({
   );
 
   const close = useCallback(() => {
-    if (!isControlled) {
-      setUncontrolledOpen(false);
-    }
-    controlledOnOpenChange?.(false);
+    onOpenChange(false);
     setSelectedAction(actions[0] ?? null);
-  }, [isControlled, controlledOnOpenChange, actions]);
+  }, [onOpenChange, actions]);
 
   const onSelect = useCallback(
     (type: string) => {
@@ -118,8 +144,9 @@ const ActionMenuListRoot = ({
       close,
       floatingStyles: combinedStyles,
       setFloatingRef: refs.setFloating,
+      getFloatingProps,
     }),
-    [isOpen, view, actions, selectedAction, onSelect, close, combinedStyles, refs.setFloating],
+    [isOpen, view, actions, selectedAction, onSelect, close, combinedStyles, refs.setFloating, getFloatingProps],
   );
 
   // API for render props
@@ -149,10 +176,31 @@ type ActionMenuListContentProps = {
 
 const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentProps>(
   ({ children, className = '', ...props }, forwardedRef) => {
-    const { isOpen, floatingStyles, setFloatingRef, actions, selectedAction, setSelectedAction, onSelect, view, close } =
-      useActionMenuListContext();
-    const mergedRef = useMergeRefs([forwardedRef, setFloatingRef]);
+    const {
+      isOpen,
+      floatingStyles,
+      setFloatingRef,
+      actions,
+      selectedAction,
+      setSelectedAction,
+      onSelect,
+      view,
+      close,
+      getFloatingProps,
+    } = useActionMenuListContext();
+    const internalRef = useRef<HTMLDivElement>(null);
+    const mergedRef = useMergeRefs([forwardedRef, setFloatingRef, internalRef]);
     const editor = useYooptaEditor();
+
+    // Auto-focus content when it opens for proper escape key handling
+    useEffect(() => {
+      if (isOpen && internalRef.current) {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          internalRef.current?.focus();
+        });
+      }
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -187,11 +235,13 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
             tabIndex={0}
             className={`yoopta-ui-action-menu-list-content yoopta-ui-action-menu-list-${view} ${className}`}
             style={floatingStyles}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onClick={(e) => e.stopPropagation()}
+            {...getFloatingProps({
+              onMouseDown: (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              },
+              onClick: (e) => e.stopPropagation(),
+            })}
             {...props}
           >
             {content}

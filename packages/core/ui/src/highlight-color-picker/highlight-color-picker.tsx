@@ -132,14 +132,14 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
           <div
             ref={setFloatingRef}
             style={floatingStyles}
-            className={`yoopta-highlight-color-picker ${className ?? ''}`}
+            className={`yoopta-ui-highlight-color-picker ${className ?? ''}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}>
             {/* Mode Toggle */}
-            <div className="yoopta-highlight-color-picker__mode-toggle">
+            <div className="yoopta-ui-highlight-color-picker-mode-toggle">
               <button
                 type="button"
-                className="yoopta-highlight-color-picker__mode-btn"
+                className="yoopta-ui-highlight-color-picker-mode-btn"
                 data-active={mode === 'backgroundColor'}
                 onClick={() => setMode('backgroundColor')}
                 aria-label="Background color">
@@ -147,7 +147,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
               </button>
               <button
                 type="button"
-                className="yoopta-highlight-color-picker__mode-btn"
+                className="yoopta-ui-highlight-color-picker-mode-btn"
                 data-active={mode === 'color'}
                 onClick={() => setMode('color')}
                 aria-label="Text color">
@@ -155,23 +155,23 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
               </button>
             </div>
 
-            <div className="yoopta-highlight-color-picker__picker">
+            <div className="yoopta-ui-highlight-color-picker-picker">
               <HexColorPicker
                 color={currentColor}
                 onChange={handleColorChange}
-                className="yoopta-highlight-color-picker__react-colorful"
+                className="yoopta-ui-highlight-color-picker-react-colorful"
               />
             </div>
 
             {presets.length > 0 && (
-              <div className="yoopta-highlight-color-picker__presets">
+              <div className="yoopta-ui-highlight-color-picker-presets">
                 {presets.map((presetColor) => {
                   const isSelected = currentColor?.toLowerCase() === presetColor.toLowerCase();
                   return (
                     <button
                       key={presetColor}
                       type="button"
-                      className="yoopta-highlight-color-picker__preset"
+                      className="yoopta-ui-highlight-color-picker-preset"
                       data-selected={isSelected}
                       style={{ backgroundColor: presetColor }}
                       onClick={() => handleColorChange(presetColor)}
@@ -183,15 +183,15 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
             )}
 
             {showInput && (
-              <div className="yoopta-highlight-color-picker__hex-row">
+              <div className="yoopta-ui-highlight-color-picker-hex-row">
                 <div
-                  className="yoopta-highlight-color-picker__swatch"
+                  className="yoopta-ui-highlight-color-picker-swatch"
                   style={{ backgroundColor: currentColor }}
                 />
                 <HexColorInput
                   color={currentColor}
                   onChange={handleColorChange}
-                  className="yoopta-highlight-color-picker__hex-input"
+                  className="yoopta-ui-highlight-color-picker-hex-input"
                   prefixed
                 />
               </div>

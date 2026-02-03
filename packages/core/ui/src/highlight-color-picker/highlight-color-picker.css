@@ -1,30 +1,40 @@
-.yoopta-highlight-color-picker {
-  /* Theme vars (light by default) */
-  --hcp-bg: #ffffff;
-  --hcp-fg: #18181b;
-  --hcp-muted: #71717a;
-  --hcp-border: #e4e4e7;
-  --hcp-ring: #3b82f6;
-  --hcp-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.18), 0 4px 16px -4px rgba(0, 0, 0, 0.1);
+@import '../styles/variables.css';
 
-  --hcp-radius: 10px;
-  --hcp-pad: 10px;
-  --hcp-gap: 10px;
+:root {
+  /* HighlightColorPicker - Base */
+  --yoopta-ui-highlight-color-picker-bg: var(--yoopta-ui-background);
+  --yoopta-ui-highlight-color-picker-fg: var(--yoopta-ui-foreground);
+  --yoopta-ui-highlight-color-picker-border: var(--yoopta-ui-border);
+  --yoopta-ui-highlight-color-picker-muted: var(--yoopta-ui-muted-foreground);
+  --yoopta-ui-highlight-color-picker-ring: var(--yoopta-ui-ring);
+  --yoopta-ui-highlight-color-picker-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.1);
 
-  /* Compact sizes */
-  --hcp-width: 224px;
-  --hcp-picker-height: 120px;
-  --hcp-preset-size: 24px;
-  --hcp-input-height: 26px;
+  /* HighlightColorPicker - Layout */
+  --yoopta-ui-highlight-color-picker-radius: 0.625rem;
+  --yoopta-ui-highlight-color-picker-padding: 10px;
+  --yoopta-ui-highlight-color-picker-gap: 10px;
+  --yoopta-ui-highlight-color-picker-width: 224px;
+  --yoopta-ui-highlight-color-picker-z-index: 9999;
 
-  z-index: 9999;
-  width: var(--hcp-width);
-  background: var(--hcp-bg);
-  color: var(--hcp-fg);
-  border: 1px solid var(--hcp-border);
-  border-radius: var(--hcp-radius);
-  box-shadow: var(--hcp-shadow);
-  padding: var(--hcp-pad);
+  /* HighlightColorPicker - Components */
+  --yoopta-ui-highlight-color-picker-picker-height: 120px;
+  --yoopta-ui-highlight-color-picker-preset-size: 24px;
+  --yoopta-ui-highlight-color-picker-input-height: 26px;
+
+  /* Transitions */
+  --yoopta-ui-highlight-color-picker-transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+/* HighlightColorPicker Root */
+.yoopta-ui-highlight-color-picker {
+  z-index: var(--yoopta-ui-highlight-color-picker-z-index);
+  width: var(--yoopta-ui-highlight-color-picker-width);
+  background: hsl(var(--yoopta-ui-highlight-color-picker-bg));
+  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
+  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border-radius: var(--yoopta-ui-highlight-color-picker-radius);
+  box-shadow: var(--yoopta-ui-highlight-color-picker-shadow);
+  padding: var(--yoopta-ui-highlight-color-picker-padding);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -32,84 +42,79 @@
   user-select: none;
 }
 
-.yoopta-highlight-color-picker[data-theme="dark"],
-.dark .yoopta-highlight-color-picker {
-  --hcp-bg: #18181b;
-  --hcp-fg: #fafafa;
-  --hcp-muted: #a1a1aa;
-  --hcp-border: #3f3f46;
-  --hcp-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.5), 0 4px 16px -4px rgba(0, 0, 0, 0.3);
-}
-
-.yoopta-highlight-color-picker__mode-toggle {
+/* Mode Toggle */
+.yoopta-ui-highlight-color-picker-mode-toggle {
   display: flex;
   gap: 4px;
   padding: 4px;
-  background: var(--hcp-border);
+  background: hsl(var(--yoopta-ui-highlight-color-picker-border));
   border-radius: 8px;
   flex-shrink: 0;
 }
 
-.yoopta-highlight-color-picker__mode-btn {
+/* Mode Button */
+.yoopta-ui-highlight-color-picker-mode-btn {
   flex: 1;
   padding: 4px 8px;
   font-size: 11px;
   font-weight: 500;
-  color: var(--hcp-muted);
+  color: hsl(var(--yoopta-ui-highlight-color-picker-muted));
   background: transparent;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   outline: none;
-  transition: background-color 120ms ease, color 120ms ease;
+  transition: var(--yoopta-ui-highlight-color-picker-transition);
   text-align: center;
   line-height: 1.4;
 }
 
-.yoopta-highlight-color-picker__mode-btn:hover {
-  color: var(--hcp-fg);
+.yoopta-ui-highlight-color-picker-mode-btn:hover {
+  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
 }
 
-.yoopta-highlight-color-picker__mode-btn[data-active="true"] {
-  background: var(--hcp-bg);
-  color: var(--hcp-fg);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.yoopta-ui-highlight-color-picker-mode-btn[data-active='true'] {
+  background: hsl(var(--yoopta-ui-highlight-color-picker-bg));
+  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
 }
 
-.yoopta-highlight-color-picker__mode-btn:focus-visible {
-  outline: 2px solid var(--hcp-ring);
+.yoopta-ui-highlight-color-picker-mode-btn:focus-visible {
+  outline: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-ring));
   outline-offset: 2px;
 }
 
-.yoopta-highlight-color-picker__react-colorful {
+/* React Colorful Wrapper */
+.yoopta-ui-highlight-color-picker-react-colorful {
   width: 100% !important;
-  height: var(--hcp-picker-height) !important;
+  height: var(--yoopta-ui-highlight-color-picker-picker-height) !important;
 }
 
 /* Saturation */
-.yoopta-highlight-color-picker__react-colorful .react-colorful__saturation {
+.yoopta-ui-highlight-color-picker-react-colorful .react-colorful__saturation {
   border-radius: 8px;
-  border: 1px solid var(--hcp-border);
+  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
 }
 
 /* Hue slider */
-.yoopta-highlight-color-picker__react-colorful .react-colorful__hue {
+.yoopta-ui-highlight-color-picker-react-colorful .react-colorful__hue {
   margin-top: 8px;
   height: 10px;
   border-radius: 999px;
-  border: 1px solid var(--hcp-border);
+  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
 }
 
 /* Pointer */
-.yoopta-highlight-color-picker__react-colorful .react-colorful__pointer {
+.yoopta-ui-highlight-color-picker-react-colorful .react-colorful__pointer {
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-  border: 2px solid var(--hcp-bg);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.22);
+  border: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-bg));
 }
 
-.yoopta-highlight-color-picker__presets {
+/* Presets */
+.yoopta-ui-highlight-color-picker-presets {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -118,81 +123,85 @@
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: thin;
-  scrollbar-color: var(--hcp-border) transparent;
+  scrollbar-color: hsl(var(--yoopta-ui-highlight-color-picker-border)) transparent;
 }
 
-.yoopta-highlight-color-picker__presets::-webkit-scrollbar {
+.yoopta-ui-highlight-color-picker-presets::-webkit-scrollbar {
   height: 6px;
 }
 
-.yoopta-highlight-color-picker__presets::-webkit-scrollbar-track {
+.yoopta-ui-highlight-color-picker-presets::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.yoopta-highlight-color-picker__presets::-webkit-scrollbar-thumb {
-  background-color: var(--hcp-border);
+.yoopta-ui-highlight-color-picker-presets::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--yoopta-ui-highlight-color-picker-border));
   border-radius: 999px;
 }
 
-.yoopta-highlight-color-picker__preset {
-  width: var(--hcp-preset-size);
-  height: var(--hcp-preset-size);
+/* Preset Button */
+.yoopta-ui-highlight-color-picker-preset {
+  width: var(--yoopta-ui-highlight-color-picker-preset-size);
+  height: var(--yoopta-ui-highlight-color-picker-preset-size);
   flex: 0 0 auto;
   border-radius: 7px;
-  border: 2px solid var(--hcp-border);
+  border: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
   cursor: pointer;
   padding: 0;
   outline: none;
-  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  transition: var(--yoopta-ui-highlight-color-picker-transition);
 }
 
-.yoopta-highlight-color-picker__preset:hover {
+.yoopta-ui-highlight-color-picker-preset:hover {
   transform: scale(1.08);
 }
 
-.yoopta-highlight-color-picker__preset:focus-visible {
-  box-shadow: 0 0 0 2px var(--hcp-ring);
-  border-color: var(--hcp-ring);
+.yoopta-ui-highlight-color-picker-preset:focus-visible {
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring));
+  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
 }
 
-.yoopta-highlight-color-picker__preset[data-selected="true"] {
-  border-color: var(--hcp-ring);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+.yoopta-ui-highlight-color-picker-preset[data-selected='true'] {
+  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring) / 0.35);
 }
 
-.yoopta-highlight-color-picker__hex-row {
+/* Hex Row */
+.yoopta-ui-highlight-color-picker-hex-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.yoopta-highlight-color-picker__swatch {
-  width: var(--hcp-input-height);
-  height: var(--hcp-input-height);
+/* Swatch */
+.yoopta-ui-highlight-color-picker-swatch {
+  width: var(--yoopta-ui-highlight-color-picker-input-height);
+  height: var(--yoopta-ui-highlight-color-picker-input-height);
   border-radius: 7px;
-  border: 1px solid var(--hcp-border);
+  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
   flex: 0 0 auto;
 }
 
-.yoopta-highlight-color-picker__hex-input {
-  height: var(--hcp-input-height);
+/* Hex Input */
+.yoopta-ui-highlight-color-picker-hex-input {
+  height: var(--yoopta-ui-highlight-color-picker-input-height);
   flex: 1;
   min-width: 0;
   border-radius: 9px;
-  border: 1px solid var(--hcp-border);
+  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
   background: transparent;
-  color: var(--hcp-fg);
+  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
   padding: 0 10px;
   font-size: 12px;
   line-height: 1;
   outline: none;
 }
 
-.yoopta-highlight-color-picker__hex-input:focus {
-  border-color: var(--hcp-ring);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+.yoopta-ui-highlight-color-picker-hex-input:focus {
+  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring) / 0.25);
 }
 
-.yoopta-highlight-color-picker__hex-input::placeholder {
-  color: var(--hcp-muted);
+.yoopta-ui-highlight-color-picker-hex-input::placeholder {
+  color: hsl(var(--yoopta-ui-highlight-color-picker-muted));
 }

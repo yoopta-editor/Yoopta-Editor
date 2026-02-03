@@ -11,7 +11,7 @@ export const SlashCommandEmpty = ({ children, className }: SlashCommandEmptyProp
   if (filteredItems.length > 0) return null;
 
   return (
-    <div className={`slash-command-empty ${className || ''}`}>{children || 'No results found'}</div>
+    <div className={`yoopta-ui-slash-command-empty ${className || ''}`}>{children || 'No results found'}</div>
   );
 };
 

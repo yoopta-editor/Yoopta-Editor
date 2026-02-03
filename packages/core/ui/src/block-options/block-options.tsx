@@ -173,7 +173,7 @@ const BlockOptionsContent = forwardRef<HTMLDivElement, BlockOptionsContentProps>
 
     return (
       <FloatingPortal root={editor.refElement} id={`yoopta-ui-block-options-portal-${editor.id}`}>
-        <Overlay lockScroll={false} onClick={() => onOpenChange(false)}>
+        <Overlay lockScroll onClick={() => onOpenChange(false)}>
           <FloatingFocusManager context={context} modal={false}>
             <div
               ref={contentRef}

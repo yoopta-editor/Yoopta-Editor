@@ -41,8 +41,8 @@ const exampleNavigation = [
   },
   {
     name: "Rich Chat",
-    href: "/playground/ai-chat",
-    description: "WhatsApp/Telegram-like messaging",
+    href: "/playground/social-media-chat",
+    description: "Social media-like messaging interface ",
     icon: MessageSquare,
   },
   {

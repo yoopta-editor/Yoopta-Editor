@@ -170,7 +170,7 @@ export const YOOPTA_PLUGINS = applyTheme([
   }),
   Paragraph,
   Tabs.extend({
-    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
+    injectElementsFromPlugins: [Code, Lists.BulletedList, Lists.NumberedList, Lists.TodoList],
   }),
   CodeGroup,
   Headings.HeadingOne,

@@ -450,7 +450,7 @@ type YooptaEditorProps = {
 Live demos and source code from the [next-app-example](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example) app:
 
 - [Playground](https://yoopta.dev/playground) — Full setup: toolbar, slash menu, block actions, drag & drop, mentions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup))
-- [Rich Chat](https://yoopta.dev/playground/ai-chat) — WhatsApp/Telegram-like messaging with rich text, code blocks, reactions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/ai-chat))
+- [Rich Chat](https://yoopta.dev/playground/social-media-chat) — WhatsApp/Telegram-like messaging with rich text, code blocks, reactions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/social-media-chat))
 - [Word Example](https://yoopta.dev/playground/word-example) — Word-like editor with fixed toolbar, tables, images ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/word-example))
 - [Slack Chat](https://yoopta.dev/playground/slack-chat) — Slack-style channel list and message composer ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/slack-chat))
 - [README Editor](https://yoopta.dev/playground/readme-editor) — Split view with live Markdown preview ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/readme-editor))

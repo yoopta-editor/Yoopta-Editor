@@ -14,7 +14,7 @@ export const SlashCommandContent = ({ children, className }: SlashCommandContent
       tabIndex={0}
       role="listbox"
       aria-label="Slash commands"
-      className={`slash-command-content ${className || ''}`}
+      className={`yoopta-ui-slash-command-content ${className || ''}`}
       onMouseDown={preventDefault}
       onMouseMove={preventDefault}>
       {children}

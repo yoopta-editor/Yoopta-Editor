@@ -64,15 +64,15 @@ export const SlashCommandItem = ({
 
   const content = children || (
     <>
-      {icon && <div className="slash-command-item-icon">{icon}</div>}
-      <div className="slash-command-item-content">
-        {title && <div className="slash-command-item-title">{title}</div>}
-        {description && <div className="slash-command-item-description">{description}</div>}
+      {icon && <div className="yoopta-ui-slash-command-item-icon">{icon}</div>}
+      <div className="yoopta-ui-slash-command-item-content">
+        {title && <div className="yoopta-ui-slash-command-item-title">{title}</div>}
+        {description && <div className="yoopta-ui-slash-command-item-description">{description}</div>}
       </div>
       {shortcut && shortcut.length > 0 && (
-        <div className="slash-command-item-shortcut">
+        <div className="yoopta-ui-slash-command-item-shortcut">
           {shortcut.map((key) => (
-            <kbd key={key} className="slash-command-kbd">
+            <kbd key={key} className="yoopta-ui-slash-command-kbd">
               {key}
             </kbd>
           ))}
@@ -91,7 +91,7 @@ export const SlashCommandItem = ({
       data-selected={isSelected}
       data-disabled={disabled}
       data-value={value}
-      className={`slash-command-item ${className || ''}`}
+      className={`yoopta-ui-slash-command-item ${className || ''}`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseDown={(e) => e.preventDefault()}

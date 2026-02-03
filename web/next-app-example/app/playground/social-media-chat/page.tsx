@@ -23,7 +23,9 @@ export default function RichChatPage() {
           View source
         </Link>
       </div>
-      <SocialMediaChatEditor />
+      <div className="flex-1 min-h-0 flex flex-col">
+        <SocialMediaChatEditor />
+      </div>
     </div>
   );
 }

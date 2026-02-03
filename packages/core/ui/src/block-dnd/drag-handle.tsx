@@ -60,9 +60,9 @@ export const DragHandle = forwardRef<HTMLButtonElement, DragHandleProps>(
     );
 
     const combinedClassName = [
-      'yoopta-block-dnd-handle',
-      isHolding && 'yoopta-block-dnd-handle--holding',
-      isDragging && 'yoopta-block-dnd-handle--dragging',
+      'yoopta-ui-block-dnd-handle',
+      isHolding && 'yoopta-ui-block-dnd-handle--holding',
+      isDragging && 'yoopta-ui-block-dnd-handle--dragging',
       className,
     ]
       .filter(Boolean)

@@ -17,12 +17,12 @@ export const SlashCommandInput = forwardRef<HTMLInputElement, SlashCommandInputP
     const { state, actionHandlers } = useSlashCommandContext();
 
     return (
-      <div className={`slash-command-input-wrapper ${className || ''}`}>
-        {showTrigger && <span className="slash-command-input-trigger">/</span>}
+      <div className={`yoopta-ui-slash-command-input-wrapper ${className || ''}`}>
+        {showTrigger && <span className="yoopta-ui-slash-command-input-trigger">/</span>}
         <input
           ref={ref}
           type="text"
-          className="slash-command-input"
+          className="yoopta-ui-slash-command-input"
           placeholder={placeholder}
           value={state.search}
           onChange={(e) => actionHandlers.setSearch(e.target.value)}
@@ -31,7 +31,7 @@ export const SlashCommandInput = forwardRef<HTMLInputElement, SlashCommandInputP
           autoCapitalize="off"
           spellCheck={false}
         />
-        {showEscHint && <kbd className="slash-command-kbd">ESC</kbd>}
+        {showEscHint && <kbd className="yoopta-ui-slash-command-kbd">ESC</kbd>}
       </div>
     );
   },

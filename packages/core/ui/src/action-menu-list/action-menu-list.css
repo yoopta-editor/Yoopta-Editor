@@ -1,3 +1,5 @@
+@import '../styles/variables.css';
+
 /* ActionMenuList Overlay */
 .yoopta-ui-action-menu-list-overlay {
   background: transparent;
@@ -20,11 +22,9 @@
   background: hsl(var(--yoopta-ui-background));
   border: 1px solid hsl(var(--yoopta-ui-border));
   border-radius: var(--yoopta-ui-action-menu-radius, 0.5rem);
-  box-shadow: var(
-    --yoopta-ui-action-menu-shadow,
-    0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1)
-  );
+  box-shadow: var(--yoopta-ui-action-menu-shadow,
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1));
   padding: var(--yoopta-ui-action-menu-padding, 0.5rem);
   max-height: var(--yoopta-ui-action-menu-max-height, 330px);
   overflow-y: auto;
