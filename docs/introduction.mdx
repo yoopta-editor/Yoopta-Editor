@@ -380,6 +380,11 @@ The `injectElementsFromPlugins` property allows elements from one plugin to be i
 
 ```jsx
 import Callout from '@yoopta/callout';
+import Lists from '@yoopta/lists';
+import Blockquote from '@yoopta/blockquote';
+import Image from '@yoopta/image';
+import Code from '@yoopta/code';
+import Tabs from '@yoopta/tabs';
 
 const plugins = [
   Callout.extend({
@@ -388,15 +393,16 @@ const plugins = [
       Lists.NumberedList,
       Lists.TodoList,
       Blockquote,
-      Callout,
-      YImage,
       Code,
     ],
+  }),
+  Tabs.extend({
+    injectElementsFromPlugins: [Code],
   }),
 ];
 ```
 
-When a user is inside a `callout-content` element, the slash command menu will only show blocks from the allowed plugins (`Paragraph`, `Heading`, `List`).
+When a user is inside a `callout` element, the slash command menu will only show blocks from the injected plugins.
 
 **Use Cases:**
 
@@ -404,13 +410,13 @@ When a user is inside a `callout-content` element, the slash command menu will o
 - **Table cells** - Allow any block type inside cells
 - **Steps content** - Allow nested content in step items
 - **Accordion items** - Allow nested blocks inside accordion content
+- **Tab items** - Allow nested blocks inside tab leaf elements
 
 **How it works:**
 
 1. When the cursor is inside an element with `injectElementsFromPlugins`
 2. The slash command menu filters available blocks to only those specified
 3. Inserted blocks become children of that element
-4. Each injected block gets its own Slate editor instance
 
 ## Plugin System
 
