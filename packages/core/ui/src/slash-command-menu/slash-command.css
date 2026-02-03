@@ -1,13 +1,6 @@
 @import '../styles/variables.css';
 
 :root {
-  /* SlashCommand - Base */
-  --yoopta-ui-slash-command-bg: var(--yoopta-ui-background);
-  --yoopta-ui-slash-command-fg: var(--yoopta-ui-foreground);
-  --yoopta-ui-slash-command-border: var(--yoopta-ui-border);
-  --yoopta-ui-slash-command-ring: var(--yoopta-ui-ring);
-  --yoopta-ui-slash-command-muted: var(--yoopta-ui-muted-foreground);
-  --yoopta-ui-slash-command-accent: var(--yoopta-ui-accent);
   --yoopta-ui-slash-command-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.1);
 
   /* SlashCommand - Layout */
@@ -41,8 +34,8 @@
   width: var(--yoopta-ui-slash-command-width);
   max-height: var(--yoopta-ui-slash-command-max-height);
   overflow: hidden;
-  background-color: hsl(var(--yoopta-ui-slash-command-bg));
-  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  background-color: hsl(var(--yoopta-ui-background));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   border-radius: var(--yoopta-ui-slash-command-radius);
   box-shadow: var(--yoopta-ui-slash-command-shadow);
   animation: yoopta-ui-slash-command-in 150ms ease-out;
@@ -67,14 +60,14 @@
   display: flex;
   align-items: center;
   padding: 12px 14px;
-  border-bottom: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  border-bottom: 1px solid hsl(var(--yoopta-ui-border));
   gap: 8px;
   flex-shrink: 0;
 }
 
 /* SlashCommand Input Trigger */
 .yoopta-ui-slash-command-input-trigger {
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   font-size: var(--yoopta-ui-slash-command-font-size);
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
   font-weight: 500;
@@ -87,13 +80,13 @@
   border: none;
   outline: none;
   font-size: var(--yoopta-ui-slash-command-font-size);
-  color: hsl(var(--yoopta-ui-slash-command-fg));
+  color: hsl(var(--yoopta-ui-foreground));
   background-color: transparent;
   min-width: 0;
 }
 
 .yoopta-ui-slash-command-input::placeholder {
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
 }
 
 /* SlashCommand Kbd */
@@ -104,9 +97,9 @@
   padding: 2px 6px;
   font-size: 10px;
   font-weight: 500;
-  color: hsl(var(--yoopta-ui-slash-command-muted));
-  background-color: hsl(var(--yoopta-ui-slash-command-accent));
-  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  color: hsl(var(--yoopta-ui-muted-foreground));
+  background-color: hsl(var(--yoopta-ui-accent));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   border-radius: 4px;
   user-select: none;
 }
@@ -132,12 +125,12 @@
 }
 
 .yoopta-ui-slash-command-list::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--yoopta-ui-slash-command-border));
+  background-color: hsl(var(--yoopta-ui-border));
   border-radius: 3px;
 }
 
 .yoopta-ui-slash-command-list::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--yoopta-ui-slash-command-muted));
+  background-color: hsl(var(--yoopta-ui-muted-foreground));
 }
 
 /* SlashCommand Group */
@@ -154,7 +147,7 @@
   padding: 8px 12px 6px;
   font-size: var(--yoopta-ui-slash-command-font-size-xs);
   font-weight: 600;
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   text-transform: uppercase;
   letter-spacing: 0.05em;
   user-select: none;
@@ -174,16 +167,16 @@
   text-align: left;
   outline: none;
   transition: var(--yoopta-ui-slash-command-transition);
-  color: hsl(var(--yoopta-ui-slash-command-fg));
+  color: hsl(var(--yoopta-ui-foreground));
 }
 
 .yoopta-ui-slash-command-item:hover,
 .yoopta-ui-slash-command-item[data-selected='true'] {
-  background-color: hsl(var(--yoopta-ui-slash-command-accent));
+  background-color: hsl(var(--yoopta-ui-accent));
 }
 
 .yoopta-ui-slash-command-item:focus-visible {
-  outline: 2px solid hsl(var(--yoopta-ui-slash-command-ring));
+  outline: 2px solid hsl(var(--yoopta-ui-ring));
   outline-offset: -2px;
 }
 
@@ -201,15 +194,15 @@
   width: var(--yoopta-ui-slash-command-icon-size);
   height: var(--yoopta-ui-slash-command-icon-size);
   border-radius: var(--yoopta-ui-slash-command-icon-radius);
-  background-color: hsl(var(--yoopta-ui-slash-command-bg));
-  border: 1px solid hsl(var(--yoopta-ui-slash-command-border));
+  background-color: hsl(var(--yoopta-ui-background));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   flex-shrink: 0;
   transition: var(--yoopta-ui-slash-command-transition);
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
 }
 
 .yoopta-ui-slash-command-item[data-selected='true'] .yoopta-ui-slash-command-item-icon {
-  border-color: hsl(var(--yoopta-ui-slash-command-muted));
+  border-color: hsl(var(--yoopta-ui-muted-foreground));
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
 }
 
@@ -228,7 +221,7 @@
 .yoopta-ui-slash-command-item-title {
   font-size: var(--yoopta-ui-slash-command-font-size);
   font-weight: 500;
-  color: hsl(var(--yoopta-ui-slash-command-fg));
+  color: hsl(var(--yoopta-ui-foreground));
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -238,7 +231,7 @@
 /* SlashCommand Item Description */
 .yoopta-ui-slash-command-item-description {
   font-size: var(--yoopta-ui-slash-command-font-size-sm);
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -261,7 +254,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px 16px;
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   font-size: var(--yoopta-ui-slash-command-font-size);
   text-align: center;
 }
@@ -275,7 +268,7 @@
 .yoopta-ui-slash-command-separator {
   height: 1px;
   margin: 8px 12px;
-  background-color: hsl(var(--yoopta-ui-slash-command-border));
+  background-color: hsl(var(--yoopta-ui-border));
 }
 
 /* SlashCommand Footer */
@@ -284,8 +277,8 @@
   align-items: center;
   gap: 16px;
   padding: 8px 14px;
-  border-top: 1px solid hsl(var(--yoopta-ui-slash-command-border));
-  background-color: hsl(var(--yoopta-ui-slash-command-accent));
+  border-top: 1px solid hsl(var(--yoopta-ui-border));
+  background-color: hsl(var(--yoopta-ui-accent));
   flex-shrink: 0;
 }
 
@@ -295,7 +288,7 @@
   align-items: center;
   gap: 4px;
   font-size: var(--yoopta-ui-slash-command-font-size-xs);
-  color: hsl(var(--yoopta-ui-slash-command-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
 }
 
 /* SlashCommand Loading */
@@ -310,7 +303,7 @@
 .yoopta-ui-slash-command-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid hsl(var(--yoopta-ui-slash-command-border));
+  border: 2px solid hsl(var(--yoopta-ui-border));
   border-top-color: hsl(var(--yoopta-ui-primary));
   border-radius: 50%;
   animation: yoopta-ui-slash-command-spin 600ms linear infinite;

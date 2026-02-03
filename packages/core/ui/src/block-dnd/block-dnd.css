@@ -2,23 +2,12 @@
 
 /* CSS Variables for BlockDnd - shadcn style */
 :root {
-  /* BlockDnd - Base */
-  --yoopta-ui-block-dnd-indicator-color: var(--yoopta-ui-primary);
-  --yoopta-ui-block-dnd-focus-ring: var(--yoopta-ui-ring);
-
   /* BlockDnd - Overlay */
-  --yoopta-ui-block-dnd-overlay-bg: var(--yoopta-ui-background);
-  --yoopta-ui-block-dnd-overlay-border: var(--yoopta-ui-border);
   --yoopta-ui-block-dnd-overlay-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --yoopta-ui-block-dnd-overlay-radius: 0.5rem;
   --yoopta-ui-block-dnd-overlay-padding-y: 10px;
   --yoopta-ui-block-dnd-overlay-padding-x: 14px;
   --yoopta-ui-block-dnd-overlay-min-width: 140px;
-
-  /* BlockDnd - Text */
-  --yoopta-ui-block-dnd-text-color: var(--yoopta-ui-foreground);
-  --yoopta-ui-block-dnd-text-accent: var(--yoopta-ui-foreground);
-  --yoopta-ui-block-dnd-icon-color: var(--yoopta-ui-muted-foreground);
 
   /* Transitions */
   --yoopta-ui-block-dnd-transition: transform 200ms ease, opacity 200ms ease;
@@ -50,7 +39,7 @@
   right: 0;
   top: 0;
   height: 2px;
-  background-color: hsl(var(--yoopta-ui-block-dnd-indicator-color));
+  background-color: hsl(var(--yoopta-ui-primary));
   border-radius: 1px;
   pointer-events: none;
   z-index: 100;
@@ -65,7 +54,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: hsl(var(--yoopta-ui-block-dnd-indicator-color));
+  background-color: hsl(var(--yoopta-ui-primary));
 }
 
 .yoopta-ui-block-dnd-drop-indicator::before {
@@ -91,7 +80,7 @@
 }
 
 .yoopta-ui-block-dnd-handle:focus-visible {
-  outline: 2px solid hsl(var(--yoopta-ui-block-dnd-focus-ring));
+  outline: 2px solid hsl(var(--yoopta-ui-ring));
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -116,8 +105,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: hsl(var(--yoopta-ui-block-dnd-overlay-bg));
-  border: 1px solid hsl(var(--yoopta-ui-block-dnd-overlay-border));
+  background-color: hsl(var(--yoopta-ui-background));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   border-radius: var(--yoopta-ui-block-dnd-overlay-radius);
   box-shadow: var(--yoopta-ui-block-dnd-overlay-shadow);
   padding: var(--yoopta-ui-block-dnd-overlay-padding-y) var(--yoopta-ui-block-dnd-overlay-padding-x);
@@ -132,7 +121,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: hsl(var(--yoopta-ui-block-dnd-icon-color));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   flex-shrink: 0;
 }
 
@@ -146,7 +135,7 @@
 .yoopta-ui-block-dnd-overlay-text {
   font-size: 13px;
   font-weight: 500;
-  color: hsl(var(--yoopta-ui-block-dnd-text-color));
+  color: hsl(var(--yoopta-ui-foreground));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -154,7 +143,7 @@
 
 .yoopta-ui-block-dnd-overlay-text strong {
   font-weight: 600;
-  color: hsl(var(--yoopta-ui-block-dnd-text-accent));
+  color: hsl(var(--yoopta-ui-foreground));
 }
 
 /* Multi-select visual feedback */
@@ -169,7 +158,7 @@
 }
 
 .yoopta-ui-block-dnd-sortable:focus-visible {
-  outline: 2px solid hsl(var(--yoopta-ui-block-dnd-focus-ring));
+  outline: 2px solid hsl(var(--yoopta-ui-ring));
   outline-offset: 2px;
   border-radius: 4px;
 }

@@ -1,12 +1,6 @@
 @import '../styles/variables.css';
 
 :root {
-  /* HighlightColorPicker - Base */
-  --yoopta-ui-highlight-color-picker-bg: var(--yoopta-ui-background);
-  --yoopta-ui-highlight-color-picker-fg: var(--yoopta-ui-foreground);
-  --yoopta-ui-highlight-color-picker-border: var(--yoopta-ui-border);
-  --yoopta-ui-highlight-color-picker-muted: var(--yoopta-ui-muted-foreground);
-  --yoopta-ui-highlight-color-picker-ring: var(--yoopta-ui-ring);
   --yoopta-ui-highlight-color-picker-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.18), 0 4px 16px -4px rgb(0 0 0 / 0.1);
 
   /* HighlightColorPicker - Layout */
@@ -29,9 +23,9 @@
 .yoopta-ui-highlight-color-picker {
   z-index: var(--yoopta-ui-highlight-color-picker-z-index);
   width: var(--yoopta-ui-highlight-color-picker-width);
-  background: hsl(var(--yoopta-ui-highlight-color-picker-bg));
-  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
-  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  background: hsl(var(--yoopta-ui-background));
+  color: hsl(var(--yoopta-ui-foreground));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   border-radius: var(--yoopta-ui-highlight-color-picker-radius);
   box-shadow: var(--yoopta-ui-highlight-color-picker-shadow);
   padding: var(--yoopta-ui-highlight-color-picker-padding);
@@ -47,7 +41,7 @@
   display: flex;
   gap: 4px;
   padding: 4px;
-  background: hsl(var(--yoopta-ui-highlight-color-picker-border));
+  background: hsl(var(--yoopta-ui-border));
   border-radius: 8px;
   flex-shrink: 0;
 }
@@ -58,7 +52,7 @@
   padding: 4px 8px;
   font-size: 11px;
   font-weight: 500;
-  color: hsl(var(--yoopta-ui-highlight-color-picker-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
   background: transparent;
   border: none;
   border-radius: 6px;
@@ -70,17 +64,17 @@
 }
 
 .yoopta-ui-highlight-color-picker-mode-btn:hover {
-  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
+  color: hsl(var(--yoopta-ui-foreground));
 }
 
 .yoopta-ui-highlight-color-picker-mode-btn[data-active='true'] {
-  background: hsl(var(--yoopta-ui-highlight-color-picker-bg));
-  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
+  background: hsl(var(--yoopta-ui-background));
+  color: hsl(var(--yoopta-ui-foreground));
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
 }
 
 .yoopta-ui-highlight-color-picker-mode-btn:focus-visible {
-  outline: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-ring));
+  outline: 2px solid hsl(var(--yoopta-ui-ring));
   outline-offset: 2px;
 }
 
@@ -93,7 +87,7 @@
 /* Saturation */
 .yoopta-ui-highlight-color-picker-react-colorful .react-colorful__saturation {
   border-radius: 8px;
-  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border: 1px solid hsl(var(--yoopta-ui-border));
 }
 
 /* Hue slider */
@@ -101,7 +95,7 @@
   margin-top: 8px;
   height: 10px;
   border-radius: 999px;
-  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border: 1px solid hsl(var(--yoopta-ui-border));
 }
 
 /* Pointer */
@@ -110,7 +104,7 @@
   height: 16px;
   border-radius: 999px;
   box-shadow: 0 2px 6px rgb(0 0 0 / 0.22);
-  border: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-bg));
+  border: 2px solid hsl(var(--yoopta-ui-background));
 }
 
 /* Presets */
@@ -123,7 +117,7 @@
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: thin;
-  scrollbar-color: hsl(var(--yoopta-ui-highlight-color-picker-border)) transparent;
+  scrollbar-color: hsl(var(--yoopta-ui-border)) transparent;
 }
 
 .yoopta-ui-highlight-color-picker-presets::-webkit-scrollbar {
@@ -135,7 +129,7 @@
 }
 
 .yoopta-ui-highlight-color-picker-presets::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--yoopta-ui-highlight-color-picker-border));
+  background-color: hsl(var(--yoopta-ui-border));
   border-radius: 999px;
 }
 
@@ -145,7 +139,7 @@
   height: var(--yoopta-ui-highlight-color-picker-preset-size);
   flex: 0 0 auto;
   border-radius: 7px;
-  border: 2px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border: 2px solid hsl(var(--yoopta-ui-border));
   cursor: pointer;
   padding: 0;
   outline: none;
@@ -157,13 +151,13 @@
 }
 
 .yoopta-ui-highlight-color-picker-preset:focus-visible {
-  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring));
-  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-ring));
+  border-color: hsl(var(--yoopta-ui-ring));
 }
 
 .yoopta-ui-highlight-color-picker-preset[data-selected='true'] {
-  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
-  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring) / 0.35);
+  border-color: hsl(var(--yoopta-ui-ring));
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-ring) / 0.35);
 }
 
 /* Hex Row */
@@ -178,7 +172,7 @@
   width: var(--yoopta-ui-highlight-color-picker-input-height);
   height: var(--yoopta-ui-highlight-color-picker-input-height);
   border-radius: 7px;
-  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   flex: 0 0 auto;
 }
 
@@ -188,9 +182,9 @@
   flex: 1;
   min-width: 0;
   border-radius: 9px;
-  border: 1px solid hsl(var(--yoopta-ui-highlight-color-picker-border));
+  border: 1px solid hsl(var(--yoopta-ui-border));
   background: transparent;
-  color: hsl(var(--yoopta-ui-highlight-color-picker-fg));
+  color: hsl(var(--yoopta-ui-foreground));
   padding: 0 10px;
   font-size: 12px;
   line-height: 1;
@@ -198,10 +192,10 @@
 }
 
 .yoopta-ui-highlight-color-picker-hex-input:focus {
-  border-color: hsl(var(--yoopta-ui-highlight-color-picker-ring));
-  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-highlight-color-picker-ring) / 0.25);
+  border-color: hsl(var(--yoopta-ui-ring));
+  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-ring) / 0.25);
 }
 
 .yoopta-ui-highlight-color-picker-hex-input::placeholder {
-  color: hsl(var(--yoopta-ui-highlight-color-picker-muted));
+  color: hsl(var(--yoopta-ui-muted-foreground));
 }
