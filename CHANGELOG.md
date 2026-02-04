@@ -4,6 +4,26 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.0-beta.18] - 2026-02-04
+
+### Fixed
+
+- **FloatingBlockActions**: Fixed hover detection - users can now reliably reach floating actions when moving cursor from block to actions. Uses JavaScript-based extended bounds checking instead of CSS pseudo-elements.
+- **FloatingToolbar (Safari)**: Fixed button clicks immediately closing the toolbar in Safari by adding `preventDefault()` on mouseDown.
+- **HighlightColorPicker**: Fixed click-outside handling using FloatingOverlay approach for reliable behavior across browsers including Safari.
+- **HighlightColorPicker**: Added debounce (300ms) to color picker onChange to prevent flooding undo/redo history with every color change.
+- **SelectionBox**: Fixed native text selection appearing during programmatic block selection by preventing default and setting `user-select: none`.
+- **Steps plugin**: Fixed buggy `moveUp` and `moveDown` methods - now properly uses `Transforms.moveNodes` and recalculates order values.
+- **Inline toolbars positioning (Safari)**: Fixed image, file, embed, and video inline toolbars appearing at top-left corner (0,0) in Safari. Now uses `useLayoutEffect`, `isReady` state guard, and `FloatingPortal` for proper positioning.
+- **Image resize handlers**: Added contrasting white ring (`ring-2 ring-white/80`) for visibility on dark images.
+- **Image resize (left handle)**: Fixed buggy left-side resizing by anchoring position with `position={{ x: 0, y: 0 }}`.
+
+### Changed
+
+- **Code/CodeGroup themes**: Shiki theme colors now use scoped CSS variables on elements instead of global document variables for better isolation.
+
+---
+
 ## [6.0.0] - 2026-01-28
 
 Major version with significant API and architectural changes compared to 4.9.x.
