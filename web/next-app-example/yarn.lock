@@ -1734,45 +1734,45 @@
   resolved "https://registry.npmjs.org/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@yoopta/accordion@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/accordion/-/accordion-6.0.0-beta.17.tgz#a2943579d3bc93804eb58c0802657bfc15bb7f04"
-  integrity sha512-/AXS1ledv37IX1lvZ2ZsUjgoAXX+6G0Oiqmkpvgb8dZ4r/V5jgg2MLFNfOHCzCAGl+C6VZs8B5BDq0LT0kGidA==
+"@yoopta/accordion@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/accordion/-/accordion-6.0.0-beta.18.tgz#75a3822e3c5b261cc24fb82f1bc0c8462b2847f8"
+  integrity sha512-vviPdISQkJAdJgn6nh/gxM6gnsh0ocDjskOfsQcHQ1oKSZiV9unm4OBB80gzrudXxAd8B9tIn8Re4NvpKBSiXQ==
 
-"@yoopta/blockquote@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/blockquote/-/blockquote-6.0.0-beta.17.tgz#e831b4354ebc60b93b93c20866e8e79409be1449"
-  integrity sha512-ULPdCIBVJBIzcPbLcWReIUEqAi+9odamzGkozAywEkah/JLE0hER/r/K15vh9ZTIxPzBt/4L3UNvIGHHP/E/ZQ==
+"@yoopta/blockquote@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/blockquote/-/blockquote-6.0.0-beta.18.tgz#77b90f1c40a62aedbe51aa8f514ccfad23f041a9"
+  integrity sha512-ebRiZje+7FB+mu0so1QOBwuhJumxFDaTdfBWHmgl+B/qkZtXzEd8s3UkhgmUuJoy40QIKPFqqIvhvXNAWb3RHQ==
 
-"@yoopta/callout@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/callout/-/callout-6.0.0-beta.17.tgz#a91b71cba2a684a4f92b4f19c295f4189850515c"
-  integrity sha512-2aZ6Q5D477NS0TlcPRM4f6XcXBcE7rZn7CnZWOLsagyh6OYYPJobDGIR3y4M+4O6uVTNoyMEykudxnSkVMU72w==
+"@yoopta/callout@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/callout/-/callout-6.0.0-beta.18.tgz#fa2680c3964c5aa62ef7fc403d61a84d80e46099"
+  integrity sha512-nM8QfeEfkLLBqrwIsUAB73+7nKP3k1DUrSNRnB3oxG3ePIKG8T2iwLc6/I6uZK2iQK9/mEYEBX6K0YDOaml2XQ==
 
-"@yoopta/carousel@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/carousel/-/carousel-6.0.0-beta.17.tgz#06f90e2c2b7e199691363bddeb9d3276d2a87753"
-  integrity sha512-ljZR9b2j2FIR3V0wfkoe9ArHkoSAK3WOKz1fIU30nIYKjutitWUa4YRZoYOyHcOp9S74MhZsOmCiiK2WXTZUkw==
+"@yoopta/carousel@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/carousel/-/carousel-6.0.0-beta.18.tgz#b49a2e7b03411f2ba1886d4a1cf0fc057647a081"
+  integrity sha512-iLdXcELvH8ii2G9Hf95d2UUTa9tW4wNvIpCBM0+0on7bDPlaW9i409uub7/6wl+arVfrDIIykdnggma4LAhgtQ==
   dependencies:
     embla-carousel-react "^8.6.0"
 
-"@yoopta/code@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/code/-/code-6.0.0-beta.17.tgz#56fdaf5a9613bea42c30e2538fa89639818bddf5"
-  integrity sha512-aNS+KAoej6ZySpbQlZropgFWh8nCig24ulirl7howNPJcdBAnoFEa3W4w1CHKqZwhk7GLRNaf8OuBuGBzJDq4Q==
+"@yoopta/code@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/code/-/code-6.0.0-beta.18.tgz#a86e234da828d4da61bcae3153407f842f7311dc"
+  integrity sha512-h6AhXL/pwzjp3zfDvC3aaNFWIb0fllHM4CDQOIe26qSQITPq7MpTndLG1sp/LLQeUk+FiPbYf3sc69FXJoH9ZA==
   dependencies:
     prettier "^3.7.4"
     shiki "^3.20.0"
 
-"@yoopta/divider@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/divider/-/divider-6.0.0-beta.17.tgz#42f55619d8678a4d0732eef89f5d0eb55d374896"
-  integrity sha512-PoDrUy9SB+9ntjqoPOIUB+EKSmpuUva8jC9HiLzbgDO+RPrX/pQok6G3S0jKAEbEAIX4ORwzkOtpT6F0mIVSFA==
+"@yoopta/divider@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/divider/-/divider-6.0.0-beta.18.tgz#cdea6a695806a2db5dbc02a1dbe9a9eebc7d86c1"
+  integrity sha512-I+kDWiWyTdK0jUMAtNy0RLJ3s1jOr1PADgyPEeH9fEUvFgY5VyvsPo6A0Kv3dtiXwdGoVmV2pba07hMqm6cyFg==
 
-"@yoopta/editor@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/editor/-/editor-6.0.0-beta.17.tgz#8db91971963dd35c3e1acd74c14fc14144ce164f"
-  integrity sha512-J2ANNMehPbzQ6g/L8nxEveSTBuoT/HaLLTQsIYpoHWiOxKTo6mQ7RaNx8JZMY4dnVGLLBTAB3WPpHgU3gNTj9g==
+"@yoopta/editor@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/editor/-/editor-6.0.0-beta.18.tgz#bb615f6948315e23c720e88dcdeb6c5917659f0e"
+  integrity sha512-kUsZhrfhUv7I5FaCiftBnZjaXspChlCez0Ns/BB70HeA93B8Ze7/Q1kQ4IcnwdWbuyotrqIApEr5k3dHtA6qyw==
   dependencies:
     eventemitter3 "^5.0.1"
     immer "^10.0.3"
@@ -1780,82 +1780,82 @@
     lodash.clonedeep "^4.5.0"
     validator "^13.12.0"
 
-"@yoopta/embed@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/embed/-/embed-6.0.0-beta.17.tgz#c5a6c3c4c42b34f8534e6ce08817511f8c36d8b2"
-  integrity sha512-8U+j4xFkYQVYrpsnO9qDOSlG5ffHPh0HlkI3vMNRlye0+VNNJQMwLlXr2ThSJj6rTo4mQVmsG3/TpbEm14Qg0Q==
+"@yoopta/embed@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/embed/-/embed-6.0.0-beta.18.tgz#75386355a83a43c1b8fdb374f49003898bc6ae72"
+  integrity sha512-QicItANDJ+h7CGKJ6kyqExpvPozpesh0YPSByp9YyOp3dBBAdpwzgU7QHJ9DtHSbPenp/XgFm63hBdVVpSoELg==
 
-"@yoopta/exports@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/exports/-/exports-6.0.0-beta.17.tgz#bdaa7af6e9ad67d164c582354eed4c80c077d0d5"
-  integrity sha512-sPLLdvNZV0JgWTmf6ei+GEx/Cy6yHqzwdf9CDdlOk/qhDJeA5UQoNuInVWQOkVjajO7oUT8JB3pFcyBa7bY1wA==
+"@yoopta/exports@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/exports/-/exports-6.0.0-beta.18.tgz#ae115432d38db3c2ce98c0396b64f2cb7bc0af7e"
+  integrity sha512-2JzIbyZghIyqcdij4GQt0lgn6qj8xYYixUTaUKKjV4RaSX8fearr2NlIHMf0S++Yv47tQR8jtNpViNfKgTpnzA==
   dependencies:
     marked "^13.0.0"
 
-"@yoopta/file@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/file/-/file-6.0.0-beta.17.tgz#fd7e0509934247aea9d623766118c1df9be7c941"
-  integrity sha512-xVOLZbrrYPRk+52PBa0Iu8CyyEhFgxPBzu+KCECzNVyqiucwIduYBxVRcjwfp9VPpkJxJZHcgN1jypI32atQdg==
+"@yoopta/file@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/file/-/file-6.0.0-beta.18.tgz#dc5be2b6bfb8846e3ac5dc60e387f75f8699a237"
+  integrity sha512-DGhtfZ0stv5fRJi6qXxxv1ROhRHLcpk5uLtxVSfbfYkHxM1nTBhagA2c0SBC2zIgVoWJHyoUIH7moKk5unuLZQ==
 
-"@yoopta/headings@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/headings/-/headings-6.0.0-beta.17.tgz#377b00cacf26d90e916ae6d60da77981b3acb134"
-  integrity sha512-RbRQ0xRxpQfscKt+gbaw+KcgzQSPDh0SdazlnXYFmcHEED8qkSOI06YOwKr0ZwiCgaFyd5uaC9kq4ST4Uw/DlQ==
+"@yoopta/headings@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/headings/-/headings-6.0.0-beta.18.tgz#b31d0f2000b08e4da0a148d3974cc882179ae692"
+  integrity sha512-FsDPXs+OI9FucF3iGj2Cov/uHMcKL8b5ZttqvlXm6KLPgEBcV0LUz9cHNQoXaTgHU030ASkY9u6h52hG5gUCog==
 
-"@yoopta/image@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/image/-/image-6.0.0-beta.17.tgz#febcfe829da6d72772af5a874250f356ecfc6045"
-  integrity sha512-TxDM4gsBTCeBFUwdEDCOyXGt/6+7ag51OjDHuMKqBEbZFxDMkwOOqxwsj/PuK6GQONX0R5/9hPvzvAW4eNMNZw==
+"@yoopta/image@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/image/-/image-6.0.0-beta.18.tgz#fcb7b2d1ef783f42edf636808fb46fe0edd76e20"
+  integrity sha512-F9MungCZOXFPE0hp7GBUf6RcFmiVcu93Jv6kSe/AQKMVryPMkjhqhF260IJ5otp2vwQma949OOYN+t2ZJ86Xzg==
 
-"@yoopta/link@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/link/-/link-6.0.0-beta.17.tgz#10f416b81e5f6c10de6bcb5420ad45d6b6a407f0"
-  integrity sha512-pJZjyeDoLmi2+orG1ccj9b0TEdHcXe9hhFXhyXFyIt1KIm/jG6BgIxQ8olsL3OEGaVJNcJzWxz9Nikrajya8jQ==
+"@yoopta/link@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/link/-/link-6.0.0-beta.18.tgz#8cd3429996f07033a806400935257ba393780ced"
+  integrity sha512-QhRL5y4ZpW5fsjgHFS1GfVSQRAqNbVERjmgo78V2G71+/9k+x/IA9OPjiJZVwbtvd/n+zUuLE0eu/M7YFu9N3g==
 
-"@yoopta/lists@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/lists/-/lists-6.0.0-beta.17.tgz#8090813c153639bf3a11b67daa52634b67d423bc"
-  integrity sha512-gwF800Bu77PNq3DjBdtDSxYpNxtTatRqKbzVQ8eWSAFmFtmFieL8o2jjqncKgl4iCPTv/Dd4v06f+RKL1FmTrw==
+"@yoopta/lists@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/lists/-/lists-6.0.0-beta.18.tgz#f55a960f1c9304ca5ba2769e7c25b2848fd81a3c"
+  integrity sha512-mEYbOIkRh0dXpgAqG05vfjlDHAPbVWE20LPN2Bvb08DxQbtXdU0vw/bai2YgqRCO0DWOdc9LowfZd3bIwHcciw==
 
-"@yoopta/marks@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/marks/-/marks-6.0.0-beta.17.tgz#a5a41e957b82f4e2c3e9b2d5eb66354e8e54e056"
-  integrity sha512-DG/a427Et7EcHMV1KqzwacZGj8GkDHcp1Z6dWX0ErEGfA5yJY+VmGu3Z3AA4/J4nqPVE4AblZ0Fg/ID1SrU4Vw==
+"@yoopta/marks@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/marks/-/marks-6.0.0-beta.18.tgz#b713a075a5ae562717d9d07c5decf86a1b670d2c"
+  integrity sha512-BN2qosEJ4YDKBKoMTddEHMjxzkIaWUpSVw+Eaik1bwIX1NbmfOTsTqBsk1zpfxyKHtefd3pqHIDD35J86NUOpQ==
 
-"@yoopta/mention@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/mention/-/mention-6.0.0-beta.17.tgz#1957f7cf59b859f8f4bb70a529c7acefa5b769f9"
-  integrity sha512-ECU2AXPuR/R9yfY1PrW/MnxbhddjLRH8d44Ic3J8FDiEuCR7AnBM7g7k7ZxdT4mHv2kr373XfXe5AgnGehCx0g==
+"@yoopta/mention@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/mention/-/mention-6.0.0-beta.18.tgz#1b20faac79bb0536c98d9653491b9cb154f3439f"
+  integrity sha512-hD+G0sIH63KQUQnAxmFbCk68u3TSfX/78b299EhklF6qqP6yaCi8GRD10bjRcRLtRliYUI7y5qXjPlMggwyNrw==
 
-"@yoopta/paragraph@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/paragraph/-/paragraph-6.0.0-beta.17.tgz#e90396f4f07c1a9d1d2a889ceb63381a340f25e2"
-  integrity sha512-CS37v2bkT0SUUKW3BzY0wLlhIflUhPL3aaso5Psk+iA171Hinwct3DAqpsUv8UGbY2Tl6/yE+g5JxbP6o4NAjw==
+"@yoopta/paragraph@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/paragraph/-/paragraph-6.0.0-beta.18.tgz#4b80d846fc2519d3c298e457d84ebf876339e3ce"
+  integrity sha512-DjIxHlZtCHideQu6eaeYCbsMwaZRYABvIETsTFQrdroyz3IBY5UEaEZ8hOImeVXjeJNk9FdJ/ragQ4ZMspFo3A==
 
-"@yoopta/steps@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/steps/-/steps-6.0.0-beta.17.tgz#083fb896130a359d7ee9a202347c9966c99a853e"
-  integrity sha512-K6DInV+72FkfeF915AK9oTp4ONBeDhVw+YeFv3xxvhI08jwz9jpkAojFxkNUzlH9CRN46gfkKizRgRap4cYPZA==
+"@yoopta/steps@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/steps/-/steps-6.0.0-beta.18.tgz#a8dc272dc7dc156037e22310b3b40cd8c7b19b64"
+  integrity sha512-LzGYFV7BnbPCywEWnuyFTB8SAF13RKpz96hfBKMjNymk2wVKOOkn9+oZOtTcFhcFSNDtlbSl4F/jKLgZx3SJwg==
 
-"@yoopta/table-of-contents@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/table-of-contents/-/table-of-contents-6.0.0-beta.17.tgz#f866185990e74280ed59172a1520193468947d7b"
-  integrity sha512-hmmCPevse78Xk3d1TRkkjgVWiPzq4LBeqfU/6qRCdc/sdgA+26drJTA1oHiGVjMLWh5swOBNRC+mshY3MxePDw==
+"@yoopta/table-of-contents@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/table-of-contents/-/table-of-contents-6.0.0-beta.18.tgz#8d2a68bd5e83c2392ffe9e30d74c218dd2c9dbaa"
+  integrity sha512-9QFRJ6/zduXlXxykdtVzGzfaGjhYBS7Mjm1skHiAT7msjJNPoeUXigJp7jsYuFOXrIbAHsW5V1YpNwT2T9VuUg==
 
-"@yoopta/table@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/table/-/table-6.0.0-beta.17.tgz#7535547a0b07517564bb30e9a7e8eb853c134673"
-  integrity sha512-MjPb6eHYJdpjSRtUP8pf3zYrqHNvyWGPxq19oXZecAxVooEeXrMCGOqsfRICMK2un0Ur5nESXGvbMtnmG9qwGQ==
+"@yoopta/table@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/table/-/table-6.0.0-beta.18.tgz#200c67ada8c08886b603343b2a51e08072a29243"
+  integrity sha512-bUewgAoiAvkwX2ZXgGeDNRO0hsz8zRKNhGvRNvrVx2ZMahf9na7vHXWA6uKZ4+FX0FqkS+lhLNXu6T5e9lWbFA==
 
-"@yoopta/tabs@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/tabs/-/tabs-6.0.0-beta.17.tgz#e8f7ff3085c36e5645219f351dbfafb88124a195"
-  integrity sha512-IagfoqMmjJycaq0glt3fOzhzfdyTxICfehvkvdKzzmd9RoEv2xBxkmmEAKnZOPb2OiKVOvRTc1l+gbd1W+Ljmg==
+"@yoopta/tabs@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/tabs/-/tabs-6.0.0-beta.18.tgz#38b4da5755d816b6f4bd2fd2dddcdaa3fa519213"
+  integrity sha512-c3P4PUgMl8z7ib4TEUL7fpTfMY6B1I58PS5ea4mD5wrW+gaQKXdnEdvz9S7kf8DsN6CbbI+DaLw483BipH9zeg==
 
-"@yoopta/themes-shadcn@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/themes-shadcn/-/themes-shadcn-6.0.0-beta.17.tgz#b9a094b0eb78aa68a233aa45c1ba7d02f55555a8"
-  integrity sha512-oVMivrSOLDJH4obu6uSI7oWM6CTl2RBN+XiZMsvHL/06IiLtO6MxVGQoS9n+Q+tmjbbuQ3di7J1El06HApNwmA==
+"@yoopta/themes-shadcn@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/themes-shadcn/-/themes-shadcn-6.0.0-beta.18.tgz#0c1a9f29553beba2e698262bee167e3e32850d4c"
+  integrity sha512-Xza9ikglo9vmOuYnok20YwqZKsMEEZEkuXuiAIGNKtAhI/AQXTysAC7yckYUOf0zeq9pVdKhJM7TwvNiaiJi8w==
   dependencies:
     "@radix-ui/react-accordion" "^1.0.0"
     "@radix-ui/react-checkbox" "^1.1.1"
@@ -1877,10 +1877,10 @@
     react-rnd "^10.5.2"
     tailwind-merge "^2.5.4"
 
-"@yoopta/ui@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/ui/-/ui-6.0.0-beta.17.tgz#708b8b08446f877011f2149e3769bb07bef4d233"
-  integrity sha512-WuCaPPxdg0OLJBErQvoUpGI7c3P8WSeLz6efxSZlUrIW9sWbVVGWbOx5OpLkXS7s7rZB2NU+8j0BYHjoWdceCg==
+"@yoopta/ui@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/ui/-/ui-6.0.0-beta.18.tgz#46c5c2b44ebe4c4d416f3bff42536ebaffa8fd76"
+  integrity sha512-jcnJ0MYogb0LGidM/BecNePGzDi81NVFMXNc1YQxogylmqad9EKDgllf+LDVk18YbzRMd5R4V4oeDhLBskmY1A==
   dependencies:
     "@dnd-kit/core" "^6.1.0"
     "@dnd-kit/sortable" "^8.0.0"
@@ -1893,10 +1893,10 @@
     tailwind-merge "^2.0.0"
     use-debounce "^10.0.0"
 
-"@yoopta/video@6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@yoopta/video/-/video-6.0.0-beta.17.tgz#6d9250c5650ec48af57d0f136405f75d5001490b"
-  integrity sha512-DFg5ESW41H0CTpQVZqJFYTJCczX2KhyGrb2ffgS1KmZQGZqttp5r21iZ9YGk0w1xvhjZkx4X+rRbdpi9zEabPQ==
+"@yoopta/video@6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@yoopta/video/-/video-6.0.0-beta.18.tgz#aa7bd11eb5cd2f32634278a2ac97c790c36363ac"
+  integrity sha512-aUj34ueeXuXzZxnCwegIOnFKMc0H8YH6R1GUnWdu+7p0B/5R3FKE+EJ3alr9WvYW0ZREQuMPCgrN0ep31/osDw==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
