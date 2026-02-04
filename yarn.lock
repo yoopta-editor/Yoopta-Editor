@@ -4561,6 +4561,8 @@
 
 "@yoopta/carousel@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/carousel/-/carousel-6.0.0-beta.17.tgz#06f90e2c2b7e199691363bddeb9d3276d2a87753"
+  integrity sha512-ljZR9b2j2FIR3V0wfkoe9ArHkoSAK3WOKz1fIU30nIYKjutitWUa4YRZoYOyHcOp9S74MhZsOmCiiK2WXTZUkw==
   dependencies:
     embla-carousel-react "^8.6.0"
 
@@ -4679,6 +4681,8 @@
 
 "@yoopta/mention@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/mention/-/mention-6.0.0-beta.17.tgz#1957f7cf59b859f8f4bb70a529c7acefa5b769f9"
+  integrity sha512-ECU2AXPuR/R9yfY1PrW/MnxbhddjLRH8d44Ic3J8FDiEuCR7AnBM7g7k7ZxdT4mHv2kr373XfXe5AgnGehCx0g==
 
 "@yoopta/paragraph@*":
   version "4.9.9"
@@ -4687,9 +4691,13 @@
 
 "@yoopta/steps@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/steps/-/steps-6.0.0-beta.17.tgz#083fb896130a359d7ee9a202347c9966c99a853e"
+  integrity sha512-K6DInV+72FkfeF915AK9oTp4ONBeDhVw+YeFv3xxvhI08jwz9jpkAojFxkNUzlH9CRN46gfkKizRgRap4cYPZA==
 
 "@yoopta/table-of-contents@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/table-of-contents/-/table-of-contents-6.0.0-beta.17.tgz#f866185990e74280ed59172a1520193468947d7b"
+  integrity sha512-hmmCPevse78Xk3d1TRkkjgVWiPzq4LBeqfU/6qRCdc/sdgA+26drJTA1oHiGVjMLWh5swOBNRC+mshY3MxePDw==
 
 "@yoopta/table@*":
   version "4.9.9"
@@ -4700,9 +4708,13 @@
 
 "@yoopta/tabs@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/tabs/-/tabs-6.0.0-beta.17.tgz#e8f7ff3085c36e5645219f351dbfafb88124a195"
+  integrity sha512-IagfoqMmjJycaq0glt3fOzhzfdyTxICfehvkvdKzzmd9RoEv2xBxkmmEAKnZOPb2OiKVOvRTc1l+gbd1W+Ljmg==
 
 "@yoopta/themes-material@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/themes-material/-/themes-material-6.0.0-beta.17.tgz#7d97aae4c6b59075729687797f645075ac6f2bd8"
+  integrity sha512-CMBx3+0yU1vNS2zouMUairSyrsII+A3LW5iHcifNozO9Xf2tajtCPQJfgxeJYgquewf1PLvswNY1dEPrytAelg==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
@@ -4715,6 +4727,8 @@
 
 "@yoopta/themes-shadcn@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/themes-shadcn/-/themes-shadcn-6.0.0-beta.17.tgz#b9a094b0eb78aa68a233aa45c1ba7d02f55555a8"
+  integrity sha512-oVMivrSOLDJH4obu6uSI7oWM6CTl2RBN+XiZMsvHL/06IiLtO6MxVGQoS9n+Q+tmjbbuQ3di7J1El06HApNwmA==
   dependencies:
     "@radix-ui/react-accordion" "^1.0.0"
     "@radix-ui/react-checkbox" "^1.1.1"
@@ -4751,6 +4765,8 @@
 
 "@yoopta/ui@*":
   version "6.0.0-beta.17"
+  resolved "https://registry.npmjs.org/@yoopta/ui/-/ui-6.0.0-beta.17.tgz#708b8b08446f877011f2149e3769bb07bef4d233"
+  integrity sha512-WuCaPPxdg0OLJBErQvoUpGI7c3P8WSeLz6efxSZlUrIW9sWbVVGWbOx5OpLkXS7s7rZB2NU+8j0BYHjoWdceCg==
   dependencies:
     "@dnd-kit/core" "^6.1.0"
     "@dnd-kit/sortable" "^8.0.0"
