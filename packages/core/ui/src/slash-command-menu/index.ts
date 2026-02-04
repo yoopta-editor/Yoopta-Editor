@@ -1,13 +1,13 @@
-import { SlashCommandContent } from './components/SlashCommandContent';
-import { SlashCommandEmpty } from './components/SlashCommandEmpty';
-import { SlashCommandFooter } from './components/SlashCommandFooter';
-import { SlashCommandGroup } from './components/SlashCommandGroup';
-import { SlashCommandInput } from './components/SlashCommandInput';
-import { SlashCommandItem } from './components/SlashCommandItem';
-import { SlashCommandList } from './components/SlashCommandList';
-import { SlashCommandLoading } from './components/SlashCommandLoading';
-import { SlashCommandRoot } from './components/SlashCommandRoot';
-import { SlashCommandSeparator } from './components/SlashCommandSeparator';
+import { SlashCommandContent } from './components/slash-command-content';
+import { SlashCommandEmpty } from './components/slash-command-empty';
+import { SlashCommandFooter } from './components/slash-command-footer';
+import { SlashCommandGroup } from './components/slash-command-group';
+import { SlashCommandInput } from './components/slash-command-input';
+import { SlashCommandItem } from './components/slash-command-item';
+import { SlashCommandList } from './components/slash-command-list';
+import { SlashCommandLoading } from './components/slash-command-loading';
+import { SlashCommandRoot } from './components/slash-command-root';
+import { SlashCommandSeparator } from './components/slash-command-separator';
 
 export type {
   SlashCommandItem as SlashCommandItemType,
@@ -26,34 +26,34 @@ export {
   useSlashCommandActions,
   useSlashCommandItems,
   useSlashCommandRefs,
-} from './context/SlashCommandContext';
+} from './context/slash-command-context';
 
 // Hooks
 export { useSlashCommand } from './hooks/useSlashCommand';
 
 // Components
-export { SlashCommandRoot } from './components/SlashCommandRoot';
-export { SlashCommandContent } from './components/SlashCommandContent';
-export { SlashCommandInput } from './components/SlashCommandInput';
-export { SlashCommandList } from './components/SlashCommandList';
-export { SlashCommandGroup } from './components/SlashCommandGroup';
-export { SlashCommandItem } from './components/SlashCommandItem';
-export { SlashCommandEmpty } from './components/SlashCommandEmpty';
-export { SlashCommandSeparator } from './components/SlashCommandSeparator';
-export { SlashCommandFooter } from './components/SlashCommandFooter';
-export { SlashCommandLoading } from './components/SlashCommandLoading';
+export { SlashCommandRoot } from './components/slash-command-root';
+export { SlashCommandContent } from './components/slash-command-content';
+export { SlashCommandInput } from './components/slash-command-input';
+export { SlashCommandList } from './components/slash-command-list';
+export { SlashCommandGroup } from './components/slash-command-group';
+export { SlashCommandItem } from './components/slash-command-item';
+export { SlashCommandEmpty } from './components/slash-command-empty';
+export { SlashCommandSeparator } from './components/slash-command-separator';
+export { SlashCommandFooter } from './components/slash-command-footer';
+export { SlashCommandLoading } from './components/slash-command-loading';
 
 // Component Types
-export type { SlashCommandRootProps } from './components/SlashCommandRoot';
-export type { SlashCommandContentProps } from './components/SlashCommandContent';
-export type { SlashCommandInputProps } from './components/SlashCommandInput';
-export type { SlashCommandListProps } from './components/SlashCommandList';
-export type { SlashCommandGroupProps } from './components/SlashCommandGroup';
-export type { SlashCommandItemProps } from './components/SlashCommandItem';
-export type { SlashCommandEmptyProps } from './components/SlashCommandEmpty';
-export type { SlashCommandSeparatorProps } from './components/SlashCommandSeparator';
-export type { SlashCommandFooterProps } from './components/SlashCommandFooter';
-export type { SlashCommandLoadingProps } from './components/SlashCommandLoading';
+export type { SlashCommandRootProps } from './components/slash-command-root';
+export type { SlashCommandContentProps } from './components/slash-command-content';
+export type { SlashCommandInputProps } from './components/slash-command-input';
+export type { SlashCommandListProps } from './components/slash-command-list';
+export type { SlashCommandGroupProps } from './components/slash-command-group';
+export type { SlashCommandItemProps } from './components/slash-command-item';
+export type { SlashCommandEmptyProps } from './components/slash-command-empty';
+export type { SlashCommandSeparatorProps } from './components/slash-command-separator';
+export type { SlashCommandFooterProps } from './components/slash-command-footer';
+export type { SlashCommandLoadingProps } from './components/slash-command-loading';
 
 export const SlashCommandMenu = Object.assign(SlashCommandRoot, {
   Root: SlashCommandRoot,

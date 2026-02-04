@@ -35,7 +35,7 @@ export const ImageRender = ({
   const { isElementSelected } = useElementSelected();
   const isBlockSelected = useBlockSelected({ blockId });
   const isSelected = isElementSelected && isBlockSelected;
-  const rndRef = useRef<HTMLElement | null>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 
   // Get max sizes from plugin options, with default maxWidth from editor width
@@ -94,7 +94,9 @@ export const ImageRender = ({
 
   // Helper function to limit sizes (similar to limitSizes from @yoopta/image)
   const limitImageSizes = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     sizes: { width: number | string; height: number | string },
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     maxSizes: { width: number | string; height: number | string },
   ): { width: number; height: number } => {
     const parseSize = (value: string | number): number => {
@@ -192,14 +194,8 @@ export const ImageRender = ({
     <div
       {...attributes}
       className={cn('group/image mt-2 relative transition-all w-full flex', alignmentClass)}>
-      <div className="relative" contentEditable={false}>
+      <div className="relative" contentEditable={false} ref={imageContainerRef}>
         <Rnd
-          ref={(node) => {
-            // Get the actual DOM element from Rnd
-            if (node?.resizableElement && node.resizableElement instanceof HTMLElement) {
-              rndRef.current = node.resizableElement;
-            }
-          }}
           style={{
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
@@ -216,6 +212,7 @@ export const ImageRender = ({
           minHeight={100}
           maxWidth={maxSizes.maxWidth}
           maxHeight={maxSizes.maxHeight}
+          position={{ x: 0, y: 0 }}
           enableResizing={
             isSelected
               ? {
@@ -251,10 +248,10 @@ export const ImageRender = ({
           }}
           resizeHandleComponent={{
             left: (
-              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
             ),
             right: (
-              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
             ),
           }}
           className={cn('rounded-sm')}>
@@ -271,7 +268,7 @@ export const ImageRender = ({
         </Rnd>
         {isSelected && (
           <ImageInlineToolbar
-            referenceRef={rndRef}
+            referenceRef={imageContainerRef}
             elementProps={elementProps}
             onUpdate={onUpdate}
             onReplace={onReplace}

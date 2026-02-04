@@ -24,7 +24,7 @@ export const YooptaToolbar = () => {
     | { color?: string; backgroundColor?: string }
     | null;
 
-  const onTurnIntoClick = () => {
+  const onTurnIntoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setActionMenuOpen(true);
   };
 
@@ -111,12 +111,6 @@ export const YooptaToolbar = () => {
                 <FloatingToolbar.Button
                   active={Marks.isActive(editor, { type: 'highlight' })}
                   title="Highlight"
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    if (isHighlightActive) {
-                      Marks.remove(editor, { type: 'highlight' });
-                    }
-                  }}
                   style={{
                     backgroundColor: isHighlightActive ? highlightValue?.backgroundColor : undefined,
                     color: isHighlightActive ? highlightValue?.color : undefined,

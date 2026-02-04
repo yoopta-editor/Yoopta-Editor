@@ -32,6 +32,7 @@
 
 /* FloatingBlockActions Container */
 .yoopta-ui-floating-block-actions {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--yoopta-ui-floating-gap);
@@ -42,6 +43,7 @@
   box-shadow: var(--yoopta-ui-floating-shadow-md);
   z-index: var(--yoopta-ui-floating-z-index);
 }
+
 
 /* FloatingBlockActions Button */
 .yoopta-ui-floating-action-button {

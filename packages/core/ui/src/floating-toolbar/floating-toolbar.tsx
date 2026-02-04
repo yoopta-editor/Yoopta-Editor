@@ -222,7 +222,7 @@ const FloatingToolbarRoot = ({ children, frozen = false, className = '' }: Float
 
   return (
     <FloatingToolbarContext.Provider value={contextValue}>
-      <div className={className}>{content}</div>
+      <div contentEditable={false} className={className}>{content}</div>
     </FloatingToolbarContext.Provider>
   );
 };
@@ -247,7 +247,11 @@ const FloatingToolbarContent = ({ children, className = '', ...props }: Floating
         className={`yoopta-ui-floating-toolbar ${className}`}
         style={floatingStyles}
         onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
+        onMouseDown={(e) => {
+          // preventDefault stops Safari from collapsing text selection
+          e.preventDefault();
+          e.stopPropagation();
+        }}
         {...props}
       >
         {children}
@@ -294,6 +298,16 @@ const FloatingToolbarButton = forwardRef<HTMLButtonElement, FloatingToolbarButto
       disabled={disabled}
       data-active={active}
       className={`yoopta-ui-floating-toolbar-button ${className}`}
+      onMouseDown={(e) => {
+        // preventDefault stops Safari from collapsing text selection on button click
+        e.preventDefault();
+        e.stopPropagation();
+        props.onMouseDown?.(e);
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        props.onClick?.(e);
+      }}
       {...props}
     >
       {children}

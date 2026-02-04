@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 
-import { useSlashCommandContext } from '../context/SlashCommandContext';
+import { useSlashCommandContext } from '../context/slash-command-context';
 
 export type SlashCommandItemProps = {
   children?: ReactNode;

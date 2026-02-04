@@ -96,6 +96,17 @@ export const useRectangeSelectionBox = ({
 
       if (isInsideEditor) return;
 
+      // Prevent native text selection when starting selection box
+      event.preventDefault();
+
+      // Clear any existing native selection
+      window.getSelection()?.removeAllRanges();
+
+      // Add user-select: none to editor during selection
+      if (editor.refElement) {
+        editor.refElement.style.userSelect = 'none';
+      }
+
       const coords: Coords = [event.pageX, event.pageY - window.scrollY];
       setState({
         origin: coords,
@@ -106,6 +117,12 @@ export const useRectangeSelectionBox = ({
 
     const onMouseMove = (event: MouseEvent) => {
       if (!stateRef.current.selection) return;
+
+      // Prevent native selection during drag
+      event.preventDefault();
+
+      // Clear any native selection that might have occurred
+      window.getSelection()?.removeAllRanges();
 
       const newCoords: Coords = [event.pageX, event.pageY - window.scrollY];
 
@@ -125,6 +142,10 @@ export const useRectangeSelectionBox = ({
 
     const onMouseUp = () => {
       if (stateRef.current.selection) {
+        // Restore user-select on editor
+        if (editor.refElement) {
+          editor.refElement.style.userSelect = '';
+        }
         onClose();
       }
     };

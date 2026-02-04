@@ -115,11 +115,6 @@
   color: hsl(var(--yoopta-ui-destructive));
 }
 
-.yoopta-ui-block-options-button-destructive:hover {
-  background-color: hsl(var(--yoopta-ui-destructive));
-  color: hsl(var(--yoopta-ui-destructive));
-}
-
 /* BlockOptions Button Icon */
 .yoopta-ui-block-options-button-icon {
   display: inline-flex;

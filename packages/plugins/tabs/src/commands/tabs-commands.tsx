@@ -157,9 +157,9 @@ export const TabsCommands: TabsCommandsType = {
     const containerEntry = Array.from(containerNodes)[0];
     if (!containerEntry) return;
 
-    const [, containerPath] = containerEntry;
+    const [containerNode, containerPath] = containerEntry;
 
-    // Find all headings to check count
+    // Find all headings (in order) to get ids and decide new active tab
     const headings = Array.from(
       Editor.nodes<SlateElement>(slate, {
         at: [0],
@@ -167,12 +167,22 @@ export const TabsCommands: TabsCommandsType = {
       }),
     );
 
-    Editor.withoutNormalizing(slate, () => {
-      if (headings.length === 1) {
-        Blocks.deleteBlock(editor, { blockId });
-        return;
-      }
+    if (headings.length === 1) {
+      Blocks.deleteBlock(editor, { blockId });
+      return;
+    }
 
+    const headingIds = headings.map(([node]) => (node as SlateElement).id as string);
+    const deletedIndex = headingIds.indexOf(options.tabId);
+    const remainingIds = headingIds.filter((id) => id !== options.tabId);
+    const newActiveId =
+      remainingIds.length > 0
+        ? deletedIndex > 0
+          ? remainingIds[deletedIndex - 1]
+          : remainingIds[0]
+        : null;
+
+    Editor.withoutNormalizing(slate, () => {
       // Find tabs-item-content with matching referenceId
       const contentNodes = Editor.nodes<SlateElement>(slate, {
         at: containerPath,
@@ -201,6 +211,14 @@ export const TabsCommands: TabsCommandsType = {
       if (headingEntry) {
         const [, headingPath] = headingEntry;
         Transforms.removeNodes(slate, { at: headingPath });
+      }
+
+      if (newActiveId) {
+        Transforms.setNodes<SlateElement>(
+          slate,
+          { props: { ...(containerNode as SlateElement).props, activeTabId: newActiveId } },
+          { at: containerPath },
+        );
       }
     });
   },

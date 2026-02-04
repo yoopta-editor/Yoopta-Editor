@@ -64,14 +64,21 @@ const ActionMenuListRoot = ({
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
 
-  const actions = useMemo(
-    () => mapActionMenuItems(editor).filter((item) => filterToggleActions(editor, item.type)).filter(item => {
-      const plugin = editor.plugins[item.type];
-      const rootElement = getRootBlockElement(plugin.elements);
-      return rootElement?.props?.nodeType !== 'inline' && rootElement?.props?.nodeType !== 'inlineVoid' && rootElement?.props?.nodeType !== 'void';
-    }),
-    [editor],
-  );
+  const actions = useMemo(() => {
+    const baseActions = mapActionMenuItems(editor)
+      .filter((item) => filterToggleActions(editor, item.type))
+      .filter((item) => {
+        const plugin = editor.plugins[item.type];
+        const rootElement = getRootBlockElement(plugin.elements);
+        return (
+          rootElement?.props?.nodeType !== 'inline' &&
+          rootElement?.props?.nodeType !== 'inlineVoid' &&
+          rootElement?.props?.nodeType !== 'void'
+        );
+      });
+
+    return baseActions;
+  }, [editor]);
 
   const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(actions[0] ?? null);
 
@@ -93,6 +100,11 @@ const ActionMenuListRoot = ({
     middleware: [flip(), shift(), offset(10)],
     whileElementsMounted: autoUpdate,
   });
+
+  if (isOpen) {
+    console.log('ActionMenuListRoot refs', refs)
+  }
+
 
   // Handle dismiss (escape key, outside press handled by Overlay)
   const dismiss = useDismiss(context, {
@@ -194,12 +206,16 @@ const ActionMenuListContent = forwardRef<HTMLDivElement, ActionMenuListContentPr
 
     // Auto-focus content when it opens for proper escape key handling
     useEffect(() => {
+      let raf;
+
       if (isOpen && internalRef.current) {
         // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
+        raf = requestAnimationFrame(() => {
           internalRef.current?.focus();
         });
       }
+
+      return () => cancelAnimationFrame(raf);
     }, [isOpen]);
 
     if (!isOpen) return null;

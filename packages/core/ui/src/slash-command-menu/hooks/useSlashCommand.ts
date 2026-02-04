@@ -12,10 +12,10 @@ import { getVirtualElementRects, usePositioning } from './usePositioning';
 
 type Action =
   | {
-      type: 'OPEN';
-      virtualElement: VirtualElement;
-      floatingContext: FloatingContext<VirtualElement> | null;
-    }
+    type: 'OPEN';
+    virtualElement: VirtualElement;
+    floatingContext: FloatingContext<VirtualElement> | null;
+  }
   | { type: 'CLOSE' }
   | { type: 'SET_SEARCH'; search: string }
   | { type: 'SET_SELECTED_INDEX'; index: number }

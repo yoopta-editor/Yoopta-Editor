@@ -1,7 +1,7 @@
 import { type ReactNode, useMemo } from 'react';
 import { getRootBlockElementType, useYooptaEditor } from '@yoopta/editor';
 
-import { SlashCommandContext } from '../context/SlashCommandContext';
+import { SlashCommandContext } from '../context/slash-command-context';
 import { useSlashCommand } from '../hooks/useSlashCommand';
 import type { SlashCommandContextValue, SlashCommandItem } from '../types';
 
@@ -34,7 +34,7 @@ export const SlashCommandRoot = ({
       return itemsProps;
     }
 
-    // filter elements where root element is inline
+    // filter elements where root element is not inline or inlineVoid
     const pluginTypes = Object.keys(editor.plugins).filter((pluginType) => {
       const rootElementType = getRootBlockElementType(editor.plugins[pluginType].elements);
       const rootElement = rootElementType

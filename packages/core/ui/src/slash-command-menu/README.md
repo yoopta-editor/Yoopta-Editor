@@ -21,31 +21,28 @@ npm install @floating-ui/react
 ## File Structure
 
 ```
-slash-command/
-├── index.ts                      # Main exports
-├── types.ts                      # TypeScript types
-├── constants.ts                  # Constants
+slash-command-menu/
+├── index.ts                         # Main exports
+├── types.ts                         # TypeScript types
+├── constants.ts                     # Constants
+├── slash-command.css                # CSS styles
 ├── context/
-│   └── SlashCommandContext.tsx   # React context
+│   └── slash-command-context.tsx   # React context
 ├── hooks/
-│   ├── useSlashCommand.ts        # Main hook with Yoopta integration
-│   ├── useFilter.ts              # Filtering logic
-│   ├── useKeyboardNavigation.ts  # Arrow navigation with loop
-│   └── usePositioning.ts         # floating-ui positioning
-├── components/
-│   ├── SlashCommandRoot.tsx      # Provider component
-│   ├── SlashCommandContent.tsx   # Floating container
-│   ├── SlashCommandInput.tsx     # Search input
-│   ├── SlashCommandList.tsx      # Scrollable list
-│   ├── SlashCommandGroup.tsx     # Group with heading
-│   ├── SlashCommandItem.tsx      # Selectable item
-│   ├── SlashCommandEmpty.tsx     # Empty state
-│   ├── SlashCommandSeparator.tsx # Divider
-│   ├── SlashCommandFooter.tsx    # Keyboard hints
-│   └── SlashCommandLoading.tsx   # Loading state
-├── styles/
-│   └── slash-command.css         # CSS styles
-└── examples.tsx                  # Usage examples
+│   ├── useSlashCommand.ts           # Main hook with Yoopta integration
+│   ├── useFilter.ts                 # Filtering logic
+│   └── usePositioning.ts            # floating-ui positioning
+└── components/
+    ├── slash-command-root.tsx       # Provider component
+    ├── slash-command-content.tsx    # Floating container
+    ├── slash-command-input.tsx      # Search input
+    ├── slash-command-list.tsx       # Scrollable list
+    ├── slash-command-group.tsx      # Group with heading
+    ├── slash-command-item.tsx       # Selectable item
+    ├── slash-command-empty.tsx      # Empty state
+    ├── slash-command-separator.tsx  # Divider
+    ├── slash-command-footer.tsx     # Keyboard hints
+    └── slash-command-loading.tsx    # Loading state
 ```
 
 ## Basic Usage

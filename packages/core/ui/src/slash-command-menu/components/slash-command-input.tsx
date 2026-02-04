@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { useSlashCommandContext } from '../context/SlashCommandContext';
+import { useSlashCommandContext } from '../context/slash-command-context';
 
 export type SlashCommandInputProps = {
   placeholder?: string;

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   CodeGroupCommands,
   HighlightedCodeOverlay,
@@ -24,10 +24,6 @@ const getNodeText = (node: unknown): string => {
     return children?.map(getNodeText).join('\n') ?? '';
   }
   return '';
-};
-
-type ThemeColors = {
-  buttonForeground: string;
 };
 
 export const CodeGroupContent = (props: PluginElementRenderProps) => {
@@ -56,22 +52,6 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
 
   const [copied, setCopied] = useState(false);
   const [isBeautifying, setIsBeautifying] = useState(false);
-  const [themeColors, setThemeColors] = useState<ThemeColors>({
-    buttonForeground: '',
-  });
-
-  useEffect(() => {
-    if (window.yShiki) {
-      const themeData = window.yShiki.getTheme(theme);
-
-      setThemeColors({
-        buttonForeground:
-          themeData.colors?.['button.foreground'] ??
-          themeData.colors?.['icon.foreground'] ??
-          themeData.fg,
-      });
-    }
-  }, [theme]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (overlayRef.current) {
@@ -147,6 +127,9 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
             options={SHIKI_CODE_LANGUAGES}
             onValueChange={updateLanguage}
             currentLabel={currentLanguage.label}
+            style={{
+              color: 'var(--code-group-tab-active-fg)',
+            }}
           />
           {canBeautify && (
             <Button
@@ -157,7 +140,7 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
               disabled={isBeautifying}
               title="Beautify code"
               style={{
-                color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
+                color: 'var(--code-group-button-fg, var(--code-group-tab-active-fg))',
               }}>
               <Sparkles className={`h-4 w-4 ${isBeautifying ? 'animate-pulse' : ''}`} />
             </Button>
@@ -169,7 +152,7 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
             onClick={copyCode}
             title={copied ? 'Copied!' : 'Copy code'}
             style={{
-              color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
+              color: 'var(--code-group-button-fg, var(--code-group-tab-active-fg))',
             }}>
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
@@ -181,7 +164,7 @@ export const CodeGroupContent = (props: PluginElementRenderProps) => {
               onClick={deleteCodeElement}
               title="Delete code"
               style={{
-                color: themeColors.buttonForeground || 'var(--code-group-tab-active-fg)',
+                color: 'var(--code-group-button-fg, var(--code-group-tab-active-fg))',
               }}>
               <Trash2 className="h-4 w-4" />
             </Button>

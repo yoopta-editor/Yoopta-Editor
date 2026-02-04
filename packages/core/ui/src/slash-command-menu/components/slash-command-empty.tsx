@@ -1,4 +1,4 @@
-import { useSlashCommandContext } from '../context/SlashCommandContext';
+import { useSlashCommandContext } from '../context/slash-command-context';
 
 export type SlashCommandEmptyProps = {
   children?: React.ReactNode;

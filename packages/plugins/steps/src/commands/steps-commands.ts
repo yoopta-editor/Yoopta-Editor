@@ -283,87 +283,56 @@ export const StepsCommands: StepsCommands = {
     const slate = Blocks.getBlockSlate(editor, { id: options?.blockId });
     if (!slate) return;
 
-    // Find step-container
-    const containerNodes = Editor.nodes<SlateElement>(slate, {
-      at: [0],
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-container',
-    });
-
-    const containerEntry = Array.from(containerNodes)[0];
-    if (!containerEntry) return;
-
-    const [, containerPath] = containerEntry;
-
     // Find step-list
-    const listNodes = Editor.nodes<SlateElement>(slate, {
-      at: containerPath,
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list',
-    });
-
-    const listEntry = Array.from(listNodes)[0];
+    const listEntry = Array.from(
+      Editor.nodes<SlateElement>(slate, {
+        at: [0],
+        match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list',
+      }),
+    )[0];
     if (!listEntry) return;
 
     const [, listPath] = listEntry;
 
     // Find all step-list-item elements
-    const stepNodes = Editor.nodes<SlateElement>(slate, {
-      at: listPath,
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
-    });
-
-    const steps = Array.from(stepNodes);
-
-    // Find target step
-    const targetStep = steps.find(([node]) => (node as SlateElement).id === options?.stepId);
-    if (!targetStep) return;
-
-    const [targetNode, targetPath] = targetStep;
-    const targetOrder = (targetNode as SlateElement).props?.order as number;
-
-    // Can't move up if already first
-    if (targetOrder === 0) return;
-
-    // Find previous step
-    const previousStep = steps.find(
-      ([node]) => (node as SlateElement).props?.order === targetOrder - 1,
+    const steps = Array.from(
+      Editor.nodes<SlateElement>(slate, {
+        at: listPath,
+        match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
+      }),
     );
-    if (!previousStep) return;
 
-    const [, previousPath] = previousStep;
+    // Find target step by id
+    const targetStepIndex = steps.findIndex(
+      ([node]) => (node as SlateElement).id === options?.stepId,
+    );
+    if (targetStepIndex === -1 || targetStepIndex === 0) return;
+
+    const [, targetPath] = steps[targetStepIndex];
+    const [, previousPath] = steps[targetStepIndex - 1];
 
     Editor.withoutNormalizing(slate, () => {
-      // Swap orders
-      Transforms.setNodes<SlateElement>(
-        slate,
-        {
-          props: {
-            ...((slate.children[targetPath[0]] as SlateElement).props ?? {}),
-            order: targetOrder - 1,
-          },
-        },
-        { at: targetPath },
+      // Move target node to the position of previous node
+      Transforms.moveNodes(slate, { at: targetPath, to: previousPath });
+
+      // After move, recalculate and update all step orders based on their new positions
+      const updatedSteps = Array.from(
+        Editor.nodes<SlateElement>(slate, {
+          at: listPath,
+          match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
+        }),
       );
 
-      Transforms.setNodes<SlateElement>(
-        slate,
-        {
-          props: {
-            ...((slate.children[previousPath[0]] as SlateElement).props ?? {}),
-            order: targetOrder,
-          },
-        },
-        { at: previousPath },
-      );
-
-      // Swap positions in DOM
-      const targetNodeData = Editor.node(slate, targetPath)[0];
-      const previousNodeData = Editor.node(slate, previousPath)[0];
-
-      Transforms.removeNodes(slate, { at: targetPath });
-      Transforms.insertNodes(slate, targetNodeData, { at: previousPath });
-
-      Transforms.removeNodes(slate, { at: Path.next(previousPath) });
-      Transforms.insertNodes(slate, previousNodeData, { at: Path.next(previousPath) });
+      updatedSteps.forEach(([node, path], index) => {
+        const currentOrder = (node as SlateElement).props?.order;
+        if (currentOrder !== index) {
+          Transforms.setNodes<SlateElement>(
+            slate,
+            { props: { ...(node as SlateElement).props, order: index } },
+            { at: path },
+          );
+        }
+      });
     });
   },
 
@@ -371,90 +340,57 @@ export const StepsCommands: StepsCommands = {
     const slate = Blocks.getBlockSlate(editor, { id: options?.blockId });
     if (!slate) return;
 
-    // Find step-container
-    const containerNodes = Editor.nodes<SlateElement>(slate, {
-      at: [0],
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-container',
-    });
-
-    const containerEntry = Array.from(containerNodes)[0];
-    if (!containerEntry) return;
-
-    const [, containerPath] = containerEntry;
-
     // Find step-list
-    const listNodes = Editor.nodes<SlateElement>(slate, {
-      at: containerPath,
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list',
-    });
-
-    const listEntry = Array.from(listNodes)[0];
+    const listEntry = Array.from(
+      Editor.nodes<SlateElement>(slate, {
+        at: [0],
+        match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list',
+      }),
+    )[0];
     if (!listEntry) return;
 
     const [, listPath] = listEntry;
 
     // Find all step-list-item elements
-    const stepNodes = Editor.nodes<SlateElement>(slate, {
-      at: listPath,
-      match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
-    });
-
-    const steps = Array.from(stepNodes);
-
-    // Find target step
-    const targetStep = steps.find(([node]) => (node as SlateElement).id === options?.stepId);
-    if (!targetStep) return;
-
-    const [targetNode, targetPath] = targetStep;
-    const targetOrder = (targetNode as SlateElement).props?.order as number;
-
-    // Can't move down if already last
-    const maxOrder = Math.max(
-      ...steps.map(([node]) => (node as SlateElement).props?.order as number),
+    const steps = Array.from(
+      Editor.nodes<SlateElement>(slate, {
+        at: listPath,
+        match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
+      }),
     );
-    if (targetOrder === maxOrder) return;
 
-    // Find next step
-    const nextStep = steps.find(
-      ([node]) => (node as SlateElement).props?.order === targetOrder + 1,
+    // Find target step by id
+    const targetStepIndex = steps.findIndex(
+      ([node]) => (node as SlateElement).id === options?.stepId,
     );
-    if (!nextStep) return;
+    if (targetStepIndex === -1 || targetStepIndex === steps.length - 1) return;
 
-    const [, nextPath] = nextStep;
+    const [, targetPath] = steps[targetStepIndex];
+    const [, nextPath] = steps[targetStepIndex + 1];
 
     Editor.withoutNormalizing(slate, () => {
-      // Swap orders
-      Transforms.setNodes<SlateElement>(
-        slate,
-        {
-          props: {
-            ...((slate.children[targetPath[0]] as SlateElement).props ?? {}),
-            order: targetOrder + 1,
-          },
-        },
-        { at: targetPath },
+      // Move target node to the position of next node
+      // After removing target, next shifts up, so inserting at nextPath puts target after next
+      Transforms.moveNodes(slate, { at: targetPath, to: nextPath });
+
+      // After move, recalculate and update all step orders based on their new positions
+      const updatedSteps = Array.from(
+        Editor.nodes<SlateElement>(slate, {
+          at: listPath,
+          match: (n) => Element.isElement(n) && (n as SlateElement).type === 'step-list-item',
+        }),
       );
 
-      Transforms.setNodes<SlateElement>(
-        slate,
-        {
-          props: {
-            ...((slate.children[nextPath[0]] as SlateElement).props ?? {}),
-            order: targetOrder,
-          },
-        },
-        { at: nextPath },
-      );
-
-      // Swap positions in DOM
-      const targetNodeData = Editor.node(slate, targetPath)[0];
-      const nextNodeData = Editor.node(slate, nextPath)[0];
-
-      Transforms.removeNodes(slate, { at: nextPath });
-      Transforms.insertNodes(slate, nextNodeData, { at: targetPath });
-
-      Transforms.removeNodes(slate, { at: targetPath });
-      Transforms.insertNodes(slate, targetNodeData, { at: Path.next(targetPath) });
+      updatedSteps.forEach(([node, path], index) => {
+        const currentOrder = (node as SlateElement).props?.order;
+        if (currentOrder !== index) {
+          Transforms.setNodes<SlateElement>(
+            slate,
+            { props: { ...(node as SlateElement).props, order: index } },
+            { at: path },
+          );
+        }
+      });
     });
   },
 };

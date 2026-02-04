@@ -1,8 +1,9 @@
 import type { ReactElement } from 'react';
-import { cloneElement, forwardRef, useEffect, useState } from 'react';
+import { cloneElement, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
 import { HexColorInput, HexColorPicker } from 'react-colorful';
 
+import { debounce } from '../utils/debounce';
 import './highlight-color-picker.css';
 
 export type HighlightColorPickerProps = {
@@ -65,6 +66,13 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
       whileElementsMounted: autoUpdate,
     });
 
+    // Keep track of value ref for debounced callback
+    const valueRef = useRef(value);
+    valueRef.current = value;
+
+    const modeRef = useRef(mode);
+    modeRef.current = mode;
+
     useEffect(() => {
       if (value.backgroundColor) {
         setColor(value.backgroundColor);
@@ -74,7 +82,26 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
       }
     }, [value]);
 
+    // Debounced onChange to prevent flooding undo/redo history during color picker drag
+    const debouncedOnChange = useMemo(
+      () =>
+        debounce((newColor: string, colorMode: 'color' | 'backgroundColor') => {
+          if (colorMode === 'backgroundColor') {
+            onChange?.({ ...valueRef.current, backgroundColor: newColor });
+          } else {
+            onChange?.({ ...valueRef.current, color: newColor });
+          }
+        }, 300),
+      [onChange],
+    );
+
+    // Cleanup debounce on unmount
+    useEffect(() => () => {
+      debouncedOnChange.cancel();
+    }, [debouncedOnChange]);
+
     // Close on outside click
+    // [TODO] - rewrite to useDismiss hook from @floating-ui
     useEffect(() => {
       if (!isOpen) return;
 
@@ -87,22 +114,47 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
         if (referenceEl && referenceEl instanceof Element && referenceEl.contains(target)) return;
         if (floatingEl?.contains(target)) return;
 
+        // Flush any pending debounced changes before closing
+        debouncedOnChange.flush();
         setIsOpen(false);
       };
 
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, refs.floating, refs.reference]);
+    }, [isOpen, refs.floating, refs.reference, debouncedOnChange]);
 
-    const handleColorChange = (newColor: string) => {
-      if (mode === 'backgroundColor') {
-        setColor(newColor);
-        onChange?.({ ...value, backgroundColor: newColor });
-      } else {
-        setTextColor(newColor);
-        onChange?.({ ...value, color: newColor });
-      }
-    };
+    // Handler for color picker (continuous changes) - uses debounce
+    const handlePickerChange = useCallback(
+      (newColor: string) => {
+        // Update visual state immediately for feedback
+        if (modeRef.current === 'backgroundColor') {
+          setColor(newColor);
+        } else {
+          setTextColor(newColor);
+        }
+        // Debounce the actual onChange to prevent history flooding
+        debouncedOnChange(newColor, modeRef.current);
+      },
+      [debouncedOnChange],
+    );
+
+    // Handler for presets and hex input (discrete changes) - immediate
+    const handleColorChange = useCallback(
+      (newColor: string) => {
+        // Cancel any pending debounced changes
+        debouncedOnChange.cancel();
+
+        // Update visual state
+        if (mode === 'backgroundColor') {
+          setColor(newColor);
+          onChange?.({ ...value, backgroundColor: newColor });
+        } else {
+          setTextColor(newColor);
+          onChange?.({ ...value, color: newColor });
+        }
+      },
+      [mode, value, onChange, debouncedOnChange],
+    );
 
     const currentColor = mode === 'backgroundColor' ? color : textColor;
 
@@ -134,6 +186,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
             style={floatingStyles}
             className={`yoopta-ui-highlight-color-picker ${className ?? ''}`}
             onClick={(e) => e.stopPropagation()}
+            contentEditable={false}
             onMouseDown={(e) => e.stopPropagation()}>
             {/* Mode Toggle */}
             <div className="yoopta-ui-highlight-color-picker-mode-toggle">
@@ -141,7 +194,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
                 type="button"
                 className="yoopta-ui-highlight-color-picker-mode-btn"
                 data-active={mode === 'backgroundColor'}
-                onClick={() => setMode('backgroundColor')}
+                onMouseDown={() => setMode('backgroundColor')}
                 aria-label="Background color">
                 Background
               </button>
@@ -149,7 +202,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
                 type="button"
                 className="yoopta-ui-highlight-color-picker-mode-btn"
                 data-active={mode === 'color'}
-                onClick={() => setMode('color')}
+                onMouseDown={() => setMode('color')}
                 aria-label="Text color">
                 Text
               </button>
@@ -158,7 +211,7 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
             <div className="yoopta-ui-highlight-color-picker-picker">
               <HexColorPicker
                 color={currentColor}
-                onChange={handleColorChange}
+                onChange={handlePickerChange}
                 className="yoopta-ui-highlight-color-picker-react-colorful"
               />
             </div>

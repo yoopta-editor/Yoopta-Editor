@@ -94,7 +94,9 @@ export const VideoRender = ({
 
   // Helper function to limit sizes
   const limitVideoSizes = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     sizes: { width: number | string; height: number | string },
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     maxSizes: { width: number | string; height: number | string },
   ): { width: number; height: number } => {
     const parseSize = (value: string | number): number => {
@@ -240,6 +242,7 @@ export const VideoRender = ({
           minHeight={150}
           maxWidth={maxSizes.maxWidth}
           maxHeight={maxSizes.maxHeight}
+          position={{ x: 0, y: 0 }}
           enableResizing={
             isSelected
               ? {
@@ -275,10 +278,10 @@ export const VideoRender = ({
           }}
           resizeHandleComponent={{
             left: (
-              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
             ),
             right: (
-              <div className="h-10 w-2 rounded-full border border-primary bg-primary shadow-sm" />
+              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
             ),
           }}
           className={cn('rounded-sm overflow-hidden')}>

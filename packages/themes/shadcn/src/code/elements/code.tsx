@@ -41,7 +41,12 @@ type ThemeColors = {
   caret: string;
   tabActiveBackground: string;
   tabInactiveBackground: string;
+  tabActiveForeground: string;
+  tabInactiveForeground: string;
   buttonForeground: string;
+  selectBackground: string;
+  selectForeground: string;
+  borderColor: string;
 };
 
 export const CodeBlockElement = ({
@@ -63,29 +68,48 @@ export const CodeBlockElement = ({
     caret: '',
     tabActiveBackground: '',
     tabInactiveBackground: '',
+    tabActiveForeground: '',
+    tabInactiveForeground: '',
     buttonForeground: '',
+    selectBackground: '',
+    selectForeground: '',
+    borderColor: '',
   });
 
   useEffect(() => {
     if (window.yShiki) {
       const themeData = window.yShiki.getTheme(theme);
+      const colors = themeData.colors ?? {};
 
       setThemeColors({
-        background: themeData.bg,
-        foreground: themeData.fg,
-        caret: themeData.colors?.['editorCursor.foreground'] ?? themeData.fg,
+        background: colors['editor.background'] ?? themeData.bg,
+        foreground: colors['editor.foreground'] ?? themeData.fg,
+        caret: colors['editorCursor.foreground'] ?? themeData.fg,
         tabActiveBackground:
-          themeData.colors?.['editorTab.activeBackground'] ??
-          themeData.colors?.['tab.activeBackground'] ??
-          themeData.bg,
+          colors['tab.activeBackground'] ?? colors['editorTab.activeBackground'] ?? themeData.bg,
         tabInactiveBackground:
-          themeData.colors?.['editorTab.inactiveBackground'] ??
-          themeData.colors?.['tab.inactiveBackground'] ??
+          colors['tab.inactiveBackground'] ??
+          colors['editorTab.inactiveBackground'] ??
+          colors['editorGroupHeader.tabsBackground'] ??
           themeData.bg,
-        buttonForeground:
-          themeData.colors?.['button.foreground'] ??
-          themeData.colors?.['icon.foreground'] ??
+        tabActiveForeground:
+          colors['tab.activeForeground'] ?? colors['editorTab.activeForeground'] ?? themeData.fg,
+        tabInactiveForeground:
+          colors['tab.inactiveForeground'] ??
+          colors['editorTab.inactiveForeground'] ??
+          colors['foreground'] ??
           themeData.fg,
+        buttonForeground:
+          colors['button.foreground'] ?? colors['icon.foreground'] ?? themeData.fg,
+        selectBackground:
+          colors['dropdown.background'] ?? colors['input.background'] ?? themeData.bg,
+        selectForeground:
+          colors['dropdown.foreground'] ?? colors['input.foreground'] ?? themeData.fg,
+        borderColor:
+          colors['dropdown.border'] ??
+          colors['input.border'] ??
+          colors['editorGroup.border'] ??
+          'transparent',
       });
     }
   }, [theme]);
@@ -158,26 +182,57 @@ export const CodeBlockElement = ({
     SHIKI_CODE_LANGUAGES.find((lang) => lang.value === language) ?? SHIKI_CODE_LANGUAGES[0];
   const currentTheme = SHIKI_CODE_THEMES.find((t) => t.value === theme) ?? SHIKI_CODE_THEMES[0];
 
+  // CSS custom properties for scoped theming
+  const cssVariables = {
+    '--code-bg': themeColors.background,
+    '--code-fg': themeColors.foreground,
+    '--code-caret': themeColors.caret,
+    '--code-tab-active-bg': themeColors.tabActiveBackground,
+    '--code-tab-inactive-bg': themeColors.tabInactiveBackground,
+    '--code-tab-active-fg': themeColors.tabActiveForeground,
+    '--code-tab-inactive-fg': themeColors.tabInactiveForeground,
+    '--code-button-fg': themeColors.buttonForeground,
+    '--code-select-bg': themeColors.selectBackground,
+    '--code-select-fg': themeColors.selectForeground,
+    '--code-border': themeColors.borderColor,
+  } as React.CSSProperties;
+
   return (
     <div
       {...attributes}
-      className="relative my-2 group/code-block rounded-lg border border-border bg-muted/50 overflow-hidden">
+      className="relative my-2 group/code-block rounded-lg border overflow-hidden"
+      style={{
+        ...cssVariables,
+        borderColor: themeColors.borderColor || undefined,
+        backgroundColor: themeColors.tabInactiveBackground || undefined,
+      }}>
       <div
         contentEditable={false}
-        className="flex items-center justify-between px-4 py-2 border-b border-border select-none"
-        style={{ backgroundColor: themeColors.tabActiveBackground || undefined }}>
+        className="flex items-center justify-between px-4 py-2 border-b select-none"
+        style={{
+          backgroundColor: themeColors.tabActiveBackground || undefined,
+          borderColor: themeColors.borderColor || undefined,
+        }}>
         <div className="flex items-center gap-2">
           <LanguageSelect
             value={language}
             options={SHIKI_CODE_LANGUAGES}
             onValueChange={(value: string) => updateLanguage(value as BundledLanguage)}
             currentLabel={currentLanguage.label}
+            style={{
+              color: themeColors.tabActiveForeground || undefined,
+              borderColor: themeColors.borderColor || undefined,
+            }}
           />
           <ThemeSelect
             value={theme}
             options={SHIKI_CODE_THEMES}
             onValueChange={(value: string) => updateTheme(value as BundledTheme)}
             currentLabel={currentTheme.label}
+            style={{
+              color: themeColors.tabActiveForeground || undefined,
+              borderColor: themeColors.borderColor || undefined,
+            }}
           />
         </div>
 

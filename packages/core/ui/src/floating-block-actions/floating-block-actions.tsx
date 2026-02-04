@@ -145,6 +145,23 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
       const isInsideEditor = editor.refElement?.contains(target);
       const isInsideActions = containerRef.current?.contains(target);
 
+      // Check if mouse is within extended bounds of floating actions (hover bridge)
+      // This creates a "ghost" area that doesn't block interactions but keeps actions visible
+      const isInExtendedBounds = (() => {
+        if (!containerRef.current) return false;
+        const rect = containerRef.current.getBoundingClientRect();
+        const padding = { top: 8, right: 24, bottom: 8, left: 8 };
+        return (
+          event.clientX >= rect.left - padding.left &&
+          event.clientX <= rect.right + padding.right &&
+          event.clientY >= rect.top - padding.top &&
+          event.clientY <= rect.bottom + padding.bottom
+        );
+      })();
+
+      // Inside floating actions or extended hover area - keep current state
+      if (isInsideActions || isInExtendedBounds) return;
+
       // Outside editor - hide
       if (!isInsideEditor) {
         hide();
@@ -153,9 +170,6 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
 
       // Read-only mode - ignore
       if (editor.readOnly) return;
-
-      // Inside floating actions - keep current state
-      if (isInsideActions) return;
 
       const closestBlock = findClosestBlock(event.clientY);
 

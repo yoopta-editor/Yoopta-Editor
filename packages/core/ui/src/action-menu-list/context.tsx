@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { CSSProperties, HTMLProps } from 'react';
+
 import type { ActionMenuItem } from './types';
 
 export type ActionMenuListContextValue = {
