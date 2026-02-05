@@ -92,7 +92,7 @@ export function Plugins() {
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="info" className="mb-4">
-            18+ Plugins
+            20+ Plugins
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-neutral-900 dark:text-white">
             Every block type you need

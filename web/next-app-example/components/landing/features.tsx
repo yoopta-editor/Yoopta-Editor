@@ -19,7 +19,7 @@ import {
 const features = [
   {
     icon: Blocks,
-    title: "20+ Block Plugins",
+    title: "20+ Plugins",
     description:
       "Paragraph, headings, lists, code, images, videos, tables, accordions, and more out of the box.",
   },

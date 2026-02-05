@@ -199,6 +199,163 @@ const editor = useMemo(() => createYooptaEditor({
 </YooptaEditor>
 ```
 
+## Plugin Structure
+
+Plugins are instances of `YooptaPlugin<TElementMap, TOptions>`. Each plugin follows this structure:
+
+```
+packages/plugins/{plugin-name}/
+├── src/
+│   ├── index.ts          # Main export
+│   ├── types.ts          # ElementMap, ElementProps types
+│   ├── commands/         # Plugin commands (e.g., ParagraphCommands)
+│   ├── extensions/       # Slate editor extensions (with* functions)
+│   ├── plugin/           # Main plugin definition
+│   └── utils/            # Helper functions
+├── package.json
+├── rollup.config.js
+└── tsconfig.json
+```
+
+**Creating a Plugin**:
+```typescript
+const MyPlugin = new YooptaPlugin<MyElementMap>({
+  type: 'MyPlugin',           // PascalCase
+  elements: {
+    'my-element': {           // kebab-case
+      render: (props) => <div>{props.children}</div>,
+      props: { nodeType: 'block' }
+    }
+  },
+  parsers: { html: {...}, markdown: {...} },
+  commands: MyPluginCommands,
+  extensions: [withMyPlugin],
+});
+```
+
+**Extending Plugins**:
+```typescript
+const CustomImage = Image.extend({
+  options: { upload: customUploadFn },
+  injectElementsFromPlugins: [Paragraph, Lists.BulletedList]  // Only for leaf elements
+});
+```
+
+**NodeType Values**: `'block'` | `'inline'` | `'void'` | `'inlineVoid'`
+
+## Marks (Text Formatting)
+
+```typescript
+import { createYooptaMark } from '@yoopta/editor';
+
+export const Bold = createYooptaMark<BoldMarkProps>({
+  type: 'bold',              // lowercase
+  hotkey: 'mod+b',
+  render: (props) => <strong>{props.children}</strong>
+});
+```
+
+Available marks: `Bold`, `Italic`, `Underline`, `Strike`, `CodeMark`, `Highlight`
+
+## Theme Structure
+
+Themes provide styled versions of plugin renderers:
+
+```
+packages/themes/{theme-name}/
+├── src/
+│   ├── {plugin-name}/
+│   │   ├── elements/      # Custom render components
+│   │   └── styles.css
+│   └── index.ts
+```
+
+Available themes: `base`, `material`, `shadcn`
+
+## Export Formats
+
+```
+packages/core/exports/src/
+├── html/       # serialize.ts, deserialize.ts
+├── markdown/   # serialize.ts, deserialize.ts
+├── email/      # serialize.ts
+└── text/       # serialize.ts, deserialize.ts
+```
+
+**Plugin Parsers**:
+```typescript
+parsers: {
+  html: {
+    deserialize: { nodeNames: ['P'], parse: (el, editor) => SlateElement },
+    serialize: (element, text, blockMeta) => '<p>...</p>'
+  },
+  markdown: { serialize: (element) => '...' },
+  email: { serialize: (element, text, blockMeta) => '...' }
+}
+```
+
+## Available Hooks
+
+Must be called within `<YooptaEditor>` children:
+
+- `useYooptaEditor()` - Get editor instance
+- `useYooptaReadOnly()` - Check read-only state
+- `useYooptaFocused()` - Check focus state
+- `useBlockData(blockId)` - Get block data
+- `useYooptaPluginOptions(type)` - Get plugin options
+
+## Important Conventions
+
+**Type Case Sensitivity** (Critical!):
+- Block types: **PascalCase** (`"Paragraph"`, `"HeadingOne"`, `"Image"`)
+- Element types: **kebab-case** (`"paragraph"`, `"heading-one"`, `"image"`)
+
+**Block vs Element**:
+- **Block** (`YooptaBlockData`): Top-level content container with `type`, `meta`, `order`, `depth`
+- **Element** (`SlateElement`): Nested structure within block's `value` array
+
+**Plugin Injection**:
+- `injectElementsFromPlugins` ONLY works on leaf elements (elements without children)
+- Throws error if applied to parent elements
+- Used by: Accordion, Carousel, Tabs, table-of-contents
+
+**Slate Extensions**:
+- Named `with*` (e.g., `withParagraph`, `withParagraphNormalize`)
+- Signature: `(slate: SlateEditor, editor: YooEditor) => SlateEditor`
+
+## Build System
+
+**Rollup** (via `config/rollup.js`):
+- ES modules with TypeScript declarations
+- CSS extraction with PostCSS + Tailwind support
+- CSS class prefixes per plugin: `yoo-p-` (paragraph), `yoo-code-` (code)
+
+**Workspace Commands**:
+```bash
+yarn lerna run {script} --parallel              # Run across all packages
+yarn lerna run {script} --scope=@yoopta/editor  # Single package
+PACKAGES="@yoopta/editor @yoopta/paragraph" yarn dev  # Selective watch
+```
+
+## Key Directories
+
+```
+packages/core/editor/src/
+├── editor/
+│   ├── blocks/        # Block operations (insert, delete, move, merge, split)
+│   ├── elements/      # Element operations within blocks
+│   ├── textFormats/   # Mark operations
+│   ├── selection/     # Selection utilities
+│   └── core/          # applyTransforms, setEditorValue, history
+├── utils/
+│   ├── generateId.ts
+│   ├── editor-builders.ts
+│   └── hotkeys.ts
+└── plugins/
+    ├── create-yoopta-plugin.tsx  # YooptaPlugin class
+    └── types.ts
+```
+
 ## AI Content Generation
 
 When generating Yoopta content programmatically, see `YOOPTA_AI_SYSTEM_PROMPT.md` for the JSON format specification including all block types, validation rules, and common pitfalls.

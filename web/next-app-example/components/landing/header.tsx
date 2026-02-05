@@ -91,10 +91,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
       <div className="container flex h-14 max-w-screen-2xl items-center px-4 md:px-8">
-        {/* Logo */}
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <span className="text-sm font-bold">Y</span>
+          {/* change bg- to bg-primary after release */}
+          <div className="flex h-7 w-7 items-end justify-center gap-0 bg-[#171717] rounded-md border border-white">
+            <span className="text-md font-black text-white rotate-[-8deg] mb-px">Y</span>
+            <span className="text-sm font-black text-white rotate-[12deg] mb-[3px] -ml-[3px]">o</span>
           </div>
           <span className="font-semibold text-foreground">Yoopta</span>
           <Badge variant="warning" className="ml-0.5 text-[10px] font-medium px-1.5 py-0">
@@ -168,6 +169,36 @@ export function Header() {
 
         {/* Right Side */}
         <div className="ml-auto flex items-center gap-2">
+          {/* GitHub Stars Badge */}
+          <a
+            href="https://github.com/Darginec05/Yoopta-Editor/stargazers"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn("hidden", !isMobile && "sm:block")}
+          >
+            <img
+              src="https://img.shields.io/github/stars/Darginec05/Yoopta-Editor?style=social"
+              alt="GitHub stars"
+              className="h-5"
+            />
+          </a>
+
+          {/* npm Downloads Badge */}
+          <a
+            href="https://www.npmjs.com/package/@yoopta/editor"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn("hidden", !isMobile && "lg:block")}
+          >
+            <img
+              src="https://img.shields.io/npm/dm/@yoopta/editor?label=downloads&color=blue"
+              alt="npm downloads"
+              className="h-5"
+            />
+          </a>
+
+          <Separator orientation="vertical" className={cn("h-6", isMobile ? "hidden" : "sm:block")} />
+
           {/* Sponsor Link */}
           <Button
             variant="ghost"
@@ -207,8 +238,6 @@ export function Header() {
               </svg>
             </a>
           </Button>
-
-          <Separator orientation="vertical" className={cn("h-6", isMobile ? "hidden" : "block")} />
 
           {/* {mounted && (
             <Button

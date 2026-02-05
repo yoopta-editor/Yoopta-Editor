@@ -6,7 +6,9 @@
 
 # Yoopta-Editor v6 (beta)
 
-![](/docs/public/yoopta_intro.gif)
+<!-- **[▶ Watch intro video](docs/public/yoopta-intro.mp4)** -->
+
+<!-- ![](docs/public/images/yoopta-logo.png) -->
 
 ## Motivation. Why Yoopta?
 

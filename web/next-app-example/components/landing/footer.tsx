@@ -8,7 +8,7 @@ const navigation = {
   product: [
     { name: "Features", href: "#features" },
     { name: "Plugins", href: "#plugins" },
-    { name: "Roadmap", href: "#waitlist" },
+    { name: "Comparison", href: "#comparison" },
     { name: "Playground", href: "/playground" },
   ],
   resources: [
@@ -38,7 +38,7 @@ export function Footer() {
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
-                <span className="text-white font-bold text-sm">Y</span>
+                <span className="text-white font-bold text-sm">Yo</span>
               </div>
               <span className="font-semibold text-lg text-neutral-900 dark:text-white">Yoopta Editor</span>
             </Link>

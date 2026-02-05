@@ -2618,7 +2618,7 @@ export const playgroundInitialValue = {
                 "type": "table-data-cell",
                 "children": [
                   {
-                    "text": "Side Inline Element Editor"
+                    "text": "Sidebar Block elements editor"
                   }
                 ],
                 "props": {}
@@ -2696,7 +2696,7 @@ export const playgroundInitialValue = {
                 "type": "table-data-cell",
                 "children": [
                   {
-                    "text": "Advanced Theming"
+                    "text": "Theme builder"
                   }
                 ],
                 "props": {}

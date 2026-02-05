@@ -59,7 +59,7 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
       serialize: (element, text, blockMeta) => {
         const { depth = 0 } = blockMeta || {};
         const indent = '  '.repeat(depth);
-        return `${indent}- ${serializeTextNodesIntoMarkdown(element.children)}`;
+        return `${indent}1. ${serializeTextNodesIntoMarkdown(element.children)}`;
       },
     },
     email: {

@@ -20,7 +20,6 @@ export const YooptaBlockOptions = ({ open, onOpenChange, blockId, anchor }: Yoop
   };
 
   const onActionMenuClose = (menuOpen: boolean) => {
-    console.log('menuOpen', menuOpen)
     setActionMenuOpen(false);
     onOpenChange?.(false);
   };

@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Yoopta Editor (Beta)",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/public/logo/light.png",
+    "dark": "/public/logo/dark.png"
   },
   "favicon": "/favicon.png",
   "colors": {

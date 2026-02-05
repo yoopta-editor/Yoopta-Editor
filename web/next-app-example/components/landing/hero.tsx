@@ -6,9 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
-  Github,
-  Copy,
-  Check,
   ChevronDown,
   Star,
 } from "lucide-react";
@@ -36,7 +33,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-0 pb-10">
         <div className="text-center">
           {/* Badge */}
-          <div className="flex justify-center mb-6">
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
             <a
               href="https://github.com/Darginec05/Yoopta-Editor"
               target="_blank"
@@ -64,31 +61,28 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="mx-auto max-w-2xl text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 mb-10">
-            Free, open-source rich-text editor with 20+ plugins, drag & drop,
-            keyboard shortcuts, and more. Built with love with a powerful
-            plugin architecture.
+            Build Notion-like editors or custom CMS applications in minutes.
+            <br className="hidden sm:block" />
+            Free, open-source, and packed with 20+ plugins, drag & drop,
+            theme presets, and full API control.
           </p>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Button variant="primary" size="xl" asChild>
+              <Link href="/playground">
+                Try the Playground
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="xl" asChild>
               <a
                 href="https://docs.yoopta.dev"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Get Started
+                Read the Docs
                 <ArrowRight className="w-5 h-5" />
-              </a>
-            </Button>
-            <Button variant="outline" size="xl" asChild>
-              <a
-                href="https://github.com/Darginec05/Yoopta-Editor"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Github className="w-5 h-5" />
-                View on GitHub
               </a>
             </Button>
           </div>
@@ -115,24 +109,42 @@ export function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-600 dark:text-neutral-400 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-600 dark:text-neutral-400 mb-10">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
               <span>MIT License</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span>18+ Plugins</span>
+              <span>20+ Powerful Plugins</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-violet-500" />
-              <span>TypeScript</span>
+              <span>Theme Presets</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-amber-500" />
-              <span>React 18+</span>
+              <span>Built with love ❤️</span>
             </div>
           </div>
+
+          {/* Intro video */}
+          {/* <div className="mx-auto max-w-4xl mb-10">
+            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-900 overflow-hidden shadow-xl shadow-neutral-900/20 ring-1 ring-neutral-800">
+              <video
+                src="/yoopta-intro.mp4"
+                className="w-full aspect-video object-contain bg-neutral-950"
+                playsInline
+                controls
+                preload="metadata"
+                autoPlay
+                muted
+                loop
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div> */}
 
           {/* Waitlist teaser */}
           <Link

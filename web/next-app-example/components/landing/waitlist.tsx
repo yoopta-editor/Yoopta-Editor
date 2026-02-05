@@ -32,7 +32,7 @@ const upcomingFeatures = [
   },
   {
     icon: PanelRightOpen,
-    title: "Side Inline Element Editor",
+    title: "Sidebar Block elements editor",
     description:
       "Advanced element editing panel for complex blocks like tabs, carousels, tables, code and embeds.",
   },
@@ -50,7 +50,7 @@ const upcomingFeatures = [
   },
   {
     icon: Palette,
-    title: "Advanced Theming",
+    title: "Theme builder",
     description:
       "Visual theme builder with live preview. Export themes and share with others.",
   },

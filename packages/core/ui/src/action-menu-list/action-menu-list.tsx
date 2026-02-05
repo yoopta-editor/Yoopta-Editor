@@ -101,11 +101,6 @@ const ActionMenuListRoot = ({
     whileElementsMounted: autoUpdate,
   });
 
-  if (isOpen) {
-    console.log('ActionMenuListRoot refs', refs)
-  }
-
-
   // Handle dismiss (escape key, outside press handled by Overlay)
   const dismiss = useDismiss(context, {
     escapeKey: true,
