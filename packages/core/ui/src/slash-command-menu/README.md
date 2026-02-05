@@ -72,7 +72,7 @@ const items: SlashCommandItem[] = [
 
 function Editor() {
   return (
-    <YooptaEditor editor={editor} plugins={plugins}>
+    <YooptaEditor editor={editor}>
       <SlashCommand.Root items={items}>
         <SlashCommand.Content>
           <SlashCommand.Input />

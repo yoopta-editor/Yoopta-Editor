@@ -1,63 +1,60 @@
-# Tabs plugin
+# @yoopta/tabs
 
-Tabs is plugin for Yoopta-Editor
+Tabs block plugin for Yoopta Editor. Renders tabbed content with multiple panels. Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/tabs
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Tabs from '@yoopta/tabs';
 
 const plugins = [Tabs];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-tabs
-- .yoopta-tabs-theme-['default' | 'success' | 'warning' | 'error' | 'info']
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, Tabs, /* ... */]);
+```
 
-### Default options
+Or: `Tabs.extend({ elements: TabsUI })` with `TabsUI` from `@yoopta/themes-shadcn/tabs`.
 
-```js
-const Tabs = new YooptaPlugin({
+## Default options
+
+- **display:** title `'Tabs'`, description for tabbed content
+- **shortcuts:** e.g. `['tabs']`
+
+## Extend
+
+```tsx
+Tabs.extend({
+  elements: {
+    tabs: { render: (props) => <YourTabs {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Tabs',
-      description: 'Make writing stand out',
-    },
-    shortcuts: ['<'],
+    display: { title: 'Tabs', description: 'Your description' },
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  Tabs.extend({
-    renders: {
-      tabs: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- `.yoopta-tabs` — root
+- `.yoopta-tabs-theme-['default' | 'success' | 'warning' | 'error' | 'info']` (if used by theme)
+
+See [Tabs plugin docs](https://docs.yoopta.dev/plugins/tabs).

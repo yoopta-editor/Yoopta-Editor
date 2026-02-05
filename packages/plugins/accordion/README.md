@@ -1,102 +1,55 @@
 # @yoopta/accordion
 
-Accordion plugin for Yoopta Editor with **fully headless architecture** and multiple UI themes.
+Accordion plugin for Yoopta Editor with **headless architecture**. Use as-is (headless) or attach theme UI from `@yoopta/themes-shadcn`.
 
 ## Installation
 
 ```bash
-npm install @yoopta/accordion
-# or
 yarn add @yoopta/accordion
 ```
 
-## Quick Start
+## Usage
 
-```typescript
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Accordion from '@yoopta/accordion';
-import AccordionElements from '@yoopta/accordion/ui/base';
 
-const plugins = [
-  Accordion.extend({
-    elements: AccordionElements,
-  }),
-];
+const plugins = [Accordion];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-## Headless Architecture
+## Themed UI (Shadcn)
 
-The Accordion plugin follows a **headless architecture**, separating logic from UI rendering:
+Apply theme to all plugins or only Accordion:
 
-- **Headless Core** (`@yoopta/accordion`) - Logic, commands, events (NO UI)
-- **UI Themes** (`@yoopta/accordion/ui/*`) - Pre-built UI components
-
-### Why Headless?
-
-- ✅ **Flexibility** - Use any UI library or CSS framework
-- ✅ **Customization** - Full control over styling and behavior
-- ✅ **Tree-shaking** - Import only what you need
-- ✅ **No conflicts** - No CSS prefix pollution
-
-## Available UI Themes
-
-### 1. Base (Vanilla CSS) ⭐ Recommended
-
-Minimal styled components with vanilla CSS. No dependencies, no Tailwind.
-
-```typescript
-import Accordion from '@yoopta/accordion';
-import AccordionElements from '@yoopta/accordion/ui/base';
-
-Accordion.extend({
-  elements: AccordionElements,
-});
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, Accordion, /* ... */]);
 ```
 
-**Size:** ~5KB | **Dependencies:** None
+Or extend a single plugin:
 
-[Read more →](./src/ui/base/README.md)
-
-### 2. Base Tailwind (Coming soon)
-
-Tailwind CSS version without prefixes.
-
-```typescript
+```tsx
 import Accordion from '@yoopta/accordion';
-import AccordionElements from '@yoopta/accordion/ui/base-tw';
+import { AccordionUI } from '@yoopta/themes-shadcn/accordion';
+
+const AccordionWithUI = Accordion.extend({ elements: AccordionUI });
+const plugins = [AccordionWithUI];
 ```
 
-### 3. Shadcn ⭐ Premium
+## Headless architecture
 
-Beautiful, modern design with Shadcn UI components and glassmorphic effects.
+- **Headless core** (`@yoopta/accordion`) — logic, commands, events (no UI)
+- **Theme packages** (e.g. `@yoopta/themes-shadcn`) — pre-built styled elements
 
-```typescript
-import Accordion from '@yoopta/accordion';
-import AccordionElements from '@yoopta/accordion/ui/shadcn';
-
-Accordion.extend({
-  elements: AccordionElements,
-});
-```
-
-**Size:** ~8KB | **Dependencies:** `lucide-react`, `tailwindcss`
-
-**Features:**
-
-- ✨ Glassmorphic design
-- 🎭 Smooth animations
-- 🎯 Hover micro-interactions
-- 🌗 Dark mode support
-
-[Read more →](./src/ui/shadcn/README.md)
-
-### 4. Material UI (Coming soon)
-
-Material Design styled components.
-
-```typescript
-import Accordion from '@yoopta/accordion';
-import AccordionElements from '@yoopta/accordion/ui/material';
-```
+You can also build custom UI by extending with your own `elements` (see Custom UI below).
 
 ## Custom UI
 
@@ -226,7 +179,7 @@ See [UI-ARCHITECTURE.md](./UI-ARCHITECTURE.md) for detailed information about:
 
 ## Examples
 
-Check out examples in the [development workspace](../../development).
+Check out the [development workspace](../../development) and [live playground](https://yoopta.dev/playground). See [Accordion plugin docs](https://docs.yoopta.dev/plugins/accordion).
 
 ## TypeScript
 

@@ -1,62 +1,50 @@
-# Paragraph plugin
+# @yoopta/carousel
 
-Paragraph is default plugin for Yoopta-Editor
+Carousel block plugin for Yoopta Editor. Renders a carousel of items (e.g. images or cards). Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
-yarn add @yoopta/paragraph
+yarn add @yoopta/carousel
 ```
 
-### Usage
+## Usage
 
-```jsx
-import Paragraph from '@yoopta/paragraph';
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
 
-const plugins = [Paragraph];
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Carousel from '@yoopta/carousel';
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+const plugins = [Carousel];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-paragraph
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, Carousel, /* ... */]);
+```
 
-### Default options
+Or: `Carousel.extend({ elements: CarouselUI })` with `CarouselUI` from `@yoopta/themes-shadcn/carousel`.
 
-```js
-const Paragraph = new YooptaPlugin({
+## Extend
+
+```tsx
+Carousel.extend({
+  elements: {
+    'carousel-container': { render: (props) => <YourCarousel {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Text',
-      description: 'Start writing plain text.',
-    },
-    shortcuts: ['p', 'text'],
+    display: { title: 'Carousel', description: 'Your description' },
   },
 });
 ```
 
-### How to extend
-
-```tsx
-const plugins = [
-  Paragraph.extend({
-    renders: {
-      paragraph: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+See [Carousel plugin docs](https://docs.yoopta.dev/plugins/carousel).

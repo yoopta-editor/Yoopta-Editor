@@ -1,161 +1,63 @@
-# Lists plugins
+# @yoopta/lists
 
-Lists include three plugins for Yoopta-Editor:
+List block plugins for Yoopta Editor: **NumberedList**, **BulletedList**, **TodoList**. Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-- NumberedList
-- BulletedList
-- TodoList
-
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/lists
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugins to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import { NumberedList, BulletedList, TodoList } from '@yoopta/lists';
 
 const plugins = [NumberedList, BulletedList, TodoList];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-## NumberedList
+## Themed UI
 
-### Default classnames
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, NumberedList, BulletedList, TodoList, /* ... */]);
+```
 
-- .yoopta-numbered-list
-- .yoopta-numbered-list-count
-- .yoopta-numbered-list-content
+## Default options
 
-### Default options
+| Plugin        | Title          | Shortcuts |
+| ------------- | -------------- | --------- |
+| NumberedList  | Numbered List  | `['1.']`  |
+| BulletedList  | Bulleted List  | `['-']`   |
+| TodoList      | Todo List      | `['[]']`  |
 
-```js
-const NumberedList = new YooptaPlugin({
+## Extend
+
+```tsx
+NumberedList.extend({
+  elements: {
+    'numbered-list': { render: (props) => <YourNumberedList {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Numbered List',
-      description: 'Create list with numbering',
-    },
+    display: { title: 'Numbered List', description: 'Create list with numbering' },
     shortcuts: ['1.'],
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  NumberedList.extend({
-    renders: {
-      numbered-list: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- **NumberedList:** `.yoopta-numbered-list`, `.yoopta-numbered-list-count`, `.yoopta-numbered-list-content`
+- **BulletedList:** `.yoopta-bulleted-list`, `.yoopta-bulleted-list-bullet`, `.yoopta-bulleted-list-content`
+- **TodoList:** `.yoopta-todo-list`, `.yoopta-todo-list-checkbox`, `.yoopta-todo-list-content`
 
-## BulletedList
-
-### Default classnames
-
-- .yoopta-bulleted-list
-- .yoopta-bulleted-list-bullet
-- .yoopta-bulleted-list-content
-
-### Default options
-
-```js
-const BulletedList = new YooptaPlugin({
-  options: {
-    display: {
-      title: 'Bulleted List',
-      description: 'Create bullet list',
-    },
-    shortcuts: ['-'],
-  },
-});
-```
-
-### How to extend
-
-```tsx
-const plugins = [
-  BulletedList.extend({
-    renders: {
-      bulleted-list: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
-
-## TodoList
-
-### Default classnames
-
-- .yoopta-todo-list
-- .yoopta-todo-list-checkbox
-- .yoopta-todo-list-checkbox-input
-- .yoopta-todo-list-content
-
-### Default options
-
-```js
-const TodoList = new YooptaPlugin({
-  options: {
-    display: {
-      title: 'Todo List',
-      description: 'Track tasks',
-    },
-    shortcuts: ['[]'],
-  },
-});
-```
-
-### How to extend
-
-```tsx
-const plugins = [
-  TodoList.extend({
-    renders: {
-      todo-list: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+See [Lists plugin docs](https://docs.yoopta.dev/plugins/lists).

@@ -1,62 +1,50 @@
-# Paragraph plugin
+# @yoopta/steps
 
-Paragraph is default plugin for Yoopta-Editor
+Steps block plugin for Yoopta Editor. Renders step-by-step content with ordered steps. Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
-yarn add @yoopta/paragraph
+yarn add @yoopta/steps
 ```
 
-### Usage
+## Usage
 
-```jsx
-import Paragraph from '@yoopta/paragraph';
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
 
-const plugins = [Paragraph];
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Steps from '@yoopta/steps';
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+const plugins = [Steps];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-paragraph
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, Steps, /* ... */]);
+```
 
-### Default options
+Or: `Steps.extend({ elements: StepsUI })` with `StepsUI` from `@yoopta/themes-shadcn/steps`.
 
-```js
-const Paragraph = new YooptaPlugin({
+## Extend
+
+```tsx
+Steps.extend({
+  elements: {
+    'steps-container': { render: (props) => <YourSteps {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Text',
-      description: 'Start writing plain text.',
-    },
-    shortcuts: ['p', 'text'],
+    display: { title: 'Steps', description: 'Step-by-step content' },
   },
 });
 ```
 
-### How to extend
-
-```tsx
-const plugins = [
-  Paragraph.extend({
-    renders: {
-      paragraph: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+See [Steps plugin docs](https://docs.yoopta.dev/plugins/steps).

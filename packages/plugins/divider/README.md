@@ -1,6 +1,6 @@
-# Divider
+# @yoopta/divider
 
-## Overview
+Divider block plugin for Yoopta Editor. Renders horizontal dividers with configurable style (solid, dashed, dotted, gradient) and color. Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
 ## Installation
 
@@ -8,71 +8,45 @@
 yarn add @yoopta/divider
 ```
 
+## Usage
+
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Divider from '@yoopta/divider';
+
+const plugins = [Divider];
+
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
+```
+
 ## Elements
 
-### divider
-
-- props
-- `color: string`
-- `theme: 'solid' | 'dashed' | 'dotted' | 'gradient'`
+**divider** — props: `color` (string), `theme` (`'solid' | 'dashed' | 'dotted' | 'gradient'`).
 
 ## Commands
 
-```javascript
-export type DividerCommands = {
-  buildDividerElements: (
-    editor: YooEditor,
-    options?: Partial<DividerElementProps>,
-  ) => DividerElement,
-  insertDivider: (editor: YooEditor, options?: Partial<DividerInsertOptions>) => void,
-  deleteDivider: (editor: YooEditor, blockId: string) => void,
-  updateDivider: (editor: YooEditor, blockId: string, props: Partial<DividerElementProps>) => void,
-};
-```
+Use the plugin's commands via the editor (e.g. from block options or programmatically):
 
-### buildDividerElements
-
-` buildDividerElements: (editor: YooEditor, options?: Partial``) => DividerElement; `
-
-Define elements structure for slate value in your block
-
-### insertDivider
-
-` editor.methods.insertDivider(blockId: string, options?: Partial``) => void `
-
-Insert divider block in specific path with options
-
-Options:
-
-- `color: string`
-- `theme: 'solid' | 'dashed' | 'dotted' | 'gradient'`
-
-### deleteDivider
-
-`deleteDivider: (editor: YooEditor, blockId: string) => void;`
-
-Delete divider block
-
-### updateDivider
-
-` updateDivider: (editor: YooEditor, blockId: string, props: Partial``) => void; `
-
-Update divider props
-
-Options:
-
-- `color: string`
-- `theme: 'solid' | 'dashed' | 'dotted' | 'gradient'`
+- **insertDivider** — Insert a divider block with optional `color` and `theme`.
+- **deleteDivider** — Delete divider block by `blockId`.
+- **updateDivider** — Update divider props (`color`, `theme`) by `blockId`.
+- **buildDividerElements** — Build element structure for Slate value.
 
 ## Hotkeys
 
-| Operation                           | Hotkey          |
-| ----------------------------------- | --------------- |
-| Switch themes when block is focused | **cmd+shift+d** |
+| Action                         | Hotkey           |
+| ------------------------------ | ---------------- |
+| Switch theme when block focused | **Cmd+Shift+D** |
 
 ## Styling
 
-| Classname              | Element                             |
-| ---------------------- | ----------------------------------- |
-| yoopta-divider         | Root of divider                     |
-| yoopta-divider-[theme] | Divider element with specific theme |
+- `.yoopta-divider` — root
+- `.yoopta-divider-[theme]` — divider with specific theme
+
+See [Divider plugin docs](https://docs.yoopta.dev/plugins/divider).

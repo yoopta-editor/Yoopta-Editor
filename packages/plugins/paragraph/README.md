@@ -1,62 +1,61 @@
-# Paragraph plugin
+# @yoopta/paragraph
 
-Paragraph is default plugin for Yoopta-Editor
+Default paragraph (text) block plugin for Yoopta Editor. Use it headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/paragraph
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 
 const plugins = [Paragraph];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-paragraph
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([Paragraph, /* ... */]);
+```
 
-### Default options
+Or extend a single plugin: `Paragraph.extend({ elements: ParagraphUI })` with `ParagraphUI` from `@yoopta/themes-shadcn/paragraph`.
 
-```js
-const Paragraph = new YooptaPlugin({
+## Default options
+
+- **display:** title `'Text'`, description `'Start writing plain text.'`
+- **shortcuts:** `['p', 'text']`
+
+## Extend
+
+```tsx
+Paragraph.extend({
+  elements: {
+    paragraph: { render: (props) => <YourParagraph {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Text',
-      description: 'Start writing plain text.',
-    },
-    shortcuts: ['p', 'text'],
+    shortcuts: ['para'],
+    display: { title: 'Paragraph', description: 'Your description' },
+    HTMLAttributes: { className: 'my-paragraph' },
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  Paragraph.extend({
-    renders: {
-      paragraph: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- `.yoopta-paragraph` — root element
+
+See [Paragraph plugin docs](https://docs.yoopta.dev/plugins/paragraph) and [Core plugins](https://docs.yoopta.dev/core/plugins).

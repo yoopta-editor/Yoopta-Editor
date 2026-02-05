@@ -1,62 +1,64 @@
-# Blockquote plugin
+# @yoopta/blockquote
 
-Blockquote is plugin for Yoopta-Editor
+Blockquote plugin for Yoopta Editor. Renders quote blocks; use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/blockquote
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Blockquote from '@yoopta/blockquote';
 
 const plugins = [Blockquote];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-blockquote
+Use Shadcn theme for styled blockquotes:
 
-### Default options
+```tsx
+import Blockquote from '@yoopta/blockquote';
+import { BlockquoteUI } from '@yoopta/themes-shadcn/blockquote';
 
-```js
-const Blockquote = new YooptaPlugin({
+const BlockquoteWithUI = Blockquote.extend({ elements: BlockquoteUI });
+const plugins = [BlockquoteWithUI];
+```
+
+## Default options
+
+- **display:** title `'Blockquote'`, description `'Capture quote'`
+- **shortcuts:** `['>']`
+
+## Extend
+
+```tsx
+Blockquote.extend({
+  elements: {
+    blockquote: { render: (props) => <YourCustomBlockquote {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Blockquote',
-      description: 'Capture quote',
-    },
-    shortcuts: ['>'],
+    shortcuts: ['quote'],
+    display: { title: 'Quote', description: 'Your description' },
+    HTMLAttributes: { className: 'my-blockquote' },
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  Blockquote.extend({
-    renders: {
-      blockquote: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- `.yoopta-blockquote` — root element
+
+See [Blockquote plugin docs](https://docs.yoopta.dev/plugins/blockquote).

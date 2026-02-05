@@ -1,154 +1,67 @@
-# Headings plugins
+# @yoopta/headings
 
-Headings include three plugins for Yoopta-Editor:
+Heading block plugins for Yoopta Editor: **HeadingOne**, **HeadingTwo**, **HeadingThree**. Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-- HeadingOne
-- HeadingTwo
-- HeadingThree
-
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/headings
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugins to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
 
 const plugins = [HeadingOne, HeadingTwo, HeadingThree];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-## HeadingOne
+## Themed UI
 
-### Default classnames
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+const plugins = applyTheme([
+  Paragraph,
+  HeadingOne,
+  HeadingTwo,
+  HeadingThree,
+]);
+```
 
-- .yoopta-heading-one
+## Default options
 
-### Default options
+| Plugin       | Title       | Shortcuts   |
+| ------------ | ----------- | ----------- |
+| HeadingOne   | Heading 1   | `['h1', '#', '*']` |
+| HeadingTwo   | Heading 2   | `['h2', '##']`     |
+| HeadingThree | Heading 3   | `['h3', '###']`    |
 
-```js
-const HeadingOne = new YooptaPlugin({
+## Extend
+
+```tsx
+HeadingOne.extend({
+  elements: {
+    'heading-one': { render: (props) => <YourH1 {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Heading 1',
-      description: 'Big section heading',
-    },
-    shortcuts: ['h1', '#', '*'],
+    shortcuts: ['h1', 'title'],
+    display: { title: 'Heading 1', description: 'Big section heading' },
+    HTMLAttributes: { className: 'my-heading-one' },
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  HeadingOne.extend({
-    renders: {
-      heading-one: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- `.yoopta-heading-one`, `.yoopta-heading-two`, `.yoopta-heading-three`
 
-## HeadingTwo
-
-### Default classnames
-
-- .yoopta-heading-two
-
-### Default options
-
-```js
-const HeadingTwo = new YooptaPlugin({
-  options: {
-    display: {
-      title: 'Heading 2',
-      description: 'Medium section heading',
-    },
-    shortcuts: ['h2', '##'],
-  },
-});
-```
-
-### How to extend
-
-```tsx
-const plugins = [
-  HeadingTwo.extend({
-    renders: {
-      heading-two: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
-
-## HeadingThree
-
-### Default classnames
-
-- .yoopta-heading-three
-
-### Default options
-
-```js
-const HeadingThree = new YooptaPlugin({
-  options: {
-    display: {
-      title: 'Heading 3',
-      description: 'Small section heading',
-    },
-    shortcuts: ['h3', '###'],
-  },
-});
-```
-
-### How to extend
-
-```tsx
-const plugins = [
-  HeadingThree.extend({
-    renders: {
-      heading-three: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+See [Headings plugin docs](https://docs.yoopta.dev/plugins/headings) and [Core plugins](https://docs.yoopta.dev/core/plugins).

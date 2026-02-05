@@ -1,63 +1,63 @@
-# Callout plugin
+# @yoopta/callout
 
-Callout is plugin for Yoopta-Editor
+Callout plugin for Yoopta Editor. Renders callout blocks with optional theme (default, success, warning, error, info). Use headless or with theme UI from `@yoopta/themes-shadcn`.
 
-### Installation
+## Installation
 
 ```bash
 yarn add @yoopta/callout
 ```
 
-### Usage
+## Usage
 
-```jsx
+Pass the plugin to `createYooptaEditor`. Do not pass `plugins` to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Callout from '@yoopta/callout';
 
 const plugins = [Callout];
 
-const Editor = () => {
-  return <YooptaEditor plugins={plugins} />;
-};
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
-### Default classnames
+## Themed UI
 
-- .yoopta-callout
-- .yoopta-callout-theme-['default' | 'success' | 'warning' | 'error' | 'info']
+```tsx
+import Callout from '@yoopta/callout';
+import { CalloutUI } from '@yoopta/themes-shadcn/callout';
 
-### Default options
+const CalloutWithUI = Callout.extend({ elements: CalloutUI });
+const plugins = [CalloutWithUI];
+```
 
-```js
-const Callout = new YooptaPlugin({
+## Default options
+
+- **display:** title `'Callout'`, description `'Make writing stand out'`
+- **shortcuts:** `['<']`
+
+## Extend
+
+```tsx
+Callout.extend({
+  elements: {
+    callout: { render: (props) => <YourCallout {...props} /> },
+  },
   options: {
-    display: {
-      title: 'Callout',
-      description: 'Make writing stand out',
-    },
-    shortcuts: ['<'],
+    shortcuts: ['callout'],
+    display: { title: 'Callout', description: 'Your description' },
+    HTMLAttributes: { className: 'my-callout' },
   },
 });
 ```
 
-### How to extend
+## Classnames
 
-```tsx
-const plugins = [
-  Callout.extend({
-    renders: {
-      callout: (props) => <YourCustomComponent {...props} />
-    },
-    options: {
-      shortcuts: [`<your custom shortcuts>`],
-      display: {
-        title: `<your custom title>`,
-        description: `<your custom description>`,
-      },
-      HTMLAttributes: {
-        className: '<your classname>',
-        // ...other HTML attributes
-      },
-    },
-  });
-];
-```
+- `.yoopta-callout` — root
+- `.yoopta-callout-theme-['default' | 'success' | 'warning' | 'error' | 'info']`
+
+See [Callout plugin docs](https://docs.yoopta.dev/plugins/callout) and [Core themes](https://docs.yoopta.dev/core/themes).
