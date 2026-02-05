@@ -20,29 +20,36 @@ npm install @yoopta/mention
 
 ## Basic Usage
 
+Pass the plugin to `createYooptaEditor` (wrapped with `withMentions`); do not pass `plugins` to `<YooptaEditor>`. Add `MentionDropdown` as a child when using theme UI.
+
 ```jsx
-import { Mention } from '@yoopta/mention';
-import { withMentions } from '@yoopta/mention';
-import { createYooptaEditor } from '@yoopta/editor';
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import { Mention, withMentions } from '@yoopta/mention';
+import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
 
-const editor = withMentions(
-  createYooptaEditor({
-    plugins: [
-      Mention.extend({
-        options: {
-          onSearch: async (query, trigger) => {
-            // Your search logic here
-            const results = await fetchUsers(query);
-            return results;
-          },
-        },
-      }),
-      // ... other plugins
-    ],
+const plugins = [
+  Mention.extend({
+    options: {
+      onSearch: async (query) => {
+        const results = await fetchUsers(query);
+        return results;
+      },
+    },
   }),
-);
+];
 
-<YooptaEditor editor={editor} plugins={plugins} />;
+export default function Editor() {
+  const editor = useMemo(
+    () => withMentions(createYooptaEditor({ plugins, marks: [] })),
+    [],
+  );
+  return (
+    <YooptaEditor editor={editor} onChange={() => {}}>
+      <MentionDropdown />
+    </YooptaEditor>
+  );
+}
 ```
 
 <Warning>

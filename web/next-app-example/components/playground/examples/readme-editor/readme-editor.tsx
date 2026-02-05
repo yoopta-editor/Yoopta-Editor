@@ -427,11 +427,11 @@ export function ReadmeEditor() {
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      {/* Toolbar */}
-      <div className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-4 py-2">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-1">
+    <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+      {/* Toolbar - wraps on mobile */}
+      <div className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-3 sm:px-4 py-2 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-1.5">
             {/* Insert Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -565,7 +565,7 @@ export function ReadmeEditor() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Separator orientation="vertical" className="h-6 mx-2" />
+            <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
 
             {/* Quick insert buttons */}
             <Button
@@ -597,7 +597,7 @@ export function ReadmeEditor() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {/* View mode toggle */}
             <div className="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-md overflow-hidden">
               <Button
@@ -672,25 +672,25 @@ export function ReadmeEditor() {
         </div>
       </div>
 
-      {/* Main content area */}
-      <div className="flex-1 flex overflow-hidden">
+      {/* Main content area - stacked on mobile, side-by-side on md+ */}
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
         {/* Editor Panel */}
         {(viewMode === "editor" || viewMode === "split") && (
           <div
             className={cn(
-              "flex flex-col border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950",
-              viewMode === "split" ? "w-1/2" : "w-full"
+              "flex flex-col flex-1 min-h-0 border-r-0 md:border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950",
+              viewMode === "split" ? "w-full md:w-1/2" : "w-full"
             )}
           >
-            <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
+            <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <FileText className="h-4 w-4" />
-                <span className="font-medium">README.md</span>
-                <span className="text-xs">— Editor</span>
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="font-medium truncate">README.md</span>
+                <span className="text-xs hidden sm:inline">— Editor</span>
               </div>
             </div>
-            <ScrollArea className="flex-1">
-              <div className="p-6 max-w-3xl mx-auto">
+            <ScrollArea className="flex-1 min-h-0">
+              <div className="p-4 sm:p-6 max-w-3xl mx-auto">
                 <YooptaEditor
                   editor={editor}
                   style={{ width: "100%" }}
@@ -705,23 +705,23 @@ export function ReadmeEditor() {
         {(viewMode === "preview" || viewMode === "split") && (
           <div
             className={cn(
-              "flex flex-col bg-white dark:bg-neutral-950",
-              viewMode === "split" ? "w-1/2" : "w-full"
+              "flex flex-col flex-1 min-h-0 bg-white dark:bg-neutral-950",
+              viewMode === "split" ? "w-full md:w-1/2" : "w-full"
             )}
           >
-            <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
+            <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Eye className="h-4 w-4" />
+                <Eye className="h-4 w-4 shrink-0" />
                 <span className="font-medium">Preview</span>
-                <span className="text-xs">— Markdown Output</span>
+                <span className="text-xs hidden sm:inline">— Markdown Output</span>
               </div>
             </div>
-            <ScrollArea className="flex-1">
-              <div className="p-6">
+            <ScrollArea className="flex-1 min-h-0">
+              <div className="p-4 sm:p-6">
                 <div className="max-w-3xl mx-auto">
                   {/* GitHub-style markdown preview */}
-                  <div className="prose prose-neutral dark:prose-invert prose-pre:bg-neutral-900 prose-pre:text-neutral-100 prose-code:before:content-none prose-code:after:content-none max-w-none">
-                    <pre className="bg-neutral-100 dark:bg-neutral-900 p-4 rounded-lg overflow-x-auto text-sm font-mono whitespace-pre-wrap break-words">
+                  <div className="prose prose-neutral dark:prose-invert prose-pre:bg-neutral-900 prose-pre:text-neutral-100 prose-code:before:content-none prose-code:after:content-none max-w-none prose-pre:text-xs sm:prose-pre:text-sm">
+                    <pre className="bg-neutral-100 dark:bg-neutral-900 p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm font-mono whitespace-pre-wrap wrap-break-word">
                       {markdown || "# Your README preview will appear here..."}
                     </pre>
                   </div>
@@ -732,17 +732,17 @@ export function ReadmeEditor() {
         )}
       </div>
 
-      {/* Footer stats */}
-      <div className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-4 py-1.5">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-4">
+      {/* Footer stats - wraps on mobile */}
+      <div className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 sm:px-4 py-1.5 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5">
             <span>{Object.keys(editor.getEditorValue()).length} blocks</span>
             <span>{markdown.length} characters</span>
             <span>{markdown.split("\n").length} lines</span>
           </div>
           <div className="flex items-center gap-2">
-            <FileType className="h-3 w-3" />
-            <span>GitHub Flavored Markdown</span>
+            <FileType className="h-3 w-3 shrink-0" />
+            <span className="truncate">GitHub Flavored Markdown</span>
           </div>
         </div>
       </div>

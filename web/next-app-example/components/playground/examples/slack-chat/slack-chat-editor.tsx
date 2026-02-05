@@ -61,11 +61,11 @@ function MessageBubble({ message }: { message: Message }) {
   }, [previewEditor, message.content]);
 
   return (
-    <div className="group flex gap-3 px-5 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 transition-colors">
+    <div className="group flex gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 transition-colors">
       {/* Avatar */}
       <div
         className={cn(
-          "flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-sm font-semibold text-white",
+          "flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-xs sm:text-sm font-semibold text-white",
           message.author.isOnline
             ? "bg-gradient-to-br from-green-500 to-emerald-600"
             : "bg-gradient-to-br from-neutral-400 to-neutral-500"
@@ -75,7 +75,7 @@ function MessageBubble({ message }: { message: Message }) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 overflow-hidden">
         <div className="flex items-baseline gap-2">
           <span className="font-semibold text-neutral-900 dark:text-white text-sm">
             {message.author.name}
@@ -122,8 +122,8 @@ function MessageBubble({ message }: { message: Message }) {
         )}
       </div>
 
-      {/* Hover actions */}
-      <div className="flex items-start gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Hover actions - visible on hover desktop, always on mobile for touch */}
+      <div className="flex items-start gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0">
         <Button variant="ghost" size="icon" className="h-7 w-7">
           <Smile className="w-4 h-4" />
         </Button>
@@ -214,12 +214,12 @@ export function SlackChatEditor() {
   const toggleBlockquote = () => Blocks.toggleBlock(editor, "Blockquote", { focus: true });
 
   return (
-    <div className="flex flex-1 bg-white dark:bg-neutral-950 justify-center">
-      <div className="flex-1 flex flex-col w-full max-w-2xl items-center">
+    <div className="flex flex-1 min-h-0 bg-white dark:bg-neutral-950 justify-center">
+      <div className="flex-1 flex flex-col w-full max-w-2xl min-w-0 items-center">
 
         {/* Messages area */}
-        <ScrollArea className="flex-1">
-          <div className="py-4">
+        <ScrollArea className="flex-1 min-h-0 w-full">
+          <div className="py-3 sm:py-4">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
@@ -228,10 +228,10 @@ export function SlackChatEditor() {
         </ScrollArea>
 
         {/* Message composer */}
-        <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 w-full">
+        <div className="w-full flex-shrink-0 p-3 sm:p-4 border-t border-neutral-200 dark:border-neutral-800">
           <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
-            {/* Formatting toolbar */}
-            <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-neutral-200 dark:border-neutral-800">
+            {/* Formatting toolbar - scroll horizontally on narrow screens */}
+            <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-neutral-200 dark:border-neutral-800 overflow-x-auto">
               <Button
                 variant="ghost"
                 size="icon"
@@ -317,7 +317,7 @@ export function SlackChatEditor() {
               </Button>
             </div>
 
-            <div className="min-h-[80px] max-h-[200px] overflow-auto px-3 py-2">
+            <div className="min-h-[72px] sm:min-h-[80px] max-h-[180px] sm:max-h-[200px] overflow-auto px-3 py-2">
               <YooptaEditor
                 editor={editor}
                 style={EDITOR_STYLES}
@@ -327,8 +327,8 @@ export function SlackChatEditor() {
               </YooptaEditor>
             </div>
 
-            <div className="flex items-center justify-between px-2 py-1.5 border-t border-neutral-200 dark:border-neutral-800">
-              <div className="flex items-center gap-0.5">
+            <div className="flex items-center justify-between gap-2 px-2 py-1.5 border-t border-neutral-200 dark:border-neutral-800">
+              <div className="flex items-center gap-0.5 min-w-0 overflow-x-auto">
                 <Button variant="ghost" size="icon" className="h-7 w-7">
                   <Plus className="w-4 h-4" />
                 </Button>
@@ -351,8 +351,8 @@ export function SlackChatEditor() {
               </Button>
             </div>
           </div>
-          <p className="text-xs text-neutral-500 mt-2 text-center">
-            Press <kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Enter</kbd> to send, <kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Shift+Enter</kbd> for new line
+          <p className="text-[10px] sm:text-xs text-neutral-500 mt-1.5 sm:mt-2 text-center px-1">
+            <span className="hidden xs:inline">Press </span><kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-[10px] sm:text-xs">Enter</kbd> to send<span className="hidden sm:inline">, <kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Shift+Enter</kbd> for new line</span>
           </p>
         </div>
       </div>

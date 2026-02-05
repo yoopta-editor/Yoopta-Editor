@@ -20,18 +20,19 @@ npm install @yoopta/tabs
 
 ## Basic Usage
 
+Pass the plugin to `createYooptaEditor`; do not pass `plugins` to `<YooptaEditor>`.
+
 ```jsx
-import { Tabs } from '@yoopta/tabs';
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Tabs from '@yoopta/tabs';
 
-const plugins = [
-  Tabs,
-  // ... other plugins
-];
+const plugins = [Tabs];
 
-<YooptaEditor
-  editor={editor}
-  plugins={plugins}
-/>
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
 ## Features

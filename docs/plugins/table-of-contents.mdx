@@ -21,29 +21,33 @@ npm install @yoopta/table-of-contents
 ## Basic Usage
 
 ```jsx
-import { createYooptaEditor } from '@yoopta/editor';
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import TableOfContents from '@yoopta/table-of-contents';
-import Headings from '@yoopta/headings';
+import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
 import Paragraph from '@yoopta/paragraph';
 import { applyTheme } from '@yoopta/themes-shadcn';
 
-const PLUGINS = applyTheme([
+const plugins = applyTheme([
   TableOfContents,
-  Headings.HeadingOne,
-  Headings.HeadingTwo,
-  Headings.HeadingThree,
+  HeadingOne,
+  HeadingTwo,
+  HeadingThree,
   Paragraph,
 ]);
 
-const editor = createYooptaEditor({
-  plugins: PLUGINS,
-  value: {},
-});
-
-<YooptaEditor editor={editor} onChange={handleChange}>
-  <YooptaToolbar />
-  <YooptaSlashCommandMenu />
-</YooptaEditor>
+export default function Editor() {
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks: [], value: {} }),
+    [],
+  );
+  return (
+    <YooptaEditor editor={editor} onChange={() => {}}>
+      <YooptaToolbar />
+      <YooptaSlashCommandMenu />
+    </YooptaEditor>
+  );
+}
 ```
 
 ## Features

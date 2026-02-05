@@ -20,15 +20,19 @@ npm install @yoopta/code
 
 ## Basic Usage
 
+Pass the plugin to `createYooptaEditor`; do not pass `plugins` to `<YooptaEditor>`.
+
 ```jsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import { CodeGroup } from '@yoopta/code';
 
-const plugins = [
-  CodeGroup,
-  // ... other plugins
-];
+const plugins = [CodeGroup];
 
-<YooptaEditor editor={editor} plugins={plugins} />;
+export default function Editor() {
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks: [] }), []);
+  return <YooptaEditor editor={editor} onChange={() => {}} />;
+}
 ```
 
 ## Features

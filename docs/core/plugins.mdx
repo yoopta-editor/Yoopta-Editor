@@ -125,20 +125,33 @@ Yoopta Editor provides a rich set of built-in plugins:
 
 ## Using Plugins
 
+Plugins are passed to **`createYooptaEditor`**, not to `<YooptaEditor>`. The component only receives the `editor` instance.
+
 ### Basic Usage
 
 ```jsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
 import Code from '@yoopta/code';
 
 const plugins = [Paragraph, Blockquote, Code];
 
-<YooptaEditor
-  editor={editor}
-  plugins={plugins}
-  // ... other props
-/>;
+export default function Editor() {
+  const editor = useMemo(
+    () => createYooptaEditor({ plugins, marks: [] }),
+    [],
+  );
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => {}}
+      placeholder="Type / to open menu"
+    />
+  );
+}
 ```
 
 ### Headings Plugin
@@ -167,7 +180,7 @@ const plugins = [Lists.BulletedList, Lists.NumberedList, Lists.TodoList];
 
 ## Plugin Configuration
 
-Most plugins accept configuration options:
+Most plugins accept configuration options when you call `plugin.extend({ options: { ... } })`. Pass the resulting plugins array to `createYooptaEditor({ plugins, marks })`, not to `<YooptaEditor>`.
 
 ### Image Plugin
 
@@ -228,15 +241,22 @@ const plugins = [
 
 ### extend()
 
-Extend a plugin with custom options:
+Extend a plugin with custom options or elements (UI):
 
 ```jsx
 const CustomParagraph = Paragraph.extend({
   options: {
-    // Custom options
+    display: { title: 'Text', description: 'Plain text' },
+    shortcuts: ['p'],
   },
-  renders: {
-    // Custom renderers
+  elements: {
+    paragraph: {
+      render: (props) => (
+        <p className="my-paragraph" {...props.attributes}>
+          {props.children}
+        </p>
+      ),
+    },
   },
 });
 ```
@@ -293,21 +313,21 @@ const MyPlugin = new YooptaPlugin({
   Placeholder text for empty elements
 </ParamField>
 
-## Custom Renders
+## Custom elements (renders)
 
-Override default rendering:
+Override default rendering by extending with custom `elements`:
 
 ```jsx
 import Paragraph from '@yoopta/paragraph';
 
 const CustomParagraph = Paragraph.extend({
-  renders: {
-    paragraph: (props) => {
-      return (
+  elements: {
+    paragraph: {
+      render: (props) => (
         <p className="custom-paragraph" {...props.attributes}>
           {props.children}
         </p>
-      );
+      ),
     },
   },
 });
@@ -334,20 +354,9 @@ const CustomImage = Image.extend({
 });
 ```
 
-## Plugin Shortcuts
+## Plugin shortcuts
 
-Define custom keyboard shortcuts:
-
-```jsx
-const CustomCode = Code.extend({
-  shortcuts: {
-    'mod+shift+c': (editor) => {
-      // Transform current block to code block
-      editor.blocks.toggle({ type: 'Code' });
-    },
-  },
-});
-```
+Configure slash-menu shortcuts via `options.shortcuts` (array of strings). Plugin-specific hotkeys are defined in the plugin's `events.onKeyDown` or in options. Use `Blocks.toggleBlock(editor, { type: 'Code' })` for programmatic block type change.
 
 ## Common Plugin Options
 
