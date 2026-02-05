@@ -13,9 +13,9 @@ import {
   Palette,
   FileCode,
   ArrowRight,
-  Check,
-  Loader2,
 } from "lucide-react";
+
+const TALLY_FORM_ID = "RGPj8v";
 
 const upcomingFeatures = [
   {
@@ -63,23 +63,26 @@ const upcomingFeatures = [
 ];
 
 export function Waitlist() {
-  const [email, setEmail] = React.useState("");
-  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
+  React.useEffect(() => {
+    const existingScript = document.querySelector('script[src="https://tally.so/widgets/embed.js"]');
+    if (existingScript) return;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+    const script = document.createElement("script");
+    script.src = "https://tally.so/widgets/embed.js";
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
 
-    setStatus("loading");
-
-    // Simulate API call - replace with actual endpoint
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // TODO: Replace with actual waitlist API
-    console.log("Waitlist signup:", email);
-
-    setStatus("success");
-    setEmail("");
+  const openTallyPopup = () => {
+    if (typeof window !== "undefined" && (window as any).Tally) {
+      (window as any).Tally.openPopup(TALLY_FORM_ID, {
+        layout: "modal",
+        width: 500,
+        autoClose: 3000,
+      });
+    } else {
+      window.open(`https://tally.so/r/${TALLY_FORM_ID}`, "_blank");
+    }
   };
 
   return (
@@ -133,7 +136,7 @@ export function Waitlist() {
           ))}
         </div>
 
-        {/* Email signup */}
+        {/* Waitlist CTA */}
         <div className="max-w-xl mx-auto">
           <div className="p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50">
             <div className="text-center mb-6">
@@ -145,41 +148,16 @@ export function Waitlist() {
               </p>
             </div>
 
-            {status === "success" ? (
-              <div className="flex items-center justify-center gap-3 py-4 px-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                <Check className="w-5 h-5 text-emerald-500" />
-                <span className="text-emerald-600 dark:text-emerald-400 font-medium">
-                  You&apos;re on the list! We&apos;ll be in touch.
-                </span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="flex-1 px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
-                />
-                <Button
-                  type="submit"
-                  variant="gradient"
-                  size="lg"
-                  disabled={status === "loading"}
-                  className="shrink-0"
-                >
-                  {status === "loading" ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <>
-                      Join Waitlist
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            )}
+            <div className="flex justify-center">
+              <Button
+                variant="gradient"
+                size="lg"
+                onClick={openTallyPopup}
+              >
+                Join Waitlist
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

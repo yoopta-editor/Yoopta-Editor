@@ -34,6 +34,7 @@ type EditorState = {
   version: number;
 };
 
+// [TODO] - add placeholder 
 const YooptaEditor = ({
   editor,
   autoFocus,
