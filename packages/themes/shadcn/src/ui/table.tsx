@@ -5,16 +5,13 @@ import { cn } from '../utils';
 
 const Table = forwardRef<HTMLTableElement, ComponentProps<'table'>>(
   ({ className, ...props }, ref) => (
-    <div
-      data-slot="table-container"
-      className="relative w-full overflow-x-auto rounded-md">
-      <table
-        ref={ref}
-        data-slot="table"
-        className={cn('caption-bottom text-sm table-fixed border-collapse', className)}
-        {...props}
-      />
-    </div>
+
+    <table
+      ref={ref}
+      data-slot="table"
+      className={cn('caption-bottom text-sm table-fixed border-collapse', className)}
+      {...props}
+    />
   ),
 );
 Table.displayName = 'Table';

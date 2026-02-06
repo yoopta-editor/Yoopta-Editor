@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
+import * as Popover from '@radix-ui/react-popover';
 import { useYooptaEditor } from '@yoopta/editor';
 
 import { ElementOptionsContext } from '../context/element-options-context';
@@ -8,14 +9,11 @@ export const ElementOptionsRoot = ({
   blockId,
   element,
   children,
-  anchorRef,
   className,
   style,
 }: ElementOptionsRootProps) => {
   const editor = useYooptaEditor();
   const [isOpen, setIsOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const contextValue = useMemo(
     () => ({
@@ -24,22 +22,21 @@ export const ElementOptionsRoot = ({
       editor,
       isOpen,
       setIsOpen,
-      triggerRef,
-      contentRef,
-      anchorRef: anchorRef ?? null,
     }),
-    [blockId, element, editor, isOpen, anchorRef],
+    [blockId, element, editor, isOpen],
   );
 
   return (
     <ElementOptionsContext.Provider value={contextValue}>
-      <div
-        className={className}
-        style={style}
-        data-element-options-root
-        data-state={isOpen ? 'open' : 'closed'}>
-        {children}
-      </div>
+      <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+        <div
+          className={className}
+          style={style}
+          data-element-options-root
+          data-state={isOpen ? 'open' : 'closed'}>
+          {children}
+        </div>
+      </Popover.Root>
     </ElementOptionsContext.Provider>
   );
 };

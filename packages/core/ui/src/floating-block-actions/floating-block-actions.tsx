@@ -30,6 +30,7 @@ type FloatingBlockActionsRootProps = {
   /** When true, hover tracking is paused (e.g., when BlockOptions is open) */
   frozen?: boolean;
   className?: string;
+  style?: CSSProperties;
 };
 
 type FloatingBlockActionsButtonProps = {
@@ -60,13 +61,13 @@ const getVisibleStyles = (top: number, left: number, width: number): CSSProperti
   transition: 'transform 150ms ease-out',
 });
 
-const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: FloatingBlockActionsRootProps) => {
+const FloatingBlockActionsRoot = ({ children, style, frozen = false, className = '' }: FloatingBlockActionsRootProps) => {
   const editor = useYooptaEditor();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Internal state
   const [blockId, setBlockId] = useState<string | null>(null);
-  const [styles, setStyles] = useState<CSSProperties>(HIDDEN_STYLES);
+  const [styles, setStyles] = useState<CSSProperties>({ ...style, ...HIDDEN_STYLES });
 
   // Derived state
   const blockData = blockId ? editor.children[blockId] ?? null : null;
@@ -75,15 +76,26 @@ const FloatingBlockActionsRoot = ({ children, frozen = false, className = '' }: 
   // Hide actions
   const hide = useCallback(() => {
     setBlockId(null);
-    setStyles(HIDDEN_STYLES);
-  }, []);
+    setStyles({ ...style, ...HIDDEN_STYLES });
+  }, [style]);
 
   // Update position based on block element
   const updatePosition = useCallback((blockElement: HTMLElement) => {
     const rect = blockElement.getBoundingClientRect();
     const containerWidth = containerRef.current?.offsetWidth ?? 46;
-    setStyles(getVisibleStyles(rect.top + 2, rect.left, containerWidth));
-  }, []);
+
+    // Account for margin collapse: if the rendered element has margin-top,
+    // it collapses through the parent wrapper, making rect.top appear
+    // higher than where the content visually starts
+    let marginOffset = 0;
+    const renderedElement = blockElement.querySelector('[data-element-type]') as HTMLElement | null;
+    if (renderedElement) {
+      const elementStyle = window.getComputedStyle(renderedElement);
+      marginOffset = parseFloat(elementStyle.marginTop) || 0;
+    }
+
+    setStyles({ ...style, ...getVisibleStyles(rect.top + marginOffset, rect.left, containerWidth) });
+  }, [style]);
 
   // Find closest block to cursor
   const findClosestBlock = useCallback(

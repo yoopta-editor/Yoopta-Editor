@@ -22,7 +22,7 @@ const tableDataCellProps: TableDataCellElementProps = {
 const tableProps: TableElementProps = {
   headerRow: false,
   headerColumn: false,
-  columnWidths: [200, 150, 250],
+  columnWidths: [200, 200, 200],
 };
 
 const Table = new YooptaPlugin<TableElementMap>({
@@ -55,7 +55,7 @@ const Table = new YooptaPlugin<TableElementMap>({
     },
   },
   lifecycle: {
-    beforeCreate: (editor) => TableCommands.buildTableElements(editor, { rows: 3, columns: 3 }),
+    beforeCreate: (editor) => TableCommands.buildTableElements(editor, { rows: 3, columns: 3, columnWidth: 200 }),
   },
   parsers: {
     html: {

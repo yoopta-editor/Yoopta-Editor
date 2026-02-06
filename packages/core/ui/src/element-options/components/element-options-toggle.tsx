@@ -1,3 +1,5 @@
+import * as Switch from '@radix-ui/react-switch';
+
 import type { ElementOptionsToggleProps } from '../types';
 
 export const ElementOptionsToggle = ({
@@ -7,40 +9,18 @@ export const ElementOptionsToggle = ({
   className,
   style,
 }: ElementOptionsToggleProps) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onCheckedChange(!checked);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onCheckedChange(!checked);
-    }
-  };
-
   return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      className={className}
-      style={style}
-      onClick={handleClick}
-      onMouseDown={handleMouseDown}
-      onKeyDown={handleKeyDown}
-      data-element-options-toggle
-      data-state={checked ? 'checked' : 'unchecked'}>
-      <span data-element-options-toggle-thumb />
+    <div className={className} style={style} data-element-options-toggle-wrapper>
+      <Switch.Root
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        onMouseDown={(e) => e.preventDefault()}
+        data-element-options-toggle>
+        <Switch.Thumb data-element-options-toggle-thumb />
+      </Switch.Root>
       {label && <span data-element-options-toggle-label>{label}</span>}
-    </button>
+    </div>
   );
 };
 
 ElementOptionsToggle.displayName = 'ElementOptions.Toggle';
-

@@ -11,7 +11,7 @@ import { DEFAULT_HEADING_TYPES } from '../types';
 const defaultTocProps: TableOfContentsElementProps = {
   depth: 3,
   title: 'Table of Contents',
-  headingTypes: [...DEFAULT_HEADING_TYPES],
+  headingTypes: DEFAULT_HEADING_TYPES,
   showNumbers: false,
   collapsible: false,
 };

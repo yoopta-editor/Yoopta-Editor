@@ -12,7 +12,7 @@ import { YooptaFloatingBlockActions } from '@/components/new-yoo-components/yoop
 import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-slash-command-menu';
 
 import { SelectionBox } from '@yoopta/ui/selection-box';
-import { BlockDndContext, SortableBlock, DragHandle } from '@yoopta/ui/block-dnd';
+import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 
 const EDITOR_STYLE = {
   width: 700,

@@ -71,6 +71,10 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     ) as HTMLElement;
     if (!tableContainer) return;
 
+    // Find the scroll container (div with overflow-x-auto)
+    const scrollContainer = tableContainer.querySelector('.overflow-x-auto') as HTMLElement;
+    const scrollContainerRect = scrollContainer?.getBoundingClientRect();
+
     const tableElement = tableContainer.querySelector('table');
     if (!tableElement) return;
 
@@ -92,7 +96,6 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     const rowTop = Math.min(...rowCellRects.map((r) => r.top));
     const rowBottom = Math.max(...rowCellRects.map((r) => r.bottom));
     const rowLeft = Math.min(...rowCellRects.map((r) => r.left));
-    const rowRight = Math.max(...rowCellRects.map((r) => r.right));
     const rowHeight = rowBottom - rowTop;
 
     const columnCells: DOMRect[] = [];
@@ -107,12 +110,23 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
     });
 
     const columnLeft = columnCells.length > 0 ? Math.min(...columnCells.map((r) => r.left)) : rowLeft;
-    const columnRight = columnCells.length > 0 ? Math.max(...columnCells.map((r) => r.right)) : rowRight;
+    const columnRight = columnCells.length > 0 ? Math.max(...columnCells.map((r) => r.right)) : rowLeft;
     const columnWidth = columnRight - columnLeft;
     const columnTop = columnCells.length > 0 ? Math.min(...columnCells.map((r) => r.top)) : rowTop;
 
     const isLastRow = cellInfo.rowIndex === cellInfo.totalRows - 1;
     const isLastColumn = cellInfo.colIndex === cellInfo.totalColumns - 1;
+
+    // Check if column is visible within scroll container bounds
+    const isColumnVisible = scrollContainerRect
+      ? columnLeft >= scrollContainerRect.left - columnWidth &&
+        columnRight <= scrollContainerRect.right + columnWidth
+      : true;
+
+    // Calculate visible bounds for add buttons
+    const visibleLeft = scrollContainerRect?.left ?? tableRect.left;
+    const visibleRight = scrollContainerRect?.right ?? tableRect.right;
+    const visibleWidth = visibleRight - visibleLeft;
 
     setPositions({
       rowControls: {
@@ -120,24 +134,26 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
         top: rowTop,
         height: rowHeight,
       },
-      columnControls: {
-        left: columnLeft,
-        top: columnTop - 32,
-        width: columnWidth,
-      },
+      columnControls: isColumnVisible
+        ? {
+            left: columnLeft,
+            top: columnTop - 32,
+            width: columnWidth,
+          }
+        : null,
       addRowButton: isLastRow
         ? {
-          left: tableRect.left,
-          top: tableRect.bottom,
-          width: tableRect.width,
-        }
+            left: visibleLeft,
+            top: tableRect.bottom,
+            width: visibleWidth,
+          }
         : null,
       addColumnButton: isLastColumn
         ? {
-          left: tableRect.right,
-          top: tableRect.top,
-          height: tableRect.height,
-        }
+            left: Math.min(tableRect.right, visibleRight),
+            top: tableRect.top,
+            height: tableRect.height,
+          }
         : null,
     });
   }, [blockId]);
@@ -225,11 +241,11 @@ export const TableControls = ({ blockId }: TableControlsProps) => {
       const totalColumns = firstRowNode.children.length;
 
       return {
-          rowIndex,
-          colIndex,
+        rowIndex,
+        colIndex,
         cellElementId: elementId,
-          totalRows,
-          totalColumns,
+        totalRows,
+        totalColumns,
       };
     },
     [slate],

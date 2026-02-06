@@ -6,14 +6,38 @@ import { useYooptaEditor } from '@yoopta/editor';
 import {
   type TableOfContentsEditor,
   type TableOfContentsElementProps,
+  type TableOfContentsItem,
   useTableOfContentsItems,
 } from '@yoopta/table-of-contents';
+import { ElementOptions } from '@yoopta/ui/element-options';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { Button } from '../../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { ScrollArea } from '../../ui/scroll-area';
 import { cn } from '../../utils';
+import { TocElementOptions } from '../components/toc-element-options';
+
+/** Build hierarchical numbers (1, 1.1, 1.2, 2, 2.1, …) for nested TOC items */
+function getNumbering(items: TableOfContentsItem[]): string[] {
+  const numbers: string[] = [];
+  const c = [0, 0, 0];
+  for (const item of items) {
+    const level = item.level;
+    if (level === 1) {
+      c[0] += 1;
+      c[1] = 0;
+      c[2] = 0;
+    } else if (level === 2) {
+      c[1] += 1;
+      c[2] = 0;
+    } else if (level === 3) {
+      c[2] += 1;
+    }
+    numbers.push(c.slice(0, level).join('.'));
+  }
+  return numbers;
+}
 
 const defaultTocProps: TableOfContentsElementProps = {
   depth: 3,
@@ -50,9 +74,16 @@ export const TableOfContents = (props: PluginElementRenderProps) => {
   };
 
   const showContent = !collapsible || isExpanded;
+  const numbering = getNumbering(items);
 
   return (
-    <div {...props.attributes} contentEditable={false}>
+    <div {...props.attributes} contentEditable={false} className="group relative mt-4">
+      <ElementOptions.Root blockId={blockId} element={element}>
+        <ElementOptions.Trigger
+          className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity rounded-md p-1 hover:bg-accent"
+        />
+        <TocElementOptions />
+      </ElementOptions.Root>
       <Card
         className="w-full overflow-hidden"
         role="navigation"
@@ -103,24 +134,29 @@ export const TableOfContents = (props: PluginElementRenderProps) => {
                   className="space-y-1"
                   data-show-numbers={showNumbers}
                   style={{
-                    listStyle: showNumbers ? 'decimal' : 'none',
-                    paddingLeft: showNumbers ? 20 : 0,
+                    listStyle: 'none',
+                    paddingLeft: 0,
                   }}>
-                  {items.map((item) => (
+                  {items.map((item, index) => (
                     <li
                       key={item.id}
                       data-level={item.level}
                       className={cn(
-                        'leading-tight',
+                        'leading-tight flex gap-2',
                         item.level === 1 && 'font-medium',
                         item.level === 2 && 'pl-3 text-sm',
                         item.level === 3 && 'pl-6 text-sm text-muted-foreground',
                       )}>
+                      {showNumbers ? (
+                        <span className="shrink-0 text-muted-foreground" aria-hidden>
+                          {numbering[index]}.
+                        </span>
+                      ) : null}
                       <Button
                         type="button"
                         variant="link"
                         size="sm"
-                        className="h-auto justify-start p-0 text-left font-inherit text-inherit no-underline hover:underline"
+                        className="h-auto min-w-0 flex-1 justify-start p-0 text-left font-inherit text-inherit no-underline hover:underline"
                         onClick={() => handleItemClick(item.id)}>
                         {item.text || '(Untitled)'}
                       </Button>

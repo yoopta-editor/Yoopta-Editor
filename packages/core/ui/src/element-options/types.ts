@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode, RefObject } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { SlateElement, YooEditor } from '@yoopta/editor';
 
 // Shared positioning types
@@ -12,9 +12,6 @@ export type ElementOptionsContextValue = {
   editor: YooEditor;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  triggerRef: RefObject<HTMLButtonElement | null>;
-  contentRef: RefObject<HTMLDivElement | null>;
-  anchorRef: RefObject<HTMLElement | null> | null;
 };
 
 // Component props
@@ -22,8 +19,6 @@ export type ElementOptionsRootProps = {
   blockId: string;
   element: SlateElement;
   children: ReactNode;
-  /** Ref to the element that Trigger should position relative to */
-  anchorRef?: RefObject<HTMLElement | null>;
   className?: string;
   style?: CSSProperties;
 };
@@ -32,14 +27,6 @@ export type ElementOptionsTriggerProps = {
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
-  /** Which side of the anchor to position the trigger */
-  side?: Side;
-  /** Alignment along the side */
-  align?: Align;
-  /** Offset from the side in pixels */
-  sideOffset?: number;
-  /** Offset along the alignment axis in pixels */
-  alignOffset?: number;
 };
 
 export type ElementOptionsContentProps = {

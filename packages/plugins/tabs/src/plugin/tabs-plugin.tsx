@@ -130,16 +130,16 @@ const Tabs = new YooptaPlugin<TabsElementMap>({
         const { depth = 0 } = blockMeta || {};
 
         if (element.type === 'tabs-container') {
-          const tabsList = element.children?.find((c: SlateElement) => c.type === 'tabs-list');
+          const tabsList = element.children?.find((c) => Element.isElement(c) && c.type === 'tabs-list');
           const contents = element.children?.filter(
-            (c: SlateElement) => c.type === 'tabs-item-content',
+            (c) => Element.isElement(c) && c.type === 'tabs-item-content',
           );
 
           const tabHeadings = tabsList?.children || [];
           const activeTabId = element.props?.activeTabId;
 
           const tabsHeaderHtml = tabHeadings
-            .map((heading: SlateElement) => {
+            .map((heading) => {
               const isActive = heading.id === activeTabId;
               const headingText = serializeTextNodes(heading.children);
               return `<button style="padding: 8px 16px; border: none; background: ${isActive ? '#f3f4f6' : 'transparent'}; cursor: pointer; font-weight: ${isActive ? '600' : '400'};" data-tab-id="${heading.id}">${headingText}</button>`;
@@ -170,18 +170,18 @@ const Tabs = new YooptaPlugin<TabsElementMap>({
         const indent = '  '.repeat(depth);
 
         if (element.type === 'tabs-container') {
-          const tabsList = element.children?.find((c: SlateElement) => c.type === 'tabs-list');
+          const tabsList = element.children?.find((c) => Element.isElement(c) && c.type === 'tabs-list');
           const contents = element.children?.filter(
-            (c: SlateElement) => c.type === 'tabs-item-content',
+            (c) => Element.isElement(c) && c.type === 'tabs-item-content',
           );
 
           const tabHeadings = tabsList?.children || [];
 
           return tabHeadings
-            .map((heading: SlateElement, index: number) => {
+            .map((heading) => {
               const headingText = serializeTextNodesIntoMarkdown(heading.children);
               const content = (contents || []).find(
-                (c: SlateElement) => c.props?.referenceId === heading.id,
+                (c) => Element.isElement(c) && c.props?.referenceId === heading.id,
               );
               const contentText = content
                 ? serializeTextNodesIntoMarkdown(content.children)

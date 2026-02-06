@@ -1,18 +1,11 @@
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import {
   ElementOptions,
-  useElementOptions,
-  useUpdateElementProps,
 } from '@yoopta/ui/element-options';
-import { AlertCircle, CheckCircle, Info, MessageSquare, XCircle } from 'lucide-react';
 
 import { cn } from '../../utils';
-
-type CalloutTheme = 'default' | 'success' | 'warning' | 'error' | 'info';
-
-type CalloutElementProps = {
-  theme: CalloutTheme;
-};
+import type { CalloutTheme } from '../components/callout-element-options';
+import { CalloutElementOptions } from '../components/callout-element-options';
 
 const getThemeClasses = (theme: CalloutTheme = 'default'): string => {
   const themeClasses: Record<CalloutTheme, string> = {
@@ -29,54 +22,8 @@ const getThemeClasses = (theme: CalloutTheme = 'default'): string => {
   return themeClasses[theme];
 };
 
-const CALLOUT_THEMES = [
-  { value: 'default' as const, label: 'Default', icon: <MessageSquare className="h-4 w-4" /> },
-  { value: 'info' as const, label: 'Info', icon: <Info className="h-4 w-4 text-blue-500" /> },
-  { value: 'success' as const, label: 'Success', icon: <CheckCircle className="h-4 w-4 text-green-500" /> },
-  { value: 'warning' as const, label: 'Warning', icon: <AlertCircle className="h-4 w-4 text-yellow-500" /> },
-  { value: 'error' as const, label: 'Error', icon: <XCircle className="h-4 w-4 text-red-500" /> },
-];
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CalloutOptionsContent = () => {
-  const { element } = useElementOptions();
-  const updateProps = useUpdateElementProps<CalloutElementProps>();
-
-  return (
-    <ElementOptions.Content
-      side="right"
-      align="start"
-      sideOffset={8}
-      className="min-w-[160px] rounded-lg border bg-popover p-2 shadow-md">
-      <ElementOptions.Group className="flex flex-col gap-1">
-        <ElementOptions.Label className="px-2 text-xs font-medium text-muted-foreground">
-          Theme
-        </ElementOptions.Label>
-        <ElementOptions.Select
-          value={(element.props?.theme as CalloutTheme) ?? 'default'}
-          options={CALLOUT_THEMES}
-          onValueChange={(value) => updateProps({ theme: value })}
-          className="flex h-8 w-full items-center justify-between rounded-md border border-input bg-background px-3 text-sm hover:bg-accent"
-          renderOption={(option) => (
-            <span className="flex items-center gap-2">
-              {option.icon}
-              {option.label}
-            </span>
-          )}
-          renderValue={(option) => (
-            <span className="flex items-center gap-2">
-              {option?.icon}
-              {option?.label ?? 'Select theme'}
-            </span>
-          )}
-        />
-      </ElementOptions.Group>
-    </ElementOptions.Content>
-  );
-};
-
 export const Callout = (props: PluginElementRenderProps) => {
-  const { attributes, children, element } = props;
+  const { attributes, children, element, blockId } = props;
   const theme = (element.props?.theme as CalloutTheme) ?? 'default';
 
   return (
@@ -86,6 +33,12 @@ export const Callout = (props: PluginElementRenderProps) => {
         'mt-4 group relative rounded-lg border-l-4 p-4 [&>p]:m-0 [&>p]:text-sm',
         getThemeClasses(theme),
       )}>
+      <ElementOptions.Root blockId={blockId} element={element}>
+        <ElementOptions.Trigger
+          className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md p-1 hover:bg-black/5 dark:hover:bg-white/10"
+        />
+        <CalloutElementOptions />
+      </ElementOptions.Root>
       {children}
     </div>
   );

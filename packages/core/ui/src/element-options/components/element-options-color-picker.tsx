@@ -1,15 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-  FloatingPortal,
-  autoUpdate,
-  flip,
-  offset,
-  shift,
-  useFloating,
-} from '@floating-ui/react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as Popover from '@radix-ui/react-popover';
 import { useYooptaEditor } from '@yoopta/editor';
-import { HexColorPicker } from 'react-colorful';
+import { HexColorInput, HexColorPicker } from 'react-colorful';
 
+import { debounce } from '../../utils/debounce';
 import type { ElementOptionsColorPickerProps } from '../types';
 
 const DEFAULT_PRESET_COLORS = [
@@ -23,6 +17,10 @@ const DEFAULT_PRESET_COLORS = [
   '#EC4899',
 ];
 
+const COLOR_PICKER_STYLES = {
+  width: '100%'
+}
+
 export const ElementOptionsColorPicker = ({
   value,
   onChange,
@@ -30,121 +28,119 @@ export const ElementOptionsColorPicker = ({
   className,
   style,
 }: ElementOptionsColorPickerProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   const editor = useYooptaEditor();
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [localColor, setLocalColor] = useState(value);
 
-  const { refs, floatingStyles } = useFloating({
-    open: isOpen,
-    placement: 'bottom-start',
-    middleware: [
-      offset(4),
-      flip({ padding: 8 }),
-      shift({ padding: 8 }),
-    ],
-    whileElementsMounted: autoUpdate,
-  });
+  // Keep value ref for debounced callback
+  const valueRef = useRef(value);
+  valueRef.current = value;
 
+  // Sync local state when external value changes
   useEffect(() => {
-    if (triggerRef.current) {
-      refs.setReference(triggerRef.current);
-    }
-  }, [refs]);
+    setLocalColor(value);
+  }, [value]);
 
-  useEffect(() => {
-    if (!isOpen) return;
+  // Debounced onChange to prevent flooding undo/redo history during color picker drag
+  const debouncedOnChange = useMemo(
+    () =>
+      debounce((newColor: string) => {
+        onChange(newColor);
+      }, 300),
+    [onChange],
+  );
 
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(target) &&
-        refs.floating.current &&
-        !refs.floating.current.contains(target)
-      ) {
-        setIsOpen(false);
-      }
-    };
+  // Cleanup debounce on unmount
+  useEffect(
+    () => () => {
+      debouncedOnChange.cancel();
+    },
+    [debouncedOnChange],
+  );
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
+  // Handler for color picker (continuous changes) - uses debounce
+  const handlePickerChange = useCallback(
+    (newColor: string) => {
+      setLocalColor(newColor);
+      debouncedOnChange(newColor);
+    },
+    [debouncedOnChange],
+  );
 
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, refs.floating]);
-
-  const handleTriggerClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsOpen(!isOpen);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-  };
-
-  const handlePresetClick = (color: string) => {
-    onChange(color);
-  };
+  // Handler for presets and hex input (discrete changes) - immediate
+  const handleColorChange = useCallback(
+    (newColor: string) => {
+      debouncedOnChange.cancel();
+      setLocalColor(newColor);
+      onChange(newColor);
+    },
+    [onChange, debouncedOnChange],
+  );
 
   return (
-    <>
-      <button
-        ref={triggerRef}
-        type="button"
-        className={className}
-        style={style}
-        onClick={handleTriggerClick}
-        onMouseDown={handleMouseDown}
-        data-element-options-color-picker
-        data-state={isOpen ? 'open' : 'closed'}
-        aria-expanded={isOpen}>
-        <span
-          data-element-options-color-preview
-          style={{ backgroundColor: value }}
-        />
-        <span data-element-options-color-value>{value}</span>
-      </button>
+    <Popover.Root>
+      <Popover.Trigger asChild>
+        <button
+          type="button"
+          className={className}
+          style={style}
+          onMouseDown={(e) => e.preventDefault()}
+          data-element-options-color-picker>
+          <span data-element-options-color-preview style={{ backgroundColor: localColor }} />
+          <span data-element-options-color-value>{localColor}</span>
+        </button>
+      </Popover.Trigger>
 
-      {isOpen && (
-        <FloatingPortal root={editor.refElement} id={`yoopta-ui-element-options-color-picker-portal-${editor.id}`}>
-          <div
-            ref={refs.setFloating}
-            style={floatingStyles}
-            data-element-options-color-picker-content
-            onMouseDown={handleMouseDown}>
-            <HexColorPicker color={value} onChange={onChange} />
+      <Popover.Portal container={editor.refElement}>
+        <Popover.Content
+          data-element-options-color-picker-content
+          side="bottom"
+          align="start"
+          sideOffset={4}
+          collisionPadding={8}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => {
+            e.preventDefault();
+            // Flush pending changes when closing
+            debouncedOnChange.flush();
+          }}
+          onMouseDown={(e) => e.preventDefault()}>
+          <HexColorPicker
+            color={localColor}
+            onChange={handlePickerChange}
+            data-element-options-color-picker-picker
+            style={COLOR_PICKER_STYLES}
+          />
 
-            {presetColors.length > 0 && (
-              <div data-element-options-color-presets>
-                {presetColors.map((color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    data-element-options-color-preset
-                    data-selected={color === value}
-                    style={{ backgroundColor: color }}
-                    onClick={() => handlePresetClick(color)}
-                    onMouseDown={handleMouseDown}
-                    aria-label={`Select color ${color}`}
-                  />
-                ))}
-              </div>
-            )}
+          {presetColors.length > 0 && (
+            <div data-element-options-color-presets>
+              {presetColors.map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  data-element-options-color-preset
+                  data-selected={color.toLowerCase() === localColor?.toLowerCase()}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleColorChange(color)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  aria-label={`Select color ${color}`}
+                />
+              ))}
+            </div>
+          )}
+
+          <div data-element-options-color-hex-row>
+            <div data-element-options-color-swatch style={{ backgroundColor: localColor }} />
+            <HexColorInput
+              color={localColor}
+              onChange={handleColorChange}
+              data-element-options-color-hex-input
+              prefixed
+            />
           </div>
-        </FloatingPortal>
-      )}
-    </>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 };
 
 ElementOptionsColorPicker.displayName = 'ElementOptions.ColorPicker';
-

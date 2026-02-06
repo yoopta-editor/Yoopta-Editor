@@ -4,7 +4,7 @@ export const Paragraph = (props: PluginElementRenderProps) => {
   const { attributes, children } = props;
 
   return (
-    <p {...attributes} className="leading-7 [&:not(:first-child)]:mt-6">
+    <p {...attributes} className="leading-7 mt-2">
       {children}
     </p>
   );

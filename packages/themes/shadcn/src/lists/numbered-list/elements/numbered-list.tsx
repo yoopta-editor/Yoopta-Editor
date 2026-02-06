@@ -9,7 +9,7 @@ export const NumberedList = (props: PluginElementRenderProps) => {
   const count = useNumberListCount(block);
 
   return (
-    <div {...attributes} className="my-0 ml-6 list-decimal [&>li]:mt-2">
+    <div {...attributes} className="my-0 ml-6 list-decimal leading-7 [&>li]:mt-2">
       <span contentEditable={false}>{count}.</span>
       <span {...attributes} className="pl-2">
         {children}

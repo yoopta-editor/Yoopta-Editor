@@ -24,7 +24,7 @@ export const TodoList = (props: PluginElementRenderProps) => {
   };
 
   return (
-    <div {...attributes} className="m-0 mt-2 ml-6 list-none">
+    <div {...attributes} className="m-0 mt-2 ml-6 leading-7 list-none">
       <div className="flex items-start gap-2 pl-2">
         <button
           type="button"

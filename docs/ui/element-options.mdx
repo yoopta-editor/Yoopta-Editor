@@ -1,0 +1,593 @@
+---
+title: 'ElementOptions'
+description: 'Inline popover for configuring element-specific properties'
+icon: 'sliders'
+---
+
+## Overview
+
+`ElementOptions` is a compound component for building inline configuration popovers attached to elements. It provides form controls (Select, Toggle, Slider, ColorPicker, Input) and helper hooks for updating element properties.
+
+<Frame>
+  <img src="/images/element-options.png" alt="Element Options example" />
+</Frame>
+
+## Features
+
+- **Compound components** — Root, Trigger, Content, Group, Label, Separator
+- **Form controls** — Select, Toggle, Slider, ColorPicker, Input
+- **Helper hooks** — `useElementOptions`, `useUpdateElementProps`
+- **Radix UI** — Built on Radix Popover for accessibility and positioning
+
+## Installation
+
+```bash
+npm install @yoopta/ui
+# or
+yarn add @yoopta/ui
+```
+
+## Basic Usage
+
+```tsx
+import { ElementOptions, useElementOptions, useUpdateElementProps } from '@yoopta/ui/element-options';
+
+// In your element render component
+function MyElement({ attributes, children, element, blockId }) {
+  return (
+    <div {...attributes} className="group relative">
+      <ElementOptions.Root blockId={blockId} element={element}>
+        <ElementOptions.Trigger className="absolute right-0 top-0 opacity-0 group-hover:opacity-100" />
+        <MyElementOptions />
+      </ElementOptions.Root>
+      {children}
+    </div>
+  );
+}
+
+// Options content component
+function MyElementOptions() {
+  const { element } = useElementOptions();
+  const updateProps = useUpdateElementProps<{ theme: string }>();
+
+  return (
+    <ElementOptions.Content side="bottom" align="end">
+      <ElementOptions.Group>
+        <ElementOptions.Label>Theme</ElementOptions.Label>
+        <ElementOptions.Select
+          value={element.props?.theme ?? 'default'}
+          options={[
+            { value: 'default', label: 'Default' },
+            { value: 'info', label: 'Info' },
+          ]}
+          onValueChange={(value) => updateProps({ theme: value })}
+        />
+      </ElementOptions.Group>
+    </ElementOptions.Content>
+  );
+}
+```
+
+## API Reference
+
+### `ElementOptions.Root`
+
+Root component that provides context and manages popover state.
+
+```tsx
+<ElementOptions.Root blockId={blockId} element={element}>
+  {children}
+</ElementOptions.Root>
+```
+
+**Props:**
+
+| Prop        | Type           | Description                |
+| ----------- | -------------- | -------------------------- |
+| `blockId`   | `string`       | Block ID containing element |
+| `element`   | `SlateElement` | The element being configured |
+| `children`  | `ReactNode`    | Trigger and Content        |
+| `className` | `string`       | Custom CSS classes         |
+| `style`     | `CSSProperties`| Custom inline styles       |
+
+### `ElementOptions.Trigger`
+
+Button that opens the options popover.
+
+```tsx
+<ElementOptions.Trigger className="opacity-0 group-hover:opacity-100">
+  <SettingsIcon />
+</ElementOptions.Trigger>
+```
+
+**Props:**
+
+| Prop        | Type        | Description                              |
+| ----------- | ----------- | ---------------------------------------- |
+| `children`  | `ReactNode` | Custom icon (defaults to MoreHorizontal) |
+| `className` | `string`    | Custom CSS classes                       |
+| `style`     | `CSSProperties` | Custom inline styles               |
+
+### `ElementOptions.Content`
+
+Floating content panel containing form controls.
+
+```tsx
+<ElementOptions.Content side="bottom" align="end" sideOffset={8}>
+  {/* Groups and controls here */}
+</ElementOptions.Content>
+```
+
+**Props:**
+
+| Prop          | Type                                     | Default    | Description           |
+| ------------- | ---------------------------------------- | ---------- | --------------------- |
+| `side`        | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Placement side        |
+| `align`       | `'start' \| 'center' \| 'end'`           | `'end'`    | Alignment             |
+| `sideOffset`  | `number`                                 | `4`        | Offset from trigger   |
+| `alignOffset` | `number`                                 | `0`        | Alignment offset      |
+| `className`   | `string`                                 |            | Custom CSS classes    |
+
+### `ElementOptions.Group`
+
+Groups related controls together.
+
+```tsx
+<ElementOptions.Group>
+  <ElementOptions.Label>Settings</ElementOptions.Label>
+  {/* Controls here */}
+</ElementOptions.Group>
+```
+
+### `ElementOptions.Label`
+
+Label for a group of controls.
+
+```tsx
+<ElementOptions.Label>Theme</ElementOptions.Label>
+```
+
+### `ElementOptions.Separator`
+
+Visual separator between groups.
+
+```tsx
+<ElementOptions.Separator />
+```
+
+### `ElementOptions.Select`
+
+Dropdown select for choosing from predefined options.
+
+```tsx
+<ElementOptions.Select
+  value={currentValue}
+  options={[
+    { value: 'solid', label: 'Solid' },
+    { value: 'dashed', label: 'Dashed', icon: <DashedIcon /> },
+  ]}
+  onValueChange={(value) => updateProps({ style: value })}
+  renderOption={(option) => <span>{option.icon} {option.label}</span>}
+  renderValue={(option) => <span>{option?.label}</span>}
+/>
+```
+
+**Props:**
+
+| Prop            | Type                                    | Description                    |
+| --------------- | --------------------------------------- | ------------------------------ |
+| `value`         | `T`                                     | Current selected value         |
+| `options`       | `SelectOption<T>[]`                     | Available options              |
+| `onValueChange` | `(value: T) => void`                    | Called when selection changes  |
+| `placeholder`   | `string`                                | Placeholder text               |
+| `renderOption`  | `(option: SelectOption<T>) => ReactNode`| Custom option renderer         |
+| `renderValue`   | `(option?: SelectOption<T>) => ReactNode`| Custom value renderer        |
+
+**SelectOption type:**
+
+```tsx
+type SelectOption<T> = {
+  value: T;
+  label: string;
+  icon?: ReactNode;
+  color?: string;
+};
+```
+
+### `ElementOptions.Toggle`
+
+Boolean toggle switch.
+
+```tsx
+<ElementOptions.Toggle
+  checked={isEnabled}
+  onCheckedChange={(checked) => updateProps({ enabled: checked })}
+  label="Enable feature"
+/>
+```
+
+**Props:**
+
+| Prop              | Type                       | Description              |
+| ----------------- | -------------------------- | ------------------------ |
+| `checked`         | `boolean`                  | Current state            |
+| `onCheckedChange` | `(checked: boolean) => void` | Called when toggled    |
+| `label`           | `string`                   | Optional label text      |
+
+### `ElementOptions.Slider`
+
+Numeric slider for range values.
+
+```tsx
+<ElementOptions.Slider
+  value={50}
+  onValueChange={(value) => updateProps({ opacity: value })}
+  min={0}
+  max={100}
+  step={1}
+/>
+```
+
+**Props:**
+
+| Prop            | Type                     | Default | Description           |
+| --------------- | ------------------------ | ------- | --------------------- |
+| `value`         | `number`                 |         | Current value         |
+| `onValueChange` | `(value: number) => void`|         | Called on change      |
+| `min`           | `number`                 | `0`     | Minimum value         |
+| `max`           | `number`                 | `100`   | Maximum value         |
+| `step`          | `number`                 | `1`     | Step increment        |
+
+### `ElementOptions.ColorPicker`
+
+Color picker with presets and hex input.
+
+```tsx
+<ElementOptions.ColorPicker
+  value="#3B82F6"
+  onChange={(color) => updateProps({ color })}
+  presetColors={['#EF4444', '#22C55E', '#3B82F6', '#8B5CF6']}
+/>
+```
+
+**Props:**
+
+| Prop           | Type                       | Description              |
+| -------------- | -------------------------- | ------------------------ |
+| `value`        | `string`                   | Current color (hex)      |
+| `onChange`     | `(color: string) => void`  | Called on change         |
+| `presetColors` | `string[]`                 | Preset color swatches    |
+
+### `ElementOptions.Input`
+
+Text input for string values.
+
+```tsx
+<ElementOptions.Input
+  value={title}
+  onChange={(value) => updateProps({ title: value })}
+  placeholder="Enter title..."
+  type="text"
+/>
+```
+
+**Props:**
+
+| Prop          | Type                       | Default  | Description          |
+| ------------- | -------------------------- | -------- | -------------------- |
+| `value`       | `string`                   |          | Current value        |
+| `onChange`    | `(value: string) => void`  |          | Called on change     |
+| `placeholder` | `string`                   |          | Placeholder text     |
+| `type`        | `'text' \| 'number' \| 'url'` | `'text'` | Input type        |
+
+## Hooks
+
+### `useElementOptions()`
+
+Access element context within Content.
+
+```tsx
+const { blockId, element, editor, isOpen, setIsOpen } = useElementOptions();
+```
+
+**Returns:**
+
+| Property   | Type                        | Description              |
+| ---------- | --------------------------- | ------------------------ |
+| `blockId`  | `string`                    | Block ID                 |
+| `element`  | `SlateElement`              | Current element          |
+| `editor`   | `YooEditor`                 | Editor instance          |
+| `isOpen`   | `boolean`                   | Popover open state       |
+| `setIsOpen`| `(open: boolean) => void`   | Toggle popover           |
+
+### `useUpdateElementProps<T>()`
+
+Helper hook for updating element properties.
+
+```tsx
+const updateProps = useUpdateElementProps<{ theme: string; color: string }>();
+
+// Usage
+updateProps({ theme: 'info' });
+updateProps({ color: '#3B82F6' });
+```
+
+## Examples
+
+### Callout Theme Selector
+
+```tsx
+const CALLOUT_THEMES = [
+  { value: 'default', label: 'Default', icon: <MessageSquare className="h-4 w-4" /> },
+  { value: 'info', label: 'Info', icon: <Info className="h-4 w-4 text-blue-500" /> },
+  { value: 'success', label: 'Success', icon: <CheckCircle className="h-4 w-4 text-green-500" /> },
+  { value: 'warning', label: 'Warning', icon: <AlertCircle className="h-4 w-4 text-yellow-500" /> },
+  { value: 'error', label: 'Error', icon: <XCircle className="h-4 w-4 text-red-500" /> },
+];
+
+function CalloutElementOptions() {
+  const { element } = useElementOptions();
+  const updateProps = useUpdateElementProps<{ theme: string }>();
+
+  return (
+    <ElementOptions.Content side="bottom" align="end" sideOffset={8}>
+      <ElementOptions.Group>
+        <ElementOptions.Label>Theme</ElementOptions.Label>
+        <ElementOptions.Select
+          value={element.props?.theme ?? 'default'}
+          options={CALLOUT_THEMES}
+          onValueChange={(value) => updateProps({ theme: value })}
+          renderOption={(option) => (
+            <span className="flex items-center gap-2">
+              {option.icon}
+              {option.label}
+            </span>
+          )}
+        />
+      </ElementOptions.Group>
+    </ElementOptions.Content>
+  );
+}
+```
+
+### Divider with Style and Color
+
+```tsx
+const DIVIDER_THEMES = [
+  { value: 'solid', label: 'Solid' },
+  { value: 'dashed', label: 'Dashed' },
+  { value: 'dotted', label: 'Dotted' },
+  { value: 'gradient', label: 'Gradient' },
+];
+
+const DIVIDER_COLORS = ['#E5E7EB', '#6B7280', '#EF4444', '#22C55E', '#3B82F6'];
+
+function DividerElementOptions() {
+  const { element } = useElementOptions();
+  const updateProps = useUpdateElementProps<{ theme: string; color: string }>();
+
+  return (
+    <ElementOptions.Content side="bottom" align="end" sideOffset={8}>
+      <ElementOptions.Group>
+        <ElementOptions.Label>Style</ElementOptions.Label>
+        <ElementOptions.Select
+          value={element.props?.theme ?? 'solid'}
+          options={DIVIDER_THEMES}
+          onValueChange={(value) => updateProps({ theme: value })}
+        />
+      </ElementOptions.Group>
+
+      <ElementOptions.Separator />
+
+      <ElementOptions.Group>
+        <ElementOptions.Label>Color</ElementOptions.Label>
+        <ElementOptions.ColorPicker
+          value={element.props?.color ?? '#E5E7EB'}
+          onChange={(color) => updateProps({ color })}
+          presetColors={DIVIDER_COLORS}
+        />
+      </ElementOptions.Group>
+    </ElementOptions.Content>
+  );
+}
+```
+
+### Table Appearance Toggles
+
+```tsx
+function TableElementOptions() {
+  const { element } = useElementOptions();
+  const updateProps = useUpdateElementProps<{
+    bordered: boolean;
+    compact: boolean;
+    scrollable: boolean;
+  }>();
+  const props = element.props ?? {};
+
+  return (
+    <ElementOptions.Content side="bottom" align="end" sideOffset={8}>
+      <ElementOptions.Group>
+        <ElementOptions.Label>Appearance</ElementOptions.Label>
+
+        <div className="flex items-center justify-between px-2">
+          <span>Bordered</span>
+          <ElementOptions.Toggle
+            checked={props.bordered ?? true}
+            onCheckedChange={(checked) => updateProps({ bordered: checked })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between px-2">
+          <span>Compact</span>
+          <ElementOptions.Toggle
+            checked={props.compact ?? false}
+            onCheckedChange={(checked) => updateProps({ compact: checked })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between px-2">
+          <span>Scrollable</span>
+          <ElementOptions.Toggle
+            checked={props.scrollable ?? true}
+            onCheckedChange={(checked) => updateProps({ scrollable: checked })}
+          />
+        </div>
+      </ElementOptions.Group>
+    </ElementOptions.Content>
+  );
+}
+```
+
+### Table of Contents with Input and Toggles
+
+```tsx
+const DEPTH_OPTIONS = [
+  { value: '1', label: 'H1 only' },
+  { value: '2', label: 'H1 – H2' },
+  { value: '3', label: 'H1 – H3' },
+];
+
+function TocElementOptions() {
+  const { element } = useElementOptions();
+  const updateProps = useUpdateElementProps<{
+    title: string;
+    depth: number;
+    showNumbers: boolean;
+    collapsible: boolean;
+  }>();
+  const props = element.props ?? {};
+
+  return (
+    <ElementOptions.Content side="bottom" align="end" sideOffset={8}>
+      <ElementOptions.Group>
+        <ElementOptions.Label>Title</ElementOptions.Label>
+        <ElementOptions.Input
+          value={props.title ?? 'Table of Contents'}
+          onChange={(value) => updateProps({ title: value })}
+          placeholder="Title..."
+        />
+      </ElementOptions.Group>
+
+      <ElementOptions.Separator />
+
+      <ElementOptions.Group>
+        <ElementOptions.Label>Depth</ElementOptions.Label>
+        <ElementOptions.Select
+          value={String(props.depth ?? 3)}
+          options={DEPTH_OPTIONS}
+          onValueChange={(value) => updateProps({ depth: Number(value) })}
+        />
+      </ElementOptions.Group>
+
+      <ElementOptions.Separator />
+
+      <ElementOptions.Group>
+        <div className="flex items-center justify-between px-2">
+          <span>Numbered</span>
+          <ElementOptions.Toggle
+            checked={props.showNumbers ?? false}
+            onCheckedChange={(checked) => updateProps({ showNumbers: checked })}
+          />
+        </div>
+        <div className="flex items-center justify-between px-2">
+          <span>Collapsible</span>
+          <ElementOptions.Toggle
+            checked={props.collapsible ?? false}
+            onCheckedChange={(checked) => updateProps({ collapsible: checked })}
+          />
+        </div>
+      </ElementOptions.Group>
+    </ElementOptions.Content>
+  );
+}
+```
+
+## Styling
+
+### CSS Variables
+
+```css
+:root {
+  --yoopta-ui-element-options-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --yoopta-ui-element-options-content-min-width: 180px;
+  --yoopta-ui-element-options-content-padding: 8px;
+  --yoopta-ui-element-options-content-radius: 0.5rem;
+  --yoopta-ui-element-options-control-padding-y: 6px;
+  --yoopta-ui-element-options-control-padding-x: 10px;
+  --yoopta-ui-element-options-control-radius: 6px;
+  --yoopta-ui-element-options-toggle-width: 36px;
+  --yoopta-ui-element-options-toggle-height: 20px;
+}
+```
+
+### Custom Styling
+
+Apply Tailwind or custom classes to components:
+
+```tsx
+<ElementOptions.Content className="min-w-[200px] rounded-lg border bg-popover p-2 shadow-md">
+  <ElementOptions.Group className="flex flex-col gap-1">
+    <ElementOptions.Label className="px-2 text-xs font-medium text-muted-foreground">
+      Theme
+    </ElementOptions.Label>
+    <ElementOptions.Select
+      className="flex h-8 w-full items-center justify-between rounded-md border px-3 text-sm"
+      {...props}
+    />
+  </ElementOptions.Group>
+</ElementOptions.Content>
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Separate options into their own component">
+    ```tsx
+    // Good: Separate component for options
+    function MyElementOptions() {
+      const { element } = useElementOptions();
+      const updateProps = useUpdateElementProps();
+      // ...
+    }
+
+    // In render:
+    <ElementOptions.Root blockId={blockId} element={element}>
+      <ElementOptions.Trigger />
+      <MyElementOptions />
+    </ElementOptions.Root>
+    ```
+  </Accordion>
+
+  <Accordion title="Use group-hover for trigger visibility">
+    ```tsx
+    <div className="group relative">
+      <ElementOptions.Root blockId={blockId} element={element}>
+        <ElementOptions.Trigger
+          className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        />
+        <MyElementOptions />
+      </ElementOptions.Root>
+      {children}
+    </div>
+    ```
+  </Accordion>
+
+  <Accordion title="Provide default values">
+    ```tsx
+    // Always provide defaults when reading props
+    const theme = element.props?.theme ?? 'default';
+    const enabled = element.props?.enabled ?? false;
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="BlockOptions" icon="ellipsis" href="/ui/block-options">
+    Context menu for block-level actions
+  </Card>
+  <Card title="FloatingBlockActions" icon="hand-pointer" href="/ui/floating-block-actions">
+    Floating buttons for block operations
+  </Card>
+</CardGroup>

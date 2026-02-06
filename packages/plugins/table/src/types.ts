@@ -19,8 +19,8 @@ export type TableElementProps = {
   headerColumn?: boolean;
   columnWidths?: (number | string)[];
   bordered?: boolean;
-  striped?: boolean;
   compact?: boolean;
+  scrollable?: boolean;
 };
 
 export type TableElement = SlateElement<'table', TableElementProps>;

@@ -1,7 +1,38 @@
-import type { YooEditor } from '@yoopta/editor';
+import type { SlateElement, YooEditor } from '@yoopta/editor';
 import { deserializeTextNodes, generateId } from '@yoopta/editor';
 
 import type { TableElement, TableRowElement } from '../../types';
+
+function getColumnWidths(el: HTMLElement, columnCount: number): number[] {
+  // Try data-column-widths attribute first (comma-separated)
+  const widthsAttr = el.getAttribute('data-column-widths');
+  if (widthsAttr) {
+    const widths = widthsAttr.split(',').map((w) => parseInt(w.trim(), 10) || 200);
+    // Pad with defaults if not enough
+    while (widths.length < columnCount) widths.push(200);
+    return widths.slice(0, columnCount);
+  }
+
+  // Try <colgroup> / <col> elements
+  const cols = el.querySelectorAll('colgroup col, col');
+  if (cols.length > 0) {
+    const widths: number[] = [];
+    cols.forEach((col) => {
+      const style = (col as HTMLElement).style?.width || col.getAttribute('width');
+      if (style) {
+        const parsed = parseInt(style, 10);
+        widths.push(Number.isNaN(parsed) ? 200 : parsed);
+      } else {
+        widths.push(200);
+      }
+    });
+    while (widths.length < columnCount) widths.push(200);
+    return widths.slice(0, columnCount);
+  }
+
+  // Default: 200 per column
+  return Array(columnCount).fill(200);
+}
 
 export function deserializeTable(el: HTMLElement, editor: YooEditor) {
   const tbody = el.querySelector('tbody');
@@ -14,6 +45,7 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
     props: {
       headerRow: el.getAttribute('data-header-row') === 'true',
       headerColumn: el.getAttribute('data-header-column') === 'true',
+      columnWidths: [], // Will be set after parsing rows
     },
   };
 
@@ -109,6 +141,11 @@ export function deserializeTable(el: HTMLElement, editor: YooEditor) {
       tableElement.children.push(rowElement);
     }
   });
+
+  // Calculate columnWidths from parsed data
+  const firstRow = tableElement.children[0] as SlateElement;
+  const columnCount = firstRow?.children?.length ?? 0;
+  tableElement.props!.columnWidths = getColumnWidths(el, columnCount);
 
   return tableElement;
 }
