@@ -4,6 +4,27 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.0-beta.19] - 2026-02-07
+
+### Added
+
+- **ElementOptions (@yoopta/ui)**: New compound component for inline element configuration popovers. Includes Root, Trigger, Content, Group, Label, Separator, Select, Toggle, Slider, ColorPicker, and Input components. Built on Radix UI primitives.
+- **ElementOptions hooks**: Added `useElementOptions()` and `useUpdateElementProps<T>()` helper hooks for accessing element context and updating properties.
+- **Table plugin**: Added `scrollable` prop (default: `true`) - tables now respect column widths and scroll horizontally when wider than container.
+- **Documentation**: Added comprehensive ElementOptions documentation with API reference and examples.
+
+### Fixed
+
+- **FloatingBlockActions**: Fixed positioning when blocks have margin-top styles. Now finds `[data-element-type]` element and accounts for its margin offset.
+- **Table controls**: Fixed column controls, add row/column buttons appearing outside visible bounds when table is scrollable. Controls now stay within the visible scroll container area.
+- **ElementOptions ColorPicker**: Added debounced onChange (300ms) to prevent flooding undo/redo history, plus HexColorInput field and swatch preview.
+
+### Changed
+
+- **ElementOptions**: Migrated from floating-ui to Radix UI Popover for better accessibility and positioning.
+
+---
+
 ## [6.0.0-beta.18] - 2026-02-04
 
 ### Fixed

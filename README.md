@@ -31,7 +31,7 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 - **Easy setup** — Sensible defaults; plugins and marks passed to `createYooptaEditor`, then render `<YooptaEditor />`
 - **20+ plugins** — Paragraph, headings, lists, code, image, video, table, callout, accordion, tabs, steps, divider, embed, file, link, mention, carousel, table-of-contents, and more
 - **Headless core** — Full control over UI; optional pre-built theme presets (`@yoopta/themes-shadcn` available, `@yoopta/themes-material` in progress) for styled block UI
-- **Pre-built UI components** (`@yoopta/ui`) — FloatingToolbar, SlashCommandMenu, ActionMenuList, BlockOptions, FloatingBlockActions, SelectionBox, BlockDndContext so you don’t have to build everything from scratch
+- **Pre-built UI components** (`@yoopta/ui`) — FloatingToolbar, SlashCommandMenu, ActionMenuList, BlockOptions, ElementOptions, FloatingBlockActions, SelectionBox, BlockDndContext so you don't have to build everything from scratch
 - **Blocks, Elements, Marks APIs** — Programmatic control: insert/update/delete blocks and elements, apply text formatting (Bold, Italic, Highlight, etc.), custom marks supported
 - **Undo/redo** — Built-in history with `editor.undo()` / `editor.redo()`; batch operations for single undo step
 - **Drag and drop** — Reorder blocks with nested depth support; optional `SortableBlock` for custom DnD
@@ -237,7 +237,7 @@ export default function Editor() {
 | Package                                    | Description                                                                                                                                         |
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [@yoopta/editor](./packages/core/editor)   | Core editor component and API (headless)                                                                                                            |
-| [@yoopta/ui](./packages/core/ui)           | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, SelectionBox, BlockDndContext, SortableBlock) |
+| [@yoopta/ui](./packages/core/ui)           | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, ElementOptions, SelectionBox, BlockDndContext, SortableBlock) |
 | [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                                                    |
 | [@yoopta/marks](./packages/marks)          | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                                                            |
 
