@@ -1,0 +1,14 @@
+{
+  "extends": "../../../config/tsconfig.base.json",
+  "include": ["src"],
+  "exclude": ["dist", "src/**/*.test.ts", "src/**/*.test.tsx"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "references": [
+    {
+      "path": "../editor"
+    }
+  ]
+}

@@ -13,21 +13,40 @@ import { YooptaSlashCommandMenu } from '@/components/new-yoo-components/yoopta-s
 
 import { SelectionBox } from '@yoopta/ui/selection-box';
 import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
+import { withCollaboration, RemoteCursors, CollaborationConfig } from '@yoopta/collaboration';
+import { faker } from '@faker-js/faker';
 
 const EDITOR_STYLE = {
   width: 700,
   paddingBottom: 100,
 };
 
+const {
+  person: { firstName, lastName },
+  color: { rgb },
+} = faker;
+
 const YooptaUIPackageExample = () => {
   const selectionBoxRef = useRef<HTMLDivElement>(null);
   const editor = useMemo(
-    () =>
-      withMentions(createYooptaEditor({
+    () => {
+      const collabConfig: CollaborationConfig = {
+        url: 'ws://localhost:4000',
+        roomId: 'document-dev-room',
+        user: { id: generateId(), name: `${firstName()} ${lastName()}`, color: rgb() },
+        token: 'your-auth-token',
+        connect: true,
+      }
+
+      const baseEditor = createYooptaEditor({
         plugins: YOOPTA_PLUGINS,
         marks: MARKS,
         readOnly: false,
-      })),
+      })
+
+      const editor = withMentions(withCollaboration(baseEditor, collabConfig))
+      return editor
+    },
     [],
   );
 
@@ -36,11 +55,18 @@ const YooptaUIPackageExample = () => {
   }, []);
 
   useEffect(() => {
-    const localStorageValue = localStorage.getItem('yoopta-editor-value');
-    const data = localStorageValue ? JSON.parse(localStorageValue) : DEFAULT_VALUE;
-    editor.setEditorValue(data);
-    editor.applyTransforms([{ type: 'validate_block_paths' }]);
-  }, []);
+    const handleBeforeUnload = () => {
+      console.log('handleBeforeUnload');
+      editor.collaboration.destroy();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      handleBeforeUnload();
+    };
+  }, [editor]);
 
   return (
     <div className="flex flex-col gap-2" style={{ paddingTop: '80px' }} ref={selectionBoxRef}>
@@ -50,10 +76,6 @@ const YooptaUIPackageExample = () => {
           autoFocus
           placeholder="Type / to open menu"
           style={EDITOR_STYLE}
-          onChange={(value) => {
-            console.log('value', value);
-            localStorage.setItem('yoopta-editor-value', JSON.stringify(value));
-          }}
           className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col"
           renderBlock={renderBlock}>
           <YooptaToolbar />
@@ -61,6 +83,7 @@ const YooptaUIPackageExample = () => {
           <YooptaSlashCommandMenu />
           <SelectionBox selectionBoxElement={selectionBoxRef} />
           <MentionDropdown />
+          <RemoteCursors />
         </YooptaEditor>
       </BlockDndContext>
     </div>

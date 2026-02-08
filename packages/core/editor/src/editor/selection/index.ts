@@ -17,6 +17,7 @@ import { isExpanded } from './isExpanded';
 import { setCurrent } from './setCurrent';
 import { setSelected } from './setSelected';
 import { setSlateSelection } from './setSlateSelection';
+import { toDOMRange } from './toDOMRange';
 
 // Namespace export
 export const Selection = {
@@ -44,6 +45,9 @@ export const Selection = {
   getEnd,
   getFirstPoint,
   getLastPoint,
+
+  // DOM operations
+  toDOMRange,
 };
 
 // Export methods individually
@@ -66,6 +70,7 @@ export {
   setCurrent,
   setSelected,
   setSlateSelection,
+  toDOMRange,
 };
 
 // Export types
@@ -81,4 +86,6 @@ export type {
   SetSelectedOptions,
   SetSlateSelectionOptions,
 } from './types';
+
+export type { ToDOMRangeOptions } from './toDOMRange';
 

@@ -134,74 +134,81 @@ export const useSlateEditor = (
       normalizeNode(entry);
     };
 
-    slate.apply = (op) => {
-      if (Operation.isSelectionOperation(op)) {
-        const selectedPaths = Paths.getSelectedPaths(editor);
-        const path = Paths.getBlockOrder(editor);
+    console.log('editor.useSlateEditor slate.apply editor.isRemoteSlateOp?.(slate)', editor.isRemoteSlateOp?.(slate))
+    // slate.apply = (op) => {
+    //   // If this is a remote collaborative change (from slate-yjs), skip Yoopta history tracking
+    //   if (editor.isRemoteSlateOp?.(slate)) {
+    //     apply(op);
+    //     return;
+    //   }
 
-        if (Array.isArray(selectedPaths) && slate.selection && Range.isExpanded(slate.selection)) {
-          editor.setPath({ current: path });
-        }
-      }
+    //   if (Operation.isSelectionOperation(op)) {
+    //     const selectedPaths = Paths.getSelectedPaths(editor);
+    //     const path = Paths.getBlockOrder(editor);
 
-      let save = editor.isSavingHistory();
-      if (typeof save === 'undefined') {
-        save = shouldSave(op);
-      }
+    //     if (Array.isArray(selectedPaths) && slate.selection && Range.isExpanded(slate.selection)) {
+    //       editor.setPath({ current: path });
+    //     }
+    //   }
 
-      if (save) {
-        const lastEditorBatch = editor.historyStack.undos[editor.historyStack.undos.length - 1];
-        if (!lastEditorBatch || lastEditorBatch?.operations[0]?.type !== 'set_slate') {
-          const setSlateOperation: SetSlateOperation = {
-            type: 'set_slate',
-            properties: {
-              slateOps: [op],
-              selectionBefore: slate.selection,
-            },
-            blockId: id,
-            slate,
-          };
+    //   let save = editor.isSavingHistory();
+    //   if (typeof save === 'undefined') {
+    //     save = shouldSave(op);
+    //   }
 
-          editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
-          apply(op);
-          return;
-        }
+    //   if (save) {
+    //     const lastEditorBatch = editor.historyStack.undos[editor.historyStack.undos.length - 1];
+    //     if (!lastEditorBatch || lastEditorBatch?.operations[0]?.type !== 'set_slate') {
+    //       const setSlateOperation: SetSlateOperation = {
+    //         type: 'set_slate',
+    //         properties: {
+    //           slateOps: [op],
+    //           selectionBefore: slate.selection,
+    //         },
+    //         blockId: id,
+    //         slate,
+    //       };
 
-        const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties
-          ?.slateOps;
-        const lastOp = lastSlateOps && lastSlateOps[lastSlateOps.length - 1];
-        let merge = shouldMerge(op, lastOp);
+    //       editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
+    //       apply(op);
+    //       return;
+    //     }
 
-        if (slate.operations.length !== 0) {
-          merge = true;
-        }
+    //     const lastSlateOps = (lastEditorBatch?.operations[0] as SetSlateOperation)?.properties
+    //       ?.slateOps;
+    //     const lastOp = lastSlateOps && lastSlateOps[lastSlateOps.length - 1];
+    //     let merge = shouldMerge(op, lastOp);
 
-        if (merge) {
-          if (lastOp !== op) {
-            lastSlateOps.push(op);
-          }
-        } else {
-          const batch = {
-            operations: [op],
-            selectionBefore: slate.selection,
-          };
+    //     if (slate.operations.length !== 0) {
+    //       merge = true;
+    //     }
 
-          const setSlateOperation: SetSlateOperation = {
-            type: 'set_slate',
-            properties: {
-              slateOps: batch.operations,
-              selectionBefore: batch.selectionBefore,
-            },
-            blockId: id,
-            slate,
-          };
+    //     if (merge) {
+    //       if (lastOp !== op) {
+    //         lastSlateOps.push(op);
+    //       }
+    //     } else {
+    //       const batch = {
+    //         operations: [op],
+    //         selectionBefore: slate.selection,
+    //       };
 
-          editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
-        }
-      }
+    //       const setSlateOperation: SetSlateOperation = {
+    //         type: 'set_slate',
+    //         properties: {
+    //           slateOps: batch.operations,
+    //           selectionBefore: batch.selectionBefore,
+    //         },
+    //         blockId: id,
+    //         slate,
+    //       };
 
-      apply(op);
-    };
+    //       editor.applyTransforms([setSlateOperation], { source: 'api', validatePaths: false });
+    //     }
+    //   }
+
+    //   apply(op);
+    // };
 
     if (withExtensions) {
       slate = withExtensions(slate, editor, id);

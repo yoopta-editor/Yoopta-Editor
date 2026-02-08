@@ -1,0 +1,366 @@
+---
+title: Collaboration
+description: Real-time collaboration for Yoopta Editor using Yjs CRDT
+icon: 'users'
+---
+
+## Overview
+
+The `@yoopta/collaboration` package enables real-time collaborative editing in Yoopta Editor. Multiple users can edit the same document simultaneously with automatic conflict resolution powered by [Yjs](https://yjs.dev/) CRDT.
+
+The package provides:
+- **`withCollaboration`** extension — connects your editor to a collaboration server
+- **Remote cursors** — see where other users are editing
+- **Awareness** — track connected users and their presence
+- **React hooks** — access collaboration state in your components
+
+## Installation
+
+```bash
+npm install @yoopta/collaboration
+```
+
+<Note>
+  `@yoopta/collaboration` requires `@yoopta/editor` >= 6.0.0-beta.19 and React >= 18.2.0 as peer dependencies.
+</Note>
+
+## Quick Start
+
+Wrap your editor with `withCollaboration` — similar to how `withMentions` works:
+
+```tsx
+import { useMemo, useEffect } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import { withCollaboration, RemoteCursors } from '@yoopta/collaboration';
+import { PLUGINS } from './plugins';
+import { MARKS } from './marks';
+
+export default function CollaborativeEditor() {
+  const editor = useMemo(
+    () =>
+      withCollaboration(
+        createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
+        {
+          url: 'wss://collab.yoopta.cloud',
+          roomId: 'document-123',
+          token: 'your-auth-token',
+          user: {
+            id: 'user-1',
+            name: 'Alice',
+            color: '#e06c75',
+          },
+        },
+      ),
+    [],
+  );
+
+  useEffect(() => {
+    return () => editor.collaboration.destroy();
+  }, [editor]);
+
+  return (
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+    >
+      <RemoteCursors />
+      {/* Your other UI components */}
+    </YooptaEditor>
+  );
+}
+```
+
+<Warning>
+  Always call `editor.collaboration.destroy()` on cleanup to properly close the WebSocket connection and remove awareness states.
+</Warning>
+
+## Configuration
+
+### `withCollaboration(editor, config)`
+
+Extends a `YooEditor` instance with collaboration capabilities. Returns a `CollaborationYooEditor`.
+
+<ParamField path="editor" type="YooEditor" required>
+  The editor instance from `createYooptaEditor()`.
+</ParamField>
+
+<ParamField path="config" type="CollaborationConfig" required>
+  Configuration object for the collaboration session.
+</ParamField>
+
+### CollaborationConfig
+
+<ParamField path="url" type="string" required>
+  WebSocket server URL. Example: `"wss://collab.yoopta.cloud"`
+</ParamField>
+
+<ParamField path="roomId" type="string" required>
+  Unique identifier for the document/room. All users with the same `roomId` will collaborate on the same document.
+</ParamField>
+
+<ParamField path="user" type="CollaborationUser" required>
+  Information about the current user. Used for cursor labels and presence indicators.
+
+  ```ts
+  {
+    id: string;       // Unique user identifier
+    name: string;     // Display name (shown on cursors)
+    color: string;    // Cursor color (hex, e.g. "#e06c75")
+    avatar?: string;  // Optional avatar URL
+  }
+  ```
+</ParamField>
+
+<ParamField path="token" type="string">
+  Authentication token sent to the server on connection. Use this to verify users and check subscription access on the server side.
+</ParamField>
+
+<ParamField path="initialValue" type="YooptaContentValue">
+  Initial content to seed the document if no remote state exists. When the first user connects to an empty room, this value populates the shared document.
+</ParamField>
+
+<ParamField path="connect" type="boolean" default="true">
+  Whether to connect to the server immediately. Set to `false` to connect manually later via `editor.collaboration.connect()`.
+</ParamField>
+
+<ParamField path="document" type="Y.Doc">
+  Optional: provide your own Yjs `Y.Doc` instance. If not provided, one is created automatically. Useful for advanced integrations or testing.
+</ParamField>
+
+## Editor API
+
+After applying `withCollaboration`, the editor gains an `editor.collaboration` namespace:
+
+### `editor.collaboration.state`
+
+Read-only access to the current collaboration state.
+
+```ts
+type CollaborationState = {
+  status: ConnectionStatus;           // 'disconnected' | 'connecting' | 'connected' | 'error'
+  connectedUsers: CollaborationUser[]; // All users currently in the room
+  document: Y.Doc | null;             // The Yjs document instance
+  isSynced: boolean;                   // Whether initial sync with server is complete
+};
+```
+
+### `editor.collaboration.connect()`
+
+Manually connect to the WebSocket server. Only needed if `connect: false` was passed in config.
+
+```ts
+editor.collaboration.connect();
+```
+
+### `editor.collaboration.disconnect()`
+
+Disconnect from the server. The editor remains usable for local editing.
+
+```ts
+editor.collaboration.disconnect();
+```
+
+### `editor.collaboration.destroy()`
+
+Disconnect and clean up all resources (WebSocket, observers, awareness). Call this on component unmount.
+
+```ts
+useEffect(() => {
+  return () => editor.collaboration.destroy();
+}, [editor]);
+```
+
+### `editor.collaboration.getDocument()`
+
+Returns the underlying `Y.Doc` instance for advanced use cases.
+
+```ts
+const doc = editor.collaboration.getDocument();
+```
+
+## Components
+
+### `<RemoteCursors />`
+
+Renders visual indicators showing which block each remote user is currently editing.
+
+```tsx
+import { RemoteCursors } from '@yoopta/collaboration';
+
+<YooptaEditor editor={editor}>
+  <RemoteCursors />
+</YooptaEditor>
+```
+
+Must be rendered as a child of `<YooptaEditor>`. Displays a colored bar and name label next to the block each remote user is editing.
+
+## Hooks
+
+All hooks must be used within a `<YooptaEditor>` component that has collaboration enabled.
+
+### `useCollaboration()`
+
+Returns the full collaboration state. Re-renders on any state change.
+
+```tsx
+import { useCollaboration } from '@yoopta/collaboration';
+
+function StatusBar() {
+  const { status, connectedUsers, isSynced } = useCollaboration();
+
+  return (
+    <div>
+      <span>{status}</span>
+      <span>{connectedUsers.length} online</span>
+      {!isSynced && <span>Syncing...</span>}
+    </div>
+  );
+}
+```
+
+### `useConnectionStatus()`
+
+Returns only the connection status string. Lighter than `useCollaboration()` when you only need the status.
+
+```tsx
+import { useConnectionStatus } from '@yoopta/collaboration';
+
+function ConnectionIndicator() {
+  const status = useConnectionStatus();
+
+  return (
+    <div style={{
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      backgroundColor:
+        status === 'connected' ? '#4ade80' :
+        status === 'connecting' ? '#facc15' :
+        '#ef4444',
+    }} />
+  );
+}
+```
+
+### `useRemoteCursors()`
+
+Returns an array of remote cursor data for all connected users.
+
+```tsx
+import { useRemoteCursors } from '@yoopta/collaboration';
+
+function UserPresence() {
+  const cursors = useRemoteCursors();
+
+  return (
+    <div>
+      {cursors.map((cursor) => (
+        <div key={cursor.clientId} style={{ color: cursor.user.color }}>
+          {cursor.user.name} - editing block {cursor.blockId}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Deferred Connection
+
+If you need to connect after the editor is rendered (e.g., after authentication), set `connect: false`:
+
+```tsx
+const editor = useMemo(
+  () =>
+    withCollaboration(
+      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
+      {
+        url: 'wss://collab.yoopta.cloud',
+        roomId: 'doc-123',
+        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+        connect: false,  // Don't connect yet
+      },
+    ),
+  [],
+);
+
+// Connect later, e.g. after auth
+function handleLogin(token: string) {
+  editor.collaboration.connect();
+}
+```
+
+## Custom Y.Doc
+
+For advanced use cases (e.g., testing two editors in the same page), you can provide your own `Y.Doc`:
+
+```tsx
+import * as Y from 'yjs';
+
+const doc = new Y.Doc();
+
+const editor = useMemo(
+  () =>
+    withCollaboration(
+      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
+      {
+        url: 'wss://collab.yoopta.cloud',
+        roomId: 'doc-123',
+        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+        document: doc,
+      },
+    ),
+  [],
+);
+```
+
+## How It Works
+
+Under the hood, `@yoopta/collaboration` maintains a bidirectional binding between the Yoopta editor and a Yjs shared document:
+
+```
+┌──────────────────────┐        ┌──────────────────────┐
+│   Yoopta Editor      │        │   Y.Doc              │
+│                      │        │                      │
+│  editor.children ◄──►│ binding│ Y.Array("blockOrder")│
+│  block ordering      │◄──────►│ Y.Map("blockMeta")   │
+│  block metadata      │        │ Y.Map("blockContents")│
+│  Slate content       │        │                      │
+└──────────────────────┘        └──────┬───────────────┘
+                                       │
+                                       │ y-protocols (WebSocket)
+                                       │
+                                ┌──────▼───────────────┐
+                                │   Collab Server       │
+                                │   (your private repo) │
+                                └───────────────────────┘
+```
+
+- **Local changes** flow through `editor.applyTransforms` and are automatically synced to the Y.Doc, then sent to the server via WebSocket.
+- **Remote changes** arrive via WebSocket, update the Y.Doc, and are applied to the editor without entering the local undo/redo history.
+- **Conflict resolution** is handled by the Yjs CRDT — concurrent edits are merged automatically at the character level.
+
+## TypeScript
+
+All types are exported from the package:
+
+```ts
+import type {
+  CollaborationConfig,
+  CollaborationUser,
+  CollaborationState,
+  ConnectionStatus,
+  RemoteCursorData,
+  CollaborationAPI,
+  CollaborationYooEditor,
+} from '@yoopta/collaboration';
+```
+
+## WebSocketProvider
+
+For advanced server integrations, the `WebSocketProvider` class is exported:
+
+```ts
+import { WebSocketProvider } from '@yoopta/collaboration';
+```
+
+This is the transport layer used internally. It implements the Yjs sync and awareness protocols over WebSocket with automatic reconnection and authentication support.

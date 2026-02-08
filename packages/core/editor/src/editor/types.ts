@@ -156,6 +156,10 @@ export type YooEditor = {
   getEditorValue: () => YooptaContentValue;
   setEditorValue: WithoutFirstArg<typeof setEditorValue>;
   blockEditorsMap: YooptaPluginsEditorMap;
+  /** Optional factory override for building Slate editors — used by collaboration to inject withYjs */
+  buildSlateEditorFn?: (blockId: string) => SlateEditor;
+  /** Returns true if the given Slate editor is currently applying a remote collaborative change */
+  isRemoteSlateOp?: (slate: SlateEditor) => boolean;
   // blocks: YooptaBlocks;
   formats: YooptaFormats;
   marks: YooptaMark<any>[];
