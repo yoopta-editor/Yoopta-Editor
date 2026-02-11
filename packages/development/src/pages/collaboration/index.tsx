@@ -73,7 +73,7 @@ function CollaborativeEditor({ user, label }: CollaborativeEditorProps) {
       <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/30">
         <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: user.color }} />
         <span className="text-sm font-medium truncate">{label}</span>
-        <span className="text-xs text-muted-foreground truncate">({user.name})</span>
+        {/* <span className="text-xs text-muted-foreground truncate">({user.name})</span> */}
       </div>
       <div className="flex-1 overflow-y-auto" ref={selectionBoxRef}>
         <BlockDndContext editor={editor}>
@@ -99,19 +99,16 @@ function CollaborativeEditor({ user, label }: CollaborativeEditorProps) {
 const CollaborationTestPage = () => {
   return (
     <div className="flex flex-col h-screen">
-      <div className="px-6 py-4 border-b">
-        <h1 className="text-lg font-semibold">Collaboration Test</h1>
-        <p className="text-sm text-muted-foreground">
-          Two editors connected to the same room. Changes in one editor should appear in the other.
-        </p>
+      <div className="border-b" style={{ padding: '1rem' }}>
+        <h1 className="text-lg font-semibold">Room name: <span style={{ textDecoration: 'underline' }}>{ROOM_ID}</span></h1>
       </div>
       <div className="flex flex-1 min-h-0">
         <div className="flex-1 min-w-0">
-          <CollaborativeEditor user={USERS[0]} label="Editor 1" />
+          <CollaborativeEditor user={USERS[0]} label={USERS[0].name} />
         </div>
         <Separator orientation="vertical" className='h-[100vh]' />
         <div className="flex-1 min-w-0">
-          <CollaborativeEditor user={USERS[1]} label="Editor 2" />
+          <CollaborativeEditor user={USERS[1]} label={USERS[1].name} />
         </div>
       </div>
     </div>

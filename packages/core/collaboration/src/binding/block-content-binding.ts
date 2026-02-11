@@ -26,7 +26,6 @@ export class BlockContentBinding {
   /** Update an existing block's Y.XmlFragment content in-place */
   updateContent(blockId: string, slateValue: SlateElement[]): void {
     const fragment = this.blockContents.get(blockId);
-    console.log('BlockContentBinding updateContent fragment', fragment)
     if (!fragment) return;
 
     // Clear existing content

@@ -235,7 +235,7 @@ describe('yjs-slate-converters', () => {
     it('should handle element with many text children', () => {
       const children = [];
       for (let i = 0; i < 20; i += 1) {
-        children.push({ text: `segment${i}` });
+        children.push({ text: `segment${i}` } as never);
       }
       const element = makeElement('paragraph', children);
       const xmlElement = integrate(slateElementToYXmlElement(element));
