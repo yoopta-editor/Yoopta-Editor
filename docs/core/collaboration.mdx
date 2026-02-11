@@ -14,6 +14,8 @@ The package provides:
 - **Awareness** — track connected users and their presence
 - **React hooks** — access collaboration state in your components
 
+The collaboration client is **fully open-source** and works with any Yjs-compatible WebSocket server. You can self-host with your own infrastructure or use [Yoopta Cloud](#yoopta-cloud) for a managed solution with version history, permissions, and more.
+
 ## Installation
 
 ```bash
@@ -313,6 +315,141 @@ const editor = useMemo(
 );
 ```
 
+## Self-Hosted Setup
+
+`@yoopta/collaboration` uses Yjs only as a **sync layer** — it does not store your documents. Your content remains standard Yoopta JSON (`YooptaContentValue`) that you store in your own database.
+
+```
+┌─────────────┐     load       ┌──────────────────┐      sync       ┌─────────────┐
+│ Your DB     │ ──────────────►│  Yoopta Editor    │◄───────────────►│  Other      │
+│ (Postgres,  │  initialValue  │  + Y.Doc          │  WebSocket      │  Clients    │
+│  Mongo, ..) │◄──────────────┤                    │  (y-protocols)  │             │
+└─────────────┘  save on       └────────┬───────────┘                └─────────────┘
+                 change                 │
+                                        │
+                                 ┌──────▼──────────┐
+                                 │  Your WebSocket  │
+                                 │  Server          │
+                                 └─────────────────┘
+```
+
+The Y.Doc is **ephemeral** — it only lives during the collaboration session. When all users disconnect, it can be discarded. Your database is the source of truth.
+
+### Persisting to Your Database
+
+Load content from your database as `initialValue`, and save back on change:
+
+```tsx
+import { useMemo, useEffect, useCallback } from 'react';
+import { debounce } from 'lodash'; // or your preferred debounce
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import { withCollaboration, RemoteCursors } from '@yoopta/collaboration';
+
+export default function CollaborativeEditor({ documentId, savedContent, currentUser }) {
+  const editor = useMemo(
+    () =>
+      withCollaboration(
+        createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
+        {
+          url: 'ws://localhost:4000',       // Your own server
+          roomId: documentId,
+          user: currentUser,
+          initialValue: savedContent,        // Load from your DB
+        },
+      ),
+    [],
+  );
+
+  // Save to your database on change
+  const handleChange = useCallback(
+    debounce((value) => {
+      fetch(`/api/documents/${documentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(value),
+      });
+    }, 2000),
+    [documentId],
+  );
+
+  useEffect(() => {
+    return () => editor.collaboration.destroy();
+  }, [editor]);
+
+  return (
+    <YooptaEditor editor={editor} onChange={handleChange}>
+      <RemoteCursors />
+    </YooptaEditor>
+  );
+}
+```
+
+<Note>
+  The `initialValue` is only used when the first user connects to an empty room. Once the Y.Doc has content (from any client), subsequent connections load from the Y.Doc state, not from `initialValue`.
+</Note>
+
+### Running Your Own WebSocket Server
+
+Any Yjs-compatible WebSocket server works. The simplest option is [y-websocket](https://github.com/yjs/y-websocket):
+
+```bash
+npm install y-websocket
+```
+
+```js
+// server.js
+import { WebSocketServer } from 'ws';
+import { setupWSConnection } from 'y-websocket/bin/utils';
+
+const wss = new WebSocketServer({ port: 4000 });
+
+wss.on('connection', (ws, req) => {
+  // req.url is "/<roomId>"
+  setupWSConnection(ws, req);
+});
+
+console.log('Yjs WebSocket server running on ws://localhost:4000');
+```
+
+For production, consider [Hocuspocus](https://tiptap.dev/hocuspocus) which adds authentication, persistence hooks, and webhook support out of the box.
+
+<Tip>
+  For small teams (2-5 concurrent editors), a single y-websocket process is more than sufficient. No special infrastructure needed.
+</Tip>
+
+## Yoopta Cloud
+
+For teams that don't want to run their own collaboration infrastructure, **Yoopta Cloud** provides a managed solution:
+
+- Managed WebSocket infrastructure with automatic scaling
+- Built-in document persistence and version history
+- Authentication and room-level permissions
+- Comments and threads
+- REST API for document access
+- Webhooks for integrations (search indexing, backups, workflows)
+- Analytics dashboard
+
+```tsx
+// Using Yoopta Cloud — just change the URL and add your API key
+const editor = useMemo(
+  () =>
+    withCollaboration(
+      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
+      {
+        url: 'wss://collab.yoopta.cloud',
+        roomId: 'document-123',
+        token: 'your-api-key',
+        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+      },
+    ),
+  [],
+);
+```
+
+<Info>
+  Yoopta Cloud is coming soon. The self-hosted path described above will always remain free and open-source.
+</Info>
+
 ## How It Works
 
 Under the hood, `@yoopta/collaboration` maintains a bidirectional binding between the Yoopta editor and a Yjs shared document:
@@ -331,7 +468,6 @@ Under the hood, `@yoopta/collaboration` maintains a bidirectional binding betwee
                                        │
                                 ┌──────▼───────────────┐
                                 │   Collab Server       │
-                                │   (your private repo) │
                                 └───────────────────────┘
 ```
 
