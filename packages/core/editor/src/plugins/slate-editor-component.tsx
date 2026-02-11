@@ -1,5 +1,5 @@
 import type React from 'react';
-import { memo, useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NodeEntry, Selection } from 'slate';
 import { Editor, Path, Range } from 'slate';
 import { DefaultElement, Editable, ReactEditor, Slate } from 'slate-react';
@@ -63,18 +63,27 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   const slate = useSlateEditor(id, editor, block, elements, withExtensions);
   const eventHandlers = useEventHandlers(events, editor, block, slate);
 
+  const [decoratorVersion, setDecoratorVersion] = useState(0);
+  useEffect(() => {
+    const handler = () => setDecoratorVersion((v) => v + 1);
+    editor.on('decorations:change', handler);
+    return () => {
+      editor.off('decorations:change', handler);
+    };
+  }, [editor]);
+
   const onChange = useCallback(
     (value) => {
-      if (editor.readOnly) return;
-      // @ts-expect-error - fixme
-      if (window.scheduler) {
-        // @ts-expect-error - fixme
-        window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
-          priority: 'background',
-        });
-      } else {
-        editor.updateBlock(id, { value });
-      }
+      // if (editor.readOnly) return;
+      // // @ts-expect-error - fixme
+      // if (window.scheduler) {
+      //   // @ts-expect-error - fixme
+      //   window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
+      //     priority: 'background',
+      //   });
+      // } else {
+      //   editor.updateBlock(id, { value });
+      // }
     },
     [id, editor.readOnly],
   );
@@ -124,9 +133,16 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         });
       }
 
+      // Apply leaf decorators (e.g., remote cursors)
+      for (const leafRenderer of editor.leafDecorators.values()) {
+        try {
+          children = leafRenderer(leaf, children) as typeof children;
+        } catch {}
+      }
+
       return <TextLeaf attributes={attributes}>{children}</TextLeaf>;
     },
-    [marks],
+    [marks, decoratorVersion],
   );
 
   const onKeyDown = useCallback(
@@ -251,7 +267,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
   const decorate = useCallback(
     (nodeEntry: NodeEntry) => {
-      const ranges = [] as NodeEntry[] & { withPlaceholder?: boolean }[];
+      const ranges: any[] = [];
       if (editor.readOnly) return ranges;
 
       const [node, path] = nodeEntry;
@@ -271,9 +287,17 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         }
       }
 
+      // Call all registered decorators
+      for (const decoratorFn of editor.decorators.values()) {
+        try {
+          const extra = decoratorFn(id, nodeEntry);
+          if (extra.length > 0) ranges.push(...extra);
+        } catch {}
+      }
+
       return ranges;
     },
-    [editor.readOnly, editor.path.current, block.meta.order],
+    [editor.readOnly, editor.path.current, block.meta.order, decoratorVersion],
   );
 
   return (

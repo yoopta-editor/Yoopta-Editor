@@ -1,7 +1,7 @@
 import './awareness/remote-cursors.css';
 
 // Main extension
-export { withCollaboration } from './withCollaboration';
+export { withCollaboration } from './with-collaboration';
 
 // Types
 export type {
@@ -20,7 +20,10 @@ export { useRemoteCursors } from './hooks/useRemoteCursors';
 export { useConnectionStatus } from './hooks/useConnectionStatus';
 
 // React components
-export { RemoteCursors } from './awareness/RemoteCursors';
+export { RemoteCursors } from './awareness/remote-cursors';
+
+// Cursor decoration utilities
+export { createCursorDecorator, createCursorLeafRenderer } from './awareness/cursor-decorations';
 
 // Provider (for advanced usage / custom server integration)
-export { WebSocketProvider } from './provider/WebSocketProvider';
+export { WebSocketProvider } from './provider/web-socket-provider';

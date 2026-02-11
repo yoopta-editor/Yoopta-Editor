@@ -145,12 +145,8 @@ function createSlateForBlock(editor: YooEditor, blockId: string): SlateEditor {
   return buildSlateEditor(editor);
 }
 
-// When buildSlateEditorFn is set (collaboration), the factory already sets up
-// slate.children via YjsEditor.connect. Direct assignment would break the
-// internal Yjs↔Slate node mappings, so we skip it.
-const isCollaborativeEditor = (editor: YooEditor): boolean => !!editor.buildSlateEditorFn;
-
 function applyOperation(editor: YooEditor, op: YooptaOperation): void {
+  console.log('editor.applyTransforms applyOperation op', op)
   switch (op.type) {
     case 'set_slate': {
       const { properties, blockId } = op;
@@ -182,9 +178,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
     case 'insert_block': {
       editor.blockEditorsMap[op.block.id] = createSlateForBlock(editor, op.block.id);
       editor.children[op.block.id] = op.block;
-      if (!isCollaborativeEditor(editor)) {
-        editor.blockEditorsMap[op.block.id].children = op.block.value;
-      }
+      editor.blockEditorsMap[op.block.id].children = op.block.value;
 
       Object.keys(editor.children).forEach((blockId) => {
         const existingBlock = editor.children[blockId];
@@ -238,22 +232,22 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
     }
 
     case 'set_block_value': {
-      // const { id, value, forceSlate } = op;
-      // const slate = editor.blockEditorsMap[id];
+      const { id, value, forceSlate } = op;
+      const slate = editor.blockEditorsMap[id];
 
-      // if (forceSlate && slate) {
-      //   slate.children = value;
-      // }
+      if (forceSlate && slate) {
+        slate.children = value;
+      }
 
-      // if (Array.isArray(value)) {
-      //   if (isDraft(editor.children[id])) {
-      //     editor.children[id].value = value;
-      //   } else {
-      //     produce(editor.children[id], (draft) => {
-      //       draft.value = value;
-      //     });
-      //   }
-      // }
+      if (Array.isArray(value)) {
+        if (isDraft(editor.children[id])) {
+          editor.children[id].value = value;
+        } else {
+          produce(editor.children[id], (draft) => {
+            draft.value = value;
+          });
+        }
+      }
       break;
     }
 
@@ -280,20 +274,16 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       const { properties } = op;
 
       const nextSlate = createSlateForBlock(editor, properties.nextBlock.id);
-      if (!isCollaborativeEditor(editor)) {
-        nextSlate.children = properties.nextSlateValue;
-      }
+      nextSlate.children = properties.nextSlateValue;
       editor.children[properties.nextBlock.id] = {
         ...properties.nextBlock,
         value: nextSlate.children,
       };
       editor.blockEditorsMap[properties.nextBlock.id] = nextSlate;
 
-      if (!isCollaborativeEditor(editor)) {
-        const splitSlate = editor.blockEditorsMap[op.prevProperties.originalBlock.id];
-        splitSlate.children = properties.splitSlateValue;
-        editor.children[op.prevProperties.originalBlock.id].value = splitSlate.children;
-      }
+      const splitSlate = editor.blockEditorsMap[op.prevProperties.originalBlock.id];
+      splitSlate.children = properties.splitSlateValue;
+      editor.children[op.prevProperties.originalBlock.id].value = splitSlate.children;
 
       Object.values(editor.children).forEach((block) => {
         if (
@@ -319,9 +309,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       delete editor.children[prevProperties.sourceBlock.id];
 
       editor.children[properties.mergedBlock.id] = properties.mergedBlock;
-      if (!isCollaborativeEditor(editor)) {
-        editor.blockEditorsMap[properties.mergedBlock.id].children = properties.mergedSlateValue;
-      }
+      editor.blockEditorsMap[properties.mergedBlock.id].children = properties.mergedSlateValue;
 
       Object.values(editor.children).forEach((block) => {
         if (block.meta.order > properties.mergedBlock.meta.order) {
@@ -343,9 +331,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       delete editor.children[prevProperties.sourceBlock.id];
 
       const newSlate = createSlateForBlock(editor, properties.toggledBlock.id);
-      if (!isCollaborativeEditor(editor)) {
-        newSlate.children = properties.toggledSlateValue;
-      }
+      newSlate.children = properties.toggledSlateValue;
 
       editor.children[properties.toggledBlock.id] = properties.toggledBlock;
       editor.blockEditorsMap[properties.toggledBlock.id] = newSlate;
@@ -395,9 +381,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       Object.keys(editor.children).forEach((id) => {
         const block = editor.children[id];
         const slate = createSlateForBlock(editor, id);
-        if (!isCollaborativeEditor(editor)) {
-          slate.children = block.value;
-        }
+        slate.children = block.value;
 
         blockEditorsMap[id] = slate;
       });

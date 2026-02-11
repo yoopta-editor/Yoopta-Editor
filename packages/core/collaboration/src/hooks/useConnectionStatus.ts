@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useYooptaEditor } from '@yoopta/editor';
+
 import type { CollaborationYooEditor, ConnectionStatus } from '../types';
 
 /**

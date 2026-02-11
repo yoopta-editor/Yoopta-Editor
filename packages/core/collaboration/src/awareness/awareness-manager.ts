@@ -1,7 +1,7 @@
 import type { YooEditor } from '@yoopta/editor';
 import * as awarenessProtocol from 'y-protocols/awareness';
 
-import type { WebSocketProvider } from '../provider/WebSocketProvider';
+import type { WebSocketProvider } from '../provider/web-socket-provider';
 import type { CollaborationUser, RemoteCursorData } from '../types';
 
 export class AwarenessManager {

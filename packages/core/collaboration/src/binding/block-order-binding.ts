@@ -4,6 +4,7 @@ import type {
   MergeBlockOperation,
   MoveBlockOperation,
   SplitBlockOperation,
+  ToogleBlockOperation,
 } from '@yoopta/editor';
 import type * as Y from 'yjs';
 
@@ -45,6 +46,19 @@ export class BlockOrderBinding {
 
     // Insert the new block after the original
     this.blockOrder.insert(originalIndex + 1, [op.properties.nextBlock.id]);
+  }
+
+  toggleBlock(op: ToogleBlockOperation): void {
+    const { sourceBlock } = op.prevProperties;
+    const { toggledBlock } = op.properties;
+
+    if (sourceBlock.id === toggledBlock.id) return; // No ID change
+
+    const index = this.findBlockIndex(sourceBlock.id);
+    if (index === -1) return;
+
+    this.blockOrder.delete(index, 1);
+    this.blockOrder.insert(index, [toggledBlock.id]);
   }
 
   mergeBlock(op: MergeBlockOperation): void {

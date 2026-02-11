@@ -14,7 +14,6 @@
     "dist/"
   ],
   "dependencies": {
-    "@slate-yjs/core": "^1.0.2",
     "yjs": "^13.6.0",
     "y-protocols": "^1.0.6",
     "lib0": "^0.2.88"
@@ -22,8 +21,7 @@
   "peerDependencies": {
     "@yoopta/editor": "6.0.0-beta.4",
     "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
-    "slate": ">=0.70.0"
+    "react-dom": ">=18.2.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",

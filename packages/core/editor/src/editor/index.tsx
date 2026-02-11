@@ -158,6 +158,9 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
 
     refElement: null,
 
+    decorators: new Map(),
+    leafDecorators: new Map(),
+
     historyStack: {
       undos: [],
       redos: [],

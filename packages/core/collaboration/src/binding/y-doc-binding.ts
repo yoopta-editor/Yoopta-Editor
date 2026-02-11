@@ -1,4 +1,5 @@
 import type {
+  SlateEditor,
   SlateElement,
   YooEditor,
   YooptaContentValue,
@@ -6,12 +7,24 @@ import type {
 } from '@yoopta/editor';
 import * as Y from 'yjs';
 
-import { BlockContentBinding } from './blockContentBinding';
-import { BlockMetaBinding } from './blockMetaBinding';
-import type { BlockMetaYMap } from './blockMetaBinding';
-import { BlockOrderBinding } from './blockOrderBinding';
+import { BlockContentBinding } from './block-content-binding';
+import { BlockMetaBinding } from './block-meta-binding';
+import type { BlockMetaYMap } from './block-meta-binding';
+import { BlockOrderBinding } from './block-order-binding';
+import { SlateContentBinding } from './slate-content-binding';
 import { LOCAL_ORIGIN } from '../types';
 
+/**
+ * Y.Doc structure:
+ *
+ *   Y.Doc
+ *   ├── blockOrder:    Y.Array<string>              — ordered block IDs
+ *   ├── blockMeta:     Y.Map<Y.Map>                 — per-block metadata (type, depth, align)
+ *   └── blockContents: Y.Map<Y.XmlFragment>         — per-block Slate content
+ *                        └── Y.XmlElement            — slate element (type as nodeName)
+ *                              attrs: { id, props? }
+ *                              └── Y.XmlText         — text content, marks as attributes
+ */
 export class YDocBinding {
   public isApplyingRemote = false;
 
@@ -21,7 +34,9 @@ export class YDocBinding {
 
   private blockOrder: Y.Array<string>;
   private blockMeta: Y.Map<BlockMetaYMap>;
-  private blockContents: Y.Map<Y.XmlText>;
+  private blockContents: Y.Map<Y.XmlFragment>;
+
+  private contentBindings: Map<string, SlateContentBinding> = new Map();
 
   private blockOrderObserver: ((event: Y.YArrayEvent<string>, transaction: Y.Transaction) => void) | null = null;
   private blockMetaObserver: ((event: Y.YMapEvent<BlockMetaYMap>, transaction: Y.Transaction) => void) | null = null;
@@ -32,7 +47,7 @@ export class YDocBinding {
   ) {
     this.blockOrder = doc.getArray<string>('blockOrder');
     this.blockMeta = doc.getMap<BlockMetaYMap>('blockMeta');
-    this.blockContents = doc.getMap<Y.XmlText>('blockContents');
+    this.blockContents = doc.getMap<Y.XmlFragment>('blockContents');
 
     this.blockOrderBinding = new BlockOrderBinding(this.blockOrder);
     this.blockMetaBinding = new BlockMetaBinding(this.blockMeta);
@@ -41,23 +56,11 @@ export class YDocBinding {
     this.setupObservers();
   }
 
-  // ---- Public accessors for collaboration integration ----
+  // ---- Public accessors ----
 
-  /** Get the Y.XmlText shared root for a block (used by buildSlateEditorFn) */
-  getSharedRoot(blockId: string): Y.XmlText | undefined {
-    return this.blockContentBinding.getSharedRoot(blockId);
-  }
-
-  /** Create a Y.XmlText shared root for a block if it doesn't already exist */
-  ensureSharedRoot(blockId: string, slateValue: SlateElement[]): Y.XmlText {
-    const existing = this.blockContentBinding.getSharedRoot(blockId);
-    if (existing) return existing;
-    return this.blockContentBinding.createSharedRoot(blockId, slateValue);
-  }
-
-  /** Delete a block's Y.XmlText shared root */
-  deleteSharedRoot(blockId: string): void {
-    // this.blockContentBinding.deleteSharedRoot(blockId);
+  /** Get the Y.XmlFragment for a block's content */
+  getFragment(blockId: string): Y.XmlFragment | undefined {
+    return this.blockContentBinding.getFragment(blockId);
   }
 
   // ---- Initial Sync ----
@@ -124,15 +127,15 @@ export class YDocBinding {
         metaMap.set('align', block.meta.align || 'left');
         this.blockMeta.set(block.id, metaMap);
 
-        // Block content — create Y.XmlText via slate-yjs conversion
-        this.blockContentBinding.createSharedRoot(block.id, block.value as SlateElement[]);
+        // Block content — convert Slate value to Y.XmlFragment
+        this.blockContentBinding.createContent(block.id, block.value as SlateElement[]);
       }
     }, LOCAL_ORIGIN);
   }
 
   // ---- Local -> Yjs ----
 
-  /** Push local structural operations to Y.Doc */
+  /** Push local operations to Y.Doc */
   pushLocalOperations(ops: YooptaOperation[]): void {
     this.doc.transact(() => {
       for (const op of ops) {
@@ -146,13 +149,13 @@ export class YDocBinding {
       case 'insert_block':
         this.blockOrderBinding.insertBlock(op);
         this.blockMetaBinding.insertBlock(op);
-        // Y.XmlText already created via ensureSharedRoot (pre-processed by withCollaboration)
+        this.blockContentBinding.createContent(op.block.id, op.block.value as SlateElement[]);
         break;
 
       case 'delete_block':
         this.blockOrderBinding.deleteBlock(op);
         this.blockMetaBinding.deleteBlock(op.block.id);
-        this.blockContentBinding.deleteSharedRoot(op.block.id);
+        this.blockContentBinding.deleteContent(op.block.id);
         break;
 
       case 'set_block_meta':
@@ -166,26 +169,50 @@ export class YDocBinding {
       case 'split_block':
         this.blockOrderBinding.splitBlock(op);
         this.blockMetaBinding.splitBlock(op);
-        // Y.XmlText for new block already created via ensureSharedRoot (pre-processed)
+        this.blockContentBinding.createContent(
+          op.properties.nextBlock.id,
+          op.properties.nextSlateValue,
+        );
+        // Update original block's content (truncated after split).
+        // applyTransforms directly assigns splitSlate.children, bypassing slate.apply,
+        // so SlateContentBinding doesn't see this change.
+        this.blockContentBinding.updateContent(
+          op.prevProperties.originalBlock.id,
+          op.properties.splitSlateValue,
+        );
         break;
 
       case 'merge_block':
         this.blockOrderBinding.mergeBlock(op);
         this.blockMetaBinding.mergeBlock(op);
-        this.blockContentBinding.deleteSharedRoot(op.prevProperties.sourceBlock.id);
+        this.blockContentBinding.deleteContent(op.prevProperties.sourceBlock.id);
+        // Update merged block's content (now includes merged text).
+        // applyTransforms directly assigns slate.children, bypassing slate.apply.
+        this.blockContentBinding.updateContent(
+          op.properties.mergedBlock.id,
+          op.properties.mergedSlateValue,
+        );
         break;
 
       case 'toggle_block':
+        this.blockOrderBinding.toggleBlock(op);
         this.blockMetaBinding.toggleBlock(op);
-        // Y.XmlText already swapped in pre-processing (old deleted, new created)
+        this.blockContentBinding.deleteContent(op.prevProperties.sourceBlock.id);
+        this.blockContentBinding.createContent(
+          op.properties.toggledBlock.id,
+          op.properties.toggledSlateValue,
+        );
         break;
 
       case 'set_editor_value':
-        this.fullSync(op.properties.value);
+        // this.fullSync(op.properties.value);
         break;
 
-      // Content sync is handled by slate-yjs per block — no Y.Doc changes needed
+      // TODO: set_slate will be handled by per-block content binding (next step)
       case 'set_slate':
+        break;
+
+      // set_block_value is handled via set_slate at the Yjs level
       case 'set_block_value':
         break;
 
@@ -223,7 +250,7 @@ export class YDocBinding {
       metaMap.set('align', block.meta.align || 'left');
       this.blockMeta.set(block.id, metaMap);
 
-      this.blockContentBinding.createSharedRoot(block.id, block.value as SlateElement[]);
+      this.blockContentBinding.createContent(block.id, block.value as SlateElement[]);
     }
   }
 
@@ -244,11 +271,10 @@ export class YDocBinding {
     };
     this.blockMeta.observe(this.blockMetaObserver);
 
-    // No content observer needed — slate-yjs handles content sync per Slate editor
+    // TODO: Content observers will be added in per-block binding step
   }
 
   private handleRemoteBlockOrderChange(_event: Y.YArrayEvent<string>): void {
-    // Rebuild editor state from Y.Doc — the Y.Array already has the correct final ordering.
     this.applyRemote(() => {
       this.rebuildEditorFromYDoc();
     });
@@ -361,7 +387,64 @@ export class YDocBinding {
     }
   }
 
+  // ---- Content bindings lifecycle ----
+
+  /**
+   * Reconcile per-block content bindings with the current editor state.
+   * Creates bindings for new blocks, removes bindings for deleted blocks,
+   * and recreates bindings when slate references change.
+   */
+  reconcileContentBindings(): void {
+    const currentBlockIds = new Set(Object.keys(this.editor.blockEditorsMap));
+
+    // Remove bindings for blocks that no longer exist or whose slate changed
+    for (const [blockId, binding] of this.contentBindings) {
+      const slate = this.editor.blockEditorsMap[blockId];
+      if (!slate || binding.slate !== slate) {
+        binding.destroy();
+        this.contentBindings.delete(blockId);
+      }
+    }
+
+    // Create bindings for blocks that don't have one yet
+    for (const blockId of currentBlockIds) {
+      if (this.contentBindings.has(blockId)) continue;
+
+      const fragment = this.blockContentBinding.getFragment(blockId);
+      const slate = this.editor.blockEditorsMap[blockId];
+
+      if (fragment && slate) {
+        const contentBinding = new SlateContentBinding(fragment, slate, this.doc);
+        this.contentBindings.set(blockId, contentBinding);
+      }
+    }
+  }
+
+  /**
+   * Check if the given Slate editor is currently applying a remote change
+   * (either structural from YDocBinding or character-level from SlateContentBinding).
+   */
+  isRemoteForSlate(slate: SlateEditor): boolean {
+    // Check structural remote changes
+    if (this.isApplyingRemote) return true;
+
+    // Check per-block content bindings
+    for (const [, binding] of this.contentBindings) {
+      if (binding.slate === slate && binding.isApplyingRemote) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   destroy(): void {
+    // Clean up content bindings first
+    for (const [, binding] of this.contentBindings) {
+      binding.destroy();
+    }
+    this.contentBindings.clear();
+
     if (this.blockOrderObserver) {
       this.blockOrder.unobserve(this.blockOrderObserver);
       this.blockOrderObserver = null;

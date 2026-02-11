@@ -9,24 +9,6 @@
   z-index: 50;
 }
 
-/* Block-level presence bar (fallback) */
-.yoopta-collab-block-presence {
-  pointer-events: none;
-  z-index: 50;
-}
-
-/* Inline caret */
-.yoopta-collab-inline-caret {
-  pointer-events: none;
-  z-index: 50;
-}
-
-/* Text selection highlight */
-.yoopta-collab-selection-highlight {
-  pointer-events: none;
-  z-index: 49;
-}
-
 /* Multi-block selection highlight */
 .yoopta-collab-multi-block-highlight {
   pointer-events: none;
@@ -44,4 +26,23 @@
   font-weight: 500;
   pointer-events: none;
   z-index: 51;
+}
+
+/* Decorate-based caret (rendered via renderLeaf) */
+.yoopta-collab-decorate-caret {
+  position: relative;
+  pointer-events: none;
+}
+
+.yoopta-collab-decorate-caret-label {
+  position: absolute;
+  top: -20px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 51;
+}
+
+/* Decorate-based highlight (rendered via renderLeaf) */
+.yoopta-collab-decorate-highlight {
+  position: relative;
 }

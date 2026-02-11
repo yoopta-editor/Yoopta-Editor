@@ -57,14 +57,10 @@ export class WebSocketProvider {
   }
 
   destroy(): void {
-    this.disconnect();
+    // Unsubscribe listeners before disconnect so no stale events fire
     this.doc.off('update', this.onDocUpdate);
     this.awareness.off('update', this.onAwarenessUpdate);
-    awarenessProtocol.removeAwarenessStates(
-      this.awareness,
-      [this.doc.clientID],
-      null,
-    );
+    this.disconnect();
     this.listeners.clear();
   }
 
@@ -203,7 +199,6 @@ export class WebSocketProvider {
   // ---- Y.Doc & Awareness Handlers ----
 
   private onDocUpdate = (update: Uint8Array, origin: any): void => {
-    console.log('onDocUpdate origin', origin)
     // Don't send updates that came from the server
     if (origin === 'remote') return;
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
