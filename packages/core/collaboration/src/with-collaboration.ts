@@ -85,6 +85,8 @@ export function withCollaboration(
 
   const originalApplyTransforms = editor.applyTransforms;
   const originalIsRemoteSlateOp = editor.isRemoteSlateOp;
+  const originalUndo = editor.undo;
+  const originalRedo = editor.redo;
 
   editor.applyTransforms = (ops, options) => {
     // Apply locally first
@@ -103,6 +105,14 @@ export function withCollaboration(
 
   // Wire up isRemoteSlateOp so hooks.ts can skip history for remote changes
   editor.isRemoteSlateOp = (slate) => binding.isRemoteForSlate(slate);
+
+  // Override undo/redo to use Y.UndoManager (only undoes local changes)
+  editor.undo = () => {
+    binding.undo();
+  };
+  editor.redo = () => {
+    binding.redo();
+  };
 
   // ---- Listen to cursor/selection changes for awareness ----
 
@@ -166,6 +176,8 @@ export function withCollaboration(
       // 4. Restore original editor methods
       editor.applyTransforms = originalApplyTransforms;
       editor.isRemoteSlateOp = originalIsRemoteSlateOp;
+      editor.undo = originalUndo;
+      editor.redo = originalRedo;
 
       updateState({ status: 'disconnected', isSynced: false, connectedUsers: [] });
     },

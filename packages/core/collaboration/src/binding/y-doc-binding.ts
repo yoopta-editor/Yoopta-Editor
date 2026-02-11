@@ -37,6 +37,7 @@ export class YDocBinding {
   private blockContents: Y.Map<Y.XmlFragment>;
 
   private contentBindings: Map<string, SlateContentBinding> = new Map();
+  private undoManager: Y.UndoManager;
 
   private blockOrderObserver: ((event: Y.YArrayEvent<string>, transaction: Y.Transaction) => void) | null = null;
   private blockMetaObserver: ((event: Y.YMapEvent<BlockMetaYMap>, transaction: Y.Transaction) => void) | null = null;
@@ -52,6 +53,11 @@ export class YDocBinding {
     this.blockOrderBinding = new BlockOrderBinding(this.blockOrder);
     this.blockMetaBinding = new BlockMetaBinding(this.blockMeta);
     this.blockContentBinding = new BlockContentBinding(this.blockContents);
+
+    this.undoManager = new Y.UndoManager(
+      [this.blockOrder, this.blockMeta, this.blockContents],
+      { trackedOrigins: new Set([LOCAL_ORIGIN]) },
+    );
 
     this.setupObservers();
   }
@@ -78,6 +84,25 @@ export class YDocBinding {
     } else if (initialValue && Object.keys(initialValue).length > 0) {
       this.seedYDoc(initialValue);
     }
+
+    // Clear undo stacks — initial load/seed should not be undoable
+    this.undoManager.clear();
+  }
+
+  /** Undo the last local change via Y.UndoManager (preserves remote changes) */
+  undo(): void {
+    if (this.undoManager.undoStack.length === 0) return;
+    this.applyRemote(() => {
+      this.undoManager.undo();
+    });
+  }
+
+  /** Redo the last undone local change via Y.UndoManager */
+  redo(): void {
+    if (this.undoManager.redoStack.length === 0) return;
+    this.applyRemote(() => {
+      this.undoManager.redo();
+    });
   }
 
   /** Load the current Y.Doc state into the editor */
@@ -439,7 +464,10 @@ export class YDocBinding {
   }
 
   destroy(): void {
-    // Clean up content bindings first
+    // Clean up undo manager
+    this.undoManager.destroy();
+
+    // Clean up content bindings
     for (const [, binding] of this.contentBindings) {
       binding.destroy();
     }

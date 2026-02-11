@@ -10,6 +10,7 @@ The `@yoopta/collaboration` package enables real-time collaborative editing in Y
 
 The package provides:
 - **`withCollaboration`** extension — connects your editor to a collaboration server
+- **Collaborative undo/redo** — Cmd+Z only undoes your own changes, not other users'
 - **Remote cursors** — see where other users are editing
 - **Awareness** — track connected users and their presence
 - **React hooks** — access collaboration state in your components
@@ -474,6 +475,21 @@ Under the hood, `@yoopta/collaboration` maintains a bidirectional binding betwee
 - **Local changes** flow through `editor.applyTransforms` and are automatically synced to the Y.Doc, then sent to the server via WebSocket.
 - **Remote changes** arrive via WebSocket, update the Y.Doc, and are applied to the editor without entering the local undo/redo history.
 - **Conflict resolution** is handled by the Yjs CRDT — concurrent edits are merged automatically at the character level.
+- **Undo/redo** uses Yjs `UndoManager` to selectively reverse only local changes (see below).
+
+## Undo / Redo
+
+When collaboration is active, `editor.undo()` and `editor.redo()` (Cmd+Z / Cmd+Shift+Z) automatically use Yjs `UndoManager` instead of the default history stack. This means:
+
+- **Only your changes are undone** — if Alice types "Hello" and Bob types "World", Alice pressing Cmd+Z removes only "Hello". Bob's text stays intact.
+- **Works at all levels** — text edits, block insertions, deletions, splits, merges, formatting, and metadata changes are all tracked.
+- **No extra setup needed** — `withCollaboration` overrides undo/redo automatically. When collaboration is destroyed, the default history behavior is restored.
+
+Rapid edits (e.g., continuous typing) are batched into a single undo step, similar to how undo works in Google Docs or Notion.
+
+<Note>
+  The initial document content (loaded from the server or seeded via `initialValue`) is not undoable — only edits made after the document loads can be undone.
+</Note>
 
 ## TypeScript
 
