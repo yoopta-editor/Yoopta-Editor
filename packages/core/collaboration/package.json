@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/collaboration",
-  "version": "6.0.0-beta.19",
+  "version": "6.0.0-beta.20",
   "description": "Real-time collaboration for Yoopta Editor using Yjs CRDT",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -14,9 +14,9 @@
     "dist/"
   ],
   "dependencies": {
-    "yjs": "^13.6.0",
+    "lib0": "^0.2.88",
     "y-protocols": "^1.0.6",
-    "lib0": "^0.2.88"
+    "yjs": "^13.6.0"
   },
   "peerDependencies": {
     "@yoopta/editor": "6.0.0-beta.4",
