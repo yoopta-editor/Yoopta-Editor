@@ -22,7 +22,7 @@ export const CodeGroupList = (props: PluginElementRenderProps) => {
     <ScrollArea className="w-full">
       <TabsList
         {...attributes}
-        className="w-full relative justify-start h-8 rounded-none rounded-t-lg bg-transparent p-0 border-b border-x-0 border-t-0"
+        className="w-full mt-2 relative justify-start h-8 rounded-none rounded-t-lg bg-transparent p-0 border-b border-x-0 border-t-0"
         style={{
           backgroundColor: 'var(--code-group-tab-inactive-bg)',
           borderBottomColor: 'var(--code-group-tab-border)',

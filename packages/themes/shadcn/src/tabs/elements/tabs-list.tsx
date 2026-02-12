@@ -19,7 +19,7 @@ export const TabsListElement = (props: PluginElementRenderProps) => {
 
   return (
     <ScrollArea className="w-full">
-      <TabsList {...attributes} className="w-full relative justify-start">
+      <TabsList {...attributes} className="w-full mt-2 relative justify-start">
         {children}
         {!editor.readOnly && (
           <button

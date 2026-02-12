@@ -37,7 +37,7 @@ function CollaborativeEditor({ user, label }: CollaborativeEditorProps) {
 
   const editor = useMemo(() => {
     const collabConfig: CollaborationConfig = {
-      url: 'ws://localhost:4000',
+      url: 'wss://demos.yjs.dev/ws',
       roomId: ROOM_ID,
       user,
       token: 'collab-test-token',

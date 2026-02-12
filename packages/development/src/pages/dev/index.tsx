@@ -31,7 +31,7 @@ const YooptaUIPackageExample = () => {
   const editor = useMemo(
     () => {
       const collabConfig: CollaborationConfig = {
-        url: 'ws://localhost:4000',
+        url: 'wss://demos.yjs.dev/ws',
         roomId: 'document-dev-room',
         user: { id: generateId(), name: `${firstName()} ${lastName()}`, color: rgb() },
         token: 'your-auth-token',

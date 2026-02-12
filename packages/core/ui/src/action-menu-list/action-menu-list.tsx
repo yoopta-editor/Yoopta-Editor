@@ -65,6 +65,9 @@ const ActionMenuListRoot = ({
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
 
   const actions = useMemo(() => {
+    // Skip computation when menu is closed
+    if (!isOpen) return [];
+
     const baseActions = mapActionMenuItems(editor)
       .filter((item) => filterToggleActions(editor, item.type))
       .filter((item) => {
@@ -78,9 +81,16 @@ const ActionMenuListRoot = ({
       });
 
     return baseActions;
-  }, [editor]);
+  }, [editor, isOpen]);
 
-  const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(actions[0] ?? null);
+  const [selectedAction, setSelectedAction] = useState<ActionMenuItem | null>(null);
+
+  // Sync selectedAction when actions list changes (e.g. menu opens with new context)
+  useEffect(() => {
+    if (actions.length > 0) {
+      setSelectedAction(actions[0]);
+    }
+  }, [actions]);
 
   const onOpenChange = useCallback(
     (newOpen: boolean) => {

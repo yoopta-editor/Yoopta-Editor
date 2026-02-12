@@ -53,7 +53,7 @@ export const AccordionList = (props: PluginElementRenderProps) => {
       type="multiple"
       value={values}
       onValueChange={onValueChange}
-      className="w-full rounded-md border">
+      className="w-full mt-2 rounded-md border">
       {children}
     </Accordion>
   );
