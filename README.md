@@ -39,6 +39,7 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 - **Slash command & action menu** — Type `/` for block insertion; floating block actions (+, drag handle, block options)
 - **Inline elements** — Links, @mentions, and custom inline nodes within text
 - **Export** — HTML, Markdown, plain text, email template; get/set content as Yoopta JSON
+- **Real-time collaboration** (`@yoopta/collaboration`) — Multi-user editing with Yjs CRDT, presence (awareness), remote cursors, and WebSocket provider; optional package for collaborative documents
 - **Events** — `editor.on('change' | 'focus' | 'blur' | 'path-change' | 'block:copy')` for sync, analytics, or custom logic
 - **Keyboard shortcuts** — Customizable hotkeys; Tab/Shift+Tab for indent/outdent; shortcuts per plugin and mark
 - **Read-only mode** — Use the same editor instance for viewing or editing
@@ -65,6 +66,9 @@ yarn add @yoopta/ui
 
 # Optional: theme for styled block UI (Shadcn or Material)
 yarn add @yoopta/themes-shadcn
+
+# Optional: real-time collaboration (Yjs, awareness, remote cursors)
+yarn add @yoopta/collaboration
 ```
 
 ## Quick Start
@@ -234,12 +238,13 @@ export default function Editor() {
 
 ### Core
 
-| Package                                    | Description                                                                                                                                         |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@yoopta/editor](./packages/core/editor)   | Core editor component and API (headless)                                                                                                            |
-| [@yoopta/ui](./packages/core/ui)           | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, ElementOptions, SelectionBox, BlockDndContext, SortableBlock) |
-| [@yoopta/exports](./packages/core/exports) | Serializers for HTML, Markdown, PlainText, Email                                                                                                    |
-| [@yoopta/marks](./packages/marks)          | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                                                            |
+| Package                                                | Description                                                                                                                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@yoopta/editor](./packages/core/editor)               | Core editor component and API (headless)                                                                                                                            |
+| [@yoopta/ui](./packages/core/ui)                       | UI components (FloatingToolbar, ActionMenuList, SlashCommandMenu, FloatingBlockActions, BlockOptions, ElementOptions, SelectionBox, BlockDndContext, SortableBlock) |
+| [@yoopta/exports](./packages/core/exports)             | Serializers for HTML, Markdown, PlainText, Email                                                                                                                    |
+| [@yoopta/collaboration](./packages/core/collaboration) | Real-time collaboration with Yjs CRDT (awareness, remote cursors, WebSocket provider)                                                                               |
+| [@yoopta/marks](./packages/marks)                      | Text formatting marks (Bold, Italic, Underline, Strike, Code, Highlight)                                                                                            |
 
 ### Themes
 
@@ -458,6 +463,7 @@ Live demos and source code from the [next-app-example](https://github.com/Dargin
 - [README Editor](https://yoopta.dev/playground/readme-editor) — Split view with live Markdown preview ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/readme-editor))
 - [Email Builder](https://yoopta.dev/playground/email-builder) — Email composition with blocks and export ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/email-builder))
 - [Plugin demos](https://yoopta.dev/playground/plugin/paragraph) — Per-plugin live demos (e.g. [paragraph](https://yoopta.dev/playground/plugin/paragraph), [callout](https://yoopta.dev/playground/plugin/callout)) ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/plugin-demo))
+- [Collaboration](https://yoopta.dev/playground/collaboration) — Real-time multi-user editing with Yjs, presence and remote cursors ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/collaboration))
 
 ## Project Structure
 
@@ -495,9 +501,10 @@ yarn lint
 ## Roadmap
 
 - AI tools for content generation
-- Collaborative editing mode
 - Simplified plugin API
 - Additional plugins
+
+Real-time **collaborative editing** is available via `@yoopta/collaboration` (Yjs, awareness, remote cursors); see [docs](https://docs.yoopta.dev/core/collaboration) and the [Collaboration example](https://yoopta.dev/playground/collaboration).
 
 ## Support
 

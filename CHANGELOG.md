@@ -4,6 +4,14 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.0-beta.20] - 2026-02-12
+
+### Added
+
+- **@yoopta/collaboration**: New core package for real-time collaborative editing. Uses Yjs CRDT for conflict-free sync, with Slate ↔ Yjs binding, awareness (presence), remote cursors and selection, and WebSocket provider support. Hooks: `useCollaboration`, `useConnectionStatus`, `useRemoteCursors`. See [docs/core/collaboration](https://docs.yoopta.dev/core/collaboration) and the [Collaboration example](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/collaboration).
+
+---
+
 ## [6.0.0-beta.19] - 2026-02-07
 
 ### Added

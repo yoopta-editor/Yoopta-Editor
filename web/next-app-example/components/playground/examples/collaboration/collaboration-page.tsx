@@ -39,33 +39,9 @@ export const CollaborationPage = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
         <div className="text-center max-w-3xl mx-auto mb-0">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 mb-4">
-            <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-              Real-time
-            </span>
-          </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
             Collaborative Editing
           </h1>
-          <p className="text-lg text-muted-foreground mb-6" style={{ margin: '1rem 0' }}>
-            Edit together in real-time. Open this page in multiple tabs or
-            share the URL with others to see collaboration in action.
-          </p>
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900"
-          >
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: user.color }}
-            />
-            <span className="text-sm text-muted-foreground">
-              You are{" "}
-              <span className="font-semibold text-foreground">
-                {user.name}
-              </span>
-            </span>
-          </div>
         </div>
       </section>
 
@@ -91,13 +67,39 @@ export const CollaborationPage = () => {
                     collaboration.tsx
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm"
+                    title="Your identity in this session"
+                  >
+                    <div
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ backgroundColor: user.color }}
+                    />
+                    <span className="text-muted-foreground">
+                      You are{" "}
+                      <span className="font-medium text-foreground">
+                        {user.name}
+                      </span>
+                    </span>
+                  </div>
                   <Badge variant="default" className="text-xs">
                     <Zap className="w-3 h-3 mr-1" />
                     Live
                   </Badge>
                   <Badge variant="warning" className="text-xs">
                     v6 (beta)
+                  </Badge>
+                  <Badge variant="outline" className="hidden sm:inline-flex">
+                    <a
+                      href="https://docs.yoopta.dev/core/collaboration"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
+                      <Code2 className="w-3 h-3 mr-1" />
+                      Documentation
+                    </a>
                   </Badge>
                   <Badge variant="outline" className="hidden sm:inline-flex">
                     <a
