@@ -44,6 +44,8 @@ export const CollaborationStatusBar = () => {
   const config = STATUS_CONFIG[status];
   const StatusIcon = config.icon;
 
+  console.log('connectedUsers', connectedUsers);
+
   return (
     <div className="sticky top-0 z-40 flex items-center justify-between px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-sm">
       {/* Left: connection status */}
@@ -66,7 +68,7 @@ export const CollaborationStatusBar = () => {
         </span>
         <div className="flex -space-x-2">
           {connectedUsers.map((user) => (
-            <Tooltip key={user.id}>
+            <Tooltip key={`${user.id}-${user.name}-${user.color}`}>
               <TooltipTrigger asChild>
                 <div
                   className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold text-white ring-2 ring-white dark:ring-neutral-900 transition-transform hover:scale-110 hover:z-10 cursor-default"

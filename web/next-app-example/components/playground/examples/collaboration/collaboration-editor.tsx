@@ -53,7 +53,7 @@ export const CollaborationEditor = ({
       roomId: ROOM_ID,
       user,
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     return () => {

@@ -13,52 +13,24 @@ import {
   Info,
 } from "lucide-react";
 import { CollaborationEditor } from "./collaboration-editor";
-
-const NAMES = [
-  "Alice",
-  "Bob",
-  "Charlie",
-  "Diana",
-  "Eve",
-  "Frank",
-  "Grace",
-  "Hank",
-  "Iris",
-  "Jack",
-  "Kara",
-  "Leo",
-  "Mia",
-  "Noah",
-  "Olive",
-  "Paul",
-];
-
-const COLORS = [
-  "#E57373",
-  "#F06292",
-  "#BA68C8",
-  "#7986CB",
-  "#64B5F6",
-  "#4FC3F7",
-  "#4DD0E1",
-  "#4DB6AC",
-  "#81C784",
-  "#AED581",
-  "#FFD54F",
-  "#FFB74D",
-  "#FF8A65",
-  "#A1887F",
-];
+import { faker } from "@faker-js/faker";
 
 export const CollaborationPage = () => {
   const containerBoxRef = useRef<HTMLDivElement | null>(null);
 
   const user = useMemo(
-    () => ({
-      id: generateId(),
-      name: NAMES[Math.floor(Math.random() * NAMES.length)],
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    }),
+    () => {
+      const {
+        person: { firstName, lastName },
+        color: { rgb },
+      } = faker;
+
+      return {
+        id: generateId(),
+        name: `${firstName()} ${lastName()}`,
+        color: rgb({ format: 'hex', includeAlpha: false }),
+      }
+    },
     []
   );
 
@@ -76,7 +48,7 @@ export const CollaborationPage = () => {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
             Collaborative Editing
           </h1>
-          <p className="text-lg text-muted-foreground mb-6">
+          <p className="text-lg text-muted-foreground mb-6" style={{ margin: '1rem 0' }}>
             Edit together in real-time. Open this page in multiple tabs or
             share the URL with others to see collaboration in action.
           </p>
@@ -220,7 +192,7 @@ export const CollaborationPage = () => {
             <div className="flex items-center justify-center gap-3">
               <Button asChild>
                 <a
-                  href="https://docs.yoopta.dev"
+                  href="https://docs.yoopta.dev/core/collaboration"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
