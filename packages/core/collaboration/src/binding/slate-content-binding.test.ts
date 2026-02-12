@@ -1,10 +1,10 @@
+import { Transforms } from 'slate';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';
 
-import { SlateContentBinding } from './SlateContentBinding';
+import { SlateContentBinding } from './slate-content-binding';
 import { yXmlFragmentToSlateValue } from './yjs-slate-converters';
 import { LOCAL_ORIGIN } from '../types';
-
 // Mock Slate — needed for remote → Slate fallback paths
 vi.mock('slate', () => ({
   Editor: {
@@ -17,12 +17,7 @@ vi.mock('slate', () => ({
   },
 }));
 
-// eslint-disable-next-line import/first
-import { Transforms } from 'slate';
-
-// ---- Minimal Slate editor for testing ----
-
-interface MinimalSlateEditor {
+type MinimalSlateEditor = {
   children: any[];
   selection: any;
   operations: any[];

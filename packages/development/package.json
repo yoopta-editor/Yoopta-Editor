@@ -23,6 +23,7 @@
     "@yoopta/callout": "*",
     "@yoopta/carousel": "*",
     "@yoopta/code": "*",
+    "@yoopta/collaboration": "*",
     "@yoopta/divider": "*",
     "@yoopta/editor": "*",
     "@yoopta/embed": "*",
