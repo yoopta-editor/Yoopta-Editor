@@ -4,11 +4,13 @@ import { forwardRef } from 'react';
 import type { ComponentProps } from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 
+import { cn } from '../utils';
+
 const Accordion = forwardRef<HTMLDivElement, ComponentProps<typeof AccordionPrimitive.Root>>(
-  ({ children, ...props }, ref) => (
+  ({ children, className, ...props }, ref) => (
     <AccordionPrimitive.Root
       {...props}
-      className="w-full rounded-md border"
+      className={cn("w-full rounded-md border", className)}
       ref={ref}
       data-slot="accordion">
       {children}

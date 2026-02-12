@@ -135,6 +135,12 @@ export const useSlateEditor = (
     };
 
     slate.apply = (op) => {
+      // If this is a remote collaborative change, skip Yoopta history tracking
+      if (editor.isRemoteSlateOp?.(slate)) {
+        apply(op);
+        return;
+      }
+
       if (Operation.isSelectionOperation(op)) {
         const selectedPaths = Paths.getSelectedPaths(editor);
         const path = Paths.getBlockOrder(editor);

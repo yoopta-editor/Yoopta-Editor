@@ -1,0 +1,42 @@
+{
+  "name": "@yoopta/collaboration",
+  "version": "6.0.0-beta.20",
+  "description": "Real-time collaboration for Yoopta Editor using Yjs CRDT",
+  "author": "Darginec05 <devopsbanda@gmail.com>",
+  "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "dependencies": {
+    "lib0": "^0.2.88",
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.0"
+  },
+  "peerDependencies": {
+    "@yoopta/editor": "6.0.0-beta.4",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darginec05/Yoopta-Editor.git"
+  },
+  "scripts": {
+    "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
+    "prepublishOnly": "yarn build",
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
+  },
+  "bugs": {
+    "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
+  }
+}

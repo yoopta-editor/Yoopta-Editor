@@ -1,4 +1,4 @@
-import type { Descendant, Path, Point, Selection } from 'slate';
+import type { Descendant, NodeEntry, Path, Point, Range as SlateRange, Selection } from 'slate';
 import type { ReactEditor } from 'slate-react';
 
 import type { YooptaMark } from '../marks';
@@ -92,7 +92,7 @@ export type YooptaBlock = {
 export type YooptaBlocks = Record<string, YooptaBlock>;
 export type YooptaFormats = Record<string, TextFormat>;
 
-export type YooptaEditorEventKeys = 'change' | 'focus' | 'blur' | 'block:copy' | 'path-change';
+export type YooptaEditorEventKeys = 'change' | 'focus' | 'blur' | 'block:copy' | 'path-change' | 'decorations:change';
 export type YooptaEventChangePayload = {
   operations: YooptaOperation[];
   value: YooptaContentValue;
@@ -104,7 +104,11 @@ export type YooptaEventsMap = {
   blur: boolean;
   'block:copy': YooptaBlockData;
   'path-change': YooptaPath;
+  'decorations:change': undefined;
 };
+
+export type DecoratorFn = (blockId: string, entry: NodeEntry) => SlateRange[];
+export type LeafDecoratorRenderFn = (leaf: Record<string, unknown>, children: unknown) => unknown;
 
 export type BaseCommands = Record<string, (...args: any[]) => any>;
 
@@ -156,6 +160,10 @@ export type YooEditor = {
   getEditorValue: () => YooptaContentValue;
   setEditorValue: WithoutFirstArg<typeof setEditorValue>;
   blockEditorsMap: YooptaPluginsEditorMap;
+  /** Optional factory override for building Slate editors — used by collaboration to inject withYjs */
+  buildSlateEditorFn?: (blockId: string) => SlateEditor;
+  /** Returns true if the given Slate editor is currently applying a remote collaborative change */
+  isRemoteSlateOp?: (slate: SlateEditor) => boolean;
   // blocks: YooptaBlocks;
   formats: YooptaFormats;
   marks: YooptaMark<any>[];
@@ -206,6 +214,10 @@ export type YooEditor = {
 
   // ref to editor element
   refElement: HTMLElement | null;
+
+  // decorator registry (for collaboration cursors, search highlights, etc.)
+  decorators: Map<string, DecoratorFn>;
+  leafDecorators: Map<string, LeafDecoratorRenderFn>;
 };
 
 export type SlateElementTextNode = {

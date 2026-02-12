@@ -8,7 +8,7 @@ export const HeadingTwo = (props: PluginElementRenderProps) => {
       id={element.id}
       draggable={false}
       {...attributes}
-      className="mt-8 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors">
+      className="mt-6 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors">
       {children}
     </h2>
   );

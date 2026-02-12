@@ -30,7 +30,9 @@ export function buildBlockSlateEditors(editor: YooEditor) {
   const blockEditorsMap = {};
 
   Object.keys(editor.children).forEach((id) => {
-    const slate = buildSlateEditor(editor);
+    const slate = editor.buildSlateEditorFn
+      ? editor.buildSlateEditorFn(id)
+      : buildSlateEditor(editor);
 
     if (slate.children.length === 0) {
       const block = editor.children[id];

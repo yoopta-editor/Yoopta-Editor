@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { YooptaPlugin } from './create-yoopta-plugin';
-import type { PluginElementRenderProps } from './types';
+import type { PluginElementRenderProps, PluginInputElements } from './types';
 import type { SlateElement } from '../editor/types';
 
 // Helper to create mock render functions
@@ -23,7 +23,7 @@ const createMockJSXElement = (
     nodeType?: 'block' | 'inline' | 'void' | 'inlineVoid';
     placeholder?: string;
   },
-): React.ReactElement => React.createElement(type, props, props.children) as React.ReactElement;
+): PluginInputElements<TestElementMap> => React.createElement(type, props, props.children) as PluginInputElements<TestElementMap>;
 
 type TestElementMap = {
   paragraph: SlateElement<'paragraph'>;
@@ -45,7 +45,7 @@ describe('YooptaPlugin', () => {
 
       const plugin = new YooptaPlugin<TestElementMap, TestOptions>({
         type: 'Paragraph',
-        elements: jsxElement as any,
+        elements: jsxElement,
         options: {
           display: {
             title: 'Paragraph',
@@ -133,7 +133,7 @@ describe('YooptaPlugin', () => {
 
       const plugin = new YooptaPlugin({
         type: 'List',
-        elements: list as any,
+        elements: list,
       });
 
       const pluginData = plugin.getPlugin;
@@ -155,7 +155,7 @@ describe('YooptaPlugin', () => {
 
       const plugin = new YooptaPlugin<TestElementMap, TestOptions>({
         type: 'Paragraph',
-        elements: jsxElement as any,
+        elements: jsxElement,
         options: {
           display: {
             title: 'Paragraph',
@@ -573,7 +573,7 @@ describe('YooptaPlugin', () => {
           elements: jsxElement,
         });
 
-        const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
         basePlugin.extend({
           elements: {
@@ -710,7 +710,7 @@ describe('YooptaPlugin', () => {
       const jsxElement = createMockJSXElement('paragraph', {
         render: paragraphRender,
         nodeType: 'block',
-      });
+      }) as any;
 
       const basePlugin = new YooptaPlugin<TestElementMap, TestOptions>({
         type: 'Paragraph',

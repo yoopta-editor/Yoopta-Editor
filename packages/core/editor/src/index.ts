@@ -46,6 +46,8 @@ export {
   YooptaEventChangePayload,
   YooptaEventsMap,
   YooptaEditorEventKeys,
+  DecoratorFn,
+  LeafDecoratorRenderFn,
 } from './editor/types';
 export { buildBlockData, buildBlockElement } from './components/Editor/utils';
 export { buildBlockElementsStructure } from './utils/block-elements';
@@ -78,6 +80,7 @@ export {
   SetBlockValueOperation,
   SetBlockMetaOperation,
   MergeBlockOperation,
+  ToogleBlockOperation,
   MoveBlockOperation,
   SetSlateOperation,
   SetEditorValueOperation,

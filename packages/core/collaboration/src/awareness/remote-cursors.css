@@ -1,0 +1,48 @@
+.yoopta-collab-cursors-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Multi-block selection highlight */
+.yoopta-collab-multi-block-highlight {
+  pointer-events: none;
+  z-index: 49;
+}
+
+.yoopta-collab-multi-block-bar {
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Cursor name label */
+.yoopta-collab-cursor-label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  pointer-events: none;
+  z-index: 51;
+}
+
+/* Decorate-based caret (rendered via renderLeaf) */
+.yoopta-collab-decorate-caret {
+  position: relative;
+  pointer-events: none;
+}
+
+.yoopta-collab-decorate-caret-label {
+  position: absolute;
+  top: -20px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 51;
+}
+
+/* Decorate-based highlight (rendered via renderLeaf) */
+.yoopta-collab-decorate-highlight {
+  position: relative;
+}

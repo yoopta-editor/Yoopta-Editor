@@ -18,8 +18,8 @@ import CarouselPlugin from '@yoopta/carousel';
 import TableOfContents from '@yoopta/table-of-contents';
 
 import Paragraph from '@yoopta/paragraph';
-import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
-import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
+// import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
+// import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 
 import { applyTheme } from '@yoopta/themes-shadcn';
 
@@ -176,12 +176,12 @@ export const YOOPTA_PLUGINS = applyTheme([
   Headings.HeadingOne,
   Headings.HeadingTwo,
   Headings.HeadingThree,
-  OrderDetailsActionPlugin,
+  // OrderDetailsActionPlugin,
+  // SendEmailActionPlugin.extend({
+  //   injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
+  // }),
   Code,
   Blockquote,
-  SendEmailActionPlugin.extend({
-    injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
-  }),
   Lists.BulletedList.extend({
     injectElementsFromPlugins: PLUGIN_ELEMENTS_TO_INJECT,
   }),

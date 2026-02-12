@@ -23,6 +23,7 @@ import {
   ChevronDown,
   Github,
   Code2,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -61,6 +62,12 @@ const exampleNavigation = [
     href: "/playground/readme-editor",
     description: "GitHub README with live preview",
     icon: Github,
+  },
+  {
+    name: "Collaboration",
+    href: "/playground/collaboration",
+    description: "Real-time collaborative editing",
+    icon: Users,
   },
 ];
 

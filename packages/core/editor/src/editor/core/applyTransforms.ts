@@ -138,7 +138,15 @@ export type YooptaOperation =
   | SetSlateOperation
   | SetEditorValueOperation;
 
+function createSlateForBlock(editor: YooEditor, blockId: string): SlateEditor {
+  if (editor.buildSlateEditorFn) {
+    return editor.buildSlateEditorFn(blockId);
+  }
+  return buildSlateEditor(editor);
+}
+
 function applyOperation(editor: YooEditor, op: YooptaOperation): void {
+  console.log('editor.applyTransforms applyOperation op', op)
   switch (op.type) {
     case 'set_slate': {
       const { properties, blockId } = op;
@@ -168,7 +176,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
     }
 
     case 'insert_block': {
-      editor.blockEditorsMap[op.block.id] = buildSlateEditor(editor);
+      editor.blockEditorsMap[op.block.id] = createSlateForBlock(editor, op.block.id);
       editor.children[op.block.id] = op.block;
       editor.blockEditorsMap[op.block.id].children = op.block.value;
 
@@ -265,7 +273,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
     case 'split_block': {
       const { properties } = op;
 
-      const nextSlate = buildSlateEditor(editor);
+      const nextSlate = createSlateForBlock(editor, properties.nextBlock.id);
       nextSlate.children = properties.nextSlateValue;
       editor.children[properties.nextBlock.id] = {
         ...properties.nextBlock,
@@ -322,7 +330,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
       delete editor.blockEditorsMap[prevProperties.sourceBlock.id];
       delete editor.children[prevProperties.sourceBlock.id];
 
-      const newSlate = buildSlateEditor(editor);
+      const newSlate = createSlateForBlock(editor, properties.toggledBlock.id);
       newSlate.children = properties.toggledSlateValue;
 
       editor.children[properties.toggledBlock.id] = properties.toggledBlock;
@@ -372,7 +380,7 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
 
       Object.keys(editor.children).forEach((id) => {
         const block = editor.children[id];
-        const slate = buildSlateEditor(editor);
+        const slate = createSlateForBlock(editor, id);
         slate.children = block.value;
 
         blockEditorsMap[id] = slate;

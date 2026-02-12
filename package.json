@@ -34,6 +34,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
     "@floating-ui/dom": "^1.6.11",
     "@playwright/test": "^1.30.0",
     "@rollup/plugin-alias": "^4.0.2",
