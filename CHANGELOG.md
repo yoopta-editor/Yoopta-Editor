@@ -4,6 +4,18 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.0-beta.21] - 2026-02-17
+
+### Fixed
+
+- **List plugins (Enter key)**: Fixed focus loss when pressing Enter in bulleted, numbered, and todo lists — cursor would become invisible and typing stopped working (especially in Safari). Removed unnecessary `Editor.withoutNormalizing` wrapper and added `requestAnimationFrame` DOM selection re-sync in `focusBlock` to recover from slate-react's layout effect clearing the selection.
+- **Block focus on click**: Fixed clicking on a block (e.g., third block) causing a brief focus jump to the first block. Moved `editor.focus()` call so it only fires when clicking outside any block, not when clicking on a specific block where the browser handles focus natively.
+- **SelectionBox scroll**: Added auto-scrolling when dragging selection near viewport edges. Selection origin is now tracked in document coordinates so the selection grows correctly as the page scrolls, selecting all blocks between the start position and the current mouse position.
+- **Image inline toolbar after upload**: Fixed image inline toolbar not appearing immediately after file upload. The file picker dialog steals browser focus and clears the Slate selection; now `focusBlock` is called after upload to restore selection so the toolbar renders instantly.
+- **Image/Video preview blob leak**: Fixed stale closure bug in `useImagePreview` and `useVideoPreview` where `clearPreview()` would fail to revoke the blob URL when called from async upload callbacks. Preview URL is now tracked via a ref to avoid stale state in closures.
+
+---
+
 ## [6.0.0-beta.20] - 2026-02-12
 
 ### Added
