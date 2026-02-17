@@ -46,7 +46,6 @@ export default async function handler(
 
   try {
     const body = JSON.parse(req.body) as DeleteRequest;
-    console.log('DeleteRequest body', typeof body, body);
     const fileId = body.fileId;
 
     if (!fileId) {

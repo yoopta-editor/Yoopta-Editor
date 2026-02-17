@@ -30,7 +30,6 @@ const FullSetupEditor = ({ initialValue, containerBoxRef }: FullSetupEditorProps
   }, []);
 
   const onChange = (value: YooptaContentValue) => {
-    console.log('yoopta-full-setup-editor-value', value)
     // localStorage.setItem('yoopta-full-setup-editor-value', JSON.stringify(value));
   }
 

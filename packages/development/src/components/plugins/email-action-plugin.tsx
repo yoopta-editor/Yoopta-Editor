@@ -24,8 +24,6 @@ const EmailContainerRender = (props: PluginElementRenderProps) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('editor.getEditorValue()', editor.getEditorValue());
-    console.log('editor.children', editor.children);
     const hasContent = Object.keys(editor.getEditorValue()).length > 0;
     if (hasContent) {
       editor.toggleBlock('Paragraph', {

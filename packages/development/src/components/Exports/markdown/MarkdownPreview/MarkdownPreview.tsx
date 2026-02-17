@@ -116,7 +116,6 @@ const MarkdownPreview = () => {
   const onCopy = () => {
     const mdString = editor.getMarkdown(value);
     copy(mdString);
-    console.log(mdString);
     window.alert('Markdown content copied to clipboard or logged to console');
   };
 

@@ -56,7 +56,6 @@ const YooptaUIPackageExample = () => {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      console.log('handleBeforeUnload');
       editor.collaboration.destroy();
     };
 

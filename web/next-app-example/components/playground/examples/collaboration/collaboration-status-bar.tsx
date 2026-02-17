@@ -44,8 +44,6 @@ export const CollaborationStatusBar = () => {
   const config = STATUS_CONFIG[status];
   const StatusIcon = config.icon;
 
-  console.log('connectedUsers', connectedUsers);
-
   return (
     <div className="sticky top-0 z-40 flex items-center justify-between px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-sm">
       {/* Left: connection status */}
