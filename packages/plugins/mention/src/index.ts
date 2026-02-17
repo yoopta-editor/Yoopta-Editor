@@ -34,8 +34,8 @@ export type {
 
 export { INITIAL_MENTION_STATE } from './types';
 
-export { MentionCommands } from './commands';
-export type { MentionCommandsType } from './commands';
+export { MentionCommands } from './commands/mention-commands';
+export type { MentionCommandsType } from './commands/mention-commands';
 
 export { useMentionDropdown, useMentionState, useMentionTriggerActive } from './hooks';
 

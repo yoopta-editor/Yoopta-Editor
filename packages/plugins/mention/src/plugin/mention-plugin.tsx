@@ -3,7 +3,7 @@ import type { PluginElementRenderProps } from '@yoopta/editor';
 import { YooptaPlugin, generateId } from '@yoopta/editor';
 import { Node, Range, Text } from 'slate';
 
-import { MentionCommands } from '../commands';
+import { MentionCommands } from '../commands/mention-commands';
 import type {
   MentionElementMap,
   MentionElementProps,
@@ -152,6 +152,21 @@ const Mention = new YooptaPlugin<MentionElementMap, MentionPluginOptions>({
       // Handle keys when dropdown is open
       if (mentionState.isOpen) {
         const { key } = event;
+
+        // Enter inserts the currently selected mention and prevents block handlers
+        if (key === 'Enter') {
+          event.preventDefault();
+          if (editor.mentions.selectCurrentItem) {
+            editor.mentions.selectCurrentItem();
+          }
+          return;
+        }
+
+        // Arrow keys navigate the dropdown — prevent block handlers from running
+        if (key === 'ArrowUp' || key === 'ArrowDown') {
+          event.preventDefault();
+          return;
+        }
 
         // Escape closes dropdown
         if (key === 'Escape' && pluginOptions?.closeOnEscape !== false) {

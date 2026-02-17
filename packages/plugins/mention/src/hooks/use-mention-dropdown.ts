@@ -9,7 +9,7 @@ import {
 } from '@floating-ui/react';
 import { useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
 
-import { MentionCommands } from '../commands';
+import { MentionCommands } from '../commands/mention-commands';
 import type {
   MentionCloseEvent,
   MentionItem,
@@ -160,7 +160,26 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
     [editor],
   );
 
-  // Keyboard navigation
+  // Expose selectCurrentItem on editor.mentions so the plugin's onKeyDown can
+  // call it directly on Enter (avoiding event propagation issues with block handlers).
+  useEffect(() => {
+    if (mentionState.isOpen && items.length > 0) {
+      editor.mentions.selectCurrentItem = () => {
+        if (items[selectedIndex]) {
+          selectItem(items[selectedIndex]);
+        }
+      };
+    } else {
+      editor.mentions.selectCurrentItem = null;
+    }
+
+    return () => {
+      editor.mentions.selectCurrentItem = null;
+    };
+  }, [mentionState.isOpen, items, selectedIndex, selectItem, editor]);
+
+  // Keyboard navigation (Arrow keys, Escape, Tab)
+  // Enter is handled directly by the plugin's onKeyDown via editor.mentions.selectCurrentItem
   useEffect(() => {
     if (!mentionState.isOpen) return;
 
@@ -173,12 +192,6 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
         case 'ArrowUp':
           e.preventDefault();
           setSelectedIndex((prev) => (prev - 1 + Math.max(items.length, 1)) % Math.max(items.length, 1));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (items[selectedIndex]) {
-            selectItem(items[selectedIndex]);
-          }
           break;
         case 'Escape':
           e.preventDefault();
@@ -196,7 +209,7 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [mentionState.isOpen, items, selectedIndex, selectItem, close]);
+  }, [mentionState.isOpen, items, selectedIndex, close]);
 
   // Click outside to close
   useEffect(() => {

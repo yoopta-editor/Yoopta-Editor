@@ -1,6 +1,7 @@
 import type { YooEditor } from '@yoopta/editor';
 import { Blocks } from '@yoopta/editor';
 import { Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 import type {
   EmojiCloseEvent,
@@ -76,8 +77,9 @@ export const EmojiCommands: EmojiCommandsType = {
       emojiEditor.emoji.close('select');
     }
 
-    // Re-focus the block so cursor stays after the inserted emoji
-    editor.focusBlock(blockId, { waitExecution: false });
+    // Ensure DOM focus stays on the Slate editor without moving the cursor.
+    // (focusBlock would reset cursor to start; ReactEditor.focus preserves selection)
+    ReactEditor.focus(slateEditor as ReactEditor);
 
     // Trigger onSelect callback
     if (pluginOptions?.onSelect && trigger) {
