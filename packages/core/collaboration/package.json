@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/collaboration",
-  "version": "6.0.0-beta.20",
+  "version": "6.0.0-beta.21",
   "description": "Real-time collaboration for Yoopta Editor using Yjs CRDT",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
