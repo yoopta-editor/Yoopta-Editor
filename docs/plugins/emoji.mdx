@@ -1,0 +1,542 @@
+---
+title: Emoji
+description: Insert emoji by typing shortcodes with autocomplete dropdown
+icon: 'face-smile'
+---
+
+import { PluginPlayground } from "../snippets/plugin-playground.jsx";
+
+## Overview
+
+The Emoji plugin lets users insert emoji by typing a trigger character (default: `:`) followed by a search query. A dropdown with matching emoji appears, and selecting one inserts the Unicode character directly into the text — no special inline nodes, just plain text.
+
+<PluginPlayground pluginSlug="emoji" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/emoji
+```
+
+## Basic Usage
+
+Pass the plugin to `createYooptaEditor` (wrapped with `withEmoji`); do not pass `plugins` to `<YooptaEditor>`. Add `EmojiDropdown` as a child when using theme UI.
+
+```jsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Emoji, { withEmoji } from '@yoopta/emoji';
+import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
+
+const plugins = [Emoji];
+
+export default function Editor() {
+  const editor = useMemo(
+    () => withEmoji(createYooptaEditor({ plugins, marks: [] })),
+    [],
+  );
+  return (
+    <YooptaEditor editor={editor} onChange={() => {}}>
+      <EmojiDropdown />
+    </YooptaEditor>
+  );
+}
+```
+
+<Info>
+  **Works out of the box**
+
+The Emoji plugin ships with a built-in dataset of ~400 common emoji. No configuration is needed for basic usage — just add the plugin and it works.
+
+You can provide a custom `onSearch` function to use your own dataset or API. See the [Configuration](#configuration) section below.
+
+</Info>
+
+## Features
+
+- **Works Out of the Box**: Ships with ~400 built-in emoji — no configuration required
+- **Shortcode Trigger**: Type `:` to open the emoji picker, then search by name
+- **Plain Text Insertion**: Inserts Unicode emoji characters — no special nodes in the document
+- **Autocomplete Dropdown**: Searchable dropdown with keyboard navigation
+- **Custom Search**: Optionally provide your own search logic (local data, API, emoji-mart, etc.)
+- **Keyboard Navigation**: Arrow keys, Enter, Escape support
+- **Debounced Search**: Configurable debounce delay (default: 100ms)
+- **Multiple Triggers**: Support multiple trigger characters if needed
+
+## Configuration
+
+### Zero Config (Built-in Dataset)
+
+The simplest setup — uses the built-in emoji dataset with ~400 common emoji:
+
+```jsx
+import Emoji from '@yoopta/emoji';
+
+const plugins = [Emoji];
+```
+
+### Custom Search Function
+
+Provide your own `onSearch` to use a custom dataset or API:
+
+```jsx
+import Emoji from '@yoopta/emoji';
+
+const plugins = [
+  Emoji.extend({
+    options: {
+      onSearch: async (query) => {
+        // Local emoji data or API call
+        return emojiData.filter((e) =>
+          e.name.includes(query) || e.keywords?.some((k) => k.includes(query)),
+        );
+      },
+    },
+  }),
+];
+```
+
+### With emoji-mart Data
+
+```jsx
+import data from '@emoji-mart/data';
+
+// Pre-process emoji-mart data into flat array
+const allEmoji = Object.values(data.emojis).map((e) => ({
+  emoji: e.skins[0].native,
+  name: e.id,
+  keywords: e.keywords || [],
+  category: e.category,
+}));
+
+const plugins = [
+  Emoji.extend({
+    options: {
+      onSearch: (query) => {
+        const q = query.toLowerCase();
+        return allEmoji.filter(
+          (e) =>
+            e.name.includes(q) ||
+            e.keywords.some((k) => k.includes(q)),
+        );
+      },
+    },
+  }),
+];
+```
+
+### Advanced Configuration
+
+```jsx
+const plugins = [
+  Emoji.extend({
+    options: {
+      triggers: [{ char: ':', allowSpaces: false }],
+      onSearch: async (query, trigger) => {
+        return await fetchEmoji(query);
+      },
+      debounceMs: 100,
+      minQueryLength: 1,
+      closeOnSelect: true,
+      closeOnClickOutside: true,
+      closeOnEscape: true,
+      onSelect: (item, trigger) => {
+        console.log('Inserted emoji:', item.emoji, item.name);
+      },
+      onOpen: (trigger) => {
+        console.log('Emoji dropdown opened');
+      },
+      onClose: () => {
+        console.log('Emoji dropdown closed');
+      },
+    },
+  }),
+];
+```
+
+## Options
+
+<ResponseField name="triggers" type="EmojiTrigger[]">
+  Array of trigger configurations. Each trigger defines a character(s) that opens the emoji dropdown.
+
+  <Expandable title="EmojiTrigger properties">
+    <ResponseField name="char" type="string" required>
+      Character(s) that trigger the emoji dropdown (default: `':'`)
+    </ResponseField>
+    <ResponseField name="allowSpaces" type="boolean" default="false">
+      Allow spaces in search query (default: false)
+    </ResponseField>
+    <ResponseField name="allowedAfter" type="RegExp" default="/^$|\s/">
+      Pattern that must precede the trigger (default: whitespace or start of line)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="char" type="string" default="':'">
+  Simple single trigger character (shorthand for `triggers: [{char}]`). Use this for a single
+  trigger, or use `triggers` array for multiple triggers.
+</ResponseField>
+
+<ResponseField name="onSearch" type="function">
+  Custom search function called when user types after trigger. If not provided, uses the built-in dataset (~400 common emoji).
+
+**Signature:**
+
+```typescript
+(query: string, trigger: EmojiTrigger) => Promise<EmojiItem[]> | EmojiItem[];
+```
+
+**Parameters:**
+
+- `query` - The search query (without trigger char)
+- `trigger` - The trigger that opened the dropdown
+
+**Returns:** Promise or array of `EmojiItem` objects
+
+</ResponseField>
+
+<ResponseField name="debounceMs" type="number" default="100">
+  Debounce delay for search in milliseconds. Since emoji search is often local, the default is lower than mention (100ms vs 300ms).
+</ResponseField>
+
+<ResponseField name="minQueryLength" type="number" default="1">
+  Minimum query length before triggering search. Defaults to `1` since emoji shortcodes are meaningless at zero length.
+</ResponseField>
+
+<ResponseField name="onSelect" type="function">
+  Called when an emoji is selected.
+
+**Signature:**
+
+```typescript
+(item: EmojiItem, trigger: EmojiTrigger) => void
+```
+
+</ResponseField>
+
+<ResponseField name="onOpen" type="function">
+  Called when dropdown opens.
+
+**Signature:**
+
+```typescript
+(trigger: EmojiTrigger) => void
+```
+
+</ResponseField>
+
+<ResponseField name="onClose" type="function">
+  Called when dropdown closes.
+
+**Signature:**
+
+```typescript
+() => void
+```
+
+</ResponseField>
+
+<ResponseField name="closeOnSelect" type="boolean" default="true">
+  Close dropdown when item is selected.
+</ResponseField>
+
+<ResponseField name="closeOnClickOutside" type="boolean" default="true">
+  Close dropdown on click outside.
+</ResponseField>
+
+<ResponseField name="closeOnEscape" type="boolean" default="true">
+  Close dropdown on Escape key.
+</ResponseField>
+
+## EmojiItem Type
+
+Each item returned from `onSearch` should match:
+
+<ParamField path="emoji" type="string" required>
+  The Unicode emoji character (e.g., `'😀'`, `'🎉'`)
+</ParamField>
+
+<ParamField path="name" type="string" required>
+  Short name without colons (e.g., `'grinning'`, `'tada'`)
+</ParamField>
+
+<ParamField path="keywords" type="string[]">
+  Additional search keywords (e.g., `['happy', 'face']`)
+</ParamField>
+
+<ParamField path="category" type="string">
+  Category name (e.g., `'Smileys & Emotion'`, `'Objects'`)
+</ParamField>
+
+## Commands
+
+```typescript
+import { EmojiCommands } from '@yoopta/emoji';
+
+// Insert an emoji (replaces trigger + query with Unicode character)
+EmojiCommands.insertEmoji(editor, {
+  emoji: '😀',
+  name: 'grinning',
+});
+
+// Dropdown control
+EmojiCommands.openDropdown(editor, {
+  trigger: { char: ':' },
+  targetRect: { domRect, clientRects },
+  triggerRange: { blockId, path, startOffset },
+});
+EmojiCommands.closeDropdown(editor, 'manual');
+
+// State
+const state = EmojiCommands.getState(editor);
+const query = EmojiCommands.getQuery(editor);
+EmojiCommands.setQuery(editor, 'smi');
+const trigger = EmojiCommands.getTrigger(editor);
+
+// Utilities
+const triggers = EmojiCommands.getTriggers(editor);
+const colonTrigger = EmojiCommands.getTriggerByChar(editor, ':');
+```
+
+## Using with Themes
+
+When using a theme (e.g., `@yoopta/themes-shadcn`), you need to:
+
+1. **Apply the theme** to your plugins
+2. **Add the EmojiDropdown component** to your editor
+
+```jsx
+import Emoji, { withEmoji } from '@yoopta/emoji';
+import { withShadcnUI } from '@yoopta/themes-shadcn';
+import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
+
+const plugins = withShadcnUI([
+  Emoji, // Works with built-in dataset, or use Emoji.extend({ options: { onSearch } })
+  // ... other plugins
+]);
+
+const editor = withEmoji(
+  createYooptaEditor({
+    plugins,
+    // ...
+  }),
+);
+
+<YooptaEditor editor={editor}>
+  <YooptaToolbar />
+  <EmojiDropdown /> {/* Add this component */}
+  {/* ... other UI components */}
+</YooptaEditor>;
+```
+
+## Custom Dropdown
+
+You can create a custom dropdown using the `useEmojiDropdown` hook:
+
+```jsx
+import { useEmojiDropdown } from '@yoopta/emoji';
+
+function CustomEmojiDropdown() {
+  const {
+    isOpen,
+    query,
+    trigger,
+    items,
+    loading,
+    error,
+    selectedIndex,
+    selectItem,
+    refs,
+    floatingStyles,
+  } = useEmojiDropdown();
+
+  if (!isOpen) return null;
+
+  return (
+    <div ref={refs.setFloating} style={floatingStyles} className="emoji-dropdown">
+      {loading && <div>Searching...</div>}
+      {error && <div>Error: {error.message}</div>}
+      {items.map((item, index) => (
+        <div
+          key={`${item.emoji}-${item.name}`}
+          className={selectedIndex === index ? 'selected' : ''}
+          onClick={() => selectItem(item)}>
+          <span>{item.emoji}</span>
+          <span>:{item.name}:</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Hooks
+
+### useEmojiDropdown
+
+Hook for building custom emoji dropdowns:
+
+```typescript
+import { useEmojiDropdown } from '@yoopta/emoji';
+
+const {
+  // State
+  isOpen,
+  query,
+  trigger,
+
+  // Results
+  items,
+  loading,
+  error,
+
+  // Navigation
+  selectedIndex,
+  setSelectedIndex,
+
+  // Actions
+  selectItem,
+  close,
+
+  // Refs for floating-ui
+  refs,
+  floatingStyles,
+} = useEmojiDropdown({
+  debounceMs: 100, // Optional override
+});
+```
+
+### useEmojiState
+
+Read-only hook for tracking emoji picker state:
+
+```typescript
+import { useEmojiState } from '@yoopta/emoji';
+
+const {
+  isTypingEmoji, // boolean — whether user is currently typing a shortcode
+  currentTrigger, // EmojiTrigger | null
+  query, // string — current search query
+  targetRect, // EmojiTargetRect | null — position for custom UI
+} = useEmojiState();
+```
+
+### useEmojiTriggerActive
+
+Check if a specific trigger is currently active:
+
+```typescript
+import { useEmojiTriggerActive } from '@yoopta/emoji';
+
+const isColonActive = useEmojiTriggerActive(':');
+```
+
+## How It Works
+
+Unlike the Mention plugin which inserts inline void elements, the Emoji plugin inserts **plain Unicode text**. When a user types `:smile` and selects an emoji:
+
+1. The trigger `:` and query `smile` are deleted from the document
+2. The Unicode character `😊` is inserted as plain text via `Transforms.insertText`
+3. No special nodes or elements are created — the emoji is just a text character
+
+This means emoji work naturally with all text operations (copy, paste, search, export) without needing special serialization.
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Chat & Messaging">Quick emoji insertion in chat-style editors</Card>
+  <Card title="Rich Text Editing">Add expression to documents and notes</Card>
+  <Card title="Comments & Reactions">Emoji in comment systems and feedback forms</Card>
+  <Card title="Collaborative Docs">Consistent emoji support across team documents</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use the Built-in Dataset or Local Data">
+    The plugin ships with ~400 common emoji that work with zero config. For a more comprehensive dataset, use libraries like `@emoji-mart/data` and provide a custom `onSearch`. Emoji search is fast enough to run locally — avoid API calls when possible.
+  </Accordion>
+
+{' '}
+
+<Accordion title="Keep Debounce Low">
+  Since emoji search is usually local, the default 100ms debounce is appropriate. Only increase it if you're making API calls.
+</Accordion>
+
+{' '}
+
+<Accordion title="Include Keywords">
+  Return items with `keywords` arrays so users can find emoji by alternate names (e.g., searching "happy" finds 😀 "grinning").
+</Accordion>
+
+{' '}
+
+<Accordion title="Limit Results">
+  Return a reasonable number of results (e.g., 10-20) to keep the dropdown manageable. Users typically pick from the first few results.
+</Accordion>
+
+  <Accordion title="Handle Empty State">
+    The theme dropdowns show helpful messages for empty states. If building a custom dropdown, show "Type to search..." when the query is empty and "No emoji found" when there are no matches.
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Dropdown not opening">
+    Make sure you've:
+    1. Wrapped your editor with `withEmoji()`
+    2. Added the `EmojiDropdown` component to your editor (when using themes)
+
+    **Solution:**
+    ```jsx
+    const editor = withEmoji(createYooptaEditor({ ... }));
+
+    <YooptaEditor editor={editor}>
+      <EmojiDropdown />
+    </YooptaEditor>
+    ```
+
+  </Accordion>
+
+  <Accordion title="Search not returning results with custom onSearch">
+    If you're using a custom `onSearch` function, check that it:
+    1. Returns a Promise or array
+    2. Returns objects with `emoji` and `name` properties
+    3. Actually matches the query
+
+    If you're not using a custom `onSearch`, the built-in dataset works automatically.
+
+    **Solution:**
+    ```jsx
+    onSearch: async (query) => {
+      const results = await searchEmoji(query);
+      return results.map((item) => ({
+        emoji: item.emoji, // Required — Unicode character
+        name: item.name,   // Required — shortcode name
+        keywords: item.keywords, // Optional
+      }));
+    },
+    ```
+
+  </Accordion>
+
+  <Accordion title="Trigger not activating">
+    The trigger only activates after whitespace or at the start of a line. If you're typing `:` immediately after a word (e.g., `hello:`), it won't trigger. This is intentional to avoid false positives with URLs and time formats.
+
+    **Solution:** Type a space before `:` — e.g., `hello :smile`.
+
+  </Accordion>
+
+  <Accordion title="Emoji not inserting">
+    Ensure the `insertEmoji` command has access to the trigger range. If you're calling it manually, the dropdown must have been opened first (which sets the trigger range).
+
+    **Solution:** Use the dropdown UI or `selectItem` from the `useEmojiDropdown` hook, which handles insertion automatically.
+
+  </Accordion>
+</AccordionGroup>
+
+## Related Plugins
+
+- [Mention Plugin](/plugins/mention) - Similar autocomplete pattern for mentioning users/resources
+- [Paragraph Plugin](/plugins/paragraph) - Text blocks that support emoji insertion

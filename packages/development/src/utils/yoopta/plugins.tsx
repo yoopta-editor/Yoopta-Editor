@@ -16,8 +16,19 @@ import Tabs from '@yoopta/tabs';
 import StepsPlugin from '@yoopta/steps';
 import CarouselPlugin from '@yoopta/carousel';
 import TableOfContents from '@yoopta/table-of-contents';
-
+import Emoji from '@yoopta/emoji';
 import Paragraph from '@yoopta/paragraph';
+
+import emojiData from '@emoji-mart/data';
+
+
+const allEmoji = Object.values(emojiData.emojis).map((e) => ({
+  emoji: e.skins[0].native,
+  name: e.id,
+  keywords: e.keywords || [],
+  category: e.category,
+}));
+
 // import { OrderDetailsActionPlugin } from '@/components/plugins/email-plugin';
 // import { SendEmailActionPlugin } from '@/components/plugins/email-action-plugin';
 
@@ -68,6 +79,18 @@ const PLUGIN_ELEMENTS_TO_INJECT = [
 ];
 
 export const YOOPTA_PLUGINS = applyTheme([
+  Emoji.extend({
+    options: {
+      onSearch: (query) => {
+        const q = query.toLowerCase();
+        return allEmoji.filter(
+          (e) =>
+            e.name.includes(q) ||
+            e.keywords.some((k) => k.includes(q)),
+        );
+      },
+    },
+  }),
   TableOfContents,
   Mention.extend({
     options: {
