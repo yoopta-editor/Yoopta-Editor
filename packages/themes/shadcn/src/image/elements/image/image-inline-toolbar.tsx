@@ -31,6 +31,8 @@ export const ImageInlineToolbar = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
+  console.log('image inline toolbar', { isVisible, isReady, referenceRef });
+
   const { refs, floatingStyles } = useFloating({
     placement: 'top-end',
     strategy: 'absolute',

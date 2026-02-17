@@ -50,6 +50,26 @@ export function focusBlock(editor: YooEditor, blockId: string, options: FocusBlo
       // Ignore focus errors
     }
 
+    // Re-sync DOM selection after React's layout effects.
+    // When a new block is mounted, slate-react's layout effect may call toDOMRange()
+    // on stale DOM nodes and fall back to domSelection.removeAllRanges(), wiping the
+    // cursor even though the element has focus. Re-setting the DOM selection in a
+    // requestAnimationFrame (which fires after layout effects, before paint) restores it.
+    requestAnimationFrame(() => {
+      try {
+        if (slate.selection) {
+          const domRange = ReactEditor.toDOMRange(slate, slate.selection);
+          const domSelection = window.getSelection();
+          if (domSelection) {
+            domSelection.removeAllRanges();
+            domSelection.addRange(domRange);
+          }
+        }
+      } catch {
+        // DOM nodes may not be ready yet — safe to ignore
+      }
+    });
+
     if (shouldUpdateBlockPath) {
       setTimeout(() => {
         editor.setPath({ current: block.meta.order });

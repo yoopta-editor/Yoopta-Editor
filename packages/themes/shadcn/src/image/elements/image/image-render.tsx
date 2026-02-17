@@ -40,7 +40,7 @@ export const ImageRender = ({
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width ?? 650;
     const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
@@ -60,7 +60,7 @@ export const ImageRender = ({
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width ?? 650;
       const pluginMaxSizes = pluginOptions?.maxSizes;
 
       setMaxSizes({

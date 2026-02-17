@@ -76,6 +76,9 @@ const YooptaUIPackageExample = () => {
           autoFocus
           placeholder="Type / to open menu"
           style={EDITOR_STYLE}
+          onChange={(value) => {
+            console.log('onChange value', value)
+          }}
           className="px-[100px] max-w-[900px] mx-auto my-10 flex flex-col"
           renderBlock={renderBlock}>
           <YooptaToolbar />

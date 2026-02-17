@@ -74,16 +74,16 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
   const onChange = useCallback(
     (value) => {
-      // if (editor.readOnly) return;
-      // // @ts-expect-error - fixme
-      // if (window.scheduler) {
-      //   // @ts-expect-error - fixme
-      //   window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
-      //     priority: 'background',
-      //   });
-      // } else {
-      //   editor.updateBlock(id, { value });
-      // }
+      if (editor.readOnly) return;
+      // @ts-expect-error - fixme
+      if (window.scheduler) {
+        // @ts-expect-error - fixme
+        window.scheduler.postTask(() => editor.updateBlock(id, { value }), {
+          priority: 'background',
+        });
+      } else {
+        editor.updateBlock(id, { value });
+      }
     },
     [id, editor.readOnly],
   );
@@ -137,7 +137,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       for (const leafRenderer of editor.leafDecorators.values()) {
         try {
           children = leafRenderer(leaf, children) as typeof children;
-        } catch {}
+        } catch { }
       }
 
       return <TextLeaf attributes={attributes}>{children}</TextLeaf>;
@@ -292,7 +292,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         try {
           const extra = decoratorFn(id, nodeEntry);
           if (extra.length > 0) ranges.push(...extra);
-        } catch {}
+        } catch { }
       }
 
       return ranges;

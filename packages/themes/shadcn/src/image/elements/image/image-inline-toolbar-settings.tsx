@@ -83,7 +83,7 @@ export const ImageInlineToolbarSettings = ({
             <p className="text-xs text-muted-foreground">Important for accessibility and SEO</p>
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1 z-50">
             <Label htmlFor="object-fit" className="text-sm font-medium">
               How image fits
             </Label>

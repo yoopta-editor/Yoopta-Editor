@@ -32,25 +32,35 @@ const getTransform = (origin: [number, number], coords: [number, number]): strin
 const SelectionBox = ({ selectionBoxElement }: SelectionBoxProps) => {
   const editor = useYooptaEditor();
   const isReadOnly = useYooptaReadOnly();
+  // origin is in page (document) coordinates; coords is in viewport coordinates
   const { coords, origin, selection } = useRectangeSelectionBox({
     editor,
     root: selectionBoxElement ?? undefined,
   });
 
+  // Convert origin from page to viewport coordinates for position: fixed rendering
+  const originViewport: [number, number] = useMemo(
+    () => [
+      origin[0] - (typeof window !== 'undefined' ? window.scrollX : 0),
+      origin[1] - (typeof window !== 'undefined' ? window.scrollY : 0),
+    ],
+    [origin, coords], // recalc when coords change (which happens on scroll too)
+  );
+
   const selectionBoxStyle = useMemo<CSSProperties>(
     () => ({
       zIndex: 10,
-      left: origin[0],
-      top: origin[1],
-      height: Math.abs(coords[1] - origin[1] - 1),
-      width: Math.abs(coords[0] - origin[0] - 1),
+      left: originViewport[0],
+      top: originViewport[1],
+      height: Math.abs(coords[1] - originViewport[1] - 1),
+      width: Math.abs(coords[0] - originViewport[0] - 1),
       userSelect: 'none',
       transformOrigin: 'top left',
-      transform: getTransform(origin, coords),
+      transform: getTransform(originViewport, coords),
       position: 'fixed',
       backgroundColor: 'rgba(35, 131, 226, 0.14)',
     }),
-    [origin, coords],
+    [originViewport, coords],
   );
 
   if (!selection || isReadOnly) return null;

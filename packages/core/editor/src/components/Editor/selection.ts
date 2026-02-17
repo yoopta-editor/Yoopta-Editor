@@ -75,8 +75,6 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
   const onMouseDown = (e: React.MouseEvent) => {
     if (editor.readOnly) return;
 
-    if (!editor.isFocused()) editor.focus();
-
     editor.batchOperations(() => {
       const selectedBlocks = Paths.getSelectedPaths(editor);
       // [TEST]
@@ -86,6 +84,12 @@ export function useMultiSelection({ editor }: MultiSelectionOptions) {
 
       const target = e.target as HTMLElement;
       const blockElement = target.closest('[data-yoopta-block]');
+
+      if (!blockElement && !editor.isFocused()) {
+        // Clicked inside the editor wrapper but not on a specific block —
+        // fall back to focusing the first block.
+        editor.focus();
+      }
 
       if (blockElement && e.button === 0) {
         const blockId = blockElement.getAttribute('data-yoopta-block-id') || '';

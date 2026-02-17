@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type {
   ImageDeleteEndpointOptions,
@@ -364,21 +364,27 @@ export const useImageDimensions = () => {
 
 export const useImagePreview = () => {
   const [preview, setPreview] = useState<ImageUploadPreview | null>(null);
+  // Ref to always hold the current preview URL, avoiding stale closure bugs
+  // when clearPreview is called from inside async callbacks (e.g. onUpload).
+  const previewRef = useRef<ImageUploadPreview | null>(null);
 
   const generatePreview = (file: File) => {
-    if (preview) {
-      URL.revokeObjectURL(preview.url);
+    if (previewRef.current) {
+      URL.revokeObjectURL(previewRef.current.url);
     }
 
     const url = URL.createObjectURL(file);
-    setPreview({ url });
+    const newPreview = { url };
+    previewRef.current = newPreview;
+    setPreview(newPreview);
 
     return { url };
   };
 
   const clearPreview = () => {
-    if (preview) {
-      URL.revokeObjectURL(preview.url);
+    if (previewRef.current) {
+      URL.revokeObjectURL(previewRef.current.url);
+      previewRef.current = null;
       setPreview(null);
     }
   };

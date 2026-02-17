@@ -87,8 +87,11 @@ export const ImageElement = ({
         sizes: { width: result.width!, height: result.height! },
       });
       clearPreview();
+      // File picker steals browser focus and clears the Slate selection.
+      // Re-focus the block so useSelected() returns true and the toolbar shows immediately.
+      editor.focusBlock(blockId, { waitExecution: false });
     },
-    [uploadImageToStorage, updateElement, generatePreview, clearPreview],
+    [uploadImageToStorage, updateElement, generatePreview, clearPreview, editor, blockId],
   );
 
   if (!element.props.src) {

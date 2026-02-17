@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type {
   UseVideoDeleteReturn,
@@ -535,22 +535,27 @@ export const useVideoDimensions = () => {
 
 export const useVideoPreview = () => {
   const [preview, setPreview] = useState<VideoUploadPreview | null>(null);
+  // Ref to always hold the current preview URL, avoiding stale closure bugs
+  // when clearPreview is called from inside async callbacks (e.g. onUpload).
+  const previewRef = useRef<VideoUploadPreview | null>(null);
 
   const generatePreview = (file: File): VideoUploadPreview => {
-    if (preview) {
-      URL.revokeObjectURL(preview.url);
+    if (previewRef.current) {
+      URL.revokeObjectURL(previewRef.current.url);
     }
 
     const url = URL.createObjectURL(file);
     const newPreview: VideoUploadPreview = { url };
+    previewRef.current = newPreview;
     setPreview(newPreview);
 
     return newPreview;
   };
 
   const clearPreview = () => {
-    if (preview) {
-      URL.revokeObjectURL(preview.url);
+    if (previewRef.current) {
+      URL.revokeObjectURL(previewRef.current.url);
+      previewRef.current = null;
       setPreview(null);
     }
   };

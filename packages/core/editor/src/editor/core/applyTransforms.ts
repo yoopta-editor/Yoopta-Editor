@@ -146,7 +146,6 @@ function createSlateForBlock(editor: YooEditor, blockId: string): SlateEditor {
 }
 
 function applyOperation(editor: YooEditor, op: YooptaOperation): void {
-  console.log('editor.applyTransforms applyOperation op', op)
   switch (op.type) {
     case 'set_slate': {
       const { properties, blockId } = op;
