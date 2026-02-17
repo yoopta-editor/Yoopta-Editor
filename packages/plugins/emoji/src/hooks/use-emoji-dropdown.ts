@@ -168,7 +168,26 @@ export function useEmojiDropdown(
     [editor],
   );
 
-  // Keyboard navigation
+  // Expose selectCurrentItem on editor.emoji so the plugin's onKeyDown can
+  // call it directly on Enter (avoiding event propagation issues).
+  useEffect(() => {
+    if (emojiState.isOpen && items.length > 0) {
+      editor.emoji.selectCurrentItem = () => {
+        if (items[selectedIndex]) {
+          selectItem(items[selectedIndex]);
+        }
+      };
+    } else {
+      editor.emoji.selectCurrentItem = null;
+    }
+
+    return () => {
+      editor.emoji.selectCurrentItem = null;
+    };
+  }, [emojiState.isOpen, items, selectedIndex, selectItem, editor]);
+
+  // Keyboard navigation (Arrow keys, Escape, Tab)
+  // Enter is handled directly by the plugin's onKeyDown via editor.emoji.selectCurrentItem
   useEffect(() => {
     if (!emojiState.isOpen) return;
 
@@ -181,12 +200,6 @@ export function useEmojiDropdown(
         case 'ArrowUp':
           e.preventDefault();
           setSelectedIndex((prev) => (prev - 1 + Math.max(items.length, 1)) % Math.max(items.length, 1));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (items[selectedIndex]) {
-            selectItem(items[selectedIndex]);
-          }
           break;
         case 'Escape':
           e.preventDefault();
@@ -202,7 +215,7 @@ export function useEmojiDropdown(
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [emojiState.isOpen, items, selectedIndex, selectItem, close]);
+  }, [emojiState.isOpen, items, selectedIndex, close]);
 
   // Click outside to close
   useEffect(() => {

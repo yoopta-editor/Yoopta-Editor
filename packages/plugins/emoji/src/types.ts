@@ -196,6 +196,8 @@ export type EmojiEditor = {
     }) => void;
     close: (reason?: EmojiCloseEvent['reason']) => void;
     setQuery: (query: string) => void;
+    /** Set by useEmojiDropdown hook — inserts the currently selected emoji */
+    selectCurrentItem: (() => void) | null;
   };
 };
 

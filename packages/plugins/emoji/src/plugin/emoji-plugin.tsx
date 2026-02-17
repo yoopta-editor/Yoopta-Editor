@@ -77,12 +77,12 @@ const Emoji = new YooptaPlugin<EmojiElementMap, EmojiPluginOptions>({
       if (emojiState.isOpen) {
         const { key } = event;
 
-        // Enter selects the current item — prevent default so the editor
-        // doesn't create a new block. The actual selection is handled by
-        // the useEmojiDropdown hook's document keydown listener.
+        // Enter inserts the currently selected emoji and prevents new block creation
         if (options.hotkeys.isEnter(event)) {
           event.preventDefault();
-          event.stopPropagation();
+          if (editor.emoji.selectCurrentItem) {
+            editor.emoji.selectCurrentItem();
+          }
           return;
         }
 

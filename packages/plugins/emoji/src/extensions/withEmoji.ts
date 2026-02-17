@@ -73,6 +73,7 @@ export function withEmoji(editor: YooEditor): EmojiYooEditor {
         trigger: state.trigger,
       });
     },
+    selectCurrentItem: null,
   };
 
   return emojiEditor;
