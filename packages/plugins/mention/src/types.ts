@@ -214,6 +214,8 @@ export type MentionEditor = {
     }) => void;
     close: (reason?: MentionCloseEvent['reason']) => void;
     setQuery: (query: string) => void;
+    /** Set by useMentionDropdown hook — inserts the currently selected mention */
+    selectCurrentItem: (() => void) | null;
   };
 }
 

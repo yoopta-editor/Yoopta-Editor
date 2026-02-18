@@ -9,99 +9,107 @@ import {
 } from '@floating-ui/react';
 import { useYooptaEditor, useYooptaPluginOptions } from '@yoopta/editor';
 
-import { MentionCommands } from '../commands/mention-commands';
+import { EmojiCommands } from '../commands/emoji-commands';
+import { defaultEmojiSearch } from '../data/default-search';
 import type {
-  MentionCloseEvent,
-  MentionItem,
-  MentionPluginOptions,
-  MentionState,
-  UseMentionDropdownOptions,
-  UseMentionDropdownReturn,
+  EmojiCloseEvent,
+  EmojiItem,
+  EmojiPluginOptions,
+  EmojiState,
+  EmojiYooEditor,
+  UseEmojiDropdownOptions,
+  UseEmojiDropdownReturn,
 } from '../types';
-import { INITIAL_MENTION_STATE } from '../types';
+import { INITIAL_EMOJI_STATE } from '../types';
 
 /**
- * Hook for building mention dropdown UI
- * Provides state, actions, and floating-ui refs
+ * Hook for building emoji dropdown UI.
+ * Provides state, actions, and floating-ui refs.
  */
-export function useMentionDropdown<TMeta = Record<string, unknown>>(
-  options: UseMentionDropdownOptions = {},
-): UseMentionDropdownReturn<TMeta> {
-  const editor = useYooptaEditor();
-  const pluginOptions = useYooptaPluginOptions<MentionPluginOptions<TMeta>>('Mention');
+export function useEmojiDropdown(
+  options: UseEmojiDropdownOptions = {},
+): UseEmojiDropdownReturn {
+  const baseEditor = useYooptaEditor();
+  const editor = baseEditor as unknown as EmojiYooEditor;
+  const pluginOptions = useYooptaPluginOptions<EmojiPluginOptions>('Emoji');
 
   // Local state for items/loading
-  const [items, setItems] = useState<MentionItem<TMeta>[]>([]);
+  const [items, setItems] = useState<EmojiItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Track mention state from editor
-  const [mentionState, setMentionState] = useState<MentionState>(INITIAL_MENTION_STATE);
+  // Track emoji state from editor
+  const [emojiState, setEmojiState] = useState<EmojiState>(INITIAL_EMOJI_STATE);
 
   // Debounce timer ref
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastQueryRef = useRef<string>('');
 
-  // Debounce settings
-  const debounceMs = options.debounceMs ?? pluginOptions?.debounceMs ?? 300;
-  const minQueryLength = pluginOptions?.minQueryLength ?? 0;
+  // Debounce settings — emoji search is typically local so default is lower
+  const debounceMs = options.debounceMs ?? pluginOptions?.debounceMs ?? 100;
+  const minQueryLength = pluginOptions?.minQueryLength ?? 1;
 
   // Floating UI setup
   const { refs, floatingStyles } = useFloating({
     placement: 'bottom-start',
-    open: mentionState.isOpen,
+    open: emojiState.isOpen,
     middleware: [inline(), flip(), shift({ padding: 8 }), offset(4)],
     whileElementsMounted: autoUpdate,
   });
 
-  // Sync editor mention state to local state
+  // Type-safe event helpers — custom emoji events are added at runtime via withEmoji
+  const on = editor.on as (event: string, fn: (...args: any[]) => void) => void;
+  const off = editor.off as (event: string, fn: (...args: any[]) => void) => void;
+
+  // Sync editor emoji state to local state
   useEffect(() => {
-    const handleMentionOpen = () => {
-      setMentionState({ ...editor.mentions.state });
+    const handleOpen = () => {
+      setEmojiState({ ...editor.emoji.state });
       setSelectedIndex(0);
       setItems([]);
       setError(null);
     };
 
-    const handleMentionClose = () => {
-      setMentionState({ ...INITIAL_MENTION_STATE });
+    const handleClose = () => {
+      setEmojiState({ ...INITIAL_EMOJI_STATE });
       setItems([]);
       setSelectedIndex(0);
       setError(null);
     };
 
     const handleQueryChange = () => {
-      setMentionState({ ...editor.mentions.state });
+      setEmojiState({ ...editor.emoji.state });
     };
 
-    editor.on('mention:open', handleMentionOpen);
-    editor.on('mention:close', handleMentionClose);
-    editor.on('mention:query-change', handleQueryChange);
+    on('emoji:open', handleOpen);
+    on('emoji:close', handleClose);
+    on('emoji:query-change', handleQueryChange);
 
     return () => {
-      editor.off('mention:open', handleMentionOpen);
-      editor.off('mention:close', handleMentionClose);
-      editor.off('mention:query-change', handleQueryChange);
+      off('emoji:open', handleOpen);
+      off('emoji:close', handleClose);
+      off('emoji:query-change', handleQueryChange);
     };
   }, [editor]);
 
   // Update floating reference when target changes
   useEffect(() => {
-    if (mentionState.targetRect) {
+    if (emojiState.targetRect) {
       refs.setReference({
-        getBoundingClientRect: () => mentionState.targetRect!.domRect,
-        getClientRects: () => mentionState.targetRect!.clientRects,
+        getBoundingClientRect: () => emojiState.targetRect!.domRect,
+        getClientRects: () => emojiState.targetRect!.clientRects,
       });
     }
-  }, [mentionState.targetRect, refs]);
+  }, [emojiState.targetRect, refs]);
 
   // Fetch items when query changes
   useEffect(() => {
-    if (!mentionState.isOpen || !pluginOptions?.onSearch) return;
+    if (!emojiState.isOpen) return;
 
-    const query = mentionState.query;
-    const trigger = mentionState.trigger;
+    const query = emojiState.query;
+    const trigger = emojiState.trigger;
+    const searchFn = pluginOptions?.onSearch ?? defaultEmojiSearch;
 
     // Skip if query is same as last
     if (query === lastQueryRef.current && items.length > 0) return;
@@ -126,11 +134,11 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
       setError(null);
 
       try {
-        const results = await pluginOptions?.onSearch?.(query, trigger);
-        setItems(results as MentionItem<TMeta>[]);
+        const results = await searchFn(query, trigger);
+        setItems(results);
         setSelectedIndex(0);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Search failed'));
+        setError(err instanceof Error ? err : new Error('Emoji search failed'));
         setItems([]);
       } finally {
         setLoading(false);
@@ -142,46 +150,46 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [mentionState.isOpen, mentionState.query, mentionState.trigger, pluginOptions, debounceMs, minQueryLength, items.length]);
+  }, [emojiState.isOpen, emojiState.query, emojiState.trigger, pluginOptions, debounceMs, minQueryLength, items.length]);
 
   // Select item action
   const selectItem = useCallback(
-    (item: MentionItem<TMeta>) => {
-      MentionCommands.insertMention(editor, item, { focus: true });
+    (item: EmojiItem) => {
+      EmojiCommands.insertEmoji(editor, item);
     },
     [editor],
   );
 
   // Close action
   const close = useCallback(
-    (reason: MentionCloseEvent['reason'] = 'manual') => {
-      MentionCommands.closeDropdown(editor, reason);
+    (reason: EmojiCloseEvent['reason'] = 'manual') => {
+      EmojiCommands.closeDropdown(editor, reason);
     },
     [editor],
   );
 
-  // Expose selectCurrentItem on editor.mentions so the plugin's onKeyDown can
-  // call it directly on Enter (avoiding event propagation issues with block handlers).
+  // Expose selectCurrentItem on editor.emoji so the plugin's onKeyDown can
+  // call it directly on Enter (avoiding event propagation issues).
   useEffect(() => {
-    if (mentionState.isOpen && items.length > 0) {
-      editor.mentions.selectCurrentItem = () => {
+    if (emojiState.isOpen && items.length > 0) {
+      editor.emoji.selectCurrentItem = () => {
         if (items[selectedIndex]) {
           selectItem(items[selectedIndex]);
         }
       };
     } else {
-      editor.mentions.selectCurrentItem = null;
+      editor.emoji.selectCurrentItem = null;
     }
 
     return () => {
-      editor.mentions.selectCurrentItem = null;
+      editor.emoji.selectCurrentItem = null;
     };
-  }, [mentionState.isOpen, items, selectedIndex, selectItem, editor]);
+  }, [emojiState.isOpen, items, selectedIndex, selectItem, editor]);
 
   // Keyboard navigation (Arrow keys, Escape, Tab)
-  // Enter is handled directly by the plugin's onKeyDown via editor.mentions.selectCurrentItem
+  // Enter is handled directly by the plugin's onKeyDown via editor.emoji.selectCurrentItem
   useEffect(() => {
-    if (!mentionState.isOpen) return;
+    if (!emojiState.isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -198,10 +206,8 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
           close('escape');
           break;
         case 'Tab':
-          // Close on tab
           close('escape');
           break;
-
         default:
           break;
       }
@@ -209,11 +215,11 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [mentionState.isOpen, items, selectedIndex, close]);
+  }, [emojiState.isOpen, items, selectedIndex, close]);
 
   // Click outside to close
   useEffect(() => {
-    if (!mentionState.isOpen) return;
+    if (!emojiState.isOpen) return;
     if (pluginOptions?.closeOnClickOutside === false) return;
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -232,14 +238,14 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
       clearTimeout(timer);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [mentionState.isOpen, refs.floating, close, pluginOptions?.closeOnClickOutside]);
+  }, [emojiState.isOpen, refs.floating, close, pluginOptions?.closeOnClickOutside]);
 
   return useMemo(
     () => ({
       // State
-      isOpen: mentionState.isOpen,
-      query: mentionState.query,
-      trigger: mentionState.trigger,
+      isOpen: emojiState.isOpen,
+      query: emojiState.query,
+      trigger: emojiState.trigger,
 
       // Results
       items,
@@ -262,9 +268,9 @@ export function useMentionDropdown<TMeta = Record<string, unknown>>(
       floatingStyles,
     }),
     [
-      mentionState.isOpen,
-      mentionState.query,
-      mentionState.trigger,
+      emojiState.isOpen,
+      emojiState.query,
+      emojiState.trigger,
       items,
       loading,
       error,

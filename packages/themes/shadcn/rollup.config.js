@@ -113,6 +113,7 @@ const createMultiEntryConfig = () => {
       'table-of-contents': './src/table-of-contents/index.ts',
       tabs: './src/tabs/index.ts',
       video: './src/video/index.ts',
+      emoji: './src/emoji/index.ts',
     },
     output: {
       format: 'es',

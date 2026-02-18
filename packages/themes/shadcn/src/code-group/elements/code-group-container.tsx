@@ -20,6 +20,7 @@ export const CodeGroupContainer = (props: PluginElementRenderProps) => {
 
   // Compute scoped CSS variables from Shiki theme
   const cssVariables = useMemo(() => {
+    if (typeof window === 'undefined') return {};
     if (!window.yShiki || !theme) return {};
 
     const themeData = window.yShiki.getTheme(theme);

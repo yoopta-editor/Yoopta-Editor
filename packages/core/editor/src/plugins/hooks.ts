@@ -256,12 +256,15 @@ export const useEventHandlers = (
             const inlineHandler = plugin.events![eventType];
 
             allEventHandlers[eventType] = (yEditor, ySlate, options) => (event) => {
-              // Call the block's event handler first
-              const result = existingHandler(yEditor, ySlate, options)(event);
-              // IMPORTANT: Always call inline handler, even if block handler returned early
-              // This ensures inline plugins (like Mention) can handle events
+              // Call inline handler FIRST so it can preventDefault before the block handler
+              // This ensures inline plugins (like Emoji, Mention) can intercept events
+              // (e.g., Enter for emoji selection) before block handlers (e.g., Lists, Tabs)
               inlineHandler(yEditor, ySlate, options)(event);
-              return result;
+
+              // Skip block handler if inline handler already handled the event
+              if ((event as Event).defaultPrevented) return;
+
+              existingHandler(yEditor, ySlate, options)(event);
             };
           } else {
             // If no block handler exists, just use the inline handler

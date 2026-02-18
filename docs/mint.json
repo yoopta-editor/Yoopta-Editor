@@ -75,6 +75,7 @@
         "plugins/code-group",
         "plugins/divider",
         "plugins/embed",
+        "plugins/emoji",
         "plugins/file",
         "plugins/headings",
         "plugins/image",

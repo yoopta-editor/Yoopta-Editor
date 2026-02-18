@@ -73,6 +73,7 @@ export function withMentions(editor: YooEditor): MentionYooEditor {
         trigger: state.trigger,
       });
     },
+    selectCurrentItem: null,
   };
 
   return mentionEditor;
