@@ -402,6 +402,40 @@ function applyOperation(editor: YooEditor, op: YooptaOperation): void {
           block.meta.order = index;
         }
       });
+
+      // Validate column group integrity: blocks with same columnGroup must be consecutive
+      const groupRanges = new Map<string, { min: number; max: number }>();
+      for (const block of blocks) {
+        const group = block.meta.columnGroup;
+        if (!group) continue;
+        const range = groupRanges.get(group);
+        if (range) {
+          range.min = Math.min(range.min, block.meta.order);
+          range.max = Math.max(range.max, block.meta.order);
+        } else {
+          groupRanges.set(group, { min: block.meta.order, max: block.meta.order });
+        }
+      }
+
+      for (const [group, range] of groupRanges) {
+        // Count blocks in this group
+        const groupBlockCount = blocks.filter((b) => b.meta.columnGroup === group).length;
+        const expectedSpan = range.max - range.min + 1;
+
+        if (groupBlockCount !== expectedSpan) {
+          // Non-consecutive: dissolve the group
+          for (const block of blocks) {
+            if (block.meta.columnGroup === group) {
+              if (isDraft(block.meta)) {
+                block.meta.columnGroup = undefined;
+                block.meta.columnIndex = undefined;
+                block.meta.columnWidth = undefined;
+              }
+            }
+          }
+        }
+      }
+
       break;
     }
 

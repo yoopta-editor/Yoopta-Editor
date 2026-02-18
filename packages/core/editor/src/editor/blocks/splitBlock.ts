@@ -200,6 +200,9 @@ export function splitBlock(editor: YooEditor, options: SplitBlockOptions = {}): 
           order: blockToSplit.meta.order + 1,
           depth: blockToSplit.meta.depth,
           align: blockToSplit.meta.align,
+          columnGroup: blockToSplit.meta.columnGroup,
+          columnIndex: blockToSplit.meta.columnIndex,
+          columnWidth: blockToSplit.meta.columnWidth,
         },
         value: [],
       };

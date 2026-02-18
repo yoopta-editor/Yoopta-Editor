@@ -1,3 +1,5 @@
+import { deleteColumnGroup } from '../columns/deleteColumnGroup';
+import { getColumnGroupBlocks } from '../columns/getColumnGroupBlocks';
 import type { YooptaOperation } from '../core/applyTransforms';
 import { Paths } from '../paths';
 import type { YooEditor, YooptaPathIndex } from '../types';
@@ -103,5 +105,15 @@ export function deleteBlock(editor: YooEditor, options: DeleteBlockOptions = {})
   if (focus && focusTarget !== 'none' && targetBlock && targetSlate) {
     const lastNodePoint = Paths.getLastNodePoint(targetSlate);
     editor.focusBlock(targetBlock.id, { focusAt: lastNodePoint });
+  }
+
+  // Auto-dissolve column group if only one column index remains
+  const columnGroup = block.meta.columnGroup;
+  if (columnGroup) {
+    const remainingBlocks = getColumnGroupBlocks(editor, columnGroup);
+    const remainingColumnIndices = new Set(remainingBlocks.map((b) => b.meta.columnIndex));
+    if (remainingColumnIndices.size <= 1) {
+      deleteColumnGroup(editor, { columnGroup });
+    }
   }
 }

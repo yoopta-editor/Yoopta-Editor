@@ -17,6 +17,11 @@ import type { getEmail } from '../parsers/getEmail';
 import type { getHTML } from '../parsers/getHTML';
 import type { getYooptaJSON } from '../parsers/getYooptaJSON';
 import type { WithoutFirstArg } from '../utils/types';
+import type { addToColumn } from './columns/addToColumn';
+import type { createColumnGroup } from './columns/createColumnGroup';
+import type { deleteColumnGroup } from './columns/deleteColumnGroup';
+import type { removeFromColumn } from './columns/removeFromColumn';
+import type { setColumnWidth } from './columns/setColumnWidth';
 import type { moveBlock } from './blocks/moveBlock';
 import type { SplitBlockOptions } from './blocks/splitBlock';
 import type { updateBlock } from './blocks/updateBlock';
@@ -54,6 +59,9 @@ export type YooptaBlockBaseMeta = {
   order: number;
   depth: number;
   align?: 'left' | 'center' | 'right' | undefined;
+  columnGroup?: string;
+  columnIndex?: number;
+  columnWidth?: number;
 };
 
 export type YooptaContentValue = Record<string, YooptaBlockData>;
@@ -132,6 +140,13 @@ export type YooEditor = {
   mergeBlock: WithoutFirstArg<typeof mergeBlock>;
   splitBlock: (options?: SplitBlockOptions) => string | undefined;
   getBlock: (options: GetBlockOptions) => YooptaBlockData | null;
+
+  // column handlers
+  createColumnGroup: WithoutFirstArg<typeof createColumnGroup>;
+  addToColumn: WithoutFirstArg<typeof addToColumn>;
+  removeFromColumn: WithoutFirstArg<typeof removeFromColumn>;
+  setColumnWidth: WithoutFirstArg<typeof setColumnWidth>;
+  deleteColumnGroup: WithoutFirstArg<typeof deleteColumnGroup>;
 
   // element handlers
   insertElement: WithoutFirstArg<typeof insertElement>;

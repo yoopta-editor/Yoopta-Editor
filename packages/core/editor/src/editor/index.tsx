@@ -14,6 +14,11 @@ import { moveBlock } from './blocks/moveBlock';
 import { splitBlock } from './blocks/splitBlock';
 import { toggleBlock } from './blocks/toggleBlock';
 import { updateBlock } from './blocks/updateBlock';
+import { addToColumn } from './columns/addToColumn';
+import { createColumnGroup } from './columns/createColumnGroup';
+import { deleteColumnGroup } from './columns/deleteColumnGroup';
+import { removeFromColumn } from './columns/removeFromColumn';
+import { setColumnWidth } from './columns/setColumnWidth';
 import { applyTransforms } from './core/applyTransforms';
 import { batchOperations } from './core/batchOperations';
 import { blur } from './core/blur';
@@ -110,6 +115,14 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     updateBlock: (...args) => updateBlock(editor, ...args),
     splitBlock: (...args) => splitBlock(editor, ...args),
     mergeBlock: (...args) => mergeBlock(editor, ...args),
+
+    // Column methods
+    createColumnGroup: (...args) => createColumnGroup(editor, ...args),
+    addToColumn: (...args) => addToColumn(editor, ...args),
+    removeFromColumn: (...args) => removeFromColumn(editor, ...args),
+    setColumnWidth: (...args) => setColumnWidth(editor, ...args),
+    deleteColumnGroup: (...args) => deleteColumnGroup(editor, ...args),
+
     setPath: (...args) => setPath(editor, ...args),
 
     // New element methods

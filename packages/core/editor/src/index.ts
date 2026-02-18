@@ -42,6 +42,7 @@ export {
   YooptaContentValue,
   SlateEditor,
   YooptaPath,
+  YooptaBlockBaseMeta,
   YooptaPathIndex,
   YooptaEventChangePayload,
   YooptaEventsMap,
@@ -68,6 +69,7 @@ export type { ElementStructureOptions } from './editor/elements/create-element-s
 
 export { Elements } from './editor/elements';
 export { Blocks } from './editor/blocks';
+export { Columns } from './editor/columns';
 export { Marks } from './editor/textFormats';
 export { Selection } from './editor/selection';
 export { Paths } from './editor/paths';

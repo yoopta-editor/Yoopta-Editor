@@ -1,5 +1,5 @@
-import YooptaEditor, { createYooptaEditor, type RenderBlockProps } from '@yoopta/editor';
-import { useCallback, useMemo, useRef } from 'react';
+import YooptaEditor, { Columns, createYooptaEditor, type RenderBlockProps } from '@yoopta/editor';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { MARKS } from '../../utils/yoopta/marks';
 import { YOOPTA_PLUGINS } from '../../utils/yoopta/plugins';
@@ -41,6 +41,15 @@ const YooptaUIPackageExample = () => {
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
     return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
   }, []);
+
+  useEffect(() => {
+    const groupId = Columns.createColumnGroup(editor, {
+      blockIds: ['980b9946-9a2e-4707-9046-e10175c82e7d', 'b1fd5415-6c13-4e57-8fbb-aa69581793b7']
+    });
+
+    editor.addToColumn({ blockId: 'd7bd9ade-f81e-4f1d-880c-0a0a590cf8a9', columnGroup: groupId!, columnIndex: 1 });
+    console.log('Columns.createColumnGroup', groupId);
+  }, [editor]);
 
   return (
     <div className="flex flex-col gap-2" style={{ paddingTop: '80px' }} ref={selectionBoxRef}>
