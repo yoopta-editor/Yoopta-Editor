@@ -16,7 +16,7 @@
     "embla-carousel-react": "^8.6.0"
   },
   "peerDependencies": {
-    "@yoopta/editor": "6.0.0-beta.15",
+    "@yoopta/editor": "6.0.0-beta.21",
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },
