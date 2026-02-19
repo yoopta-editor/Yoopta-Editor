@@ -6321,7 +6321,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/accordion@workspace:packages/plugins/accordion"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6331,7 +6331,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/blockquote@workspace:packages/plugins/blockquote"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6341,7 +6341,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/callout@workspace:packages/plugins/callout"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6353,7 +6353,7 @@ __metadata:
   dependencies:
     embla-carousel-react: "npm:^8.6.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6367,7 +6367,7 @@ __metadata:
     prettier: "npm:^3.7.4"
     shiki: "npm:^3.20.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6381,7 +6381,7 @@ __metadata:
     y-protocols: "npm:^1.0.6"
     yjs: "npm:^13.6.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6391,7 +6391,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/divider@workspace:packages/plugins/divider"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6421,7 +6421,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/embed@workspace:packages/plugins/embed"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6431,7 +6431,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/emoji@workspace:packages/plugins/emoji"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6443,7 +6443,7 @@ __metadata:
   dependencies:
     marked: "npm:^13.0.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6453,7 +6453,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/file@workspace:packages/plugins/file"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6467,7 +6467,7 @@ __metadata:
     postcss: "npm:^8"
     tailwindcss: "npm:^3.3.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6477,7 +6477,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/image@workspace:packages/plugins/image"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6487,7 +6487,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/link@workspace:packages/plugins/link"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6497,7 +6497,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/lists@workspace:packages/plugins/lists"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6507,7 +6507,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/marks@workspace:packages/marks"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6517,7 +6517,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/mention@workspace:packages/plugins/mention"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6527,7 +6527,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/paragraph@workspace:packages/plugins/paragraph"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6537,7 +6537,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/steps@workspace:packages/plugins/steps"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6547,7 +6547,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/table-of-contents@workspace:packages/plugins/table-of-contents"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6557,7 +6557,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/table@workspace:packages/plugins/table"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6567,7 +6567,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/tabs@workspace:packages/plugins/tabs"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6577,8 +6577,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/themes-base@workspace:packages/themes/base"
   peerDependencies:
-    "@yoopta/accordion": ">=4.0.0"
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6597,7 +6596,7 @@ __metadata:
     copy-to-clipboard: "npm:^3.3.3"
     react-rnd: "npm:^10.5.2"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6667,7 +6666,7 @@ __metadata:
     tailwind-merge: "npm:^2.0.0"
     use-debounce: "npm:^10.0.0"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.4
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
@@ -6677,7 +6676,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yoopta/video@workspace:packages/plugins/video"
   peerDependencies:
-    "@yoopta/editor": 6.0.0-beta.15
+    "@yoopta/editor": 6.0.0-beta.21
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   languageName: unknown
