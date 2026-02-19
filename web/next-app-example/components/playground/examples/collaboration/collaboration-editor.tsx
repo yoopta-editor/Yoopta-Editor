@@ -15,6 +15,8 @@ import { SelectionBox } from "@yoopta/ui/selection-box";
 import { BlockDndContext, SortableBlock } from "@yoopta/ui/block-dnd";
 import { withMentions } from "@yoopta/mention";
 import { MentionDropdown } from "@yoopta/themes-shadcn/mention";
+import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
+import { withEmoji } from '@yoopta/emoji';
 import { applyTheme } from "@yoopta/themes-shadcn";
 import { YooptaToolbar } from "../full-setup/new-yoo-components/yoopta-toolbar";
 import { YooptaFloatingBlockActions } from "../full-setup/new-yoo-components/yoopta-floating-block-actions";
@@ -39,14 +41,14 @@ export const CollaborationEditor = ({
   containerBoxRef,
 }: CollaborationEditorProps) => {
   const editor = useMemo(() => {
-    const base = withMentions(
+    const base = withEmoji(withMentions(
       createYooptaEditor({
         plugins: applyTheme(
           YOOPTA_PLUGINS
         ) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[],
         marks: YOOPTA_MARKS,
       })
-    );
+    ));
 
     return withCollaboration(base, {
       url: WS_URL,
@@ -87,6 +89,7 @@ export const CollaborationEditor = ({
           <YooptaSlashCommandMenu />
           <SelectionBox selectionBoxElement={containerBoxRef} />
           <MentionDropdown />
+          <EmojiDropdown />
           <RemoteCursors />
         </YooptaEditor>
       </BlockDndContext>

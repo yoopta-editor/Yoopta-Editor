@@ -7,6 +7,7 @@ import { HeadingOne, HeadingTwo, HeadingThree } from "@yoopta/headings";
 import Divider from "@yoopta/divider";
 import Image from "@yoopta/image";
 import Video from "@yoopta/video";
+import Emoji from "@yoopta/emoji";
 import File from "@yoopta/file";
 import { SlateElement, YooptaPlugin } from "@yoopta/editor";
 
@@ -70,6 +71,7 @@ export const CHAT_PLUGINS = [
   ImageWithUpload,
   VideoWithUpload,
   FileWithUpload,
+  Emoji,
 ] as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[];
 
 // Plugins for user input - includes media
@@ -86,4 +88,5 @@ export const CHAT_INPUT_PLUGINS = [
   ImageWithUpload,
   VideoWithUpload,
   FileWithUpload,
+  Emoji,
 ] as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[];

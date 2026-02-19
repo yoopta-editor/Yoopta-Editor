@@ -11,8 +11,12 @@ import { YooptaSlashCommandMenu } from './new-yoo-components/yoopta-slash-comman
 import { YooptaFloatingBlockActions } from './new-yoo-components/yoopta-floating-block-actions';
 import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 import { withMentions } from '@yoopta/mention';
+// @ts-expect-error - MentionDropdown types not properly exported
 import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+// @ts-expect-error - EmojiDropdown types not properly exported
+import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
 import { applyTheme } from '@yoopta/themes-shadcn';
+import { withEmoji } from '@yoopta/emoji';
 
 const EDITOR_STYLES = {
   width: '100%',
@@ -26,7 +30,7 @@ type FullSetupEditorProps = {
 
 const FullSetupEditor = ({ initialValue, containerBoxRef }: FullSetupEditorProps) => {
   const editor = useMemo(() => {
-    return withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS }));
+    return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS })));
   }, []);
 
   const onChange = (value: YooptaContentValue) => {
@@ -62,6 +66,7 @@ const FullSetupEditor = ({ initialValue, containerBoxRef }: FullSetupEditorProps
           <YooptaSlashCommandMenu />
           <SelectionBox selectionBoxElement={containerBoxRef} />
           <MentionDropdown />
+          <EmojiDropdown />
         </YooptaEditor>
       </BlockDndContext>
     </div>

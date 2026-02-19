@@ -17,6 +17,8 @@ import { BlockDndContext, SortableBlock } from "@yoopta/ui/block-dnd";
 import { withMentions } from "@yoopta/mention";
 import { applyTheme } from "@yoopta/themes-shadcn";
 // @ts-expect-error - MentionDropdown types not properly exported
+import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
+// @ts-expect-error - MentionDropdown types not properly exported
 import { MentionDropdown } from "@yoopta/themes-shadcn/mention";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +31,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Check, Code2 } from "lucide-react";
 import { YooptaSlashCommandMenu } from "../full-setup/new-yoo-components/yoopta-slash-command-menu";
+import { withEmoji } from "@yoopta/emoji";
 
 const EDITOR_STYLES = {
   width: "100%",
@@ -307,7 +310,7 @@ export const WordEditor = () => {
   const [copied, setCopied] = useState(false);
 
   const editor = useMemo(() => {
-    return withMentions(
+    return withEmoji(withMentions(
       createYooptaEditor({
         plugins: applyTheme(WORD_PLUGINS) as unknown as YooptaPlugin<
           Record<string, SlateElement>,
@@ -315,7 +318,7 @@ export const WordEditor = () => {
         >[],
         marks: WORD_MARKS,
       })
-    );
+    ));
   }, []);
 
   const onChange = (value: YooptaContentValue) => {
@@ -398,6 +401,7 @@ export const WordEditor = () => {
                   <SelectionBox selectionBoxElement={containerBoxRef} />
                   <YooptaSlashCommandMenu />
                   <MentionDropdown />
+                  <EmojiDropdown />
                 </YooptaEditor>
               </BlockDndContext>
             </div>

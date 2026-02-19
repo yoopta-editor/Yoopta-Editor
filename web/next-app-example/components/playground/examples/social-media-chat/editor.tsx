@@ -28,6 +28,8 @@ import {
   Film,
   Send,
 } from "lucide-react";
+// @ts-expect-error - EmojiDropdown types not properly exported
+import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
 
 export type ChatInputEditorProps = {
   editor: YooEditor;
@@ -157,7 +159,9 @@ export function ChatInputEditor({
       </div>
 
       <div className="relative min-h-[80px] max-h-[280px] overflow-auto pl-4 pr-12 py-2">
-        <YooptaEditor editor={editor} style={{ width: "100%" }} placeholder={placeholder} />
+        <YooptaEditor editor={editor} style={{ width: "100%" }} placeholder={placeholder}>
+          <EmojiDropdown />
+        </YooptaEditor>
         <Button
           size="icon"
           className="absolute right-2 bottom-2 h-9 w-9 shrink-0 bg-blue-500 hover:bg-blue-600 text-white rounded-full"

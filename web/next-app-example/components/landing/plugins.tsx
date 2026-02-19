@@ -24,6 +24,7 @@ import {
   AtSign,
   ImageIcon,
   AlertCircle,
+  Smile,
 } from "lucide-react";
 
 const pluginCategories = [
@@ -78,6 +79,7 @@ const pluginCategories = [
     plugins: [
       { name: "Link", icon: Link2, package: "@yoopta/link" },
       { name: "Mention", icon: AtSign, package: "@yoopta/mention" },
+      { name: "Emoji", icon: Smile, package: "@yoopta/emoji" },
     ],
   },
 ];

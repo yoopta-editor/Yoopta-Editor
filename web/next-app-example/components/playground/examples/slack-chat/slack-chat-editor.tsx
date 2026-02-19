@@ -12,7 +12,10 @@ import YooptaEditor, {
 import { SLACK_PLUGINS } from "./plugins";
 import { SLACK_MARKS } from "./marks";
 import { applyTheme } from "@yoopta/themes-shadcn";
+// @ts-expect-error - EmojiDropdown types not properly exported
 import { MentionDropdown } from "@yoopta/themes-shadcn/mention";
+// @ts-expect-error - EmojiDropdown types not properly exported
+import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -324,6 +327,7 @@ export function SlackChatEditor() {
                 placeholder={`Message #yoopta-editor`}
               >
                 <MentionDropdown />
+                <EmojiDropdown />
               </YooptaEditor>
             </div>
 

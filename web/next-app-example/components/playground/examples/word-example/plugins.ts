@@ -11,6 +11,7 @@ import { NumberedList, BulletedList, TodoList } from "@yoopta/lists";
 import Embed from "@yoopta/embed";
 import Image from "@yoopta/image";
 import Video from "@yoopta/video";
+import Emoji from "@yoopta/emoji";
 import File from "@yoopta/file";
 import Tabs from "@yoopta/tabs";
 import Steps from "@yoopta/steps";
@@ -84,6 +85,7 @@ export const WORD_PLUGINS = [
     injectElementsFromPlugins: [YImage],
   }),
   Tabs,
+  Emoji,
   Mention.extend({
     options: {
       onSearch: async (query, trigger) => {

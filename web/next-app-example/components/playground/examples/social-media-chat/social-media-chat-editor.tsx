@@ -27,6 +27,7 @@ import {
   EMPTY_EDITOR_VALUE,
   CURRENT_USER,
 } from "./initialValue";
+import { withEmoji } from "@yoopta/emoji";
 
 function MessageStatus({ status }: { status: "sent" | "delivered" | "read" }) {
   if (status === "sent") return <Check className="w-3 h-3 text-neutral-400" />;
@@ -132,14 +133,14 @@ export function SocialMediaChatEditor() {
   const otherUser = INITIAL_CONVERSATIONS[0]?.participants.find((p) => p.id !== "me");
 
   const editor = useMemo(() => {
-    return createYooptaEditor({
+    return withEmoji(createYooptaEditor({
       plugins: applyTheme(CHAT_INPUT_PLUGINS) as unknown as YooptaPlugin<
         Record<string, SlateElement>,
         unknown
       >[],
       marks: CHAT_MARKS,
       value: EMPTY_EDITOR_VALUE,
-    });
+    }));
   }, []);
 
   useEffect(() => {

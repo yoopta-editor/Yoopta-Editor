@@ -6,6 +6,7 @@ import { NumberedList, BulletedList } from "@yoopta/lists";
 import Image from "@yoopta/image";
 import Mention from "@yoopta/mention";
 import { CHANNELS } from "./initialValue";
+import Emoji from "@yoopta/emoji";
 
 // Slack-like editor with minimal plugins for chat
 export const SLACK_PLUGINS = [
@@ -16,6 +17,7 @@ export const SLACK_PLUGINS = [
   Code.Code,
   Blockquote,
   Image,
+  Emoji,
   Mention.extend({
     options: {
       triggers: [{ char: "#", type: "channel" }],

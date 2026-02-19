@@ -14,6 +14,7 @@ import { NumberedList, BulletedList, TodoList } from '@yoopta/lists';
 import Embed from '@yoopta/embed';
 import Image from '@yoopta/image';
 import Video from '@yoopta/video';
+import Emoji from '@yoopta/emoji';
 import FilePlugin from '@yoopta/file';
 import Tabs from '@yoopta/tabs';
 import Steps from '@yoopta/steps';
@@ -91,6 +92,7 @@ export const PLUGIN_SLUG_TO_PLUGINS = {
   accordion: [Paragraph, Accordion],
   image: [Paragraph, ImageWithUpload],
   video: [Paragraph, VideoWithUpload],
+  emoji: [Paragraph, Emoji],
   file: [Paragraph, FileWithUpload],
   embed: [Paragraph, Embed],
   carousel: [Paragraph, CarouselWithImage],

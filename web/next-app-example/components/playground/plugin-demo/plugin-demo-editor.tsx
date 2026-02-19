@@ -6,12 +6,16 @@ import YooptaEditor, {
   SlateElement,
 } from '@yoopta/editor';
 import { applyTheme } from '@yoopta/themes-shadcn';
+// @ts-expect-error - MentionDropdown types not properly exported
 import { MentionDropdown } from '@yoopta/themes-shadcn/mention';
+// @ts-expect-error - EmojiDropdown types not properly exported
+import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
 import { withMentions } from '@yoopta/mention';
 import { YooptaToolbar } from '@/components/playground/examples/full-setup/new-yoo-components/yoopta-toolbar';
 import { YooptaSlashCommandMenu } from '@/components/playground/examples/full-setup/new-yoo-components/yoopta-slash-command-menu';
 import { YOOPTA_MARKS } from '@/components/playground/examples/full-setup/marks';
 import type { YooptaPlugin as YooptaPluginType } from '@yoopta/editor';
+import { withEmoji } from '@yoopta/emoji';
 
 const EDITOR_STYLES = {
   width: '100%',
@@ -26,7 +30,7 @@ type PluginDemoEditorProps = {
 export const PluginDemoEditor = ({ plugins, slug }: PluginDemoEditorProps) => {
   const editor = useMemo(
     () => {
-      const baseEditor = createYooptaEditor({ plugins: applyTheme(plugins), marks: YOOPTA_MARKS });
+      const baseEditor = withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(plugins), marks: YOOPTA_MARKS })));
       if (slug === 'mention') {
         return withMentions(baseEditor);
       }
@@ -48,6 +52,7 @@ export const PluginDemoEditor = ({ plugins, slug }: PluginDemoEditorProps) => {
         <YooptaToolbar />
         <YooptaSlashCommandMenu />
         {slug === 'mention' && <MentionDropdown />}
+        {slug === 'emoji' && <EmojiDropdown />}
       </YooptaEditor>
     </div>
   );
