@@ -4,6 +4,22 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.0-beta.22] - 2026-02-19
+
+### Changed
+
+- **Monorepo: Lerna → Turborepo + Yarn Berry**: Migrated from Lerna + Yarn v1 to Turborepo + Yarn Berry (v4). `workspace:*` protocol now resolves local packages correctly (fixes broken symlinks with prerelease versions). Turborepo provides build caching and `--filter` for selective dev mode.
+- **Dev workflow**: `yarn dev` starts the dev server. Use `yarn dev --filter=@yoopta/editor` to watch specific packages — replaces the old `PACKAGES="..." yarn dev` workaround.
+- **Dev playground**: Removed `packages/development/`. The `web/next-app-example/` app is now the development workspace.
+- **Publishing: Lerna → Changesets**: Versioning and publishing now uses Changesets with fixed version groups — all `@yoopta/*` packages share the same version.
+- **React 19**: Upgraded monorepo to React 19. Packages keep `peerDependencies: "react": ">=18.2.0"` for backwards compatibility.
+
+### Added
+
+- **@yoopta/emoji**: New plugin for emoji insertion (added in beta.21, first included in workspace build).
+
+---
+
 ## [6.0.0-beta.21] - 2026-02-17
 
 ### Fixed
