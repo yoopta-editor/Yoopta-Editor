@@ -57,15 +57,16 @@ tmp/
 test-results/
 .DS_Store
 
-# Recommendation from https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored (not using Zero-installs)
+# Yarn Berry
 .yarn/*
-!.yarn/releases
+!.yarn/patches
 !.yarn/plugins
-!/.yarn/sdks/
-!/.yarn/sdks/**/lib/
+!.yarn/releases
+!.yarn/sdks
 !.yarn/versions
 .pnp.*
 
-.env
+# Turborepo
+.turbo
 
-.yarn
+.env

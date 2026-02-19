@@ -19,33 +19,55 @@ We'd also love PRs. If you're thinking of a large PR, we advise opening up an is
 
 To start contributing to the project, follow these steps:
 
-1. **Build the Project**: Before beginning active development, ensure all packages are built by running:
+1. **Install dependencies and build all packages**:
 
 ```bash
-  yarn build
+yarn install
+yarn build
 ```
 
-2. **Start Development Mode for Specific Packages**: You can specify which packages to run in watch mode. This helps you focus on the specific packages you're working on. Use the following command:
+2. **Start the dev server**:
 
 ```bash
-  PACKAGES="<package names>" yarn dev
+yarn dev
 ```
 
-For example, to run only the `@yoopta/editor` and `@yoopta/paragraph` packages:
+This starts the Next.js app at `web/next-app-example`. It imports `@yoopta/*` packages from their pre-built `dist/` folders.
+
+3. **Watch specific packages you're working on** (recommended):
 
 ```bash
-PACKAGES="@yoopta/editor @yoopta/paragraph" yarn dev
+yarn dev --filter=@yoopta/editor --filter=@yoopta/paragraph
 ```
 
-3. Find the editor initializer code in `./packages/development/src/pages/dev/index.tsx` and you are ready for development
+This starts the dev server **and** runs rollup in watch mode for the specified packages. When you edit a package's source, rollup rebuilds its `dist/` and Next.js picks up the change via HMR.
+
+Only watch the packages you're actively changing — this keeps startup fast and CPU usage low.
+
+4. **Build a single package**:
+
+```bash
+yarn build --filter=@yoopta/editor
+```
+
+5. Find the editor code in `./web/next-app-example` and you are ready for development.
 
 ## Project structure
 
 ```text
 packages/
-├── core - core components of the editor
-├── marks - text marks
-├── plugins - editor plugin extensions
-└── development - developer playground
-└── web/next-example - all examples
+├── core/        - core components (editor, ui, exports, collaboration)
+├── marks/       - text formatting marks
+├── plugins/     - editor plugin extensions
+├── themes/      - theme packages (base, material, shadcn)
+web/
+└── next-app-example - development playground and examples
 ```
+
+## Publishing
+
+This project uses [Changesets](https://github.com/changesets/changesets) for versioning and publishing:
+
+1. `yarn changeset` — create a changeset describing your change
+2. `yarn version` — bump versions and update changelogs
+3. `yarn release` — build and publish to npm
