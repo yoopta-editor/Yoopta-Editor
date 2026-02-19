@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/image",
-  "version": "6.0.0-beta.21",
+  "version": "6.0.0-beta.22",
   "description": "Image plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -13,7 +13,7 @@
     "dist/"
   ],
   "peerDependencies": {
-    "@yoopta/editor": "6.0.0-beta.21",
+    "@yoopta/editor": "6.0.0-beta.22",
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },
