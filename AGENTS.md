@@ -11,14 +11,14 @@ yarn install
 # Build all packages (cleans dist directories first)
 yarn build
 
-# Development - runs packages in watch mode + dev server
+# Development - start dev server (web/next-app-example)
 yarn dev
 
-# Run specific packages in watch mode only
-PACKAGES="@yoopta/editor @yoopta/paragraph" yarn dev
+# Dev server + watch specific packages (recommended)
+yarn dev --filter=@yoopta/editor --filter=@yoopta/paragraph
 
-# Run just the dev playground server
-yarn serve
+# Build a single package
+yarn build --filter=@yoopta/editor
 ```
 
 ## Testing
@@ -48,21 +48,23 @@ yarn format            # Run all formatters
 
 Yoopta-Editor is a React rich-text editor built on Slate.js with a plugin architecture.
 
-### Monorepo Structure (Lerna + Yarn Workspaces)
+### Monorepo Structure (Turborepo + Yarn Berry)
 
 ```
 packages/
 ├── core/
 │   ├── editor/       # @yoopta/editor - Main editor component, YooEditor API
+│   ├── collaboration/# @yoopta/collaboration - Real-time collaboration (Yjs)
 │   ├── ui/           # @yoopta/ui - Toolbar, ActionMenu, BlockOptions, etc.
 │   └── exports/      # @yoopta/exports - HTML/Markdown/PlainText serializers
 ├── plugins/          # Block plugins (see list below)
 ├── marks/            # @yoopta/marks - Text formatting (Bold, Italic, etc.)
 ├── themes/           # Theme packages (base, material, shadcn)
-└── development/      # Next.js dev playground
+web/
+└── next-app-example/ # Development playground and examples
 ```
 
-**Available Plugins**: accordion, blockquote, callout, carousel, code, divider, embed, file, headings, image, link, lists, mention, paragraph, steps, table, tabs, video
+**Available Plugins**: accordion, blockquote, callout, carousel, code, divider, embed, emoji, file, headings, image, link, lists, mention, paragraph, steps, table, table-of-contents, tabs, video
 
 ### YooEditor API
 
@@ -175,7 +177,7 @@ SlateElement = {
 - Block operations: `packages/core/editor/src/editor/blocks/`
 - Element operations: `packages/core/editor/src/editor/elements/`
 - Plugin types: `packages/core/editor/src/plugins/types.ts`
-- Dev playground: `packages/development/src/pages/dev/index.tsx`
+- Dev playground: `web/next-app-example/`
 
 ### Usage Pattern
 

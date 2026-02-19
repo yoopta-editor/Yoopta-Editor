@@ -5,7 +5,6 @@
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
   "license": "MIT",
-  "private": false,
   "main": "dist/index.js",
   "type": "module",
   "module": "dist/index.js",
