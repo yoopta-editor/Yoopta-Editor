@@ -157,37 +157,42 @@ export default function ExamplesLayout({
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         <div className="flex-1 overflow-auto">{children}</div>
 
-        {/* Bottom bar */}
-        <div className="flex items-center justify-end gap-2 px-4 py-2 border-t border-neutral-200 bg-neutral-50 shrink-0">
-          {currentExample && (
+        {/* Bottom bar — CTA strip */}
+        <div className="examples-bottom-bar relative flex items-center justify-between gap-4 px-4 py-3 border-t border-neutral-200 shrink-0">
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 hidden sm:block">
+            Like what you see? Get the editor and docs — it’s free and open source.
+          </p>
+          <div className="flex items-center gap-2 ml-auto">
+            {currentExample && (
+              <a
+                href={`${GITHUB_BASE}/${currentExample.sourceFolder}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-neutral-700/60 transition-colors"
+              >
+                <ExternalLink className="size-3.5" />
+                Source
+              </a>
+            )}
             <a
-              href={`${GITHUB_BASE}/${currentExample.sourceFolder}`}
+              href="https://docs.yoopta.dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/70 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-neutral-700/60 transition-colors"
             >
-              <ExternalLink className="size-3.5" />
-              Source Code
+              <Code2 className="size-3.5" />
+              Docs
             </a>
-          )}
-          <a
-            href="https://docs.yoopta.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/70 transition-colors"
-          >
-            <Code2 className="size-3.5" />
-            Docs
-          </a>
-          <a
-            href="https://github.com/Darginec05/Yoopta-Editor"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/70 transition-colors"
-          >
-            <Github className="size-3.5" />
-            Star Repo
-          </a>
+            <a
+              href="https://github.com/Darginec05/Yoopta-Editor"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3.5 h-8 rounded-md text-xs font-semibold text-white bg-neutral-900 dark:bg-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 shadow-sm hover:shadow transition-all duration-200"
+            >
+              <Github className="size-4" />
+              Star on GitHub
+            </a>
+          </div>
         </div>
       </main>
     </div>

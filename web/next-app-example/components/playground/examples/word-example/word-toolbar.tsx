@@ -339,7 +339,7 @@ export const WordToolbar = ({ editor, onExport, onPrint }: WordToolbarProps) => 
   const currentAlign = currentBlock?.meta?.align || "left";
 
   return (
-    <div className="sticky top-16 z-40 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 shadow-sm">
+    <div className="sticky top-0 z-40 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 shadow-sm">
       {/* File Menu Bar */}
       <div className="flex items-center gap-1 px-2 py-1 border-b border-neutral-200 dark:border-neutral-800">
         <DropdownMenu>

@@ -106,6 +106,15 @@ body {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
+/* Examples layout bottom bar gradient */
+.examples-bottom-bar {
+  background: linear-gradient(to right, #fafafa 0%, #fafafa 55%, rgb(239 246 255) 100%);
+}
+
+.dark .examples-bottom-bar {
+  background: linear-gradient(to right, rgb(23 23 23) 0%, rgb(23 23 23) 55%, rgb(30 58 138 / 0.35) 100%);
+}
+
 /* Code block styling */
 .code-block {
   background: linear-gradient(135deg, var(--muted) 0%, var(--card) 100%);

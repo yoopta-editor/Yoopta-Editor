@@ -43,7 +43,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
         id: "fs-divider-1-el",
         type: "divider",
         children: [{ text: "" }],
-        props: { nodeType: "void", theme: "gradient" },
+        props: { nodeType: "void", theme: "solid" },
       },
     ],
     meta: { order: 2, depth: 0 },

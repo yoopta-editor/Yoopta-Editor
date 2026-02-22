@@ -60,195 +60,282 @@ import { cn } from "@/lib/utils";
 
 const INITIAL_README: YooptaContentValue = {
   "block-1": {
-    id: "block-1",
-    type: "HeadingOne",
-    value: [
+    "id": "block-1",
+    "type": "HeadingOne",
+    "value": [
       {
-        id: "el-1",
-        type: "heading-one",
-        children: [{ text: "My Awesome Project" }],
-        props: { nodeType: "block" },
-      },
+        "id": "el-1",
+        "type": "heading-one",
+        "children": [
+          {
+            "text": "My Awesome Project"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 0, depth: 0 },
+    "meta": {
+      "order": 0,
+      "depth": 0
+    }
   },
   "block-2": {
-    id: "block-2",
-    type: "Paragraph",
-    value: [
+    "id": "block-2",
+    "type": "Paragraph",
+    "value": [
       {
-        id: "el-2",
-        type: "paragraph",
-        children: [
-          { text: "A brief description of what this project does and who it's for. Built with " },
-          { text: "Yoopta Editor", bold: true },
-          { text: " - the most powerful rich-text editor." },
-        ],
-        props: { nodeType: "block" },
-      },
-    ],
-    meta: { order: 1, depth: 0 },
-  },
-  "block-3": {
-    id: "block-3",
-    type: "HeadingTwo",
-    value: [
-      {
-        id: "el-3",
-        type: "heading-two",
-        children: [{ text: "Features" }],
-        props: { nodeType: "block" },
-      },
-    ],
-    meta: { order: 2, depth: 0 },
-  },
-  "block-4": {
-    id: "block-4",
-    type: "BulletedList",
-    value: [
-      {
-        id: "el-4",
-        type: "bulleted-list",
-        children: [
+        "id": "el-2",
+        "type": "paragraph",
+        "children": [
           {
-            id: "li-1",
-            type: "list-item",
-            children: [{ text: "Live markdown preview" }],
-            props: { nodeType: "block" },
+            "text": "A brief description of what this project does and who it's for. Built with "
           },
-        ],
-        props: { nodeType: "block" },
-      },
-    ],
-    meta: { order: 3, depth: 0 },
-  },
-  "block-5": {
-    id: "block-5",
-    type: "BulletedList",
-    value: [
-      {
-        id: "el-5",
-        type: "bulleted-list",
-        children: [
           {
-            id: "li-2",
-            type: "list-item",
-            children: [{ text: "Export to markdown with one click" }],
-            props: { nodeType: "block" },
+            "text": "Yoopta Editor",
+            "bold": true
           },
-        ],
-        props: { nodeType: "block" },
-      },
-    ],
-    meta: { order: 4, depth: 0 },
-  },
-  "block-6": {
-    id: "block-6",
-    type: "BulletedList",
-    value: [
-      {
-        id: "el-6",
-        type: "bulleted-list",
-        children: [
           {
-            id: "li-3",
-            type: "list-item",
-            children: [{ text: "Quick insert for badges, sections, and more" }],
-            props: { nodeType: "block" },
-          },
+            "text": " - the most powerful rich-text editor."
+          }
         ],
-        props: { nodeType: "block" },
-      },
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 5, depth: 0 },
+    "meta": {
+      "order": 1,
+      "depth": 0
+    }
   },
   "block-7": {
-    id: "block-7",
-    type: "HeadingTwo",
-    value: [
+    "id": "block-7",
+    "type": "HeadingTwo",
+    "value": [
       {
-        id: "el-7",
-        type: "heading-two",
-        children: [{ text: "Installation" }],
-        props: { nodeType: "block" },
-      },
+        "id": "el-7",
+        "type": "heading-two",
+        "children": [
+          {
+            "text": "Installation"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 6, depth: 0 },
+    "meta": {
+      "order": 6,
+      "depth": 0
+    }
   },
   "block-8": {
-    id: "block-8",
-    type: "Code",
-    value: [
+    "id": "block-8",
+    "type": "Code",
+    "value": [
       {
-        id: "el-8",
-        type: "code",
-        children: [{ text: "npm install my-awesome-project" }],
-        props: { nodeType: "void", language: "bash" },
-      },
+        "id": "el-8",
+        "type": "code",
+        "children": [
+          {
+            "text": "npm install my-awesome-project"
+          }
+        ],
+        "props": {
+          "nodeType": "void",
+          "language": "bash"
+        }
+      }
     ],
-    meta: { order: 7, depth: 0 },
+    "meta": {
+      "order": 7,
+      "depth": 0
+    }
   },
   "block-9": {
-    id: "block-9",
-    type: "HeadingTwo",
-    value: [
+    "id": "block-9",
+    "type": "HeadingTwo",
+    "value": [
       {
-        id: "el-9",
-        type: "heading-two",
-        children: [{ text: "Usage" }],
-        props: { nodeType: "block" },
-      },
+        "id": "el-9",
+        "type": "heading-two",
+        "children": [
+          {
+            "text": "Usage"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 8, depth: 0 },
+    "meta": {
+      "order": 8,
+      "depth": 0
+    }
   },
   "block-10": {
-    id: "block-10",
-    type: "Code",
-    value: [
+    "id": "block-10",
+    "type": "Code",
+    "value": [
       {
-        id: "el-10",
-        type: "code",
-        children: [
+        "id": "el-10",
+        "type": "code",
+        "children": [
           {
-            text: `import { MyComponent } from 'my-awesome-project';
-
-function App() {
-  return <MyComponent />;
-}`,
-          },
+            "text": "import { MyComponent } from 'my-awesome-project';\n\nfunction App() {\n  return <MyComponent />;\n}"
+          }
         ],
-        props: { nodeType: "void", language: "typescript" },
-      },
+        "props": {
+          "nodeType": "void",
+          "language": "typescript"
+        }
+      }
     ],
-    meta: { order: 9, depth: 0 },
+    "meta": {
+      "order": 9,
+      "depth": 0
+    }
   },
   "block-11": {
-    id: "block-11",
-    type: "HeadingTwo",
-    value: [
+    "id": "block-11",
+    "type": "HeadingTwo",
+    "value": [
       {
-        id: "el-11",
-        type: "heading-two",
-        children: [{ text: "License" }],
-        props: { nodeType: "block" },
-      },
+        "id": "el-11",
+        "type": "heading-two",
+        "children": [
+          {
+            "text": "License"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 10, depth: 0 },
+    "meta": {
+      "order": 10,
+      "depth": 0
+    }
   },
   "block-12": {
-    id: "block-12",
-    type: "Paragraph",
-    value: [
+    "id": "block-12",
+    "type": "Paragraph",
+    "value": [
       {
-        id: "el-12",
-        type: "paragraph",
-        children: [{ text: "MIT" }],
-        props: { nodeType: "block" },
-      },
+        "id": "el-12",
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "MIT"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
     ],
-    meta: { order: 11, depth: 0 },
+    "meta": {
+      "order": 11,
+      "depth": 0
+    }
   },
-};
+  "f4c51b3d-3947-45d8-aa06-babe7407c4ad": {
+    "id": "f4c51b3d-3947-45d8-aa06-babe7407c4ad",
+    "type": "NumberedList",
+    "value": [
+      {
+        "id": "ba593386-dd64-4580-b420-5fe22cfe26de",
+        "type": "numbered-list",
+        "children": [
+          {
+            "text": "Live markdown preview"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "align": "left",
+      "depth": 0,
+      "order": 3
+    }
+  },
+  "c3bf2f48-ff12-4afe-9157-2476dca303b8": {
+    "id": "c3bf2f48-ff12-4afe-9157-2476dca303b8",
+    "type": "NumberedList",
+    "value": [
+      {
+        "id": "e6ebf60b-1eb0-4060-87ac-07866f237c27",
+        "type": "numbered-list",
+        "children": [
+          {
+            "text": "Export to markdown with one click"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "align": "left",
+      "depth": 0,
+      "order": 4
+    }
+  },
+  "81c4988a-eeea-404d-bd2c-379a95e8761c": {
+    "id": "81c4988a-eeea-404d-bd2c-379a95e8761c",
+    "type": "NumberedList",
+    "value": [
+      {
+        "id": "29f96ec0-6fef-4354-93b7-1c4fedf79c9a",
+        "type": "numbered-list",
+        "children": [
+          {
+            "text": "Quick insert for badges, sections and more"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "align": "left",
+      "depth": 0,
+      "order": 5
+    }
+  },
+  "8c9b1f31-f479-45c7-979a-40ed29eee64a": {
+    "id": "8c9b1f31-f479-45c7-979a-40ed29eee64a",
+    "type": "HeadingTwo",
+    "meta": {
+      "depth": 0,
+      "order": 2
+    },
+    "value": [
+      {
+        "id": "df52c486-c7b0-4af6-85fb-d16c069088d0",
+        "type": "heading-two",
+        "props": {
+          "withAnchor": false
+        },
+        "children": [
+          {
+            "text": "Features"
+          }
+        ]
+      }
+    ]
+  }
+}
 
 // Badge templates
 const BADGE_TEMPLATES = [
@@ -696,6 +783,7 @@ export function ReadmeEditor() {
                 editor={editor}
                 style={{ width: "100%" }}
                 placeholder="Start writing your README..."
+                onChange={(value) => console.log(value)}
               />
             </div>
           </ScrollArea>
