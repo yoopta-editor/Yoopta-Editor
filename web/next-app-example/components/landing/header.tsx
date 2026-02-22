@@ -2,80 +2,29 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import {
   Menu,
   Heart,
-  FileText,
-  MessageSquare,
   Laptop,
   BookOpen,
   ExternalLink,
-  ChevronDown,
-  Github,
-  Code2,
-  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const mainNavigation = [
-  { name: "Playground", href: "/playground" },
+  { name: "Examples", href: "/examples" },
   { name: "Documentation", href: "https://docs.yoopta.dev", external: true },
 ];
 
-const exampleNavigation = [
-  {
-    name: "Full Setup Example",
-    href: "/playground",
-    description: "Full setup example with all features",
-    icon: Code2,
-  },
-  {
-    name: "Rich Chat",
-    href: "/playground/social-media-chat",
-    description: "Social media-like messaging interface ",
-    icon: MessageSquare,
-  },
-  {
-    name: "MS Word Example",
-    href: "/playground/word-example",
-    description: "Microsoft Word-like interface",
-    icon: FileText,
-  },
-  {
-    name: "Slack Chat",
-    href: "/playground/slack-chat",
-    description: "Slack-like messaging UI",
-    icon: MessageSquare,
-  },
-  {
-    name: "README Editor",
-    href: "/playground/readme-editor",
-    description: "GitHub README with live preview",
-    icon: Github,
-  },
-  {
-    name: "Collaboration",
-    href: "/playground/collaboration",
-    description: "Real-time collaborative editing",
-    icon: Users,
-  },
-];
 
 const MOBILE_BREAKPOINT_PX = 768;
 
 export function Header() {
   const pathname = usePathname();
-  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   // Avoid SSR/media-query flash: default to desktop, then sync with viewport in useLayoutEffect
   const [isMobile, setIsMobile] = React.useState(false);
@@ -129,49 +78,6 @@ export function Header() {
               {item.external && <ExternalLink className="h-3 w-3" />}
             </Link>
           ))}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "gap-1 text-sm font-medium",
-                  exampleNavigation.some((item) => isActive(item.href))
-                    ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
-                    : "text-muted-foreground"
-                )}
-              >
-                Examples
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64">
-              {exampleNavigation.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <DropdownMenuItem
-                    key={item.name}
-                    className="flex items-start gap-3 p-2 cursor-pointer"
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      router.push(item.href);
-                    }}
-                  >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
-                      <Icon className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{item.name}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {item.description}
-                      </span>
-                    </div>
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </nav>
 
         {/* Right Side */}

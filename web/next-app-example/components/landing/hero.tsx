@@ -33,7 +33,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-0 pb-10">
         <div className="text-center">
           {/* Badge */}
-          <div className="flex flex-wrap justify-center gap-3 mb-6">
+          <div className="flex flex-wrap justify-center gap-3 mb-6 mt-0">
             <a
               href="https://github.com/Darginec05/Yoopta-Editor"
               target="_blank"

@@ -23,12 +23,6 @@ export function PlaygroundPage() {
 
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
         <div className="text-center max-w-3xl mx-auto mb-0">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 mb-4">
-            <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-              Try it live
-            </span>
-          </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
             Interactive Playground v6 (beta)
           </h1>

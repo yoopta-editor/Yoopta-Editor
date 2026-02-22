@@ -1,10 +1,10 @@
 import type { Path } from 'slate';
 import { Editor, Element, Path as SlatePath, Transforms } from 'slate';
 
+import type { InsertElementOptions } from './types';
 import { buildBlockElement } from '../../components/Editor/utils';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
 import type { SlateEditor, SlateElement, YooEditor, YooptaBlockData } from '../types';
-import type { InsertElementOptions } from './types';
 
 /**
  * Build new element with proper structure

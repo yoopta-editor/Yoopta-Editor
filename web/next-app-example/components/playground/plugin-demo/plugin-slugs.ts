@@ -18,6 +18,7 @@ export const PLUGIN_SLUGS = [
   'embed',
   'carousel',
   'mention',
+  'emoji',
   'link',
 ] as const;
 

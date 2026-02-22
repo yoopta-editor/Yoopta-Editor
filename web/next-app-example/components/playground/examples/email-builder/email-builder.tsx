@@ -10,6 +10,10 @@ import YooptaEditor, {
   Marks,
 } from "@yoopta/editor";
 
+import { EmojiCommands, withEmoji } from "@yoopta/emoji";
+// @ts-expect-error - EmojiDropdown types not properly exported
+import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
+
 import { EMAIL_PLUGINS } from "./plugins";
 import { EMAIL_MARKS } from "./marks";
 import { applyTheme } from "@yoopta/themes-shadcn";
@@ -43,25 +47,17 @@ import {
   Link2,
   Image,
   Smile,
-  MoreVertical,
   ChevronDown,
-  X,
-  Copy,
   Check,
   Eye,
   Code,
   Columns,
   FileText,
   PanelLeft,
-  Sparkles,
-  Clock,
-  Star,
-  Archive,
   Pen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Email templates
 const EMAIL_TEMPLATES = [
   {
     id: "blank",
@@ -138,14 +134,7 @@ const EMAIL_TEMPLATES = [
           {
             id: "el-4",
             type: "numbered-list",
-            children: [
-              {
-                id: "li-1",
-                type: "list-item",
-                children: [{ text: "Complete your profile" }],
-                props: { nodeType: "block" },
-              },
-            ],
+            children: [{ text: "Complete your profile" }],
             props: { nodeType: "block" },
           },
         ],
@@ -158,14 +147,7 @@ const EMAIL_TEMPLATES = [
           {
             id: "el-5",
             type: "numbered-list",
-            children: [
-              {
-                id: "li-2",
-                type: "list-item",
-                children: [{ text: "Explore our features" }],
-                props: { nodeType: "block" },
-              },
-            ],
+            children: [{ text: "Explore our features" }],
             props: { nodeType: "block" },
           },
         ],
@@ -178,14 +160,7 @@ const EMAIL_TEMPLATES = [
           {
             id: "el-6",
             type: "numbered-list",
-            children: [
-              {
-                id: "li-3",
-                type: "list-item",
-                children: [{ text: "Connect with your team" }],
-                props: { nodeType: "block" },
-              },
-            ],
+            children: [{ text: "Connect with your team" }],
             props: { nodeType: "block" },
           },
         ],
@@ -194,16 +169,7 @@ const EMAIL_TEMPLATES = [
       "block-7": {
         id: "block-7",
         type: "Paragraph",
-        value: [
-          {
-            id: "el-7",
-            type: "paragraph",
-            children: [
-              { text: "If you have any questions, feel free to reach out to our support team." },
-            ],
-            props: { nodeType: "block" },
-          },
-        ],
+        value: [{ text: "If you have any questions, feel free to reach out to our support team." }],
         meta: { order: 6, depth: 0 },
       },
       "block-8": {
@@ -604,13 +570,13 @@ export function EmailBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("welcome");
 
   const editor = useMemo(() => {
-    return createYooptaEditor({
+    return withEmoji(createYooptaEditor({
       plugins: applyTheme(EMAIL_PLUGINS) as unknown as YooptaPlugin<
         Record<string, SlateElement>,
         unknown
       >[],
       marks: EMAIL_MARKS,
-    });
+    }));
   }, []);
 
   // Initialize with welcome template
@@ -624,7 +590,9 @@ export function EmailBuilder() {
   // Update HTML preview
   const updatePreview = useCallback(() => {
     const content = editor.getEditorValue();
-    const html = editor.getHTML(content);
+    const html = editor.getEmail(content);
+
+    console.log(html);
     setHtmlPreview(html);
   }, [editor]);
 
@@ -642,7 +610,7 @@ export function EmailBuilder() {
 
   const handleCopyHtml = useCallback(async () => {
     const content = editor.getEditorValue();
-    const html = editor.getHTML(content);
+    const html = editor.getEmail(content);
     await navigator.clipboard.writeText(html);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -960,7 +928,7 @@ export function EmailBuilder() {
                 <Button variant="ghost" size="icon" className="h-8 w-8" title="Insert link">
                   <Link2 className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8" title="Insert emoji">
+                <Button variant="ghost" size="icon" onClick={() => EmojiCommands.insertEmoji(editor, { emoji: '😀', name: 'grinning' })} className="h-8 w-8" title="Insert emoji">
                   <Smile className="h-4 w-4" />
                 </Button>
               </div>
@@ -972,7 +940,9 @@ export function EmailBuilder() {
                     editor={editor}
                     style={{ width: "100%" }}
                     placeholder="Compose your email..."
-                  />
+                  >
+                    <EmojiDropdown />
+                  </YooptaEditor>
                 </div>
               </ScrollArea>
             </div>

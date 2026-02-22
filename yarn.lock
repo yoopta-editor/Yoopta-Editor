@@ -2118,6 +2118,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hocuspocus/common@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "@hocuspocus/common@npm:3.4.4"
+  dependencies:
+    lib0: "npm:^0.2.87"
+  checksum: 10c0/412a7b2ff47cfa6570d841bc3ae7b2d6279c96b32726c7c20dbd3389557bf69abbe70059ca040ee813364a0617a33351e5c1099253855b95e4fcc3980467de32
+  languageName: node
+  linkType: hard
+
+"@hocuspocus/server@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "@hocuspocus/server@npm:3.4.4"
+  dependencies:
+    "@hocuspocus/common": "npm:^3.4.4"
+    async-lock: "npm:^1.3.1"
+    async-mutex: "npm:^0.5.0"
+    kleur: "npm:^4.1.4"
+    lib0: "npm:^0.2.47"
+    ws: "npm:^8.5.0"
+  peerDependencies:
+    y-protocols: ^1.0.6
+    yjs: ^13.6.8
+  checksum: 10c0/7ea56b6d05bd4504acdb1cf2f64bbb32f466cee5ce1d0478e8bd2ab279240293c022caa1bbcf0482e26bd4bf01ce66b33891c9b827fc5dd3518a659317c62c24
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -7076,6 +7102,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"async-lock@npm:^1.3.1":
+  version: 1.4.1
+  resolution: "async-lock@npm:1.4.1"
+  checksum: 10c0/f696991c7d894af1dc91abc81cc4f14b3785190a35afb1646d8ab91138238d55cabd83bfdd56c42663a008d72b3dc39493ff83797e550effc577d1ccbde254af
+  languageName: node
+  linkType: hard
+
+"async-mutex@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "async-mutex@npm:0.5.0"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/9096e6ad6b674c894d8ddd5aa4c512b09bb05931b8746ebd634952b05685608b2b0820ed5c406e6569919ff5fe237ab3c491e6f2887d6da6b6ba906db3ee9c32
+  languageName: node
+  linkType: hard
+
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -11020,6 +11062,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"kleur@npm:^4.1.4":
+  version: 4.1.5
+  resolution: "kleur@npm:4.1.5"
+  checksum: 10c0/e9de6cb49657b6fa70ba2d1448fd3d691a5c4370d8f7bbf1c2f64c24d461270f2117e1b0afe8cb3114f13bbd8e51de158c2a224953960331904e636a5e4c0f2a
+  languageName: node
+  linkType: hard
+
 "language-subtag-registry@npm:^0.3.20":
   version: 0.3.23
   resolution: "language-subtag-registry@npm:0.3.23"
@@ -11053,7 +11102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lib0@npm:^0.2.85, lib0@npm:^0.2.88, lib0@npm:^0.2.99":
+"lib0@npm:^0.2.47, lib0@npm:^0.2.85, lib0@npm:^0.2.87, lib0@npm:^0.2.88, lib0@npm:^0.2.99":
   version: 0.2.117
   resolution: "lib0@npm:0.2.117"
   dependencies:
@@ -11851,6 +11900,7 @@ __metadata:
   resolution: "next-app-example@workspace:web/next-app-example"
   dependencies:
     "@faker-js/faker": "npm:^10.3.0"
+    "@hocuspocus/server": "npm:^3.4.4"
     "@radix-ui/react-accordion": "npm:^1.2.12"
     "@radix-ui/react-dialog": "npm:^1.1.15"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.15"
@@ -11906,6 +11956,8 @@ __metadata:
     tailwindcss: "npm:^4"
     tw-animate-css: "npm:^1.4.0"
     typescript: "npm:^5"
+    y-protocols: "npm:^1.0.7"
+    yjs: "npm:^13.6.29"
   languageName: unknown
   linkType: soft
 
@@ -16331,7 +16383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.13.0":
+"ws@npm:^8.13.0, ws@npm:^8.5.0":
   version: 8.19.0
   resolution: "ws@npm:8.19.0"
   peerDependencies:
@@ -16360,7 +16412,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"y-protocols@npm:^1.0.6":
+"y-protocols@npm:^1.0.6, y-protocols@npm:^1.0.7":
   version: 1.0.7
   resolution: "y-protocols@npm:1.0.7"
   dependencies:
@@ -16437,7 +16489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yjs@npm:^13.6.0":
+"yjs@npm:^13.6.0, yjs@npm:^13.6.29":
   version: 13.6.29
   resolution: "yjs@npm:13.6.29"
   dependencies:

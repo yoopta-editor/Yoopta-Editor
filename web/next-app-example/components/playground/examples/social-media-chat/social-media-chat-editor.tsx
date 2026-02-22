@@ -223,6 +223,8 @@ export function SocialMediaChatEditor() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
+
       if (e.key === "Enter" && !e.shiftKey) {
         const activeElement = document.activeElement;
         const isInEditor = inputRef.current?.contains(activeElement);

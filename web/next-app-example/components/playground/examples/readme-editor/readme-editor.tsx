@@ -598,8 +598,8 @@ export function ReadmeEditor() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* View mode toggle */}
-            <div className="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-md overflow-hidden">
+            {/* View mode toggle — mobile only, desktop always shows split */}
+            <div className="flex md:hidden items-center border border-neutral-200 dark:border-neutral-800 rounded-md overflow-hidden">
               <Button
                 variant="ghost"
                 size="sm"
@@ -672,64 +672,63 @@ export function ReadmeEditor() {
         </div>
       </div>
 
-      {/* Main content area - stacked on mobile, side-by-side on md+ */}
-      <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
-        {/* Editor Panel */}
-        {(viewMode === "editor" || viewMode === "split") && (
-          <div
-            className={cn(
-              "flex flex-col flex-1 min-h-0 border-r-0 md:border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950",
-              viewMode === "split" ? "w-full md:w-1/2" : "w-full"
-            )}
-          >
-            <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <FileText className="h-4 w-4 shrink-0" />
-                <span className="font-medium truncate">README.md</span>
-                <span className="text-xs hidden sm:inline">— Editor</span>
-              </div>
+      {/* Main content area - mobile: controlled by viewMode, desktop: always split */}
+      {/* <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden"> */}
+      <div className="flex-1 flex flex-row min-h-0 overflow-hidden">
+        {/* Editor Panel — always visible on md+, mobile respects viewMode */}
+        <div
+          className={cn(
+            "flex-col flex-1 min-h-0 md:border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 md:w-1/2",
+            viewMode === "preview" ? "hidden md:flex" : "flex",
+            viewMode === "editor" ? "w-full md:w-1/2" : "w-full md:w-1/2"
+          )}
+        >
+          <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <FileText className="h-4 w-4 shrink-0" />
+              <span className="font-medium truncate">README.md</span>
+              <span className="text-xs hidden sm:inline">— Editor</span>
             </div>
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-4 sm:p-6 max-w-3xl mx-auto">
-                <YooptaEditor
-                  editor={editor}
-                  style={{ width: "100%" }}
-                  placeholder="Start writing your README..."
-                />
-              </div>
-            </ScrollArea>
           </div>
-        )}
-
-        {/* Preview Panel */}
-        {(viewMode === "preview" || viewMode === "split") && (
-          <div
-            className={cn(
-              "flex flex-col flex-1 min-h-0 bg-white dark:bg-neutral-950",
-              viewMode === "split" ? "w-full md:w-1/2" : "w-full"
-            )}
-          >
-            <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Eye className="h-4 w-4 shrink-0" />
-                <span className="font-medium">Preview</span>
-                <span className="text-xs hidden sm:inline">— Markdown Output</span>
-              </div>
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="p-4 sm:p-6 max-w-3xl mx-auto">
+              <YooptaEditor
+                editor={editor}
+                style={{ width: "100%" }}
+                placeholder="Start writing your README..."
+              />
             </div>
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-4 sm:p-6">
-                <div className="max-w-3xl mx-auto">
-                  {/* GitHub-style markdown preview */}
-                  <div className="prose prose-neutral dark:prose-invert prose-pre:bg-neutral-900 prose-pre:text-neutral-100 prose-code:before:content-none prose-code:after:content-none max-w-none prose-pre:text-xs sm:prose-pre:text-sm">
-                    <pre className="bg-neutral-100 dark:bg-neutral-900 p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm font-mono whitespace-pre-wrap wrap-break-word">
-                      {markdown || "# Your README preview will appear here..."}
-                    </pre>
-                  </div>
+          </ScrollArea>
+        </div>
+
+        {/* Preview Panel — always visible on md+, mobile respects viewMode */}
+        <div
+          className={cn(
+            "flex-col flex-1 min-h-0 bg-white dark:bg-neutral-950 md:w-1/2",
+            viewMode === "editor" ? "hidden md:flex" : "flex",
+            viewMode === "preview" ? "w-full md:w-1/2" : "w-full md:w-1/2"
+          )}
+        >
+          <div className="px-3 sm:px-4 py-2 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 shrink-0">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Eye className="h-4 w-4 shrink-0" />
+              <span className="font-medium">Preview</span>
+              <span className="text-xs hidden sm:inline">— Markdown Output</span>
+            </div>
+          </div>
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="p-4 sm:p-6">
+              <div className="max-w-3xl mx-auto">
+                {/* GitHub-style markdown preview */}
+                <div className="prose prose-neutral dark:prose-invert prose-pre:bg-neutral-900 prose-pre:text-neutral-100 prose-code:before:content-none prose-code:after:content-none max-w-none prose-pre:text-xs sm:prose-pre:text-sm">
+                  <pre className="bg-neutral-100 dark:bg-neutral-900 p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm font-mono whitespace-pre-wrap wrap-break-word">
+                    {markdown || "# Your README preview will appear here..."}
+                  </pre>
                 </div>
               </div>
-            </ScrollArea>
-          </div>
-        )}
+            </div>
+          </ScrollArea>
+        </div>
       </div>
 
       {/* Footer stats - wraps on mobile */}

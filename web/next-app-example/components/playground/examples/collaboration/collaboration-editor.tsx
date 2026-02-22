@@ -23,7 +23,7 @@ import { YooptaFloatingBlockActions } from "../full-setup/new-yoo-components/yoo
 import { YooptaSlashCommandMenu } from "../full-setup/new-yoo-components/yoopta-slash-command-menu";
 import { CollaborationStatusBar } from "./collaboration-status-bar";
 
-const WS_URL = "wss://demos.yjs.dev/ws";
+const WS_URL = "ws://localhost:4444";
 const ROOM_ID = "yoopta-playground-collab";
 
 const EDITOR_STYLES = {

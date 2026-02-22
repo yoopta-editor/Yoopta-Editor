@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import YooptaEditor, { createYooptaEditor, RenderBlockProps, SlateElement, YooptaContentValue, YooptaPlugin } from '@yoopta/editor'
 
-import { YOOPTA_PLUGINS } from './plugins';
-import { YOOPTA_MARKS } from './marks';
+import { INJECT_PLUGINS } from './plugins';
+import { YOOPTA_MARKS } from '../full-setup/marks';
 import { SelectionBox } from '@yoopta/ui/selection-box';
-import { YooptaToolbar } from './new-yoo-components/yoopta-toolbar';
-import { YooptaSlashCommandMenu } from './new-yoo-components/yoopta-slash-command-menu';
-import { YooptaFloatingBlockActions } from './new-yoo-components/yoopta-floating-block-actions';
+import { YooptaToolbar } from '../full-setup/new-yoo-components/yoopta-toolbar';
+import { YooptaSlashCommandMenu } from '../full-setup/new-yoo-components/yoopta-slash-command-menu';
+import { YooptaFloatingBlockActions } from '../full-setup/new-yoo-components/yoopta-floating-block-actions';
 import { BlockDndContext, SortableBlock } from '@yoopta/ui/block-dnd';
 import { withMentions } from '@yoopta/mention';
 // @ts-expect-error - MentionDropdown types not properly exported
@@ -23,30 +23,23 @@ const EDITOR_STYLES = {
   paddingBottom: 100,
 }
 
-type FullSetupEditorProps = {
+type InjectPluginsEditorProps = {
   initialValue?: YooptaContentValue;
   containerBoxRef?: React.RefObject<HTMLDivElement>;
 };
 
-const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSetupEditorProps) => {
+const InjectPluginsEditor = ({ initialValue, containerBoxRef: externalRef }: InjectPluginsEditorProps) => {
   const internalRef = useRef<HTMLDivElement>(null);
   const containerBoxRef = externalRef ?? internalRef;
 
   const editor = useMemo(() => {
-    return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS })));
+    return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(INJECT_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS })));
   }, []);
 
-  const onChange = (value: YooptaContentValue) => {
-    // localStorage.setItem('yoopta-full-setup-editor-value', JSON.stringify(value));
-  }
-
   useEffect(() => {
-    const localStorageValue = localStorage.getItem('yoopta-full-setup-editor-value');
-    const data = localStorageValue ? JSON.parse(localStorageValue) : initialValue;
-
-    if (data) {
+    if (initialValue) {
       editor.withoutSavingHistory(() => {
-        editor.setEditorValue(data);
+        editor.setEditorValue(initialValue);
         editor.focus();
       });
     }
@@ -62,8 +55,8 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
         <YooptaEditor
           editor={editor}
           style={EDITOR_STYLES}
-          onChange={onChange}
           renderBlock={renderBlock}
+          onChange={(value) => console.log(value)}
           placeholder="Type / to open menu, or start typing..."
         >
           <YooptaToolbar />
@@ -78,4 +71,4 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
   )
 }
 
-export { FullSetupEditor }
+export { InjectPluginsEditor }

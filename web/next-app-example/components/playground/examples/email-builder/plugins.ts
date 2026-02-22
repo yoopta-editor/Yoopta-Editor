@@ -6,6 +6,7 @@ import Callout from "@yoopta/callout";
 import Link from "@yoopta/link";
 import { NumberedList, BulletedList } from "@yoopta/lists";
 import Image from "@yoopta/image";
+import Emoji from "@yoopta/emoji";
 
 const YImage = Image.extend({
   options: {
@@ -36,4 +37,5 @@ export const EMAIL_PLUGINS = [
   Callout,
   Divider,
   YImage,
+  Emoji,
 ];

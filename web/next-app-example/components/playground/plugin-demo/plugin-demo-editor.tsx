@@ -31,12 +31,9 @@ export const PluginDemoEditor = ({ plugins, slug }: PluginDemoEditorProps) => {
   const editor = useMemo(
     () => {
       const baseEditor = withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(plugins), marks: YOOPTA_MARKS })));
-      if (slug === 'mention') {
-        return withMentions(baseEditor);
-      }
       return baseEditor;
     },
-    [plugins, slug],
+    [plugins],
   );
 
   const onChange = () => { };

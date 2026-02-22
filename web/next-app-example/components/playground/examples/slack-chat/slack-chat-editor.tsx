@@ -38,6 +38,7 @@ import {
 import { cn } from "@/lib/utils";
 import { INITIAL_MESSAGES, Message, SLATE_EDITOR_INITIAL_VALUE } from "./initialValue";
 import { withMentions } from "@yoopta/mention";
+import { withEmoji } from "@yoopta/emoji";
 
 function formatTime(date: Date): string {
   return date.toLocaleTimeString("en-US", {
@@ -151,14 +152,14 @@ export function SlackChatEditor() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const editor = useMemo(() => {
-    return withMentions(createYooptaEditor({
+    return withEmoji(withMentions(createYooptaEditor({
       plugins: applyTheme(SLACK_PLUGINS) as unknown as YooptaPlugin<
         Record<string, SlateElement>,
         unknown
       >[],
       marks: SLACK_MARKS,
       value: SLATE_EDITOR_INITIAL_VALUE
-    }));
+    })));
   }, []);
 
   useEffect(() => {
@@ -185,6 +186,7 @@ export function SlackChatEditor() {
   useEffect(() => {
     const handleKeyDown =
       (e: KeyboardEvent) => {
+        if (e.defaultPrevented) return;
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           sendMessage();
