@@ -302,16 +302,6 @@ const Editor = ({
     }
   };
 
-  // const editorStyles: CSSProperties = getEditorStyles({
-  //   ...style,
-  //   // userSelect: selectionBox.selection ? 'none' : 'auto',
-  //   // pointerEvents: selectionBox.selection ? 'none' : 'auto',
-  //   // width: width || style?.width,
-  //   // paddingBottom: style?.paddingBottom,
-  //   // paddingLeft: '2.5rem',
-  //   // paddingRight: '2.5rem',
-  // });
-
   return (
     <div
       // eslint-disable-next-line no-return-assign

@@ -119,7 +119,107 @@ import { CalloutUI } from '@yoopta/themes-shadcn/callout';
 Callout.extend({ elements: CalloutUI });
 ```
 
-CSS is included with the package; no extra theme setup is required.
+### CSS Variables
+
+The theme reads from standard [shadcn/ui](https://ui.shadcn.com/) CSS variables (`--background`, `--foreground`, `--card`, `--border`, etc.). If your app already uses shadcn/ui, the theme works out of the box — no extra setup needed.
+
+If you **don't** have shadcn CSS variables defined, import the default variables provided by the package:
+
+```tsx
+import '@yoopta/themes-shadcn/variables.css';
+```
+
+This gives you a complete set of light and dark mode color tokens.
+
+### Dark mode
+
+The theme supports dark mode through CSS variables. When dark mode is active, the variable values change and the editor automatically picks up the new colors (background, text, borders, etc.).
+
+Dark mode activates when any ancestor of the editor has one of these selectors:
+
+- `.dark` class (default for shadcn/ui and Tailwind dark mode)
+- `[data-theme="dark"]` attribute
+- `[data-yoopta-theme="dark"]` attribute
+
+**Example: toggle dark mode**
+
+```tsx
+function App() {
+  const [isDark, setIsDark] = useState(false);
+
+  return (
+    <div className={isDark ? 'dark' : ''}>
+      <button onClick={() => setIsDark(!isDark)}>Toggle theme</button>
+      <YooptaEditor editor={editor}>
+        {/* ... */}
+      </YooptaEditor>
+    </div>
+  );
+}
+```
+
+Or using a data attribute:
+
+```tsx
+<div data-theme={isDark ? 'dark' : 'light'}>
+  <YooptaEditor editor={editor} />
+</div>
+```
+
+### Customizing variables
+
+You can override any variable to match your brand. The theme uses HSL values (without the `hsl()` wrapper):
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  /* ... your dark mode overrides */
+}
+```
+
+You only need to define the variables you want to change — the rest will use defaults from `variables.css` (if imported) or your existing shadcn/ui setup.
+
+**Full list of variables used by the theme:**
+
+| Variable | Usage |
+|----------|-------|
+| `--background` | Editor background |
+| `--foreground` | Editor text color |
+| `--card` / `--card-foreground` | Card-style blocks (callout, code, etc.) |
+| `--popover` / `--popover-foreground` | Dropdowns, menus, tooltips |
+| `--primary` / `--primary-foreground` | Primary actions, buttons |
+| `--secondary` / `--secondary-foreground` | Secondary actions |
+| `--muted` / `--muted-foreground` | Muted text, disabled states |
+| `--accent` / `--accent-foreground` | Hover highlights, accents |
+| `--destructive` / `--destructive-foreground` | Delete actions, errors |
+| `--border` | Borders |
+| `--input` | Input field borders |
+| `--ring` | Focus rings |
+| `--radius` | Border radius base value |
 
 ---
 

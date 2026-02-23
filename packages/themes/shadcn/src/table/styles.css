@@ -24,7 +24,7 @@
 }
 
 .column-resize-handle:hover {
-  background-color: hsl(var(--yoopta-shadcn-primary) / 0.3) !important;
+  background-color: hsl(var(--primary) / 0.3) !important;
 }
 
 /* Table appearance variants */
@@ -32,12 +32,12 @@
 /* Bordered: add outer edge borders on extreme cells */
 .yoopta-table-bordered [data-slot='table-cell']:first-child,
 .yoopta-table-bordered [data-slot='table-head']:first-child {
-  border-left: 1px solid hsl(var(--yoopta-shadcn-border));
+  border-left: 1px solid hsl(var(--border));
 }
 
 .yoopta-table-bordered [data-slot='table-cell']:last-child,
 .yoopta-table-bordered [data-slot='table-head']:last-child {
-  border-right: 1px solid hsl(var(--yoopta-shadcn-border));
+  border-right: 1px solid hsl(var(--border));
 }
 
 /* No borders: remove outer edge borders from extreme rows */
@@ -51,7 +51,7 @@
 
 /* Striped: alternating row backgrounds */
 .yoopta-table-striped [data-slot='table-body'] tr:nth-child(even) {
-  background-color: hsl(var(--yoopta-shadcn-muted) / 0.4);
+  background-color: hsl(var(--muted) / 0.4);
 }
 
 /* Compact: reduced padding */

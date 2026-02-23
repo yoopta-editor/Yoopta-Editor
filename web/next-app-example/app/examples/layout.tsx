@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Mail,
   BookOpen,
   MessageSquare,
   MessagesSquare,
@@ -20,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import '@yoopta/themes-shadcn/variables.css';
 
 const GITHUB_BASE =
   "https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-app-example/components/playground/examples";

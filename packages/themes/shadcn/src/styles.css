@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
+
+.yoopta-editor {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+}
 
 .yoopta-editor::-moz-selection {
   background: #c6ddf8;

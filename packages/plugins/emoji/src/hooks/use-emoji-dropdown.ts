@@ -33,24 +33,20 @@ export function useEmojiDropdown(
   const editor = baseEditor as unknown as EmojiYooEditor;
   const pluginOptions = useYooptaPluginOptions<EmojiPluginOptions>('Emoji');
 
-  // Local state for items/loading
   const [items, setItems] = useState<EmojiItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Track emoji state from editor
   const [emojiState, setEmojiState] = useState<EmojiState>(INITIAL_EMOJI_STATE);
 
   // Debounce timer ref
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastQueryRef = useRef<string>('');
 
-  // Debounce settings — emoji search is typically local so default is lower
   const debounceMs = options.debounceMs ?? pluginOptions?.debounceMs ?? 100;
   const minQueryLength = pluginOptions?.minQueryLength ?? 1;
 
-  // Floating UI setup
   const { refs, floatingStyles } = useFloating({
     placement: 'bottom-start',
     open: emojiState.isOpen,
@@ -58,11 +54,9 @@ export function useEmojiDropdown(
     whileElementsMounted: autoUpdate,
   });
 
-  // Type-safe event helpers — custom emoji events are added at runtime via withEmoji
   const on = editor.on as (event: string, fn: (...args: any[]) => void) => void;
   const off = editor.off as (event: string, fn: (...args: any[]) => void) => void;
 
-  // Sync editor emoji state to local state
   useEffect(() => {
     const handleOpen = () => {
       setEmojiState({ ...editor.emoji.state });
@@ -93,7 +87,6 @@ export function useEmojiDropdown(
     };
   }, [editor]);
 
-  // Update floating reference when target changes
   useEffect(() => {
     if (emojiState.targetRect) {
       refs.setReference({
@@ -103,7 +96,6 @@ export function useEmojiDropdown(
     }
   }, [emojiState.targetRect, refs]);
 
-  // Fetch items when query changes
   useEffect(() => {
     if (!emojiState.isOpen) return;
 
@@ -111,22 +103,18 @@ export function useEmojiDropdown(
     const trigger = emojiState.trigger;
     const searchFn = pluginOptions?.onSearch ?? defaultEmojiSearch;
 
-    // Skip if query is same as last
     if (query === lastQueryRef.current && items.length > 0) return;
     lastQueryRef.current = query;
 
-    // Check min query length
     if (query.length < minQueryLength) {
       setItems([]);
       return;
     }
 
-    // Clear previous timer
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
 
-    // Debounce search
     debounceTimerRef.current = setTimeout(async () => {
       if (!trigger) return;
 
@@ -152,7 +140,6 @@ export function useEmojiDropdown(
     };
   }, [emojiState.isOpen, emojiState.query, emojiState.trigger, pluginOptions, debounceMs, minQueryLength, items.length]);
 
-  // Select item action
   const selectItem = useCallback(
     (item: EmojiItem) => {
       EmojiCommands.insertEmoji(editor, item);
@@ -160,7 +147,6 @@ export function useEmojiDropdown(
     [editor],
   );
 
-  // Close action
   const close = useCallback(
     (reason: EmojiCloseEvent['reason'] = 'manual') => {
       EmojiCommands.closeDropdown(editor, reason);
@@ -242,25 +228,20 @@ export function useEmojiDropdown(
 
   return useMemo(
     () => ({
-      // State
       isOpen: emojiState.isOpen,
       query: emojiState.query,
       trigger: emojiState.trigger,
 
-      // Results
       items,
       loading,
       error,
 
-      // Navigation
       selectedIndex,
       setSelectedIndex,
 
-      // Actions
       selectItem,
       close,
 
-      // Refs
       refs: {
         setFloating: refs.setFloating,
         setReference: refs.setReference,
