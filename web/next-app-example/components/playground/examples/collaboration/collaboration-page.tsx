@@ -5,7 +5,6 @@ import { generateId } from "@yoopta/editor";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
   Zap,
   Github,
   ExternalLink,
@@ -180,16 +179,7 @@ export const CollaborationPage = () => {
                   >
                     Yjs
                   </a>{" "}
-                  &amp; a local{" "}
-                  <a
-                    href="https://tiptap.dev/hocuspocus"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-foreground"
-                  >
-                    Hocuspocus
-                  </a>{" "}
-                  server. Run{" "}
+                  &amp; a local Yjs WebSocket server. Run{" "}
                   <code className="px-1 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700 text-xs">
                     yarn collab-server
                   </code>{" "}

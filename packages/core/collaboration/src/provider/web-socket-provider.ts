@@ -64,8 +64,6 @@ export class WebSocketProvider {
     this.listeners.clear();
   }
 
-  // ---- WebSocket Setup ----
-
   private setupWebSocket(): void {
     if (this.ws) {
       this.ws.close();
