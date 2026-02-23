@@ -51,8 +51,7 @@
       "group": "Getting Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "installation"
+        "quickstart"
       ]
     },
     {

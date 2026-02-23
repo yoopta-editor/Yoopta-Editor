@@ -83,45 +83,17 @@ Each plugin configuration consists of:
 
 ## Available Plugins
 
-Yoopta Editor provides a rich set of built-in plugins:
+Yoopta Editor provides 20+ built-in plugins:
 
-### Text Plugins
-
-- **[Paragraph](/plugins/paragraph)** - Basic text blocks
-- **Headings** - H1, H2, H3 heading blocks
-- **Blockquote** - Quote blocks
-
-### List Plugins
-
-- **BulletedList** - Unordered lists
-- **NumberedList** - Ordered lists
-- **TodoList** - Checkable task lists
-
-### Media Plugins
-
-- **[Image](/plugins/image)** - Image blocks with upload support
-- **Video** - Video blocks with upload support
-- **File** - File attachment blocks
-- **Embed** - Embed external content (YouTube, Twitter, etc.)
-
-### Layout Plugins
-
-- **[Table](/plugins/table)** - Tabular data
-- **[Tabs](/plugins/tabs)** - Tabbed content sections
-- **[Steps](/plugins/steps)** - Step-by-step instructions
-- **[Carousel](/plugins/carousel)** - Image/content carousel
-- **Accordion** - Collapsible content sections
-- **Divider** - Horizontal separator
-- **Callout** - Highlighted notice blocks
-
-### Code Plugins
-
-- **[Code](/plugins/code)** - Syntax-highlighted code blocks
-- **[CodeGroup](/plugins/code)** - Tabbed code blocks with multiple files
-
-### Special Plugins
-
-- **Link** - Link blocks
+| Category | Plugins |
+|----------|---------|
+| **Text** | [Paragraph](/plugins/paragraph), [Headings](/plugins/headings) (H1, H2, H3), [Blockquote](/plugins/blockquote) |
+| **Lists** | [BulletedList, NumberedList, TodoList](/plugins/lists) |
+| **Media** | [Image](/plugins/image), [Video](/plugins/video), [File](/plugins/file), [Embed](/plugins/embed) |
+| **Layout** | [Table](/plugins/table), [Accordion](/plugins/accordion), [Tabs](/plugins/tabs), [Steps](/plugins/steps), [Carousel](/plugins/carousel), [Callout](/plugins/callout), [Divider](/plugins/divider) |
+| **Code** | [Code](/plugins/code), [CodeGroup](/plugins/code-group) |
+| **Inline** | [Link](/plugins/link), [Mention](/plugins/mention), [Emoji](/plugins/emoji) |
+| **Navigation** | [TableOfContents](/plugins/table-of-contents) |
 
 ## Using Plugins
 
@@ -393,51 +365,12 @@ const plugins = [
 ];
 ```
 
-## Conditional Plugin Loading
-
-Load plugins based on conditions:
-
-```jsx
-const plugins = [
-  Paragraph,
-  Headings.HeadingOne,
-  // Conditionally include plugins
-  ...(enableMedia ? [Image, Video] : []),
-  ...(enableCode ? [Code] : []),
-];
-```
-
-## Plugin Detection
-
-Check if a plugin is loaded:
-
-```jsx
-const hasImagePlugin = plugins.some((p) => p.type === 'Image');
-```
-
 ## Best Practices
 
-<AccordionGroup>
-  <Accordion title="Always include Paragraph plugin">
-    The Paragraph plugin should always be included as it's the default block type.
-  </Accordion>
-
-{' '}
-
-<Accordion title="Define plugins outside component">
-  Define your plugins array outside the component to prevent recreation on every render.
-</Accordion>
-
-{' '}
-
-<Accordion title="Use extend() for customization">
-  Use the `extend()` method instead of modifying plugin objects directly.
-</Accordion>
-
-  <Accordion title="Handle async operations properly">
-    For plugins with async operations (uploads, etc.), always handle errors and loading states.
-  </Accordion>
-</AccordionGroup>
+- Always include the **Paragraph** plugin — it's the default block type
+- Define your `plugins` array **outside the component** to prevent recreation on every render
+- Use **`extend()`** to customize plugins instead of modifying plugin objects directly
+- For plugins with async operations (uploads), always handle errors and loading states
 
 ## Lifecycle Hooks
 

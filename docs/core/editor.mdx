@@ -14,12 +14,12 @@ Use `createYooptaEditor()` with an options object. **Plugins are required**; mar
 
 ```jsx
 import { createYooptaEditor } from '@yoopta/editor';
-import { ParagraphPlugin } from '@yoopta/paragraph';
+import Paragraph from '@yoopta/paragraph';
 
 const editor = useMemo(
   () =>
     createYooptaEditor({
-      plugins: [ParagraphPlugin],
+      plugins: [Paragraph],
       marks: [], // optional, e.g. from @yoopta/marks
       value: undefined, // optional initial content
       id: undefined, // optional editor ID
@@ -85,10 +85,10 @@ The `<YooptaEditor>` component accepts:
 
 ```jsx
 import { useMemo, useState } from 'react';
-import { YooptaEditor, createYooptaEditor } from '@yoopta/editor';
-import { ParagraphPlugin } from '@yoopta/paragraph';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
 
-const plugins = [ParagraphPlugin];
+const plugins = [Paragraph];
 
 export default function MyEditor() {
   const editor = useMemo(

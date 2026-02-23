@@ -1,37 +1,38 @@
 ---
 title: 'Quickstart'
-description: 'Get started with Yoopta Editor in 5 minutes'
+description: 'Install Yoopta Editor and build your first editor in 5 minutes'
 icon: 'rocket'
 ---
 
-## Installation
+## Prerequisites
 
-First, install the required dependencies:
+- **Node.js** 18+
+- **React** 18+
+
+## Install
 
 <CodeGroup>
 
 ```bash npm
-npm install slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+npm install slate slate-react slate-dom @yoopta/editor @yoopta/paragraph @yoopta/marks
 ```
 
 ```bash yarn
-yarn add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+yarn add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph @yoopta/marks
 ```
 
 ```bash pnpm
-pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph
+pnpm add slate slate-react slate-dom @yoopta/editor @yoopta/paragraph @yoopta/marks
 ```
 
 </CodeGroup>
 
-<Note>`slate` `slate-react` `slate-dom` are peer dependencies required by Yoopta Editor.</Note>
+<Note>`slate`, `slate-react`, and `slate-dom` are peer dependencies required by `@yoopta/editor`.</Note>
 
-## Basic Setup
-
-Create a simple editor component. Plugins, marks and initialValue are passed to `createYooptaEditor`.
+## Basic Editor
 
 ```jsx
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import { Bold, Italic } from '@yoopta/marks';
@@ -43,38 +44,26 @@ export default function MyEditor() {
   const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
   return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        onChange={(value) => console.log(value)}
-        placeholder="Type something..."
-      />
-    </div>
+    <YooptaEditor
+      editor={editor}
+      onChange={(value) => console.log(value)}
+      placeholder="Type something..."
+    />
   );
 }
 ```
 
-## Adding More Plugins
+If you see an editor with placeholder text, you're all set. Now let's make it useful.
 
-Install additional plugins for richer content. All available plugins:
+## Add Plugins
 
-<CodeGroup>
+Install the plugins you need:
 
-```bash npm
-npm install @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/emoji @yoopta/carousel @yoopta/table-of-contents
+```bash
+npm install @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code
 ```
 
-```bash yarn
-yarn add @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/emoji @yoopta/carousel @yoopta/table-of-contents
-```
-
-```bash pnpm
-pnpm add @yoopta/paragraph @yoopta/headings @yoopta/blockquote @yoopta/lists @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/link @yoopta/mention @yoopta/emoji @yoopta/carousel @yoopta/table-of-contents
-```
-
-</CodeGroup>
-
-Pass the plugins you need to `createYooptaEditor`:
+Pass them to `createYooptaEditor`:
 
 ```jsx
 import Paragraph from '@yoopta/paragraph';
@@ -82,7 +71,6 @@ import Blockquote from '@yoopta/blockquote';
 import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
 import { BulletedList, NumberedList, TodoList } from '@yoopta/lists';
 import Code from '@yoopta/code';
-// Add more: Image, Video, Embed, File, Callout, Divider, Accordion, Table, Tabs, Steps, Link, Mention, Emoji, Carousel, TableOfContents
 
 const plugins = [
   Paragraph,
@@ -95,114 +83,73 @@ const plugins = [
   TodoList,
   Code,
 ];
-
-const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
 
-See [Plugins](/core/plugins) and the plugin pages for each block type's API and usage.
+See [Available Plugins](/plugins/accordion) for the full list — image, video, table, accordion, embed, and more.
 
-## Adding Themes
+## Add a Theme
 
-Plugins are headless by default. To get styled block UI (Callout, Code, Image, etc.), use a theme package. **`@yoopta/themes-shadcn`** is production ready; **`@yoopta/themes-material`** is in progress.
+Plugins are headless by default. To get styled block UI, apply a theme:
 
-<CodeGroup>
-
-```bash npm
+```bash
 npm install @yoopta/themes-shadcn
 ```
 
-```bash yarn
-yarn add @yoopta/themes-shadcn
-```
-
-```bash pnpm
-pnpm add @yoopta/themes-shadcn
-```
-
-</CodeGroup>
-
-**Option 1: Apply theme to all plugins** — Wrap your plugin array with `applyTheme()` so every supported plugin gets the theme's styled elements:
+**Apply to all plugins:**
 
 ```jsx
 import { applyTheme } from '@yoopta/themes-shadcn';
-import Paragraph from '@yoopta/paragraph';
-import Blockquote from '@yoopta/blockquote';
-import { HeadingOne, HeadingTwo, HeadingThree } from '@yoopta/headings';
-import Code from '@yoopta/code';
 
-const plugins = applyTheme([Paragraph, HeadingOne, HeadingTwo, HeadingThree, Blockquote, Code]);
-
-const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
+const plugins = applyTheme([Paragraph, HeadingOne, HeadingTwo, Blockquote, Code]);
 ```
 
-**Option 2: Apply theme to a single plugin** — Use the theme's UI for one plugin and keep the rest headless:
+**Or apply to a single plugin:**
 
 ```jsx
 import Callout from '@yoopta/callout';
 import { CalloutUI } from '@yoopta/themes-shadcn/callout';
 
 const CalloutWithUI = Callout.extend({ elements: CalloutUI });
-
-const plugins = [Paragraph, CalloutWithUI /* ... */];
 ```
 
-See [Themes](/core/themes) for the full concept and per-plugin UI exports.
+See [Themes](/core/themes) for all available theme exports.
 
-## Adding UI Components
+## Add UI Components
 
-Add toolbar and slash menu as **children** of `YooptaEditor`. Install `@yoopta/ui`:
+Toolbar, slash menu, and block actions are provided by `@yoopta/ui`. Add them as **children** of `YooptaEditor`:
 
-<CodeGroup>
-
-```bash npm
+```bash
 npm install @yoopta/ui
 ```
-
-```bash yarn
-yarn add @yoopta/ui
-```
-
-</CodeGroup>
 
 ```jsx
 import { FloatingToolbar, FloatingBlockActions, SlashCommandMenu } from '@yoopta/ui';
 
-export default function MyEditor() {
-  const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
-
-  return (
-    <div>
-      <YooptaEditor
-        editor={editor}
-        onChange={(value) => console.log(value)}
-        placeholder="Type / to open menu...">
-        <FloatingToolbar />
-        <FloatingBlockActions />
-        <SlashCommandMenu />
-      </YooptaEditor>
-    </div>
-  );
-}
+<YooptaEditor editor={editor} placeholder="Type / to open menu...">
+  <FloatingToolbar />
+  <FloatingBlockActions />
+  <SlashCommandMenu />
+</YooptaEditor>
 ```
 
-See [UI overview](/ui/overview) for the compound component structure (e.g. `FloatingToolbar.Content`).
+See [UI Components](/ui/overview) for all available components and customization.
 
-## Adding Marks
+## Add Marks
 
-Marks provide text formatting (bold, italic, etc.). Pass them to `createYooptaEditor`:
+Marks handle text formatting. All available marks:
 
 ```jsx
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from '@yoopta/marks';
 
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
-
-const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 ```
 
 ## Full Example
 
+Everything together — plugins, theme, marks, and UI:
+
 ```jsx
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
@@ -229,16 +176,11 @@ const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 export default function MyEditor() {
   const editor = useMemo(() => createYooptaEditor({ plugins, marks }), []);
 
-  const onChange = (value) => {
-    // Save to database, localStorage, etc.
-    console.log(value);
-  };
-
   return (
     <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <YooptaEditor
         editor={editor}
-        onChange={onChange}
+        onChange={(value) => console.log(value)}
         placeholder="Type / to open menu..."
         autoFocus>
         <FloatingToolbar />
@@ -250,23 +192,41 @@ export default function MyEditor() {
 }
 ```
 
-Here's a complete editor with plugins, marks, theme, and UI:
-
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Explore Plugins" icon="puzzle-piece" href="/plugins/overview">
-    Learn about all available plugins
+  <Card title="Core Concepts" icon="book" href="/core/editor">
+    Understand blocks, elements, and the editor API
   </Card>
-  <Card title="Editor Instance" icon="code" href="/advanced/editor-instance">
-    Control editor programmatically
+  <Card title="Explore Plugins" icon="puzzle-piece" href="/plugins/accordion">
+    Browse all 20+ available plugins
   </Card>
-  <Card title="View Examples" icon="image" href="/examples/basic-setup">
-    See more complex examples
+  <Card title="UI Components" icon="palette" href="/ui/overview">
+    Customize toolbar, menus, and block actions
+  </Card>
+  <Card title="Live Examples" icon="image" href="https://yoopta.dev/examples">
+    See what's possible with Yoopta Editor
   </Card>
 </CardGroup>
 
-<Tip>
-  Check out our [live examples](https://yoopta.dev/examples) to see what's possible with Yoopta
-  Editor!
-</Tip>
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Module not found: slate">
+    Make sure you've installed all three Slate peer dependencies:
+
+    ```bash
+    npm install slate slate-react slate-dom
+    ```
+
+  </Accordion>
+
+  <Accordion title="TypeScript errors">
+    Yoopta Editor ships its own type definitions. Make sure you're using TypeScript 4.8+ and that `@yoopta/editor` is properly installed.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Need help? Join our [Discord community](https://discord.gg/Dt8rhSTjsn) or check
+  [GitHub Issues](https://github.com/Darginec05/Yoopta-Editor/issues).
+</Note>
