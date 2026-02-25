@@ -50,9 +50,8 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
       serialize: (element, text, blockMeta) => {
         const { align = 'left', depth = 0 } = blockMeta || {};
 
-        return `<ol data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${
-          depth * 20
-        }px; text-align: ${align}"><li>${serializeTextNodes(element.children)}</li></ol>`;
+        return `<ol data-meta-align="${align}" data-meta-depth="${depth}" style="margin-left: ${depth * 20
+          }px; text-align: ${align}"><li>${serializeTextNodes(element.children)}</li></ol>`;
       },
     },
     markdown: {
@@ -77,6 +76,7 @@ const NumberedList = new YooptaPlugin<Pick<ListElementMap, 'numbered-list'>>({
     padding-left: 1rem;
     padding-top: 2px;
     margin: 0;
+    list-style-type: decimal;
     "><li>${serializeTextNodes(element.children)}</li></ol>
                 </td>
               </tr>

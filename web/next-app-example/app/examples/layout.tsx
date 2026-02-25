@@ -17,6 +17,7 @@ import {
   Github,
   Code2,
   ScrollText,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -37,12 +38,12 @@ const EXAMPLES = [
     icon: Blocks,
     sourceFolder: "inject-plugins",
   },
-  // {
-  //   title: "Email Builder",
-  //   href: "/examples/email-builder",
-  //   icon: Mail,
-  //   sourceFolder: "email-builder",
-  // },
+  {
+    title: "Email Builder",
+    href: "/examples/email-builder",
+    icon: Mail,
+    sourceFolder: "email-builder",
+  },
   {
     title: "Markdown Editor",
     href: "/examples/readme-editor",

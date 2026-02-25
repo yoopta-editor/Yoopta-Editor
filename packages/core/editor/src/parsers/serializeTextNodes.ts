@@ -1,6 +1,8 @@
 // [TODO] - Move to @yoopta/utils or @yoopta/editor/utils
 // helpers for serializing text nodes when you use custom parsers in your plugins
 export function serializeTextNodes(nodes: any[]): string {
+  if (!nodes || !Array.isArray(nodes)) return '';
+
   return nodes
     .map((node) => {
       if ('text' in node) {
@@ -49,6 +51,8 @@ export function serializeTextNodes(nodes: any[]): string {
 // [TODO] - Move to @yoopta/utils or @yoopta/editor/utils
 // helpers for serializing text nodes into markdown style when you use custom parsers in your plugins
 export function serializeTextNodesIntoMarkdown(nodes: any[]): string {
+  if (!nodes || !Array.isArray(nodes)) return '';
+
   return nodes
     .map((node) => {
       if ('text' in node) {
