@@ -13,6 +13,7 @@ import YooptaEditor, {
 import { EmojiCommands, withEmoji } from "@yoopta/emoji";
 // @ts-expect-error - EmojiDropdown types not properly exported
 import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
+import '@yoopta/themes-shadcn/variables.css';
 
 import { EMAIL_PLUGINS } from "./plugins";
 import { EMAIL_MARKS } from "./marks";
@@ -563,7 +564,7 @@ export function EmailBuilder() {
   const [cc, setCc] = useState("");
   const [subject, setSubject] = useState("Welcome to Yoopta Editor!");
   const [showCc, setShowCc] = useState(false);
-  const [viewMode, setViewMode] = useState<"editor" | "preview" | "split">("editor");
+  const [viewMode, setViewMode] = useState<"editor" | "preview" | "split">("split");
   const [htmlPreview, setHtmlPreview] = useState("");
   const [copied, setCopied] = useState(false);
   const [showSentDialog, setShowSentDialog] = useState(false);
@@ -948,12 +949,12 @@ export function EmailBuilder() {
             </div>
           )}
 
-          {/* HTML Preview */}
+          {/* Email Preview */}
           {(viewMode === "preview" || viewMode === "split") && (
             <div className={cn("flex flex-col", viewMode === "split" ? "w-1/2" : "w-full")}>
               <div className="px-4 py-2 border-b border-neutral-100 dark:border-neutral-900 bg-neutral-50 dark:bg-neutral-900">
                 <span className="text-xs text-muted-foreground font-medium">
-                  HTML Preview
+                  Email Preview
                 </span>
               </div>
               <ScrollArea className="flex-1 bg-neutral-50 dark:bg-neutral-900">

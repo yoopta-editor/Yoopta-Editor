@@ -86,10 +86,12 @@ export function getEmail(
     const plugin = editor.plugins[blockData.type];
 
     if (plugin && plugin.parsers?.email?.serialize) {
-      // @ts-ignore - fixme
-      const innerContent = serializeTextNodes(blockData.value[0].children);
+      const rootElement = blockData.value[0] as SlateElement;
+      if (!rootElement) return '';
+
+      const innerContent = serializeTextNodes(rootElement.children || []);
       return plugin.parsers.email.serialize(
-        blockData.value[0] as SlateElement,
+        rootElement,
         innerContent,
         blockData.meta,
       );
