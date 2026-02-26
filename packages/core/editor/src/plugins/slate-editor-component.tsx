@@ -53,6 +53,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
   marks,
   events,
   extensions: withExtensions,
+  placeholder,
 }: Props<TElementMap, TOptions>) => {
   const editor = useYooptaEditor();
   const block = useBlockData(id);
@@ -140,9 +141,16 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
         } catch { }
       }
 
-      return <TextLeaf attributes={attributes}>{children}</TextLeaf>;
+      return (
+        <TextLeaf
+          attributes={attributes}
+          placeholder={leaf.withPlaceholder ? leaf.elementPlaceholder : undefined}
+        >
+          {children}
+        </TextLeaf>
+      );
     },
-    [marks, decoratorVersion],
+    [marks, decoratorVersion, elements, placeholder],
   );
 
   const onKeyDown = useCallback(
@@ -276,14 +284,29 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
       if (slate.selection && isCurrent) {
         if (
           !Editor.isEditor(node) &&
-          Editor.string(slate, [path[0]]) === '' &&
+          path.length > 0 &&
           Range.includes(slate.selection, path) &&
           Range.isCollapsed(slate.selection)
         ) {
-          ranges.push({
-            ...slate.selection,
-            withPlaceholder: true,
-          });
+          // Find the closest parent element to resolve its placeholder
+          const parentPath = Path.parent(path);
+          const parentText = Editor.string(slate, parentPath);
+
+          if (parentText === '') {
+            const [parentNode] = Editor.node(slate, parentPath);
+            const elementType = (parentNode as any)?.type as string | undefined;
+            const pluginPlaceholder = elementType ? elements[elementType]?.placeholder : undefined;
+
+            const resolvedPlaceholder = pluginPlaceholder ?? placeholder;
+
+            if (resolvedPlaceholder) {
+              ranges.push({
+                ...slate.selection,
+                withPlaceholder: true,
+                elementPlaceholder: resolvedPlaceholder,
+              });
+            }
+          }
         }
       }
 
@@ -297,7 +320,7 @@ const SlateEditorComponent = <TElementMap extends Record<string, SlateElement>, 
 
       return ranges;
     },
-    [editor.readOnly, editor.path.current, block.meta.order, decoratorVersion],
+    [editor.readOnly, editor.path.current, block.meta.order, decoratorVersion, elements, placeholder],
   );
 
   return (

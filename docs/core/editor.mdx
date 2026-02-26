@@ -62,7 +62,7 @@ The `<YooptaEditor>` component accepts:
 </ParamField>
 
 <ParamField path="placeholder" type="string">
-  Placeholder text when the editor is empty.
+  Global placeholder text shown when the editor has a single empty block. If a plugin defines its own element-level placeholder, the element-level placeholder takes priority in multi-block editors. See [Placeholders](#placeholders) for details.
 </ParamField>
 
 <ParamField path="className" type="string">
@@ -115,6 +115,102 @@ export default function MyEditor() {
       autoFocus
     />
   );
+}
+```
+
+## Placeholders
+
+Yoopta supports placeholders at two levels that work together:
+
+- **Editor-level** — a global fallback placeholder passed to `<YooptaEditor placeholder="..." />`
+- **Element-level** — per-plugin placeholders set via `.extend()` on each element type
+
+### How resolution works
+
+When a block is focused and its element is empty, the editor resolves which placeholder to display:
+
+1. Check the focused element's type (e.g. `heading-one`, `step-list-item-heading`)
+2. If that element has a `placeholder` defined — use it
+3. Otherwise, fall back to the editor-level `placeholder` prop
+
+This means element-level placeholders always take priority over the global one.
+
+### Editor-level placeholder
+
+```jsx
+<YooptaEditor
+  editor={editor}
+  placeholder="Type / to open menu..."
+/>
+```
+
+### Element-level placeholder
+
+Set placeholders per element type using `.extend()`:
+
+```jsx
+import { HeadingOne } from '@yoopta/headings';
+import Paragraph from '@yoopta/paragraph';
+
+const plugins = [
+  Paragraph.extend({
+    elements: {
+      paragraph: {
+        placeholder: 'Type something...',
+      },
+    },
+  }),
+  HeadingOne.extend({
+    elements: {
+      'heading-one': {
+        placeholder: 'Heading 1',
+      },
+    },
+  }),
+];
+```
+
+### Nested plugins
+
+For plugins with multiple nested elements (e.g. Steps, Accordion), you can set a different placeholder for each element:
+
+```jsx
+import Steps from '@yoopta/steps';
+
+const plugins = [
+  Steps.extend({
+    elements: {
+      'step-list-item-heading': {
+        placeholder: 'Step title',
+      },
+      'step-list-item-content': {
+        placeholder: 'Describe this step...',
+      },
+    },
+  }),
+];
+```
+
+Each nested element resolves its own placeholder independently — the heading shows "Step title" while the content area shows "Describe this step...".
+
+### Styling
+
+Placeholders are rendered via the `.yoopta-placeholder` CSS class and `data-placeholder` attribute. If you use a Yoopta theme (e.g. `@yoopta/themes-shadcn`), placeholder styles are included. For headless usage, add your own styles:
+
+```css
+.yoopta-placeholder {
+  position: relative;
+}
+
+.yoopta-placeholder::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  white-space: nowrap;
+  user-select: none;
 }
 ```
 

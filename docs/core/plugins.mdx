@@ -282,7 +282,15 @@ const MyPlugin = new YooptaPlugin({
 </ParamField>
 
 <ParamField path="placeholder" type="string">
-  Placeholder text for empty elements
+  Placeholder text shown when this element is focused and empty. Set via `.extend()`:
+  ```jsx
+  HeadingOne.extend({
+    elements: {
+      'heading-one': { placeholder: 'Heading 1' },
+    },
+  })
+  ```
+  Element-level placeholders take priority over the editor-level `placeholder` prop. For nested plugins (Steps, Accordion), each element can have its own placeholder. See [Editor Placeholders](/core/editor#placeholders) for the full guide.
 </ParamField>
 
 ## Custom elements (renders)

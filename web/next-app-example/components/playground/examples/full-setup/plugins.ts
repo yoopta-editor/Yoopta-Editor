@@ -56,7 +56,13 @@ export const YOOPTA_PLUGINS = [
   Accordion,
   Divider,
   Paragraph,
-  HeadingOne,
+  HeadingOne.extend({
+    elements: {
+      'heading-one': {
+        placeholder: 'Heading 1',
+      },
+    },
+  }),
   HeadingTwo,
   HeadingThree,
   Blockquote,
@@ -81,7 +87,16 @@ export const YOOPTA_PLUGINS = [
       },
     },
   }),
-  Steps,
+  Steps.extend({
+    elements: {
+      'step-list-item-heading': {
+        placeholder: 'Step title',
+      },
+      'step-list-item-content': {
+        placeholder: 'Describe this step...',
+      },
+    },
+  }),
   Carousel.extend({
     injectElementsFromPlugins: [YImage]
   }),

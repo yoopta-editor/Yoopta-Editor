@@ -41,3 +41,22 @@
   opacity: 100;
   transition: opacity 200ms;
 }
+
+/* Placeholder */
+.yoopta-placeholder {
+  position: relative;
+}
+
+.yoopta-placeholder::before {
+  color: hsl(var(--foreground));
+  content: attr(data-placeholder);
+  left: 4px;
+  opacity: .4;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+  white-space: nowrap;
+  font-size: 75%;
+}
