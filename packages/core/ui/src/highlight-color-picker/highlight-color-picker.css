@@ -157,7 +157,18 @@
 
 .yoopta-ui-highlight-color-picker-preset[data-selected='true'] {
   border-color: hsl(var(--yoopta-ui-ring));
-  box-shadow: 0 0 0 2px hsl(var(--yoopta-ui-ring) / 0.35);
+  box-shadow: 0 0 0 0px hsl(var(--yoopta-ui-ring) / 0.35);
+}
+
+/* Remove Color Preset */
+.yoopta-ui-highlight-color-picker-preset-remove {
+  background:
+    linear-gradient(to top right,
+      transparent calc(50% - 1px),
+      hsl(0 65% 55%) calc(50% - 1px),
+      hsl(0 65% 55%) calc(50% + 1px),
+      transparent calc(50% + 1px)),
+    linear-gradient(to right bottom, hsl(var(--yoopta-ui-background)) 50%, hsl(var(--yoopta-ui-border)) 50%) !important;
 }
 
 /* Hex Row */
