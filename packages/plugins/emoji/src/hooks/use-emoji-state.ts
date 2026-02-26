@@ -13,7 +13,6 @@ export function useEmojiState() {
   const editor = baseEditor as unknown as EmojiYooEditor;
   const [state, setState] = useState<EmojiState>(INITIAL_EMOJI_STATE);
 
-  // Type-safe event helpers — custom emoji events are added at runtime via withEmoji
   const on = editor.on as (event: string, fn: (...args: any[]) => void) => void;
   const off = editor.off as (event: string, fn: (...args: any[]) => void) => void;
 

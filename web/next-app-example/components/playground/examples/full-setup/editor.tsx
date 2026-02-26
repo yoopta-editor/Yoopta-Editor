@@ -18,6 +18,8 @@ import { EmojiDropdown } from '@yoopta/themes-shadcn/emoji';
 import { applyTheme } from '@yoopta/themes-shadcn';
 import { withEmoji } from '@yoopta/emoji';
 
+// import '@yoopta/themes-shadcn/variables.css';
+
 const EDITOR_STYLES = {
   width: '100%',
   paddingBottom: 100,

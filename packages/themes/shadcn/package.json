@@ -81,6 +81,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./variables.css": "./dist/variables.css",
     "./accordion": {
       "types": "./dist/types/accordion/index.d.ts",
       "import": "./dist/accordion.js"
@@ -224,7 +225,7 @@
     "test": "node ./__tests__/yoopta-themes-shadcn.test.js",
     "start": "rollup --config rollup.config.js --watch --bundleConfigAsCjs --environment NODE_ENV:development",
     "prepublishOnly": "yarn build",
-    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production"
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs --environment NODE_ENV:production && cp src/variables.css dist/variables.css"
   },
   "bugs": {
     "url": "https://github.com/Darginec05/Yoopta-Editor/issues"
