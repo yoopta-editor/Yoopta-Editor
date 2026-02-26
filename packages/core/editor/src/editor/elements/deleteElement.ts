@@ -28,14 +28,24 @@ function findElement(
   isInline: boolean,
   customMatcher?: ElementMatcher,
 ): [Element, Path] | null {
-  if (!slate.selection) {
-    return null;
-  }
-
   const matcher = customMatcher ?? ((n) => Element.isElement(n) && n.type === type);
 
+  // First try to find within current selection
+  if (slate.selection) {
+    const [entry] = Editor.nodes(slate, {
+      at: slate.selection,
+      match: matcher,
+      mode: isInline ? 'lowest' : 'highest',
+    });
+
+    if (entry) {
+      return entry as [Element, Path];
+    }
+  }
+
+  // Fallback: search entire document (handles unfocused/out-of-focus blocks)
   const [entry] = Editor.nodes(slate, {
-    at: slate.selection,
+    at: [],
     match: matcher,
     mode: isInline ? 'lowest' : 'highest',
   });
