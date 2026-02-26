@@ -156,6 +156,19 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
       [mode, value, onChange, debouncedOnChange],
     );
 
+    // Handler for removing color (set to undefined)
+    const handleRemoveColor = useCallback(() => {
+      debouncedOnChange.cancel();
+
+      if (mode === 'backgroundColor') {
+        setColor(undefined);
+        onChange?.({ ...value, backgroundColor: undefined });
+      } else {
+        setTextColor(undefined);
+        onChange?.({ ...value, color: undefined });
+      }
+    }, [mode, value, onChange, debouncedOnChange]);
+
     const currentColor = mode === 'backgroundColor' ? color : textColor;
 
     const trigger = cloneElement(children, {
@@ -218,6 +231,13 @@ export const HighlightColorPicker = forwardRef<HTMLDivElement, HighlightColorPic
 
             {presets.length > 0 && (
               <div className="yoopta-ui-highlight-color-picker-presets">
+                <button
+                  type="button"
+                  className="yoopta-ui-highlight-color-picker-preset yoopta-ui-highlight-color-picker-preset-remove"
+                  data-selected={!currentColor}
+                  onClick={handleRemoveColor}
+                  aria-label={`Remove ${mode === 'backgroundColor' ? 'background' : 'text'} color`}
+                />
                 {presets.map((presetColor) => {
                   const isSelected = currentColor?.toLowerCase() === presetColor.toLowerCase();
                   return (
