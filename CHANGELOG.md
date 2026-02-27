@@ -4,11 +4,32 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
-## [6.0.0-beta.22] - 2026-02-19
+## [6.0.1] - 2026-02-27
+
+### Fixed
+
+- **Email serialization**: Fixed `getEmail` to check for valid root elements and handle invalid input gracefully in `serializeTextNodes`. Refactored callout and list plugins to use centralized theme styles for consistent email output. (#575)
+- **Media plugins max size**: Removed hardcoded `maxWidth`/`maxHeight` from embed, image, and video plugins. Default sizing now uses `Infinity` for better responsiveness. (#584)
+
+### Added
+
+- **Highlight color removal**: Added a button to the HighlightColorPicker to remove/reset background or text color. (#582)
+- **Element operation tests**: Added comprehensive test suites for `deleteElement` and `updateElement` functions, covering selection, path, and custom matchers. (#581)
+- **Placeholders**: Implemented per-element placeholders via `.extend()` and global editor placeholder. Added placeholder CSS to shadcn theme. (#583)
 
 ### Changed
 
-- **Monorepo: Lerna → Turborepo + Yarn Berry**: Migrated from Lerna + Yarn v1 to Turborepo + Yarn Berry (v4). `workspace:*` protocol now resolves local packages correctly (fixes broken symlinks with prerelease versions). Turborepo provides build caching and `--filter` for selective dev mode.
+- **Theme CSS variables**: Removed `--yoopta-shadcn-*` prefix from CSS variables. Theme now reads standard shadcn variables (`--card`, `--foreground`, `--border`, etc.) directly. Removed `@tailwind base` to prevent overriding user styles. `variables.css` is no longer auto-imported — users who don't have their own shadcn variables can import it separately. (#574)
+
+---
+
+## [6.0.0] - 2026-02-24
+
+First stable release. Graduated from `6.0.0-beta.22` with no feature changes.
+
+### Changed (from beta series)
+
+- **Monorepo: Lerna → Turborepo + Yarn Berry**: Migrated from Lerna + Yarn v1 to Turborepo + Yarn Berry (v4). `workspace:*` protocol now resolves local packages correctly. Turborepo provides build caching and `--filter` for selective dev mode.
 - **Dev workflow**: `yarn dev` starts the dev server. Use `yarn dev --filter=@yoopta/editor` to watch specific packages — replaces the old `PACKAGES="..." yarn dev` workaround.
 - **Dev playground**: Removed `packages/development/`. The `web/next-app-example/` app is now the development workspace.
 - **Publishing: Lerna → Changesets**: Versioning and publishing now uses Changesets with fixed version groups — all `@yoopta/*` packages share the same version.
@@ -16,7 +37,7 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ### Added
 
-- **@yoopta/emoji**: New plugin for emoji insertion (added in beta.21, first included in workspace build).
+- **@yoopta/emoji**: New plugin for emoji insertion.
 
 ---
 
