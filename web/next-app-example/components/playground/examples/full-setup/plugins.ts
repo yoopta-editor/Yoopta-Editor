@@ -26,6 +26,7 @@ const YImage = Image.extend({
         id: file.name,
         src: URL.createObjectURL(file),
         alt: 'cloudinary',
+        fit: 'cover',
         sizes: {
           width: file.size,
           height: file.size,

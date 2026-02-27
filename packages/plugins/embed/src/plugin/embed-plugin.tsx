@@ -41,7 +41,6 @@ const Embed = new YooptaPlugin<EmbedElementMap, EmbedPluginOptions>({
       description: 'Embed videos, maps, code, and more',
     },
     shortcuts: ['embed', 'youtube', 'vimeo', 'twitter', 'instagram', 'figma', 'codepen', 'spotify'],
-    maxWidth: 650,
   },
   commands: EmbedCommands,
   parsers: {

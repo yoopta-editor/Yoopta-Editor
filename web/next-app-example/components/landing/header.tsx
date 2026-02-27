@@ -208,36 +208,6 @@ export function Header() {
                 {item.external && <ExternalLink className="h-3 w-3 ml-auto" />}
               </Link>
             ))}
-
-            <div className="pt-2">
-              <p className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Examples
-              </p>
-              {exampleNavigation.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-colors",
-                      isActive(item.href)
-                        ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <div className="flex flex-col">
-                      <span>{item.name}</span>
-                      <span className="text-xs text-muted-foreground font-normal">
-                        {item.description}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
           </nav>
         </div>
       )}
