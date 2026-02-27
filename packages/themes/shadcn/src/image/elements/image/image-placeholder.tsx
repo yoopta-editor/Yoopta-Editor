@@ -7,8 +7,8 @@ import { ImagePlaceholderUnsplash } from './image-placeholder-unsplash';
 import { Button } from '../../../ui/button';
 import { Input } from '../../../ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../ui/tabs';
-import { cn } from '../../../utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../../ui/tooltip';
+import { cn } from '../../../utils';
 
 type ImagePlaceholderProps = {
   onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -289,7 +289,7 @@ const ImagePlaceholderTabs = ({
         <ImageUploadForm onUpload={onUpload} hasPreview={hasPreview} />
       </TabsContent>
 
-      <TabsContent value="link" d>
+      <TabsContent value="link">
         <ImageLinkForm onInsertUrl={onInsertUrl} />
       </TabsContent>
 

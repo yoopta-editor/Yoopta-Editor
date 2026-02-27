@@ -30,7 +30,7 @@ export const EmbedRender = ({
   onReplace,
   pluginOptions,
 }: Props) => {
-  const [sizes, setSizes] = useState(elementProps.sizes || { width: 650, height: 400 });
+  const [sizes, setSizes] = useState(elementProps.sizes);
   const { isElementSelected } = useElementSelected();
   const isBlockSelected = useBlockSelected({ blockId });
   const isSelected = isElementSelected && isBlockSelected;
@@ -39,24 +39,24 @@ export const EmbedRender = ({
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
     const maxWidth = pluginOptions?.maxWidth ?? editorWidth;
 
     return {
       maxWidth: typeof maxWidth === 'number' ? maxWidth : editorWidth,
-      maxHeight: 800, // reasonable max height
+      maxHeight: Infinity, // reasonable max height
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
       const maxWidth = pluginOptions?.maxWidth ?? editorWidth;
 
       setMaxSizes({
         maxWidth: typeof maxWidth === 'number' ? maxWidth : editorWidth,
-        maxHeight: 800,
+        maxHeight: Infinity,
       });
     };
 
@@ -156,7 +156,7 @@ export const EmbedRender = ({
   }[(elementProps as any).alignment ?? 'center'];
 
   return (
-    <div {...attributes} className={cn('group/embed mt-2 relative transition-all w-full flex', alignmentClass)}>
+    <div {...attributes} className={cn('group/embed mt-4 relative transition-all w-full flex', alignmentClass)}>
       <div className="relative" contentEditable={false}>
         <Rnd
           ref={(node) => {
@@ -168,10 +168,7 @@ export const EmbedRender = ({
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
             outlineColor: isSelected ? 'hsl(var(--primary))' : 'none',
-          }}
-          size={{
-            width: typeof sizes.width === 'number' ? sizes.width : parseInt(String(sizes.width), 10),
-            height: typeof sizes.height === 'number' ? sizes.height : parseInt(String(sizes.height), 10),
+            padding: 2
           }}
           onResize={onResize}
           onResizeStop={onResizeStop}
@@ -183,15 +180,15 @@ export const EmbedRender = ({
           enableResizing={
             isSelected
               ? {
-                  bottom: false,
-                  bottomLeft: false,
-                  bottomRight: false,
-                  left: true,
-                  right: true,
-                  top: false,
-                  topLeft: false,
-                  topRight: false,
-                }
+                bottom: false,
+                bottomLeft: false,
+                bottomRight: false,
+                left: true,
+                right: true,
+                top: false,
+                topLeft: false,
+                topRight: false,
+              }
               : false
           }
           disableDragging

@@ -40,7 +40,7 @@ export const ImageRender = ({
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width ?? 650;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width ?? Infinity;
     const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
@@ -53,14 +53,14 @@ export const ImageRender = ({
         ? typeof maxSizesOptions.maxHeight === 'number'
           ? maxSizesOptions.maxHeight
           : parseInt(String(maxSizesOptions.maxHeight).replace(/[^\d]/g, ''), 10)
-        : 550,
+        : Infinity,
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width ?? 650;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width ?? Infinity;
       const pluginMaxSizes = pluginOptions?.maxSizes;
 
       setMaxSizes({
@@ -73,7 +73,7 @@ export const ImageRender = ({
           ? typeof pluginMaxSizes.maxHeight === 'number'
             ? pluginMaxSizes.maxHeight
             : parseInt(String(pluginMaxSizes.maxHeight).replace(/[^\d]/g, ''), 10)
-          : 550,
+          : Infinity,
       });
     };
 
@@ -193,26 +193,23 @@ export const ImageRender = ({
   return (
     <div
       {...attributes}
-      className={cn('group/image mt-2 relative transition-all w-full flex', alignmentClass)}>
+      className={cn('group/image mt-4 relative transition-all w-full flex', alignmentClass)}>
       <div className="relative" contentEditable={false} ref={imageContainerRef}>
         <Rnd
           style={{
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
             outlineColor: isSelected ? 'hsl(var(--primary))' : 'none',
-          }}
-          size={{
-            width: sizes.width,
-            height: sizes.height,
+            padding: 2
           }}
           onResize={onResize}
           onResizeStop={onResizeStop}
           lockAspectRatio
           minWidth={100}
           minHeight={100}
-          maxWidth={maxSizes.maxWidth}
-          maxHeight={maxSizes.maxHeight}
-          position={{ x: 0, y: 0 }}
+          // maxWidth={maxSizes.maxWidth}
+          // maxHeight={maxSizes.maxHeight}
+          position={{ x: Infinity, y: 0 }}
           enableResizing={
             isSelected
               ? {

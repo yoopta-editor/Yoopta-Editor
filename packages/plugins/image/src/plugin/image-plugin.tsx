@@ -43,8 +43,6 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
       title: 'Image',
       description: 'Upload from device or insert with link',
     },
-    // accept: 'image/png, image/jpeg, image/gif, image/webp',
-    maxSizes: { maxWidth: 650, maxHeight: 550 },
   },
   parsers: {
     html: {

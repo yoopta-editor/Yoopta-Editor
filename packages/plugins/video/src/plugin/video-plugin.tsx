@@ -52,7 +52,6 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
   ),
   options: {
     accept: 'video/*',
-    maxSizes: { maxWidth: 650, maxHeight: 550 },
     display: {
       title: 'Video',
       description: 'Upload from device, insert from Youtube, Vimeo, DailyMotion, Loom, Wistia',

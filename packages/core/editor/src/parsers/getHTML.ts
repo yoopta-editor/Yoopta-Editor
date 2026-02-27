@@ -1,7 +1,7 @@
+import { getYooptaJSON } from './getYooptaJSON';
 import { Paths } from '../editor/paths';
 import type { SlateElement, YooEditor, YooptaContentValue } from '../editor/types';
 import { getPluginByInlineElement } from '../utils/block-elements';
-import { getYooptaJSON } from './getYooptaJSON';
 
 const MARKS_NODE_NAME_MATCHERS_MAP = {
   underline: { type: 'underline', tag: 'u' },
@@ -13,6 +13,8 @@ const MARKS_NODE_NAME_MATCHERS_MAP = {
 };
 
 function serializeChildren(children, plugins, editor) {
+  if (!children) return '';
+
   return children
     .map((child) => {
       let innerHtml = '';

@@ -31,7 +31,7 @@ export const VideoRender = ({
   onReplace,
   pluginOptions,
 }: Props) => {
-  const [sizes, setSizes] = useState(elementProps.sizes || { width: 650, height: 400 });
+  const [sizes, setSizes] = useState(elementProps.sizes);
   const { isElementSelected } = useElementSelected();
   const isBlockSelected = useBlockSelected({ blockId });
   const isSelected = isElementSelected && isBlockSelected;
@@ -40,7 +40,7 @@ export const VideoRender = ({
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
     const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
@@ -53,14 +53,14 @@ export const VideoRender = ({
         ? typeof maxSizesOptions.maxHeight === 'number'
           ? maxSizesOptions.maxHeight
           : parseInt(String(maxSizesOptions.maxHeight).replace(/[^\d]/g, ''), 10)
-        : 550,
+        : Infinity,
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width || 650;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
       const pluginMaxSizes = pluginOptions?.maxSizes;
 
       setMaxSizes({
@@ -73,7 +73,7 @@ export const VideoRender = ({
           ? typeof pluginMaxSizes.maxHeight === 'number'
             ? pluginMaxSizes.maxHeight
             : parseInt(String(pluginMaxSizes.maxHeight).replace(/[^\d]/g, ''), 10)
-          : 550,
+          : Infinity,
       });
     };
 
@@ -217,7 +217,7 @@ export const VideoRender = ({
   return (
     <div
       {...attributes}
-      className={cn('group/video mt-2 relative transition-all w-full flex', alignmentClass)}>
+      className={cn('group/video mt-4 relative transition-all w-full flex', alignmentClass)}>
       <div className="relative" contentEditable={false}>
         <Rnd
           ref={(node) => {
@@ -230,10 +230,7 @@ export const VideoRender = ({
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
             outlineColor: isSelected ? 'hsl(var(--primary))' : 'none',
-          }}
-          size={{
-            width: typeof sizes.width === 'number' ? sizes.width : parseInt(String(sizes.width), 10),
-            height: typeof sizes.height === 'number' ? sizes.height : parseInt(String(sizes.height), 10),
+            padding: 2
           }}
           onResize={onResize}
           onResizeStop={onResizeStop}
@@ -242,7 +239,7 @@ export const VideoRender = ({
           minHeight={150}
           maxWidth={maxSizes.maxWidth}
           maxHeight={maxSizes.maxHeight}
-          position={{ x: 0, y: 0 }}
+          position={{ x: Infinity, y: 0 }}
           enableResizing={
             isSelected
               ? {
@@ -296,7 +293,7 @@ export const VideoRender = ({
               allowFullScreen
               className="w-full h-full"
               style={{
-                aspectRatio: `${sizes.width} / ${sizes.height}`,
+                aspectRatio: `${sizes?.width} / ${sizes?.height}`,
               }}
             />
           ) : (
