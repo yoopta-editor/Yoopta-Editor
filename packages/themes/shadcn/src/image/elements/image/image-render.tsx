@@ -207,8 +207,6 @@ export const ImageRender = ({
           lockAspectRatio
           minWidth={100}
           minHeight={100}
-          // maxWidth={maxSizes.maxWidth}
-          // maxHeight={maxSizes.maxHeight}
           position={{ x: Infinity, y: 0 }}
           enableResizing={
             isSelected
