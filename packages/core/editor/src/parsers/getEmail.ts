@@ -70,6 +70,7 @@ export function getEmail(
   opts?: EmailTemplateOptions,
 ): string {
   const options = deepMerge(DEFAULT_OPTIONS, opts || {});
+  // [TODO] - add options for this
   const blocks = Object.values(content)
     .filter((item) => {
       const selectedBlocks = Paths.getSelectedPaths(editor);

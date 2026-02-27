@@ -13,7 +13,6 @@ import YooptaEditor, {
 import { EmojiCommands, withEmoji } from "@yoopta/emoji";
 // @ts-expect-error - EmojiDropdown types not properly exported
 import { EmojiDropdown } from "@yoopta/themes-shadcn/emoji";
-import '@yoopta/themes-shadcn/variables.css';
 
 import { EMAIL_PLUGINS } from "./plugins";
 import { EMAIL_MARKS } from "./marks";
@@ -170,7 +169,12 @@ const EMAIL_TEMPLATES = [
       "block-7": {
         id: "block-7",
         type: "Paragraph",
-        value: [{ text: "If you have any questions, feel free to reach out to our support team." }],
+        value: [{
+          id: "el-3",
+          type: "paragraph",
+          children: [{ text: "If you have any questions, feel free to reach out to our support team." }],
+          props: { nodeType: "block" },
+        }],
         meta: { order: 6, depth: 0 },
       },
       "block-8": {

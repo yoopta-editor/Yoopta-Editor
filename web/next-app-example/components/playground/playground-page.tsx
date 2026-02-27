@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Github,
-  Sparkles,
   Zap,
   Code2,
   ExternalLink,
@@ -13,6 +12,8 @@ import { Header } from "@/components/landing/header";
 import { FullSetupEditor } from "./examples/full-setup/editor";
 import { playgroundInitialValue } from "./playground-initial-value";
 import { useRef } from "react";
+
+import '@yoopta/themes-shadcn/variables.css';
 
 export function PlaygroundPage() {
   const containerBoxRef = useRef<HTMLDivElement | null>(null);

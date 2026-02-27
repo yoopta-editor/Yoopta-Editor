@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+
 import '@yoopta/themes-shadcn/variables.css';
 
 const GITHUB_BASE =
