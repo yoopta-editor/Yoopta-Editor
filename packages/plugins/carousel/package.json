@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/carousel",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Carousel plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -16,7 +16,7 @@
     "embla-carousel-react": "^8.6.0"
   },
   "peerDependencies": {
-    "@yoopta/editor": "6.0.0",
+    "@yoopta/editor": "6.0.1",
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },
