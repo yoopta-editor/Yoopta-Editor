@@ -1,0 +1,342 @@
+/* CMS Sidebar */
+.yoo-cms-sidebar {
+  position: sticky;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  min-width: 40px;
+  border-left: 1px solid #e5e7eb;
+  background: #fafafa;
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+.yoo-cms-sidebar[data-expanded='false'] {
+  width: 40px;
+}
+
+/* Header row with toggle + preview */
+.yoo-cms-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  flex-shrink: 0;
+  min-height: 40px;
+  gap: 8px;
+}
+
+.yoo-cms-sidebar-toggle {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.yoo-cms-sidebar-toggle:hover {
+  color: #111827;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.yoo-cms-sidebar-preview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.yoo-cms-sidebar-preview-btn:hover {
+  background: #2563eb;
+}
+
+.yoo-cms-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  overflow: hidden;
+}
+
+.yoo-cms-sidebar[data-expanded='false'] .yoo-cms-sidebar-inner {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.yoo-cms-sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.yoo-cms-sidebar-tab {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.yoo-cms-sidebar-tab:hover {
+  color: #374151;
+}
+
+.yoo-cms-sidebar-tab[data-active='true'] {
+  color: #111827;
+  border-bottom-color: #3b82f6;
+}
+
+.yoo-cms-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.yoo-cms-sidebar-section {
+  margin-bottom: 20px;
+}
+
+.yoo-cms-sidebar-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.yoo-cms-sidebar-field {
+  margin-bottom: 14px;
+}
+
+.yoo-cms-sidebar-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.yoo-cms-sidebar-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.yoo-cms-sidebar-input:focus {
+  border-color: #3b82f6;
+}
+
+.yoo-cms-sidebar-select {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+}
+
+.yoo-cms-sidebar-select:focus {
+  border-color: #3b82f6;
+}
+
+.yoo-cms-sidebar-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yoo-cms-sidebar-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.yoo-cms-sidebar-color-swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.yoo-cms-sidebar-color-swatch::-webkit-color-swatch {
+  border: none;
+  border-radius: 5px;
+}
+
+/* File upload */
+.yoo-cms-sidebar-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.yoo-cms-sidebar-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  background: #fff;
+  border: 1px dashed #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.yoo-cms-sidebar-upload-btn:hover {
+  border-color: #3b82f6;
+  background: #f0f7ff;
+}
+
+.yoo-cms-sidebar-upload-preview {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.yoo-cms-sidebar-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.yoo-cms-sidebar-upload-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.yoo-cms-sidebar-upload-remove:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.yoo-cms-sidebar-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.yoo-cms-sidebar-empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.yoo-cms-sidebar-empty-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Layout wrapper */
+.yoo-cms-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.yoo-cms-editor-area {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* Topbar */
+.yoo-cms-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.yoo-cms-topbar-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.yoo-cms-topbar-preview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.yoo-cms-topbar-preview-btn:hover {
+  background: #2563eb;
+}

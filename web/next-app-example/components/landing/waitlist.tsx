@@ -13,9 +13,12 @@ import {
   Palette,
   FileCode,
   ArrowRight,
+  ExternalLinkIcon,
 } from "lucide-react";
 
 const TALLY_FORM_ID = "RGPj8v";
+
+const releasedFeatures = [{ title: "Real-time Collaboration", example: "/examples/collaboration", docs: "https://docs.yoopta.dev/core/collaboration" }];
 
 const upcomingFeatures = [
   {
@@ -110,30 +113,55 @@ export function Waitlist() {
 
         {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {upcomingFeatures.map((feature) => (
-            <div
-              key={feature.title}
-              className="group relative p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300"
-            >
-              {/* Icon */}
-              <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 dark:from-blue-500/20 dark:to-violet-500/20 group-hover:from-blue-500/20 group-hover:to-violet-500/20 dark:group-hover:from-blue-500/30 dark:group-hover:to-violet-500/30 transition-colors">
-                <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              </div>
+          {upcomingFeatures.map((feature) => {
+            const releasedFeature = releasedFeatures.find(releasedFeature => releasedFeature.title === feature.title);
+            const isReleased = !!releasedFeature;
 
-              {/* Content */}
-              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">{feature.title}</h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                {feature.description}
-              </p>
+            return (
+              <div
+                key={feature.title}
+                className="group relative p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300"
+              >
+                {/* Icon */}
+                <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 dark:from-blue-500/20 dark:to-violet-500/20 group-hover:from-blue-500/20 group-hover:to-violet-500/20 dark:group-hover:from-blue-500/30 dark:group-hover:to-violet-500/30 transition-colors">
+                  <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
 
-              {/* Coming soon badge */}
-              <div className="absolute top-4 right-4">
-                <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
-                  Soon
-                </span>
+                {/* Content */}
+                <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">{feature.title}</h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  {feature.description}
+                </p>
+
+                {/* if released show released badge and link to example and docs */}
+                {isReleased ? (
+                  <div className="absolute top-4 right-4">
+                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
+                      Released
+                    </span>
+                    <Button variant="link" size="sm" asChild>
+                      <a href={releasedFeature?.example} target="_blank" rel="noopener noreferrer">
+                        View Example
+                        <ExternalLinkIcon className="w-4 h-4" />
+                      </a>
+                    </Button>
+                    <Button variant="link" size="sm" asChild>
+                      <a href={releasedFeature?.docs} target="_blank" rel="noopener noreferrer">
+                        View Docs
+                        <ExternalLinkIcon className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="absolute top-4 right-4">
+                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
+                      Soon
+                    </span>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Waitlist CTA */}

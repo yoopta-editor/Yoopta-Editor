@@ -9,6 +9,7 @@ import {
   FileEdit,
   Users,
   LayoutDashboard,
+  LayoutTemplate,
   PanelLeft,
   ChevronLeft,
   Blocks,
@@ -17,6 +18,7 @@ import {
   Code2,
   ScrollText,
   Mail,
+  LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -26,7 +28,15 @@ import '@yoopta/themes-shadcn/variables.css';
 const GITHUB_BASE =
   "https://github.com/Darginec05/Yoopta-Editor/tree/master/web/next-app-example/components/playground/examples";
 
-const EXAMPLES = [
+type Example = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  sourceFolder: string;
+  new?: boolean;
+}
+
+const EXAMPLES: Example[] = [
   {
     title: "Full Setup",
     href: "/examples/full-setup",
@@ -70,16 +80,24 @@ const EXAMPLES = [
     sourceFolder: "word-example",
   },
   {
-    title: "Collaboration",
-    href: "/examples/collaboration",
-    icon: Users,
-    sourceFolder: "collaboration",
-  },
-  {
     title: "Large Document",
     href: "/examples/large-document",
     icon: ScrollText,
     sourceFolder: "large-document",
+  },
+  {
+    title: "Collaboration",
+    href: "/examples/collaboration",
+    icon: Users,
+    sourceFolder: "collaboration",
+    new: true,
+  },
+  {
+    title: "CMS",
+    href: "/examples/cms",
+    icon: LayoutTemplate,
+    sourceFolder: "cms",
+    new: true,
   },
 ];
 
@@ -132,6 +150,12 @@ export default function ExamplesLayout({
             {EXAMPLES.map((example) => {
               const isActive = pathname === example.href;
               const Icon = example.icon;
+              const isNew = example.new;
+              const newBadge = isNew && (
+                <span className="inline-flex items-center gap-1.5 px-2 h-5 rounded-full text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-200/80 dark:bg-blue-700/60">
+                  New
+                </span>
+              );
 
               return (
                 <li key={example.href}>
@@ -146,8 +170,9 @@ export default function ExamplesLayout({
                     )}
                   >
                     <Icon className="size-4 shrink-0" />
-                    {!collapsed && <span className="truncate">{example.title}</span>}
+                    {!collapsed && <span className="truncate">{example.title} {newBadge}</span>}
                   </Link>
+
                 </li>
               );
             })}
@@ -161,7 +186,7 @@ export default function ExamplesLayout({
 
         {/* Bottom bar — CTA strip */}
         <div className="examples-bottom-bar relative flex items-center justify-between gap-4 px-4 py-3 border-t border-neutral-200 shrink-0">
-          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 hidden sm:block">
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 hidden sm:!block">
             Like what you see? Get the editor and docs — it’s free and open source.
           </p>
           <div className="flex items-center gap-2 ml-auto">
