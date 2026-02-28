@@ -1,0 +1,227 @@
+/* Pricing Table — root grid */
+.yoo-cms-pricing-table {
+  display: grid;
+  width: 100%;
+  gap: 24px;
+  align-items: start;
+}
+
+.yoo-cms-pricing-table[data-columns='2'] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.yoo-cms-pricing-table[data-columns='3'] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.yoo-cms-pricing-table[data-columns='4'] {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.yoo-cms-pricing-table[data-padding-y='sm'] {
+  padding: 32px 24px;
+}
+
+.yoo-cms-pricing-table[data-padding-y='md'] {
+  padding: 48px 24px;
+}
+
+.yoo-cms-pricing-table[data-padding-y='lg'] {
+  padding: 64px 24px;
+}
+
+.yoo-cms-pricing-table[data-padding-y='xl'] {
+  padding: 80px 24px;
+}
+
+/* Heading + description span full width */
+.yoo-cms-pricing-heading,
+.yoo-cms-pricing-description {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.yoo-cms-pricing-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+
+.yoo-cms-pricing-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 0 auto 32px;
+  max-width: 600px;
+}
+
+/* Tier card */
+.yoo-cms-pricing-tier {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Variant: cards */
+.yoo-cms-pricing-tier[data-variant='cards'] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  padding: 32px 24px;
+}
+
+/* Variant: bordered */
+.yoo-cms-pricing-tier[data-variant='bordered'] {
+  border: 1px solid #e5e7eb;
+  padding: 32px 24px;
+}
+
+/* Variant: flat */
+.yoo-cms-pricing-tier[data-variant='flat'] {
+  padding: 32px 24px;
+}
+
+/* Featured tier */
+.yoo-cms-pricing-tier[data-featured='true'] {
+  transform: scale(1.03);
+  z-index: 1;
+}
+
+.yoo-cms-pricing-tier[data-featured='true'][data-variant='cards'] {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.yoo-cms-pricing-tier[data-featured='true'][data-variant='bordered'] {
+  border-width: 2px;
+}
+
+/* Featured badge */
+.yoo-cms-pricing-tier-badge {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  user-select: none;
+}
+
+/* Tier name */
+.yoo-cms-pricing-tier-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  line-height: 1.3;
+}
+
+/* Tier price */
+.yoo-cms-pricing-tier-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+}
+
+/* Tier period */
+.yoo-cms-pricing-tier-period {
+  font-size: 0.875rem;
+  margin: 4px 0 24px;
+}
+
+/* Features list */
+.yoo-cms-pricing-tier-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+/* Feature item */
+.yoo-cms-pricing-tier-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.yoo-cms-pricing-tier-feature-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  margin-top: 1px;
+  user-select: none;
+}
+
+.yoo-cms-pricing-tier-feature[data-included='true'] .yoo-cms-pricing-tier-feature-icon {
+  color: #22c55e;
+}
+
+.yoo-cms-pricing-tier-feature[data-included='false'] .yoo-cms-pricing-tier-feature-icon {
+  color: #d1d5db;
+}
+
+.yoo-cms-pricing-tier-feature[data-included='false'] {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* CTA Button */
+.yoo-cms-pricing-tier-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 24px;
+  border: 2px solid transparent;
+  cursor: default;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-top: 1rem;
+}
+
+.yoo-cms-pricing-tier-button[data-variant='outline'] {
+  background: transparent !important;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .yoo-cms-pricing-table[data-columns='2'],
+  .yoo-cms-pricing-table[data-columns='3'],
+  .yoo-cms-pricing-table[data-columns='4'] {
+    grid-template-columns: 1fr;
+  }
+
+  .yoo-cms-pricing-table[data-padding-y='sm'] { padding: 24px 16px; }
+  .yoo-cms-pricing-table[data-padding-y='md'] { padding: 32px 16px; }
+  .yoo-cms-pricing-table[data-padding-y='lg'] { padding: 48px 16px; }
+  .yoo-cms-pricing-table[data-padding-y='xl'] { padding: 56px 16px; }
+
+  .yoo-cms-pricing-heading {
+    font-size: 1.5rem;
+  }
+
+  .yoo-cms-pricing-description {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+
+  .yoo-cms-pricing-tier[data-featured='true'] {
+    transform: none;
+  }
+
+  .yoo-cms-pricing-tier-price {
+    font-size: 2rem;
+  }
+}

@@ -9,7 +9,7 @@ import {
   Github,
   ExternalLink,
   Code2,
-  Info,
+  Cloud,
 } from "lucide-react";
 import { CollaborationEditor } from "./collaboration-editor";
 import { faker } from "@faker-js/faker";
@@ -36,17 +36,45 @@ export const CollaborationPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-2 sm:pb-4">
         <div className="text-center max-w-3xl mx-auto mb-0">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
             Collaborative Editing
           </h1>
         </div>
+        <div className="px-4 sm:px-6 lg:px-8 my-4 mx-auto max-w-2xl rounded-xl border border-violet-200 dark:border-violet-900/50 bg-gradient-to-br from-violet-50/80 to-blue-50/80 dark:from-violet-950/30 dark:to-blue-950/30 p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row! items-center gap-4">
+            <div className="hidden sm:flex! items-center justify-center w-10 h-10 rounded-lg bg-violet-100 dark:bg-violet-900/40 shrink-0">
+              <Cloud className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground text-sm sm:text-base">
+                Interested in a Yoopta Cloud solution?
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                Managed collaboration infrastructure, real-time sync, and hosted backends — so you don&apos;t have to run your own servers.
+              </p>
+            </div>
+            <Button asChild variant="default" size="sm" className="shrink-0 w-auto sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+              <a
+                href="https://cal.eu/akhmed-ibragimov-ngggdf/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Let&apos;s Talk
+                <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+              </a>
+            </Button>
+          </div>
+        </div>
       </section>
+
+      {/* Cloud CTA */}
+
 
       {/* Editor Card */}
       <section
-        className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8"
         ref={containerBoxRef}
       >
         <div className="max-w-5xl mx-auto">
@@ -55,41 +83,34 @@ export const CollaborationPage = () => {
 
             <div className="relative rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-neutral-900 shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50 overflow-hidden">
               {/* Card header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
+              <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
-                  <span className="ml-3 text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                  <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400 hidden sm:!inline">
                     collaboration.tsx
                   </span>
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                   <div
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-xs sm:text-sm"
                     title="Your identity in this session"
                   >
                     <div
-                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0"
                       style={{ backgroundColor: user.color }}
                     />
                     <span className="text-muted-foreground">
-                      You are{" "}
+                      <span className="hidden sm:!inline">You are </span>
                       <span className="font-medium text-foreground">
                         {user.name}
                       </span>
                     </span>
                   </div>
-                  <Badge variant="default" className="text-xs">
-                    <Zap className="w-3 h-3 mr-1" />
-                    Live
-                  </Badge>
-                  <Badge variant="warning" className="text-xs">
-                    v6 (beta)
-                  </Badge>
-                  <Badge variant="outline" className="hidden sm:inline-flex">
+                  <Badge variant="outline" className="hidden sm:!inline-flex">
                     <a
                       href="https://docs.yoopta.dev/core/collaboration"
                       target="_blank"
@@ -100,7 +121,7 @@ export const CollaborationPage = () => {
                       Documentation
                     </a>
                   </Badge>
-                  <Badge variant="outline" className="hidden sm:inline-flex">
+                  <Badge variant="outline" className="hidden sm:!inline-flex">
                     <a
                       href="https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/collaboration"
                       target="_blank"
@@ -111,7 +132,7 @@ export const CollaborationPage = () => {
                       Source Code
                     </a>
                   </Badge>
-                  <Badge variant="outline" className="hidden sm:inline-flex">
+                  <Badge variant="outline" className="hidden sm:!inline-flex">
                     <a
                       href="https://github.com/Darginec05/Yoopta-Editor"
                       target="_blank"
@@ -126,8 +147,8 @@ export const CollaborationPage = () => {
               </div>
 
               {/* Editor body */}
-              <div className="relative min-h-[600px] max-h-[calc(100vh-400px)] overflow-auto bg-white dark:bg-neutral-900">
-                <div className="pt-0 pb-8 px-4 sm:px-8 lg:px-12">
+              <div className="relative min-h-[400px] sm:min-h-[600px] max-h-[calc(100vh-100px)] sm:max-h-[calc(100vh-200px)] overflow-auto bg-white dark:bg-neutral-900">
+                <div className="pt-0 pb-6 sm:pb-8 px-3 sm:px-8 lg:px-12">
                   <CollaborationEditor
                     user={user}
                     containerBoxRef={
@@ -139,59 +160,9 @@ export const CollaborationPage = () => {
             </div>
           </div>
 
-          {/* Instructions callout */}
-          <div className="mt-6 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/20 p-6">
-            <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">
-                  How to test collaboration
-                </h3>
-                <ol className="space-y-1.5 text-sm text-muted-foreground list-decimal list-inside">
-                  <li>
-                    Open this same page in a{" "}
-                    <span className="font-medium text-foreground">
-                      second browser tab
-                    </span>
-                  </li>
-                  <li>
-                    Each tab gets a random identity &mdash; you&apos;ll see both
-                    users in the status bar
-                  </li>
-                  <li>
-                    Start typing in one tab and watch the text appear in the
-                    other in real-time
-                  </li>
-                  <li>
-                    Notice the colored cursor and name label of the remote user
-                  </li>
-                  <li>
-                    Share the URL with a friend to collaborate across devices
-                  </li>
-                </ol>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Powered by{" "}
-                  <a
-                    href="https://yjs.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-foreground"
-                  >
-                    Yjs
-                  </a>{" "}
-                  &amp; a local Yjs WebSocket server. Run{" "}
-                  <code className="px-1 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700 text-xs">
-                    yarn collab-server
-                  </code>{" "}
-                  to start it.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Footer CTA */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+          <div className="mt-6 sm:mt-8 text-center">
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-4">
               Add real-time collaboration to your editor in minutes.
             </p>
             <div className="flex items-center justify-center gap-3">

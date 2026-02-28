@@ -652,7 +652,7 @@ export function ReadmeEditor() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
+            <Separator orientation="vertical" className="h-6 mx-1 hidden sm:!block" />
 
             {/* Quick insert buttons */}
             <Button
@@ -686,7 +686,7 @@ export function ReadmeEditor() {
 
           <div className="flex flex-wrap items-center gap-2">
             {/* View mode toggle — mobile only, desktop always shows split */}
-            <div className="flex md:hidden items-center border border-neutral-200 dark:border-neutral-800 rounded-md overflow-hidden">
+            <div className="flex md:!hidden items-center border border-neutral-200 dark:border-neutral-800 rounded-md overflow-hidden">
               <Button
                 variant="ghost"
                 size="sm"
@@ -766,7 +766,7 @@ export function ReadmeEditor() {
         <div
           className={cn(
             "flex-col flex-1 min-h-0 md:border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 md:w-1/2",
-            viewMode === "preview" ? "hidden md:flex" : "flex",
+            viewMode === "preview" ? "hidden md:!flex" : "flex",
             viewMode === "editor" ? "w-full md:w-1/2" : "w-full md:w-1/2"
           )}
         >
@@ -774,7 +774,7 @@ export function ReadmeEditor() {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <FileText className="h-4 w-4 shrink-0" />
               <span className="font-medium truncate">README.md</span>
-              <span className="text-xs hidden sm:inline">— Editor</span>
+              <span className="text-xs hidden sm:!inline">— Editor</span>
             </div>
           </div>
           <ScrollArea className="flex-1 min-h-0">
@@ -793,7 +793,7 @@ export function ReadmeEditor() {
         <div
           className={cn(
             "flex-col flex-1 min-h-0 bg-white dark:bg-neutral-950 md:w-1/2",
-            viewMode === "editor" ? "hidden md:flex" : "flex",
+            viewMode === "editor" ? "hidden md:!flex" : "flex",
             viewMode === "preview" ? "w-full md:w-1/2" : "w-full md:w-1/2"
           )}
         >
@@ -801,7 +801,7 @@ export function ReadmeEditor() {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Eye className="h-4 w-4 shrink-0" />
               <span className="font-medium">Preview</span>
-              <span className="text-xs hidden sm:inline">— Markdown Output</span>
+              <span className="text-xs hidden sm:!inline">— Markdown Output</span>
             </div>
           </div>
           <ScrollArea className="flex-1 min-h-0">

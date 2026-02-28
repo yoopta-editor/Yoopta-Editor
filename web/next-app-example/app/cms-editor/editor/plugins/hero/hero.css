@@ -1,0 +1,327 @@
+/* Hero Plugin Styles */
+.yoo-cms-hero {
+  position: relative;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+/* Full height */
+.yoo-cms-hero[data-full-height='true'] {
+  min-height: 100vh;
+}
+
+/* Padding variants */
+.yoo-cms-hero[data-padding-y='sm'] {
+  padding: 40px 48px;
+}
+
+.yoo-cms-hero[data-padding-y='md'] {
+  padding: 64px 48px;
+}
+
+.yoo-cms-hero[data-padding-y='lg'] {
+  padding: 96px 48px;
+}
+
+.yoo-cms-hero[data-padding-y='xl'] {
+  padding: 128px 48px;
+}
+
+/* Layout variants */
+.yoo-cms-hero[data-variant='centered'] {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.yoo-cms-hero[data-variant='split'] {
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+}
+
+.yoo-cms-hero[data-variant='fullwidth'] {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ========================
+   Background Effects
+   ======================== */
+
+/* Shared layer for decorative effects */
+.yoo-cms-hero-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Glow effect — two animated blurred orbs */
+.yoo-cms-hero-glow-1,
+.yoo-cms-hero-glow-2 {
+  position: absolute;
+  width: 40%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: yoo-cms-hero-pulse 4s ease-in-out infinite alternate;
+}
+
+.yoo-cms-hero-glow-1 {
+  top: 15%;
+  left: 20%;
+  background: #3b82f6;
+}
+
+.yoo-cms-hero-glow-2 {
+  bottom: 15%;
+  right: 20%;
+  background: #8b5cf6;
+  animation-delay: 1s;
+}
+
+@keyframes yoo-cms-hero-pulse {
+  0% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(1.15);
+  }
+}
+
+/* Grid pattern effect */
+.yoo-cms-hero-grid-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ========================
+   Overlay
+   ======================== */
+.yoo-cms-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================
+   Content wrapper
+   ======================== */
+.yoo-cms-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.yoo-cms-hero[data-variant='centered'] .yoo-cms-hero-content {
+  align-items: center;
+}
+
+.yoo-cms-hero[data-variant='split'] .yoo-cms-hero-content {
+  align-items: flex-start;
+  max-width: 600px;
+}
+
+.yoo-cms-hero[data-variant='fullwidth'] .yoo-cms-hero-content {
+  align-items: center;
+  max-width: 960px;
+}
+
+/* ========================
+   Badge
+   ======================== */
+.yoo-cms-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  border-radius: 9999px;
+  white-space: nowrap;
+  margin-bottom: 24px;
+  cursor: text;
+}
+
+.yoo-cms-hero-badge[data-variant='pill'] {
+  padding: 6px 16px;
+}
+
+.yoo-cms-hero-badge[data-variant='outlined'] {
+  padding: 6px 16px;
+  background: transparent !important;
+}
+
+.yoo-cms-hero-badge[data-variant='subtle'] {
+  padding: 6px 16px;
+}
+
+/* ========================
+   Title
+   ======================== */
+.yoo-cms-hero-title {
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding: 0;
+}
+
+.yoo-cms-hero-title[data-font-size='4xl'] {
+  font-size: 2.25rem;
+}
+
+.yoo-cms-hero-title[data-font-size='5xl'] {
+  font-size: 3rem;
+}
+
+.yoo-cms-hero-title[data-font-size='6xl'] {
+  font-size: 3.75rem;
+}
+
+.yoo-cms-hero-title[data-font-size='7xl'] {
+  font-size: 4.5rem;
+}
+
+/* Gradient text effect */
+.yoo-cms-hero-title[data-gradient-text='true'] {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================
+   Subtitle
+   ======================== */
+.yoo-cms-hero-subtitle {
+  line-height: 1.6;
+  margin-top: 24px;
+  max-width: 640px;
+  font-weight: 400;
+}
+
+.yoo-cms-hero-subtitle[data-font-size='lg'] {
+  font-size: 1.125rem;
+}
+
+.yoo-cms-hero-subtitle[data-font-size='xl'] {
+  font-size: 1.25rem;
+}
+
+.yoo-cms-hero-subtitle[data-font-size='2xl'] {
+  font-size: 1.5rem;
+}
+
+/* ========================
+   Buttons
+   ======================== */
+.yoo-cms-hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.yoo-cms-hero[data-variant='centered'] .yoo-cms-hero-buttons {
+  justify-content: center;
+}
+
+/* Button base */
+.yoo-cms-hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: text;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+
+.yoo-cms-hero-button:hover {
+  opacity: 0.9;
+}
+
+/* Button sizes */
+.yoo-cms-hero-button[data-size='sm'] {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+.yoo-cms-hero-button[data-size='md'] {
+  padding: 10px 24px;
+  font-size: 1rem;
+}
+
+.yoo-cms-hero-button[data-size='lg'] {
+  padding: 14px 32px;
+  font-size: 1.125rem;
+}
+
+/* Button variant — outline always transparent bg */
+.yoo-cms-hero-button[data-variant='outline'] {
+  background-color: transparent;
+}
+
+/* ========================
+   Mobile styles
+   ======================== */
+@media (max-width: 768px) {
+  .yoo-cms-hero[data-padding-y='sm'] { padding: 24px 20px; }
+  .yoo-cms-hero[data-padding-y='md'] { padding: 40px 20px; }
+  .yoo-cms-hero[data-padding-y='lg'] { padding: 56px 20px; }
+  .yoo-cms-hero[data-padding-y='xl'] { padding: 72px 20px; }
+
+  .yoo-cms-hero[data-variant='split'] {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .yoo-cms-hero[data-variant='split'] .yoo-cms-hero-content {
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .yoo-cms-hero-title[data-font-size='4xl'] { font-size: 1.75rem; }
+  .yoo-cms-hero-title[data-font-size='5xl'] { font-size: 2rem; }
+  .yoo-cms-hero-title[data-font-size='6xl'] { font-size: 2.5rem; }
+  .yoo-cms-hero-title[data-font-size='7xl'] { font-size: 3rem; }
+
+  .yoo-cms-hero-subtitle[data-font-size='lg'] { font-size: 1rem; }
+  .yoo-cms-hero-subtitle[data-font-size='xl'] { font-size: 1.0625rem; }
+  .yoo-cms-hero-subtitle[data-font-size='2xl'] { font-size: 1.125rem; }
+
+  .yoo-cms-hero-buttons {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .yoo-cms-hero-button[data-size='lg'] {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}

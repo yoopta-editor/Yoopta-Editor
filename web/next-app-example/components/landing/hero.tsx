@@ -62,7 +62,7 @@ export function Hero() {
           {/* Subheadline */}
           <p className="mx-auto max-w-2xl text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 mb-10">
             Build Notion-like editors or custom CMS applications in minutes.
-            <br className="hidden sm:block" />
+            <br className="hidden sm:!block" />
             Free, open-source, and packed with 20+ plugins, drag & drop,
             theme presets, and full API control.
           </p>

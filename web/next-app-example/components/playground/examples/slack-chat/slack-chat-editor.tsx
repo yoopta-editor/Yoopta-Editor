@@ -358,7 +358,7 @@ export function SlackChatEditor() {
             </div>
           </div>
           <p className="text-[10px] sm:text-xs text-neutral-500 mt-1.5 sm:mt-2 text-center px-1">
-            <span className="hidden xs:inline">Press </span><kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-[10px] sm:text-xs">Enter</kbd> to send<span className="hidden sm:inline">, <kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Shift+Enter</kbd> for new line</span>
+            <span className="hidden xs:!inline">Press </span><kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-[10px] sm:text-xs">Enter</kbd> to send<span className="hidden sm:!inline">, <kbd className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Shift+Enter</kbd> for new line</span>
           </p>
         </div>
       </div>

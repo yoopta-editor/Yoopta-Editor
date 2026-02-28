@@ -21,7 +21,7 @@ export function ExampleViewer({ name, description }: ExampleViewerProps) {
         <div className="flex items-center gap-3">
           <h1 className="text-lg font-semibold text-neutral-900 dark:text-white">{name}</h1>
           {description && (
-            <Badge variant="secondary" className="hidden sm:inline-flex">
+            <Badge variant="secondary" className="hidden sm:!inline-flex">
               {description}
             </Badge>
           )}

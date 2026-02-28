@@ -1,0 +1,133 @@
+/* Navigation Plugin Styles */
+.yoo-cms-nav {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  margin: 4px 0;
+  z-index: 50;
+}
+
+/* Position variants — visual indicators in editor */
+.yoo-cms-nav[data-position='sticky']::before,
+.yoo-cms-nav[data-position='fixed']::before {
+  content: attr(data-position);
+  position: absolute;
+  top: -18px;
+  left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* Border bottom */
+.yoo-cms-nav[data-border='true'] {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Layout: standard — logo left, links center, CTA right */
+.yoo-cms-nav[data-layout='standard'] {
+  justify-content: space-between;
+}
+
+/* Layout: centered — logo left, links center (absolute), CTA right */
+.yoo-cms-nav[data-layout='centered'] {
+  justify-content: space-between;
+}
+
+.yoo-cms-nav[data-layout='centered'] .yoo-cms-nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Layout: minimal — logo left, CTA right, no visible links */
+.yoo-cms-nav[data-layout='minimal'] {
+  justify-content: space-between;
+}
+
+.yoo-cms-nav[data-layout='minimal'] .yoo-cms-nav-links {
+  display: none;
+}
+
+/* Logo */
+.yoo-cms-nav-logo {
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: text;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Links container */
+.yoo-cms-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Individual link */
+.yoo-cms-nav-link {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: text;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.yoo-cms-nav-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* CTA button */
+.yoo-cms-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  white-space: nowrap;
+  cursor: text;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.yoo-cms-nav-cta:hover {
+  opacity: 0.9;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .yoo-cms-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .yoo-cms-nav-links {
+    display: none;
+  }
+
+  .yoo-cms-nav[data-layout='centered'] .yoo-cms-nav-links {
+    position: static;
+    transform: none;
+    display: none;
+  }
+
+  .yoo-cms-nav-logo {
+    font-size: 0.9375rem;
+  }
+
+  .yoo-cms-nav-cta {
+    font-size: 0.8125rem;
+    padding: 6px 14px;
+  }
+}
