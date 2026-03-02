@@ -1,6 +1,6 @@
 import { COMMAND_MENU_DEFAULT_ICONS_MAP } from '@/lib/icons';
 import { SlashCommandMenu } from '@yoopta/ui/slash-command-menu';
-import { LayoutTemplateIcon, LayoutGridIcon, NavigationIcon, MegaphoneIcon, QuoteIcon, FootprintsIcon, DollarSignIcon } from 'lucide-react';
+import { LayoutTemplateIcon, LayoutGridIcon, NavigationIcon, MegaphoneIcon, QuoteIcon, FootprintsIcon, DollarSignIcon, ImageIcon, HelpCircleIcon } from 'lucide-react';
 
 // Extended icons map for CMS plugins
 const CMS_ICONS_MAP: Record<string, React.ComponentType<{ width?: number; height?: number }>> = {
@@ -12,6 +12,8 @@ const CMS_ICONS_MAP: Record<string, React.ComponentType<{ width?: number; height
   Testimonials: QuoteIcon,
   Footer: FootprintsIcon,
   PricingTable: DollarSignIcon,
+  LogoCloud: ImageIcon,
+  FAQ: HelpCircleIcon,
 };
 
 export const CMSSlashCommandMenu = () => (

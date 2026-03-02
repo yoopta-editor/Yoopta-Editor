@@ -78,9 +78,9 @@ const Video = new YooptaPlugin<VideoElementMap, VideoPluginOptions>({
             };
 
             const maxSizes = (editor.plugins.Image.options as VideoPluginOptions)?.maxSizes;
-            const limitedSizes = limitSizes(sizes!, {
-              width: maxSizes!.maxWidth!,
-              height: maxSizes!.maxHeight!,
+            const limitedSizes = limitSizes(sizes, {
+              width: maxSizes?.maxWidth ?? 0,
+              height: maxSizes?.maxHeight ?? 0,
             });
 
             const controls = el.getAttribute('controls');

@@ -18,13 +18,32 @@ I've integrated rich-text editors into products more times than I'd like to admi
 
 Yoopta was built to end that cycle. The idea is simple: give developers a **headless core** when they need full control, but also ship **20+ ready-made plugins**, **pre-built UI components** (toolbars, slash menus, block actions), and **theme presets** (shadcn, Material) — so you can launch a polished editing experience without thinking about implementing a rich-text editor in your project and engage in other business tasks
 
+Whether you're building a simple blog editor, a Notion-like workspace, a CMS for landing pages, or even a full website builder — Yoopta gives you the primitives to get there
+
 If Yoopta saves you time, consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring the project](https://github.com/sponsors/Darginec05). It keeps the project alive
 
 ## Introduction
 
-Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc.
+Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc. — or go further and build a CMS, landing page builder, or website builder on top of it.
 
 Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor gives you the flexibility to customize everything—tweak the look, add features, or craft a completely custom user interface. The core is headless by default; Yoopta also provides pre-built theme presets so you can get a full editing experience and start quickly (shadcn theme `@yoopta/themes-shadcn` is available now; Material theme is in progress). Pre-built UI components via `@yoopta/ui` (toolbars, menus, block actions) let you improve the editing experience without building everything from scratch.
+
+## Examples & Demos
+
+See what you can build with Yoopta:
+
+| Example | Description | Demo | Source |
+|---------|-------------|------|--------|
+| **Full Setup** | Complete editor with toolbar, slash menu, block actions, drag & drop, and mentions | [Live](https://yoopta.dev/examples/full-setup) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/full-setup) |
+| **CMS / Website Builder** | Visual page builder with drag-and-drop blocks, sidebar settings, and live preview — build landing pages and websites | [Live](https://yoopta.dev/examples/cms) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/cms) |
+| **Word Example** | Microsoft Word-inspired editor with fixed toolbar, formatting, tables, and export to HTML/Markdown/Text/JSON | [Live](https://yoopta.dev/examples/word-example) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/word-example) |
+| **Email Builder** | Email composition tool with templates, signatures, split-view editing, HTML preview, and email-safe export | [Live](https://yoopta.dev/examples/email-builder) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/email-builder) |
+| **README Editor** | GitHub-flavored Markdown editor with live preview, section templates, and download as README.md | [Live](https://yoopta.dev/examples/readme-editor) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/readme-editor) |
+| **Slack Chat** | Slack-style messaging with channel list, rich text composer, mentions, and emoji support | [Live](https://yoopta.dev/examples/slack-chat) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/slack-chat) |
+| **Social Media Chat** | WhatsApp/Instagram-like chat with message bubbles, attachments, reactions, and status indicators | [Live](https://yoopta.dev/examples/social-media-chat) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/social-media-chat) |
+| **Collaboration** | Real-time multi-user editing with Yjs, remote cursors, and presence awareness | [Live](https://yoopta.dev/examples/collaboration) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/collaboration) |
+| **Nested Plugins** | Injecting child elements from other plugins into Accordion, Tabs, and Carousel components | [Live](https://yoopta.dev/examples/inject-plugins) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/inject-plugins) |
+| **Large Document** | Performance stress test with a large dataset to demonstrate scalability with many blocks | [Live](https://yoopta.dev/examples/large-document) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/large-document) |
 
 ## Features
 
@@ -451,19 +470,6 @@ type YooptaEditorProps = {
   children?: React.ReactNode; // UI components: FloatingToolbar, SlashCommandMenu, etc.
 };
 ```
-
-## Examples
-
-Live demos and source code from the [next-app-example](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example) app:
-
-- [Playground](https://yoopta.dev/playground) — Full setup: toolbar, slash menu, block actions, drag & drop, mentions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/full-setup))
-- [Rich Chat](https://yoopta.dev/playground/social-media-chat) — WhatsApp/Telegram-like messaging with rich text, code blocks, reactions ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/social-media-chat))
-- [Word Example](https://yoopta.dev/playground/word-example) — Word-like editor with fixed toolbar, tables, images ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/word-example))
-- [Slack Chat](https://yoopta.dev/playground/slack-chat) — Slack-style channel list and message composer ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/slack-chat))
-- [README Editor](https://yoopta.dev/playground/readme-editor) — Split view with live Markdown preview ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/readme-editor))
-- [Email Builder](https://yoopta.dev/playground/email-builder) — Email composition with blocks and export ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/email-builder))
-- [Plugin demos](https://yoopta.dev/playground/plugin/paragraph) — Per-plugin live demos (e.g. [paragraph](https://yoopta.dev/playground/plugin/paragraph), [callout](https://yoopta.dev/playground/plugin/callout)) ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/plugin-demo))
-- [Collaboration](https://yoopta.dev/playground/collaboration) — Real-time multi-user editing with Yjs, presence and remote cursors ([source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/components/playground/examples/collaboration))
 
 ## Project Structure
 

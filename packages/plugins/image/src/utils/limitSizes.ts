@@ -5,7 +5,8 @@ import type { ImageSizes } from '../types';
  * @param value Size value that can be number or string (e.g. '570px', '100%', 300)
  * @returns Number value without units
  */
-const parseSize = (value: string | number): number => {
+const parseSize = (value: string | number | undefined): number => {
+  if (!value) return 0;
   if (typeof value === 'number') return value;
   return parseInt(value.replace(/[^\d]/g, ''), 10);
 };
@@ -16,11 +17,11 @@ const parseSize = (value: string | number): number => {
  * @param maxSizes Maximum allowed dimensions
  * @returns New image dimensions that fit within maxSizes
  */
-export const limitSizes = (sizes: ImageSizes, maxSizes: ImageSizes): ImageSizes => {
+export const limitSizes = (sizes: ImageSizes, maxSizes: ImageSizes | undefined): ImageSizes => {
   const currentWidth = parseSize(sizes.width);
   const currentHeight = parseSize(sizes.height);
-  const maxWidth = parseSize(maxSizes.width);
-  const maxHeight = parseSize(maxSizes.height);
+  const maxWidth = parseSize(maxSizes?.width);
+  const maxHeight = parseSize(maxSizes?.height);
 
   if (currentWidth <= maxWidth && currentHeight <= maxHeight) {
     return { width: currentWidth, height: currentHeight };

@@ -1,0 +1,131 @@
+/* FAQ — root container */
+.yoo-cms-faq {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.yoo-cms-faq[data-padding-y='sm'] { padding: 32px 24px; }
+.yoo-cms-faq[data-padding-y='md'] { padding: 48px 24px; }
+.yoo-cms-faq[data-padding-y='lg'] { padding: 64px 24px; }
+.yoo-cms-faq[data-padding-y='xl'] { padding: 80px 24px; }
+
+/* Heading + description — centered */
+.yoo-cms-faq-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+
+.yoo-cms-faq-description {
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 0 auto 40px;
+  max-width: 600px;
+}
+
+/* FAQ item — container for question + answer */
+.yoo-cms-faq-item {
+  position: relative;
+  padding: 16px 48px 16px 20px;
+}
+
+/* Variant: default — divider lines */
+.yoo-cms-faq[data-variant='default'] .yoo-cms-faq-item {
+  border-bottom: 1px solid;
+}
+
+.yoo-cms-faq[data-variant='default'] .yoo-cms-faq-item:first-of-type {
+  border-top: 1px solid;
+}
+
+/* Variant: bordered — each item has border all around */
+.yoo-cms-faq[data-variant='bordered'] .yoo-cms-faq-item {
+  border: 1px solid;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* Variant: separated — items have background + gap */
+.yoo-cms-faq[data-variant='separated'] .yoo-cms-faq-item {
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: none;
+}
+
+/* Expand/collapse icon — positioned right */
+.yoo-cms-faq-item-icon {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  user-select: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Chevron rotation animation */
+.yoo-cms-faq-chevron-icon {
+  transition: transform 0.2s ease;
+}
+
+.yoo-cms-faq-chevron-icon[data-expanded='true'] {
+  transform: rotate(180deg);
+}
+
+/* Question */
+.yoo-cms-faq-item-question {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+/* Answer — collapsible */
+.yoo-cms-faq-item-answer {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease, opacity 0.2s ease, margin-top 0.2s ease;
+}
+
+.yoo-cms-faq-item-answer[data-expanded='false'] {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.yoo-cms-faq-item-answer[data-expanded='true'] {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .yoo-cms-faq[data-padding-y='sm'] { padding: 24px 16px; }
+  .yoo-cms-faq[data-padding-y='md'] { padding: 32px 16px; }
+  .yoo-cms-faq[data-padding-y='lg'] { padding: 48px 16px; }
+  .yoo-cms-faq[data-padding-y='xl'] { padding: 56px 16px; }
+
+  .yoo-cms-faq-heading {
+    font-size: 1.5rem;
+  }
+
+  .yoo-cms-faq-description {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+}

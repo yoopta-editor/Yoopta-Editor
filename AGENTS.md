@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -71,6 +71,7 @@ web/
 Created via `createYooptaEditor({ plugins, marks, value })`. Key methods:
 
 **Block Operations**:
+
 - `insertBlock`, `updateBlock`, `deleteBlock`, `duplicateBlock`
 - `toggleBlock` - Change block type while preserving content
 - `moveBlock`, `focusBlock`, `mergeBlock`, `splitBlock`
@@ -78,11 +79,13 @@ Created via `createYooptaEditor({ plugins, marks, value })`. Key methods:
 - `getBlock`
 
 **Element Operations**:
+
 - `insertElement`, `updateElement`, `deleteElement`
 - `getElement`, `getElements`, `getElementEntry`, `getElementPath`
 - `isElementEmpty`
 
 **Element Builder** (`editor.y`):
+
 ```typescript
 // Create block element
 editor.y('paragraph', { props: {...}, children: [...] })
@@ -109,6 +112,7 @@ import { Blocks, Elements, Marks, Selection } from '@yoopta/editor';
 ```
 
 **Blocks API** - block-level operations:
+
 ```typescript
 Blocks.insertBlock(editor, { ... })
 Blocks.deleteBlock(editor, { ... })
@@ -127,6 +131,7 @@ Blocks.buildBlockData(editor, { ... })
 ```
 
 **Elements API** - element-level operations within blocks:
+
 ```typescript
 Elements.insertElement(editor, { ... })
 Elements.updateElement(editor, { ... })
@@ -141,6 +146,7 @@ Elements.isElementEmpty(editor, { ... })
 ```
 
 **Marks API** - text formatting:
+
 ```typescript
 Marks.update(editor, {
   type: 'highlight',
@@ -200,7 +206,3 @@ const editor = useMemo(() => createYooptaEditor({
   <YooptaActionMenuList />
 </YooptaEditor>
 ```
-
-## AI Content Generation
-
-When generating Yoopta content programmatically, see `YOOPTA_AI_SYSTEM_PROMPT.md` for the JSON format specification including all block types, validation rules, and common pitfalls.

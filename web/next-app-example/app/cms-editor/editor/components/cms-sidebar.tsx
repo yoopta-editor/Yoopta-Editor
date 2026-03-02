@@ -8,6 +8,8 @@ import { CTABannerSettings } from '../plugins/cta-banner/cta-banner-settings';
 import { TestimonialsSettings } from '../plugins/testimonials/testimonials-settings';
 import { FooterSettings } from '../plugins/footer/footer-settings';
 import { PricingTableSettings } from '../plugins/pricing-table/pricing-table-settings';
+import { LogoCloudSettings } from '../plugins/logo-cloud/logo-cloud-settings';
+import { FAQSettings } from '../plugins/faq/faq-settings';
 import type { CMSBlockSettingsProps } from '../page-settings';
 import './cms-sidebar.css';
 
@@ -34,6 +36,8 @@ const BLOCK_SETTINGS_MAP: Record<string, ComponentType<CMSBlockSettingsProps>> =
   Testimonials: TestimonialsSettings,
   Footer: FooterSettings,
   PricingTable: PricingTableSettings,
+  LogoCloud: LogoCloudSettings,
+  FAQ: FAQSettings,
 };
 
 type CMSSidebarProps = {

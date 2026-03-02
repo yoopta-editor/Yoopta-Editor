@@ -1,0 +1,110 @@
+/* Logo Cloud Plugin Styles */
+.yoo-cms-logo-cloud {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  margin: 4px 0;
+  display: grid;
+  gap: 0;
+}
+
+/* Column variants */
+.yoo-cms-logo-cloud[data-columns='3'] {
+  grid-template-columns: repeat(3, 1fr);
+}
+.yoo-cms-logo-cloud[data-columns='4'] {
+  grid-template-columns: repeat(4, 1fr);
+}
+.yoo-cms-logo-cloud[data-columns='5'] {
+  grid-template-columns: repeat(5, 1fr);
+}
+.yoo-cms-logo-cloud[data-columns='6'] {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Padding variants */
+.yoo-cms-logo-cloud[data-padding-y='sm'] {
+  padding: 32px 24px;
+}
+.yoo-cms-logo-cloud[data-padding-y='md'] {
+  padding: 48px 24px;
+}
+.yoo-cms-logo-cloud[data-padding-y='lg'] {
+  padding: 64px 24px;
+}
+.yoo-cms-logo-cloud[data-padding-y='xl'] {
+  padding: 96px 24px;
+}
+
+/* Grayscale mode */
+.yoo-cms-logo-cloud[data-grayscale='true'] .yoo-cms-logo-item {
+  opacity: 0.6;
+}
+
+/* Heading — spans full width */
+.yoo-cms-logo-cloud-heading {
+  grid-column: 1 / -1;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+/* Description — spans full width */
+.yoo-cms-logo-cloud-description {
+  grid-column: 1 / -1;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 auto 40px auto;
+  max-width: 500px;
+  line-height: 1.6;
+  width: 100%;
+}
+
+/* Logo item pill */
+.yoo-cms-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  margin: 8px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+  transition: opacity 0.2s;
+  min-height: 56px;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .yoo-cms-logo-cloud[data-columns='3'],
+  .yoo-cms-logo-cloud[data-columns='4'],
+  .yoo-cms-logo-cloud[data-columns='5'],
+  .yoo-cms-logo-cloud[data-columns='6'] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .yoo-cms-logo-cloud[data-padding-y='sm'] { padding: 24px 16px; }
+  .yoo-cms-logo-cloud[data-padding-y='md'] { padding: 32px 16px; }
+  .yoo-cms-logo-cloud[data-padding-y='lg'] { padding: 48px 16px; }
+  .yoo-cms-logo-cloud[data-padding-y='xl'] { padding: 64px 16px; }
+
+  .yoo-cms-logo-cloud-heading {
+    font-size: 1.125rem;
+  }
+
+  .yoo-cms-logo-cloud-description {
+    font-size: 0.875rem;
+    margin-bottom: 28px;
+  }
+
+  .yoo-cms-logo-item {
+    margin: 4px;
+    padding: 12px 16px;
+    font-size: 0.8125rem;
+    min-height: 48px;
+  }
+}

@@ -10,6 +10,8 @@ I've integrated rich-text editors into products more times than I'd like to admi
 
 Yoopta was built to end that cycle. The idea is simple: give developers a **headless core** when they need full control, but also ship **20+ ready-made plugins**, **pre-built UI components** (toolbars, slash menus, block actions), and **theme presets** (shadcn, Material) — so you can launch a polished editing experience without building everything from scratch.
 
+Whether you're building a simple blog editor, a Notion-like workspace, a CMS for landing pages, or even a full website builder — Yoopta gives you the primitives to get there.
+
 If Yoopta saves you time, consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring the project](https://github.com/sponsors/Darginec05). It keeps the project alive.
 
 ## How it works
@@ -23,6 +25,39 @@ Don't want to build everything yourself? Yoopta also ships:
 - **20+ plugins** — paragraph, headings, lists, tables, images, code, embeds, and more
 
 Each block in the editor runs its own [Slate.js](https://docs.slatejs.org/) instance, which means blocks are isolated, performant, and independently extensible.
+
+## Examples & Demos
+
+See what you can build with Yoopta:
+
+<CardGroup cols={2}>
+  <Card title="Full Setup" icon="rocket" href="https://yoopta.dev/examples/full-setup">
+    Complete editor with toolbar, slash menu, block actions, drag & drop, and mentions
+  </Card>
+  <Card title="CMS / Website Builder" icon="globe" href="https://yoopta.dev/examples/cms">
+    Visual page builder with drag-and-drop blocks, sidebar settings, and live preview
+  </Card>
+  <Card title="Word Example" icon="file-word" href="https://yoopta.dev/examples/word-example">
+    Microsoft Word-inspired editor with fixed toolbar, formatting, and export
+  </Card>
+  <Card title="Email Builder" icon="envelope" href="https://yoopta.dev/examples/email-builder">
+    Email composition with templates, split-view editing, and email-safe export
+  </Card>
+  <Card title="README Editor" icon="markdown" href="https://yoopta.dev/examples/readme-editor">
+    GitHub-flavored Markdown editor with live preview and download as README.md
+  </Card>
+  <Card title="Slack Chat" icon="comments" href="https://yoopta.dev/examples/slack-chat">
+    Slack-style messaging with channel list, rich text composer, and mentions
+  </Card>
+  <Card title="Social Media Chat" icon="message" href="https://yoopta.dev/examples/social-media-chat">
+    WhatsApp/Instagram-like chat with message bubbles, attachments, and reactions
+  </Card>
+  <Card title="Collaboration" icon="users" href="https://yoopta.dev/examples/collaboration">
+    Real-time multi-user editing with Yjs, remote cursors, and presence awareness
+  </Card>
+</CardGroup>
+
+All examples with source code are available in the [examples directory](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples).
 
 ## Quick Example
 
@@ -85,6 +120,9 @@ Install only what you need:
   </Card>
   <Card title="Export Anywhere" icon="file-export">
     Serialize to HTML, Markdown, plain text, or email-safe HTML out of the box.
+  </Card>
+  <Card title="Beyond Editing" icon="globe">
+    Build CMS dashboards, landing page builders, or full website builders — Yoopta provides the content primitives, you define the experience.
   </Card>
   <Card title="TypeScript First" icon="code">
     Full type safety across the editor, plugins, and all APIs.

@@ -82,11 +82,11 @@ export const INJECT_PLUGINS = [
   }),
   // Accordion with injected Paragraph, Callout, Code, and Image plugins
   Accordion.extend({
-    injectElementsFromPlugins: [Paragraph, Callout, Code.Code, YImage],
+    injectElementsFromPlugins: [Paragraph, Callout, NumberedList, BulletedList, TodoList, Code.Code, YImage],
   }),
   // Steps with injected Paragraph, Callout, and Code plugins
   Steps.extend({
-    injectElementsFromPlugins: [Paragraph, Callout, Code.Code, YImage],
+    injectElementsFromPlugins: [Paragraph, Callout, NumberedList, BulletedList, TodoList, Code.Code, YImage],
   }),
   // Carousel with injected Image plugin
   Carousel.extend({
@@ -94,7 +94,7 @@ export const INJECT_PLUGINS = [
   }),
   // Tabs with injected Paragraph, Callout, Code, and Image plugins
   Tabs.extend({
-    injectElementsFromPlugins: [Paragraph, Callout, Code.Code, YImage],
+    injectElementsFromPlugins: [Paragraph, Callout, NumberedList, BulletedList, TodoList, Code.Code, YImage],
   }),
   Mention.extend({
     options: {

@@ -71,6 +71,7 @@ web/
 Created via `createYooptaEditor({ plugins, marks, value })`. Key methods:
 
 **Block Operations**:
+
 - `insertBlock`, `updateBlock`, `deleteBlock`, `duplicateBlock`
 - `toggleBlock` - Change block type while preserving content
 - `moveBlock`, `focusBlock`, `mergeBlock`, `splitBlock`
@@ -78,11 +79,13 @@ Created via `createYooptaEditor({ plugins, marks, value })`. Key methods:
 - `getBlock`
 
 **Element Operations**:
+
 - `insertElement`, `updateElement`, `deleteElement`
 - `getElement`, `getElements`, `getElementEntry`, `getElementPath`
 - `isElementEmpty`
 
 **Element Builder** (`editor.y`):
+
 ```typescript
 // Create block element
 editor.y('paragraph', { props: {...}, children: [...] })
@@ -109,6 +112,7 @@ import { Blocks, Elements, Marks, Selection } from '@yoopta/editor';
 ```
 
 **Blocks API** - block-level operations:
+
 ```typescript
 Blocks.insertBlock(editor, { ... })
 Blocks.deleteBlock(editor, { ... })
@@ -127,6 +131,7 @@ Blocks.buildBlockData(editor, { ... })
 ```
 
 **Elements API** - element-level operations within blocks:
+
 ```typescript
 Elements.insertElement(editor, { ... })
 Elements.updateElement(editor, { ... })
@@ -141,6 +146,7 @@ Elements.isElementEmpty(editor, { ... })
 ```
 
 **Marks API** - text formatting:
+
 ```typescript
 Marks.update(editor, {
   type: 'highlight',
@@ -220,6 +226,7 @@ packages/plugins/{plugin-name}/
 ```
 
 **Creating a Plugin**:
+
 ```typescript
 const MyPlugin = new YooptaPlugin<MyElementMap>({
   type: 'MyPlugin',           // PascalCase
@@ -236,10 +243,11 @@ const MyPlugin = new YooptaPlugin<MyElementMap>({
 ```
 
 **Extending Plugins**:
+
 ```typescript
 const CustomImage = Image.extend({
   options: { upload: customUploadFn },
-  injectElementsFromPlugins: [Paragraph, Lists.BulletedList]  // Only for leaf elements
+  injectElementsFromPlugins: [Paragraph, Lists.BulletedList], // Only for leaf elements
 });
 ```
 
@@ -251,9 +259,9 @@ const CustomImage = Image.extend({
 import { createYooptaMark } from '@yoopta/editor';
 
 export const Bold = createYooptaMark<BoldMarkProps>({
-  type: 'bold',              // lowercase
+  type: 'bold', // lowercase
   hotkey: 'mod+b',
-  render: (props) => <strong>{props.children}</strong>
+  render: (props) => <strong>{props.children}</strong>,
 });
 ```
 
@@ -285,6 +293,7 @@ packages/core/exports/src/
 ```
 
 **Plugin Parsers**:
+
 ```typescript
 parsers: {
   html: {
@@ -309,30 +318,36 @@ Must be called within `<YooptaEditor>` children:
 ## Important Conventions
 
 **Type Case Sensitivity** (Critical!):
+
 - Block types: **PascalCase** (`"Paragraph"`, `"HeadingOne"`, `"Image"`)
 - Element types: **kebab-case** (`"paragraph"`, `"heading-one"`, `"image"`)
 
 **Block vs Element**:
+
 - **Block** (`YooptaBlockData`): Top-level content container with `type`, `meta`, `order`, `depth`
 - **Element** (`SlateElement`): Nested structure within block's `value` array
 
 **Plugin Injection**:
+
 - `injectElementsFromPlugins` ONLY works on leaf elements (elements without children)
 - Throws error if applied to parent elements
 - Used by: Accordion, Carousel, Tabs, table-of-contents
 
 **Slate Extensions**:
+
 - Named `with*` (e.g., `withParagraph`, `withParagraphNormalize`)
 - Signature: `(slate: SlateEditor, editor: YooEditor) => SlateEditor`
 
 ## Build System
 
 **Rollup** (via `config/rollup.js`):
+
 - ES modules with TypeScript declarations
 - CSS extraction with PostCSS + Tailwind support
 - CSS class prefixes per plugin: `yoo-p-` (paragraph), `yoo-code-` (code)
 
 **Workspace Commands**:
+
 ```bash
 yarn dev --filter=@yoopta/editor              # Dev server + watch one package
 yarn build --filter=@yoopta/editor            # Build single package
@@ -357,7 +372,3 @@ packages/core/editor/src/
     ├── create-yoopta-plugin.tsx  # YooptaPlugin class
     └── types.ts
 ```
-
-## AI Content Generation
-
-When generating Yoopta content programmatically, see `YOOPTA_AI_SYSTEM_PROMPT.md` for the JSON format specification including all block types, validation rules, and common pitfalls.

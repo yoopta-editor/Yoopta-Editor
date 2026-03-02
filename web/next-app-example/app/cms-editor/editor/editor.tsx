@@ -14,6 +14,8 @@ import { CMSSidebar } from './components/cms-sidebar';
 import { CMSCtaBar } from './components/cms-cta-bar';
 import { DEFAULT_PAGE_SETTINGS, type CMSPageSettings } from './page-settings';
 
+import './editor.css';
+
 const EDITOR_STYLES = {
   width: '100%',
   paddingBottom: 100,
@@ -82,6 +84,9 @@ const CMSEditor = ({ initialValue, containerBoxRef: externalRef }: CMSEditorProp
     '--cms-max-width': pageSettings.maxWidth,
   } as React.CSSProperties;
 
+
+  console.log(' CMS Editor rendered', editor.isEmpty());
+
   return (
     <div className="yoo-cms-layout">
       <div
@@ -89,10 +94,6 @@ const CMSEditor = ({ initialValue, containerBoxRef: externalRef }: CMSEditorProp
         className="yoo-cms-editor-area"
         style={{ ...cssVariables, background: pageSettings.background, fontFamily: pageSettings.fontFamily }}
       >
-        {/* <div className="yoo-cms-topbar">
-          <span className="yoo-cms-topbar-title">CMS Editor</span>
-          
-        </div> */}
         <div style={{ width: '100%', maxWidth: pageSettings.maxWidth, margin: '0 auto' }}>
           <BlockDndContext editor={editor}>
             <YooptaEditor

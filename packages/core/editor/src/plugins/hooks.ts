@@ -1,16 +1,50 @@
 import { useMemo } from 'react';
-import { Element, Node, Operation, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Node, Operation, Path, Range, Transforms } from 'slate';
 
 import { withInlines } from './extenstions/with-inlines';
 import type { PluginDOMEvents, PluginEventHandlerOptions } from './types';
 import { Blocks } from '../editor/blocks';
 import type { SetSlateOperation } from '../editor/core/applyTransforms';
 import { Paths } from '../editor/paths';
-import type { SlateEditor, YooEditor, YooptaBlockData } from '../editor/types';
+import type { SlateEditor, SlateElement, YooEditor, YooptaBlockData } from '../editor/types';
 import type { EditorEventHandlers } from '../types/eventHandlers';
 import { getRootBlockElementType } from '../utils/block-elements';
 import { generateId } from '../utils/generateId';
 import { HOTKEYS } from '../utils/hotkeys';
+
+function isInsideInjectedElement(
+  editor: YooEditor,
+  slate: SlateEditor,
+  block: YooptaBlockData,
+): boolean {
+  if (!slate.selection) return false;
+
+  const blockPlugin = editor.plugins[block.type];
+  if (!blockPlugin?.elements) return false;
+
+  // Quick check: does this plugin have complex structure (container)?
+  const hasComplexStructure = Object.values(blockPlugin.elements).some((el: any) => {
+    if (el.rootPlugin) return false;
+    return el.children && el.children.length > 0;
+  });
+  if (!hasComplexStructure) return false;
+
+  // Find the lowest block element at cursor
+  const elementEntry = Editor.above(slate, {
+    at: slate.selection,
+    match: (n) => !Editor.isEditor(n) && Element.isElement(n),
+    mode: 'lowest',
+  });
+  if (!elementEntry) return false;
+
+  const [element] = elementEntry;
+  const elementType = (element as SlateElement).type;
+  const elementConfig = blockPlugin.elements[elementType];
+
+  // rootPlugin is set when building injected elements
+  // If rootPlugin exists and differs from the container block type, it's injected
+  return !!elementConfig?.rootPlugin && elementConfig.rootPlugin !== block.type;
+}
 
 
 const shouldSave = (op: Operation): boolean => {
@@ -277,10 +311,29 @@ export const useEventHandlers = (
     // Transform handlers to match EditorEventHandlers type
     Object.keys(allEventHandlers).forEach((eventType) => {
       const handler = allEventHandlers[eventType];
-      if (handler) {
+      if (!handler) return;
+
+      if (eventType === 'onKeyDown') {
         eventHandlersMap[eventType] = (event) => {
-          const eventHandler = handler(editor, slate, eventHandlersOptions);
-          eventHandler(event);
+          const keyEvent = event as React.KeyboardEvent;
+
+          // For Enter/Backspace inside injected elements, skip the container
+          // plugin's handler. The editor-level onKeyDown already has full
+          // injected element support via getEnterAction/getBackspaceAction.
+
+          console.log('isInsideInjectedElement for block', block.type, isInsideInjectedElement(editor, slate, block));
+          if (
+            (HOTKEYS.isEnter(keyEvent) || HOTKEYS.isBackspace(keyEvent)) &&
+            isInsideInjectedElement(editor, slate, block)
+          ) {
+            return;
+          }
+
+          handler(editor, slate, eventHandlersOptions)(event);
+        };
+      } else {
+        eventHandlersMap[eventType] = (event) => {
+          handler(editor, slate, eventHandlersOptions)(event);
         };
       }
     });

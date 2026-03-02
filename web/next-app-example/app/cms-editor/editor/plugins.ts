@@ -17,6 +17,8 @@ import { CTABannerPlugin } from './plugins/cta-banner/cta-banner-plugin';
 import { PricingTablePlugin } from './plugins/pricing-table/pricing-table-plugin';
 import { TestimonialsPlugin } from './plugins/testimonials/testimonials-plugin';
 import { FooterPlugin } from './plugins/footer/footer-plugin';
+import { LogoCloudPlugin } from './plugins/logo-cloud/logo-cloud-plugin';
+import { FAQPlugin } from './plugins/faq/faq-plugin';
 
 const YImage = Image.extend({
   options: {
@@ -66,4 +68,6 @@ export const CMS_PLUGINS = [
   TestimonialsPlugin,
   FooterPlugin,
   PricingTablePlugin,
+  LogoCloudPlugin,
+  FAQPlugin,
 ];

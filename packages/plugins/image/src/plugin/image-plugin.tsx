@@ -60,9 +60,9 @@ const Image = new YooptaPlugin<ImageElementMap, ImagePluginOptions>({
             };
 
             const maxSizes = (editor.plugins.Image.options as ImagePluginOptions)?.maxSizes;
-            const limitedSizes = limitSizes(sizes!, {
-              width: maxSizes!.maxWidth!,
-              height: maxSizes!.maxHeight!,
+            const limitedSizes = limitSizes(sizes, {
+              width: maxSizes?.maxWidth ?? 0,
+              height: maxSizes?.maxHeight ?? 0,
             });
 
             const props: SlateElement<'image', ImageElementProps>['props'] = {

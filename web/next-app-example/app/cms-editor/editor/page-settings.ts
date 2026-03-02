@@ -13,7 +13,7 @@ export const DEFAULT_PAGE_SETTINGS: CMSPageSettings = {
   primaryColor: '#3b82f6',
   secondaryColor: '#1e293b',
   accentColor: '#8b5cf6',
-  maxWidth: '100%',
+  maxWidth: '1024px',
 };
 
 export type CMSBlockSettingsProps = {
