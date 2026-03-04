@@ -36,10 +36,6 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
     return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS })));
   }, []);
 
-  const onChange = (value: YooptaContentValue) => {
-    // localStorage.setItem('yoopta-full-setup-editor-value', JSON.stringify(value));
-  }
-
   useEffect(() => {
     const localStorageValue = localStorage.getItem('yoopta-full-setup-editor-value');
     const data = localStorageValue ? JSON.parse(localStorageValue) : initialValue;
@@ -62,7 +58,6 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
         <YooptaEditor
           editor={editor}
           style={EDITOR_STYLES}
-          onChange={onChange}
           renderBlock={renderBlock}
           placeholder="Type / to open menu, or start typing..."
         >
