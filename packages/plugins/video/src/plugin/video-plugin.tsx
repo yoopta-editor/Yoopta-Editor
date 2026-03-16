@@ -19,7 +19,7 @@ const videoProps = {
   nodeType: 'void',
   fit: null,
   settings: {
-    controls: false,
+    controls: true,
     loop: false,
     muted: false,
     autoPlay: false,

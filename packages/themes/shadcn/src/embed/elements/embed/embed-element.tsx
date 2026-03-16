@@ -79,6 +79,9 @@ export const EmbedElement = ({ element, attributes, children, blockId }: PluginE
   const embedElement = element as EmbedElementType;
 
   if (!embedElement.props?.provider) {
+    if (editor.readOnly) {
+      return null;
+    }
     return (
       <EmbedPlaceholder onInsertUrl={onInsertUrl} attributes={attributes}>
         {children}

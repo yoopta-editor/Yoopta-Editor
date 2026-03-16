@@ -95,6 +95,10 @@ export const ImageElement = ({
   );
 
   if (!element.props.src) {
+    if (editor.readOnly) {
+      return null;
+    }
+
     return (
       <ImagePlaceholder
         onUpload={onUpload}

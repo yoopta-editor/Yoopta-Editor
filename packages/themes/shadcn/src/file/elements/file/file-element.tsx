@@ -30,6 +30,9 @@ export const FileElement = ({ element, attributes, children, blockId }: PluginEl
   );
 
   const deleteFile = useCallback(async () => {
+    if (editor.readOnly) {
+      return null;
+    }
     await deleteFileFromStorage(element as FileElementType);
     const slate = Blocks.getBlockSlate(editor, { id: blockId });
     if (!slate) return;
@@ -51,6 +54,9 @@ export const FileElement = ({ element, attributes, children, blockId }: PluginEl
   }, [editor, blockId, element, deleteFileFromStorage]);
 
   const replaceFile = useCallback(() => {
+    if (editor.readOnly) {
+      return null;
+    }
     Elements.updateElement(editor, {
       blockId,
       type: 'file',
@@ -67,6 +73,9 @@ export const FileElement = ({ element, attributes, children, blockId }: PluginEl
 
   const onUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (editor.readOnly) {
+        return null;
+      }
       const file = e.target.files?.[0];
       if (!file) return;
 
@@ -90,11 +99,13 @@ export const FileElement = ({ element, attributes, children, blockId }: PluginEl
         format,
       });
     },
-    [uploadFileToStorage, updateElement],
+    [uploadFileToStorage, updateElement, editor.readOnly],
   );
 
-  // Show placeholder if no src
   if (!element.props.src) {
+    if (editor.readOnly) {
+      return null;
+    }
     return (
       <FilePlaceholder
         onUpload={onUpload}

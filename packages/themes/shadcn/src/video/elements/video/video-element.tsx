@@ -122,6 +122,9 @@ export const VideoElement = ({
   );
 
   if (!element.props.src && !element.props.provider) {
+    if (editor.readOnly) {
+      return null;
+    }
     return (
       <VideoPlaceholder
         onUpload={onUpload}
