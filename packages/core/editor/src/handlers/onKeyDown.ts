@@ -1,5 +1,5 @@
 import { isKeyHotkey } from 'is-hotkey';
-import { Path, Range, Transforms } from 'slate';
+import { Path, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 import { Blocks } from '../editor/blocks';
@@ -232,15 +232,13 @@ export function onKeyDown(editor: YooEditor) {
     }
 
     if (slate && slate.selection) {
-      if (Range.isExpanded(slate.selection)) {
-        const marks = Object.values(editor.formats);
-        if (marks.length > 0) {
-          for (const mark of Object.values(editor.formats)) {
-            if (mark.hotkey && isKeyHotkey(mark.hotkey)(event)) {
-              event.preventDefault();
-              editor.formats[mark.type].toggle();
-              break;
-            }
+      const marks = Object.values(editor.formats);
+      if (marks.length > 0) {
+        for (const mark of Object.values(editor.formats)) {
+          if (mark.hotkey && isKeyHotkey(mark.hotkey)(event)) {
+            event.preventDefault();
+            editor.formats[mark.type].toggle();
+            break;
           }
         }
       }
