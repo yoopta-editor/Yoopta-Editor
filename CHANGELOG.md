@@ -4,6 +4,26 @@ All notable changes to Yoopta Editor are documented in this file (monorepo singl
 
 ---
 
+## [6.0.2] - 2026-03-16
+
+### Fixed
+
+- **Marks in Table plugin**: Fixed bold, italic, underline, and other marks not toggling inside table cells. Removed `Range.isExpanded` guard from the editor's `onKeyDown` handler so mark hotkeys work with both collapsed and expanded selections. (#592)
+- **Multi-block mark undo**: Applying marks (bold, italic, highlight, etc.) across multiple selected blocks now undoes in a single Cmd+Z step instead of block-by-block. Wrapped `toggle`, `addMark`, `removeMark`, and `update` multi-block loops in `editor.batchOperations()`. (#592)
+- **Video/Embed inline toolbar not showing**: Fixed inline toolbar not appearing for video and embed blocks. Replaced Rnd callback ref with a regular div ref (same pattern as image) so the floating toolbar reference is available on mount. (#592)
+- **Resize handles visibility on dark content**: Changed resize handle styling for image, video, and embed from `bg-primary` to white handles with border and drop shadow (`bg-white border border-border shadow-[0_0_4px_rgba(0,0,0,0.3)]`) for consistent visibility on any background. (#592)
+- **Placeholder support for nested plugins**: Fixed placeholders not showing in nested plugin elements (e.g., Steps). `decorate` now resolves placeholder from the closest parent element instead of only the root element. (#592)
+
+### Changed
+
+- **Media resize defaults**: Removed hardcoded `650px`/`550px` default sizes from image, embed, and video render components in shadcn theme. Max sizes now derive from actual editor container width via `ResizeObserver`, with no artificial limits. (#592)
+
+### Added
+
+- **Placeholder documentation**: Added comprehensive Placeholders section to `docs/core/editor.mdx` covering editor-level, element-level, nested plugin, and CSS styling. Updated `docs/core/plugins.mdx` with extended placeholder field docs and cross-references. (#592)
+
+---
+
 ## [6.0.1] - 2026-02-27
 
 ### Fixed
