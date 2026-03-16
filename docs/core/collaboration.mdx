@@ -9,6 +9,7 @@ icon: 'users'
 The `@yoopta/collaboration` package enables real-time collaborative editing in Yoopta Editor. Multiple users can edit the same document simultaneously with automatic conflict resolution powered by [Yjs](https://yjs.dev/) CRDT.
 
 The package provides:
+
 - **`withCollaboration`** extension — connects your editor to a collaboration server
 - **Collaborative undo/redo** — Cmd+Z only undoes your own changes, not other users'
 - **Remote cursors** — see where other users are editing
@@ -24,7 +25,8 @@ npm install @yoopta/collaboration
 ```
 
 <Note>
-  `@yoopta/collaboration` requires `@yoopta/editor` >= 6.0.0-beta.19 and React >= 18.2.0 as peer dependencies.
+  `@yoopta/collaboration` requires `@yoopta/editor` >= 6.0.0 and React >= 18.2.0 as peer
+  dependencies.
 </Note>
 
 ## Quick Start
@@ -41,31 +43,29 @@ import { MARKS } from './marks';
 export default function CollaborativeEditor() {
   const editor = useMemo(
     () =>
-      withCollaboration(
-        createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-        {
-          url: 'wss://collab.yoopta.cloud',
-          roomId: 'document-123',
-          token: 'your-auth-token',
-          user: {
-            id: 'user-1',
-            name: 'Alice',
-            color: '#e06c75',
-          },
+      withCollaboration(createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), {
+        url: 'wss://collab.yoopta.cloud',
+        roomId: 'document-123',
+        token: 'your-auth-token',
+        user: {
+          id: 'user-1',
+          name: 'Alice',
+          color: '#e06c75',
         },
-      ),
+      }),
     [],
   );
 
   useEffect(() => {
-    return () => editor.collaboration.destroy();
-  }, [editor]);
+    editor.collaboration.connect();
+
+    return () => {
+      editor.collaboration.disconnect();
+    };
+  }, [editor.collaboration]);
 
   return (
-    <YooptaEditor
-      editor={editor}
-      onChange={(value) => console.log(value)}
-    >
+    <YooptaEditor editor={editor} onChange={(value) => console.log(value)}>
       <RemoteCursors />
       {/* Your other UI components */}
     </YooptaEditor>
@@ -74,7 +74,8 @@ export default function CollaborativeEditor() {
 ```
 
 <Warning>
-  Always call `editor.collaboration.destroy()` on cleanup to properly close the WebSocket connection and remove awareness states.
+  Always call `editor.collaboration.destroy()` on cleanup to properly close the WebSocket connection
+  and remove awareness states.
 </Warning>
 
 ## Configuration
@@ -98,36 +99,42 @@ Extends a `YooEditor` instance with collaboration capabilities. Returns a `Colla
 </ParamField>
 
 <ParamField path="roomId" type="string" required>
-  Unique identifier for the document/room. All users with the same `roomId` will collaborate on the same document.
+  Unique identifier for the document/room. All users with the same `roomId` will collaborate on the
+  same document.
 </ParamField>
 
 <ParamField path="user" type="CollaborationUser" required>
   Information about the current user. Used for cursor labels and presence indicators.
 
-  ```ts
-  {
-    id: string;       // Unique user identifier
-    name: string;     // Display name (shown on cursors)
-    color: string;    // Cursor color (hex, e.g. "#e06c75")
-    avatar?: string;  // Optional avatar URL
-  }
-  ```
+```ts
+{
+  id: string;       // Unique user identifier
+  name: string;     // Display name (shown on cursors)
+  color: string;    // Cursor color (hex, e.g. "#e06c75")
+  avatar?: string;  // Optional avatar URL
+}
+```
+
 </ParamField>
 
 <ParamField path="token" type="string">
-  Authentication token sent to the server on connection. Use this to verify users and check subscription access on the server side.
+  Authentication token sent to the server on connection. Use this to verify users and check
+  subscription access on the server side.
 </ParamField>
 
 <ParamField path="initialValue" type="YooptaContentValue">
-  Initial content to seed the document if no remote state exists. When the first user connects to an empty room, this value populates the shared document.
+  Initial content to seed the document if no remote state exists. When the first user connects to an
+  empty room, this value populates the shared document.
 </ParamField>
 
 <ParamField path="connect" type="boolean" default="true">
-  Whether to connect to the server immediately. Set to `false` to connect manually later via `editor.collaboration.connect()`.
+  Whether to connect to the server immediately. Set to `false` to connect manually later via
+  `editor.collaboration.connect()`.
 </ParamField>
 
 <ParamField path="document" type="Y.Doc">
-  Optional: provide your own Yjs `Y.Doc` instance. If not provided, one is created automatically. Useful for advanced integrations or testing.
+  Optional: provide your own Yjs `Y.Doc` instance. If not provided, one is created automatically.
+  Useful for advanced integrations or testing.
 </ParamField>
 
 ## Editor API
@@ -140,10 +147,10 @@ Read-only access to the current collaboration state.
 
 ```ts
 type CollaborationState = {
-  status: ConnectionStatus;           // 'disconnected' | 'connecting' | 'connected' | 'error'
+  status: ConnectionStatus; // 'disconnected' | 'connecting' | 'connected' | 'error'
   connectedUsers: CollaborationUser[]; // All users currently in the room
-  document: Y.Doc | null;             // The Yjs document instance
-  isSynced: boolean;                   // Whether initial sync with server is complete
+  document: Y.Doc | null; // The Yjs document instance
+  isSynced: boolean; // Whether initial sync with server is complete
 };
 ```
 
@@ -192,7 +199,7 @@ import { RemoteCursors } from '@yoopta/collaboration';
 
 <YooptaEditor editor={editor}>
   <RemoteCursors />
-</YooptaEditor>
+</YooptaEditor>;
 ```
 
 Must be rendered as a child of `<YooptaEditor>`. Displays a colored bar and name label next to the block each remote user is editing.
@@ -232,15 +239,15 @@ function ConnectionIndicator() {
   const status = useConnectionStatus();
 
   return (
-    <div style={{
-      width: 8,
-      height: 8,
-      borderRadius: '50%',
-      backgroundColor:
-        status === 'connected' ? '#4ade80' :
-        status === 'connecting' ? '#facc15' :
-        '#ef4444',
-    }} />
+    <div
+      style={{
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        backgroundColor:
+          status === 'connected' ? '#4ade80' : status === 'connecting' ? '#facc15' : '#ef4444',
+      }}
+    />
   );
 }
 ```
@@ -274,15 +281,12 @@ If you need to connect after the editor is rendered (e.g., after authentication)
 ```tsx
 const editor = useMemo(
   () =>
-    withCollaboration(
-      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-      {
-        url: 'wss://collab.yoopta.cloud',
-        roomId: 'doc-123',
-        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
-        connect: false,  // Don't connect yet
-      },
-    ),
+    withCollaboration(createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), {
+      url: 'wss://collab.yoopta.cloud',
+      roomId: 'doc-123',
+      user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+      connect: false, // Don't connect yet
+    }),
   [],
 );
 
@@ -303,15 +307,12 @@ const doc = new Y.Doc();
 
 const editor = useMemo(
   () =>
-    withCollaboration(
-      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-      {
-        url: 'wss://collab.yoopta.cloud',
-        roomId: 'doc-123',
-        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
-        document: doc,
-      },
-    ),
+    withCollaboration(createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), {
+      url: 'wss://collab.yoopta.cloud',
+      roomId: 'doc-123',
+      user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+      document: doc,
+    }),
   [],
 );
 ```
@@ -349,15 +350,12 @@ import { withCollaboration, RemoteCursors } from '@yoopta/collaboration';
 export default function CollaborativeEditor({ documentId, savedContent, currentUser }) {
   const editor = useMemo(
     () =>
-      withCollaboration(
-        createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-        {
-          url: 'ws://localhost:4000',       // Your own server
-          roomId: documentId,
-          user: currentUser,
-          initialValue: savedContent,        // Load from your DB
-        },
-      ),
+      withCollaboration(createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), {
+        url: 'ws://localhost:4000', // Your own server
+        roomId: documentId,
+        user: currentUser,
+        initialValue: savedContent, // Load from your DB
+      }),
     [],
   );
 
@@ -374,8 +372,12 @@ export default function CollaborativeEditor({ documentId, savedContent, currentU
   );
 
   useEffect(() => {
-    return () => editor.collaboration.destroy();
-  }, [editor]);
+    editor.collaboration.connect();
+
+    return () => {
+      editor.collaboration.disconnect();
+    };
+  }, [editor.collaboration]);
 
   return (
     <YooptaEditor editor={editor} onChange={handleChange}>
@@ -386,7 +388,9 @@ export default function CollaborativeEditor({ documentId, savedContent, currentU
 ```
 
 <Note>
-  The `initialValue` is only used when the first user connects to an empty room. Once the Y.Doc has content (from any client), subsequent connections load from the Y.Doc state, not from `initialValue`.
+  The `initialValue` is only used when the first user connects to an empty room. Once the Y.Doc has
+  content (from any client), subsequent connections load from the Y.Doc state, not from
+  `initialValue`.
 </Note>
 
 ### Running Your Own WebSocket Server
@@ -415,7 +419,8 @@ console.log('Yjs WebSocket server running on ws://localhost:4000');
 For production, consider [Hocuspocus](https://tiptap.dev/hocuspocus) which adds authentication, persistence hooks, and webhook support out of the box.
 
 <Tip>
-  For small teams (2-5 concurrent editors), a single y-websocket process is more than sufficient. No special infrastructure needed.
+  For small teams (2-5 concurrent editors), a single y-websocket process is more than sufficient. No
+  special infrastructure needed.
 </Tip>
 
 ## Yoopta Cloud
@@ -434,21 +439,19 @@ For teams that don't want to run their own collaboration infrastructure, **Yoopt
 // Using Yoopta Cloud — just change the URL and add your API key
 const editor = useMemo(
   () =>
-    withCollaboration(
-      createYooptaEditor({ plugins: PLUGINS, marks: MARKS }),
-      {
-        url: 'wss://collab.yoopta.cloud',
-        roomId: 'document-123',
-        token: 'your-api-key',
-        user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
-      },
-    ),
+    withCollaboration(createYooptaEditor({ plugins: PLUGINS, marks: MARKS }), {
+      url: 'wss://collab.yoopta.cloud',
+      roomId: 'document-123',
+      token: 'your-api-key',
+      user: { id: 'user-1', name: 'Alice', color: '#e06c75' },
+    }),
   [],
 );
 ```
 
 <Info>
-  Yoopta Cloud is coming soon. The self-hosted path described above will always remain free and open-source.
+  Yoopta Cloud is coming soon. The self-hosted path described above will always remain free and
+  open-source.
 </Info>
 
 ## How It Works
@@ -488,7 +491,8 @@ When collaboration is active, `editor.undo()` and `editor.redo()` (Cmd+Z / Cmd+S
 Rapid edits (e.g., continuous typing) are batched into a single undo step, similar to how undo works in Google Docs or Notion.
 
 <Note>
-  The initial document content (loaded from the server or seeded via `initialValue`) is not undoable — only edits made after the document loads can be undone.
+  The initial document content (loaded from the server or seeded via `initialValue`) is not undoable
+  — only edits made after the document loads can be undone.
 </Note>
 
 ## TypeScript

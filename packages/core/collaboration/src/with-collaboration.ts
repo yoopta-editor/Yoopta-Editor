@@ -9,6 +9,7 @@ import type {
   CollaborationConfig,
   CollaborationState,
   CollaborationYooEditor,
+  ConnectionError,
   ConnectionStatus,
 } from './types';
 
@@ -20,21 +21,16 @@ export function withCollaboration(
 ): CollaborationYooEditor {
   const collabEditor = editor as CollaborationYooEditor;
 
-  // Create or use provided Y.Doc
   const doc = config.document ?? new Y.Doc();
 
-  // Create provider
   const provider = new WebSocketProvider(config.url, config.roomId, doc, {
     token: config.token,
   });
 
-  // Create awareness manager
   const awareness = new AwarenessManager(provider, config.user, editor);
 
-  // Create binding
   const binding = new YDocBinding(editor, doc);
 
-  // Cast emit to allow custom collaboration events
   const emit = editor.emit as CollaborationEmit;
 
   let state: CollaborationState = {
@@ -42,6 +38,7 @@ export function withCollaboration(
     connectedUsers: [config.user],
     document: doc,
     isSynced: false,
+    error: null,
   };
 
   function updateState(partial: Partial<CollaborationState>): void {
@@ -49,10 +46,18 @@ export function withCollaboration(
     emit('collaboration:state-change', state);
   }
 
-  // Listen to provider status
   provider.on('status', (status: ConnectionStatus) => {
-    updateState({ status });
+    const patch: Partial<CollaborationState> = { status };
+    if (status === 'connected') {
+      patch.error = null;
+    }
+    updateState(patch);
     emit('collaboration:status-change', { status });
+  });
+
+  provider.on('connection-error', (error: ConnectionError) => {
+    updateState({ error });
+    emit('collaboration:connection-error', error);
   });
 
   provider.on('synced', () => {
@@ -81,8 +86,6 @@ export function withCollaboration(
     emit('decorations:change', undefined);
   });
 
-  // ---- Intercept applyTransforms ----
-
   const originalApplyTransforms = editor.applyTransforms;
   const originalIsRemoteSlateOp = editor.isRemoteSlateOp;
   const originalUndo = editor.undo;
@@ -92,9 +95,7 @@ export function withCollaboration(
     // Apply locally first
     originalApplyTransforms(ops, options);
 
-    // If this is a remote change being applied, don't push back to Y.Doc
     if (!binding.isApplyingRemote) {
-      // Push local changes to Y.Doc
       binding.pushLocalOperations(ops);
     }
 
@@ -113,8 +114,6 @@ export function withCollaboration(
   editor.redo = () => {
     binding.redo();
   };
-
-  // ---- Listen to cursor/selection changes for awareness ----
 
   const pathChangeHandler = (path: { current: number | null; selected?: number[] | null }) => {
     if (binding.isApplyingRemote) return;
@@ -142,11 +141,13 @@ export function withCollaboration(
 
   editor.on('path-change', pathChangeHandler);
 
-  // ---- Public API ----
-
   collabEditor.collaboration = {
     get state() {
       return state;
+    },
+
+    setToken: (token: string) => {
+      provider.setToken(token);
     },
 
     connect: () => {
@@ -159,21 +160,16 @@ export function withCollaboration(
     },
 
     destroy: () => {
-      // 1. Unsubscribe editor listeners
       editor.off('path-change', pathChangeHandler);
       editor.decorators.delete('remote-cursors');
       editor.leafDecorators.delete('remote-cursors');
       emit('decorations:change', undefined);
 
-      // 2. Remove awareness states WHILE WebSocket is still open
-      //    so the removal message actually reaches the server
       awareness.destroy();
 
-      // 3. Now disconnect and clean up
       binding.destroy();
       provider.destroy();
 
-      // 4. Restore original editor methods
       editor.applyTransforms = originalApplyTransforms;
       editor.isRemoteSlateOp = originalIsRemoteSlateOp;
       editor.undo = originalUndo;
@@ -185,8 +181,7 @@ export function withCollaboration(
     getDocument: () => doc,
   };
 
-  // Auto-connect if not explicitly disabled
-  if (config.connect !== false) {
+  if (config.connect === true) {
     provider.connect();
   }
 

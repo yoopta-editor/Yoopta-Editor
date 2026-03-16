@@ -54,7 +54,6 @@ export const CollaborationEditor = ({
       url: WS_URL,
       roomId: ROOM_ID,
       user,
-      connect: false,
     });
   }, [user]);
 
@@ -62,7 +61,6 @@ export const CollaborationEditor = ({
     editor.collaboration.connect();
 
     return () => {
-      console.log('editor.collaboration.disconnect FIRED');
       editor.collaboration.disconnect();
     };
   }, [editor.collaboration]);
