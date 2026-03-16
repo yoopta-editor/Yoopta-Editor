@@ -213,7 +213,7 @@ export const VideoRender = ({
             left: {
               width: 'auto',
               height: '40px',
-              left: '-5px',
+              left: '5px',
               top: '50%',
               transform: 'translateY(-50%)',
               cursor: 'ew-resize',
@@ -221,7 +221,7 @@ export const VideoRender = ({
             right: {
               width: 'auto',
               height: '40px',
-              right: '-5px',
+              right: '5px',
               top: '50%',
               transform: 'translateY(-50%)',
               cursor: 'ew-resize',
@@ -229,10 +229,10 @@ export const VideoRender = ({
           }}
           resizeHandleComponent={{
             left: (
-              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
+              <div className="h-10 w-1.5 rounded-full bg-white border border-border shadow-[0_0_4px_rgba(0,0,0,0.3)]" />
             ),
             right: (
-              <div className="h-10 w-2 rounded-full bg-primary shadow-md ring-2 ring-white/80" />
+              <div className="h-10 w-1.5 rounded-full bg-white border border-border shadow-[0_0_4px_rgba(0,0,0,0.3)]" />
             ),
           }}
           className={cn('rounded-sm overflow-hidden')}>
