@@ -9,6 +9,7 @@ export type {
   CollaborationUser,
   CollaborationState,
   ConnectionStatus,
+  ConnectionError,
   RemoteCursorData,
   CollaborationAPI,
   CollaborationYooEditor,

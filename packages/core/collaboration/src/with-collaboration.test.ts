@@ -5,14 +5,12 @@ import { LOCAL_ORIGIN } from './types';
 // eslint-disable-next-line import/order
 import type { CollaborationYooEditor } from './types';
 
-// Mock WebSocketProvider (needs WebSocket API)
 const mockProviderOn = vi.fn();
 const mockProviderConnect = vi.fn();
 const mockProviderDisconnect = vi.fn();
 const mockProviderDestroy = vi.fn();
 const mockProviderEmit = vi.fn();
 
-// Store event handlers so we can trigger them in tests
 const providerHandlers: Record<string, (...args: any[]) => void> = {};
 
 vi.mock('./provider/web-socket-provider', () => ({
@@ -37,7 +35,6 @@ vi.mock('./provider/web-socket-provider', () => ({
   },
 }));
 
-// Mock AwarenessManager (needs y-protocols/awareness)
 const mockAwarenessDestroy = vi.fn();
 const mockAwarenessUpdateCursor = vi.fn();
 const mockAwarenessGetConnectedUsers = vi.fn(() => []);
@@ -58,7 +55,6 @@ vi.mock('./awareness/awareness-manager', () => ({
   },
 }));
 
-// Mock cursor decorations (needs Slate types)
 vi.mock('./awareness/cursor-decorations', () => ({
   createCursorDecorator: vi.fn(() => vi.fn(() => [])),
   createCursorLeafRenderer: vi.fn(() => vi.fn((leaf: any, children: any) => children)),
@@ -66,8 +62,6 @@ vi.mock('./awareness/cursor-decorations', () => ({
 
 // eslint-disable-next-line import/first
 import { withCollaboration } from './with-collaboration';
-
-// ---- Minimal YooEditor mock ----
 
 type MockEventHandler = (...args: any[]) => void;
 

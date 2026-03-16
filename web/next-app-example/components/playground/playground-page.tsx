@@ -25,7 +25,7 @@ export function PlaygroundPage() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
         <div className="text-center max-w-3xl mx-auto mb-0">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 dark:from-white dark:via-neutral-100 dark:to-white bg-clip-text text-transparent">
-            Interactive Playground v6 (beta)
+            Interactive Playground v6
           </h1>
         </div>
       </section>
@@ -53,7 +53,7 @@ export function PlaygroundPage() {
                     Live
                   </Badge>
                   <Badge variant="warning" className="text-xs">
-                    v6 (beta)
+                    v6
                   </Badge>
                   <Badge variant="outline">
                     <a

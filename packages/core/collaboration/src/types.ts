@@ -19,7 +19,7 @@ export type CollaborationConfig = {
   document?: YDoc;
   /** Initial value to seed the document if no remote state exists */
   initialValue?: YooptaContentValue;
-  /** Whether to connect immediately (default: true) */
+  /** Whether to connect immediately (default: false) */
   connect?: boolean;
   /** Authentication token sent to the server on connect */
   token?: string;
@@ -38,6 +38,11 @@ export type CollaborationUser = {
 
 export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
 
+export type ConnectionError = {
+  code: number;
+  reason: string;
+};
+
 // ---- State ----
 
 export type CollaborationState = {
@@ -45,6 +50,7 @@ export type CollaborationState = {
   connectedUsers: CollaborationUser[];
   document: YDoc | null;
   isSynced: boolean;
+  error: ConnectionError | null;
 };
 
 // ---- Remote Cursors ----
@@ -65,6 +71,7 @@ export type RemoteCursorData = {
 
 export type CollaborationAPI = {
   readonly state: CollaborationState;
+  setToken: (token: string) => void;
   connect: () => void;
   disconnect: () => void;
   destroy: () => void;

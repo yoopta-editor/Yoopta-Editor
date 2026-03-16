@@ -122,7 +122,7 @@ export function yInline(
   if (!elementConfig) {
     throw new Error(
       `Inline element type "${type}" not found in any plugin. ` +
-        `Make sure the plugin is registered in editor.plugins`,
+      `Make sure the plugin is registered in editor.plugins`,
     );
   }
 
@@ -219,7 +219,7 @@ export function y(
   if (!elementConfig) {
     throw new Error(
       `Element type "${type}" not found in any plugin. ` +
-        `Make sure the plugin is registered in editor.plugins`,
+      `Make sure the plugin is registered in editor.plugins`,
     );
   }
 

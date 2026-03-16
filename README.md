@@ -1,10 +1,10 @@
 [![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/darginec05)
 
 ![npm](https://img.shields.io/npm/v/@yoopta/editor)
-[![Beta](https://img.shields.io/badge/status-beta-orange?style=flat)](https://github.com/Darginec05/Yoopta-Editor)
+![downloads](https://img.shields.io/npm/dm/@yoopta/editor)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/Darginec05)
 
-# Yoopta-Editor v6 (beta)
+# Yoopta-Editor v6
 
 <!-- **[▶ Watch intro video](docs/public/yoopta-intro.mp4)** -->
 
@@ -32,18 +32,18 @@ Built on top of Slate.js with a powerful plugin architecture, Yoopta-Editor give
 
 See what you can build with Yoopta:
 
-| Example | Description | Demo | Source |
-|---------|-------------|------|--------|
-| **Full Setup** | Complete editor with toolbar, slash menu, block actions, drag & drop, and mentions | [Live](https://yoopta.dev/examples/full-setup) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/full-setup) |
-| **CMS / Website Builder** | Visual page builder with drag-and-drop blocks, sidebar settings, and live preview — build landing pages and websites | [Live](https://yoopta.dev/examples/cms) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/cms) |
-| **Word Example** | Microsoft Word-inspired editor with fixed toolbar, formatting, tables, and export to HTML/Markdown/Text/JSON | [Live](https://yoopta.dev/examples/word-example) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/word-example) |
-| **Email Builder** | Email composition tool with templates, signatures, split-view editing, HTML preview, and email-safe export | [Live](https://yoopta.dev/examples/email-builder) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/email-builder) |
-| **README Editor** | GitHub-flavored Markdown editor with live preview, section templates, and download as README.md | [Live](https://yoopta.dev/examples/readme-editor) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/readme-editor) |
-| **Slack Chat** | Slack-style messaging with channel list, rich text composer, mentions, and emoji support | [Live](https://yoopta.dev/examples/slack-chat) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/slack-chat) |
-| **Social Media Chat** | WhatsApp/Instagram-like chat with message bubbles, attachments, reactions, and status indicators | [Live](https://yoopta.dev/examples/social-media-chat) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/social-media-chat) |
-| **Collaboration** | Real-time multi-user editing with Yjs, remote cursors, and presence awareness | [Live](https://yoopta.dev/examples/collaboration) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/collaboration) |
-| **Nested Plugins** | Injecting child elements from other plugins into Accordion, Tabs, and Carousel components | [Live](https://yoopta.dev/examples/inject-plugins) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/inject-plugins) |
-| **Large Document** | Performance stress test with a large dataset to demonstrate scalability with many blocks | [Live](https://yoopta.dev/examples/large-document) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/large-document) |
+| Example                   | Description                                                                                                          | Demo                                                  | Source                                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Full Setup**            | Complete editor with toolbar, slash menu, block actions, drag & drop, and mentions                                   | [Live](https://yoopta.dev/examples/full-setup)        | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/full-setup)        |
+| **CMS / Website Builder** | Visual page builder with drag-and-drop blocks, sidebar settings, and live preview — build landing pages and websites | [Live](https://yoopta.dev/examples/cms)               | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/cms)               |
+| **Word Example**          | Microsoft Word-inspired editor with fixed toolbar, formatting, tables, and export to HTML/Markdown/Text/JSON         | [Live](https://yoopta.dev/examples/word-example)      | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/word-example)      |
+| **Email Builder**         | Email composition tool with templates, signatures, split-view editing, HTML preview, and email-safe export           | [Live](https://yoopta.dev/examples/email-builder)     | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/email-builder)     |
+| **README Editor**         | GitHub-flavored Markdown editor with live preview, section templates, and download as README.md                      | [Live](https://yoopta.dev/examples/readme-editor)     | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/readme-editor)     |
+| **Slack Chat**            | Slack-style messaging with channel list, rich text composer, mentions, and emoji support                             | [Live](https://yoopta.dev/examples/slack-chat)        | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/slack-chat)        |
+| **Social Media Chat**     | WhatsApp/Instagram-like chat with message bubbles, attachments, reactions, and status indicators                     | [Live](https://yoopta.dev/examples/social-media-chat) | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/social-media-chat) |
+| **Collaboration**         | Real-time multi-user editing with Yjs, remote cursors, and presence awareness                                        | [Live](https://yoopta.dev/examples/collaboration)     | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/collaboration)     |
+| **Nested Plugins**        | Injecting child elements from other plugins into Accordion, Tabs, and Carousel components                            | [Live](https://yoopta.dev/examples/inject-plugins)    | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/inject-plugins)    |
+| **Large Document**        | Performance stress test with a large dataset to demonstrate scalability with many blocks                             | [Live](https://yoopta.dev/examples/large-document)    | [Source](https://github.com/Darginec05/Yoopta-Editor/tree/main/web/next-app-example/app/examples/large-document)    |
 
 ## Features
 

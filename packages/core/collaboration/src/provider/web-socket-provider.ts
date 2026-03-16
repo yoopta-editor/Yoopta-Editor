@@ -36,6 +36,10 @@ export class WebSocketProvider {
     this.awareness.on('update', this.onAwarenessUpdate);
   }
 
+  setToken(token: string): void {
+    this.token = token;
+  }
+
   connect(): void {
     if (this.shouldConnect) return;
     this.shouldConnect = true;
@@ -162,8 +166,17 @@ export class WebSocketProvider {
 
     };
 
-    this.ws.onclose = () => {
+    this.ws.onclose = (event: CloseEvent) => {
       this.ws = null;
+
+      // 4000–4099: application-level fatal errors — do not reconnect
+      if (event.code >= 4000 && event.code < 4100) {
+        this.shouldConnect = false;
+        this.emit('connection-error', { code: event.code, reason: event.reason });
+        this.emit('status', 'error');
+        return;
+      }
+
       if (this.shouldConnect) {
         this.emit('status', 'connecting');
         this.scheduleReconnect();
@@ -173,7 +186,6 @@ export class WebSocketProvider {
     };
 
     this.ws.onerror = () => {
-      this.emit('status', 'error');
       // onclose will fire after onerror, which handles reconnection
     };
   }
