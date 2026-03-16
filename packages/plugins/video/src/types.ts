@@ -36,7 +36,7 @@ export type VideoElementProps = {
   settings?: VideoElementSettings;
   alignment?: 'left' | 'center' | 'right' | null;
   sizes?: VideoSizes;
-  provider?: VideoProvider;
+  provider?: VideoProvider | null;
   fit?: 'contain' | 'cover' | 'fill' | null;
   poster?: string | null;
 };

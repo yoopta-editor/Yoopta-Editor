@@ -28,15 +28,17 @@ export const ElementOptionsRoot = ({
 
   return (
     <ElementOptionsContext.Provider value={contextValue}>
-      <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-        <div
-          className={className}
-          style={style}
-          data-element-options-root
-          data-state={isOpen ? 'open' : 'closed'}>
-          {children}
-        </div>
-      </Popover.Root>
+      {editor.readOnly ? null : (
+        <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+          <div
+            className={className}
+            style={style}
+            data-element-options-root
+            data-state={isOpen ? 'open' : 'closed'}>
+            {children}
+          </div>
+        </Popover.Root>
+      )}
     </ElementOptionsContext.Provider>
   );
 };

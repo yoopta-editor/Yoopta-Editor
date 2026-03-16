@@ -40,7 +40,7 @@ export const ImageRender = ({
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width ?? Infinity;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
     const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
@@ -53,14 +53,14 @@ export const ImageRender = ({
         ? typeof maxSizesOptions.maxHeight === 'number'
           ? maxSizesOptions.maxHeight
           : parseInt(String(maxSizesOptions.maxHeight).replace(/[^\d]/g, ''), 10)
-        : Infinity,
+        : 0,
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width ?? Infinity;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
       const pluginMaxSizes = pluginOptions?.maxSizes;
 
       setMaxSizes({
@@ -73,7 +73,7 @@ export const ImageRender = ({
           ? typeof pluginMaxSizes.maxHeight === 'number'
             ? pluginMaxSizes.maxHeight
             : parseInt(String(pluginMaxSizes.maxHeight).replace(/[^\d]/g, ''), 10)
-          : Infinity,
+          : 0,
       });
     };
 
@@ -92,52 +92,15 @@ export const ImageRender = ({
     };
   }, [editor, pluginOptions]);
 
-  // Helper function to limit sizes (similar to limitSizes from @yoopta/image)
-  const limitImageSizes = (
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    sizes: { width: number | string; height: number | string },
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    maxSizes: { width: number | string; height: number | string },
-  ): { width: number; height: number } => {
-    const parseSize = (value: string | number): number => {
-      if (typeof value === 'number') return value;
-      return parseInt(String(value).replace(/[^\d]/g, ''), 10);
-    };
-
-    const currentWidth = parseSize(sizes.width);
-    const currentHeight = parseSize(sizes.height);
-    const maxWidth = parseSize(maxSizes.width);
-    const maxHeight = parseSize(maxSizes.height);
-
-    if (currentWidth <= maxWidth && currentHeight <= maxHeight) {
-      return { width: currentWidth, height: currentHeight };
-    }
-
-    const widthRatio = currentWidth / maxWidth;
-    const heightRatio = currentHeight / maxHeight;
-    const ratio = Math.max(widthRatio, heightRatio);
-
-    const newWidth = Math.round(currentWidth / ratio);
-    const newHeight = Math.round(currentHeight / ratio);
-
-    return {
-      width: Math.min(newWidth, maxWidth),
-      height: Math.min(newHeight, maxHeight),
-    };
-  };
-
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits
-    const limitedSizes = limitImageSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
     onUpdate({
-      sizes: limitedSizes,
+      sizes: {
+        width: newWidth,
+        height: newHeight,
+      },
     });
   };
 
@@ -145,13 +108,10 @@ export const ImageRender = ({
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits during resize
-    const limitedSizes = limitImageSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
-    setSizes(limitedSizes);
+    setSizes({
+      width: newWidth,
+      height: newHeight,
+    });
   };
 
   const download = async () => {
@@ -207,7 +167,9 @@ export const ImageRender = ({
           lockAspectRatio
           minWidth={100}
           minHeight={100}
-          position={{ x: Infinity, y: 0 }}
+          maxWidth={maxSizes.maxWidth - 8 || undefined}
+          maxHeight={maxSizes.maxHeight || undefined}
+          position={{ x: 0, y: 0 }}
           enableResizing={
             isSelected
               ? {

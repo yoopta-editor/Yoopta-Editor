@@ -35,12 +35,12 @@ export const VideoRender = ({
   const { isElementSelected } = useElementSelected();
   const isBlockSelected = useBlockSelected({ blockId });
   const isSelected = isElementSelected && isBlockSelected;
-  const rndRef = useRef<HTMLElement | null>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
     const maxSizesOptions = pluginOptions?.maxSizes;
 
     return {
@@ -53,14 +53,14 @@ export const VideoRender = ({
         ? typeof maxSizesOptions.maxHeight === 'number'
           ? maxSizesOptions.maxHeight
           : parseInt(String(maxSizesOptions.maxHeight).replace(/[^\d]/g, ''), 10)
-        : Infinity,
+        : 0,
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
       const pluginMaxSizes = pluginOptions?.maxSizes;
 
       setMaxSizes({
@@ -73,7 +73,7 @@ export const VideoRender = ({
           ? typeof pluginMaxSizes.maxHeight === 'number'
             ? pluginMaxSizes.maxHeight
             : parseInt(String(pluginMaxSizes.maxHeight).replace(/[^\d]/g, ''), 10)
-          : Infinity,
+          : 0,
       });
     };
 
@@ -92,52 +92,15 @@ export const VideoRender = ({
     };
   }, [editor, pluginOptions]);
 
-  // Helper function to limit sizes
-  const limitVideoSizes = (
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    sizes: { width: number | string; height: number | string },
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    maxSizes: { width: number | string; height: number | string },
-  ): { width: number; height: number } => {
-    const parseSize = (value: string | number): number => {
-      if (typeof value === 'number') return value;
-      return parseInt(String(value).replace(/[^\d]/g, ''), 10);
-    };
-
-    const currentWidth = parseSize(sizes.width);
-    const currentHeight = parseSize(sizes.height);
-    const maxWidth = parseSize(maxSizes.width);
-    const maxHeight = parseSize(maxSizes.height);
-
-    if (currentWidth <= maxWidth && currentHeight <= maxHeight) {
-      return { width: currentWidth, height: currentHeight };
-    }
-
-    const widthRatio = currentWidth / maxWidth;
-    const heightRatio = currentHeight / maxHeight;
-    const ratio = Math.max(widthRatio, heightRatio);
-
-    const newWidth = Math.round(currentWidth / ratio);
-    const newHeight = Math.round(currentHeight / ratio);
-
-    return {
-      width: Math.min(newWidth, maxWidth),
-      height: Math.min(newHeight, maxHeight),
-    };
-  };
-
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits
-    const limitedSizes = limitVideoSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
     onUpdate({
-      sizes: limitedSizes,
+      sizes: {
+        width: newWidth,
+        height: newHeight,
+      },
     });
   };
 
@@ -145,13 +108,10 @@ export const VideoRender = ({
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits during resize
-    const limitedSizes = limitVideoSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
-    setSizes(limitedSizes);
+    setSizes({
+      width: newWidth,
+      height: newHeight,
+    });
   };
 
   const isProviderVideo = elementProps.provider && elementProps.provider.type;
@@ -160,7 +120,7 @@ export const VideoRender = ({
     ? getEmbedUrl(elementProps.provider.type, elementProps.provider.id)
     : null;
 
-  const settings = elementProps.settings || {
+  const settings = elementProps.settings ?? {
     controls: true,
     loop: false,
     muted: false,
@@ -218,14 +178,8 @@ export const VideoRender = ({
     <div
       {...attributes}
       className={cn('group/video mt-4 relative transition-all w-full flex', alignmentClass)}>
-      <div className="relative" contentEditable={false}>
+      <div className="relative" contentEditable={false} ref={videoContainerRef}>
         <Rnd
-          ref={(node) => {
-            // Get the actual DOM element from Rnd
-            if (node?.resizableElement && node.resizableElement instanceof HTMLElement) {
-              rndRef.current = node.resizableElement;
-            }
-          }}
           style={{
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
@@ -237,9 +191,9 @@ export const VideoRender = ({
           lockAspectRatio
           minWidth={200}
           minHeight={150}
-          maxWidth={maxSizes.maxWidth}
-          maxHeight={maxSizes.maxHeight}
-          position={{ x: Infinity, y: 0 }}
+          maxWidth={maxSizes.maxWidth - 8 || undefined}
+          maxHeight={maxSizes.maxHeight || undefined}
+          position={{ x: 0, y: 0 }}
           enableResizing={
             isSelected
               ? {
@@ -316,7 +270,7 @@ export const VideoRender = ({
         </Rnd>
         {isSelected && (
           <VideoInlineToolbar
-            referenceRef={rndRef}
+            referenceRef={videoContainerRef}
             elementProps={elementProps}
             onUpdate={onUpdate}
             onReplace={onReplace}

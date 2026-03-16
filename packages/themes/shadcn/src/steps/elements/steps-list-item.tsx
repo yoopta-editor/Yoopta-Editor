@@ -26,8 +26,14 @@ export const StepListItem = (props: PluginElementRenderProps) => {
     return orderNumber;
   }, [editor, element, props.blockId]);
 
+  const isLast = useMemo(() => {
+    const steps = Elements.getElementChildren(editor, { blockId: props.blockId, type: 'step-list' });
+    if (!steps) return false;
+    return order === steps.length - 1;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, element, props.blockId, order]);
+
   const stepNumber = order + 1;
-  const isLast = order === element.children.length - 1;
   const isEmpty = element.children.length === 0;
 
   const moveUp = () => {

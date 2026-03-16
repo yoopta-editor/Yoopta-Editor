@@ -34,29 +34,29 @@ export const EmbedRender = ({
   const { isElementSelected } = useElementSelected();
   const isBlockSelected = useBlockSelected({ blockId });
   const isSelected = isElementSelected && isBlockSelected;
-  const rndRef = useRef<HTMLElement | null>(null);
+  const embedContainerRef = useRef<HTMLDivElement>(null);
   const editor = useYooptaEditor();
 
   // Get max sizes from plugin options, with default maxWidth from editor width
   const [maxSizes, setMaxSizes] = useState(() => {
-    const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
+    const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
     const maxWidth = pluginOptions?.maxWidth ?? editorWidth;
 
     return {
       maxWidth: typeof maxWidth === 'number' ? maxWidth : editorWidth,
-      maxHeight: Infinity, // reasonable max height
+      maxHeight: 0, // reasonable max height
     };
   });
 
   // Update maxSizes when editor width changes
   useEffect(() => {
     const updateMaxSizes = () => {
-      const editorWidth = editor.refElement?.getBoundingClientRect().width || Infinity;
+      const editorWidth = editor.refElement?.getBoundingClientRect().width || 0;
       const maxWidth = pluginOptions?.maxWidth ?? editorWidth;
 
       setMaxSizes({
         maxWidth: typeof maxWidth === 'number' ? maxWidth : editorWidth,
-        maxHeight: Infinity,
+        maxHeight: 0,
       });
     };
 
@@ -75,50 +75,15 @@ export const EmbedRender = ({
     };
   }, [editor, pluginOptions]);
 
-  // Helper function to limit sizes
-  const limitEmbedSizes = (
-    currentSizes: { width: number | string; height: number | string },
-    limits: { width: number | string; height: number | string },
-  ): { width: number; height: number } => {
-    const parseSize = (value: string | number): number => {
-      if (typeof value === 'number') return value;
-      return parseInt(String(value).replace(/[^\d]/g, ''), 10);
-    };
-
-    const currentWidth = parseSize(currentSizes.width);
-    const currentHeight = parseSize(currentSizes.height);
-    const maxWidth = parseSize(limits.width);
-    const maxHeight = parseSize(limits.height);
-
-    if (currentWidth <= maxWidth && currentHeight <= maxHeight) {
-      return { width: currentWidth, height: currentHeight };
-    }
-
-    const widthRatio = currentWidth / maxWidth;
-    const heightRatio = currentHeight / maxHeight;
-    const ratio = Math.max(widthRatio, heightRatio);
-
-    const newWidth = Math.round(currentWidth / ratio);
-    const newHeight = Math.round(currentHeight / ratio);
-
-    return {
-      width: Math.min(newWidth, maxWidth),
-      height: Math.min(newHeight, maxHeight),
-    };
-  };
-
   const onResizeStop = (_e: any, _direction: any, ref: HTMLElement) => {
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits
-    const limitedSizes = limitEmbedSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
     onUpdate({
-      sizes: limitedSizes,
+      sizes: {
+        width: newWidth,
+        height: newHeight,
+      },
     });
   };
 
@@ -126,13 +91,10 @@ export const EmbedRender = ({
     const newWidth = parseInt(ref.style.width, 10);
     const newHeight = parseInt(ref.style.height, 10);
 
-    // Apply max size limits during resize
-    const limitedSizes = limitEmbedSizes(
-      { width: newWidth, height: newHeight },
-      { width: maxSizes.maxWidth, height: maxSizes.maxHeight },
-    );
-
-    setSizes(limitedSizes);
+    setSizes({
+      width: newWidth,
+      height: newHeight,
+    });
   };
 
   const provider = elementProps.provider;
@@ -157,13 +119,8 @@ export const EmbedRender = ({
 
   return (
     <div {...attributes} className={cn('group/embed mt-4 relative transition-all w-full flex', alignmentClass)}>
-      <div className="relative" contentEditable={false}>
+      <div className="relative" contentEditable={false} ref={embedContainerRef}>
         <Rnd
-          ref={(node) => {
-            if (node?.resizableElement && node.resizableElement instanceof HTMLElement) {
-              rndRef.current = node.resizableElement;
-            }
-          }}
           style={{
             position: 'relative',
             outline: isSelected ? '.125rem solid rgba(0, 0, 0, 0)' : 'none',
@@ -175,8 +132,8 @@ export const EmbedRender = ({
           lockAspectRatio
           minWidth={200}
           minHeight={150}
-          maxWidth={maxSizes.maxWidth}
-          maxHeight={maxSizes.maxHeight}
+          maxWidth={maxSizes.maxWidth - 8 || undefined}
+          maxHeight={maxSizes.maxHeight || undefined}
           enableResizing={
             isSelected
               ? {
@@ -232,7 +189,7 @@ export const EmbedRender = ({
         </Rnd>
         {isSelected && (
           <EmbedInlineToolbar
-            referenceRef={rndRef}
+            referenceRef={embedContainerRef}
             elementProps={elementProps}
             onUpdate={onUpdate}
             onReplace={onReplace}
