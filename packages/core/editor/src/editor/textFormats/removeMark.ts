@@ -87,20 +87,22 @@ export function removeMark(editor: YooEditor, options: RemoveMarkOptions): void 
 
   // Handle multiple selected blocks
   if (blockIndices && blockIndices.length > 0) {
-    for (const path of blockIndices) {
-      const blockSlate = Blocks.getBlockSlate(editor, { at: path });
+    editor.batchOperations(() => {
+      for (const path of blockIndices) {
+        const blockSlate = Blocks.getBlockSlate(editor, { at: path });
 
-      if (!blockSlate) continue;
+        if (!blockSlate) continue;
 
-      const [node] = Editor.node(blockSlate, []);
-      if (!node) continue;
+        const [node] = Editor.node(blockSlate, []);
+        if (!node) continue;
 
-      const end = Editor.end(blockSlate, []);
-      const start = Editor.start(blockSlate, []);
+        const end = Editor.end(blockSlate, []);
+        const start = Editor.start(blockSlate, []);
 
-      Transforms.select(blockSlate, { anchor: start, focus: end });
-      Editor.removeMark(blockSlate, type);
-    }
+        Transforms.select(blockSlate, { anchor: start, focus: end });
+        Editor.removeMark(blockSlate, type);
+      }
+    });
 
     return;
   }

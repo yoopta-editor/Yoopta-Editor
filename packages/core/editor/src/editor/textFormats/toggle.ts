@@ -129,15 +129,17 @@ export function toggle(editor: YooEditor, options: ToggleMarkOptions): void {
 
     const isAllActive = selectedBlockEntities.every((entity) => entity.isActiveMark);
 
-    for (const blockEntity of selectedBlockEntities) {
-      if (blockEntity.isActiveMark) {
-        if (isAllActive) {
-          Editor.removeMark(blockEntity.slate, type);
+    editor.batchOperations(() => {
+      for (const blockEntity of selectedBlockEntities) {
+        if (blockEntity.isActiveMark) {
+          if (isAllActive) {
+            Editor.removeMark(blockEntity.slate, type);
+          }
+        } else {
+          Editor.addMark(blockEntity.slate, type, true);
         }
-      } else {
-        Editor.addMark(blockEntity.slate, type, true);
       }
-    }
+    });
 
     return;
   }
