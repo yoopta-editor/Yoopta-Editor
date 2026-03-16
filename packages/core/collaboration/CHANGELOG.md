@@ -1,5 +1,13 @@
 # @yoopta/collaboration
 
+## 6.0.2
+
+### Patch Changes
+
+- fix batch for marks when selected, readonly mode fixed, fix resize handlers for media plugins
+- Updated dependencies
+  - @yoopta/editor@6.0.2
+
 ## 6.0.1
 
 ### Patch Changes

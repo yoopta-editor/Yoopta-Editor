@@ -1,5 +1,11 @@
 # @yoopta/editor
 
+## 6.0.2
+
+### Patch Changes
+
+- fix batch for marks when selected, readonly mode fixed, fix resize handlers for media plugins
+
 ## 6.0.1
 
 ### Patch Changes

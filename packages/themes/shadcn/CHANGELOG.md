@@ -1,5 +1,24 @@
 # @yoopta/themes-shadcn
 
+## 6.0.2
+
+### Patch Changes
+
+- fix batch for marks when selected, readonly mode fixed, fix resize handlers for media plugins
+- Updated dependencies
+  - @yoopta/editor@6.0.2
+  - @yoopta/ui@6.0.2
+  - @yoopta/code@6.0.2
+  - @yoopta/embed@6.0.2
+  - @yoopta/file@6.0.2
+  - @yoopta/image@6.0.2
+  - @yoopta/lists@6.0.2
+  - @yoopta/steps@6.0.2
+  - @yoopta/table@6.0.2
+  - @yoopta/table-of-contents@6.0.2
+  - @yoopta/tabs@6.0.2
+  - @yoopta/video@6.0.2
+
 ## 6.0.1
 
 ### Patch Changes
