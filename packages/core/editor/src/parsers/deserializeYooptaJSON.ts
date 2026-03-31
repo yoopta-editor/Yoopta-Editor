@@ -95,7 +95,6 @@ function isValidBlock(editor: YooEditor, block: unknown): block is YooptaBlockDa
 
   const meta = b.meta as Record<string, unknown>;
   if (typeof meta.order !== 'number') return false;
-  if (typeof meta.depth !== 'number') return false;
 
   // Check if plugin exists for this block type
   if (!editor.plugins[b.type]) {

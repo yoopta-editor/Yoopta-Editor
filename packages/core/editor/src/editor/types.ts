@@ -1,13 +1,11 @@
-import type { Descendant, NodeEntry, Path, Point, Range as SlateRange, Selection } from 'slate';
+import type { Descendant, NodeEntry, Path, Point, Selection, Range as SlateRange } from 'slate';
 import type { ReactEditor } from 'slate-react';
 
 import type { YooptaMark } from '../marks';
-import type { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import type { deleteBlock } from './blocks/deleteBlock';
 import type { duplicateBlock } from './blocks/duplicateBlock';
 import type { focusBlock } from './blocks/focusBlock';
 import type { GetBlockOptions } from './blocks/getBlock';
-import type { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import type { insertBlock } from './blocks/insertBlock';
 import type { mergeBlock } from './blocks/mergeBlock';
 import type { toggleBlock } from './blocks/toggleBlock';
@@ -30,6 +28,7 @@ import type {
   PluginElementsMap,
   PluginOptions,
 } from '../plugins/types';
+import type { MetaExtension } from '../extensions/types';
 import type { ElementStructureOptions, TextNodeOptions } from './elements/create-element-structure';
 import type { deleteElement } from './elements/deleteElement';
 import type { getElement } from './elements/getElement';
@@ -52,8 +51,7 @@ export type YooptaBlockData<T = Descendant | SlateElement> = {
 
 export type YooptaBlockBaseMeta = {
   order: number;
-  depth: number;
-  align?: 'left' | 'center' | 'right' | undefined;
+  [key: string]: unknown;
 };
 
 export type YooptaContentValue = Record<string, YooptaBlockData>;
@@ -125,8 +123,6 @@ export type YooEditor = {
   deleteBlock: WithoutFirstArg<typeof deleteBlock>;
   duplicateBlock: WithoutFirstArg<typeof duplicateBlock>;
   toggleBlock: WithoutFirstArg<typeof toggleBlock>;
-  increaseBlockDepth: WithoutFirstArg<typeof increaseBlockDepth>;
-  decreaseBlockDepth: WithoutFirstArg<typeof decreaseBlockDepth>;
   moveBlock: WithoutFirstArg<typeof moveBlock>;
   focusBlock: WithoutFirstArg<typeof focusBlock>;
   mergeBlock: WithoutFirstArg<typeof mergeBlock>;
@@ -218,6 +214,12 @@ export type YooEditor = {
   // decorator registry (for collaboration cursors, search highlights, etc.)
   decorators: Map<string, DecoratorFn>;
   leafDecorators: Map<string, LeafDecoratorRenderFn>;
+
+  // meta extensions
+  extensions: Record<string, MetaExtension>;
+
+  // dynamic extension command namespaces (e.g., editor.depth, editor.align)
+  [key: string]: any;
 };
 
 export type SlateElementTextNode = {

@@ -1,11 +1,9 @@
 import { buildBlockData } from './buildBlockData';
-import { decreaseBlockDepth } from './decreaseBlockDepth';
 import { deleteBlock } from './deleteBlock';
 import { duplicateBlock } from './duplicateBlock';
 import { focusBlock } from './focusBlock';
 import { getBlock } from './getBlock';
 import { getBlockSlate } from './getBlockSlate';
-import { increaseBlockDepth } from './increaseBlockDepth';
 import { insertBlock } from './insertBlock';
 import { mergeBlock } from './mergeBlock';
 import { moveBlock } from './moveBlock';
@@ -19,8 +17,6 @@ export const Blocks = {
   moveBlock,
   focusBlock,
   splitBlock,
-  increaseBlockDepth,
-  decreaseBlockDepth,
   duplicateBlock,
   updateBlock,
   toggleBlock,

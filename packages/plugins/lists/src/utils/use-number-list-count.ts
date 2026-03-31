@@ -10,11 +10,11 @@ function getNumberedListCount(editor: YooEditor, block: YooptaBlockData) {
 
   const depthCounters: Record<number, number> = {};
   const lastBlockTypeAtDepth: Record<number, string> = {};
-  const targetDepth = block.meta.depth;
+  const targetDepth = (block.meta.depth as number) || 0;
 
   for (const blockId of sortedBlockIds) {
     const currentBlock = editor.children[blockId];
-    const currentDepth = currentBlock.meta.depth;
+    const currentDepth = (currentBlock.meta.depth as number) || 0;
     const currentType = currentBlock.type;
 
     if (blockId === block.id) break;

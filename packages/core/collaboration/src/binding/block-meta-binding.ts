@@ -20,8 +20,9 @@ export class BlockMetaBinding {
     const { id, type, meta } = op.block;
     const metaMap = new Y.Map<string | number | undefined>();
     metaMap.set('type', type);
-    metaMap.set('depth', meta.depth);
-    metaMap.set('align', meta.align || 'left');
+    Object.entries(meta).forEach(([k, v]) => {
+      if (k !== 'order') metaMap.set(k, v as string | number | undefined);
+    });
     this.blockMeta.set(id, metaMap);
   }
 
@@ -34,20 +35,18 @@ export class BlockMetaBinding {
     if (!metaMap) return;
 
     const { properties } = op;
-    if (properties.depth !== undefined) {
-      metaMap.set('depth', properties.depth);
-    }
-    if (properties.align !== undefined) {
-      metaMap.set('align', properties.align);
-    }
+    Object.entries(properties).forEach(([k, v]) => {
+      if (k !== 'order') metaMap.set(k, v as string | number | undefined);
+    });
   }
 
   splitBlock(op: SplitBlockOperation): void {
     const { nextBlock } = op.properties;
     const metaMap = new Y.Map<string | number | undefined>();
     metaMap.set('type', nextBlock.type);
-    metaMap.set('depth', nextBlock.meta.depth);
-    metaMap.set('align', nextBlock.meta.align || 'left');
+    Object.entries(nextBlock.meta).forEach(([k, v]) => {
+      if (k !== 'order') metaMap.set(k, v as string | number | undefined);
+    });
     this.blockMeta.set(nextBlock.id, metaMap);
   }
 
@@ -59,8 +58,9 @@ export class BlockMetaBinding {
     const mergedMeta = this.blockMeta.get(op.properties.mergedBlock.id);
     if (mergedMeta) {
       const { meta } = op.properties.mergedBlock;
-      mergedMeta.set('depth', meta.depth);
-      mergedMeta.set('align', meta.align || 'left');
+      Object.entries(meta).forEach(([k, v]) => {
+        if (k !== 'order') mergedMeta.set(k, v as string | number | undefined);
+      });
     }
   }
 
@@ -73,8 +73,9 @@ export class BlockMetaBinding {
 
     const metaMap = new Y.Map<string | number | undefined>();
     metaMap.set('type', toggledBlock.type);
-    metaMap.set('depth', toggledBlock.meta.depth);
-    metaMap.set('align', toggledBlock.meta.align || 'left');
+    Object.entries(toggledBlock.meta).forEach(([k, v]) => {
+      if (k !== 'order') metaMap.set(k, v as string | number | undefined);
+    });
     this.blockMeta.set(toggledBlock.id, metaMap);
   }
 
@@ -84,15 +85,15 @@ export class BlockMetaBinding {
    * Read block metadata from Y.Map for a given block ID.
    * Used when building editor operations for remote changes.
    */
-  getBlockMeta(blockId: string): { type: string; depth: number; align: string } | null {
+  getBlockMeta(blockId: string): Record<string, unknown> | null {
     const metaMap = this.blockMeta.get(blockId);
     if (!metaMap) return null;
 
-    return {
-      type: (metaMap.get('type') as string) || 'Paragraph',
-      depth: (metaMap.get('depth') as number) || 0,
-      align: (metaMap.get('align') as string) || 'left',
-    };
+    const result: Record<string, unknown> = {};
+    metaMap.forEach((value, key) => {
+      result[key] = value;
+    });
+    return result;
   }
 
   /**
@@ -100,20 +101,19 @@ export class BlockMetaBinding {
    */
   handleRemoteChanges(
     event: Y.YMapEvent<BlockMetaYMap>,
-  ): { blockId: string; type: string; depth: number; align: string }[] {
-    const changes: { blockId: string; type: string; depth: number; align: string }[] = [];
+  ): { blockId: string; [key: string]: unknown }[] {
+    const changes: { blockId: string; [key: string]: unknown }[] = [];
 
     // Handle changes to existing block meta maps
     for (const [key, change] of event.changes.keys) {
       if (change.action === 'update' || change.action === 'add') {
         const metaMap = this.blockMeta.get(key);
         if (metaMap) {
-          changes.push({
-            blockId: key,
-            type: (metaMap.get('type') as string) || 'Paragraph',
-            depth: (metaMap.get('depth') as number) || 0,
-            align: (metaMap.get('align') as string) || 'left',
+          const entry: { blockId: string; [key: string]: unknown } = { blockId: key };
+          metaMap.forEach((value, k) => {
+            entry[k] = value;
           });
+          changes.push(entry);
         }
       }
     }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import YooptaEditor, { createYooptaEditor, RenderBlockProps, SlateElement, YooptaContentValue, YooptaPlugin } from '@yoopta/editor'
+import { DepthExtension, AlignExtension, RegionExtension } from '@yoopta/extensions'
 
 import { YOOPTA_PLUGINS } from './plugins';
 import { YOOPTA_MARKS } from './marks';
@@ -33,7 +34,7 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
   const containerBoxRef = externalRef ?? internalRef;
 
   const editor = useMemo(() => {
-    return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS })));
+    return withEmoji(withMentions(createYooptaEditor({ plugins: applyTheme(YOOPTA_PLUGINS) as unknown as YooptaPlugin<Record<string, SlateElement>, unknown>[], marks: YOOPTA_MARKS, extensions: [DepthExtension, AlignExtension, RegionExtension] })));
   }, []);
 
   useEffect(() => {
@@ -51,6 +52,21 @@ const FullSetupEditor = ({ initialValue, containerBoxRef: externalRef }: FullSet
   const renderBlock = useCallback(({ children, blockId }: RenderBlockProps) => {
     return <SortableBlock id={blockId} useDragHandle>{children}</SortableBlock>;
   }, []);
+
+  // // example of using YooptaLayout
+  // <YooptaEditor editor={editor}>
+  //   <YooptaLayout>
+  //     <YooptaLayout.Region name="sidebar" width="250px" sticky>
+  //       {/* auto-renders blocks where meta.region === 'sidebar' */}
+  //     </YooptaLayout.Region>
+  //     <YooptaLayout.Region name="content" flex={1}>
+  //       {/* blocks where meta.region === 'content' (or undefined = default) */}
+  //     </YooptaLayout.Region>
+  //     <YooptaLayout.Region name="toc" width="200px">
+  //       {/* blocks where meta.region === 'toc' */}
+  //     </YooptaLayout.Region>
+  //   </YooptaLayout>
+  // </YooptaEditor>
 
   return (
     <div ref={containerBoxRef} className="w-full max-w-4xl mx-auto">

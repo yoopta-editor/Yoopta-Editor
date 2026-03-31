@@ -1,9 +1,9 @@
-import { type Mock, vi, describe, it, expect, beforeEach } from 'vitest';
 import { Editor, Element, Transforms } from 'slate';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { updateElement } from './updateElement';
-import type { SlateElement, YooEditor } from '../types';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import type { SlateElement, YooEditor } from '../types';
 
 vi.mock('../../utils/findSlateBySelectionPath');
 vi.mock('slate', () => ({
@@ -266,7 +266,7 @@ describe('updateElement', () => {
 
   describe('error cases', () => {
     it('should warn and return when block not found', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'non-existent',
@@ -281,7 +281,7 @@ describe('updateElement', () => {
 
     it('should warn and return when slate not found', () => {
       (findSlateBySelectionPath as Mock).mockReturnValue(undefined);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -296,7 +296,7 @@ describe('updateElement', () => {
 
     it('should warn and return when plugin not found', () => {
       editor.plugins = {};
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -310,7 +310,7 @@ describe('updateElement', () => {
     });
 
     it('should warn and return when element type not in plugin', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -325,7 +325,7 @@ describe('updateElement', () => {
 
     it('should warn when element not found in selection or document', () => {
       (Editor.nodes as Mock).mockReturnValue([]);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -342,7 +342,7 @@ describe('updateElement', () => {
       (Editor.node as Mock).mockImplementation(() => {
         throw new Error('Path does not exist');
       });
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -360,7 +360,7 @@ describe('updateElement', () => {
   describe('text update for inline elements', () => {
     it('should warn when trying to update text on block element', () => {
       (Editor.nodes as Mock).mockReturnValue([[mockElement, [0]]]);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       updateElement(editor as YooEditor, {
         blockId: 'block-1',

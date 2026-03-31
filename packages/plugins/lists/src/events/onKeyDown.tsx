@@ -81,7 +81,7 @@ export function onKeyDown(
           return;
         }
 
-        editor.decreaseBlockDepth({ blockId: block.id });
+        editor.depth?.decrease({ blockId: block.id });
         return;
       }
 

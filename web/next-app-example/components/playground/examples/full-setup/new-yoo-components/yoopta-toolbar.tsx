@@ -6,8 +6,11 @@ import {
   ItalicIcon,
   Strikethrough,
   Underline,
+  AlignLeftIcon,
+  AlignCenterIcon,
+  AlignRightIcon,
 } from 'lucide-react';
-import { Marks, useYooptaEditor } from '@yoopta/editor';
+import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
 import { HighlighterIcon } from 'lucide-react';
@@ -24,6 +27,20 @@ export const YooptaToolbar = () => {
 
   const onTurnIntoClick = () => {
     setActionMenuOpen(true);
+  };
+
+  const currentBlock = Blocks.getBlock(editor, { at: editor.path.current });
+  const currentAlign = (currentBlock?.meta.align as string) ?? 'left';
+
+  const ALIGN_CYCLE = ['left', 'center', 'right'] as const;
+  const AlignIcons = { left: AlignLeftIcon, center: AlignCenterIcon, right: AlignRightIcon };
+  const AlignIcon = AlignIcons[currentAlign as keyof typeof AlignIcons] ?? AlignLeftIcon;
+
+  const onAlignCycle = () => {
+    if (!currentBlock) return;
+    const idx = ALIGN_CYCLE.indexOf(currentAlign as typeof ALIGN_CYCLE[number]);
+    const next = ALIGN_CYCLE[(idx + 1) % ALIGN_CYCLE.length];
+    editor.align?.set(currentBlock.id, next);
   };
 
   return (
@@ -83,6 +100,7 @@ export const YooptaToolbar = () => {
                 <CodeIcon />
               </FloatingToolbar.Button>
             )}
+
             {editor.formats.highlight && (
               <HighlightColorPicker
                 value={highlightValue ?? {}}
@@ -125,6 +143,20 @@ export const YooptaToolbar = () => {
               </HighlightColorPicker>
             )}
           </FloatingToolbar.Group>
+          {editor.align && (
+            <>
+              <FloatingToolbar.Separator />
+              <FloatingToolbar.Group>
+                <FloatingToolbar.Button
+                  onClick={onAlignCycle}
+                  active={currentAlign !== 'left'}
+                  title={`Align ${currentAlign}`}
+                >
+                  <AlignIcon />
+                </FloatingToolbar.Button>
+              </FloatingToolbar.Group>
+            </>
+          )}
         </FloatingToolbar.Content>
       </FloatingToolbar>
 

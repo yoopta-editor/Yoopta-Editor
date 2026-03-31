@@ -197,9 +197,8 @@ export function splitBlock(editor: YooEditor, options: SplitBlockOptions = {}): 
         id: generateId(),
         type: blockToSplit.type,
         meta: {
+          ...blockToSplit.meta,
           order: blockToSplit.meta.order + 1,
-          depth: blockToSplit.meta.depth,
-          align: blockToSplit.meta.align,
         },
         value: [],
       };

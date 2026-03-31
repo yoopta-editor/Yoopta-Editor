@@ -1,9 +1,9 @@
-import { type Mock, vi, describe, it, expect, beforeEach } from 'vitest';
 import { Editor, Element, Path, Transforms } from 'slate';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { deleteElement } from './deleteElement';
-import type { SlateElement, YooEditor } from '../types';
 import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import type { SlateElement, YooEditor } from '../types';
 
 vi.mock('../../utils/findSlateBySelectionPath');
 vi.mock('slate', () => ({
@@ -293,7 +293,7 @@ describe('deleteElement', () => {
 
   describe('error cases', () => {
     it('should warn and return when block not found', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'non-existent',
@@ -307,7 +307,7 @@ describe('deleteElement', () => {
 
     it('should warn and return when slate not found', () => {
       (findSlateBySelectionPath as Mock).mockReturnValue(undefined);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -321,7 +321,7 @@ describe('deleteElement', () => {
 
     it('should warn and return when plugin not found', () => {
       editor.plugins = {};
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -334,7 +334,7 @@ describe('deleteElement', () => {
     });
 
     it('should warn and return when element type not in plugin', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -348,7 +348,7 @@ describe('deleteElement', () => {
 
     it('should warn when element not found in selection or document', () => {
       (Editor.nodes as Mock).mockReturnValue([]);
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'block-1',
@@ -364,7 +364,7 @@ describe('deleteElement', () => {
       (Editor.node as Mock).mockImplementation(() => {
         throw new Error('Path does not exist');
       });
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
       deleteElement(editor as YooEditor, {
         blockId: 'block-1',

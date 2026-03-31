@@ -3,6 +3,7 @@
   "workspaces": [
     "packages/plugins/*",
     "packages/marks",
+    "packages/extensions",
     "packages/core/*",
     "packages/themes/*",
     "web/*"

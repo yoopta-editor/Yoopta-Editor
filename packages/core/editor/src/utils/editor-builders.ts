@@ -7,6 +7,7 @@ import { update } from '../editor/textFormats/update';
 import type { SlateElement, YooEditor } from '../editor/types';
 import type { YooptaMark } from '../marks';
 import type { Plugin, PluginElementsMap } from '../plugins/types';
+import type { MetaExtension } from '../extensions/types';
 
 export function buildMarks(editor, marks: YooptaMark<any>[]) {
   const formats: YooEditor['formats'] = {};
@@ -231,4 +232,19 @@ export function buildPlugins(
   });
 
   return pluginsMap;
+}
+
+export function buildExtensions(
+  editor: YooEditor,
+  extensions: MetaExtension[],
+): Record<string, MetaExtension> {
+  const extensionsMap: Record<string, MetaExtension> = {};
+
+  extensions.forEach((ext) => {
+    extensionsMap[ext.key] = ext;
+    const commands = ext.commands(editor);
+    editor[ext.key] = commands;
+  });
+
+  return extensionsMap;
 }

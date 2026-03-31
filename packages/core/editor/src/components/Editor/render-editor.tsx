@@ -241,33 +241,8 @@ const Editor = ({
       multiSelection.onShiftArrowDown(event);
     }
 
-    if (HOTKEYS.isTab(event)) {
-      const selectedBlocks = Paths.getSelectedPaths(editor);
-      if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
-        event.preventDefault();
-
-        editor.batchOperations(() => {
-          selectedBlocks.forEach((index) => {
-            const block = Blocks.getBlock(editor, { at: index });
-            editor.increaseBlockDepth({ blockId: block?.id });
-          });
-        });
-      }
-      return;
-    }
-
-    if (HOTKEYS.isShiftTab(event)) {
-      const selectedBlocks = Paths.getSelectedPaths(editor);
-      if (Array.isArray(selectedBlocks) && selectedBlocks.length > 0) {
-        event.preventDefault();
-
-        editor.batchOperations(() => {
-          selectedBlocks.forEach((index) => {
-            const block = Blocks.getBlock(editor, { at: index });
-            editor.decreaseBlockDepth({ blockId: block?.id });
-          });
-        });
-      }
+    for (const ext of Object.values(editor.extensions)) {
+      if (ext.events?.onKeyDown?.(editor, event)) return;
     }
   };
 

@@ -71,6 +71,10 @@ export { Blocks } from './editor/blocks';
 export { Marks } from './editor/textFormats';
 export { Selection } from './editor/selection';
 export { Paths } from './editor/paths';
+
+// Meta extensions
+export { createMetaExtension } from './extensions';
+export type { MetaExtension } from './extensions';
 export {
   InsertBlockOperation,
   DeleteBlockOperation,

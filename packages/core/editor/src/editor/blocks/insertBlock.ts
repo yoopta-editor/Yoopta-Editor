@@ -56,13 +56,21 @@ export function insertBlock(editor: YooEditor, type: string, options: InsertBloc
     slateStructure = beforeCreate?.(editor) || buildBlockElementsStructure(editor, type);
   }
 
+  // Build meta defaults from registered extensions
+  const extensionDefaults: Record<string, unknown> = {};
+  if (editor.extensions) {
+    Object.values(editor.extensions).forEach((ext) => {
+      extensionDefaults[ext.key] = ext.defaultValue;
+    });
+  }
+
   const newBlock: YooptaBlockData = {
     id: blockData?.id || generateId(),
     type,
     value: [slateStructure],
     meta: {
-      align: blockData?.meta?.align || 'left',
-      depth: blockData?.meta?.depth || 0,
+      ...extensionDefaults,
+      ...blockData?.meta,
       order: typeof at === 'number' ? at : Object.keys(editor.children).length,
     },
   };

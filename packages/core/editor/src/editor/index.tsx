@@ -2,12 +2,10 @@ import EventEmitter from 'eventemitter3';
 
 import type { YooptaMark } from '../marks';
 import type { YooptaPlugin } from '../plugins';
-import { decreaseBlockDepth } from './blocks/decreaseBlockDepth';
 import { deleteBlock } from './blocks/deleteBlock';
 import { duplicateBlock } from './blocks/duplicateBlock';
 import { focusBlock } from './blocks/focusBlock';
 import { getBlock } from './blocks/getBlock';
-import { increaseBlockDepth } from './blocks/increaseBlockDepth';
 import { insertBlock } from './blocks/insertBlock';
 import { mergeBlock } from './blocks/mergeBlock';
 import { moveBlock } from './blocks/moveBlock';
@@ -48,9 +46,11 @@ import { updateElement } from './elements/updateElement';
 import type { Plugin } from '../plugins/types';
 import {
   buildBlockSlateEditors,
+  buildExtensions,
   buildMarks,
   buildPlugins,
 } from '../utils/editor-builders';
+import type { MetaExtension } from '../extensions/types';
 import { generateId } from '../utils/generateId';
 import { validateYooptaValue } from '../utils/validations';
 
@@ -58,12 +58,13 @@ export type CreateYooptaEditorOptions = {
   id?: string;
   plugins: readonly YooptaPlugin<Record<string, SlateElement>>[];
   marks?: YooptaMark<any>[];
+  extensions?: MetaExtension[];
   value?: YooptaContentValue;
   readOnly?: boolean;
 };
 
 export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
-  const { id, plugins: pluginsFromOptions, marks, value, readOnly } = opts;
+  const { id, plugins: pluginsFromOptions, marks, extensions, value, readOnly } = opts;
 
   const plugins = pluginsFromOptions
     .filter((plugin) => !!plugin)
@@ -102,8 +103,6 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     deleteBlock: (...args) => deleteBlock(editor, ...args),
     duplicateBlock: (...args) => duplicateBlock(editor, ...args),
     toggleBlock: (...args) => toggleBlock(editor, ...args),
-    increaseBlockDepth: (...args) => increaseBlockDepth(editor, ...args),
-    decreaseBlockDepth: (...args) => decreaseBlockDepth(editor, ...args),
     moveBlock: (...args) => moveBlock(editor, ...args),
     focusBlock: (...args) => focusBlock(editor, ...args),
     getBlock: (...args) => getBlock(editor, ...args),
@@ -158,6 +157,8 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
 
     refElement: null,
 
+    extensions: {},
+
     decorators: new Map(),
     leafDecorators: new Map(),
 
@@ -178,6 +179,7 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
 
   editor.plugins = buildPlugins(plugins);
   editor.formats = marks ? buildMarks(editor, marks) : {};
+  editor.extensions = extensions ? buildExtensions(editor, extensions) : {};
   editor.blockEditorsMap = buildBlockSlateEditors(editor);
 
   return editor;

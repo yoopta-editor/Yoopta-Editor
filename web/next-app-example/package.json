@@ -30,6 +30,7 @@
     "@yoopta/embed": "workspace:*",
     "@yoopta/emoji": "workspace:*",
     "@yoopta/exports": "workspace:*",
+    "@yoopta/extensions": "workspace:*",
     "@yoopta/file": "workspace:*",
     "@yoopta/headings": "workspace:*",
     "@yoopta/image": "workspace:*",

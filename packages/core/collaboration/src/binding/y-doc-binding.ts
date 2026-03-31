@@ -148,8 +148,9 @@ export class YDocBinding {
         // Block meta
         const metaMap = new Y.Map<string | number | undefined>();
         metaMap.set('type', block.type);
-        metaMap.set('depth', block.meta.depth);
-        metaMap.set('align', block.meta.align || 'left');
+        Object.entries(block.meta).forEach(([k, v]) => {
+          if (k !== 'order') metaMap.set(k, v as string | number | undefined);
+        });
         this.blockMeta.set(block.id, metaMap);
 
         // Block content — convert Slate value to Y.XmlFragment
@@ -312,25 +313,30 @@ export class YDocBinding {
       const operations: YooptaOperation[] = [];
 
       for (const change of changes) {
-        const block = this.editor.children[change.blockId];
+        const { blockId, ...changeMeta } = change;
+        const block = this.editor.children[blockId];
         if (!block) continue;
 
-        const metaChanged =
-          block.meta.depth !== change.depth ||
-          (block.meta.align || 'left') !== change.align;
+        // Check if any meta key changed
+        const properties: Record<string, unknown> = {};
+        const prevProperties: Record<string, unknown> = {};
+        let hasChanges = false;
 
-        if (metaChanged) {
+        for (const [key, value] of Object.entries(changeMeta)) {
+          if (key === 'type') continue;
+          if (block.meta[key] !== value) {
+            properties[key] = value;
+            prevProperties[key] = block.meta[key];
+            hasChanges = true;
+          }
+        }
+
+        if (hasChanges) {
           operations.push({
             type: 'set_block_meta',
-            id: change.blockId,
-            properties: {
-              depth: change.depth,
-              align: change.align as 'left' | 'center' | 'right' | undefined,
-            },
-            prevProperties: {
-              depth: block.meta.depth,
-              align: block.meta.align,
-            },
+            id: blockId,
+            properties,
+            prevProperties,
           });
         }
       }

@@ -353,14 +353,14 @@ describe('deserializeHTML', () => {
       expect(result[0].meta.depth).toBe(2);
     });
 
-    it('should default to depth 0 for invalid depth', () => {
+    it('should store raw string for invalid depth', () => {
       const editor = createMockEditor();
       const html = createHTML('<p data-meta-depth="invalid">Text</p>');
 
       const result = deserializeHTML(editor, html);
 
       expect(result).toHaveLength(1);
-      expect(result[0].meta.depth).toBe(0);
+      expect(result[0].meta.depth).toBe('invalid');
     });
 
     it('should ignore invalid align values', () => {

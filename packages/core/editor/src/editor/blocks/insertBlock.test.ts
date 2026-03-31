@@ -65,8 +65,6 @@ describe('insertBlock', () => {
           type: 'TestBlock',
           value: [mockSlateStructure],
           meta: {
-            align: 'left',
-            depth: 0,
             order: 0,
           },
         },
@@ -129,8 +127,6 @@ describe('insertBlock', () => {
           type: 'TestBlock',
           value: [mockSlateStructure],
           meta: {
-            align: 'left',
-            depth: 0,
             order: 2,
           },
         },
@@ -195,8 +191,6 @@ describe('insertBlock', () => {
           type: 'TestBlock',
           value: [customStructure],
           meta: {
-            align: 'left',
-            depth: 0,
             order: 0,
           },
         },
@@ -227,8 +221,6 @@ describe('insertBlock', () => {
           type: 'TestBlock',
           value: [mockSlateStructure],
           meta: {
-            align: 'left',
-            depth: 0,
             order: 1, // Should be the length of children
           },
         },

@@ -128,47 +128,6 @@ export function onKeyDown(editor: YooEditor) {
       }
     }
 
-    if (HOTKEYS.isShiftTab(event)) {
-      if (event.isDefaultPrevented()) return;
-      event.preventDefault();
-
-      const selectedPaths = editor.path.selected;
-      if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
-        editor.batchOperations(() => {
-          selectedPaths.forEach((index) => {
-            const block = Blocks.getBlock(editor, { at: index });
-            if (block && block.meta.depth > 0) {
-              editor.decreaseBlockDepth({ at: index });
-            }
-          });
-        });
-
-        return;
-      }
-
-      editor.decreaseBlockDepth();
-      return;
-    }
-
-    // if (HOTKEYS.isTab(event)) {
-    //   if (event.isDefaultPrevented()) return;
-    //   event.preventDefault();
-
-    //   const selectedPaths = editor.path.selected;
-    //   if (Array.isArray(selectedPaths) && selectedPaths.length > 0) {
-    //     editor.batchOperations(() => {
-    //       selectedPaths.forEach((index) => {
-    //         editor.increaseBlockDepth({ at: index });
-    //       });
-    //     });
-
-    //     return;
-    //   }
-
-    //   editor.increaseBlockDepth();
-    //   return;
-    // }
-
     if (HOTKEYS.isArrowUp(event)) {
       if (event.isDefaultPrevented()) return;
       if (!slate || !slate.selection) return;

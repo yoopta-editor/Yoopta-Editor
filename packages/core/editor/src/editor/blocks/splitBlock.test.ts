@@ -3,12 +3,12 @@ import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { buildSlateNodeElement } from '../../utils/block-elements';
-import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
-import type { SlateEditor, SlateElement, YooEditor } from '../types';
 import { getBlock } from './getBlock';
 import { getBlockSlate } from './getBlockSlate';
 import { splitBlock } from './splitBlock';
+import { buildSlateNodeElement } from '../../utils/block-elements';
+import { findSlateBySelectionPath } from '../../utils/findSlateBySelectionPath';
+import type { SlateEditor, SlateElement, YooEditor } from '../types';
 
 vi.mock('../../utils/findSlateBySelectionPath', () => ({
   findSlateBySelectionPath: vi.fn(),
@@ -370,7 +370,7 @@ describe('splitBlock', () => {
         throw new Error('Focus error');
       });
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
       const newBlockId = splitBlock(editor as YooEditor, {
         focusTarget: 'original',

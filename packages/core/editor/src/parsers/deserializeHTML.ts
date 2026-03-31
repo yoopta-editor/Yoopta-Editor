@@ -34,7 +34,7 @@ const MARKS_NODE_NAME_MATCHERS_MAP: Record<string, MarkMatcher> = {
   },
 };
 
-const VALID_TEXT_ALIGNS: (YooptaBlockBaseMeta['align'] | undefined)[] = [
+const VALID_TEXT_ALIGNS: (string | undefined)[] = [
   'left',
   'center',
   'right',
@@ -184,18 +184,29 @@ function buildBlock(
     return undefined;
   }
 
-  const align = el.getAttribute('data-meta-align') as YooptaBlockBaseMeta['align'];
-  const depth = parseInt(el.getAttribute('data-meta-depth') ?? '0', 10);
+  // Read all data-meta-* attributes generically
+  const metaFromAttributes: Record<string, unknown> = { order: 0 };
+  const attrs = el.attributes;
+  for (let i = 0; i < attrs.length; i++) {
+    const attr = attrs[i];
+    if (attr.name.startsWith('data-meta-')) {
+      const key = attr.name.slice('data-meta-'.length);
+      if (key === 'order') continue;
+      const numVal = Number(attr.value);
+      metaFromAttributes[key] = Number.isNaN(numVal) ? attr.value : numVal;
+    }
+  }
+
+  // Validate align if present
+  if ('align' in metaFromAttributes && !VALID_TEXT_ALIGNS.includes(metaFromAttributes.align as string)) {
+    delete metaFromAttributes.align;
+  }
 
   const blockData = Blocks.buildBlockData({
     id: generateId(),
     type: plugin.type,
     value: [rootNode],
-    meta: {
-      order: 0,
-      depth: Number.isNaN(depth) ? 0 : depth,
-      align: VALID_TEXT_ALIGNS.includes(align) ? align : undefined,
-    },
+    meta: metaFromAttributes as YooptaBlockBaseMeta,
   });
 
   return blockData;

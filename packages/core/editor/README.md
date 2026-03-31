@@ -25,10 +25,7 @@ const marks = [Bold, Italic];
 const initialValue = {} as YooptaContentValue;
 
 export default function Editor() {
-  const editor = useMemo(
-    () => createYooptaEditor({ plugins, marks, value: initialValue }),
-    [],
-  );
+  const editor = useMemo(() => createYooptaEditor({ plugins, marks, value: initialValue }), []);
 
   return (
     <YooptaEditor
@@ -49,22 +46,22 @@ import { FloatingToolbar, FloatingBlockActions, SlashCommandMenu } from '@yoopta
   <FloatingToolbar />
   <FloatingBlockActions />
   <SlashCommandMenu />
-</YooptaEditor>
+</YooptaEditor>;
 ```
 
 ## YooptaEditor props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `editor` | `YooEditor` | **Required.** Instance from `createYooptaEditor`. |
-| `onChange` | `(value, options) => void` | Called when content changes. |
-| `onPathChange` | `(path) => void` | Called when the current block path changes. |
-| `autoFocus` | `boolean` | Focus editor on mount. Default: `true`. |
-| `className` | `string` | Additional CSS class (default: `.yoopta-editor`). |
-| `style` | `CSSProperties` | Inline styles (e.g. `{ width: 750, paddingBottom: 100 }`). |
-| `placeholder` | `string` | Placeholder when the editor is empty. |
-| `children` | `ReactNode` | UI components (toolbar, slash menu, block actions, etc.). |
-| `renderBlock` | `(props) => ReactNode` | Custom wrapper per block (e.g. for drag-and-drop). |
+| Prop           | Type                       | Description                                                |
+| -------------- | -------------------------- | ---------------------------------------------------------- |
+| `editor`       | `YooEditor`                | **Required.** Instance from `createYooptaEditor`.          |
+| `onChange`     | `(value, options) => void` | Called when content changes.                               |
+| `onPathChange` | `(path) => void`           | Called when the current block path changes.                |
+| `autoFocus`    | `boolean`                  | Focus editor on mount. Default: `true`.                    |
+| `className`    | `string`                   | Additional CSS class (default: `.yoopta-editor`).          |
+| `style`        | `CSSProperties`            | Inline styles (e.g. `{ width: 750, paddingBottom: 100 }`). |
+| `placeholder`  | `string`                   | Placeholder when the editor is empty.                      |
+| `children`     | `ReactNode`                | UI components (toolbar, slash menu, block actions, etc.).  |
+| `renderBlock`  | `(props) => ReactNode`     | Custom wrapper per block (e.g. for drag-and-drop).         |
 
 Initial content is set via `createYooptaEditor({ value })` or later with `editor.setEditorValue(value)`. Do not pass `plugins`, `marks`, or `value` to `<YooptaEditor>`.
 
@@ -118,12 +115,12 @@ Marks.isActive(editor, { type: 'bold' });
 
 Must be used inside a component that is a **child** of `<YooptaEditor>` (e.g. inside toolbar or block actions).
 
-| Hook | Description |
-|------|-------------|
-| `useYooptaEditor()` | Returns the editor instance. |
-| `useYooptaReadOnly()` | Returns whether the editor is read-only. |
-| `useYooptaFocused()` | Returns whether the editor is focused. |
-| `useBlockData(blockId)` | Returns block data for the given `blockId`. |
+| Hook                                | Description                                             |
+| ----------------------------------- | ------------------------------------------------------- |
+| `useYooptaEditor()`                 | Returns the editor instance.                            |
+| `useYooptaReadOnly()`               | Returns whether the editor is read-only.                |
+| `useYooptaFocused()`                | Returns whether the editor is focused.                  |
+| `useBlockData(blockId)`             | Returns block data for the given `blockId`.             |
 | `useYooptaPluginOptions(blockType)` | Returns options for the plugin of the given block type. |
 
 ## Related packages

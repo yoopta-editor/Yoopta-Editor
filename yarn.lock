@@ -6488,6 +6488,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@yoopta/extensions@workspace:*, @yoopta/extensions@workspace:packages/extensions":
+  version: 0.0.0-use.local
+  resolution: "@yoopta/extensions@workspace:packages/extensions"
+  peerDependencies:
+    "@yoopta/editor": 6.0.2
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  languageName: unknown
+  linkType: soft
+
 "@yoopta/file@workspace:*, @yoopta/file@workspace:packages/plugins/file":
   version: 0.0.0-use.local
   resolution: "@yoopta/file@workspace:packages/plugins/file"
@@ -11915,6 +11925,7 @@ __metadata:
     "@yoopta/embed": "workspace:*"
     "@yoopta/emoji": "workspace:*"
     "@yoopta/exports": "workspace:*"
+    "@yoopta/extensions": "workspace:*"
     "@yoopta/file": "workspace:*"
     "@yoopta/headings": "workspace:*"
     "@yoopta/image": "workspace:*"

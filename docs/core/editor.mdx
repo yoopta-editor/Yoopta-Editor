@@ -30,7 +30,8 @@ const editor = useMemo(
 ```
 
 <Warning>
-  Always wrap `createYooptaEditor()` in `useMemo` (with stable `plugins`/`marks`) to prevent recreating the editor on every render.
+  Always wrap `createYooptaEditor()` in `useMemo` (with stable `plugins`/`marks`) to prevent
+  recreating the editor on every render.
 </Warning>
 
 <Note>
@@ -49,8 +50,11 @@ The `<YooptaEditor>` component accepts:
 
 ### Optional
 
-<ParamField path="onChange" type="(value: YooptaContentValue, options: YooptaOnChangeOptions) => void">
-  Called when content changes. Use it to sync `value` to your state (e.g. for saving or controlled usage).
+<ParamField
+  path="onChange"
+  type="(value: YooptaContentValue, options: YooptaOnChangeOptions) => void">
+  Called when content changes. Use it to sync `value` to your state (e.g. for saving or controlled
+  usage).
 </ParamField>
 
 <ParamField path="onPathChange" type="(path: YooptaPath) => void">
@@ -62,7 +66,9 @@ The `<YooptaEditor>` component accepts:
 </ParamField>
 
 <ParamField path="placeholder" type="string">
-  Global placeholder text shown when the editor has a single empty block. If a plugin defines its own element-level placeholder, the element-level placeholder takes priority in multi-block editors. See [Placeholders](#placeholders) for details.
+  Global placeholder text shown when the editor has a single empty block. If a plugin defines its
+  own element-level placeholder, the element-level placeholder takes priority in multi-block
+  editors. See [Placeholders](#placeholders) for details.
 </ParamField>
 
 <ParamField path="className" type="string">
@@ -108,12 +114,7 @@ export default function MyEditor() {
   };
 
   return (
-    <YooptaEditor
-      editor={editor}
-      onChange={handleChange}
-      placeholder="Start typing..."
-      autoFocus
-    />
+    <YooptaEditor editor={editor} onChange={handleChange} placeholder="Start typing..." autoFocus />
   );
 }
 ```
@@ -138,10 +139,7 @@ This means element-level placeholders always take priority over the global one.
 ### Editor-level placeholder
 
 ```jsx
-<YooptaEditor
-  editor={editor}
-  placeholder="Type / to open menu..."
-/>
+<YooptaEditor editor={editor} placeholder="Type / to open menu..." />
 ```
 
 ### Element-level placeholder
