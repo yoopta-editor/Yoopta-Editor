@@ -22,6 +22,25 @@ Whether you're building a simple blog editor, a Notion-like workspace, a CMS for
 
 If Yoopta saves you time, consider [starring the repo](https://github.com/Darginec05/Yoopta-Editor) or [sponsoring the project](https://github.com/sponsors/Darginec05). It keeps the project alive
 
+## Yoo AI — AI App Builder Powered by Yoopta Editor
+
+> **[ai.yoopta.dev](https://ai.yoopta.dev)** — Describe your app. AI builds it with Yoopta plugins. You edit everything directly in the preview.
+
+Yoo AI is an AI-powered web app builder built on top of Yoopta Editor. It takes everything developers love about Yoopta — plugins, drag & drop, theming, collaboration — and wraps it in an AI-first experience that anyone can use without writing code.
+
+- **AI generates multi-page apps** from a text prompt using plugins from the marketplace
+- **Click any block to edit inline** — text, images, styles. The preview is the editor
+- **Connect your own API** for dynamic data (product catalogs, listings, blog posts)
+- **AI Plugin Generator** — describe a custom block, AI builds it with live preview and source code
+- **200+ community plugins** — developers build and publish blocks, AI learns to use them
+- **Real-time collaboration** — edit together with cursors and presence, powered by Yjs
+
+Early access is open — first 100 users get lifetime perks.
+
+**[Try Yoo AI →](https://ai.yoopta.dev)**
+
+---
+
 ## Introduction
 
 Yoopta-Editor is a free, open-source rich-text editor built for React apps. It's packed with features that let you build an editor as powerful and user-friendly as Notion, Craft, Coda, Medium etc. — or go further and build a CMS, landing page builder, or website builder on top of it.
@@ -506,11 +525,13 @@ yarn lint
 
 ## Roadmap
 
-- AI tools for content generation
 - Simplified plugin API
 - Additional plugins
+- More theme presets
 
 Real-time **collaborative editing** is available via `@yoopta/collaboration` (Yjs, awareness, remote cursors); see [docs](https://docs.yoopta.dev/core/collaboration) and the [Collaboration example](https://yoopta.dev/playground/collaboration).
+
+AI-powered features (generation, inline editing, plugin generator, marketplace) are available through **[Yoo AI](https://ai.yoopta.dev)** — the AI app builder built on Yoopta Editor.
 
 ## Support
 

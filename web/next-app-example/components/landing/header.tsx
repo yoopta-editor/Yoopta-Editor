@@ -12,12 +12,14 @@ import {
   Laptop,
   BookOpen,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const mainNavigation = [
   { name: "Examples", href: "/examples" },
   { name: "Documentation", href: "https://docs.yoopta.dev", external: true },
+  { name: "Yoo AI", href: "https://ai.yoopta.dev", external: true, highlight: true },
 ];
 
 
@@ -66,13 +68,16 @@ export function Header() {
               rel={item.external ? "noopener noreferrer" : undefined}
               className={cn(
                 "inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                isActive(item.href)
-                  ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                item.highlight
+                  ? "text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+                  : isActive(item.href)
+                    ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
               )}
             >
+              {item.highlight && <Sparkles className="h-3 w-3" />}
               {item.name}
-              {item.external && <ExternalLink className="h-3 w-3" />}
+              {item.external && !item.highlight && <ExternalLink className="h-3 w-3" />}
             </Link>
           ))}
         </nav>
@@ -191,18 +196,22 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
                   "flex items-center gap-2 px-3 py-2.5 text-sm font-medium rounded-md transition-colors",
-                  isActive(item.href)
-                    ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  item.highlight
+                    ? "text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+                    : isActive(item.href)
+                      ? "bg-neutral-100 dark:bg-neutral-800 text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 )}
               >
-                {item.name === "Playground" ? (
+                {item.highlight ? (
+                  <Sparkles className="h-4 w-4" />
+                ) : item.name === "Playground" ? (
                   <Laptop className="h-4 w-4" />
                 ) : (
                   <BookOpen className="h-4 w-4" />
                 )}
                 {item.name}
-                {item.external && <ExternalLink className="h-3 w-3 ml-auto" />}
+                {item.external && !item.highlight && <ExternalLink className="h-3 w-3 ml-auto" />}
               </Link>
             ))}
           </nav>

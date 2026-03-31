@@ -1,189 +1,139 @@
-"use client";
-
-import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Sparkles,
-  Users,
-  Wand2,
-  PanelRightOpen,
-  Blocks,
-  Store,
-  Palette,
-  FileCode,
   ArrowRight,
-  ExternalLinkIcon,
+  MousePointer2,
+  Layers,
+  Store,
+  Code2,
+  Wand2,
+  Users,
 } from "lucide-react";
 
-const TALLY_FORM_ID = "RGPj8v";
-
-const releasedFeatures = [{ title: "Real-time Collaboration", example: "/examples/collaboration", docs: "https://docs.yoopta.dev/core/collaboration" }];
-
-const upcomingFeatures = [
+const yooAiFeatures = [
   {
-    icon: Users,
-    title: "Real-time Collaboration",
+    icon: Sparkles,
+    title: "AI generates your app",
     description:
-      "Work together in real-time with your team. See cursors, selections, and changes as they happen.",
+      "Describe what you want in plain text. AI assembles a multi-page app from the plugin marketplace in seconds.",
+  },
+  {
+    icon: MousePointer2,
+    title: "Edit directly in preview",
+    description:
+      "Click any block to edit inline — text, images, styles. No code editor. The preview is the editor.",
+  },
+  {
+    icon: Layers,
+    title: "Multi-page apps",
+    description:
+      "Unlimited pages with navigation, per-page SEO, and shared context. AI generates entire apps from one prompt.",
+  },
+  {
+    icon: Code2,
+    title: "API data binding",
+    description:
+      "Connect any block to external APIs. Product catalogs, listings, blog posts — static content meets live data.",
   },
   {
     icon: Wand2,
-    title: "AI Inline Editing",
+    title: "AI Plugin Generator",
     description:
-      "Intelligent text suggestions, rewrites, and expansions powered by AI directly in the editor.",
-  },
-  {
-    icon: PanelRightOpen,
-    title: "Sidebar Block elements editor",
-    description:
-      "Advanced element editing panel for complex blocks like tabs, carousels, tables, code and embeds.",
-  },
-  {
-    icon: Blocks,
-    title: "AI Plugin Prompt Generator",
-    description:
-      "Generate custom plugins from natural language descriptions. Describe what you need, get working code.",
+      "Can't find the right block? Describe it. AI generates a complete plugin with live preview and source code.",
   },
   {
     icon: Store,
-    title: "Plugin Marketplace",
+    title: "Plugin marketplace",
     description:
-      "Discover and share plugins with the community. Build once, distribute everywhere.",
+      "200+ plugins built by the community. Developers publish blocks, AI learns them, users install in one click.",
   },
   {
-    icon: Palette,
-    title: "Theme builder",
+    icon: Users,
+    title: "Real-time collaboration",
     description:
-      "Visual theme builder with live preview. Export themes and share with others.",
-  },
-  {
-    icon: FileCode,
-    title: "MDX Export & Import",
-    description:
-      "Seamlessly export and import MDX content. Perfect for documentation sites, blogs, and content management.",
+      "Edit together with cursors, selections, and presence. Powered by the same Yjs CRDT behind Figma and Notion.",
   },
 ];
 
 export function Waitlist() {
-  React.useEffect(() => {
-    const existingScript = document.querySelector('script[src="https://tally.so/widgets/embed.js"]');
-    if (existingScript) return;
-
-    const script = document.createElement("script");
-    script.src = "https://tally.so/widgets/embed.js";
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
-
-  const openTallyPopup = () => {
-    if (typeof window !== "undefined" && (window as any).Tally) {
-      (window as any).Tally.openPopup(TALLY_FORM_ID, {
-        layout: "modal",
-        width: 500,
-        autoClose: 3000,
-      });
-    } else {
-      window.open(`https://tally.so/r/${TALLY_FORM_ID}`, "_blank");
-    }
-  };
-
   return (
-    <section id="waitlist" className="relative py-12 sm:py-16">
+    <section id="waitlist" className="relative py-16 sm:py-24">
       {/* Background */}
       <div className="absolute inset-0 glow-center" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent dark:via-blue-500/10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-500/5 to-transparent dark:via-violet-500/10" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="info" className="mb-4">
+          <Badge variant="info" className="mb-4 border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-400">
             <Sparkles className="w-3 h-3 mr-1" />
-            Coming Soon
+            Built on Yoopta Editor
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-neutral-900 dark:text-white">
-            The future of{" "}
-            <span className="gradient-text">Yoopta Editor</span>
+            See what people build with{" "}
+            <span className="gradient-text">Yoopta</span>
           </h2>
           <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            We&apos;re building powerful features to take your editing experience to
-            the next level. Join the waitlist to get early access.
+            Yoo AI is an AI-powered app builder built on top of Yoopta Editor.
+            Everything you love about Yoopta — plugins, drag & drop, theming — now
+            wrapped in an AI-first experience anyone can use.
           </p>
         </div>
 
         {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {upcomingFeatures.map((feature) => {
-            const releasedFeature = releasedFeatures.find(releasedFeature => releasedFeature.title === feature.title);
-            const isReleased = !!releasedFeature;
-
-            return (
-              <div
-                key={feature.title}
-                className="group relative p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300"
-              >
-                {/* Icon */}
-                <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 dark:from-blue-500/20 dark:to-violet-500/20 group-hover:from-blue-500/20 group-hover:to-violet-500/20 dark:group-hover:from-blue-500/30 dark:group-hover:to-violet-500/30 transition-colors">
-                  <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">{feature.title}</h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                  {feature.description}
-                </p>
-
-                {/* if released show released badge and link to example and docs */}
-                {isReleased ? (
-                  <div className="absolute top-4 right-4">
-                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
-                      Released
-                    </span>
-                    <Button variant="link" size="sm" asChild>
-                      <a href={releasedFeature?.example} target="_blank" rel="noopener noreferrer">
-                        View Example
-                        <ExternalLinkIcon className="w-4 h-4" />
-                      </a>
-                    </Button>
-                    <Button variant="link" size="sm" asChild>
-                      <a href={releasedFeature?.docs} target="_blank" rel="noopener noreferrer">
-                        View Docs
-                        <ExternalLinkIcon className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="absolute top-4 right-4">
-                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
-                      Soon
-                    </span>
-                  </div>
-                )}
+          {yooAiFeatures.map((feature) => (
+            <div
+              key={feature.title}
+              className="group relative p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm hover:border-violet-500/50 dark:hover:border-violet-500/50 transition-all duration-300"
+            >
+              <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 dark:from-violet-500/20 dark:to-fuchsia-500/20 group-hover:from-violet-500/20 group-hover:to-fuchsia-500/20 dark:group-hover:from-violet-500/30 dark:group-hover:to-fuchsia-500/30 transition-colors">
+                <feature.icon className="w-6 h-6 text-violet-600 dark:text-violet-400" />
               </div>
-            )
-          })}
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          ))}
         </div>
 
-        {/* Waitlist CTA */}
+        {/* CTA */}
         <div className="max-w-xl mx-auto">
-          <div className="p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50">
+          <div className="p-8 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 dark:from-violet-500/10 dark:to-fuchsia-500/10 shadow-xl shadow-violet-500/5">
             <div className="text-center mb-6">
               <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-white">
-                Get early access
+                Try Yoo AI — free early access
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                Be the first to know when these features launch. No spam, just updates.
+                Describe your app. AI builds it with Yoopta plugins. You edit it visually.
+                First 100 users get lifetime perks.
               </p>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button
                 variant="gradient"
                 size="lg"
-                onClick={openTallyPopup}
+                asChild
               >
-                Join Waitlist
-                <ArrowRight className="w-4 h-4" />
+                <a href="https://ai.yoopta.dev" target="_blank" rel="noopener noreferrer">
+                  Try Yoo AI
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+              >
+                <a href="https://ai.yoopta.dev" target="_blank" rel="noopener noreferrer">
+                  Watch demo
+                  <ArrowRight className="w-4 h-4" />
+                </a>
               </Button>
             </div>
           </div>

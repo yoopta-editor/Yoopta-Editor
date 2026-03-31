@@ -10,6 +10,7 @@ const navigation = {
     { name: "Plugins", href: "#plugins" },
     { name: "Comparison", href: "#comparison" },
     { name: "Playground", href: "/playground" },
+    { name: "Yoo AI — App Builder", href: "https://ai.yoopta.dev", external: true },
   ],
   resources: [
     { name: "Documentation", href: "https://docs.yoopta.dev" },
@@ -82,12 +83,23 @@ export function Footer() {
             <ul className="space-y-3">
               {navigation.product.map((item) => (
                 <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
-                  >
-                    {item.name}
-                  </Link>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors font-medium"
+                    >
+                      {item.name} ↗
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
