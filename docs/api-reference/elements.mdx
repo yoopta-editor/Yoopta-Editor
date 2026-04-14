@@ -10,7 +10,39 @@ The Elements API provides a high-level interface for working with elements insid
 
 ## Accessing the API
 
-Methods are available on the editor instance (recommended) or via the `Elements` namespace:
+The implementations in code are **functions** with the shape `(editor, options) => …`. They are exposed as:
+
+- **`Elements` namespace** — `Elements.insertElement(editor, options)`, etc.
+- **Named imports** — `import { insertElement, … } from '@yoopta/editor'` (same functions as on `Elements`).
+
+```typescript
+import { Elements } from '@yoopta/editor';
+
+Elements.insertElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
+Elements.getElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', path: [0, 1] });
+```
+
+```typescript
+import {
+  deleteElement,
+  getElement,
+  getElementChildren,
+  getElementEntry,
+  getElementPath,
+  getElementRect,
+  getElements,
+  getParentElementPath,
+  insertElement,
+  isElementEmpty,
+  updateElement,
+} from '@yoopta/editor';
+
+insertElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
+```
+
+### `YooEditor` shorthand
+
+`createYooptaEditor` also **binds** the same operations onto the editor instance: the first `editor` argument is fixed, so you call `editor.insertElement(options)` instead of `insertElement(editor, options)`. That is equivalent to `Elements.insertElement(editor, options)`.
 
 ```typescript
 import { useYooptaEditor } from '@yoopta/editor';
@@ -18,26 +50,26 @@ import { useYooptaEditor } from '@yoopta/editor';
 function MyComponent() {
   const editor = useYooptaEditor();
 
-  // On editor instance (recommended)
   editor.insertElement({ blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
-  editor.getElement({ blockId: 'accordion-1', type: 'accordion-list-item', path: [0, 1] });
+  // same as: Elements.insertElement(editor, { ... })
 }
 ```
 
-```typescript
-import { Elements } from '@yoopta/editor';
+## Module exports
 
-// Via namespace (backwards compatibility)
-Elements.insertElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', at: 'end' });
-```
+From `@yoopta/editor`, the Elements surface includes:
 
-<Note>
-  Prefer using methods on the editor instance for better TypeScript support and clearer code.
-</Note>
+- **`Elements` namespace** — object holding the same functions as the named exports (`Elements.insertElement` ≡ `insertElement`).
+- **Named functions** — `insertElement`, `updateElement`, `deleteElement`, `getElement`, `getElements`, `getElementEntry`, `getElementPath`, `getElementRect`, `getParentElementPath`, `getElementChildren`, `isElementEmpty`.
+- **Types** — `DeleteElementOptions`, `ElementMatcher`, `ElementPath`, `GetElementChildrenOptions`, `GetElementEntryOptions`, `GetElementOptions`, `GetElementPathOptions`, `GetElementRectOptions`, `GetElementsOptions`, `InsertElementOptions`, `IsElementEmptyOptions`, `UpdateElementOptions`.
 
 ## Type Definitions
 
+Signatures below use `YooEditor` from `createYooptaEditor` / `useYooptaEditor`.
+
 ```typescript
+import type { YooEditor } from '@yoopta/editor';
+
 // Path: direct Slate path or semantic position
 type ElementPath = number[] | 'selection' | 'first' | 'last';
 
@@ -52,6 +84,16 @@ type SlateElement = {
 };
 
 type ElementMatcher = (element: SlateElement) => boolean;
+
+type GetElementPathOptions = {
+  blockId: string;
+  element: SlateElement;
+};
+
+type GetElementRectOptions = {
+  blockId: string;
+  element: SlateElement;
+};
 ```
 
 ---
@@ -63,7 +105,8 @@ type ElementMatcher = (element: SlateElement) => boolean;
 Creates and inserts a new element into a block.
 
 ```typescript
-editor.insertElement(options: InsertElementOptions): void
+insertElement(editor: YooEditor, options: InsertElementOptions): void
+// Elements.insertElement(editor, options)
 ```
 
 **Parameters:**
@@ -78,7 +121,7 @@ editor.insertElement(options: InsertElementOptions): void
 - `options.match` — Custom matcher when using `at: 'next'` or `'prev'`.
 
 ```typescript
-editor.insertElement({
+Elements.insertElement(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   props: { isExpanded: true },
@@ -94,7 +137,8 @@ editor.insertElement({
 Updates properties (and optionally text) of an existing element.
 
 ```typescript
-editor.updateElement(options: UpdateElementOptions): void
+updateElement(editor: YooEditor, options: UpdateElementOptions): void
+// Elements.updateElement(editor, options)
 ```
 
 **Parameters:**
@@ -106,7 +150,7 @@ editor.updateElement(options: UpdateElementOptions): void
 - `options.match` — Custom matcher to find the element.
 
 ```typescript
-editor.updateElement({
+Elements.updateElement(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   props: { isExpanded: true },
@@ -121,7 +165,8 @@ editor.updateElement({
 Removes an element or unwraps it (inline).
 
 ```typescript
-editor.deleteElement(options: DeleteElementOptions): void
+deleteElement(editor: YooEditor, options: DeleteElementOptions): void
+// Elements.deleteElement(editor, options)
 ```
 
 **Parameters:**
@@ -132,7 +177,7 @@ editor.deleteElement(options: DeleteElementOptions): void
 - `options.mode` — For inline only: `'unwrap'` (keep text, remove wrapper; default) or `'remove'` (remove element and content). Block elements are always fully removed.
 
 ```typescript
-editor.deleteElement({
+Elements.deleteElement(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   path: [0, 1],
@@ -146,7 +191,8 @@ editor.deleteElement({
 Returns a single element by type, path, or matcher.
 
 ```typescript
-editor.getElement(options: GetElementOptions): SlateElement | null
+getElement(editor: YooEditor, options: GetElementOptions): SlateElement | null
+// Elements.getElement(editor, options)
 ```
 
 **Parameters:**
@@ -158,7 +204,7 @@ editor.getElement(options: GetElementOptions): SlateElement | null
 **Returns:** Matching element or `null`.
 
 ```typescript
-const item = editor.getElement({
+const item = Elements.getElement(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   path: [0, 1],
@@ -172,7 +218,8 @@ const item = editor.getElement({
 Returns all elements of a type or matching a condition.
 
 ```typescript
-editor.getElements(options: GetElementsOptions): SlateElement[]
+getElements(editor: YooEditor, options: GetElementsOptions): SlateElement[]
+// Elements.getElements(editor, options)
 ```
 
 **Parameters:**
@@ -183,7 +230,7 @@ editor.getElements(options: GetElementsOptions): SlateElement[]
 **Returns:** Array of elements; empty array if none found.
 
 ```typescript
-const items = editor.getElements({
+const items = Elements.getElements(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
 });
@@ -196,18 +243,19 @@ const items = editor.getElements({
 Returns element and its Slate path as a tuple.
 
 ```typescript
-editor.getElementEntry(options: GetElementEntryOptions): [SlateElement, Path] | null
+getElementEntry(editor: YooEditor, options: GetElementEntryOptions): NodeEntry<SlateElement> | null
+// Elements.getElementEntry(editor, options)
 ```
 
 **Parameters:**
 - `options.blockId` — ID of the block (required).
 - `options.type` — Element type.
-- `options.path` — Path to the element; default: selection or `[0]`.
+- `options.path` — Path: `number[]` or `'selection'` | `'first'` | `'last'`; default: selection or `[0]`.
 
-**Returns:** `[element, path]` or `null`.
+**Returns:** `[element, path]` (Slate `NodeEntry`) or `null`.
 
 ```typescript
-const entry = editor.getElementEntry({
+const entry = Elements.getElementEntry(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   path: [0, 1],
@@ -224,7 +272,8 @@ if (entry) {
 Returns the Slate path of an element instance.
 
 ```typescript
-editor.getElementPath(options: GetElementPathOptions): Path | null
+getElementPath(editor: YooEditor, options: GetElementPathOptions): Path | null
+// Elements.getElementPath(editor, options)
 ```
 
 **Parameters:**
@@ -234,9 +283,37 @@ editor.getElementPath(options: GetElementPathOptions): Path | null
 **Returns:** Path (number array) or `null`.
 
 ```typescript
-const item = editor.getElement({ blockId: 'accordion-1', type: 'accordion-list-item', path: 'first' });
+const item = Elements.getElement(editor, { blockId: 'accordion-1', type: 'accordion-list-item', path: 'first' });
 if (item) {
-  const path = editor.getElementPath({ blockId: 'accordion-1', element: item });
+  const path = Elements.getElementPath(editor, { blockId: 'accordion-1', element: item });
+}
+```
+
+---
+
+### getElementRect
+
+Returns the DOM bounding box for a Slate element (via `getBoundingClientRect` and `getClientRects`). Useful for positioning floating UI relative to an element.
+
+```typescript
+getElementRect(editor: YooEditor, options: GetElementRectOptions): { domRect: DOMRect; clientRects: DOMRectList } | null
+// Elements.getElementRect(editor, options)
+```
+
+**Parameters:**
+
+- `options.blockId` — ID of the block (required).
+- `options.element` — The Slate element instance (required).
+
+**Returns:** `{ domRect, clientRects }` for the corresponding DOM node, or `null` if the block is missing, the Slate editor is not found, or the node cannot be resolved (invalid element for the editor).
+
+```typescript
+const item = Elements.getElement(editor, { blockId: 'image-1', type: 'image', path: [0] });
+if (item) {
+  const rect = Elements.getElementRect(editor, { blockId: 'image-1', element: item });
+  if (rect) {
+    const { top, left, width, height } = rect.domRect;
+  }
 }
 ```
 
@@ -247,7 +324,8 @@ if (item) {
 Returns the Slate path of an element's parent.
 
 ```typescript
-editor.getParentElementPath(options: GetElementPathOptions): Path | null
+getParentElementPath(editor: YooEditor, options: GetElementPathOptions): Path | null
+// Elements.getParentElementPath(editor, options)
 ```
 
 **Parameters:**
@@ -257,7 +335,7 @@ editor.getParentElementPath(options: GetElementPathOptions): Path | null
 **Returns:** Parent path or `null`.
 
 ```typescript
-const parentPath = editor.getParentElementPath({
+const parentPath = Elements.getParentElementPath(editor, {
   blockId: 'accordion-1',
   element: contentElement,
 });
@@ -270,7 +348,8 @@ const parentPath = editor.getParentElementPath({
 Returns the children array of an element.
 
 ```typescript
-editor.getElementChildren(options: GetElementChildrenOptions): SlateElement['children'] | null
+getElementChildren(editor: YooEditor, options: GetElementChildrenOptions): SlateElement['children'] | null
+// Elements.getElementChildren(editor, options)
 ```
 
 **Parameters:**
@@ -281,7 +360,7 @@ editor.getElementChildren(options: GetElementChildrenOptions): SlateElement['chi
 **Returns:** Children array or `null`.
 
 ```typescript
-const children = editor.getElementChildren({
+const children = Elements.getElementChildren(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item',
   path: [0, 1],
@@ -295,7 +374,8 @@ const children = editor.getElementChildren({
 Checks whether an element has no text content.
 
 ```typescript
-editor.isElementEmpty(options: IsElementEmptyOptions): boolean
+isElementEmpty(editor: YooEditor, options: IsElementEmptyOptions): boolean
+// Elements.isElementEmpty(editor, options)
 ```
 
 **Parameters:**
@@ -306,7 +386,7 @@ editor.isElementEmpty(options: IsElementEmptyOptions): boolean
 **Returns:** `true` if empty, `false` otherwise.
 
 ```typescript
-const isEmpty = editor.isElementEmpty({
+const isEmpty = Elements.isElementEmpty(editor, {
   blockId: 'accordion-1',
   type: 'accordion-list-item-content',
   path: [0, 1, 1],
