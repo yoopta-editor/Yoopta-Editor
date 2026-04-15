@@ -8,6 +8,7 @@ import { Separator } from '../../../ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../../ui/tooltip';
 import { cn } from '../../../utils';
 import type { ImageElementProps } from '../../types';
+import { useYooptaEditor } from '@yoopta/editor';
 
 type ImageInlineToolbarProps = {
   referenceRef: React.MutableRefObject<HTMLElement | null>;
@@ -31,6 +32,7 @@ export const ImageInlineToolbar = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
+  const editor = useYooptaEditor();
   const { refs, floatingStyles } = useFloating({
     placement: 'top-end',
     strategy: 'absolute',
@@ -70,7 +72,7 @@ export const ImageInlineToolbar = ({
   if (!isReady) return null;
 
   return (
-    <FloatingPortal>
+    <FloatingPortal id='image-inline-toolbar' root={editor.refElement}>
       <div
         ref={refs.setFloating}
         onMouseDown={(e) => {

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { AlignCenter, AlignLeft, AlignRight, Copy, Download, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 
@@ -34,6 +35,7 @@ export const VideoInlineToolbar = ({
   const isProviderVideo = elementProps.provider && elementProps.provider.type;
   const hasAlignment = 'alignment' in elementProps;
 
+  const editor = useYooptaEditor();
   const { refs, floatingStyles } = useFloating({
     placement: 'top-end',
     strategy: 'absolute',
@@ -97,7 +99,7 @@ export const VideoInlineToolbar = ({
   if (!isReady) return null;
 
   return (
-    <FloatingPortal>
+    <FloatingPortal id='video-inline-toolbar' root={editor.refElement}>
       <div
         ref={refs.setFloating}
         onMouseDown={(e) => {

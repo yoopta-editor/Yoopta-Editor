@@ -106,6 +106,7 @@ const createMultiEntryConfig = () => {
       image: './src/image/index.ts',
       link: './src/link/index.ts',
       lists: './src/lists/index.ts',
+      math: './src/math/index.ts',
       mention: './src/mention/index.ts',
       paragraph: './src/paragraph/index.ts',
       steps: './src/steps/index.ts',

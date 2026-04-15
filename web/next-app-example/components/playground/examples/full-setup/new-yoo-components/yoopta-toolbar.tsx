@@ -4,10 +4,13 @@ import {
   CodeIcon,
   BoldIcon,
   ItalicIcon,
+  SigmaIcon,
   Strikethrough,
   Underline,
 } from 'lucide-react';
-import { Marks, useYooptaEditor } from '@yoopta/editor';
+import { Blocks, Marks, useYooptaEditor } from '@yoopta/editor';
+import { MathInlineCommands } from '@yoopta/math';
+import { Editor, Range } from 'slate';
 import { FloatingToolbar } from '@yoopta/ui/floating-toolbar';
 import { HighlightColorPicker } from '@yoopta/ui/highlight-color-picker';
 import { HighlighterIcon } from 'lucide-react';
@@ -24,6 +27,25 @@ export const YooptaToolbar = () => {
 
   const onTurnIntoClick = () => {
     setActionMenuOpen(true);
+  };
+
+  const onInsertMath = () => {
+    if (editor.path.current === null) return;
+
+    const currentBlockId = Object.keys(editor.children).find((id) => {
+      return editor.children[id]?.meta.order === editor.path.current;
+    });
+    if (!currentBlockId) return;
+
+    const slate = Blocks.getBlockSlate(editor, { id: currentBlockId });
+    if (!slate || !slate.selection) return;
+
+    // Use selected text as the LaTeX expression, otherwise fall back to placeholder
+    const selectedText = !Range.isCollapsed(slate.selection)
+      ? Editor.string(slate, slate.selection)
+      : '';
+
+    MathInlineCommands.insertMathInline(editor, selectedText || 'E = mc^2', { slate });
   };
 
   return (
@@ -125,6 +147,19 @@ export const YooptaToolbar = () => {
               </HighlightColorPicker>
             )}
           </FloatingToolbar.Group>
+          {editor.plugins.MathInline && (
+            <>
+              <FloatingToolbar.Separator />
+              <FloatingToolbar.Group>
+                <FloatingToolbar.Button
+                  onClick={onInsertMath}
+                  title="Insert Math"
+                >
+                  <SigmaIcon />
+                </FloatingToolbar.Button>
+              </FloatingToolbar.Group>
+            </>
+          )}
         </FloatingToolbar.Content>
       </FloatingToolbar>
 

@@ -1,0 +1,283 @@
+---
+title: MathInline
+description: Inline math expressions rendered with KaTeX
+icon: 'sigma'
+---
+
+import { PluginPlayground } from '../snippets/plugin-playground.jsx';
+
+## Overview
+
+The MathInline plugin enables users to insert inline math expressions into any text block. Expressions are written in LaTeX and rendered using [KaTeX](https://katex.org/). It works as an `inlineVoid` element, meaning it appears inline alongside regular text but is not directly editable — users edit the LaTeX source through a popover.
+
+Part of the `@yoopta/math` package, which also includes the [MathBlock](/plugins/math-block) plugin for standalone display-mode equations.
+
+<PluginPlayground pluginSlug="math" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/math katex
+```
+
+You also need KaTeX CSS for proper rendering:
+
+```tsx
+import 'katex/dist/katex.min.css';
+```
+
+## Basic Usage
+
+Pass the plugin to `createYooptaEditor` (wrapped with `withMath`). Plugins and marks are passed to `createYooptaEditor`, not to `<YooptaEditor>`.
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { MathInline, withMath } from '@yoopta/math';
+import 'katex/dist/katex.min.css';
+
+const plugins = [Paragraph, MathInline];
+
+export default function Editor() {
+  const editor = useMemo(() => withMath(createYooptaEditor({ plugins, marks: [] })), []);
+
+  return <YooptaEditor editor={editor} placeholder="Type here..." />;
+}
+```
+
+To use both inline and block math together:
+
+```tsx
+import { MathInline, MathBlock, withMath } from '@yoopta/math';
+
+const plugins = [Paragraph, MathInline, MathBlock];
+```
+
+## Features
+
+- Inline math expressions rendered with KaTeX
+- Works inside any text block (Paragraph, Headings, Callout, Lists, etc.)
+- Live preview while editing LaTeX source
+- Copy LaTeX source to clipboard
+- Toolbar integration — select text and convert to math expression
+- HTML, Markdown, and email serialization
+- Dark mode support
+
+## Using with Themes
+
+The `@yoopta/themes-shadcn` package includes a styled MathInline component with a HoverCard for preview and editing.
+
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+import { MathInline, MathBlock, withMath } from '@yoopta/math';
+import Paragraph from '@yoopta/paragraph';
+
+const plugins = applyTheme([Paragraph, MathInline, MathBlock]);
+
+const editor = withMath(createYooptaEditor({ plugins, marks: MARKS }));
+```
+
+The shadcn theme provides:
+
+- **Preview mode** — rendered math, LaTeX source display, copy and edit buttons
+- **Edit mode** — live preview, LaTeX textarea input, save/cancel/delete actions
+
+You can also apply the theme to just the MathInline plugin:
+
+```tsx
+import { MathInline } from '@yoopta/math';
+import { MathInlineUI } from '@yoopta/themes-shadcn/math';
+
+const StyledMathInline = MathInline.extend({ elements: MathInlineUI });
+```
+
+## Element Props
+
+| Prop       | Type     | Description                           |
+| ---------- | -------- | ------------------------------------- |
+| `latex`    | `string` | The LaTeX expression string           |
+| `nodeType` | `string` | Always `'inlineVoid'` for this plugin |
+
+## Commands
+
+Import commands: `import { MathInlineCommands } from '@yoopta/math'`
+
+### `buildMathInlineElement`
+
+Creates a math inline element structure without inserting it.
+
+```tsx
+const element = MathInlineCommands.buildMathInlineElement(editor, {
+  props: { latex: 'x^2 + y^2 = r^2' },
+});
+```
+
+### `insertMathInline`
+
+Inserts a math inline element at the current Slate selection.
+
+```tsx
+import { Blocks } from '@yoopta/editor';
+
+const slate = Blocks.getBlockSlate(editor, { id: blockId });
+MathInlineCommands.insertMathInline(editor, 'E = mc^2', { slate });
+```
+
+If text is selected, the selection is replaced with the math element.
+
+### `updateMathInline`
+
+Updates the LaTeX expression of an existing math element.
+
+```tsx
+MathInlineCommands.updateMathInline(editor, elementId, '\\frac{a}{b}', {
+  blockId: 'block-1',
+});
+```
+
+### `deleteMathInline`
+
+Removes a math inline element by its ID.
+
+```tsx
+MathInlineCommands.deleteMathInline(editor, elementId, {
+  blockId: 'block-1',
+});
+```
+
+### `findMathInlineElements`
+
+Finds all math inline elements in a block.
+
+```tsx
+const elements = MathInlineCommands.findMathInlineElements(editor, {
+  blockId: 'block-1',
+});
+```
+
+### `openEditor` / `closeEditor`
+
+Controls the edit popover state (requires `withMath` extension).
+
+```tsx
+MathInlineCommands.openEditor(editor, {
+  element: mathElement,
+  blockId: 'block-1',
+  anchorEl: domNode,
+});
+
+MathInlineCommands.closeEditor(editor);
+```
+
+## Editor Extension
+
+The `withMath` function extends the editor with a `math` namespace for managing the edit popover state. This extension is shared between MathInline and MathBlock.
+
+```tsx
+import { withMath } from '@yoopta/math';
+
+const editor = withMath(createYooptaEditor({ plugins, marks }));
+
+// Access state
+editor.math.state; // { isOpen, editingElement, blockId, anchorEl }
+
+// Open/close programmatically
+editor.math.open({ element, blockId, anchorEl });
+editor.math.close();
+```
+
+### `useMathState` Hook
+
+Subscribe to math state changes in React components (must be inside `<YooptaEditor>`).
+
+```tsx
+import { useMathState } from '@yoopta/math';
+
+function MyComponent() {
+  const { isOpen, editingElement, blockId } = useMathState();
+  // ...
+}
+```
+
+## Toolbar Integration
+
+Add a math button to the floating toolbar that converts selected text into a math expression:
+
+```tsx
+import { Blocks, useYooptaEditor } from '@yoopta/editor';
+import { MathInlineCommands } from '@yoopta/math';
+import { Editor, Range } from 'slate';
+import { SigmaIcon } from 'lucide-react';
+
+function MathToolbarButton() {
+  const editor = useYooptaEditor();
+
+  const onInsertMath = () => {
+    if (editor.path.current === null) return;
+
+    const currentBlockId = Object.keys(editor.children).find(
+      (id) => editor.children[id]?.meta.order === editor.path.current,
+    );
+    if (!currentBlockId) return;
+
+    const slate = Blocks.getBlockSlate(editor, { id: currentBlockId });
+    if (!slate || !slate.selection) return;
+
+    // Use selected text as LaTeX, or fall back to placeholder
+    const selectedText = !Range.isCollapsed(slate.selection)
+      ? Editor.string(slate, slate.selection)
+      : '';
+
+    MathInlineCommands.insertMathInline(editor, selectedText || 'E = mc^2', { slate });
+  };
+
+  return (
+    <button onClick={onInsertMath} title="Insert Math">
+      <SigmaIcon />
+    </button>
+  );
+}
+```
+
+## Parsers
+
+### HTML
+
+Serializes to `<span data-math-inline data-latex="...">` with KaTeX-rendered content inside.
+
+Deserializes from `<span data-math-inline>` elements, reading the `data-latex` attribute.
+
+### Markdown
+
+Serializes to standard inline math syntax: `$E = mc^2$`
+
+### Email
+
+Serializes with KaTeX HTML output wrapped in a serif font span for email clients.
+
+## LaTeX Examples
+
+Common expressions to use with the plugin:
+
+| Expression    | LaTeX                                          |
+| ------------- | ---------------------------------------------- |
+| Fraction      | `\frac{a}{b}`                                  |
+| Square root   | `\sqrt{x}`                                     |
+| Superscript   | `x^2`                                          |
+| Subscript     | `x_i`                                          |
+| Summation     | `\sum_{i=1}^{n} x_i`                           |
+| Integral      | `\int_0^1 f(x) dx`                             |
+| Greek letters | `\alpha, \beta, \gamma`                        |
+| Matrix        | `\begin{pmatrix} a & b \\ c & d \end{pmatrix}` |
+
+## Related Plugins
+
+<CardGroup cols={2}>
+  <Card title="MathBlock" icon="square-root-variable" href="/plugins/math-block">
+    Display-mode math equations as standalone blocks
+  </Card>
+  <Card title="Mention" icon="at-sign" href="/plugins/mention">
+    @mentions (another inlineVoid element plugin)
+  </Card>
+</CardGroup>

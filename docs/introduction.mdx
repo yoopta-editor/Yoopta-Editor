@@ -49,7 +49,10 @@ See what you can build with Yoopta:
   <Card title="Slack Chat" icon="comments" href="https://yoopta.dev/examples/slack-chat">
     Slack-style messaging with channel list, rich text composer, and mentions
   </Card>
-  <Card title="Social Media Chat" icon="message" href="https://yoopta.dev/examples/social-media-chat">
+  <Card
+    title="Social Media Chat"
+    icon="message"
+    href="https://yoopta.dev/examples/social-media-chat">
     WhatsApp/Instagram-like chat with message bubbles, attachments, and reactions
   </Card>
   <Card title="Collaboration" icon="users" href="https://yoopta.dev/examples/collaboration">
@@ -88,20 +91,21 @@ export default function Editor() {
 
 Install only what you need:
 
-| Category | Packages | Description |
-|----------|----------|-------------|
-| **Core** | `@yoopta/editor` | Headless editor engine (requires `slate`, `slate-react`, `slate-dom`) |
-| **UI** | `@yoopta/ui` | Toolbar, ActionMenuList, SlashCommandMenu, BlockOptions, FloatingBlockActions |
-| **Marks** | `@yoopta/marks` | Bold, Italic, Underline, Strike, Code, Highlight |
-| **Text** | `@yoopta/paragraph`, `@yoopta/headings`, `@yoopta/blockquote` | Basic text blocks |
-| **Lists** | `@yoopta/lists` | Bulleted, numbered, and todo lists |
-| **Media** | `@yoopta/image`, `@yoopta/video`, `@yoopta/file`, `@yoopta/embed` | Media and embed blocks |
-| **Layout** | `@yoopta/table`, `@yoopta/accordion`, `@yoopta/tabs`, `@yoopta/steps`, `@yoopta/carousel`, `@yoopta/callout`, `@yoopta/divider` | Structured layout blocks |
-| **Inline** | `@yoopta/link`, `@yoopta/mention`, `@yoopta/emoji` | Inline elements |
-| **Code** | `@yoopta/code` | Code block with syntax highlighting |
-| **Themes** | `@yoopta/themes-shadcn`, `@yoopta/themes-material` | Pre-styled plugin components |
-| **Exports** | `@yoopta/exports` | HTML, Markdown, plain text, email serializers |
-| **Collaboration** | `@yoopta/collaboration` | Real-time collaboration via Yjs |
+| Category          | Packages                                                                                                                        | Description                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Core**          | `@yoopta/editor`                                                                                                                | Headless editor engine (requires `slate`, `slate-react`, `slate-dom`)         |
+| **UI**            | `@yoopta/ui`                                                                                                                    | Toolbar, ActionMenuList, SlashCommandMenu, BlockOptions, FloatingBlockActions |
+| **Marks**         | `@yoopta/marks`                                                                                                                 | Bold, Italic, Underline, Strike, Code, Highlight                              |
+| **Text**          | `@yoopta/paragraph`, `@yoopta/headings`, `@yoopta/blockquote`                                                                   | Basic text blocks                                                             |
+| **Lists**         | `@yoopta/lists`                                                                                                                 | Bulleted, numbered, and todo lists                                            |
+| **Media**         | `@yoopta/image`, `@yoopta/video`, `@yoopta/file`, `@yoopta/embed`                                                               | Media and embed blocks                                                        |
+| **Layout**        | `@yoopta/table`, `@yoopta/accordion`, `@yoopta/tabs`, `@yoopta/steps`, `@yoopta/carousel`, `@yoopta/callout`, `@yoopta/divider` | Structured layout blocks                                                      |
+| **Inline**        | `@yoopta/link`, `@yoopta/mention`, `@yoopta/emoji`, `@yoopta/math`                                                              | Inline elements                                                               |
+| **Code**          | `@yoopta/code`                                                                                                                  | Code block with syntax highlighting                                           |
+| **Math**          | `@yoopta/math`                                                                                                                  | Code block with syntax highlighting                                           |
+| **Themes**        | `@yoopta/themes-shadcn`, `@yoopta/themes-material`                                                                              | Pre-styled plugin components                                                  |
+| **Exports**       | `@yoopta/exports`                                                                                                               | HTML, Markdown, plain text, email serializers                                 |
+| **Collaboration** | `@yoopta/collaboration`                                                                                                         | Real-time collaboration via Yjs                                               |
 
 ## Key Features
 
@@ -122,7 +126,8 @@ Install only what you need:
     Serialize to HTML, Markdown, plain text, or email-safe HTML out of the box.
   </Card>
   <Card title="Beyond Editing" icon="globe">
-    Build CMS dashboards, landing page builders, or full website builders — Yoopta provides the content primitives, you define the experience.
+    Build CMS dashboards, landing page builders, or full website builders — Yoopta provides the
+    content primitives, you define the experience.
   </Card>
   <Card title="TypeScript First" icon="code">
     Full type safety across the editor, plugins, and all APIs.
