@@ -18,6 +18,7 @@ import {
   PanelLeftIcon,
   GridIcon,
   TableOfContentsIcon,
+  RadicalIcon,
 } from 'lucide-react';
 
 export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, React.ComponentType<{ width?: number; height?: number }>> = {
@@ -43,4 +44,5 @@ export const COMMAND_MENU_DEFAULT_ICONS_MAP: Record<string, React.ComponentType<
   CodeGroup: CodeIcon,
   Carousel: GridIcon,
   TableOfContents: TableOfContentsIcon,
+  MathBlock: RadicalIcon,
 };
