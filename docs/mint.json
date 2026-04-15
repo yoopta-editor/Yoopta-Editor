@@ -80,6 +80,8 @@
         "plugins/image",
         "plugins/link",
         "plugins/lists",
+        "plugins/math",
+        "plugins/math-block",
         "plugins/mention",
         "plugins/paragraph",
         "plugins/steps",

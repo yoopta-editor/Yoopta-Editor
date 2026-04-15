@@ -6552,6 +6552,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@yoopta/math@workspace:*, @yoopta/math@workspace:packages/plugins/math":
+  version: 0.0.0-use.local
+  resolution: "@yoopta/math@workspace:packages/plugins/math"
+  dependencies:
+    katex: "npm:^0.16.11"
+  peerDependencies:
+    "@yoopta/editor": 6.0.2
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  languageName: unknown
+  linkType: soft
+
 "@yoopta/mention@workspace:*, @yoopta/mention@workspace:packages/plugins/mention":
   version: 0.0.0-use.local
   resolution: "@yoopta/mention@workspace:packages/plugins/mention"
@@ -6672,6 +6684,7 @@ __metadata:
     "@yoopta/file": ^6.0.2
     "@yoopta/image": ^6.0.2
     "@yoopta/lists": ^6.0.2
+    "@yoopta/math": ^6.0.2
     "@yoopta/steps": ^6.0.2
     "@yoopta/table": ^6.0.2
     "@yoopta/table-of-contents": ^6.0.2
@@ -7672,6 +7685,13 @@ __metadata:
   version: 7.2.0
   resolution: "commander@npm:7.2.0"
   checksum: 10c0/8d690ff13b0356df7e0ebbe6c59b4712f754f4b724d4f473d3cc5b3fdcf978e3a5dc3078717858a2ceb50b0f84d0660a7f22a96cdc50fb877d0c9bb31593d23a
+  languageName: node
+  linkType: hard
+
+"commander@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "commander@npm:8.3.0"
+  checksum: 10c0/8b043bb8322ea1c39664a1598a95e0495bfe4ca2fad0d84a92d7d1d8d213e2a155b441d2470c8e08de7c4a28cf2bc6e169211c49e1b21d9f7edc6ae4d9356060
   languageName: node
   linkType: hard
 
@@ -11050,6 +11070,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"katex@npm:^0.16.11":
+  version: 0.16.45
+  resolution: "katex@npm:0.16.45"
+  dependencies:
+    commander: "npm:^8.3.0"
+  bin:
+    katex: cli.js
+  checksum: 10c0/f715eb9a73daff68ac14dcc8c2f47f02f5fc756a74077d22479e64e06872b2b44f0d81f1c91a98a9873722a08841388a869a0b9ddb96b224362eb8054ddf533a
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.3, keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -11921,6 +11952,7 @@ __metadata:
     "@yoopta/link": "workspace:*"
     "@yoopta/lists": "workspace:*"
     "@yoopta/marks": "workspace:*"
+    "@yoopta/math": "workspace:*"
     "@yoopta/mention": "workspace:*"
     "@yoopta/paragraph": "workspace:*"
     "@yoopta/steps": "workspace:*"

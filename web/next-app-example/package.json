@@ -36,6 +36,7 @@
     "@yoopta/link": "workspace:*",
     "@yoopta/lists": "workspace:*",
     "@yoopta/marks": "workspace:*",
+    "@yoopta/math": "workspace:*",
     "@yoopta/mention": "workspace:*",
     "@yoopta/paragraph": "workspace:*",
     "@yoopta/steps": "workspace:*",

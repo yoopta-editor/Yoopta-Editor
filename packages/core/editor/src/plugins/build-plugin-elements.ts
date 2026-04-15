@@ -21,7 +21,7 @@ export type PluginJSXElement = ReactElement<PluginJSXElementProps, string>;
 
 function buildElementsMap<TKeys extends string = string>(
   jsxElement: PluginJSXElement,
-  pluginType: string,
+  pluginType?: string,
 ): PluginElementsMap<TKeys> {
   const elementsMap: PluginElementsMap<TKeys> = {} as PluginElementsMap<TKeys>;
 
@@ -65,15 +65,15 @@ function buildElementsMap<TKeys extends string = string>(
     if (children) {
       const childrenArray: PluginJSXElement[] = Array.isArray(children)
         ? children.filter(
-            (child): child is PluginJSXElement =>
-              typeof child === 'object' && child !== null && 'type' in child && 'props' in child,
-          )
+          (child): child is PluginJSXElement =>
+            typeof child === 'object' && child !== null && 'type' in child && 'props' in child,
+        )
         : typeof children === 'object' &&
           children !== null &&
           'type' in children &&
           'props' in children
-        ? [children as PluginJSXElement]
-        : [];
+          ? [children as PluginJSXElement]
+          : [];
 
       if (childrenArray.length > 0) {
         const childTypes = childrenArray.map((child) => traverse(child, false));
@@ -92,7 +92,7 @@ function buildElementsMap<TKeys extends string = string>(
 
 export function buildPluginElements<TKeys extends string = string>(
   jsxElement: PluginJSXElement,
-  pluginType: string,
+  pluginType?: string,
 ): PluginElementsMap<TKeys> {
   const elementsMap = buildElementsMap<TKeys>(jsxElement, pluginType);
   return elementsMap;

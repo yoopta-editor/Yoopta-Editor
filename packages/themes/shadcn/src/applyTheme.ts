@@ -13,6 +13,7 @@ import { HeadingsUI } from './headings';
 import { ImageUI } from './image';
 import { LinkUI } from './link';
 import { ListsUI } from './lists';
+import { MathInlineUI, MathBlockUI } from './math';
 import { MentionUI } from './mention';
 import { ParagraphUI } from './paragraph';
 import { StepsUI } from './steps';
@@ -89,6 +90,8 @@ export function applyTheme(
     Embed: EmbedUI,
     File: FileUI,
     Mention: MentionUI,
+    MathInline: MathInlineUI,
+    MathBlock: MathBlockUI,
   };
 
   return plugins.map((plugin) => {

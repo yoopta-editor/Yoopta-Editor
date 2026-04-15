@@ -75,7 +75,7 @@ See what you can build with Yoopta:
 - **Drag and drop** — Reorder blocks with nested depth support; optional `SortableBlock` for custom DnD
 - **Selection box** — Multi-block selection for copy, delete, or bulk operations
 - **Slash command & action menu** — Type `/` for block insertion; floating block actions (+, drag handle, block options)
-- **Inline elements** — Links, @mentions, and custom inline nodes within text
+- **Inline elements** — Links, @mentions, emojis, inline math (KaTeX), and custom inline nodes within text
 - **Export** — HTML, Markdown, plain text, email template; get/set content as Yoopta JSON
 - **Real-time collaboration** (`@yoopta/collaboration`) — Multi-user editing with Yjs CRDT, presence (awareness), remote cursors, and WebSocket provider; optional package for collaborative documents
 - **Events** — `editor.on('change' | 'focus' | 'blur' | 'path-change' | 'block:copy')` for sync, analytics, or custom logic
@@ -94,7 +94,7 @@ See what you can build with Yoopta:
 yarn add slate slate-react slate-dom @yoopta/editor
 
 # Add plugins you need
-yarn add @yoopta/paragraph @yoopta/headings @yoopta/lists @yoopta/blockquote @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/mention @yoopta/links
+yarn add @yoopta/paragraph @yoopta/headings @yoopta/lists @yoopta/blockquote @yoopta/code @yoopta/image @yoopta/video @yoopta/embed @yoopta/file @yoopta/callout @yoopta/divider @yoopta/accordion @yoopta/table @yoopta/tabs @yoopta/steps @yoopta/mention @yoopta/math @yoopta/links
 
 # Add marks for text formatting
 yarn add @yoopta/marks
@@ -293,27 +293,28 @@ export default function Editor() {
 
 ### Plugins
 
-| Package                                                           | Description                           |
-| ----------------------------------------------------------------- | ------------------------------------- |
-| [@yoopta/paragraph](./packages/plugins/paragraph)                 | Basic text paragraph                  |
-| [@yoopta/headings](./packages/plugins/headings)                   | H1, H2, H3 headings                   |
-| [@yoopta/lists](./packages/plugins/lists)                         | Bulleted, numbered, and todo lists    |
-| [@yoopta/blockquote](./packages/plugins/blockquote)               | Block quotes                          |
-| [@yoopta/callout](./packages/plugins/callout)                     | Callout/alert boxes with themes       |
-| [@yoopta/code](./packages/plugins/code)                           | Code blocks with syntax highlighting  |
-| [@yoopta/image](./packages/plugins/image)                         | Images with optimization              |
-| [@yoopta/video](./packages/plugins/video)                         | Video embeds (YouTube, Vimeo, etc.)   |
-| [@yoopta/embed](./packages/plugins/embed)                         | Generic embeds (Figma, Twitter, etc.) |
-| [@yoopta/file](./packages/plugins/file)                           | File attachments                      |
-| [@yoopta/table](./packages/plugins/table)                         | Tables with headers                   |
-| [@yoopta/accordion](./packages/plugins/accordion)                 | Collapsible accordion sections        |
-| [@yoopta/tabs](./packages/plugins/tabs)                           | Tabbed content panels                 |
-| [@yoopta/steps](./packages/plugins/steps)                         | Step-by-step instructions             |
-| [@yoopta/divider](./packages/plugins/divider)                     | Visual dividers                       |
-| [@yoopta/link](./packages/plugins/link)                           | Inline links                          |
-| [@yoopta/mention](./packages/plugins/mention)                     | @mentions                             |
-| [@yoopta/carousel](./packages/plugins/carousel)                   | Image carousels                       |
-| [@yoopta/table-of-contents](./packages/plugins/table-of-contents) | Table of contents block               |
+| Package                                                           | Description                                          |
+| ----------------------------------------------------------------- | ---------------------------------------------------- |
+| [@yoopta/paragraph](./packages/plugins/paragraph)                 | Basic text paragraph                                 |
+| [@yoopta/headings](./packages/plugins/headings)                   | H1, H2, H3 headings                                  |
+| [@yoopta/lists](./packages/plugins/lists)                         | Bulleted, numbered, and todo lists                   |
+| [@yoopta/blockquote](./packages/plugins/blockquote)               | Block quotes                                         |
+| [@yoopta/callout](./packages/plugins/callout)                     | Callout/alert boxes with themes                      |
+| [@yoopta/code](./packages/plugins/code)                           | Code blocks with syntax highlighting                 |
+| [@yoopta/image](./packages/plugins/image)                         | Images with optimization                             |
+| [@yoopta/video](./packages/plugins/video)                         | Video embeds (YouTube, Vimeo, etc.)                  |
+| [@yoopta/embed](./packages/plugins/embed)                         | Generic embeds (Figma, Twitter, etc.)                |
+| [@yoopta/file](./packages/plugins/file)                           | File attachments                                     |
+| [@yoopta/table](./packages/plugins/table)                         | Tables with headers                                  |
+| [@yoopta/accordion](./packages/plugins/accordion)                 | Collapsible accordion sections                       |
+| [@yoopta/tabs](./packages/plugins/tabs)                           | Tabbed content panels                                |
+| [@yoopta/steps](./packages/plugins/steps)                         | Step-by-step instructions                            |
+| [@yoopta/divider](./packages/plugins/divider)                     | Visual dividers                                      |
+| [@yoopta/link](./packages/plugins/link)                           | Inline links                                         |
+| [@yoopta/math](./packages/plugins/math)                           | Math expressions with KaTeX (MathInline + MathBlock) |
+| [@yoopta/mention](./packages/plugins/mention)                     | @mentions                                            |
+| [@yoopta/carousel](./packages/plugins/carousel)                   | Image carousels                                      |
+| [@yoopta/table-of-contents](./packages/plugins/table-of-contents) | Table of contents block                              |
 
 ### Marks (Text Formatting)
 

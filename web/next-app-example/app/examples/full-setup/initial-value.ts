@@ -1711,6 +1711,119 @@ export const fullSetupInitialValue: YooptaContentValue = {
       "depth": 0
     }
   },
+  "fs-h2-math": {
+    "id": "fs-h2-math",
+    "type": "HeadingTwo",
+    "value": [
+      {
+        "id": "fs-h2-math-el",
+        "type": "heading-two",
+        "children": [
+          {
+            "text": "Math Expressions"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "order": 47,
+      "depth": 0
+    }
+  },
+  "fs-p-math": {
+    "id": "fs-p-math",
+    "type": "Paragraph",
+    "value": [
+      {
+        "id": "fs-p-math-el",
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Yoopta supports inline math via KaTeX. For example, Euler's identity "
+          },
+          {
+            "id": "fs-math-inline-1",
+            "type": "math-inline",
+            "children": [{ "text": "" }],
+            "props": {
+              "latex": "e^{i\\pi} + 1 = 0",
+              "nodeType": "inlineVoid"
+            }
+          },
+          {
+            "text": " is often called the most beautiful equation in mathematics. You can also write inline expressions like "
+          },
+          {
+            "id": "fs-math-inline-2",
+            "type": "math-inline",
+            "children": [{ "text": "" }],
+            "props": {
+              "latex": "\\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}",
+              "nodeType": "inlineVoid"
+            }
+          },
+          {
+            "text": " right inside any text block."
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "order": 48,
+      "depth": 0
+    }
+  },
+  "fs-p-math-block": {
+    "id": "fs-p-math-block",
+    "type": "Paragraph",
+    "value": [
+      {
+        "id": "fs-p-math-block-el",
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "For larger, display-mode equations, use a dedicated Math Block:"
+          }
+        ],
+        "props": {
+          "nodeType": "block"
+        }
+      }
+    ],
+    "meta": {
+      "order": 49,
+      "depth": 0
+    }
+  },
+  "fs-math-block": {
+    "id": "fs-math-block",
+    "type": "MathBlock",
+    "value": [
+      {
+        "id": "fs-math-block-el",
+        "type": "math-block",
+        "children": [
+          {
+            "text": ""
+          }
+        ],
+        "props": {
+          "latex": "\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}",
+          "nodeType": "void"
+        }
+      }
+    ],
+    "meta": {
+      "order": 50,
+      "depth": 0
+    }
+  },
   "fs-divider-3": {
     "id": "fs-divider-3",
     "type": "Divider",
@@ -1730,7 +1843,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 47,
+      "order": 51,
       "depth": 0
     }
   },
@@ -1752,7 +1865,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 48,
+      "order": 52,
       "depth": 0
     }
   },
@@ -1774,7 +1887,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 49,
+      "order": 53,
       "depth": 0
     }
   },
@@ -1803,7 +1916,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 50,
+      "order": 54,
       "depth": 0
     }
   },
@@ -1832,7 +1945,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 51,
+      "order": 55,
       "depth": 0
     }
   },
@@ -1865,7 +1978,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 52,
+      "order": 56,
       "depth": 0
     }
   },
@@ -1908,7 +2021,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 53,
+      "order": 57,
       "depth": 0
     }
   },
@@ -1931,7 +2044,7 @@ export const fullSetupInitialValue: YooptaContentValue = {
       }
     ],
     "meta": {
-      "order": 54,
+      "order": 58,
       "depth": 0
     }
   },

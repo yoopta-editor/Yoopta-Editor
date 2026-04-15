@@ -9,6 +9,7 @@ export { ParagraphUI } from './paragraph';
 export { CalloutUI } from './callout';
 export { ListsUI } from './lists';
 export { LinkUI } from './link';
+export { MathInlineUI, MathBlockUI } from './math';
 export { MentionUI, MentionDropdown } from './mention';
 export { EmojiDropdown } from './emoji';
 export { ImageUI } from './image';

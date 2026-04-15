@@ -4,7 +4,6 @@ import { useState } from 'react';
 import type { PluginElementRenderProps } from '@yoopta/editor';
 import { useYooptaEditor } from '@yoopta/editor';
 import {
-  type TableOfContentsEditor,
   type TableOfContentsElementProps,
   type TableOfContentsItem,
   useTableOfContentsItems,
@@ -60,7 +59,7 @@ export const TableOfContents = (props: PluginElementRenderProps) => {
   } = tocProps;
 
   const [isExpanded, setIsExpanded] = useState(true);
-  const items = useTableOfContentsItems(editor as TableOfContentsEditor, blockId, {
+  const items = useTableOfContentsItems(editor, blockId, {
     depth,
     headingTypes,
   });

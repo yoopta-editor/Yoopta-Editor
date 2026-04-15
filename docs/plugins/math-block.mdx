@@ -1,0 +1,201 @@
+---
+title: MathBlock
+description: Display-mode math equations as standalone blocks
+icon: 'square-root-variable'
+---
+
+import { PluginPlayground } from '../snippets/plugin-playground.jsx';
+
+## Overview
+
+The MathBlock plugin provides standalone, display-mode math equations rendered with [KaTeX](https://katex.org/). Unlike [MathInline](/plugins/math), which appears inline within text, MathBlock creates a dedicated block for larger equations that are centered and rendered in display mode.
+
+Both plugins are part of the `@yoopta/math` package, following the same pattern as `Code` / `CodeGroup` from `@yoopta/code`.
+
+<PluginPlayground pluginSlug="math-block" height={320} />
+
+## Installation
+
+```bash
+npm install @yoopta/math katex
+```
+
+You also need KaTeX CSS for proper rendering:
+
+```tsx
+import 'katex/dist/katex.min.css';
+```
+
+## Basic Usage
+
+Pass the plugin to `createYooptaEditor` (wrapped with `withMath`).
+
+```tsx
+import { useMemo } from 'react';
+import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
+import Paragraph from '@yoopta/paragraph';
+import { MathBlock, withMath } from '@yoopta/math';
+import 'katex/dist/katex.min.css';
+
+const plugins = [Paragraph, MathBlock];
+
+export default function Editor() {
+  const editor = useMemo(() => withMath(createYooptaEditor({ plugins, marks: [] })), []);
+
+  return <YooptaEditor editor={editor} placeholder="Type here..." />;
+}
+```
+
+To use both inline and block math together:
+
+```tsx
+import { MathInline, MathBlock, withMath } from '@yoopta/math';
+
+const plugins = [Paragraph, MathInline, MathBlock];
+```
+
+## Features
+
+- Display-mode equations rendered with KaTeX (centered, larger font)
+- Standalone block — not inline within text
+- Click to edit, with live KaTeX preview
+- Copy LaTeX source to clipboard
+- HTML, Markdown, and email serialization
+- Dark mode support
+
+## Using with Themes
+
+The `@yoopta/themes-shadcn` package includes a styled MathBlock component with a card-based edit UI.
+
+```tsx
+import { applyTheme } from '@yoopta/themes-shadcn';
+import { MathInline, MathBlock, withMath } from '@yoopta/math';
+import Paragraph from '@yoopta/paragraph';
+
+const plugins = applyTheme([Paragraph, MathInline, MathBlock]);
+
+const editor = withMath(createYooptaEditor({ plugins, marks: MARKS }));
+```
+
+The shadcn theme provides:
+
+- **Preview mode** — centered display-mode rendering with hover overlay (copy + edit buttons)
+- **Edit mode** — larger textarea with live preview, save/cancel/delete actions
+
+You can also apply the theme to just the MathBlock plugin:
+
+```tsx
+import { MathBlock } from '@yoopta/math';
+import { MathBlockUI } from '@yoopta/themes-shadcn/math';
+
+const StyledMathBlock = MathBlock.extend({ elements: MathBlockUI });
+```
+
+## Element Props
+
+| Prop       | Type     | Description                     |
+| ---------- | -------- | ------------------------------- |
+| `latex`    | `string` | The LaTeX expression string     |
+| `nodeType` | `string` | Always `'void'` for this plugin |
+
+## Commands
+
+Import commands: `import { MathBlockCommands } from '@yoopta/math'`
+
+### `buildMathBlockElement`
+
+Creates a math block element structure without inserting it.
+
+```tsx
+const element = MathBlockCommands.buildMathBlockElement(editor, {
+  props: { latex: '\\int_0^\\infty e^{-x} dx = 1' },
+});
+```
+
+### `updateMathBlock`
+
+Updates the LaTeX expression of an existing math block.
+
+```tsx
+MathBlockCommands.updateMathBlock(editor, blockId, '\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}');
+```
+
+### `getMathBlockElement`
+
+Finds the math-block element in a given block.
+
+```tsx
+const element = MathBlockCommands.getMathBlockElement(editor, {
+  blockId: 'block-1',
+});
+```
+
+### `openEditor` / `closeEditor`
+
+Controls the edit state (requires `withMath` extension). Shared with MathInline.
+
+```tsx
+MathBlockCommands.openEditor(editor, {
+  element: mathBlockElement,
+  blockId: 'block-1',
+  anchorEl: domNode,
+});
+
+MathBlockCommands.closeEditor(editor);
+```
+
+## Editor Extension
+
+MathBlock shares the same `withMath` extension as MathInline. See the [MathInline docs](/plugins/math#editor-extension) for details.
+
+```tsx
+import { withMath } from '@yoopta/math';
+
+const editor = withMath(createYooptaEditor({ plugins, marks }));
+```
+
+## Parsers
+
+### HTML
+
+Serializes to `<div data-math-block data-latex="...">` with KaTeX-rendered content inside (display mode).
+
+Deserializes from `<div data-math-block>` elements, reading the `data-latex` attribute.
+
+### Markdown
+
+Serializes to block math syntax:
+
+```
+$$
+E = mc^2
+$$
+```
+
+### Email
+
+Serializes with display-mode KaTeX HTML output wrapped in a centered div for email clients.
+
+## LaTeX Examples
+
+Common display-mode expressions:
+
+| Expression         | LaTeX                                                              |
+| ------------------ | ------------------------------------------------------------------ |
+| Integral           | `\int_0^\infty e^{-x} dx = 1`                                     |
+| Summation          | `\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}`            |
+| Matrix             | `\begin{pmatrix} a & b \\ c & d \end{pmatrix}`                    |
+| Aligned equations  | `\begin{aligned} x &= a + b \\ y &= c + d \end{aligned}`         |
+| Limit              | `\lim_{x \to \infty} \frac{1}{x} = 0`                             |
+| Binomial           | `\binom{n}{k} = \frac{n!}{k!(n-k)!}`                              |
+
+## Related Plugins
+
+<CardGroup cols={2}>
+  <Card title="MathInline" icon="sigma" href="/plugins/math">
+    Inline math expressions within text
+  </Card>
+  <Card title="Code" icon="code" href="/plugins/code">
+    Code blocks (another void block plugin)
+  </Card>
+</CardGroup>

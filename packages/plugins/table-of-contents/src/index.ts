@@ -5,7 +5,6 @@ import type {
   TableOfContentsElementMap,
   TableOfContentsElementProps,
 } from './types';
-import { DEFAULT_HEADING_TYPES, HEADING_TYPE_LEVEL } from './types';
 
 export { TableOfContentsCommands } from './commands';
 export { DEFAULT_HEADING_TYPES, HEADING_TYPE_LEVEL } from './types';
@@ -20,7 +19,6 @@ export type {
   TableOfContentsElementProps,
 };
 export type {
-  TableOfContentsEditor,
   TableOfContentsItem,
   UseTableOfContentsItemsOptions,
 } from './useTableOfContentsItems';

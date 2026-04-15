@@ -64,7 +64,7 @@ web/
 └── next-app-example/ # Development playground and examples
 ```
 
-**Available Plugins**: accordion, blockquote, callout, carousel, code, divider, embed, emoji, file, headings, image, link, lists, mention, paragraph, steps, table, table-of-contents, tabs, video
+**Available Plugins**: accordion, blockquote, callout, carousel, code, divider, embed, emoji, file, headings, image, link, lists, math, mention, paragraph, steps, table, table-of-contents, tabs, video
 
 ### YooEditor API
 

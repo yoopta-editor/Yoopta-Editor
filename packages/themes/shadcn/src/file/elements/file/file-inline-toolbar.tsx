@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { Copy, Download, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 
@@ -26,6 +27,7 @@ export const FileInlineToolbar = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
+  const editor = useYooptaEditor();
   const { refs, floatingStyles } = useFloating({
     placement: 'top-end',
     strategy: 'absolute',
@@ -86,7 +88,7 @@ export const FileInlineToolbar = ({
   if (!isReady) return null;
 
   return (
-    <FloatingPortal>
+    <FloatingPortal id='file-inline-toolbar' root={editor.refElement}>
       <div
         ref={refs.setFloating}
         onMouseDown={(e) => {

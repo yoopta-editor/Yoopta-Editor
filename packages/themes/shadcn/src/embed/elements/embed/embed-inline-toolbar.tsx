@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { FloatingPortal, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
+import { useYooptaEditor } from '@yoopta/editor';
 import copy from 'copy-to-clipboard';
 import { AlignCenter, AlignLeft, AlignRight, Copy, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 
@@ -31,6 +32,7 @@ export const EmbedInlineToolbar = ({
   const hasProvider = elementProps.provider && elementProps.provider.type;
   const hasAlignment = 'alignment' in elementProps;
 
+  const editor = useYooptaEditor();
   const { refs, floatingStyles } = useFloating({
     placement: 'top-end',
     strategy: 'absolute',
@@ -81,7 +83,7 @@ export const EmbedInlineToolbar = ({
   if (!isReady) return null;
 
   return (
-    <FloatingPortal>
+    <FloatingPortal id='embed-inline-toolbar' root={editor.refElement}>
       <div
         ref={refs.setFloating}
         onMouseDown={(e) => {

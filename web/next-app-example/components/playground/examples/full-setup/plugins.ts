@@ -17,7 +17,10 @@ import Tabs from '@yoopta/tabs';
 import Steps from '@yoopta/steps';
 import Carousel from '@yoopta/carousel';
 import Mention from '@yoopta/mention';
+import { MathInline, MathBlock } from '@yoopta/math';
 import TableOfContents from '@yoopta/table-of-contents';
+
+import 'katex/dist/katex.min.css';
 
 const YImage = Image.extend({
   options: {
@@ -126,4 +129,6 @@ export const YOOPTA_PLUGINS = [
       triggers: [{ char: '@', type: 'user' }, { char: '#', type: 'page' }],
     },
   }),
+  MathInline,
+  MathBlock,
 ];

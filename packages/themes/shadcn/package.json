@@ -50,6 +50,9 @@
       "lists": [
         "./dist/types/lists/index.d.ts"
       ],
+      "math": [
+        "./dist/types/math/index.d.ts"
+      ],
       "mention": [
         "./dist/types/mention/index.d.ts"
       ],
@@ -133,6 +136,10 @@
     "./lists": {
       "types": "./dist/types/lists/index.d.ts",
       "import": "./dist/lists.js"
+    },
+    "./math": {
+      "types": "./dist/types/math/index.d.ts",
+      "import": "./dist/math.js"
     },
     "./mention": {
       "types": "./dist/types/mention/index.d.ts",
