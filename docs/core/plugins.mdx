@@ -336,7 +336,7 @@ const CustomImage = Image.extend({
 
 ## Plugin shortcuts
 
-Configure slash-menu shortcuts via `options.shortcuts` (array of strings). Plugin-specific hotkeys are defined in the plugin's `events.onKeyDown` or in options. Use `Blocks.toggleBlock(editor, { type: 'Code' })` for programmatic block type change.
+Configure slash-menu shortcuts via `options.shortcuts` (array of strings). Plugin-specific hotkeys are defined in the plugin's `events.onKeyDown` or in options. Use `Blocks.toggleBlock(editor, 'Code', { preserveContent: true })` for programmatic block type change.
 
 ## Common Plugin Options
 

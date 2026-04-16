@@ -273,7 +273,7 @@ function MyFloatingBlockActions() {
     if (!blockId) return;
     const block = Blocks.getBlock(editor, { id: blockId });
     if (!block) return;
-    editor.insertBlock('Paragraph', { at: block.meta.order + 1, focus: true });
+    Blocks.insertBlock(editor, 'Paragraph', { at: block.meta.order + 1, focus: true });
   };
 
   return (

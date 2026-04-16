@@ -100,21 +100,18 @@ Each code block has the following properties:
 
 ## Commands
 
-Access code commands via `editor.blocks`:
+Use the **`Blocks`** namespace for block type changes and **`CodeCommands`** (or **`Elements.updateElement`**) for code element props:
 
 ```typescript
-// Transform current block to code
-editor.blocks.toggle({ type: 'Code' });
+import { Blocks } from '@yoopta/editor';
+import { CodeCommands } from '@yoopta/code';
 
-// Update code language
-editor.blocks.updateBlock(blockId, {
-  props: { language: 'python' },
-});
+// Transform current block to a Code block
+Blocks.toggleBlock(editor, 'Code', { preserveContent: true });
 
-// Update code theme
-editor.blocks.updateBlock(blockId, {
-  props: { theme: 'dracula' },
-});
+// Update language / theme (recommended — keeps Slate structure valid)
+CodeCommands.updateCodeLanguage(editor, blockId, 'python');
+CodeCommands.updateCodeTheme(editor, blockId, 'dracula');
 ```
 
 ## Custom Rendering

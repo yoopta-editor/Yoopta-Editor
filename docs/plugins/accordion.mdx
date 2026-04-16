@@ -91,7 +91,7 @@ const plugins = [Accordion];
 
 ## Commands
 
-Accordion commands are available via the plugin's `commands` and through the editor. Use `editor.blocks` for block-level operations and the Accordion commands for structure.
+Accordion commands are available via the plugin's `commands` and through the editor. Use the **`Blocks`** namespace from `@yoopta/editor` for generic block operations (insert, delete, update meta) and **Accordion commands** for accordion structure.
 
 ### insertAccordion
 
@@ -161,7 +161,7 @@ Blocks.insertBlock(editor, 'Accordion', { blockData: { ... } });
 Blocks.deleteBlock(editor, { blockId });
 
 // Update block meta (e.g. align, depth)
-Blocks.updateBlock(editor, { blockId, meta: { align: 'center' } });
+Blocks.updateBlock(editor, blockId, { meta: { align: 'center' } });
 ```
 
 ## Element operations
