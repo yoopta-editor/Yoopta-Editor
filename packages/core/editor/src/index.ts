@@ -53,6 +53,10 @@ export { buildBlockData, buildBlockElement } from './components/Editor/utils';
 export { buildBlockElementsStructure } from './utils/block-elements';
 export { buildSlateEditor } from './utils/build-slate';
 
+// Runtime plugin management
+export { loadMarketplacePlugin } from './editor/plugins/loadMarketplacePlugin';
+export type { MarketplacePluginModule } from './editor/plugins/loadMarketplacePlugin';
+
 export {
   Plugin,
   PluginElementRenderProps,

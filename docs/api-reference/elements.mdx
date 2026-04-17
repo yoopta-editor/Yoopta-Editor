@@ -325,6 +325,48 @@ const children = Elements.getElementChildren(editor, {
 
 ---
 
+### getRootElement
+
+Returns the root element definition for a given block type (plugin). Each plugin defines one or more elements — the root is either the only element in the map, or the one marked with `asRoot: true`.
+
+```typescript
+Elements.getRootElement(editor: YooEditor, options: GetRootElementOptions): PluginElement | undefined
+```
+
+**Parameters:**
+
+- `editor` — Editor instance (required).
+- `options.blockType` — Plugin type name, PascalCase (required). E.g. `'Paragraph'`, `'Accordion'`, `'Image'`.
+
+**Returns:** The root `PluginElement` definition, or `undefined` if the plugin doesn't exist, has no elements, or no element is marked as root in a multi-element plugin.
+
+```typescript
+// Get root element of a single-element plugin
+const root = Elements.getRootElement(editor, { blockType: 'Paragraph' });
+// => { render: ..., props: { nodeType: 'block' } }
+
+// Check if a plugin's root element is void
+const imageRoot = Elements.getRootElement(editor, { blockType: 'Image' });
+if (imageRoot?.props?.nodeType === 'void') {
+  // handle void element
+}
+
+// Multi-element plugin — returns the element with asRoot: true
+const accordionRoot = Elements.getRootElement(editor, { blockType: 'Accordion' });
+if (accordionRoot?.children) {
+  console.log('Child element types:', accordionRoot.children);
+}
+
+// Filter plugins by root element node type
+const blockPlugins = Object.keys(editor.plugins).filter((type) => {
+  const root = Elements.getRootElement(editor, { blockType: type });
+  const nodeType = root?.props?.nodeType;
+  return nodeType !== 'inline' && nodeType !== 'inlineVoid';
+});
+```
+
+---
+
 ### isElementEmpty
 
 Checks whether an element has no text content.
