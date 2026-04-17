@@ -1,6 +1,6 @@
 {
   "name": "@yoopta/math",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Inline math (KaTeX) plugin for Yoopta Editor",
   "author": "Darginec05 <devopsbanda@gmail.com>",
   "homepage": "https://github.com/Darginec05/Yoopta-Editor#readme",
@@ -16,7 +16,7 @@
     "katex": "^0.16.11"
   },
   "peerDependencies": {
-    "@yoopta/editor": "6.0.2",
+    "@yoopta/editor": "6.0.3",
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
   },

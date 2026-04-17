@@ -1,5 +1,24 @@
 # @yoopta/themes-shadcn
 
+## 6.0.3
+
+### Patch Changes
+
+- added runtime registration of plugins and math plugins (block | inline) using katex
+- Updated dependencies
+  - @yoopta/editor@6.0.3
+  - @yoopta/ui@6.0.3
+  - @yoopta/code@6.0.3
+  - @yoopta/embed@6.0.3
+  - @yoopta/file@6.0.3
+  - @yoopta/image@6.0.3
+  - @yoopta/lists@6.0.3
+  - @yoopta/steps@6.0.3
+  - @yoopta/table@6.0.3
+  - @yoopta/table-of-contents@6.0.3
+  - @yoopta/tabs@6.0.3
+  - @yoopta/video@6.0.3
+
 ## 6.0.2
 
 ### Patch Changes
