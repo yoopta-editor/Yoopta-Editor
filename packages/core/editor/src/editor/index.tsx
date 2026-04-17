@@ -42,6 +42,7 @@ import { getElementPath } from './elements/getElementPath';
 import { getElementRect } from './elements/getElementRect';
 import { getElements } from './elements/getElements';
 import { getParentElementPath } from './elements/getParentElementPath';
+import { getRootElement } from './elements/getRootElement';
 import { insertElement } from './elements/insertElement';
 import { isElementEmpty } from './elements/isElementEmpty';
 import { updateElement } from './elements/updateElement';
@@ -53,6 +54,10 @@ import {
 } from '../utils/editor-builders';
 import { generateId } from '../utils/generateId';
 import { validateYooptaValue } from '../utils/validations';
+import {
+  registerPlugin as registerPluginFn,
+  unregisterPlugin as unregisterPluginFn,
+} from './plugins/registerPlugin';
 
 export type CreateYooptaEditorOptions = {
   id?: string;
@@ -123,6 +128,7 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     getElementRect: (options) => getElementRect(editor, options),
     getParentElementPath: (options) => getParentElementPath(editor, options),
     getElementChildren: (options) => getElementChildren(editor, options),
+    getRootElement: (options) => getRootElement(editor, options),
     isElementEmpty: (options) => isElementEmpty(editor, options),
 
     y: Object.assign(
@@ -155,6 +161,9 @@ export function createYooptaEditor(opts: CreateYooptaEditorOptions): YooEditor {
     getEmail: (content: YooptaContentValue, options?: Partial<EmailTemplateOptions>) =>
       getEmail(editor, content, options),
     getYooptaJSON: (content: YooptaContentValue) => getYooptaJSON(editor, content),
+
+    registerPlugin: (plugin) => registerPluginFn(editor, plugin),
+    unregisterPlugin: (pluginType) => unregisterPluginFn(editor, pluginType),
 
     refElement: null,
 

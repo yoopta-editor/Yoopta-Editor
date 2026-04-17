@@ -78,6 +78,10 @@ export type GetElementRectOptions = {
   element: SlateElement;
 };
 
+export type GetRootElementOptions = {
+  blockType: string;
+};
+
 export type TransformBlockOptions = {
   blockId: string;
   transform: (slate: SlateEditor, block: YooptaBlockData) => void;

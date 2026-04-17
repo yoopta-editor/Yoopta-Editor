@@ -1,4 +1,4 @@
-import type { Descendant, NodeEntry, Path, Point, Range as SlateRange, Selection } from 'slate';
+import type { Descendant, NodeEntry, Path, Point, Selection, Range as SlateRange } from 'slate';
 import type { ReactEditor } from 'slate-react';
 
 import type { YooptaMark } from '../marks';
@@ -39,6 +39,7 @@ import type { getElementPath } from './elements/getElementPath';
 import type { getElementRect } from './elements/getElementRect';
 import type { getElements } from './elements/getElements';
 import type { getParentElementPath } from './elements/getParentElementPath';
+import type { getRootElement } from './elements/getRootElement';
 import type { insertElement } from './elements/insertElement';
 import type { isElementEmpty } from './elements/isElementEmpty';
 import type { updateElement } from './elements/updateElement';
@@ -92,7 +93,7 @@ export type YooptaBlock = {
 export type YooptaBlocks = Record<string, YooptaBlock>;
 export type YooptaFormats = Record<string, TextFormat>;
 
-export type YooptaEditorEventKeys = 'change' | 'focus' | 'blur' | 'block:copy' | 'path-change' | 'decorations:change';
+export type YooptaEditorEventKeys = 'change' | 'focus' | 'blur' | 'block:copy' | 'path-change' | 'decorations:change' | 'plugin:register' | 'plugin:unregister';
 export type YooptaEventChangePayload = {
   operations: YooptaOperation[];
   value: YooptaContentValue;
@@ -105,6 +106,8 @@ export type YooptaEventsMap = {
   'block:copy': YooptaBlockData;
   'path-change': YooptaPath;
   'decorations:change': undefined;
+  'plugin:register': { type: string };
+  'plugin:unregister': { type: string };
 };
 
 export type DecoratorFn = (blockId: string, entry: NodeEntry) => SlateRange[];
@@ -144,6 +147,7 @@ export type YooEditor = {
   getElementRect: WithoutFirstArg<typeof getElementRect>;
   getParentElementPath: WithoutFirstArg<typeof getParentElementPath>;
   getElementChildren: WithoutFirstArg<typeof getElementChildren>;
+  getRootElement: WithoutFirstArg<typeof getRootElement>;
   isElementEmpty: WithoutFirstArg<typeof isElementEmpty>;
 
   // element structure builder
@@ -211,6 +215,10 @@ export type YooEditor = {
   withSavingHistory: WithoutFirstArg<typeof YooptaHistory.withSavingHistory>;
   redo: WithoutFirstArg<typeof YooptaHistory.redo>;
   undo: WithoutFirstArg<typeof YooptaHistory.undo>;
+
+  // runtime plugin management
+  registerPlugin: (plugin: import('../plugins').YooptaPlugin<Record<string, SlateElement>>) => void;
+  unregisterPlugin: (pluginType: string) => void;
 
   // ref to editor element
   refElement: HTMLElement | null;

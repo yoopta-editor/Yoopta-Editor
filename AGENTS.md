@@ -142,6 +142,7 @@ Elements.getElementEntry(editor, { ... })
 Elements.getElementPath(editor, { ... })
 Elements.getParentElementPath(editor, { ... })
 Elements.getElementChildren(editor, { ... })
+Elements.getRootElement(editor, { ... })
 Elements.isElementEmpty(editor, { ... })
 ```
 

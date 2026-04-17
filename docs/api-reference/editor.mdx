@@ -97,7 +97,7 @@ Available on the instance; see [Elements API](/api-reference/elements) for full 
 - `insertElement`, `updateElement`, `deleteElement`
 - `getElement`, `getElements`, `getElementEntry`
 - `getElementPath`, `getParentElementPath`, `getElementRect`
-- `getElementChildren`, `isElementEmpty`
+- `getElementChildren`, `getRootElement`, `isElementEmpty`
 
 ---
 
@@ -139,7 +139,7 @@ editor.y.inline(type: string, options?: ElementStructureOptions): SlateElement
 - **`editor.once(event, callback)`** — Subscribe once.
 - **`editor.emit(event, payload)`** — Emit event.
 
-**Events:** `'change'` (payload: `{ operations, value }`), `'focus'`, `'blur'`, `'block:copy'`, `'path-change'`.
+**Events:** `'change'` (payload: `{ operations, value }`), `'focus'`, `'blur'`, `'block:copy'`, `'path-change'`, `'plugin:register'` (payload: `{ type }`), `'plugin:unregister'` (payload: `{ type }`).
 
 ---
 
@@ -210,3 +210,82 @@ editor.batchOperations(() => {
 - **`editor.plugins`** — Resolved plugin map.
 - **`editor.blockEditorsMap`** — Map of block ID to Slate editor (internal).
 - **`editor.refElement`** — DOM element ref when used with the editor component.
+
+---
+
+### Runtime plugin management
+
+#### registerPlugin
+
+Registers a plugin at runtime into an already-initialized editor. Useful for dynamically adding block types — loading from a marketplace, enabling optional plugins based on user settings, or lazy-loading heavy plugins.
+
+```typescript
+editor.registerPlugin(plugin: YooptaPlugin<Record<string, SlateElement>>): void
+```
+
+**Parameters:**
+- `plugin` — A `YooptaPlugin` instance to register (required).
+
+**Behavior:**
+- If a plugin with the same type is already registered, the call is a **no-op** (silently skipped).
+- The full plugin map is rebuilt, including element injection resolution (`injectElementsFromPlugins`).
+- Emits `plugin:register` event with `{ type: string }`.
+
+```typescript
+import Table from '@yoopta/table';
+import Code from '@yoopta/code';
+
+// Register a single plugin
+editor.registerPlugin(Table);
+
+// Load and register a marketplace plugin
+import { loadMarketplacePlugin } from '@yoopta/editor';
+
+const { plugin } = await loadMarketplacePlugin(
+  'https://marketplace.yoopta.dev/plugins/image-gallery/1.0.0/bundle.mjs',
+);
+editor.registerPlugin(plugin);
+
+// Listen for registration
+editor.on('plugin:register', ({ type }) => {
+  console.log(`Plugin "${type}" registered`);
+});
+```
+
+#### unregisterPlugin
+
+Removes a plugin at runtime. All blocks of that plugin type are deleted from content.
+
+```typescript
+editor.unregisterPlugin(pluginType: string): void
+```
+
+**Parameters:**
+- `pluginType` — Plugin type name, PascalCase (required). E.g. `'Table'`, `'Code'`.
+
+**Behavior:**
+- If no plugin with the given type is registered, the call is a **no-op**.
+- **All blocks of that type are removed** from `editor.children` and their Slate editors are cleaned up. This is destructive and cannot be undone via `editor.undo()`.
+- The plugin map is rebuilt without the removed plugin.
+- Emits `plugin:unregister` event with `{ type: string }`.
+
+```typescript
+// Remove a plugin
+editor.unregisterPlugin('Table');
+
+// Toggle plugin on/off
+import Code from '@yoopta/code';
+
+function toggleCodePlugin(enabled: boolean) {
+  if (enabled) {
+    editor.registerPlugin(Code);
+  } else {
+    editor.unregisterPlugin('Code');
+  }
+}
+
+// Listen for removal
+editor.on('plugin:unregister', ({ type }) => {
+  console.log(`Plugin "${type}" removed`);
+});
+```

@@ -424,6 +424,7 @@ Elements.getElementEntry(editor, { ... }) // Get element with path
 Elements.getElementPath(editor, { ... })  // Get path to element
 Elements.getParentElementPath(editor, { ... }) // Get parent path
 Elements.getElementChildren(editor, { ... })   // Get child elements
+Elements.getRootElement(editor, { ... })  // Get root element definition for a plugin
 Elements.isElementEmpty(editor, { ... })  // Check if element is empty
 ```
 

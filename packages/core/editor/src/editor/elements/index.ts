@@ -6,6 +6,7 @@ import { getElementPath } from './getElementPath';
 import { getElementRect } from './getElementRect';
 import { getElements } from './getElements';
 import { getParentElementPath } from './getParentElementPath';
+import { getRootElement } from './getRootElement';
 import { insertElement } from './insertElement';
 import { isElementEmpty } from './isElementEmpty';
 import { updateElement } from './updateElement';
@@ -23,6 +24,7 @@ export const Elements = {
   getElementRect,
   getParentElementPath,
   getElementChildren,
+  getRootElement,
   isElementEmpty,
 };
 
@@ -36,6 +38,7 @@ export {
   getElementRect,
   getElements,
   getParentElementPath,
+  getRootElement,
   insertElement,
   isElementEmpty,
   updateElement,
@@ -52,6 +55,7 @@ export type {
   GetElementPathOptions,
   GetElementRectOptions,
   GetElementsOptions,
+  GetRootElementOptions,
   InsertElementOptions,
   IsElementEmptyOptions,
   UpdateElementOptions,
