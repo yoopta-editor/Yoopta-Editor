@@ -19,11 +19,16 @@ export type MarketplacePluginModule = {
  *
  * The bundle must have a default export that is a YooptaPlugin instance.
  */
+// Use Function constructor so bundlers (Turbopack, webpack, Rollup) cannot
+// statically analyse this import — magic comments like webpackIgnore are
+// stripped by Terser before they reach Turbopack's resolver.
+const dynamicImport = new Function('url', 'return import(url)') as (url: string) => Promise<unknown>;
+
 export async function loadMarketplacePlugin(bundleUrl: string): Promise<{
   plugin: YooptaPlugin<Record<string, SlateElement>>;
   module: MarketplacePluginModule;
 }> {
-  const module = (await import(/* @vite-ignore */ bundleUrl)) as MarketplacePluginModule;
+  const module = (await dynamicImport(bundleUrl)) as MarketplacePluginModule;
 
   if (!module.default) {
     throw new Error(
