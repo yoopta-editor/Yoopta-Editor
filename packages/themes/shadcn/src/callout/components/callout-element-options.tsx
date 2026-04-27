@@ -8,16 +8,24 @@ import { AlertCircle, CheckCircle, Info, MessageSquare, XCircle } from 'lucide-r
 export const CALLOUT_THEMES = [
   { value: 'default' as const, label: 'Default', icon: <MessageSquare className="h-4 w-4" /> },
   { value: 'info' as const, label: 'Info', icon: <Info className="h-4 w-4 text-blue-500" /> },
-  { value: 'success' as const, label: 'Success', icon: <CheckCircle className="h-4 w-4 text-green-500" /> },
-  { value: 'warning' as const, label: 'Warning', icon: <AlertCircle className="h-4 w-4 text-yellow-500" /> },
+  {
+    value: 'success' as const,
+    label: 'Success',
+    icon: <CheckCircle className="h-4 w-4 text-green-500" />,
+  },
+  {
+    value: 'warning' as const,
+    label: 'Warning',
+    icon: <AlertCircle className="h-4 w-4 text-yellow-500" />,
+  },
   { value: 'error' as const, label: 'Error', icon: <XCircle className="h-4 w-4 text-red-500" /> },
 ];
 
 export type CalloutTheme = 'default' | 'success' | 'warning' | 'error' | 'info';
 
-
 type CalloutElementProps = {
   theme: CalloutTheme;
+  showIcon?: boolean;
 };
 
 export const CalloutElementOptions = () => {
@@ -52,6 +60,15 @@ export const CalloutElementOptions = () => {
             </span>
           )}
         />
+        <ElementOptions.Separator className="my-2" />
+        <ElementOptions.Group>
+          <ElementOptions.Toggle
+            label="Show icon"
+            checked={!!element.props?.showIcon}
+            onCheckedChange={(checked) => updateProps({ showIcon: checked })}
+            className="flex items-center justify-between px-2"
+          />
+        </ElementOptions.Group>
       </ElementOptions.Group>
     </ElementOptions.Content>
   );
