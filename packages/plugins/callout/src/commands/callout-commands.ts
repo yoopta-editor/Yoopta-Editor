@@ -26,6 +26,11 @@ export type CalloutCommands = {
   insertCallout: (editor: YooEditor, options?: Partial<InsertCalloutOptions>) => void;
   deleteCallout: (editor: YooEditor, blockId: string) => void;
   updateCalloutTheme: (editor: YooEditor, blockId: string, theme: CalloutTheme) => void;
+  updateCalloutProps: (
+    editor: YooEditor,
+    blockId: string,
+    props: Partial<CalloutElementProps>,
+  ) => void;
 };
 
 export const CalloutCommands: CalloutCommands = {
@@ -51,6 +56,12 @@ export const CalloutCommands: CalloutCommands = {
       props: {
         theme,
       },
+    });
+  },
+  updateCalloutProps: (editor: YooEditor, blockId: string, props: Partial<CalloutElementProps>) => {
+    Elements.updateElement<CalloutPluginElementKeys, CalloutElementProps>(editor, blockId, {
+      type: 'callout',
+      props,
     });
   },
 };

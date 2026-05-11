@@ -1,11 +1,9 @@
 import type { PluginElementRenderProps } from '@yoopta/editor';
-import {
-  ElementOptions,
-} from '@yoopta/ui/element-options';
+import { ElementOptions } from '@yoopta/ui/element-options';
 
 import { cn } from '../../utils';
 import type { CalloutTheme } from '../components/callout-element-options';
-import { CalloutElementOptions } from '../components/callout-element-options';
+import { CALLOUT_THEMES, CalloutElementOptions } from '../components/callout-element-options';
 
 const getThemeClasses = (theme: CalloutTheme = 'default'): string => {
   const themeClasses: Record<CalloutTheme, string> = {
@@ -25,21 +23,26 @@ const getThemeClasses = (theme: CalloutTheme = 'default'): string => {
 export const Callout = (props: PluginElementRenderProps) => {
   const { attributes, children, element, blockId } = props;
   const theme = (element.props?.theme as CalloutTheme) ?? 'default';
+  const showIcon = !!element.props?.showIcon;
+  const themeConfig = CALLOUT_THEMES.find((t) => t.value === theme);
 
   return (
     <div
-      {...attributes}
-      className={cn(
-        'mt-4 group relative rounded-lg border-l-4 p-4 [&>p]:m-0 [&>p]:text-sm',
+      { ...attributes }
+      className={ cn(
+        `mt-4 group relative rounded-lg border-l-4 p-4 [&>p]:m-0 [&>p]:text-sm ${showIcon ? 'pl-10' : 'pl-4'} transition-[padding] duration-300`,
         getThemeClasses(theme),
-      )}>
-      <ElementOptions.Root blockId={blockId} element={element}>
-        <ElementOptions.Trigger
-          className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md p-1 hover:bg-black/5 dark:hover:bg-white/10"
-        />
+      ) }>
+      <ElementOptions.Root blockId={ blockId } element={ element }>
+        <ElementOptions.Trigger className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md p-1 hover:bg-black/5 dark:hover:bg-white/10" />
         <CalloutElementOptions />
       </ElementOptions.Root>
-      {children}
+      { showIcon && themeConfig?.icon && (
+        <div className="mt-px absolute top-5 left-4" contentEditable={ false }>
+          { themeConfig.icon }
+        </div>
+      ) }
+      <div className="flex-1 min-w-0">{ children }</div>
     </div>
   );
 };
