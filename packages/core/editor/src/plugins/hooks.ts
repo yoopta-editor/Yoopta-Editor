@@ -320,8 +320,6 @@ export const useEventHandlers = (
           // For Enter/Backspace inside injected elements, skip the container
           // plugin's handler. The editor-level onKeyDown already has full
           // injected element support via getEnterAction/getBackspaceAction.
-
-          console.log('isInsideInjectedElement for block', block.type, isInsideInjectedElement(editor, slate, block));
           if (
             (HOTKEYS.isEnter(keyEvent) || HOTKEYS.isBackspace(keyEvent)) &&
             isInsideInjectedElement(editor, slate, block)

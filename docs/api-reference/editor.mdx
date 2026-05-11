@@ -238,14 +238,6 @@ import Code from '@yoopta/code';
 // Register a single plugin
 editor.registerPlugin(Table);
 
-// Load and register a marketplace plugin
-import { loadMarketplacePlugin } from '@yoopta/editor';
-
-const { plugin } = await loadMarketplacePlugin(
-  'https://marketplace.yoopta.dev/plugins/image-gallery/1.0.0/bundle.mjs',
-);
-editor.registerPlugin(plugin);
-
 // Listen for registration
 editor.on('plugin:register', ({ type }) => {
   console.log(`Plugin "${type}" registered`);

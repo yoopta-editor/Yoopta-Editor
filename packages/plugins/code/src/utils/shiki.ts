@@ -5,6 +5,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
     yShiki: HighlighterGeneric<BundledLanguage, BundledTheme> | null;
+    yShikiPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> | null;
   }
 }
 
@@ -129,25 +130,43 @@ export const SHIKI_CODE_THEMES: { value: BundledTheme; label: string }[] = [
   { value: 'vitesse-light', label: 'Vitesse Light' },
 ];
 
+let highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> | null = null;
+
 // [TODO] - implement clean up
-export async function initHighlighter(): Promise<
-  HighlighterGeneric<BundledLanguage, BundledTheme>
-> {
+export function initHighlighter(): Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> {
   if (typeof window !== 'undefined' && window.yShiki) {
-    return window.yShiki;
+    return Promise.resolve(window.yShiki);
   }
 
-  const highlighter = await createHighlighter({
+  if (typeof window !== 'undefined' && window.yShikiPromise) {
+    return window.yShikiPromise;
+  }
+
+  if (highlighterPromise) {
+    return highlighterPromise;
+  }
+
+  highlighterPromise = createHighlighter({
     themes: SHIKI_CODE_THEMES.map((theme) => theme.value),
     langs: SHIKI_CODE_LANGUAGES.map((language) => language.value),
-  });
+  })
+    .then((highlighter) => {
+      if (typeof window !== 'undefined') {
+        window.yShiki = highlighter;
+      }
+      return highlighter;
+    })
+    .catch((error) => {
+      highlighterPromise = null;
+      if (typeof window !== 'undefined') {
+        window.yShikiPromise = null;
+      }
+      throw error;
+    });
 
   if (typeof window !== 'undefined') {
-    if (!window.yShiki) {
-      window.yShiki = highlighter;
-      return window.yShiki;
-    }
+    window.yShikiPromise = highlighterPromise;
   }
 
-  return highlighter;
+  return highlighterPromise;
 }
