@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+
 import type { ElementOptionsInputProps } from '../types';
 
 export const ElementOptionsInput = ({
@@ -8,8 +10,32 @@ export const ElementOptionsInput = ({
   className,
   style,
 }: ElementOptionsInputProps) => {
+  const [localValue, setLocalValue] = useState(value);
+  const composingRef = useRef(false);
+
+  useEffect(() => {
+    if (!composingRef.current) {
+      setLocalValue(value);
+    }
+  }, [value]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+    const nextValue = e.target.value;
+    setLocalValue(nextValue);
+    if (!composingRef.current) {
+      onChange(nextValue);
+    }
+  };
+
+  const handleCompositionStart = () => {
+    composingRef.current = true;
+  };
+
+  const handleCompositionEnd = (e: React.CompositionEvent<HTMLInputElement>) => {
+    composingRef.current = false;
+    const nextValue = e.currentTarget.value;
+    setLocalValue(nextValue);
+    onChange(nextValue);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -19,8 +45,10 @@ export const ElementOptionsInput = ({
   return (
     <input
       type={type}
-      value={value}
+      value={localValue}
       onChange={handleChange}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
       onMouseDown={handleMouseDown}
       placeholder={placeholder}
       className={className}
