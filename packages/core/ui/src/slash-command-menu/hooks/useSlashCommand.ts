@@ -290,7 +290,7 @@ export function useSlashCommand({
     open,
     close,
     setSearch,
-    filteredItems.length,
+    filteredItems,
   ]);
 
   useEffect(() => {
